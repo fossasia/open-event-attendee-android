@@ -20,9 +20,9 @@ import java.util.Locale;
 
 public class MapFragment extends SupportMapFragment {
 
-    private static final double DESTINATION_LATITUDE = 1.29677;
-    private static final double DESTINATION_LONGITUDE = 103.786914;
-    private static final String DESTINATION_NAME = "Plug-In@Blk71";
+    private static final double DESTINATION_LATITUDE = 52.50003;
+    private static final double DESTINATION_LONGITUDE = 13.37560;
+    private static final String DESTINATION_NAME = "STATION-Berlin";
     private GoogleMap mMap;
 
     @Override
