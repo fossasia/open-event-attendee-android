@@ -5,7 +5,6 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
@@ -55,42 +54,42 @@ public class AlarmIntentService extends IntentService {
                 // Create/update all alarms
                 long delay = getDelay();
                 long now = System.currentTimeMillis();
-                Cursor cursor = DatabaseManager.getInstance().getBookmarks(now);
-                try {
-                    while (cursor.moveToNext()) {
-                        long eventId = DatabaseManager.toEventId(cursor);
-                        long notificationTime = DatabaseManager.toEventStartTimeMillis(cursor) - delay;
-                        PendingIntent pi = getAlarmPendingIntent(eventId);
-                        if (notificationTime < now) {
-                            // Cancel pending alarms that where scheduled between now and delay, if any
-                            alarmManager.cancel(pi);
-                        } else {
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime, pi);
-                        }
-                    }
-                } finally {
-                    cursor.close();
-                }
-
-                // Release the wake lock setup by AlarmReceiver, if any
-                if (intent.getBooleanExtra(EXTRA_WITH_WAKE_LOCK, false)) {
-                    AlarmReceiver.completeWakefulIntent(intent);
-                }
+//                Cursor cursor = DatabaseManager.getInstance().getBookmarks(now);
+//                try {
+//                    while (cursor.moveToNext()) {
+//                        long eventId = DatabaseManager.toEventId(cursor);
+//                        long notificationTime = DatabaseManager.toEventStartTimeMillis(cursor) - delay;
+//                        PendingIntent pi = getAlarmPendingIntent(eventId);
+//                        if (notificationTime < now) {
+//                            // Cancel pending alarms that where scheduled between now and delay, if any
+//                            alarmManager.cancel(pi);
+//                        } else {
+//                            alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime, pi);
+//                        }
+//                    }
+//                } finally {
+//                    cursor.close();
+//                }
+//
+//                // Release the wake lock setup by AlarmReceiver, if any
+//                if (intent.getBooleanExtra(EXTRA_WITH_WAKE_LOCK, false)) {
+//                    AlarmReceiver.completeWakefulIntent(intent);
+//                }
 
                 break;
             }
             case ACTION_DISABLE_ALARMS: {
 
                 // Cancel alarms of every bookmark in the future
-                Cursor cursor = DatabaseManager.getInstance().getBookmarks(System.currentTimeMillis());
-                try {
-                    while (cursor.moveToNext()) {
-                        long eventId = DatabaseManager.toEventId(cursor);
-                        alarmManager.cancel(getAlarmPendingIntent(eventId));
-                    }
-                } finally {
-                    cursor.close();
-                }
+//                Cursor cursor = DatabaseManager.getInstance().getBookmarks(System.currentTimeMillis());
+//                try {
+//                    while (cursor.moveToNext()) {
+//                        long eventId = DatabaseManager.toEventId(cursor);
+//                        alarmManager.cancel(getAlarmPendingIntent(eventId));
+//                    }
+//                } finally {
+//                    cursor.close();
+//                }
 
                 break;
             }

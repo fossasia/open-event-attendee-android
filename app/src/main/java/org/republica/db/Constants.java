@@ -21,6 +21,7 @@ public class Constants {
     public final static int URL = 22;
     public final static int LINKEDIN = 23;
     public final static int MODERATOR = 24;
+    private final static int ID = 1;
 
 
 }

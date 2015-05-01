@@ -109,10 +109,6 @@
             android:name="org.republica.services.AlarmIntentService"
             android:exported="false" />
 
-        <provider
-            android:name="org.republica.providers.SearchSuggestionProvider"
-            android:authorities="org.republica.search"
-            android:exported="true" />
 
         <activity
             android:name="org.republica.activities.SplashActivity"
