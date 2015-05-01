@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Re:Pub</string>
+
+    <!-- Main screen -->
+    <string name="main_menu">Main menu</string>
+    <string name="close_menu">Close menu</string>
+    <string name="last_update">DB last updated: %1$s</string>
+    <string name="download_reminder_title">Update</string>
+    <string name="download_reminder_message">This will update the schedule database to the latest version. Make sure you are connected to the internet.</string>
+    <string name="never">Never</string>
+    <string name="update_events_db">Update events database</string>
+    <string name="events_download_up_to_date">Database is already up-to-date</string>
+    <string name="events_download_empty">No new events found</string>
+
+    <plurals name="events_download_completed">
+        <item quantity="one">Completed downloading %1$d event</item>
+        <item quantity="other">Completed downloading %1$d events</item>
+    </plurals>
+
+    <!-- Main menu -->
+    <string name="menu_tracks">Tracks</string>
+    <string name="menu_schedule">Schedule</string>
+    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_live">Live</string>
+    <string name="menu_speakers">Speakers</string>
+    <string name="menu_key_speakers">Key Speakers</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_sponsor">Sponsors</string>
+
+    <!-- Bookmarks -->
+    <string name="filter">Filter</string>
+    <string name="upcoming_only">Upcoming only</string>
+    <string name="no_bookmark">No bookmark.</string>
+    <string name="remove_bookmarks">Remove bookmarks</string>
+
+    <plurals name="selected">
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+
+    <!-- Live -->
+    <string name="next">Next</string>
+    <string name="next_empty">During Re:Publica, the events to come in the next 30 minutes will be shown here.</string>
+    <string name="now">Now</string>
+    <string name="now_empty">During Re:Publica, the events in progress will be shown here.</string>
+
+    <!-- Track types -->
+    <string name="other">Other</string>
+    <string name="keynote">Keynote</string>
+    <string name="main_track">Main track</string>
+    <string name="developer_room">Developer room</string>
+    <string name="lightning_talk">Lightning talk</string>
+    <string name="certification_exam">Certification Exam</string>
+
+    <!-- Search -->
+    <string name="search_events">Search events</string>
+    <string name="search_settings_description">Events</string>
+    <string name="search_hint">Event, track, person</string>
+    <string name="no_search_result">No result.</string>
+
+    <!-- Errors -->
+    <string name="error_title">Error</string>
+    <string name="event_not_found_error">Unable to load the session details.\nMake sure the database has been updated to the latest version.</string>
+    <string name="schedule_loading_error">An error occurred while updating the schedule. Please try again later.</string>
+    <string name="search_length_error">The minimum search text length is 3 chars.</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_enabled_title">Enable notifications</string>
+    <string name="settings_notifications_enabled_summary">If checked, this will notify you of bookmarked upcoming events</string>
+    <string name="settings_notifications_vibrate_title">Vibrate</string>
+    <string name="settings_notifications_vibrate_summary">Vibrate on notification</string>
+    <string name="settings_notifications_led_title">Flash led</string>
+    <string name="settings_notifications_led_summary">Blink led on notification</string>
+    <string name="settings_notifications_delay_title">Notification time</string>
+
+    <string-array name="settings_notifications_delay_entries">
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+    <string-array name="settings_notifications_delay_entry_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <string name="settings_notifications_delay_summary">Delay before getting notified of an upcoming bookmarked event</string>
+
+    <!-- Event details -->
+    <string name="related_links_header">Related Links</string>
+    <string name="add_bookmark">Add to bookmarks</string>
+    <string name="remove_bookmark">Remove from bookmarks</string>
+    <string name="share">Share</string>
+    <string name="add_to_agenda">Add to agenda</string>
+    <string name="calendar_not_found">No compatible calendar application found.</string>
+
+    <plurals name="speakers">
+        <item quantity="one">Speaker</item>
+        <item quantity="other">Speakers</item>
+    </plurals>
+
+    <!-- Speaker info -->
+    <string name="talks_header">Talks</string>
+    <string name="more_info">More info</string>
+
+    <!-- Others -->
+    <string name="room_map">Room map</string>
+    <string name="directions">Directions to ULB</string>
+    <string name="no_data">No data available.</string>
+    <string name="about">About</string>
+    <string name="about_text">Programmed by <a href="http://www.digitalia.be/">Christophe Beyls</a> and <a href="https://github.com/fossasia/fossasia-companion-android/blob/master/README.md">FOSSASIA contributors</a>.
+\n
+\nLicensed under the Apache License, version 2.0. Source available on <a href="https://github.com/fossasia/fossasia-companion-android">GitHub</a>.
+\n
+\nPlease report all the issues in <a href="https://github.com/fossasia/fossasia-companion-android/issues/new">Github Repository Issue Tracker</a>.
+\n
+\n<small>This application makes use of the following libraries:
+\n- <a href="http://developer.android.com/tools/support-library/">Android Support Library</a>
+            <i> by The Android Open Source Project</i>\n-
+            <a href="http://viewpagerindicator.com/">ViewPagerIndicator</a>
+            <i> by Jake Wharton</i>\n- <a href="https://github.com/chrisbanes/PhotoView">PhotoView</a>
+            <i> by Chris Banes</i>\n- <a href="https://android.googlesource.com/platform/frameworks/volley">Volley</a>
+            <i> by AOSP</i></small></string>
+    <string name="placeholder_speaker">Placeholder Speaker Name</string>
+    <string name="placeholder_speaker_designation">Placeholder Speaker Designation</string>
+    <string name="title_activity_splash">FOSSASIA</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_track">TrackActivity</string>
+
+    <string name="venue_map"><u>Go to Map</u></string>
+    <string name="venue_link"><u>Visit Link</u></string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>

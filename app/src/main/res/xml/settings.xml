@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/settings_notifications">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notifications_enabled"
+            android:summary="@string/settings_notifications_enabled_summary"
+            android:title="@string/settings_notifications_enabled_title"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notifications_vibrate"
+            android:summary="@string/settings_notifications_vibrate_summary"
+            android:title="@string/settings_notifications_vibrate_title"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notifications_led"
+            android:summary="@string/settings_notifications_led_summary"
+            android:title="@string/settings_notifications_led_title"/>
+
+        <ListPreference
+            android:defaultValue="10"
+            android:entries="@array/settings_notifications_delay_entries"
+            android:entryValues="@array/settings_notifications_delay_entry_values"
+            android:key="notifications_delay"
+            android:title="@string/settings_notifications_delay_title"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

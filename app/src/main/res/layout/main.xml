@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Toolbar.Fosdem"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Main content view -->
+
+            <FrameLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <!-- Left drawer -->
+
+            <LinearLayout
+                android:id="@+id/main_menu"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@color/main_menu_background"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/main_menu_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    tools:listheader="@layout/header_main_menu"
+                    tools:listitem="@layout/item_main_menu"/>
+
+                <TextView
+                    android:id="@+id/last_update"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#10000000"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    tools:text="DB last updated: 1 jan. 2015 13:37:00"/>
+            </LinearLayout>
+
+        </android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginTop="-7dp"
+        android:max="100"
+        android:visibility="gone"/>
+</FrameLayout>

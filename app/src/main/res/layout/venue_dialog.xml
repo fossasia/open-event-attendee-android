@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        android:background="@color/color_primary_dark"
+        android:text="Venue Details"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="#EB2222"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="Venue"/>
+
+        <TextView
+            android:id="@+id/venue_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="The Landmark"
+            android:layout_marginBottom="@dimen/venue_attribute_value_margin_bottom"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="Room"
+            android:layout_marginBottom="@dimen/venue_attribute_margin_bottom"/>
+
+        <TextView
+            android:id="@+id/venue_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="A-23(Dummy)"
+            android:layout_marginBottom="@dimen/venue_attribute_value_margin_bottom"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="Address"
+            android:layout_marginBottom="@dimen/venue_attribute_margin_bottom"/>
+
+        <TextView
+            android:id="@+id/venue_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="24/A, Hauz Khas, New Delhi(Dummy)"
+            android:layout_marginBottom="@dimen/venue_attribute_value_margin_bottom"/>
+
+        <!---->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="How to reach"
+            android:layout_marginBottom="@dimen/venue_attribute_margin_bottom"/>
+
+        <TextView
+            android:id="@+id/venue_how_to_reach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="24/A, Hauz Khas, New Delhi(Dummy)"
+            android:layout_marginBottom="@dimen/venue_attribute_value_margin_bottom"/>
+
+        <!---->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="Map"
+            android:layout_marginBottom="@dimen/venue_attribute_margin_bottom"/>
+
+
+        <TextView
+            android:id="@+id/venue_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="@string/venue_map"
+            android:layout_marginBottom="@dimen/venue_attribute_value_margin_bottom"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeTextView"
+            android:text="Link"
+            android:layout_marginBottom="@dimen/venue_attribute_margin_bottom"/>
+
+        <TextView
+            android:id="@+id/venue_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/VenueAttributeValueTextView"
+            android:text="@string/venue_link"
+            android:layout_marginBottom="17dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/venue_okay"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:background="@color/color_primary_dark"
+        android:text="Okay"/>
+
+</LinearLayout>
