@@ -1,14 +1,10 @@
 package org.republica.fragments;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
 import org.republica.R;
-import org.republica.db.DatabaseManager;
-import org.republica.loaders.SimpleCursorLoader;
 
 public class SearchResultListFragment extends SmoothListFragment {
 
@@ -44,18 +40,4 @@ public class SearchResultListFragment extends SmoothListFragment {
 
     }
 
-    private static class TextSearchLoader extends SimpleCursorLoader {
-
-        private final String query;
-
-        public TextSearchLoader(Context context, String query) {
-            super(context);
-            this.query = query;
-        }
-
-        @Override
-        protected Cursor getCursor() {
-            return DatabaseManager.getInstance().getSearchResults(query);
-        }
-    }
 }

@@ -1,6 +1,5 @@
 package org.republica.db;
 
-import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -81,13 +79,12 @@ public class DatabaseManager {
     }
 
     private static void clearDatabase(SQLiteDatabase db) {
-        db.delete(DatabaseHelper.EVENTS_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.EVENTS_TITLES_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.PERSONS_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.EVENTS_PERSONS_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.LINKS_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.TRACKS_TABLE_NAME, null, null);
-        db.delete(DatabaseHelper.DAYS_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.EVENTS_TITLES_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.PERSONS_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.EVENTS_PERSONS_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.LINKS_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.TRACKS_TABLE_NAME, null, null);
+//        db.delete(DatabaseHelper.DAYS_TABLE_NAME, null, null);
         // Deleting Fossasia tables
         db.delete(DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, null, null);
         db.delete(DatabaseHelper.TABLE_NAME_SCHEDULE, null, null);
@@ -441,147 +438,6 @@ public class DatabaseManager {
         return sponsors;
     }
 
-    /**
-     * Returns the bookmarks.
-     *
-     * @param minStartTime When positive, only return the events starting after this time.
-     * @return A cursor to Events
-     */
-    public Cursor getBookmarks(long minStartTime) {
-        String whereCondition;
-        String[] selectionArgs;
-        if (minStartTime > 0L) {
-            whereCondition = " WHERE e.start_time > ?";
-            selectionArgs = new String[]{String.valueOf(minStartTime)};
-        } else {
-            whereCondition = "";
-            selectionArgs = null;
-        }
-
-        Cursor cursor = helper
-                .getReadableDatabase()
-                .rawQuery(
-                        "SELECT e.id AS _id, e.start_time, e.end_time, e.room_name, e.slug, et.title, et.subtitle, e.abstract, e.description, GROUP_CONCAT(p.name, ', '), e.day_index, d.date, t.name, t.type, 1"
-                                + " FROM "
-                                + DatabaseHelper.BOOKMARKS_TABLE_NAME
-                                + " b"
-                                + " JOIN "
-                                + DatabaseHelper.EVENTS_TABLE_NAME
-                                + " e ON b.event_id = e.id"
-                                + " JOIN "
-                                + DatabaseHelper.EVENTS_TITLES_TABLE_NAME
-                                + " et ON e.id = et.rowid"
-                                + " JOIN "
-                                + DatabaseHelper.DAYS_TABLE_NAME
-                                + " d ON e.day_index = d._index"
-                                + " JOIN "
-                                + DatabaseHelper.TRACKS_TABLE_NAME
-                                + " t ON e.track_id = t.id"
-                                + " LEFT JOIN "
-                                + DatabaseHelper.EVENTS_PERSONS_TABLE_NAME
-                                + " ep ON e.id = ep.event_id"
-                                + " LEFT JOIN "
-                                + DatabaseHelper.PERSONS_TABLE_NAME
-                                + " p ON ep.person_id = p.rowid" + whereCondition + " GROUP BY e.id" + " ORDER BY e.start_time ASC", selectionArgs);
-        cursor.setNotificationUri(context.getContentResolver(), URI_EVENTS);
-        return cursor;
-    }
-
-    /**
-     * Search through matching titles, subtitles, track names, person names. We need to use an union of 3 sub-queries because a "match" condition can not be
-     * accompanied by other conditions in a "where" statement.
-     *
-     * @param query
-     * @return A cursor to Events
-     */
-    public Cursor getSearchResults(String query) {
-        final String matchQuery = query + "*";
-        String[] selectionArgs = new String[]{matchQuery, "%" + query + "%", matchQuery};
-        Cursor cursor = helper
-                .getReadableDatabase()
-                .rawQuery(
-                        "SELECT e.id AS _id, e.start_time, e.end_time, e.room_name, e.slug, et.title, et.subtitle, e.abstract, e.description, GROUP_CONCAT(p.name, ', '), e.day_index, d.date, t.name, t.type, b.event_id"
-                                + " FROM "
-                                + DatabaseHelper.EVENTS_TABLE_NAME
-                                + " e"
-                                + " JOIN "
-                                + DatabaseHelper.EVENTS_TITLES_TABLE_NAME
-                                + " et ON e.id = et.rowid"
-                                + " JOIN "
-                                + DatabaseHelper.DAYS_TABLE_NAME
-                                + " d ON e.day_index = d._index"
-                                + " JOIN "
-                                + DatabaseHelper.TRACKS_TABLE_NAME
-                                + " t ON e.track_id = t.id"
-                                + " LEFT JOIN "
-                                + DatabaseHelper.EVENTS_PERSONS_TABLE_NAME
-                                + " ep ON e.id = ep.event_id"
-                                + " LEFT JOIN "
-                                + DatabaseHelper.PERSONS_TABLE_NAME
-                                + " p ON ep.person_id = p.rowid"
-                                + " LEFT JOIN "
-                                + DatabaseHelper.BOOKMARKS_TABLE_NAME
-                                + " b ON e.id = b.event_id"
-                                + " WHERE e.id IN ( "
-                                + "SELECT rowid"
-                                + " FROM "
-                                + DatabaseHelper.EVENTS_TITLES_TABLE_NAME
-                                + " WHERE "
-                                + DatabaseHelper.EVENTS_TITLES_TABLE_NAME
-                                + " MATCH ?"
-                                + " UNION "
-                                + "SELECT e.id"
-                                + " FROM "
-                                + DatabaseHelper.EVENTS_TABLE_NAME
-                                + " e"
-                                + " JOIN "
-                                + DatabaseHelper.TRACKS_TABLE_NAME
-                                + " t ON e.track_id = t.id"
-                                + " WHERE t.name LIKE ?"
-                                + " UNION "
-                                + "SELECT ep.event_id"
-                                + " FROM "
-                                + DatabaseHelper.EVENTS_PERSONS_TABLE_NAME
-                                + " ep"
-                                + " JOIN "
-                                + DatabaseHelper.PERSONS_TABLE_NAME
-                                + " p ON ep.person_id = p.rowid" + " WHERE p.name MATCH ?" + " )" + " GROUP BY e.id" + " ORDER BY e.start_time ASC",
-                        selectionArgs);
-        cursor.setNotificationUri(context.getContentResolver(), URI_EVENTS);
-        return cursor;
-    }
-
-    /**
-     * Method called by SearchSuggestionProvider to return search results in the format expected by the search framework.
-     */
-    public Cursor getSearchSuggestionResults(String query, int limit) {
-        final String matchQuery = query + "*";
-        String[] selectionArgs = new String[]{matchQuery, "%" + query + "%", matchQuery, String.valueOf(limit)};
-        // Query is similar to getSearchResults but returns different columns, does not join the Day table or the Bookmark table and limits the result set.
-        Cursor cursor = helper.getReadableDatabase().rawQuery(
-                "SELECT e.id AS " + BaseColumns._ID + ", et.title AS " + SearchManager.SUGGEST_COLUMN_TEXT_1
-                        + ", IFNULL(GROUP_CONCAT(p.name, ', '), '') || ' - ' || t.name AS " + SearchManager.SUGGEST_COLUMN_TEXT_2 + ", e.id AS "
-                        + SearchManager.SUGGEST_COLUMN_INTENT_DATA + " FROM " + DatabaseHelper.EVENTS_TABLE_NAME + " e" + " JOIN "
-                        + DatabaseHelper.EVENTS_TITLES_TABLE_NAME + " et ON e.id = et.rowid" + " JOIN " + DatabaseHelper.TRACKS_TABLE_NAME
-                        + " t ON e.track_id = t.id" + " LEFT JOIN " + DatabaseHelper.EVENTS_PERSONS_TABLE_NAME + " ep ON e.id = ep.event_id" + " LEFT JOIN "
-                        + DatabaseHelper.PERSONS_TABLE_NAME + " p ON ep.person_id = p.rowid" + " WHERE e.id IN ( " + "SELECT rowid" + " FROM "
-                        + DatabaseHelper.EVENTS_TITLES_TABLE_NAME + " WHERE " + DatabaseHelper.EVENTS_TITLES_TABLE_NAME + " MATCH ?" + " UNION "
-                        + "SELECT e.id" + " FROM " + DatabaseHelper.EVENTS_TABLE_NAME + " e" + " JOIN " + DatabaseHelper.TRACKS_TABLE_NAME
-                        + " t ON e.track_id = t.id" + " WHERE t.name LIKE ?" + " UNION " + "SELECT ep.event_id" + " FROM "
-                        + DatabaseHelper.EVENTS_PERSONS_TABLE_NAME + " ep" + " JOIN " + DatabaseHelper.PERSONS_TABLE_NAME + " p ON ep.person_id = p.rowid"
-                        + " WHERE p.name MATCH ?" + " )" + " GROUP BY e.id" + " ORDER BY e.start_time ASC LIMIT ?", selectionArgs);
-        return cursor;
-    }
-
-    /**
-     * Returns all persons in alphabetical order.
-     */
-    public Cursor getPersons() {
-        Cursor cursor = helper.getReadableDatabase().rawQuery(
-                "SELECT rowid AS _id, name" + " FROM " + DatabaseHelper.PERSONS_TABLE_NAME + " ORDER BY name COLLATE NOCASE", null);
-        cursor.setNotificationUri(context.getContentResolver(), URI_EVENTS);
-        return cursor;
-    }
 
 
     public boolean isBookmarked(FossasiaEvent event) {
