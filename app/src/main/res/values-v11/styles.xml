@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Main theme -->
+
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBar.Fosdem</item>
+        <item name="android:listViewStyle">@style/ListView.Fosdem</item>
+        <item name="android:fastScrollThumbDrawable">@drawable/fosdem_fastscroll_thumb_holo</item>
+        <item name="android:selectableItemBackground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ProgressBar.Fosdem" parent="android:Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:indeterminateDrawable">
+            @drawable/fosdem_progress_indeterminate_horizontal_holo_light
+        </item>
+        <item name="android:progressDrawable">@drawable/fosdem_progress_horizontal_holo_light</item>
+    </style>
+
+    <style name="ListView.Fosdem" parent="android:Widget.Holo.Light.ListView">
+        <item name="android:listSelector">?attr/selectableItemBackground</item>
+    </style>
+
+</resources>

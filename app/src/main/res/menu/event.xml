@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/bookmark"
+        android:icon="@drawable/ic_bookmark_outline_white_24dp"
+        android:title="@string/add_bookmark"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/share"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/add_to_agenda"
+        android:icon="@drawable/ic_event_add_white_24dp"
+        android:title="@string/add_to_agenda"
+        app:showAsAction="ifRoom"/>
+
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="main_menu_padding">16dp</dimen>
+    <dimen name="main_menu_drawable_padding">32dp</dimen>
+    <dimen name="main_menu_item_height">48dp</dimen>
+    <dimen name="list_item_padding">8dp</dimen>
+    <dimen name="list_item_title_text_size">18sp</dimen>
+    <dimen name="list_item_medium_text_size">16sp</dimen>
+    <dimen name="list_item_small_text_size">14sp</dimen>
+    <dimen name="content_margin">16dp</dimen>
+    <dimen name="toolbar_elevation">8dp</dimen>
+    <dimen name="schedule_column_width">360dp</dimen>
+    <dimen name="detail_card_view_elevation">6dp</dimen>
+    <!--
+         Enlarge the card view by 7dp left & right and 10dp top & bottom
+        to compensate for the compatibility padding of the 6dp elevation
+    -->
+    <dimen name="detail_card_view_margin_left">353dp</dimen>
+    <dimen name="detail_card_view_margin_right">89dp</dimen>
+    <dimen name="detail_card_view_margin_top">54dp</dimen>
+    <dimen name="detail_card_view_margin_bottom">-10dp</dimen>
+    <dimen name="fab_diameter">56dp</dimen>
+    <dimen name="fab_elevation_low">2dp</dimen>
+    <dimen name="fab_elevation_high">4dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Venue design -->
+    <dimen name="venue_attribute_margin_bottom">0dp</dimen>
+    <dimen name="venue_attribute_value_margin_bottom">7dp</dimen>
+
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/activatedBackgroundIndicator"
+              android:orientation="vertical"
+              android:padding="@dimen/list_item_padding">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/list_item_small_text_size"
+        android:textStyle="bold"
+        tools:text="Welcome to FOSDEM 2015\nFOSDEM Staff"
+        tools:textSize="@dimen/list_item_medium_text_size"/>
+
+    <TextView
+        android:id="@+id/track_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/list_item_small_text_size"
+        android:textStyle="italic"
+        tools:text="Keynotes"/>
+
+    <TextView
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/list_item_small_text_size"
+        tools:text="Saturday, 09:30 - 09:55 | Janson"/>
+
+</LinearLayout>

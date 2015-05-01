@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/content_margin">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="Welcome to FOSDEM"/>
+
+            <TextView
+                android:id="@+id/subtitle"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="An introduction to your favourite Free Software meeting"/>
+
+            <TextView
+                android:id="@+id/persons"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:text="FOSDEM Staff"/>
+
+            <TextView
+                android:id="@+id/moderators"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:text="FOSDEM Moderator"/>
+
+
+            <View
+                style="@style/SeparatorLine"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/track"
+                style="@style/Metadata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_local_offer_grey600_18dp"
+                tools:text="Keynotes"/>
+
+            <TextView
+                android:id="@+id/time"
+                style="@style/Metadata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_access_time_grey600_18dp"
+                tools:text="Day 1 (Saturday), 09:30 - 09:55"/>
+
+            <TextView
+                android:id="@+id/room"
+                style="@style/Metadata.Selectable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_place_grey600_18dp"
+                tools:text="Janson (Building J)"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/abstract_text"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/translucent_grey"
+            android:padding="@dimen/content_margin"
+            android:textIsSelectable="true"
+            tools:text="FOSDEM welcome and opening talk."/>
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/content_margin"
+            android:textIsSelectable="true"
+            tools:text="Welcome to FOSDEM 2015!"/>
+
+        <LinearLayout
+            android:id="@+id/links_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/content_margin"
+            android:paddingLeft="@dimen/content_margin"
+            android:paddingRight="@dimen/content_margin"
+            android:paddingTop="8dp"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Header"
+                android:text="@string/related_links_header"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
