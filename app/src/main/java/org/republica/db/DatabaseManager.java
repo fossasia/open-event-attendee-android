@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.republica.model.Day;
 import org.republica.model.FossasiaEvent;
@@ -139,6 +140,7 @@ public class DatabaseManager {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();
         for (String query : queries) {
+            Log.d(this.getClass().getCanonicalName(), query);
             db.execSQL(query);
         }
         db.setTransactionSuccessful();

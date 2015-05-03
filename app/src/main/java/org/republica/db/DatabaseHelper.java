@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NAME_VENUE = "venue";
 
-    private static final String DATABASE_NAME = "repub.sqlite1";
+    private static final String DATABASE_NAME = "repub.sqlite3";
     private static final int DATABASE_VERSION = 1;
 
 
@@ -48,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE " + TABLE_NAME_SCHEDULE
                 + " (id INTEGER PRIMARY KEY, title TEXT, sub_title TEXT, date TEXT, day TEXT, start_time TEXT, abstract_text TEXT, description TEXT, venue TEXT, track TEXT, moderator TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_SPEAKER_EVENT_RELATION
-                + " (speaker TEXT, event_id INTEGER, event TEXT);");
+                + " (speaker TEXT, event_id TEXT, event TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_TRACK
                 + " (_id INTEGER, " + TABLE_COLUMN_NAME + " TEXT, " + TABLE_COLOUMN_INFORMATION + " TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_TRACK_VENUE

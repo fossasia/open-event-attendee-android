@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.republica.db.DatabaseHelper;
+import org.republica.utils.StringUtils;
 
 
 /**
@@ -116,7 +117,7 @@ public class Speaker implements Parcelable {
     }
 
     public String generateSqlQuery() {
-        String query = String.format("INSERT OR IGNORE INTO %s VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d);", DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, id, name, designation, information, twitterHandle, linkedInUrl, profilePicUrl, (isKeySpeaker ? 1 : 0));
+        String query = String.format("INSERT OR IGNORE INTO %s VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d);", DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, id, StringUtils.replaceUnicode(name), StringUtils.replaceUnicode(designation), StringUtils.replaceUnicode(information), StringUtils.replaceUnicode(twitterHandle), StringUtils.replaceUnicode(linkedInUrl), StringUtils.replaceUnicode(profilePicUrl), (isKeySpeaker ? 1 : 0));
         return query;
     }
 
