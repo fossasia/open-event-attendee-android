@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import org.republica.R;
-import org.republica.api.RepublicaUrls;
 import org.republica.db.JsonToDatabase;
-import org.republica.db.RepublicParser;
 
 
 public class SplashActivity extends ActionBarActivity {
@@ -19,8 +17,6 @@ public class SplashActivity extends ActionBarActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                RepublicParser parser = new RepublicParser(getApplicationContext());
-                parser.parseEvents(RepublicaUrls.SESSIONS_URL);
                 JsonToDatabase dataDownload = new JsonToDatabase(getApplicationContext());
                 dataDownload.setOnJsonToDatabaseCallback(new JsonToDatabase.JsonToDatabaseCallback() {
                     @Override
@@ -33,6 +29,9 @@ public class SplashActivity extends ActionBarActivity {
                 dataDownload.startDataDownload();
             }
         }).start();
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
 }

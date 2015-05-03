@@ -5,7 +5,7 @@ package org.republica.api;
  */
 public class RepublicaUrls {
 
-    public static final String SESSIONS_URL = "http://data.re-publica.de/data/rp15/sessions.json";
+    public static final String SESSIONS_URL = "http://data.re-publica.de/data/rp15/data.json";
 
     public static final String SPEAKERS_URL = "http://data.re-publica.de/api/rp15/speakers";
 

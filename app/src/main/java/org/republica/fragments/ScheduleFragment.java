@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,9 +50,9 @@ public class ScheduleFragment extends Fragment {
 
 
             ArrayList<Day> staticDays = new ArrayList<>();
-            staticDays.add(new Day(0, "March 13"));
-            staticDays.add(new Day(1, "March 14"));
-            staticDays.add(new Day(2, "March 15"));
+            staticDays.add(new Day(0, "May 5"));
+            staticDays.add(new Day(1, "May 6"));
+            staticDays.add(new Day(2, "May 7"));
 
 
             daysAdapter = new DayLoader(getChildFragmentManager(), track, staticDays);
@@ -93,6 +94,10 @@ public class ScheduleFragment extends Fragment {
             holder.pager.setAdapter(daysAdapter);
         }
         holder.slidingTabs.setViewPager(holder.pager);
+        for (Day day : days) {
+            Log.d(this.getClass().getCanonicalName(), day.getDate());
+
+        }
         if (days.size() > 0) {
             String[] date = days.get(0).getDate().split(" ");
             int position = Integer.parseInt(date[1]) - 13;

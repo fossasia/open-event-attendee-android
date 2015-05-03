@@ -2,6 +2,7 @@ package org.republica.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.republica.db.DatabaseHelper;
 import org.republica.utils.StringUtils;
@@ -201,6 +202,8 @@ public class FossasiaEvent implements Parcelable {
     public String generateSqlQuery() {
 
         String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", DatabaseHelper.TABLE_NAME_SCHEDULE, id, StringUtils.replaceUnicode(title), StringUtils.replaceUnicode(subTitle), StringUtils.replaceUnicode(date), StringUtils.replaceUnicode(day), StringUtils.replaceUnicode(startTime), StringUtils.replaceUnicode(abstractText), StringUtils.replaceUnicode(description), StringUtils.replaceUnicode(venue), StringUtils.replaceUnicode(track), StringUtils.replaceUnicode(moderator));
+
+        Log.d("this", query);
         return query;
     }
 
