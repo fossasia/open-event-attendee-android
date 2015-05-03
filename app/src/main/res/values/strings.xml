@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Re:Pub</string>
+    <string name="app_name">re:publica companion</string>
 
     <!-- Main screen -->
     <string name="main_menu">Main menu</string>
@@ -115,11 +115,11 @@
     <string name="directions">Directions to ULB</string>
     <string name="no_data">No data available.</string>
     <string name="about">About</string>
-    <string name="about_text">Programmed by <a href="http://www.digitalia.be/">Christophe Beyls</a> and <a href="https://github.com/fossasia/fossasia-companion-android/blob/master/README.md">FOSSASIA contributors</a>.
+    <string name="about_text">Contributors: Abhishek Batra, Mario Behling, Manan Wason, <a href="http://www.digitalia.be/">Christophe Beyls</a>, <a href="https://github.com/fossasia/fossasia-companion-android/blob/master/README.md">FOSSASIA Contributors</a> and others.
 \n
-\nLicensed under the Apache License, version 2.0. Source available on <a href="https://github.com/fossasia/fossasia-companion-android">GitHub</a>.
+\nLicensed under the Apache License, version 2.0. Source available on <a href="https://github.com/fossasia/rp15">GitHub</a>.
 \n
-\nPlease report all the issues in <a href="https://github.com/fossasia/fossasia-companion-android/issues/new">Github Repository Issue Tracker</a>.
+\nPlease report all the issues in <a href="https://github.com/fossasia/rp15/issues/new">Github Repository Issue Tracker</a>.
 \n
 \n<small>This application makes use of the following libraries:
 \n- <a href="http://developer.android.com/tools/support-library/">Android Support Library</a>
