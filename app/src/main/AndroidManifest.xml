@@ -40,7 +40,7 @@
         android:name="org.republica.FossasiaApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/app_logo_final"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity

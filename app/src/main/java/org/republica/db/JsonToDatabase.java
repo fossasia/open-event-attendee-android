@@ -1,15 +1,19 @@
 package org.republica.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.republica.api.FossasiaUrls;
 import org.republica.api.RepublicaUrls;
 import org.republica.model.FossasiaEvent;
 import org.republica.model.Speaker;
@@ -47,6 +51,7 @@ public class JsonToDatabase {
 
     public void startDataDownload() {
         parse(RepublicaUrls.DATA_URL);
+        fetchKeySpeakers(RepublicaUrls.SPEAKER_URL);
 
     }
 
@@ -65,7 +70,7 @@ public class JsonToDatabase {
                     JSONObject jsonData = new JSONObject(response);
 
                     parseSession(jsonData);
-                    parseSpeakers(jsonData);
+                   // parseSpeakers(jsonData);
                     parseTracks(jsonData);
 
 
@@ -159,7 +164,7 @@ public class JsonToDatabase {
     private void parseSpeakers(JSONObject jsonData) throws JSONException{
 
         JSONArray speakers = jsonData.getJSONArray("speakers");
-        long id;
+        String id;
         String name;
         String information;
         String linkedInUrl;
@@ -172,7 +177,7 @@ public class JsonToDatabase {
         for (int i = 0; i < speakers.length(); i++) {
             try {
                 JSONObject jsonObject = speakers.getJSONObject(i);
-                id = i;
+                id = jsonObject.getString("id");
                 name = jsonObject.getString("name");
                 information = jsonObject.getString("biography");
                 designation = jsonObject.getString("position");
@@ -182,12 +187,79 @@ public class JsonToDatabase {
                     designation += ", " + organization;
                 }
                 profilePicUrl = jsonObject.getString("photo");
-                Speaker speaker = new Speaker(i, name, information, "", "", designation, profilePicUrl, 0);
+                Speaker speaker = new Speaker(id, name, information, "", "", designation, profilePicUrl, 0);
                 queries.add(speaker.generateSqlQuery());
+                Log.d(TAG,speaker.generateSqlQuery()+"");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
+    private void fetchKeySpeakers(String url) {
+
+        RequestQueue queue = VolleySingleton.getReqQueue(context);
+
+        // Request a string response from the provided URL.
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+                //JSONArray jsonArray = removePaddingFromString(response);
+                //  Log.d(TAG, ""+jsonArrayRequest.toString());
+                String id;
+                String name;
+                String profilePicUrl;
+                String url;
+                String biography;
+                String organization;
+                String organization_url;
+                String position;
+                // String sessions;
+                //String links;
+                String event;
+                long last_modified;
+                //Log.d(TAG,""+jsonArray.length());
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject speaker = (JSONObject) response.get(i);
+
+                        id = replace(speaker.getString("id"));
+                        name = replace(speaker.getString("name"));
+                        profilePicUrl = replace(speaker.getString("photo"));
+                        url = replace(speaker.getString("url"));
+                        biography = replace(speaker.getString("biography"));
+                        Log.d(TAG,biography);
+                        organization = replace(speaker.getString("organization"));
+                        organization_url = replace(speaker.getString("organization_url"));
+                        position = replace(speaker.getString("position"));
+                        event = replace(speaker.getString("event"));
+                        last_modified = speaker.getLong("last_modified");
+                        Speaker temp = new Speaker(id, name, biography,"","",position,profilePicUrl, 0);
+                         Log.d(TAG, temp.generateSqlQuery());
+                        queries.add(temp.generateSqlQuery());
+
+                    } catch (JSONException e) {
+                        //         Log.e(TAG, "JSON Error: " + e.getMessage() + "\nResponse: " + response);
+                    }
+
+                }
+//                keySpeakerLoaded = true;
+            }
+        }
+
+                , new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                keySpeakerLoaded = true;
+                error.getMessage();
+            }
+        }
+
+        );
+        // Add the request to the RequestQueue.
+        queue.add(jsonArrayRequest);
+
     }
 
     private void parseTracks(JSONObject jsonData) throws JSONException{
@@ -199,6 +271,13 @@ public class JsonToDatabase {
             query = String.format(query, DatabaseHelper.TABLE_NAME_TRACK, i, StringUtils.replaceUnicode(trackName), "");
             queries.add(query);
         }
+    }
+    public String replace(String response){
+        response =response.replaceAll("'","");
+        response.replaceAll("\n","");
+
+        return response;
+
     }
 
 

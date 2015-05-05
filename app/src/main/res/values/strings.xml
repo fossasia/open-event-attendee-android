@@ -130,7 +130,7 @@
             <i> by AOSP</i></small></string>
     <string name="placeholder_speaker">Placeholder Speaker Name</string>
     <string name="placeholder_speaker_designation">Placeholder Speaker Designation</string>
-    <string name="title_activity_splash">FOSSASIA</string>
+    <string name="title_activity_splash">Re:Publica</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_track">TrackActivity</string>

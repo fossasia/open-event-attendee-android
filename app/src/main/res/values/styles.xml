@@ -4,8 +4,8 @@
     <!-- Main theme -->
 
     <style name="Base.AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorPrimary">@color/YellowGreen</item>
+        <item name="colorPrimaryDark">@color/darkgreen</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="android:textColorLink">?attr/colorAccent</item>
 

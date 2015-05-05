@@ -21,7 +21,7 @@ public class Speaker implements Parcelable {
             return new Speaker[size];
         }
     };
-    private int id;
+    private String id;
     private String name;
     private String information;
     private String linkedInUrl;
@@ -30,7 +30,7 @@ public class Speaker implements Parcelable {
     private String profilePicUrl;
     private boolean isKeySpeaker;
 
-    public Speaker(int id, String name, String information, String linkedInUrl, String twitterHandle, String designation, String profilePicUrl, int isKeySpeaker) {
+    public Speaker(String id, String name, String information, String linkedInUrl, String twitterHandle, String designation, String profilePicUrl, int isKeySpeaker) {
         this.id = id;
         this.name = name;
         this.information = information;
@@ -46,7 +46,7 @@ public class Speaker implements Parcelable {
     }
 
     public Speaker(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readString();
         this.name = in.readString();
         this.information = in.readString();
         this.linkedInUrl = in.readString();
@@ -64,11 +64,11 @@ public class Speaker implements Parcelable {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -117,7 +117,7 @@ public class Speaker implements Parcelable {
     }
 
     public String generateSqlQuery() {
-        String query = String.format("INSERT OR IGNORE INTO %s VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d);", DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, id, StringUtils.replaceUnicode(name), StringUtils.replaceUnicode(designation), StringUtils.replaceUnicode(information), StringUtils.replaceUnicode(twitterHandle), StringUtils.replaceUnicode(linkedInUrl), StringUtils.replaceUnicode(profilePicUrl), (isKeySpeaker ? 1 : 0));
+        String query = String.format("INSERT OR IGNORE INTO %s VALUES (%s, '%s', '%s', '%s', '%s', '%s', '%s', %d);", DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, id, StringUtils.replaceUnicode(name), StringUtils.replaceUnicode(designation), StringUtils.replaceUnicode(information), StringUtils.replaceUnicode(twitterHandle), StringUtils.replaceUnicode(linkedInUrl), StringUtils.replaceUnicode(profilePicUrl), (isKeySpeaker ? 1 : 0));
         return query;
     }
 
@@ -128,7 +128,7 @@ public class Speaker implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(id);
+        out.writeString(id);
         out.writeString(name);
         out.writeString(information);
         out.writeString(linkedInUrl);
