@@ -4,4 +4,4 @@
            android:layout_height="wrap_content"
            android:padding="@dimen/main_menu_padding"
            android:scaleType="center"
-           android:src="@drawable/fossasia"/>
+           android:src="@drawable/app_header"/>
