@@ -138,5 +138,6 @@
     <string name="venue_map"><u>Go to Map</u></string>
     <string name="venue_link"><u>Visit Link</u></string>
     <string name="title_activity_maps">Map</string>
+    <string name="select_map">Select Day</string>
 
 </resources>

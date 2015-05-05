@@ -8,4 +8,10 @@
         android:title="@string/directions"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/day_select"
+        android:title="@string/select_map"
+        android:icon="@drawable/ic_list_white_24dp"
+        app:showAsAction="ifRoom"/>
+
 </menu>
