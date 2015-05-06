@@ -64,8 +64,6 @@ public class JsonToDatabase {
             @Override
             public void onResponse(String response) {
 
-                ArrayList<String> queries = new ArrayList<>();
-
                 try {
                     JSONObject jsonData = new JSONObject(response);
 
