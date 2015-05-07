@@ -378,7 +378,7 @@ public class DatabaseManager {
     public ArrayList<Speaker> getSpeakers(boolean fetchKeySpeaker) {
         Cursor cursor = helper.getReadableDatabase().query(DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, null, null, null, null, null, null);
         ArrayList<Speaker> speakers = new ArrayList<Speaker>();
-        String id;
+        long id;
         String name;
         String designation;
         String profilePicUrl;
@@ -388,7 +388,7 @@ public class DatabaseManager {
         int isKeySpeaker;
         if (cursor.moveToFirst()) {
             do {
-                id = cursor.getString(0);
+                id = cursor.getLong(0);
                 name = cursor.getString(1);
                 designation = cursor.getString(2);
                 information = cursor.getString(3);

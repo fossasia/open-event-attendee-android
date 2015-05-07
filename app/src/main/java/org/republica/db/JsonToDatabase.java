@@ -51,8 +51,6 @@ public class JsonToDatabase {
 
     public void startDataDownload() {
         parse(RepublicaUrls.DATA_URL);
-        fetchKeySpeakers(RepublicaUrls.SPEAKER_URL);
-
     }
 
     public void parse(final String url) {
@@ -66,11 +64,9 @@ public class JsonToDatabase {
 
                 try {
                     JSONObject jsonData = new JSONObject(response);
-
                     parseSession(jsonData);
-                   // parseSpeakers(jsonData);
+                    parseSpeakers(jsonData);
                     parseTracks(jsonData);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -162,7 +158,7 @@ public class JsonToDatabase {
     private void parseSpeakers(JSONObject jsonData) throws JSONException{
 
         JSONArray speakers = jsonData.getJSONArray("speakers");
-        String id;
+        long id;
         String name;
         String information;
         String linkedInUrl;
@@ -175,7 +171,8 @@ public class JsonToDatabase {
         for (int i = 0; i < speakers.length(); i++) {
             try {
                 JSONObject jsonObject = speakers.getJSONObject(i);
-                id = jsonObject.getString("id");
+//                id = jsonObject.getString("id");
+                id = i;
                 name = jsonObject.getString("name");
                 information = jsonObject.getString("biography");
                 designation = jsonObject.getString("position");
@@ -192,72 +189,6 @@ public class JsonToDatabase {
                 e.printStackTrace();
             }
         }
-    }
-    private void fetchKeySpeakers(String url) {
-
-        RequestQueue queue = VolleySingleton.getReqQueue(context);
-
-        // Request a string response from the provided URL.
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-
-            @Override
-            public void onResponse(JSONArray response) {
-                //JSONArray jsonArray = removePaddingFromString(response);
-                //  Log.d(TAG, ""+jsonArrayRequest.toString());
-                String id;
-                String name;
-                String profilePicUrl;
-                String url;
-                String biography;
-                String organization;
-                String organization_url;
-                String position;
-                // String sessions;
-                //String links;
-                String event;
-                long last_modified;
-                //Log.d(TAG,""+jsonArray.length());
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject speaker = (JSONObject) response.get(i);
-
-                        id = replace(speaker.getString("id"));
-                        name = replace(speaker.getString("name"));
-                        profilePicUrl = replace(speaker.getString("photo"));
-                        url = replace(speaker.getString("url"));
-                        biography = replace(speaker.getString("biography"));
-                        Log.d(TAG,biography);
-                        organization = replace(speaker.getString("organization"));
-                        organization_url = replace(speaker.getString("organization_url"));
-                        position = replace(speaker.getString("position"));
-                        event = replace(speaker.getString("event"));
-                        last_modified = speaker.getLong("last_modified");
-                        Speaker temp = new Speaker(id, name, biography,"","",position,profilePicUrl, 0);
-                         Log.d(TAG, temp.generateSqlQuery());
-                        queries.add(temp.generateSqlQuery());
-
-                    } catch (JSONException e) {
-                        //         Log.e(TAG, "JSON Error: " + e.getMessage() + "\nResponse: " + response);
-                    }
-
-                }
-//                keySpeakerLoaded = true;
-            }
-        }
-
-                , new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-//                keySpeakerLoaded = true;
-                error.getMessage();
-            }
-        }
-
-        );
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
-
     }
 
     private void parseTracks(JSONObject jsonData) throws JSONException{
