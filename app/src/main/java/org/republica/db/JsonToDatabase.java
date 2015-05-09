@@ -208,7 +208,9 @@ public class JsonToDatabase {
     private String dataFormatter(String begin) throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date date = format.parse(begin);
-        return String.valueOf(date.getHours() + ":" + date.getMinutes());
+        DateFormat formatter = new SimpleDateFormat("HH:mm a");
+        String dateFormatted = formatter.format(date);
+        return dateFormatted;
     }
 
 }
