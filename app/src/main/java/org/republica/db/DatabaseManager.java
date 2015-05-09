@@ -305,7 +305,7 @@ public class DatabaseManager {
 
 
     public ArrayList<FossasiaEvent> getEventsByDateandTrack(String selectDate, String track) {
-        Cursor cursor = helper.getReadableDatabase().rawQuery("SELECT * FROM schedule WHERE date='" + selectDate + "' AND track='" + track + "'", null);
+        Cursor cursor = helper.getReadableDatabase().rawQuery("SELECT * FROM schedule WHERE date='" + selectDate + "' AND track='" + track + "' ORDER BY start_time ASC", null);
         ArrayList<FossasiaEvent> fossasiaEventList = new ArrayList<FossasiaEvent>();
         int id;
         String title;

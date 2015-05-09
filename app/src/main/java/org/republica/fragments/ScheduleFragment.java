@@ -47,13 +47,10 @@ public class ScheduleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             String track = getArguments().getString("TRACK");
-
-
             ArrayList<Day> staticDays = new ArrayList<>();
             staticDays.add(new Day(0, "May 5"));
             staticDays.add(new Day(1, "May 6"));
             staticDays.add(new Day(2, "May 7"));
-
 
             daysAdapter = new DayLoader(getChildFragmentManager(), track, staticDays);
         }
