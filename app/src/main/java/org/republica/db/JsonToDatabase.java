@@ -6,14 +6,11 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.republica.api.FossasiaUrls;
 import org.republica.api.RepublicaUrls;
 import org.republica.model.FossasiaEvent;
 import org.republica.model.Speaker;
@@ -135,14 +132,14 @@ public class JsonToDatabase {
                 moderator = "";
                 FossasiaEvent event = new FossasiaEvent(i, title, subTitle, date, "", startTime, abstractText, description, venue, track, moderator);
 
-                String query = "INSERT INTO %s VALUES ('%s', '%s', '%s');";
+                String query = "INSERT INTO %s VALUES ('%s', %d, '%s');";
 
                 JSONArray jArray = jsonObject.getJSONArray("speakers");
                 for (int j = 0; j < jArray.length(); j++) {
                     JSONObject jObj = jArray.getJSONObject(j);
                     String fullName = jObj.getString("name");
                     String speakerId = jObj.getString("id");
-                    String speakerQuery = String.format(query, DatabaseHelper.TABLE_NAME_SPEAKER_EVENT_RELATION, fullName, speakerId, StringUtils.replaceUnicode(title));
+                    String speakerQuery = String.format(query, DatabaseHelper.TABLE_NAME_SPEAKER_EVENT_RELATION, fullName, i, StringUtils.replaceUnicode(title));
                     queries.add(speakerQuery);
 
                 }

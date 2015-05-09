@@ -7,11 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String EVENTS_TABLE_NAME = "events";
-//    public static final String EVENTS_TITLES_TABLE_NAME = "events_titles";
-//    public static final String PERSONS_TABLE_NAME = "persons";
-//    public static final String EVENTS_PERSONS_TABLE_NAME = "events_persons";
-//    public static final String TRACKS_TABLE_NAME = "tracks_new";
-//    public static final String DAYS_TABLE_NAME = "days";
     public static final String BOOKMARKS_TABLE_NAME = "bookmarks";
     public static final String TABLE_NAME_KEY_SPEAKERS = "key_speakers";
     public static final String TABLE_NAME_SPONSOR = "sponsors";
@@ -26,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NAME_VENUE = "venue";
 
-    private static final String DATABASE_NAME = "repub.sqlite3";
+    private static final String DATABASE_NAME = "repub.sqlite4";
     private static final int DATABASE_VERSION = 1;
 
 
@@ -48,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE " + TABLE_NAME_SCHEDULE
                 + " (id INTEGER PRIMARY KEY, title TEXT, sub_title TEXT, date TEXT, day TEXT, start_time TEXT, abstract_text TEXT, description TEXT, venue TEXT, track TEXT, moderator TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_SPEAKER_EVENT_RELATION
-                + " (speaker TEXT, event_id TEXT, event TEXT);");
+                + " (speaker TEXT, event_id INTEGER, event TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_TRACK
                 + " (_id INTEGER, " + TABLE_COLUMN_NAME + " TEXT, " + TABLE_COLOUMN_INFORMATION + " TEXT);");
         database.execSQL("CREATE TABLE " + TABLE_NAME_TRACK_VENUE
