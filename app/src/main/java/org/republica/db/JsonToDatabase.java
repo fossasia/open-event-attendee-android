@@ -120,7 +120,6 @@ public class JsonToDatabase {
         for (int i = 0; i < sessions.length(); i++) {
             try {
                 JSONObject jsonObject = sessions.getJSONObject(i);
-                id = i;
                 title = jsonObject.getString("title");
                 abstractText = jsonObject.getString("abstract");
                 subTitle = jsonObject.getString("type");
@@ -130,10 +129,8 @@ public class JsonToDatabase {
 
                 try {
                     startTime = dataFormatter(jsonObject.getString("begin"));
-                    System.out.println(startTime);
                 } catch (ParseException e) {
                     e.printStackTrace();
-
                 }
                 description = jsonObject.getString("description");
                 JSONObject venueObject = jsonObject.getJSONObject("location");
