@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -35,7 +34,6 @@ public class DatabaseManager {
     public static final String EXTRA_EVENT_START_TIME = "event_start";
     public static final String ACTION_REMOVE_BOOKMARKS = "be.digitalia.fosdem.action.REMOVE_BOOKMARKS";
     public static final String EXTRA_EVENT_IDS = "event_ids";
-    public static final int PERSON_NAME_COLUMN_INDEX = 1;
     private static final Uri URI_TRACKS = Uri.parse("sqlite://be.digitalia.fosdem/tracks");
     private static final Uri URI_EVENTS = Uri.parse("sqlite://be.digitalia.fosdem/events");
     private static final String DB_PREFS_FILE = "database";
@@ -71,22 +69,8 @@ public class DatabaseManager {
         }
     }
 
-    private static void bindString(SQLiteStatement statement, int index, String value) {
-        if (value == null) {
-            statement.bindNull(index);
-        } else {
-            statement.bindString(index, value);
-        }
-    }
 
     private static void clearDatabase(SQLiteDatabase db) {
-//        db.delete(DatabaseHelper.EVENTS_TITLES_TABLE_NAME, null, null);
-//        db.delete(DatabaseHelper.PERSONS_TABLE_NAME, null, null);
-//        db.delete(DatabaseHelper.EVENTS_PERSONS_TABLE_NAME, null, null);
-//        db.delete(DatabaseHelper.LINKS_TABLE_NAME, null, null);
-//        db.delete(DatabaseHelper.TRACKS_TABLE_NAME, null, null);
-//        db.delete(DatabaseHelper.DAYS_TABLE_NAME, null, null);
-        // Deleting Fossasia tables
         db.delete(DatabaseHelper.TABLE_NAME_KEY_SPEAKERS, null, null);
         db.delete(DatabaseHelper.TABLE_NAME_SCHEDULE, null, null);
         db.delete(DatabaseHelper.TABLE_NAME_SPEAKER_EVENT_RELATION, null, null);
@@ -110,13 +94,6 @@ public class DatabaseManager {
 
     }
 
-    public static long toEventId(Cursor cursor) {
-        return cursor.getLong(0);
-    }
-
-    public static long toEventStartTimeMillis(Cursor cursor) {
-        return cursor.isNull(1) ? -1L : cursor.getLong(1);
-    }
 
     public static Person toPerson(Cursor cursor, Person person) {
         if (person == null) {
@@ -128,9 +105,6 @@ public class DatabaseManager {
         return person;
     }
 
-    public static Person toPerson(Cursor cursor) {
-        return toPerson(cursor, null);
-    }
 
     private SharedPreferences getSharedPreferences() {
         return context.getSharedPreferences(DB_PREFS_FILE, Context.MODE_PRIVATE);
