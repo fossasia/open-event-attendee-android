@@ -17,8 +17,11 @@ import org.republica.model.Speaker;
 import org.republica.utils.StringUtils;
 import org.republica.utils.VolleySingleton;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Date;
 /**
  * Created by Abhishek on 17/02/15.
  */
@@ -107,7 +110,7 @@ public class JsonToDatabase {
         //TODO: Get day from Date object
         String day;
         //TODO: Convert time to date object, will be later used to save as reminder
-        String startTime;
+        String startTime = "";
         String abstractText;
         String description;
         String venue;
@@ -124,7 +127,14 @@ public class JsonToDatabase {
 
                 JSONObject dayObject = jsonObject.getJSONObject("day");
                 date = dayObject.getString("label_en");
-                startTime = "1:00 AM";
+
+                try {
+                    startTime = dataFormatter(jsonObject.getString("begin"));
+                    System.out.println(startTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+
+                }
                 description = jsonObject.getString("description");
                 JSONObject venueObject = jsonObject.getJSONObject("location");
                 venue = venueObject.getString("label_en");
@@ -168,7 +178,6 @@ public class JsonToDatabase {
         for (int i = 0; i < speakers.length(); i++) {
             try {
                 JSONObject jsonObject = speakers.getJSONObject(i);
-//                id = jsonObject.getString("id");
                 id = i;
                 name = jsonObject.getString("name");
                 information = jsonObject.getString("biography");
@@ -181,7 +190,7 @@ public class JsonToDatabase {
                 profilePicUrl = jsonObject.getString("photo");
                 Speaker speaker = new Speaker(id, name, information, "", "", designation, profilePicUrl, 0);
                 queries.add(speaker.generateSqlQuery());
-                Log.d(TAG,speaker.generateSqlQuery()+"");
+//                Log.d(TAG,speaker.generateSqlQuery()+"");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -198,13 +207,11 @@ public class JsonToDatabase {
             queries.add(query);
         }
     }
-    public String replace(String response){
-        response =response.replaceAll("'","");
-        response.replaceAll("\n","");
 
-        return response;
-
+    private String dataFormatter(String begin) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date date = format.parse(begin);
+        return String.valueOf(date.getHours() + ":" + date.getMinutes());
     }
-
 
 }
