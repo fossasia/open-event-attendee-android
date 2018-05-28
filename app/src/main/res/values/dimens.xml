@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- text size -->
+    <dimen name="heading_text_size">20sp</dimen>
+    <dimen name="text_size_expanded_title">22sp</dimen>
+    <dimen name="text_size_extra_large">18sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+
+    <!-- margin specifics -->
+    <dimen name="layout_margin_extra_small">2dp</dimen>
+    <dimen name="layout_margin_small">6dp</dimen>
+    <dimen name="layout_margin_medium">8dp</dimen>
+    <dimen name="layout_margin_large">16dp</dimen>
+    <dimen name="layout_margin_extra_large">32dp</dimen>
+
+    <!-- padding specifics -->
+    <dimen name="padding_extra_small">2dp</dimen>
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+    <dimen name="padding_extra_large">32dp</dimen>
+
+    <!-- card details -->
+    <dimen name="card_elevation">3dp</dimen>
+    <dimen name="card_corner_radius">3dp</dimen>
+
+</resources>

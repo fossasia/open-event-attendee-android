@@ -1,0 +1,77 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/grey"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:layout_gravity="center"
+        android:elevation="2dp"
+        android:id="@+id/progressHeaderUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </ProgressBar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/user_name"
+            android:textAlignment="center"
+            android:id="@+id/first_name_tv"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:textColor="@color/black"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            android:id="@+id/avatar_image_view"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:src="@drawable/ic_account_circle_grey_24dp"
+            android:layout_height="120dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/email"
+            android:textAlignment="center"
+            android:id="@+id/email_tv"
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/greyMore"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="30dp"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout_btn"
+            app:cardBackgroundColor="@color/white">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/padding_large"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_gravity="center|start"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logout"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:src="@drawable/ic_exit_to_app_black_24dp"/>
+            </FrameLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</FrameLayout>
