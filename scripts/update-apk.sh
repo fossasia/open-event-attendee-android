@@ -4,16 +4,11 @@ set -e
 git config --global user.name "Travis CI"
 git config --global user.email "noreply+travis@fossasia.org"
 
-git clone --quiet --branch=apk https://nikit19:$GITHUB_API_KEY@github.com/nikit19/open-event-general apk > /dev/null
+git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/open-event-android-general apk > /dev/null
 cd apk
 \cp -r ../app/build/outputs/apk/*/**.apk .
 \cp -r ../app/build/outputs/apk/debug/output.json debug-output.json
 \cp -r ../app/build/outputs/apk/release/output.json release-output.json
-
-
-for file in app*; do
-  mv $file test-${file%%}
-done
 
 # Create a new branch that will contains only latest apk
 git checkout --orphan temporary
