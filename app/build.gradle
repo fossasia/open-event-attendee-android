@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
@@ -41,7 +42,8 @@ dependencies {
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.0'
-            ''
+
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.9.1"
     implementation 'com.github.jasminb:jsonapi-converter:0.8.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
@@ -52,10 +54,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
-    compileOnly 'org.projectlombok:lombok:1.16.20'
-    annotationProcessor 'org.projectlombok:lombok:1.16.20'
     implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'

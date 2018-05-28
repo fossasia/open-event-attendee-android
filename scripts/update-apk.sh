@@ -1,8 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 git config --global user.name "Travis CI"
 git config --global user.email "noreply+travis@fossasia.org"
+
+export DEPLOY_BRANCH=${DEPLOY_BRANCH:-development}
+export PUBLISH_BRANCH=${PUBLISH_BRANCH:-master}
+
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-android-general" ] || ! [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" -o "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+    echo "We upload apk only for changes in development or master, and not PRs. So, let's skip this shall we ? :)"
+    exit 0
+fi
+
 
 git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/open-event-android-general apk > /dev/null
 cd apk
