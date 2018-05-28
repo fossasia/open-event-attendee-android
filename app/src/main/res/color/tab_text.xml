@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#fff" android:state_selected="true"/>
-    <item android:color="#fff" android:state_pressed="true"/>
-    <!-- 60% brightness like mentioned in Material Design guidelines -->
-    <item android:color="#9fff"/>
-</selector>
