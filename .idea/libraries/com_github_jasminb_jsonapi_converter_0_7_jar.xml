@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.github.jasminb:jsonapi-converter:0.7@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jasminb/jsonapi-converter/0.7/22b0074e5f86189e10e233ab39e5cbe051f8fe3/jsonapi-converter-0.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jasminb/jsonapi-converter/0.7/567ff61a005452dad63fd9e065f0308cdfdb1501/jsonapi-converter-0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

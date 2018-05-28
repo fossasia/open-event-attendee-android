@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.picasso/picasso2-okhttp3-downloader/1.1.0/f4f77eb62269c977c154765cd01587eda6488273/picasso2-okhttp3-downloader-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.picasso/picasso2-okhttp3-downloader/1.1.0/26a95d4bef771299b7ddb6ae56c112a1d8f07343/picasso2-okhttp3-downloader-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.jakewharton.timber:timber-4.7.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/timber-4.7.0.aar/e2fa7807061c9b17bf8fc9b4dfb976cf/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/timber-4.7.0.aar/e2fa7807061c9b17bf8fc9b4dfb976cf/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.timber/timber/4.7.0/36dd31f8ab061a57391b87512e16772d102759a2/timber-4.7.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
