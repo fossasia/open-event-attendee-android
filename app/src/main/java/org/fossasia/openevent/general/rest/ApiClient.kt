@@ -41,11 +41,10 @@ object ApiClient {
     }
 
     private val retrofit: Retrofit by lazy {
-        val classes = arrayOf<Class<*>>(Event::class.java,User::class.java)
         Retrofit.Builder()
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, *classes))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(BASE_URL)
                 .build()
