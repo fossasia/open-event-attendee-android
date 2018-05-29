@@ -7,6 +7,7 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.model.Event
 import org.fossasia.openevent.general.model.User
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -40,10 +41,11 @@ object ApiClient {
     }
 
     private val retrofit: Retrofit by lazy {
+        val classes = arrayOf<Class<*>>(Event::class.java,User::class.java)
         Retrofit.Builder()
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, User::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, *classes))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(BASE_URL)
                 .build()
