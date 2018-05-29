@@ -1,10 +1,5 @@
 package org.fossasia.openevent.general;
 
-/**
- * Created by harsimar on 20/05/18.
- */
-
-import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -15,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.fossasia.openevent.general.model.Attributes;
 import org.fossasia.openevent.general.model.Event;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,9 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAdapter.EventViewHolder> {
-    private Context context;
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
+    /* package */ static class EventViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.all_events_card)
         CardView cv;
         @BindView(R.id.all_events_card_image)
@@ -56,23 +51,17 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         }
     }
 
-    List<Event> events;
+    private final List<Event> events = new ArrayList<>();
 
-    EventsRecyclerAdapter(Context context) {
-        this.context = context;
-        events = new ArrayList<>();
-    }
-
-    public void addAll(List<Event> eventList) {
+    /* package */ void addAll(List<Event> eventList) {
         this.events.addAll(eventList);
     }
 
     @NonNull
     @Override
     public EventsRecyclerAdapter.EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_events, parent, false);
-        EventViewHolder eventViewHolder = new EventViewHolder(v);
-        return eventViewHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_events, parent, false);
+        return new EventViewHolder(view);
     }
 
     @Override
@@ -101,14 +90,13 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public String dateFormat(Attributes attributes) {
+    private String dateFormat(Attributes attributes) {
         String returnString = "";
         String string = attributes.getStartsAt().substring(0, 9);
         DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-        Date date = null;
         try {
-            date = format.parse(string);
-            SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
+            Date date = format.parse(string);
+            SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
             returnString = dt1.format(date);
         } catch (ParseException e) {
             e.printStackTrace();

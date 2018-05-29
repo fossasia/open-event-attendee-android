@@ -12,13 +12,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.fossasia.openevent.general.model.User;
+import com.squareup.picasso.Picasso;
+
 import org.fossasia.openevent.general.rest.ApiClient;
 import org.fossasia.openevent.general.utils.ConstantStrings;
 import org.fossasia.openevent.general.utils.JWTUtils;
 import org.fossasia.openevent.general.utils.SharedPreferencesUtil;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,13 +29,10 @@ import timber.log.Timber;
 public class ProfileFragment extends Fragment {
 
     private static final String app="application/vnd.api+json";
-    private User user;
-    private static String TOKEN = null;
     private long userId=-1;
     private TextView firstNameTv;
     private TextView emailTv;
     private ImageView avatarImageView;
-    private CardView logout;
     private ProgressBar progressBar;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -46,13 +42,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TOKEN = SharedPreferencesUtil.getString(ConstantStrings.TOKEN,null);
-        if(TOKEN == null)
+        String token = SharedPreferencesUtil.getString(ConstantStrings.TOKEN, null);
+        if(token == null)
             redirectToLogin();
-        TOKEN = "JWT "+TOKEN;
+        token = "JWT "+ token;
         try {
-            userId = JWTUtils.getIdentity(TOKEN);
+            userId = JWTUtils.getIdentity(token);
             Timber.d("User id is %s", userId);
+            ApiClient.setToken(token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -74,42 +71,34 @@ public class ProfileFragment extends Fragment {
 
         firstNameTv = view.findViewById(R.id.first_name_tv);
         emailTv = view.findViewById(R.id.email_tv);
-        logout = view.findViewById(R.id.logout_btn);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferencesUtil.remove(ConstantStrings.TOKEN);
-                redirectToMain();
-            }
+        CardView logout = view.findViewById(R.id.logout_btn);
+        logout.setOnClickListener(v -> {
+            SharedPreferencesUtil.remove(ConstantStrings.TOKEN);
+            ApiClient.setToken(null);
+            redirectToMain();
         });
         avatarImageView = view.findViewById(R.id.avatar_image_view);
         progressBar= view.findViewById(R.id.progressHeaderUser);
 
         progressBar.setIndeterminate(true);
 
-        compositeDisposable.add(ApiClient.getClient2(TOKEN).getProfile(userId)
+        compositeDisposable.add(ApiClient.getEventApi().getProfile(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if(response.isSuccessful()){
+                .subscribe(user -> {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setVisibility(View.GONE);
+                    Timber.d("Response Success");
+                    firstNameTv.setText(user.getFirstName());
+                    emailTv.setText(user.getEmail());
 
-                        progressBar.setIndeterminate(false);
-                        progressBar.setVisibility(View.GONE);
-                        Timber.d("Response Success");
-                        User userAttrib = response.body();
-                        firstNameTv.setText(userAttrib.getFirstName());
-                        emailTv.setText(userAttrib.getEmail());
-
-                        Picasso.with(view.getContext())
-                                .load(userAttrib.getAvatarUrl())
-                                .placeholder(R.drawable.ic_person_black_24dp)
-                                .transform(new CircleTransform())
-                                .into(avatarImageView);
-                    } else {
-                        Timber.d("Not Successfull, Error code : "+response.code());
-                    }
+                    Picasso.with(view.getContext())
+                            .load(user.getAvatarUrl())
+                            .placeholder(R.drawable.ic_person_black_24dp)
+                            .transform(new CircleTransform())
+                            .into(avatarImageView);
                 }, throwable -> {
-                    Timber.e("Failure" + "\n" + throwable.toString());
+                    Timber.e(throwable, "Failure");
                 }));
         return view;
     }

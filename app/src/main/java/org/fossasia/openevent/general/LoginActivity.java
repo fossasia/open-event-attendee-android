@@ -28,8 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.login_btn)
     protected Button loginBtn;
 
-    ProgressDialog progressDialog;
-    public static String TOKEN=null;
+    private ProgressDialog progressDialog;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -37,57 +36,44 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         String token = SharedPreferencesUtil.getString(ConstantStrings.TOKEN,null);
-        Timber.d("Token is "+token);
-        if(token != null)
+        Timber.d("Token is %s", token);
+        if (token != null)
             redirectToMain();
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Intent i = getIntent();
-        String temp = i.getStringExtra("LOGOUT");
-        if(temp != null && temp.equals("TRUE")){
-            TOKEN = null;
-        }
 
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("Logging you in...");
 
         loginBtn.setOnClickListener(v -> {
-            //loginUser(ei.getText().toString(),e2.getText().toString());
-            loginUser("hey@hey.hey", "heyheyhey");
             progressDialog.show();
+            loginUser(usernameET.getText().toString(), passwordET.getText().toString());
         });
     }
 
     public void redirectToMain(){
-        Intent i = new Intent(LoginActivity.this,MainActivity.class);
-        startActivity(i);
-        this.finish();
+        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
-    public void loginUser(String title, String body) {
-
-        Login login=new Login(title.trim(),body.trim()) ;
-        compositeDisposable.add(ApiClient.getClient2(TOKEN).login(login)
+    private void loginUser(String email, String password) {
+        Login login = new Login(email.trim(), password.trim()) ;
+        compositeDisposable.add(ApiClient.getEventApi().login(login)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if(response.isSuccessful()) {
-                        String accessToken = response.body().getAccessToken();
-                        Toast.makeText(getApplicationContext(), "Success! " , Toast.LENGTH_LONG).show();
-                        TOKEN = accessToken;
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Error Occured "+response.code(), Toast.LENGTH_LONG).show();
-                        Timber.d("Error "+response.code()+"\n"+"Error body "+response.errorBody());
-                    }
+                .subscribe(loginResponse -> {
+                    Toast.makeText(getApplicationContext(), "Success! " , Toast.LENGTH_LONG).show();
+                    ApiClient.setToken(loginResponse.getAccessToken());
                     progressDialog.cancel();
-                    SharedPreferencesUtil.putString(ConstantStrings.TOKEN,TOKEN);
-                    if(TOKEN!=null)
+                    SharedPreferencesUtil.putString(ConstantStrings.TOKEN, loginResponse.getAccessToken());
+                    if(loginResponse.getAccessToken() != null)
                         redirectToMain();
                 }, throwable -> {
-                    TOKEN = null;
+                    ApiClient.setToken(null);
                     progressDialog.cancel();
-                    Toast.makeText(getApplicationContext(), "Unable to Login !" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Unable to Login!" , Toast.LENGTH_LONG).show();
                     Timber.e("Failure"+"\n"+throwable.toString());
                 }));
     }
