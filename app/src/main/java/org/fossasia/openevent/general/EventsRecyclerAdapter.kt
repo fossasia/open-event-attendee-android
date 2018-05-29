@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*
-import org.fossasia.openevent.general.model.Attributes
 import org.fossasia.openevent.general.model.Event
 import timber.log.Timber
 import java.text.ParseException
@@ -19,7 +18,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventsRecyclerAdapter.EventVi
 
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(event: Attributes) {
+        fun bind(event: Event) {
             itemView.eventName.text = event.name
             itemView.description.text = event.description
 
@@ -37,8 +36,8 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventsRecyclerAdapter.EventVi
             }
         }
 
-        private fun dateFormat(dateString: String): String {
-            val string = dateString.substring(0, 9)
+        private fun dateFormat(dateString: String?): String {
+            val string = dateString?.substring(0, 9)
             val format = SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH)
             try {
                 val date = format.parse(string)
@@ -62,7 +61,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventsRecyclerAdapter.EventVi
     }
 
     override fun onBindViewHolder(holder: EventsRecyclerAdapter.EventViewHolder, position: Int) {
-        val event = events[position].attributes
+        val event = events[position]
 
         holder.bind(event)
     }
