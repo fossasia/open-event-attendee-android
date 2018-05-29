@@ -25,5 +25,6 @@
     <!-- card details -->
     <dimen name="card_elevation">3dp</dimen>
     <dimen name="card_corner_radius">3dp</dimen>
+    <dimen name="avatar_medium">120dp</dimen>
 
 </resources>

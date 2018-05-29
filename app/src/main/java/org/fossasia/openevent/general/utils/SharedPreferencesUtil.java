@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
