@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +17,6 @@ import timber.log.Timber
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var progressDialog: ProgressDialog
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-        progressDialog = ProgressDialog(this@LoginActivity)
-        progressDialog.setMessage("Logging you in...")
-
-        login.setOnClickListener { _ ->
-            progressDialog.show()
+        loginButton.setOnClickListener { _ ->
+            showProgress(false)
             loginUser(username.text.toString(), password.text.toString())
         }
     }
@@ -54,13 +50,13 @@ class LoginActivity : AppCompatActivity() {
                 .subscribe({ (_, accessToken) ->
                     Toast.makeText(applicationContext, "Success!", Toast.LENGTH_LONG).show()
                     ApiClient.setToken(accessToken)
-                    progressDialog.cancel()
+                    showProgress(true)
                     SharedPreferencesUtil.putString(ConstantStrings.TOKEN, accessToken)
                     if (accessToken != null)
                         redirectToMain()
                 }) { throwable ->
                     ApiClient.setToken(null)
-                    progressDialog.cancel()
+                    showProgress(true)
                     Toast.makeText(applicationContext, "Unable to Login!", Toast.LENGTH_LONG).show()
                     Timber.e(throwable, "Failure in logging in")
                 })
@@ -69,5 +65,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
+    }
+
+    private fun showProgress(enabled:Boolean) {
+        loginButton.isEnabled = enabled
+        progressBar.visibility = if (enabled) View.GONE else View.VISIBLE
     }
 }
