@@ -45,12 +45,12 @@ class EventsFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        compositeDisposable.add(ApiClient.eventApi.getEvents(app)
+        compositeDisposable.add(ApiClient.eventApi.getEvents()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ eventList ->
                     Timber.d("Response Success")
-                    eventsRecyclerAdapter.addAll(eventList.eventList)
+                    eventsRecyclerAdapter.addAll(eventList)
 
                     progressBarHandle()
                     addAnim()
