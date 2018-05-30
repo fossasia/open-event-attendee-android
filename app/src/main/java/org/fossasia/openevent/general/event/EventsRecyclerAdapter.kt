@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general
+package org.fossasia.openevent.general.event
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*
-import org.fossasia.openevent.general.model.Event
+import org.fossasia.openevent.general.R
 import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -55,12 +55,12 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventsRecyclerAdapter.EventVi
         this.events.addAll(eventList)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsRecyclerAdapter.EventViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)
         return EventViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: EventsRecyclerAdapter.EventViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
 
         holder.bind(event)

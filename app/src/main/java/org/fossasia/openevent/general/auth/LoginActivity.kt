@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general
+package org.fossasia.openevent.general.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,29 +9,25 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
-import org.fossasia.openevent.general.model.Login
-import org.fossasia.openevent.general.rest.ApiClient
-import org.fossasia.openevent.general.utils.ConstantStrings
-import org.fossasia.openevent.general.utils.SharedPreferencesUtil
+import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class LoginActivity : AppCompatActivity() {
 
     private val compositeDisposable = CompositeDisposable()
+    private val authService: AuthService by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val token = SharedPreferencesUtil.getString(ConstantStrings.TOKEN, null)
-        Timber.d("Token is %s", token)
-        ApiClient.setToken("JWT $token")
-        if (token != null)
+        if (authService.isLoggedIn())
             redirectToMain()
 
         setContentView(R.layout.activity_login)
 
         loginButton.setOnClickListener { _ ->
-            showProgress(false)
             loginUser(username.text.toString(), password.text.toString())
         }
     }
@@ -43,20 +39,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(email: String, password: String) {
-        val login = Login(email.trim(), password.trim())
-        compositeDisposable.add(ApiClient.eventApi.login(login)
+        compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ (_, accessToken) ->
+                .doOnSubscribe {
+                    showProgress(true)
+                }
+                .doFinally {
+                    showProgress(false)
+                }
+                .subscribe({ _ ->
                     Toast.makeText(applicationContext, "Success!", Toast.LENGTH_LONG).show()
-                    ApiClient.setToken(accessToken)
-                    showProgress(true)
-                    SharedPreferencesUtil.putString(ConstantStrings.TOKEN, accessToken)
-                    if (accessToken != null)
-                        redirectToMain()
+                    redirectToMain()
                 }) { throwable ->
-                    ApiClient.setToken(null)
-                    showProgress(true)
                     Toast.makeText(applicationContext, "Unable to Login!", Toast.LENGTH_LONG).show()
                     Timber.e(throwable, "Failure in logging in")
                 })
@@ -67,8 +62,8 @@ class LoginActivity : AppCompatActivity() {
         compositeDisposable.dispose()
     }
 
-    private fun showProgress(enabled:Boolean) {
-        loginButton.isEnabled = enabled
-        progressBar.visibility = if (enabled) View.GONE else View.VISIBLE
+    private fun showProgress(enabled: Boolean) {
+        loginButton.isEnabled = !enabled
+        progressBar.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 }

@@ -5,10 +5,6 @@ import android.support.v4.util.SparseArrayCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by nikit on 18/5/18.
- */
-
 public class JWTUtils {
 
     public static SparseArrayCompat<String> decode(String token) {
@@ -28,10 +24,10 @@ public class JWTUtils {
         return Long.parseLong(new JSONObject(decoded.get(1)).get("exp").toString());
     }
 
-    public static int getIdentity(String token) throws JSONException {
+    public static long getIdentity(String token) throws JSONException {
         SparseArrayCompat<String> decoded = decode(token);
 
-        return Integer.parseInt(new JSONObject(decoded.get(1)).get("identity").toString());
+        return Long.parseLong(new JSONObject(decoded.get(1)).get("identity").toString());
     }
 
     public static boolean isExpired(String token) {

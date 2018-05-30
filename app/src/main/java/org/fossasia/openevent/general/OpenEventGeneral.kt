@@ -2,20 +2,24 @@ package org.fossasia.openevent.general
 
 import android.app.Application
 import android.content.Context
+import org.fossasia.openevent.general.di.apiModule
+import org.fossasia.openevent.general.di.commonModule
+import org.fossasia.openevent.general.di.networkModule
+import org.koin.android.ext.android.startKoin
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
 class OpenEventGeneral : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        context = WeakReference(applicationContext)
-        Timber.plant(Timber.DebugTree())
+
+    companion object  {
+        @JvmStatic
+        var appContext: Context? = null
+            private set
     }
 
-    companion object {
-        private lateinit var context: WeakReference<Context>
-        @JvmStatic
-        val appContext: Context?
-            get() = context.get()
+    override fun onCreate() {
+        super.onCreate()
+        appContext = applicationContext
+        startKoin(this, listOf(commonModule, apiModule, networkModule))
+        Timber.plant(Timber.DebugTree())
     }
 }

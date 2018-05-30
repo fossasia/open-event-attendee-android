@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.model
+package org.fossasia.openevent.general.auth
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming

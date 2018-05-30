@@ -39,7 +39,7 @@
 
 -dontwarn com.google.errorprone.**
 
--keep class org.fossasia.openevent.general.model.** {
+-keep class org.fossasia.openevent.general.data.model.** {
   *;
 }
 
