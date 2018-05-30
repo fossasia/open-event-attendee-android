@@ -1,14 +1,13 @@
 package org.fossasia.openevent.general.event
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import android.widget.Toast
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
@@ -20,8 +19,7 @@ class EventsFragment : Fragment() {
     private val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(activity)
     }
-    private val compositeDisposable = CompositeDisposable()
-    private val eventApi: EventApi by inject()
+    private val eventsViewModel: EventsViewModel by inject()
 
     private lateinit var rootView: View
 
@@ -37,24 +35,28 @@ class EventsFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        compositeDisposable.add(eventApi.getEvents()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ eventList ->
-                    Timber.d("Response Success")
-                    eventsRecyclerAdapter.addAll(eventList)
+        val slideup = SlideInUpAnimator()
+        slideup.addDuration = 500
+        rootView.eventsRecycler.itemAnimator = slideup
 
-                    progressBarHandle()
-                    addAnim()
-                    notifyItems()
+        eventsViewModel.events.observe(this, Observer {
+            it?.let {
+                eventsRecyclerAdapter.addAll(it)
+            }
 
-                    Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-                }) { throwable ->
-                    run {
-                        progressBarHandle()
-                        Timber.e(throwable, "Fetching Failed")
-                    }
-                })
+            notifyItems()
+            Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+        })
+
+        eventsViewModel.error.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        eventsViewModel.progress.observe(this, Observer {
+            it?.let { showProgressBar(it) }
+        })
+
+        eventsViewModel.loadEvents()
 
         return rootView
     }
@@ -69,20 +71,8 @@ class EventsFragment : Fragment() {
         eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
     }
 
-    private fun addAnim() {
-        //item animator
-        val slideup = SlideInUpAnimator()
-        slideup.addDuration = 500
-        rootView.eventsRecycler.itemAnimator = slideup
-    }
-
-    private fun progressBarHandle() {
-        rootView.progressBar.isIndeterminate = false
-        rootView.progressBar.visibility = View.GONE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    private fun showProgressBar(show: Boolean) {
+        rootView.progressBar.isIndeterminate = show
+        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

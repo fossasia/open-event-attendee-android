@@ -1,34 +1,33 @@
-package org.fossasia.openevent.general.auth
+package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.fossasia.openevent.general.common.SingleLiveEvent
+import timber.log.Timber
 
-class LoginActivityViewModel(private val authService: AuthService) : ViewModel() {
+class EventsViewModel(private val eventService: EventService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
-    val error = SingleLiveEvent<String>()
-    val loggedIn = SingleLiveEvent<Boolean>()
+    val events = MutableLiveData<List<Event>>()
+    val error = MutableLiveData<String>()
 
-    fun isLoggedIn() = authService.isLoggedIn()
-
-    fun login(email: String, password: String) {
-        compositeDisposable.add(authService.login(email, password)
+    fun loadEvents() {
+        compositeDisposable.add(eventService.getEvents()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
+                .doOnSubscribe({
                     progress.value = true
-                }.doFinally {
+                }).doFinally({
                     progress.value = false
-                }.subscribe({
-                    loggedIn.value = true
+                }).subscribe({
+                    events.value = it
                 }, {
-                    error.value = "Unable to Login. Please check your credentials"
+                    Timber.e(it, "Error fetching events")
+                    error.value = "Error fetching events"
                 }))
     }
 
