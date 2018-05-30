@@ -19,4 +19,7 @@
     <string name="email">example@gmail.com</string>
     <string name="password">Password</string>
 
+    <!--eventyay-->
+    <string name="eventyay_logo">eventyay</string>
+
 </resources>
