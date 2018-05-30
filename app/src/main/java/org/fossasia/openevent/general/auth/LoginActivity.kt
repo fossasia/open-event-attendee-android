@@ -9,11 +9,11 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.koin.android.ext.android.inject
+import org.koin.android.architecture.ext.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    private val loginActivityViewModel: LoginActivityViewModel by inject()
+    private val loginActivityViewModel by viewModel<LoginActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

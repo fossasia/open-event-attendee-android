@@ -11,16 +11,12 @@ import android.widget.Toast
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
-import org.koin.android.ext.android.inject
+import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
-    private val linearLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(activity)
-    }
-    private val eventsViewModel: EventsViewModel by inject()
-
+    private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +25,7 @@ class EventsFragment : Fragment() {
 
         rootView.progressBar.isIndeterminate = true
 
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        rootView.eventsRecycler.layoutManager = linearLayoutManager
+        rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
 
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
@@ -42,9 +37,9 @@ class EventsFragment : Fragment() {
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.notifyDataSetChanged()
             }
 
-            notifyItems()
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
@@ -59,16 +54,6 @@ class EventsFragment : Fragment() {
         eventsViewModel.loadEvents()
 
         return rootView
-    }
-
-    private fun notifyItems() {
-        val firstVisible = linearLayoutManager.findFirstVisibleItemPosition()
-        val lastVisible = linearLayoutManager.findLastVisibleItemPosition()
-
-        val itemsChanged = lastVisible - firstVisible + 1 // + 1 because we start count items from 0
-        val start = if (firstVisible - itemsChanged > 0) firstVisible - itemsChanged else 0
-
-        eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
     }
 
     private fun showProgressBar(show: Boolean) {
