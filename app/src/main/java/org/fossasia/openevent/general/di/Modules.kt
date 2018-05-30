@@ -36,6 +36,10 @@ val apiModule = applicationContext {
     factory { AuthService(get(), get()) }
 }
 
+val viewModelModule = applicationContext {
+    factory { LoginActivityViewModel(get()) }
+}
+
 val networkModule = applicationContext {
 
     bean {
