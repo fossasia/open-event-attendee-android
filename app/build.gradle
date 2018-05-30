@@ -5,7 +5,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "org.fossasia.openevent.general"
         minSdkVersion 15
@@ -33,6 +32,9 @@ repositories {
 }
 
 dependencies {
+    def lifecycle_version = "1.1.1"
+    def koin_version = "0.9.3"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -42,8 +44,14 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:exifinterface:27.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.koin:koin-android:0.9.3'
-    testImplementation 'org.koin:koin-test:0.9.3'
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-architecture:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
+    implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
+    testImplementation "android.arch.core:core-testing:$lifecycle_version"
+
     //recycler view animations
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
