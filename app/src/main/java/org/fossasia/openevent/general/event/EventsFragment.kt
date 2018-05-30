@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general
+package org.fossasia.openevent.general.event
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,9 +11,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_events.view.*
-import org.fossasia.openevent.general.rest.ApiClient
-import org.fossasia.openevent.general.utils.ConstantStrings
-import org.fossasia.openevent.general.utils.SharedPreferencesUtil
+import org.fossasia.openevent.general.R
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class EventsFragment : Fragment() {
@@ -22,16 +21,9 @@ class EventsFragment : Fragment() {
         LinearLayoutManager(activity)
     }
     private val compositeDisposable = CompositeDisposable()
+    private val eventApi: EventApi by inject()
 
     private lateinit var rootView: View
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        var token = SharedPreferencesUtil.getString(ConstantStrings.TOKEN, null)
-        token = "JWT $token"
-
-        ApiClient.setToken(token)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,7 +37,7 @@ class EventsFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        compositeDisposable.add(ApiClient.eventApi.getEvents()
+        compositeDisposable.add(eventApi.getEvents()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ eventList ->
@@ -92,9 +84,5 @@ class EventsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
-    }
-
-    companion object {
-        private val app = "application/vnd.api+json"
     }
 }

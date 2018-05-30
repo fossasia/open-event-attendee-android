@@ -42,6 +42,8 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:exifinterface:27.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.koin:koin-android:0.9.3'
+    testImplementation 'org.koin:koin-test:0.9.3'
     //recycler view animations
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 

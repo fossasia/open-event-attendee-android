@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.model
+package org.fossasia.openevent.general.event
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
@@ -11,7 +11,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 data class Event(
         @Id(LongIdHandler::class)
         val id: Long,
-        val paymentCountry: String,
+        val paymentCountry: String?,
         val paypalEmail: String?,
         val thumbnailImageUrl: String?,
         val schedulePublishedOn: String?,
@@ -23,12 +23,12 @@ data class Event(
         val largeImageUrl: String?,
         val timezone: String,
         val deletedAt: String?,
-        val ticketUrl: String,
+        val ticketUrl: String?,
         val locationName: String?,
         val privacy: String = "public",
         val codeOfConduct: String?,
         val state: String?,
-        var searchableLocationName: String?,
+        val searchableLocationName: String?,
         val description: String?,
         val pentabarfUrl: String?,
         val xcalUrl: String?,

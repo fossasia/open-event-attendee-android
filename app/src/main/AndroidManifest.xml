@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.LoginActivity"
+            android:name="org.fossasia.openevent.general.auth.LoginActivity"
             android:screenOrientation="portrait">
 
         </activity>

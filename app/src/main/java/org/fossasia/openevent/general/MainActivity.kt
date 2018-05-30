@@ -1,18 +1,14 @@
 package org.fossasia.openevent.general
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import org.fossasia.openevent.general.utils.ConstantStrings
-import org.fossasia.openevent.general.utils.SharedPreferencesUtil
+import org.fossasia.openevent.general.auth.ProfileFragment
+import org.fossasia.openevent.general.event.EventsFragment
 
 class MainActivity : AppCompatActivity() {
-
-    private var token: String? = null
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
@@ -24,15 +20,9 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                if (token != null) {
-                    supportActionBar?.title = "Profile"
-                    fragment = ProfileFragment()
-                    loadFragment(fragment)
-                } else {
-                    Toast.makeText(applicationContext, "You need to login first!", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                    finish()
-                }
+                supportActionBar?.title = "Profile"
+                fragment = ProfileFragment()
+                loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -46,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(listener)
 
         supportActionBar?.title = "Events"
-        token = SharedPreferencesUtil.getString(ConstantStrings.TOKEN, null)
 
         loadFragment(EventsFragment())
     }
