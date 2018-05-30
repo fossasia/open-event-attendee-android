@@ -27,15 +27,15 @@ class LoginActivity : AppCompatActivity() {
             loginActivityViewModel.login(username.text.toString(), password.text.toString())
         }
 
-        loginActivityViewModel.getProgress().observe(this, Observer {
+        loginActivityViewModel.progress.observe(this, Observer {
             it?.let { showProgress(it) }
         })
 
-        loginActivityViewModel.getError().observe(this, Observer {
+        loginActivityViewModel.error.observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        loginActivityViewModel.getLoggedIn().observe(this, Observer {
+        loginActivityViewModel.loggedIn.observe(this, Observer {
             Toast.makeText(applicationContext, "Success!", Toast.LENGTH_LONG).show()
             redirectToMain()
         })

@@ -11,6 +11,8 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventApi
+import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.EventsViewModel
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
 import retrofit2.Retrofit
@@ -32,12 +34,16 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
+
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get()) }
+    bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
+
+    bean { EventService(get()) } // TODO: Convert to factory once database is implemented
 }
 
 val viewModelModule = applicationContext {
     factory { LoginActivityViewModel(get()) }
+    factory { EventsViewModel(get()) }
 }
 
 val networkModule = applicationContext {

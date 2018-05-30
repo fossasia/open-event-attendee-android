@@ -1,11 +1,11 @@
 package org.fossasia.openevent.general.event
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 
 interface EventApi {
 
     @GET("events")
-    fun getEvents(): Observable<List<Event>>
+    fun getEvents(): Single<List<Event>>
 
 }
