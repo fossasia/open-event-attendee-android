@@ -13,7 +13,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventApi
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventsViewModel
-import org.koin.dsl.module.Module
+import org.koin.android.architecture.ext.viewModel
 import org.koin.dsl.module.applicationContext
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,7 +21,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-val commonModule: Module = applicationContext {
+val commonModule = applicationContext {
     bean { Preference() }
 }
 
@@ -42,8 +42,8 @@ val apiModule = applicationContext {
 }
 
 val viewModelModule = applicationContext {
-    factory { LoginActivityViewModel(get()) }
-    factory { EventsViewModel(get()) }
+    viewModel { LoginActivityViewModel(get()) }
+    viewModel { EventsViewModel(get()) }
 }
 
 val networkModule = applicationContext {
