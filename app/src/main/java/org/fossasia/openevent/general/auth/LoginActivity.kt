@@ -24,11 +24,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         loginButton.setOnClickListener {
-            if (username.text.toString().isEmpty() || password.text.toString().isEmpty()) {
-                Toast.makeText(this, "Username or Password can not be empty!", Toast.LENGTH_SHORT).show()
-            } else {
-                loginActivityViewModel.login(username.text.toString(), password.text.toString())
-            }
+            loginActivityViewModel.login(username.text.toString(), password.text.toString())
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
