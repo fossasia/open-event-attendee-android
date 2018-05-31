@@ -18,9 +18,7 @@ class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
-    private val linearLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(activity)
-    }
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,11 +30,13 @@ class EventsFragment : Fragment() {
 
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+
+        linearLayoutManager = LinearLayoutManager(context)
         rootView.eventsRecycler.layoutManager = linearLayoutManager
 
-        val slideup = SlideInUpAnimator()
-        slideup.addDuration = 500
-        rootView.eventsRecycler.itemAnimator = slideup
+        val slideUp = SlideInUpAnimator()
+        slideUp.addDuration = 500
+        rootView.eventsRecycler.itemAnimator = slideUp
 
         eventsViewModel.events.observe(this, Observer {
             it?.let {
