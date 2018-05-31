@@ -18,22 +18,18 @@ class LoginActivityViewModel(private val authService: AuthService) : ViewModel()
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
-       try {
-           compositeDisposable.add(authService.login(email, password)
-                   .subscribeOn(Schedulers.io())
-                   .observeOn(AndroidSchedulers.mainThread())
-                   .doOnSubscribe {
-                       progress.value = true
-                   }.doFinally {
-                       progress.value = false
-                   }.subscribe({
-                       loggedIn.value = true
-                   }, {
-                       error.value = "Unable to Login. Please check your credentials"
-                   }))
-       } catch (e : IllegalArgumentException) {
-           e.printStackTrace()
-       }
+        compositeDisposable.add(authService.login(email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.doFinally {
+                    progress.value = false
+                }.subscribe({
+                    loggedIn.value = true
+                }, {
+                    error.value = "Unable to Login. Please check your credentials"
+                }))
     }
 
     override fun onCleared() {
