@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -42,30 +43,26 @@ class ProfileFragment : Fragment() {
         }
 
         profileFragmentViewModel.progress.observe(this, Observer {
-            it?.let { rootView.progressBar.isIndeterminate = it }
+            it?.let { showProgressBar(it) }
         })
 
-        profileFragmentViewModel.visibility.observe(this, Observer {
-            it?.let { rootView.progressBar.visibility = it }
+        profileFragmentViewModel.error.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        profileFragmentViewModel.name.observe(this, Observer {
-            it?.let { rootView.name.text = it }
-        })
-
-        profileFragmentViewModel.email.observe(this, Observer {
-            it?.let { rootView.email.text = it }
-        })
-
-        profileFragmentViewModel.avatarUrl.observe(this, Observer {
+        profileFragmentViewModel.user.observe(this, Observer {
             it?.let {
+                rootView.name.text = "${it.firstName} ${it.lastName}"
+                rootView.email.text = it.email
+
                 Picasso.get()
-                        .load(it)
+                        .load(it.avatarUrl)
                         .placeholder(R.drawable.ic_person_black_24dp)
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }
         })
+
         fetchProfile()
 
         return rootView
@@ -78,6 +75,11 @@ class ProfileFragment : Fragment() {
         rootView.progressBar.isIndeterminate = true
         profileFragmentViewModel.fetchProfile()
 
+    }
+
+    private fun showProgressBar(show: Boolean) {
+        rootView.progressBar.isIndeterminate = show
+        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }
