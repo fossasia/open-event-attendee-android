@@ -7,7 +7,6 @@ import org.fossasia.openevent.general.R
 import java.util.*
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
-
     private val events = ArrayList<Event>()
 
     fun addAll(eventList: List<Event>) {
