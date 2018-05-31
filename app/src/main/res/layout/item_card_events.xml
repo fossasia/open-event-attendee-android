@@ -14,6 +14,19 @@
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation">
 
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="@dimen/fab_width"
+            android:layout_height="@dimen/fab_height"
+            android:id="@+id/shareFab"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/fab_margin_top"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:scaleType="center"
+            app:elevation="@dimen/fab_elevation"
+            app:backgroundTint="@color/colorAccent"
+            app:srcCompat="@drawable/ic_share_white_24dp"
+            android:background="@color/colorAccent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +45,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -67,7 +81,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_medium">
+                    android:paddingBottom="@dimen/padding_large"
+                    android:paddingTop="@dimen/padding_medium">
 
                     <TextView
                         android:id="@+id/eventName"
@@ -86,24 +101,16 @@
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_small"
+                        android:textStyle="italic"
                         tools:text="Description" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/year"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom"
-                        android:gravity="start"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/padding_small">
-
-                        <TextView
-                            android:id="@+id/year"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/greyMore"
-                            android:textSize="@dimen/text_size_small"
-                            tools:text="2018" />
-                    </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/greyMore"
+                        android:textSize="@dimen/text_size_small"
+                        tools:text="2018" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
