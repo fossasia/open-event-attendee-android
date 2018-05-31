@@ -10,6 +10,7 @@ class AuthService(private val authApi: AuthApi,
 
     private val userMap = ConcurrentHashMap<Long, User>() // TODO: To be replaced by room
 
+    @Throws(IllegalArgumentException::class)
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
