@@ -2,6 +2,7 @@ package org.fossasia.openevent.general
 
 import android.app.Application
 import android.content.Context
+import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
 import org.fossasia.openevent.general.di.networkModule
@@ -22,5 +23,6 @@ class OpenEventGeneral : Application() {
         appContext = applicationContext
         startKoin(this, listOf(commonModule, apiModule, viewModelModule, networkModule))
         Timber.plant(Timber.DebugTree())
+        AndroidThreeTen.init(applicationContext)
     }
 }
