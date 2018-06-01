@@ -8,4 +8,7 @@ interface EventApi {
     @GET("events")
     fun getEvents(): Single<List<Event>>
 
+    @GET
+    fun getEvent(id: Long): Single<Event>
+
 }
