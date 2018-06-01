@@ -23,13 +23,13 @@ class ProfileFragmentViewModel(private val authService: AuthService) : ViewModel
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
+                .doOnSubscribe({
+                    progress.value = true
+                }).doFinally {
                     progress.value = false
-                }
-                .subscribe({ user ->
+                }.subscribe({ user ->
                     Timber.d("Response Success")
                     this.user.value = user
-
                 }) {
                     Timber.e(it, "Failure")
                     error.value = "Failure"
