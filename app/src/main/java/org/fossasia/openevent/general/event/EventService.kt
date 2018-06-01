@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import io.reactivex.Observable
 import io.reactivex.Single
 
 class EventService(private val eventApi: EventApi) {
@@ -14,6 +15,15 @@ class EventService(private val eventApi: EventApi) {
                     events = it
                     it
                 }
+    }
+
+    fun getEvent(id: Long): Single<Event> {
+        return Observable.fromIterable(events)
+                .filter {
+                    it.id == id
+                }.switchIfEmpty {
+                    eventApi.getEvent(id)
+                }.firstOrError()
     }
 
 }

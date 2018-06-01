@@ -22,4 +22,13 @@
     <!--eventyay-->
     <string name="eventyay_logo">eventyay</string>
 
+    <!--share details-->
+    <string name="starts_on">Starts On :&#160;</string>
+    <string name="ends_on">Ends On :&#160;</string>
+    <string name="start_time">Start Time :&#160;</string>
+    <string name="end_time">End Time :&#160;</string>
+    <string name="event_link">Event Link :&#160;</string>
+    <string name="event_description">Event Description :&#160;</string>
+    <string name="event_name">Event Name :&#160;</string>
+
 </resources>
