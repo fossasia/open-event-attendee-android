@@ -88,10 +88,10 @@ class ProfileFragment : Fragment() {
     private fun startOrgaApp(packageName: String) {
         val manager = activity?.packageManager
         try {
-            val i = manager?.getLaunchIntentForPackage(packageName)
+            val intent = manager?.getLaunchIntentForPackage(packageName)
                     ?: throw  ActivityNotFoundException()
-            i.addCategory(Intent.CATEGORY_LAUNCHER)
-            startActivity(i)
+            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+            startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             showInMarket(packageName)
         }
