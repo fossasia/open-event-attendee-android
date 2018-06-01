@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
@@ -40,9 +41,20 @@ class MainActivity : AppCompatActivity() {
         loadFragment(EventsFragment())
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.profile, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.setGroupVisible(R.id.profile_menu, false)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-        .replace(R.id.frame_container, fragment)
-        .commit()
+                .replace(R.id.frame_container, fragment)
+                .commit()
     }
 }

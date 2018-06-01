@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/profile_menu">
+        <item
+            android:id="@+id/orga_app"
+            android:title="@string/manage_events" />
+        <item
+            android:id="@+id/logout"
+            android:title="@string/logout" />
+    </group>
+</menu>
