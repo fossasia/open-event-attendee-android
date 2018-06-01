@@ -1,26 +1,25 @@
 package org.fossasia.openevent.general.auth
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.squareup.picasso.Picasso
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.koin.android.ext.android.inject
-import timber.log.Timber
+import org.koin.android.architecture.ext.viewModel
 
 
 class ProfileFragment : Fragment() {
-    private val compositeDisposable = CompositeDisposable()
-    private val authService: AuthService by inject()
+    private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
+
     private lateinit var rootView: View
 
     private fun redirectToLogin() {
@@ -35,50 +34,52 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        if (!authService.isLoggedIn())
+        if (!profileFragmentViewModel.isLoggedIn())
             redirectToLogin()
 
         rootView.logout.setOnClickListener {
-            authService.logout()
+            profileFragmentViewModel.logout()
             redirectToMain()
         }
+
+        profileFragmentViewModel.progress.observe(this, Observer {
+            it?.let { showProgressBar(it) }
+        })
+
+        profileFragmentViewModel.error.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        profileFragmentViewModel.user.observe(this, Observer {
+            it?.let {
+                rootView.name.text = "${it.firstName} ${it.lastName}"
+                rootView.email.text = it.email
+
+                Picasso.get()
+                        .load(it.avatarUrl)
+                        .placeholder(R.drawable.ic_person_black_24dp)
+                        .transform(CircleTransform())
+                        .into(rootView.avatar)
+            }
+        })
 
         fetchProfile()
 
         return rootView
     }
 
-
-
     private fun fetchProfile() {
-        if (!authService.isLoggedIn())
+        if (!profileFragmentViewModel.isLoggedIn())
             return
 
         rootView.progressBar.isIndeterminate = true
+        profileFragmentViewModel.fetchProfile()
 
-        compositeDisposable.add(authService.getProfile()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    rootView.progressBar.isIndeterminate = false
-                    rootView.progressBar.visibility = View.GONE
-                }
-                .subscribe({ user ->
-                    Timber.d("Response Success")
-                    rootView.name.text = "${user.firstName} ${user.lastName}"
-                    rootView.email.text = user.email
-
-                    Picasso.get()
-                            .load(user.avatarUrl)
-                            .placeholder(R.drawable.ic_person_black_24dp)
-                            .transform(CircleTransform())
-                            .into(rootView.avatar)
-                }) { throwable -> Timber.e(throwable, "Failure") })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    private fun showProgressBar(show: Boolean) {
+        rootView.progressBar.isIndeterminate = show
+        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }
