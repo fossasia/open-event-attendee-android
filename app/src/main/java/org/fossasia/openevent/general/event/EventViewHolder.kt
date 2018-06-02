@@ -1,17 +1,17 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Intent
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*
 import org.fossasia.openevent.general.R
 
-class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event) {
+
+class EventViewHolder(itemView: View , clickListener: RecyclerViewClickListener?) : RecyclerView.ViewHolder(itemView) {
+
+    fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
         itemView.eventName.text = event.name
         itemView.description.text = event.description
 
@@ -29,13 +29,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         itemView.setOnClickListener{
-            val fragment = EventDetailsFragment()
-            val bundle = Bundle()
-            bundle.putLong("EVENT_ID", event.id)
-            fragment.setArguments(bundle)
-            val activity = itemView.getContext() as AppCompatActivity
-            activity.supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit()
-        }
+            clickListener?.onClick(event.id)
+      }
 
         itemView.shareFab.setOnClickListener{
             val sendIntent = Intent()

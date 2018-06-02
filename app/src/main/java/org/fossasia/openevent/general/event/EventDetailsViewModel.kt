@@ -16,7 +16,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
     val error = MutableLiveData<String>()
 
     fun loadEvent(id : Long) {
-        if (id.equals(0)) {
+        if (id.equals(-1)) {
             error.value = "Error fetching event"
             return
         }

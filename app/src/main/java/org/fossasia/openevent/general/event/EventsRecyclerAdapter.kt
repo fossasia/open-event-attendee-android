@@ -8,6 +8,11 @@ import java.util.*
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()
+    private var clickListener: RecyclerViewClickListener? = null
+
+    fun setListener(listener: RecyclerViewClickListener) {
+        clickListener = listener
+    }
 
     fun addAll(eventList: List<Event>) {
         if (events.isNotEmpty())
@@ -17,16 +22,21 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)
-        return EventViewHolder(view)
+        return EventViewHolder(view, clickListener)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
 
-        holder.bind(event)
+        holder.bind(event, clickListener)
     }
 
     override fun getItemCount(): Int {
         return events.size
     }
+
+}
+
+interface RecyclerViewClickListener {
+    fun onClick(eventID: Long)
 }
