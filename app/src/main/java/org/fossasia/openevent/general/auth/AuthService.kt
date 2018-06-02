@@ -28,7 +28,7 @@ class AuthService(private val authApi: AuthApi,
         val user = User()
         user.email = username
         user.password = password
-        return authApi.signUp(user, "application/vnd.api+json")
+        return authApi.signUp(user)
                 .map {
                     userMap[it.id] = it
                     it

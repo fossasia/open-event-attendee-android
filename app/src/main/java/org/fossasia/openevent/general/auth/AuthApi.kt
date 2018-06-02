@@ -12,6 +12,6 @@ interface AuthApi {
     fun getProfile(@Path("id") id: Long): Single<User>
 
     @POST("users")
-    fun signUp(@Body user: User, @Header("Content-Type")header : String): Single<User>
+    fun signUp(@Body user: User): Single<User>
 
 }
