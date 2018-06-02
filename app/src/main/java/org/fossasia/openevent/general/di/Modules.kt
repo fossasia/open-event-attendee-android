@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.di
 
+import android.arch.persistence.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -7,6 +8,7 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
@@ -14,6 +16,7 @@ import org.fossasia.openevent.general.event.EventApi
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventsViewModel
 import org.koin.android.architecture.ext.viewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -84,4 +87,21 @@ val networkModule = applicationContext {
                 .build()
     }
 
+}
+
+val databaseModule = applicationContext {
+
+    bean {
+        var INSTANCE: OpenEventDatabase? = null
+
+        if (INSTANCE == null) {
+            synchronized(OpenEventDatabase::class.java) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(androidApplication(),
+                            OpenEventDatabase::class.java, "open_event_database")
+                            .build()
+                }
+            }
+        }
+    }
 }
