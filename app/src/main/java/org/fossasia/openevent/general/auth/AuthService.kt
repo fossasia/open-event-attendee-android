@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.auth
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.R.id.username
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -21,18 +22,13 @@ class AuthService(private val authApi: AuthApi,
                 }
     }
 
-    fun signUp(username: String, password: String): Single<User> {
-        if (username.isEmpty() || password.isEmpty())
+    fun signUp(signUp: SignUp): Single<User> {
+        val email = signUp.email.toString()
+        val password = signUp.password.toString()
+        if (email.isEmpty() || password.isEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
 
-        val user = User()
-        user.email = username
-        user.password = password
-        return authApi.signUp(user)
-                .map {
-                    userMap[it.id] = it
-                    it
-                }
+        return authApi.signUp(signUp)
     }
 
     fun isLoggedIn() = authHolder.isLoggedIn()

@@ -42,10 +42,10 @@ val apiModule = applicationContext {
 }
 
 val viewModelModule = applicationContext {
-    viewModel { LoginActivityViewModel(get()) }
+    viewModel { LoginFragmentViewModel(get()) }
     viewModel { EventsViewModel(get()) }
     viewModel { ProfileFragmentViewModel(get()) }
-    viewModel { SignUpActivityViewModel(get()) }
+    viewModel { SignUpFragmentViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -79,7 +79,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()

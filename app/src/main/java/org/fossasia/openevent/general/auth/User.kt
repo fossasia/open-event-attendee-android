@@ -10,10 +10,10 @@ import com.github.jasminb.jsonapi.annotations.Type
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class User(
     @Id(IntegerIdHandler::class)
-    val id: Long = 0,
+    val id: Int,
     val firstName: String? = null,
     val lastName: String? = null,
-    var email: String? = null,
+    val email: String? = null,
     val contact: String? = null,
     val details: String? = null,
     val thumbnailImageUrl: String? = null,
@@ -25,11 +25,10 @@ data class User(
     val instagramUrl: String? = null,
     val googlePlusUrl: String? = null,
     val originalImageUrl: String? = null,
-    var password: String? = null,
 
     val isVerified: Boolean = false,
-    val isAdmin: Boolean = false,
-    val isSuperAdmin: Boolean = false,
+    val isAdmin: Boolean,
+    val isSuperAdmin: Boolean,
     val createdAt: String? = null,
     val lastAccessedAt: String? = null,
     val deletedAt: String? = null

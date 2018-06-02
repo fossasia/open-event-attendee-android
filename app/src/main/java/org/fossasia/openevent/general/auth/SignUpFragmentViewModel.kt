@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
 
-class SignUpActivityViewModel(private val authService: AuthService) : ViewModel() {
+class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -16,9 +16,15 @@ class SignUpActivityViewModel(private val authService: AuthService) : ViewModel(
     val error = SingleLiveEvent<String>()
     val signedUp = MutableLiveData<User>()
     val loggedIn = SingleLiveEvent<Boolean>()
+    lateinit var email: String
+    lateinit var password: String
 
-    fun signUp(email: String, password: String) {
-        compositeDisposable.add(authService.signUp(email, password)
+    fun signUp(signUp: SignUp, confirmPassword: String) {
+        email = signUp.email.toString()
+        password = signUp.password.toString()
+
+        if (!checkErrors(email, password, confirmPassword)) return
+        compositeDisposable.add(authService.signUp(signUp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -31,10 +37,10 @@ class SignUpActivityViewModel(private val authService: AuthService) : ViewModel(
                 }, {
                     error.value = "Unable to SignIn"
                     Timber.d("Failed" + it)
-        }))
+                }))
     }
 
-    fun loginAfterSignUp(email: String, password: String) {
+    fun login(email: String, password: String) {
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,12 +54,24 @@ class SignUpActivityViewModel(private val authService: AuthService) : ViewModel(
                 }, {
                     error.value = "Unable to Login Automatically"
                     Timber.d("Failed" + it)
-        }))
+                }))
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    private fun checkErrors(email: String, password: String, confirmPassword: String): Boolean{
+        if (email.isEmpty() || password.isEmpty()) {
+            error.value = "Email or Password cannot be empty !"
+            return false
+        }
+        if (password != confirmPassword) {
+            error.value = "Passwords do not Match !"
+            return false
+        }
+        return true
     }
 
 }

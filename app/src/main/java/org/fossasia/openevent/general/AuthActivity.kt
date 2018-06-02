@@ -5,25 +5,27 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_auth.*
+import org.fossasia.openevent.general.auth.LoginFragment
 import org.fossasia.openevent.general.auth.ProfileFragment
+import org.fossasia.openevent.general.auth.SignUpFragment
 import org.fossasia.openevent.general.event.EventsFragment
 
-class MainActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
 
         when (item.itemId) {
-            R.id.navigation_events -> {
-                supportActionBar?.title = "Events"
-                fragment = EventsFragment()
+            R.id.navigation_login -> {
+                supportActionBar?.title = "Login"
+                fragment = LoginFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_profile -> {
-                supportActionBar?.title = "Profile"
-                fragment = ProfileFragment()
+            R.id.navigation_sign_up -> {
+                supportActionBar?.title = "Sign Up"
+                fragment = SignUpFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -33,29 +35,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_auth)
 
-        navigation.setOnNavigationItemSelectedListener(listener)
+        navigation_auth.setOnNavigationItemSelectedListener(listener)
 
-        supportActionBar?.title = "Events"
+        supportActionBar?.title = "Login"
 
-        loadFragment(EventsFragment())
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.profile, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.setGroupVisible(R.id.profile_menu, false)
-        return super.onPrepareOptionsMenu(menu)
+        loadFragment(LoginFragment())
     }
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_container, fragment)
+                .replace(R.id.frame_container_auth, fragment)
                 .commit()
     }
 }

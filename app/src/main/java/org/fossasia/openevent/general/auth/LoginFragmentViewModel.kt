@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 
-class LoginActivityViewModel(private val authService: AuthService) : ViewModel() {
+class LoginFragmentViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
