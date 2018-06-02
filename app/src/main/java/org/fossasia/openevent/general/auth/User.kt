@@ -10,7 +10,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 
 @Type("user")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(tableName = "user_table")
+@Entity()
 data class User(
         @Id(IntegerIdHandler::class)
         @PrimaryKey

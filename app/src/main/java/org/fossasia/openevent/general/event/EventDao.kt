@@ -1,15 +1,17 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
+import io.reactivex.Single
 
 interface EventDao {
-    @Insert
+    @Insert(onConflict = REPLACE)
     fun insertEvent(event: Event)
 
-    @Query("DELETE FROM event_table")
+    @Query("DELETE FROM Event")
     fun deleteAll()
 
-    @Query("SELECT * from event_table ORDER BY event ASC")
-    fun getAllEvents(): List<Event>
+    @Query("SELECT * from Event ORDER BY startsAt ASC")
+    fun getAllEvents(): Single<List<Event>>
 }

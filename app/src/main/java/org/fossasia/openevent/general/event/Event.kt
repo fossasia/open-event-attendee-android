@@ -10,7 +10,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 
 @Type("event")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(tableName = "event_table")
+@Entity()
 data class Event(
         @Id(LongIdHandler::class)
         @PrimaryKey
