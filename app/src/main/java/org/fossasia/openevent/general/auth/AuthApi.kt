@@ -1,10 +1,7 @@
 package org.fossasia.openevent.general.auth
 
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface AuthApi {
 
@@ -13,5 +10,8 @@ interface AuthApi {
 
     @GET("users/{id}")
     fun getProfile(@Path("id") id: Long): Single<User>
+
+    @POST("users")
+    fun signUp(@Body user: User, @Header("Content-Type")header : String): Single<User>
 
 }

@@ -23,6 +23,9 @@
         <activity
             android:name="org.fossasia.openevent.general.auth.LoginActivity">
         </activity>
+        <activity
+            android:name="org.fossasia.openevent.general.auth.SignUpActivity">
+        </activity>
     </application>
 
 </manifest>

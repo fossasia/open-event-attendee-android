@@ -28,7 +28,7 @@
             android:layout_marginBottom="@dimen/padding_medium">
 
             <EditText
-                android:id="@+id/username"
+                android:id="@+id/usernameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/user_name"
@@ -43,7 +43,7 @@
             android:layout_marginBottom="@dimen/padding_medium">
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/passwordSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -51,28 +51,19 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/loginButton"
+            android:id="@+id/signUpButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_large"
             android:layout_marginBottom="@dimen/padding_large"
             android:padding="@dimen/padding_medium"
-            android:text="@string/login" />
-
-        <TextView
-            android:id="@+id/signupLink"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_large"
-            android:gravity="center"
-            android:text="@string/sign_in"
-            android:textSize="@dimen/text_size_large" />
+            android:text="@string/sign_up" />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBarSignUp"
             android:visibility="gone" />
 
     </LinearLayout>

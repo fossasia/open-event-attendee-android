@@ -21,6 +21,20 @@ class AuthService(private val authApi: AuthApi,
                 }
     }
 
+    fun signUp(username: String, password: String): Single<User> {
+        if (username.isEmpty() || password.isEmpty())
+            throw IllegalArgumentException("Username or password cannot be empty")
+
+        val user = User()
+        user.email = username
+        user.password = password
+        return authApi.signUp(user, "application/vnd.api+json")
+                .map {
+                    userMap[it.id] = it
+                    it
+                }
+    }
+
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun logout() {

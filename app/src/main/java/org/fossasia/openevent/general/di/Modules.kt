@@ -45,6 +45,7 @@ val viewModelModule = applicationContext {
     viewModel { LoginActivityViewModel(get()) }
     viewModel { EventsViewModel(get()) }
     viewModel { ProfileFragmentViewModel(get()) }
+    viewModel { SignUpActivityViewModel(get()) }
 }
 
 val networkModule = applicationContext {

@@ -22,9 +22,14 @@ class LoginActivity : AppCompatActivity() {
             redirectToMain()
 
         setContentView(R.layout.activity_login)
+        supportActionBar?.title = "Login"
 
         loginButton.setOnClickListener {
             loginActivityViewModel.login(username.text.toString(), password.text.toString())
+        }
+
+        signupLink.setOnClickListener {
+            openSignUp()
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
@@ -44,6 +49,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun redirectToMain() {
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun openSignUp() {
+        val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
         startActivity(intent)
         finish()
     }

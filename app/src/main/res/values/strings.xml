@@ -10,6 +10,7 @@
     <string name="user_name">Username</string>
     <string name="logout">Log out</string>
     <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
     <string name="sign_in">No account yet? Create one</string>
     <string name="email">example@gmail.com</string>
     <string name="password">Password</string>
