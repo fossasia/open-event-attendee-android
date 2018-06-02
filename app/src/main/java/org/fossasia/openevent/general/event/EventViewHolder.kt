@@ -1,6 +1,8 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Intent
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
@@ -24,6 +26,15 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .load(it)
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(itemView.eventImage)
+        }
+
+        itemView.setOnClickListener{
+            val fragment = EventDetailsFragment()
+            val bundle = Bundle()
+            bundle.putLong("EVENT_ID", event.id)
+            fragment.setArguments(bundle)
+            val activity = itemView.getContext() as AppCompatActivity
+            activity.supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit()
         }
 
         itemView.shareFab.setOnClickListener{
