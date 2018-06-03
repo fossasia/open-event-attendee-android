@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -54,7 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_medium"
-            android:layout_marginBottom="@dimen/padding_medium">
+            android:layout_marginBottom="@dimen/padding_medium"
+            app:passwordToggleEnabled="true">
 
             <EditText
                 android:id="@+id/passwordSignUp"
@@ -68,7 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_medium"
-            android:layout_marginBottom="@dimen/padding_medium">
+            android:layout_marginBottom="@dimen/padding_medium"
+            app:passwordToggleEnabled="true">
 
             <EditText
                 android:id="@+id/confirmPasswords"
