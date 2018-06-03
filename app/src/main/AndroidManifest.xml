@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.AuthActivity"
+            android:name="org.fossasia.openevent.general.AuthFragment"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".auth.LoginActivity"></activity>

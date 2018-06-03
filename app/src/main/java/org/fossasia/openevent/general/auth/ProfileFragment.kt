@@ -15,7 +15,7 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-import org.fossasia.openevent.general.AuthActivity
+import org.fossasia.openevent.general.AuthFragment
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
@@ -23,7 +23,7 @@ class ProfileFragment : Fragment() {
     private lateinit var rootView: View
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
+        fragmentManager?.beginTransaction()?.replace(R.id.frame_profile,AuthFragment())?.commit()
     }
 
     private fun redirectToMain() {
