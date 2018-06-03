@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
 class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel() {
@@ -16,14 +17,14 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
     val error = SingleLiveEvent<String>()
     val signedUp = MutableLiveData<User>()
     val loggedIn = SingleLiveEvent<Boolean>()
-    lateinit var email: String
-    lateinit var password: String
+    var email: String? = null
+    var password: String? = null
 
     fun signUp(signUp: SignUp, confirmPassword: String) {
-        email = signUp.email.toString()
-        password = signUp.password.toString()
+        email = signUp.email
+        password = signUp.password
 
-        if (!checkErrors(email, password, confirmPassword)) return
+        if (hasErrors(email, password, confirmPassword)) return
         compositeDisposable.add(authService.signUp(signUp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -36,12 +37,14 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
                     Timber.d("Success!")
                 }, {
                     error.value = "Unable to SignIn"
-                    Timber.d("Failed" + it)
+                    Timber.d(it, "Failed")
                 }))
     }
 
-    fun login(email: String, password: String) {
-        compositeDisposable.add(authService.login(email, password)
+    fun login(signUp: SignUp) {
+        email = signUp.email
+        password = signUp.password
+        compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -52,8 +55,8 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
                     loggedIn.value = true
                     Timber.d("Success!")
                 }, {
-                    error.value = "Unable to Login Automatically"
-                    Timber.d("Failed" + it)
+                    error.value = "Unable to Login automatically"
+                    Timber.d(it, "Failed")
                 }))
     }
 
@@ -62,16 +65,16 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
         compositeDisposable.clear()
     }
 
-    private fun checkErrors(email: String, password: String, confirmPassword: String): Boolean{
-        if (email.isEmpty() || password.isEmpty()) {
-            error.value = "Email or Password cannot be empty !"
-            return false
+    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean{
+        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+            error.value = "Email or Password cannot be empty!"
+            return true
         }
         if (password != confirmPassword) {
-            error.value = "Passwords do not Match !"
-            return false
+            error.value = "Passwords do not match!"
+            return true
         }
-        return true
+        return false
     }
 
 }

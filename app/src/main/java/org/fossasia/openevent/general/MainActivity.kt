@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
-
         when (item.itemId) {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"

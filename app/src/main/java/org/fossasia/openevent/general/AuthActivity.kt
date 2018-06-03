@@ -15,7 +15,6 @@ class AuthActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
-
         when (item.itemId) {
             R.id.navigation_login -> {
                 supportActionBar?.title = "Login"

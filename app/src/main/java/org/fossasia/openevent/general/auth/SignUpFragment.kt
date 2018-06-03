@@ -22,18 +22,14 @@ class SignUpFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
-        lateinit var emailLogin: String
-        lateinit var passwordLogin: String
         lateinit var confirmPassword: String
 
         setHasOptionsMenu(true)
+        val signUp = SignUp()
 
         rootView.signUpButton.setOnClickListener {
-            val signUp = SignUp()
             signUp.email = usernameSignUp.text.toString()
-            emailLogin = signUp.email.toString()
             signUp.password = passwordSignUp.text.toString()
-            passwordLogin = signUp.password.toString()
             signUp.firstName = firstNameText.text.toString()
             signUp.lastName = lastNameText.text.toString()
             confirmPassword = confirmPasswords.text.toString()
@@ -51,7 +47,7 @@ class SignUpFragment : Fragment() {
 
         signUpActivityViewModel.signedUp.observe(this, Observer {
             Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
-            signUpActivityViewModel.login(emailLogin, passwordLogin)
+            signUpActivityViewModel.login(signUp)
         })
 
         signUpActivityViewModel.loggedIn.observe(this, Observer {
