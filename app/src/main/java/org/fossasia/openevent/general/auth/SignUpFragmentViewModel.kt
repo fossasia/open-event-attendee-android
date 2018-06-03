@@ -36,7 +36,7 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
                     signedUp.value = it
                     Timber.d("Success!")
                 }, {
-                    error.value = "Unable to SignIn"
+                    error.value = "Unable to SignIn!"
                     Timber.d(it, "Failed")
                 }))
     }
