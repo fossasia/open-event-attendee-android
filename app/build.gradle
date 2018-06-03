@@ -14,6 +14,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -34,6 +39,7 @@ repositories {
 dependencies {
     def lifecycle_version = "1.1.1"
     def koin_version = "0.9.3"
+    def roomVersion = '1.1.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:multidex:1.0.3'
@@ -51,6 +57,10 @@ dependencies {
     implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
     implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
     testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    implementation "android.arch.persistence.room:rxjava2:$roomVersion"
+    testImplementation "android.arch.persistence.room:testing:$roomVersion"
 
     //recycler view animations
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
