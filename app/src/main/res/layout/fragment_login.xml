@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding_extra_large"
         android:paddingTop="@dimen/padding_extra_large"
+        android:layout_marginTop="@dimen/layout_margin_medium"
         android:paddingRight="@dimen/padding_extra_large">
 
         <TextView
@@ -58,15 +59,6 @@
             android:layout_marginBottom="@dimen/padding_large"
             android:padding="@dimen/padding_medium"
             android:text="@string/login" />
-
-        <TextView
-            android:id="@+id/signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_large"
-            android:gravity="center"
-            android:text="@string/sign_in"
-            android:textSize="@dimen/text_size_large" />
 
         <ProgressBar
             android:layout_width="wrap_content"

@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.auth.LoginActivity">
+            android:name="org.fossasia.openevent.general.AuthActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 
