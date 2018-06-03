@@ -92,16 +92,8 @@ val networkModule = applicationContext {
 val databaseModule = applicationContext {
 
     bean {
-        var INSTANCE: OpenEventDatabase? = null
-
-        if (INSTANCE == null) {
-            synchronized(OpenEventDatabase::class.java) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(androidApplication(),
-                            OpenEventDatabase::class.java, "open_event_database")
-                            .build()
-                }
-            }
-        }
+        Room.databaseBuilder(androidApplication(),
+                OpenEventDatabase::class.java, "open_event_database")
+                .build()
     }
 }

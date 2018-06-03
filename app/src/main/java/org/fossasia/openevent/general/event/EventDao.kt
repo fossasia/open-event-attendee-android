@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 @Dao
 interface EventDao {
@@ -15,8 +15,8 @@ interface EventDao {
     fun deleteAll()
 
     @Query("SELECT * from Event ORDER BY startsAt ASC")
-    fun getAllEvents(): Single<List<Event>>
+    fun getAllEvents(): Flowable<List<Event>>
 
     @Query("SELECT * from Event WHERE id = :id")
-    fun getEvent(id: Long): Single<Event>
+    fun getEvent(id: Long): Flowable<Event>
 }
