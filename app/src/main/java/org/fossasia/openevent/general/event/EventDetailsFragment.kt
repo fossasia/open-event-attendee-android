@@ -53,14 +53,11 @@ class EventDetailsFragment : Fragment() {
         return rootView
     }
 
-
     private fun loadEvent(event: Event) {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
 
-        val appBarLayout = rootView.app_bar as AppBarLayout
-        appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            internal var isShow = true
+        rootView.app_bar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             internal var scrollRange = -1
 
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
@@ -69,10 +66,8 @@ class EventDetailsFragment : Fragment() {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     rootView.toolbar_layout.title = event.name
-                    isShow = true
-                } else if (isShow) {
+                } else {
                     rootView.toolbar_layout.title = " "
-                    isShow = false
                 }
             }
         })
@@ -82,8 +77,8 @@ class EventDetailsFragment : Fragment() {
         setTextField(rootView.event_organiser_description, event.organizerDescription)
         rootView.event_location_text_view.text = event.locationName
 
-        rootView.starts_on.text = ("${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}")
-        rootView.ends_on.text = ("${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}")
+        rootView.starts_on.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
+        rootView.ends_on.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
 
         event.originalImageUrl?.let {
             Picasso.get()
