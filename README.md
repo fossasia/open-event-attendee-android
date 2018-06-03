@@ -1,4 +1,4 @@
-# open-event-general
+# open-event-android
 
 An events app to discover events happening around the world using the Open Event Platform
 
