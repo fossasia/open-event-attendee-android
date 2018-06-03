@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.event
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,21 +55,7 @@ class EventDetailsFragment : Fragment() {
     private fun loadEvent(event: Event) {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-
-        rootView.app_bar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            internal var scrollRange = -1
-
-            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.totalScrollRange
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    rootView.toolbar_layout.title = event.name
-                } else {
-                    rootView.toolbar_layout.title = " "
-                }
-            }
-        })
+        rootView.toolbar_layout.title = event.name
         rootView.event_name.text = event.name
         rootView.event_organiser_name.text = event.organizerName
         setTextField(rootView.event_description, event.description)
