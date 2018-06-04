@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import android.service.carrier.CarrierIdentifier
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)
-        return EventViewHolder(view, clickListener)
+        return EventViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {

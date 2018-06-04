@@ -5,35 +5,26 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 
-class EventDetailsViewModel(private val eventService: EventService) : ViewModel() {
+class TicketsViewModel(private val eventService: EventService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-
-    val progress = MutableLiveData<Boolean>()
     val progressTickets = MutableLiveData<Boolean>()
-    val event = MutableLiveData<Event>()
     val tickets = MutableLiveData<List<Ticket>>()
     val error = MutableLiveData<String>()
 
-    fun loadEvent(id : Long) {
-        if (id.equals(-1)) {
-            error.value = "Error fetching event"
-            return
-        }
-        compositeDisposable.add(eventService.getEvent(id)
+    fun loadTickets(identifier : String) {
+        compositeDisposable.add(eventService.getTickets(identifier)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    progress.value = true
+                    progressTickets.value = true
                 }).doFinally({
-                    progress.value = false
-                }).subscribe({
-                    event.value = it
+                    progressTickets.value = false
+                }).subscribe({ticketList ->
+                    tickets.value = ticketList
                 }, {
-                    Timber.e(it, "Error fetching event %d",id)
-                    error.value = "Error fetching event"
+                    error.value = "Error fetching tickets"
                 }))
     }
 
@@ -41,5 +32,4 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }

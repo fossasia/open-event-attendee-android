@@ -26,4 +26,7 @@ class EventService(private val eventApi: EventApi) {
                 }.firstOrError()
     }
 
+    fun getTickets(identifier: String): Single<List<Ticket>> {
+        return eventApi.getTickets(identifier)
+    }
 }

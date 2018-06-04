@@ -9,7 +9,7 @@ import org.fossasia.openevent.general.R
 
 
 
-class EventViewHolder(itemView: View , clickListener: RecyclerViewClickListener?) : RecyclerView.ViewHolder(itemView) {
+class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
         itemView.eventName.text = event.name
@@ -30,7 +30,7 @@ class EventViewHolder(itemView: View , clickListener: RecyclerViewClickListener?
 
         itemView.setOnClickListener{
             clickListener?.onClick(event.id)
-      }
+        }
 
         itemView.shareFab.setOnClickListener{
             val sendIntent = Intent()

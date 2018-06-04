@@ -7,7 +7,24 @@
     android:background="@color/white"
     tools:showIn="@layout/fragment_event">
 
-    <LinearLayout
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/event_share_fab"
+            android:layout_width="@dimen/fab_width"
+            android:layout_height="@dimen/fab_height"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:background="@color/colorAccent"
+            android:layout_gravity="end"
+            android:layout_marginTop="230dp"
+            android:scaleType="center"
+            app:backgroundTint="@color/colorAccent"
+            app:elevation="@dimen/fab_elevation"
+            app:srcCompat="@drawable/ic_share_white_24dp" />
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -22,13 +39,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
             android:orientation="vertical">
 
 
             <LinearLayout
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:id="@+id/event_details_linear_layout"
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_large"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:orientation="vertical">
@@ -45,6 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="by Organiser Name" />
 
                 <LinearLayout
@@ -115,6 +136,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="8dp"
                 android:text="About Event "
                 android:textSize="20dp" />
@@ -122,8 +145,13 @@
             <TextView
                 android:id="@+id/event_description"
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_height="wrap_content"
                 android:lines="3"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                android:textColor="@color/black"
                 android:text="Description" />
 
             <View
@@ -137,6 +165,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="About Organiser "
                 android:textSize="20dp" />
 
@@ -145,10 +175,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="3"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="Description" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="@string/tickets_available"
+                android:textSize="20dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:id="@+id/frameContainer"
+                android:layout_height="wrap_content">
+
+            </FrameLayout>
 
         </LinearLayout>
+
     </LinearLayout>
-
-
+    </FrameLayout>
 </android.support.v4.widget.NestedScrollView>

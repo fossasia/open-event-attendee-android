@@ -12,19 +12,18 @@ import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
-import kotlinx.android.synthetic.main.fragment_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
-
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
+    val EVENT_IDENTIFIER = "EVENT_IDENTIFIER"
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private lateinit var rootView: View
     private var eventId: Long = -1
-
+    private var identifier: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +44,7 @@ class EventDetailsFragment : Fragment() {
             it?.let {
                 loadEvent(it)
             }
+            loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -65,6 +65,8 @@ class EventDetailsFragment : Fragment() {
         setTextField(rootView.event_description, event.description)
         setTextField(rootView.event_organiser_description, event.organizerDescription)
         rootView.event_location_text_view.text = event.locationName
+
+        identifier = event.identifier
 
         rootView.starts_on.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
         rootView.ends_on.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
@@ -108,5 +110,15 @@ class EventDetailsFragment : Fragment() {
         } else {
             textView.text = value
         }
+    }
+
+    private fun loadTicketFragment(){
+        //Initialise Ticket Fragment
+        val ticketFragment = TicketsFragment()
+        val bundle = Bundle()
+        bundle.putString("EVENT_IDENTIFIER", identifier)
+        ticketFragment.arguments = bundle
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 }
