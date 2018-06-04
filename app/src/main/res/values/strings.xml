@@ -6,6 +6,10 @@
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
 
+    <!--Search event details-->
+    <string name="search">Search</string>
+    <string name="search_hint">Search for. . .</string>
+
     <!--profile details-->
     <string name="user_name">Username</string>
     <string name="logout">Log out</string>

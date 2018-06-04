@@ -8,6 +8,7 @@ import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
+import org.fossasia.openevent.general.search.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +18,12 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
                 fragment = EventsFragment()
+                loadFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_search -> {
+                supportActionBar?.title = "Search"
+                fragment = SearchFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
