@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
+import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.event.Event
 
 @Type("discount-code")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -23,5 +25,7 @@ data class DiscountCode(
         val isActive: Boolean = false,
         val validFrom: String? = null,
         val validTill: String? = null,
-        val createdAt: String? = null
+        val createdAt: String? = null,
+        @Relationship("event")
+        val event: Event
 )
