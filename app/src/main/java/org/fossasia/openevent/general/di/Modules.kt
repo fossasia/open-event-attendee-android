@@ -41,7 +41,7 @@ val apiModule = applicationContext {
     }
 
     factory { AuthHolder(get()) }
-    bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
+    factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }

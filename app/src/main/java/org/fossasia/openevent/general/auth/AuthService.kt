@@ -1,15 +1,13 @@
 package org.fossasia.openevent.general.auth
 
+import io.reactivex.Flowable
 import io.reactivex.Single
-import java.util.concurrent.ConcurrentHashMap
 
 
 class AuthService(private val authApi: AuthApi,
-                  private val authHolder: AuthHolder
+                  private val authHolder: AuthHolder,
+                  private val userDao: UserDao
 ) {
-
-    private val userMap = ConcurrentHashMap<Long, User>() // TODO: To be replaced by room
-
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
@@ -33,21 +31,29 @@ class AuthService(private val authApi: AuthApi,
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun logout() {
-        userMap.remove(authHolder.getId())
-
+        val userFlowable = userDao.getUser(authHolder.getId())
+        userFlowable.map {
+            userDao.deleteUser(it)
+        }
         authHolder.token = null
     }
 
-    fun getProfile(id: Long = authHolder.getId()): Single<User> {
-        val user = userMap[id]
-        if (user != null)
-            return Single.just(user)
 
-        return authApi.getProfile(id)
-                .map {
-                    userMap[id] = it
-                    it
-                }
+    fun getProfile(id: Long = authHolder.getId()): Flowable<User> {
+        val userFlowable = userDao.getUser(id)
+        return userFlowable.switchMap {
+            if (it != null)
+                userFlowable
+            else
+                authApi.getProfile(id)
+                        .map {
+                            userDao.insertUser(it)
+                        }
+                        .toFlowable()
+                        .flatMap {
+                            userFlowable
+                        }
+        }
     }
 
 }
