@@ -3,18 +3,18 @@ package org.fossasia.openevent.general.auth
 import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
-
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-import android.net.Uri
 import org.fossasia.openevent.general.AuthActivity
 
 class ProfileFragment : Fragment() {
@@ -49,7 +49,7 @@ class ProfileFragment : Fragment() {
 
         profileFragmentViewModel.user.observe(this, Observer {
             it?.let {
-                rootView.name.text = "${it.firstName} ${it.lastName}"
+                rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
 
                 Picasso.get()
