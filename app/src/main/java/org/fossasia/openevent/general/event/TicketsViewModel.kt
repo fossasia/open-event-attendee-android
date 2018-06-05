@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 class TicketsViewModel(private val eventService: EventService) : ViewModel() {
 
@@ -13,8 +14,12 @@ class TicketsViewModel(private val eventService: EventService) : ViewModel() {
     val tickets = MutableLiveData<List<Ticket>>()
     val error = MutableLiveData<String>()
 
-    fun loadTickets(identifier : String) {
-        compositeDisposable.add(eventService.getTickets(identifier)
+    fun loadTickets(id : Long) {
+        if (id.equals(-1)) {
+            error.value = "Error fetching tickets"
+            return
+        }
+        compositeDisposable.add(eventService.getTickets(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
@@ -25,7 +30,8 @@ class TicketsViewModel(private val eventService: EventService) : ViewModel() {
                     tickets.value = ticketList
                 }, {
                     error.value = "Error fetching tickets"
-                }))
+                    Timber.e(it, "Error fetching tickets %d",id)
+        }))
     }
 
     override fun onCleared() {

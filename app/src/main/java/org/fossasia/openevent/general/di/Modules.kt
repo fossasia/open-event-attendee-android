@@ -26,11 +26,11 @@ val commonModule = applicationContext {
 }
 
 val apiModule = applicationContext {
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
@@ -38,7 +38,7 @@ val apiModule = applicationContext {
     factory { AuthHolder(get()) }
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
-    bean { EventService(get()) } // TODO: Convert to factory once database is implemented
+    factory { EventService(get(), get(), get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -95,5 +95,20 @@ val databaseModule = applicationContext {
         Room.databaseBuilder(androidApplication(),
                 OpenEventDatabase::class.java, "open_event_database")
                 .build()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.ticketsDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.userDao()
     }
 }

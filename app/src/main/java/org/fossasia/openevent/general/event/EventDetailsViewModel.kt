@@ -12,9 +12,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
-    val progressTickets = MutableLiveData<Boolean>()
     val event = MutableLiveData<Event>()
-    val tickets = MutableLiveData<List<Ticket>>()
     val error = MutableLiveData<String>()
 
     fun loadEvent(id : Long) {

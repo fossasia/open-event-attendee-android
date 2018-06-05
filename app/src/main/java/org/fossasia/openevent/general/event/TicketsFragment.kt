@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.provider.CalendarContract.Instances.EVENT_ID
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -15,8 +16,8 @@ import org.koin.android.architecture.ext.viewModel
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
-    private lateinit var identifier: String
-    private val EVENT_IDENTIFIER: String = "EVENT_IDENTIFIER"
+    private var id: Long = -1
+    private val EVENT_ID: String = "EVENT_ID"
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -24,7 +25,7 @@ class TicketsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            identifier = bundle.getString(EVENT_IDENTIFIER, null)
+            id = bundle.getLong(EVENT_ID, -1)
         }
     }
 
@@ -49,7 +50,7 @@ class TicketsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        ticketsViewModel.loadTickets(identifier)
+        ticketsViewModel.loadTickets(id)
 
         ticketsViewModel.tickets.observe(this, Observer {
             it?.let {

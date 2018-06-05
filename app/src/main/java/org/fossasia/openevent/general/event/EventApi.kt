@@ -13,7 +13,7 @@ interface EventApi {
     @GET
     fun getEvent(id: Long): Single<Event>
 
-    @GET("events/{identifier}/tickets")
-    fun getTickets(@Path("identifier") identifier: String): Flowable<List<Ticket>>
+    @GET("events/{id}/tickets")
+    fun getTickets(@Path("id") id: Long): Single<List<Ticket>>
 
 }

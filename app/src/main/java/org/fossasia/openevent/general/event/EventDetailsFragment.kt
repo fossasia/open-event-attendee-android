@@ -19,11 +19,9 @@ import timber.log.Timber
 
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
-    val EVENT_IDENTIFIER = "EVENT_IDENTIFIER"
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private lateinit var rootView: View
     private var eventId: Long = -1
-    private var identifier: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +63,6 @@ class EventDetailsFragment : Fragment() {
         setTextField(rootView.event_description, event.description)
         setTextField(rootView.event_organiser_description, event.organizerDescription)
         rootView.event_location_text_view.text = event.locationName
-
-        identifier = event.identifier
 
         rootView.starts_on.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
         rootView.ends_on.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
@@ -116,7 +112,7 @@ class EventDetailsFragment : Fragment() {
         //Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
         val bundle = Bundle()
-        bundle.putString("EVENT_IDENTIFIER", identifier)
+        bundle.putLong("EVENT_ID", eventId)
         ticketFragment.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainer, ticketFragment).commit()
