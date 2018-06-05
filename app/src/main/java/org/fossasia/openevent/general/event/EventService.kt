@@ -29,7 +29,6 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
                     .map {
                         eventDao.insertEvents(it)
                     }
-                    .toFlowable()
                     .flatMap {
                         eventsFlowable
                     }
