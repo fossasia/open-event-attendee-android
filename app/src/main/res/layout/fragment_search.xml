@@ -11,23 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/layout_margin_large"
-            android:hint="@string/search_hint" />
-
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/padding_large"
-            android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/search" />
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

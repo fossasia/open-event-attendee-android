@@ -4,9 +4,8 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import android.widget.Toast
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_search.view.*
@@ -14,6 +13,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+
 
 class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: SearchRecyclerAdapter = SearchRecyclerAdapter()
@@ -24,6 +24,8 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
+
+        setHasOptionsMenu(true)
 
         rootView.progressBar.isIndeterminate = true
 
@@ -65,12 +67,37 @@ class SearchFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        rootView.search_button.setOnClickListener({
-            searchViewModel.searchEvent = rootView.search.text.toString()
-            searchViewModel.loadEvents()
-        })
-
         return rootView
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.getItemId()) {
+            R.id.search_item -> {
+                return false
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        menu?.setGroupVisible(R.id.search_menu, true)
+        menu?.setGroupVisible(R.id.profile_menu, false)
+
+        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                //Do your search
+                searchViewModel.searchEvent = query
+                searchViewModel.loadEvents()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        super.onPrepareOptionsMenu(menu)
     }
 
     private fun showProgressBar(show: Boolean) {

@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menu?.setGroupVisible(R.id.profile_menu, false)
+        menu?.setGroupVisible(R.id.search_menu, false)
         return super.onPrepareOptionsMenu(menu)
     }
 

@@ -1,9 +1,8 @@
 package org.fossasia.openevent.general.event
 
 import io.reactivex.Flowable
-import org.fossasia.openevent.general.search.SearchEventDao
 
-class EventService(private val eventApi: EventApi, private val eventDao: EventDao, private val searchEventDao: SearchEventDao) {
+class EventService(private val eventApi: EventApi, private val eventDao: EventDao) {
 
     fun getEvents(): Flowable<List<Event>> {
         val eventsFlowable = eventDao.getAllEvents()
@@ -23,12 +22,12 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getSearchEvents(eventName: String): Flowable<List<Event>> {
-        val eventsFlowable = searchEventDao.getAllEvents()
+        val eventsFlowable = eventDao.getAllEventsByName()
         return eventsFlowable.switchMap {
-            searchEventDao.deleteAll()
+            eventDao.deleteAll()
             eventApi.searchEvents(eventName)
                     .map {
-                        searchEventDao.insertEvents(it)
+                        eventDao.insertEvents(it)
                     }
                     .toFlowable()
                     .flatMap {
