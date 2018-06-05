@@ -20,6 +20,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var loadEventsAgain=false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -90,6 +91,7 @@ class SearchFragment : Fragment() {
                 //Do your search
                 searchViewModel.searchEvent = query
                 searchViewModel.loadEvents()
+                loadEventsAgain=true
                 return false
             }
 
@@ -110,6 +112,9 @@ class SearchFragment : Fragment() {
         val lastVisible = linearLayoutManager.findLastVisibleItemPosition()
         val itemsChanged = lastVisible - firstVisible + 1 // + 1 because we start count items from 0
         val start = if (firstVisible - itemsChanged > 0) firstVisible - itemsChanged else 0
-        eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
+        if (!loadEventsAgain)
+            eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
+        else
+            eventsRecyclerAdapter.notifyDataSetChanged()
     }
 }
