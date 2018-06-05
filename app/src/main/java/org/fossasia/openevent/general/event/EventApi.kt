@@ -11,7 +11,7 @@ interface EventApi {
     fun getEvents(): Single<List<Event>>
 
     @GET("events")
-    fun searchEvents(@Query("filter") eventName: String): Flowable<List<Event>>
+    fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Flowable<List<Event>>
 
     @GET
     fun getEvent(id: Long): Single<Event>

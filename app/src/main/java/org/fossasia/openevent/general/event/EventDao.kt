@@ -21,7 +21,7 @@ interface EventDao {
     fun getAllEvents(): Flowable<List<Event>>
 
     @Query("SELECT * from Event ORDER BY name ASC")
-    fun getAllEventsByName(): Flowable<List<Event>>
+    fun getSearchEvents(): Flowable<List<Event>>
 
     @Query("SELECT * from Event WHERE id = :id")
     fun getEvent(id: Long): Flowable<Event>
