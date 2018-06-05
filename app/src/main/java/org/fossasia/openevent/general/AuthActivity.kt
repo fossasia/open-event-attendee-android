@@ -48,4 +48,8 @@ class AuthActivity : AppCompatActivity() {
                 .replace(R.id.frame_container_auth, fragment)
                 .commit()
     }
+
+    override fun onBackPressed() {
+        loadFragment(ProfileFragment())
+    }
 }
