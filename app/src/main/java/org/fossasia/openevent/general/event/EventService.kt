@@ -25,7 +25,7 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         val eventsFlowable = eventDao.getSearchEvents()
         return eventsFlowable.switchMap {
             eventDao.deleteAll()
-            eventApi.searchEvents("name",eventName)
+            eventApi.searchEvents("name", eventName)
                     .map {
                         eventDao.insertEvents(it)
                     }
