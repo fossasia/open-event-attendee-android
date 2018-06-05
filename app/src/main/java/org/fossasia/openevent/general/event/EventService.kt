@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -26,7 +27,7 @@ class EventService(private val eventApi: EventApi) {
                 }.firstOrError()
     }
 
-    fun getTickets(identifier: String): Single<List<Ticket>> {
+    fun getTickets(identifier: String): Flowable<List<Ticket>> {
         return eventApi.getTickets(identifier)
     }
 }
