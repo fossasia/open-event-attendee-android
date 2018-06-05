@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface DiscountApi {
 
-    @GET("events/{event_identifier}/discount-code?include=event")
-    fun getDiscountCodes(@Path("event_identifier") id: Long): Single<DiscountCode>
+    @GET("events/{id}/discount-code?include=event&fields[event]=id")
+    fun getDiscountCodes(@Path("id") id: Long): Single<DiscountCode>
 
 }
