@@ -6,6 +6,10 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 object EventUtils {
 
@@ -46,5 +50,15 @@ object EventUtils {
             .toOffsetDateTime()
             .atZoneSameInstant(ZoneId.systemDefault())
 
-
+    fun getTimeInMilliSeconds(date: String): Long{
+        var testDate =  Date()
+        val dateString = date.replace("T"," ")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            try {
+                testDate = dateFormat.parse(dateString)
+            } catch (e: ParseException) {
+                Timber.e(e,"Error Parsing Date")
+            }
+        return testDate.time
+    }
 }

@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,7 +18,6 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-
 
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
@@ -76,6 +76,19 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
+        val dateClickListener = View.OnClickListener {_ ->
+            val intent = Intent(Intent.ACTION_INSERT)
+            intent.type = "vnd.android.cursor.item/event"
+            intent.putExtra(CalendarContract.Events.TITLE, event.name)
+            intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+            startActivity(intent)
+        }
+
+        rootView.starts_on.setOnClickListener(dateClickListener)
+        rootView.ends_on.setOnClickListener(dateClickListener)
+
         rootView.event_share_fab.setOnClickListener {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
@@ -109,4 +122,5 @@ class EventDetailsFragment : Fragment() {
             textView.text = value
         }
     }
+
 }
