@@ -15,17 +15,17 @@ data class Ticket(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
         val id: Int,
-        val description: String? = null,
-        val type: String? = null,
+        val description: String?,
+        val type: String?,
         val name: String,
-        val maxOrder: String? = null,
+        val maxOrder: String?,
         val isFeeAbsorbed: Boolean? = false,
         val isDescriptionVisible: Boolean? = false,
-        val price: String? = null,
-        val position: String? = null,
-        val quantity: String? = null,
+        val price: String?,
+        val position: String?,
+        val quantity: String?,
         val isHidden: Boolean? = false,
-        val salesEndsAt: String? = null,
-        val minOrder: String? = null,
-        val salesStartsAt: String? = null
+        val salesEndsAt: String?,
+        val minOrder: String?,
+        val salesStartsAt: String?
 )

@@ -34,11 +34,17 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(TicketApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
-    factory { EventService(get(), get(), get()) }
+    factory { EventService(get(), get()) }
+    factory { TicketService(get(), get()) }
+
 }
 
 val viewModelModule = applicationContext {
