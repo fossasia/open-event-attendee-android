@@ -7,9 +7,11 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*
 import org.fossasia.openevent.general.R
 
-class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event) {
+
+class EventViewHolder(itemView: View , clickListener: RecyclerViewClickListener?) : RecyclerView.ViewHolder(itemView) {
+
+    fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
         itemView.eventName.text = event.name
         itemView.description.text = event.description
 
@@ -25,6 +27,10 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(itemView.eventImage)
         }
+
+        itemView.setOnClickListener{
+            clickListener?.onClick(event.id)
+      }
 
         itemView.shareFab.setOnClickListener{
             val sendIntent = Intent()

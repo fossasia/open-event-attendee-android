@@ -38,6 +38,16 @@ class EventsFragment : Fragment() {
         slideUp.addDuration = 500
         rootView.eventsRecycler.itemAnimator = slideUp
 
+        val recyclerViewClickListener = object : RecyclerViewClickListener {
+            override fun onClick(eventID: Long) {
+                val fragment = EventDetailsFragment()
+                val bundle = Bundle()
+                bundle.putLong(fragment.EVENT_ID, eventID)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+            }
+        }
+        eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)

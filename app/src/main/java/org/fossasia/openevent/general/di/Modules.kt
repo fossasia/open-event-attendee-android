@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.di
 
+import android.arch.persistence.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -7,13 +8,12 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventApi
-import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.event.EventsViewModel
+import org.fossasia.openevent.general.event.*
 import org.koin.android.architecture.ext.viewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -26,11 +26,11 @@ val commonModule = applicationContext {
 }
 
 val apiModule = applicationContext {
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
@@ -38,7 +38,7 @@ val apiModule = applicationContext {
     factory { AuthHolder(get()) }
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
-    bean { EventService(get()) } // TODO: Convert to factory once database is implemented
+    factory { EventService(get(), get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -46,6 +46,7 @@ val viewModelModule = applicationContext {
     viewModel { EventsViewModel(get()) }
     viewModel { ProfileFragmentViewModel(get()) }
     viewModel { SignUpFragmentViewModel(get()) }
+    viewModel { EventDetailsViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -85,4 +86,23 @@ val networkModule = applicationContext {
                 .build()
     }
 
+}
+
+val databaseModule = applicationContext {
+
+    bean {
+        Room.databaseBuilder(androidApplication(),
+                OpenEventDatabase::class.java, "open_event_database")
+                .build()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.userDao()
+    }
 }
