@@ -51,7 +51,6 @@ val viewModelModule = applicationContext {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { SearchDetailsViewModel(get()) }
-
 }
 
 val networkModule = applicationContext {

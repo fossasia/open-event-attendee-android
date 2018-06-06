@@ -28,7 +28,6 @@ class SearchDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private var eventId: Long = -1
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments

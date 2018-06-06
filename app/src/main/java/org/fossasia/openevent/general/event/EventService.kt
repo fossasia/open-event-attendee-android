@@ -31,8 +31,6 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
                                 events = it
                                 it
                            }
-
-
     }
 
     fun getSearchEvent(id: Long): Single<Event> {
