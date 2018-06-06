@@ -11,12 +11,14 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.EventsRecyclerAdapter
+import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
 
 class SearchFragment : Fragment() {
-    private val eventsRecyclerAdapter: SearchRecyclerAdapter = SearchRecyclerAdapter()
+    private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -44,7 +46,7 @@ class SearchFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
+                val fragment = SearchDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
