@@ -2,6 +2,8 @@ package org.fossasia.openevent.general
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
+import com.fasterxml.jackson.databind.util.Converter
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.event.Event

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "252ac80699a24ecafcef17a1492afa7e",
+    "identityHash": "b4e67cb28652e498132c1fe092883cfa",
     "entities": [
       {
         "tableName": "Event",
@@ -442,7 +442,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesEndsAt` TEXT, `minOrder` TEXT, `salesStartsAt` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesEndsAt` TEXT, `minOrder` TEXT, `salesStartsAt` TEXT, `event` BLOB NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -527,6 +527,12 @@
             "columnName": "salesStartsAt",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "BLOB",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -541,7 +547,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"252ac80699a24ecafcef17a1492afa7e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b4e67cb28652e498132c1fe092883cfa\")"
     ]
   }
 }
