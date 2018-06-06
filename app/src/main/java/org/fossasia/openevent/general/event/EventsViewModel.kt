@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.PagedList
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,7 +13,7 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
+    val events = MutableLiveData<PagedList<Event>>()
     val error = MutableLiveData<String>()
 
     fun loadEvents() {
