@@ -31,7 +31,7 @@ class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
                 }, {
                     error.value = "Error fetching tickets"
                     Timber.e(it, "Error fetching tickets %d",id)
-        }))
+                }))
     }
 
     override fun onCleared() {
