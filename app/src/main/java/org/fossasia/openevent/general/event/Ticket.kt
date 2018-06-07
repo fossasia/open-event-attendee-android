@@ -6,15 +6,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Type
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.ForeignKey.CASCADE
 
 @Type("ticket")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("id"),
-        onDelete = CASCADE))])
 data class Ticket(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
@@ -34,3 +28,4 @@ data class Ticket(
         val salesEndsAt: String?,
         val minOrder: String?
 )
+

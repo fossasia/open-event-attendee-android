@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.provider.CalendarContract.Instances.EVENT_ID
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater

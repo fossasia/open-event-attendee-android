@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "97efa4aaf6236abfe353d3ec3c345be7",
+    "identityHash": "d72b474ff1822b41be54debe93211e73",
     "entities": [
       {
         "tableName": "Event",
@@ -439,121 +439,11 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "description",
-            "columnName": "description",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "maxOrder",
-            "columnName": "maxOrder",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "isFeeAbsorbed",
-            "columnName": "isFeeAbsorbed",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "isDescriptionVisible",
-            "columnName": "isDescriptionVisible",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "price",
-            "columnName": "price",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "position",
-            "columnName": "position",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "quantity",
-            "columnName": "quantity",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "isHidden",
-            "columnName": "isHidden",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "salesStartsAt",
-            "columnName": "salesStartsAt",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "salesEndsAt",
-            "columnName": "salesEndsAt",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "minOrder",
-            "columnName": "minOrder",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": [
-          {
-            "table": "Event",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"97efa4aaf6236abfe353d3ec3c345be7\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d72b474ff1822b41be54debe93211e73\")"
     ]
   }
 }
