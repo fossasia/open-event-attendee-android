@@ -1,4 +1,8 @@
-# open-event-general
+# open-event-android
+[![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-android?branch=development)
+[![codecov.io](https://codecov.io/github/fossasia/open-event-android/coverage.svg?branch=master)](https://codecov.io/github/fossasia/open-event-android?branch=development)
+[![Join the chat at https://gitter.im/fossasia/open-event-android](https://badges.gitter.im/fossasia/open-event-android.svg)](https://gitter.im/fossasia/open-event-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:open-event@googlegroups.com)
 
 An events app to discover events happening around the world using the Open Event Platform
 

@@ -44,7 +44,6 @@ val apiModule = applicationContext {
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }
-
 }
 
 val viewModelModule = applicationContext {
