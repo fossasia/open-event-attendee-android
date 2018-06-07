@@ -28,11 +28,11 @@ val commonModule = applicationContext {
 }
 
 val apiModule = applicationContext {
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
