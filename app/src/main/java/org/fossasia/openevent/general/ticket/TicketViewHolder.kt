@@ -1,9 +1,9 @@
-package org.fossasia.openevent.general.event
+package org.fossasia.openevent.general.ticket
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_ticket.view.*
-import org.fossasia.openevent.general.utils.nullToEmpty
+import org.fossasia.openevent.general.event.EventUtils
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.event
+package org.fossasia.openevent.general.ticket
 
 import android.arch.persistence.room.*
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
