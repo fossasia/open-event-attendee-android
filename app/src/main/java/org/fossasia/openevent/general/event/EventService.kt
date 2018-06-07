@@ -24,4 +24,5 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     fun getEvent(id: Long): Flowable<Event> {
         return eventDao.getEvent(id)
     }
+
 }

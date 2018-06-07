@@ -7,11 +7,10 @@ import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDao
 
-@Database(entities = [Event::class, User::class], version = 2)
+@Database(entities = [Event::class, User::class], version = 1)
 abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun eventDao(): EventDao
 
     abstract fun userDao(): UserDao
-
 }
