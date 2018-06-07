@@ -83,7 +83,7 @@ class EventUtilsTest {
 
     @Test
     fun `should get sharable information with link`() {
-        val event = getEvent(link = "http://goo.gl")
+        val event = getEvent(identifier = "abcdefgh")
         setupStringMock()
         assertEquals("""
             Event Name : Eva Event
@@ -96,7 +96,7 @@ class EventUtilsTest {
 
     @Test
     fun `should get sharable information complete`() {
-        val event = getEvent(description = "Fresher", link = "http://fresh.er")
+        val event = getEvent(description = "Fresher", identifier = "abcdefgh")
         setupStringMock()
         assertEquals("""
             Event Name : Eva Event
