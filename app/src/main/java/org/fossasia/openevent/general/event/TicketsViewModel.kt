@@ -14,7 +14,7 @@ class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
     val tickets = MutableLiveData<List<Ticket>>()
     val error = MutableLiveData<String>()
 
-    fun loadTickets(id : Long) {
+    fun loadTickets(id: Long) {
         if (id.equals(-1)) {
             error.value = "Error fetching tickets"
             return
@@ -25,13 +25,13 @@ class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
                 .doOnSubscribe({
                     progressTickets.value = true
                 }).doFinally({
-                    progressTickets.value = false
-                }).subscribe({ticketList ->
-                    tickets.value = ticketList
-                }, {
-                    error.value = "Error fetching tickets"
-                    Timber.e(it, "Error fetching tickets %d",id)
-                }))
+            progressTickets.value = false
+        }).subscribe({ ticketList ->
+            tickets.value = ticketList
+        }, {
+            error.value = "Error fetching tickets"
+            Timber.e(it, "Error fetching tickets %d", id)
+        }))
     }
 
     override fun onCleared() {

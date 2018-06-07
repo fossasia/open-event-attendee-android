@@ -8,26 +8,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_medium"
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding_extra_large"
-        android:paddingTop="@dimen/padding_extra_large"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:paddingRight="@dimen/padding_extra_large">
+        android:paddingRight="@dimen/padding_extra_large"
+        android:paddingTop="@dimen/padding_extra_large">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/layout_margin_large"
+            android:text="@string/eventyay_logo"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_very_large"
-            android:text="@string/eventyay_logo"/>
+            android:textSize="@dimen/text_size_very_large" />
         <!-- Email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:layout_marginBottom="@dimen/padding_medium">
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_medium">
 
             <EditText
                 android:id="@+id/username"
@@ -41,8 +41,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_medium"
             app:passwordToggleEnabled="true">
 
             <EditText
@@ -57,16 +57,16 @@
             android:id="@+id/loginButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_large"
             android:layout_marginBottom="@dimen/padding_large"
+            android:layout_marginTop="@dimen/padding_large"
             android:padding="@dimen/padding_medium"
             android:text="@string/login" />
 
         <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/progressBar"
             android:visibility="gone" />
 
     </LinearLayout>

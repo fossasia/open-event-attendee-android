@@ -22,7 +22,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var loadEventsAgain=false
+    private var loadEventsAgain = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -87,13 +87,13 @@ class SearchFragment : Fragment() {
         menu?.setGroupVisible(R.id.search_menu, true)
         menu?.setGroupVisible(R.id.profile_menu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
+        val searchView: SearchView? = menu?.findItem(R.id.search_item)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchViewModel.searchEvent = query
                 searchViewModel.loadEvents()
-                loadEventsAgain=true
+                loadEventsAgain = true
                 return false
             }
 

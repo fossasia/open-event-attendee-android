@@ -9,7 +9,7 @@ import timber.log.Timber
 
 class OpenEventGeneral : Application() {
 
-    companion object  {
+    companion object {
         @JvmStatic
         var appContext: Context? = null
             private set

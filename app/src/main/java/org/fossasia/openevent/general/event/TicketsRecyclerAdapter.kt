@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
-import java.util.ArrayList
+import java.util.*
 
 class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 

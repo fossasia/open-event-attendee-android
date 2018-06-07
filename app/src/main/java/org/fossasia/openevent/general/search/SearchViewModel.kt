@@ -27,13 +27,13 @@ class SearchViewModel(private val eventService: EventService) : ViewModel() {
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally({
-                    progress.value = false
-                }).subscribe({
-                    events.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
-                }))
+            progress.value = false
+        }).subscribe({
+            events.value = it
+        }, {
+            Timber.e(it, "Error fetching events")
+            error.value = "Error fetching events"
+        }))
     }
 
     override fun onCleared() {

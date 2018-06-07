@@ -15,17 +15,17 @@
         app:cardElevation="@dimen/card_elevation">
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/shareFab"
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
-            android:id="@+id/shareFab"
             android:layout_gravity="end"
-            android:layout_marginTop="@dimen/fab_margin_top"
             android:layout_marginRight="@dimen/fab_margin_right"
+            android:layout_marginTop="@dimen/fab_margin_top"
+            android:background="@color/colorAccent"
             android:scaleType="center"
-            app:elevation="@dimen/fab_elevation"
             app:backgroundTint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_share_white_24dp"
-            android:background="@color/colorAccent" />
+            app:elevation="@dimen/fab_elevation"
+            app:srcCompat="@drawable/ic_share_white_24dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,8 +33,8 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:paddingLeft="@dimen/padding_small"
-            android:paddingTop="@dimen/padding_small"
-            android:paddingRight="@dimen/padding_small">
+            android:paddingRight="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_small">
 
             <ImageView
                 android:id="@+id/eventImage"
@@ -45,8 +45,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:orientation="horizontal">
 
                 <LinearLayout

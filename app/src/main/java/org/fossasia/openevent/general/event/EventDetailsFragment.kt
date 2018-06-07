@@ -123,7 +123,7 @@ class EventDetailsFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    private fun startCalendar(event: Event){
+    private fun startCalendar(event: Event) {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
@@ -137,8 +137,8 @@ class EventDetailsFragment : Fragment() {
         val inflaterMenu = activity?.menuInflater
         inflaterMenu?.inflate(R.menu.event_details, menu)
     }
-  
-    private fun loadTicketFragment(){
+
+    private fun loadTicketFragment() {
         //Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
         val bundle = Bundle()
