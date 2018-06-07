@@ -13,5 +13,4 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
 
     abstract fun userDao(): UserDao
-
 }

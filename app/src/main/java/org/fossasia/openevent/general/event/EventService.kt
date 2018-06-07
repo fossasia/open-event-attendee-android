@@ -24,10 +24,10 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
         return eventApi.searchEvents("name", eventName)
-                        .map {
-                            eventDao.insertEvents(it)
-                                it
-                           }
+                .map {
+                    eventDao.insertEvents(it)
+                    it
+                }
     }
 
     fun getEvent(id: Long): Flowable<Event> {
