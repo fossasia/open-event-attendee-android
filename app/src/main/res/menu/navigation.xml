@@ -7,6 +7,11 @@
         android:title="@string/Events" />
 
     <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search_grey_24dp"
+        android:title="@string/search" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_baseline_account_circle_24px"
         android:title="@string/Profile" />
