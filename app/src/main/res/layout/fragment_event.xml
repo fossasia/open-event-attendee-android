@@ -6,16 +6,5 @@
 
     <include layout="@layout/content_event" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/event_share_fab"
-        android:layout_width="@dimen/fab_width"
-        android:layout_height="@dimen/fab_height"
-        android:layout_marginRight="@dimen/fab_margin_right"
-        android:background="@color/colorAccent"
-        android:scaleType="center"
-        app:backgroundTint="@color/colorAccent"
-        app:elevation="@dimen/fab_elevation"
-        app:layout_anchor="@id/logo"
-        app:layout_anchorGravity="end|bottom"
-        app:srcCompat="@drawable/ic_share_white_24dp" />
+
 </android.support.design.widget.CoordinatorLayout>
