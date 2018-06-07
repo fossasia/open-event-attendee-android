@@ -12,19 +12,16 @@ import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
-import kotlinx.android.synthetic.main.fragment_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-
 
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private lateinit var rootView: View
     private var eventId: Long = -1
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +42,7 @@ class EventDetailsFragment : Fragment() {
             it?.let {
                 loadEvent(it)
             }
+            loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -108,5 +106,15 @@ class EventDetailsFragment : Fragment() {
         } else {
             textView.text = value
         }
+    }
+
+    private fun loadTicketFragment(){
+        //Initialise Ticket Fragment
+        val ticketFragment = TicketsFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", eventId)
+        ticketFragment.arguments = bundle
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 }
