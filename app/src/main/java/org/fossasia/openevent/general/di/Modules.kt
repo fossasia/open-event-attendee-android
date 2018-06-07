@@ -100,6 +100,7 @@ val databaseModule = applicationContext {
     bean {
         Room.databaseBuilder(androidApplication(),
                 OpenEventDatabase::class.java, "open_event_database")
+                .fallbackToDestructiveMigration()
                 .build()
     }
 
