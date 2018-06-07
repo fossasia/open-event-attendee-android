@@ -9,12 +9,15 @@ import io.reactivex.Flowable
 @Dao
 interface EventDao {
     @Insert(onConflict = REPLACE)
+    fun insertEvents(events: List<Event>)
+
+    @Insert(onConflict = REPLACE)
     fun insertEvent(event: Event)
 
     @Query("DELETE FROM Event")
     fun deleteAll()
 
-    @Query("SELECT * from Event ORDER BY startsAt ASC")
+    @Query("SELECT * from Event ORDER BY startsAt DESC")
     fun getAllEvents(): Flowable<List<Event>>
 
     @Query("SELECT * from Event WHERE id = :id")
