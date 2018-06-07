@@ -16,10 +16,12 @@ object EventUtils {
 
     private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    private val frontendUrl: String = "https://open-event-frontend-dev.herokuapp.com/e/"
 
     fun getSharableInfo(event: Event, resource: Resource = sharedResource): String {
         val description = event.description.nullToEmpty()
-        val eventUrl = event.externalEventUrl.nullToEmpty()
+        val identifier = event.identifier
+        val eventUrl = frontendUrl + identifier
 
         val message = StringBuilder()
 
@@ -45,6 +47,5 @@ object EventUtils {
     fun getLocalizedDateTime(dateString: String): ZonedDateTime = ZonedDateTime.parse(dateString)
             .toOffsetDateTime()
             .atZoneSameInstant(ZoneId.systemDefault())
-
 
 }
