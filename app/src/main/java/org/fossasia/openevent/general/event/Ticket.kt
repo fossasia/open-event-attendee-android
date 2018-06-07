@@ -11,10 +11,10 @@ import android.arch.persistence.room.ForeignKey.CASCADE
 
 @Type("ticket")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = arrayOf(ForeignKey(entity = Event::class,
-                parentColumns = arrayOf("id"),
-                childColumns = arrayOf("id"),
-                onDelete = CASCADE)))
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("id"),
+        onDelete = CASCADE))])
 data class Ticket(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
@@ -28,8 +28,9 @@ data class Ticket(
         val price: String?,
         val position: String?,
         val quantity: String?,
+
         val isHidden: Boolean? = false,
+        val salesStartsAt: String?,
         val salesEndsAt: String?,
-        val minOrder: String?,
-        val salesStartsAt: String?
+        val minOrder: String?
 )

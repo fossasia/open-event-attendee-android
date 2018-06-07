@@ -442,7 +442,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesEndsAt` TEXT, `minOrder` TEXT, `salesStartsAt` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -511,6 +511,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "salesStartsAt",
+            "columnName": "salesStartsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "salesEndsAt",
             "columnName": "salesEndsAt",
             "affinity": "TEXT",
@@ -519,12 +525,6 @@
           {
             "fieldPath": "minOrder",
             "columnName": "minOrder",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "salesStartsAt",
-            "columnName": "salesStartsAt",
             "affinity": "TEXT",
             "notNull": false
           }

@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-def dbflow_version = "4.2.4"
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -83,12 +82,6 @@ dependencies {
 
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
-
-    // DbFlow
-    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflow_version}"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.8"
