@@ -29,6 +29,10 @@
     <string name="event_link">Event Link :&#160;</string>
     <string name="event_description">Event Description :&#160;</string>
     <string name="event_name">Event Name :&#160;</string>
+    <string name="share">Share</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">Add to Calendar</string>
 
     <!--ticket details-->
     <string name="sales_dates">Sales Dates</string>

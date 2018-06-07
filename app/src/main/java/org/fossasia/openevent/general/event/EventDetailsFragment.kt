@@ -3,11 +3,9 @@ package org.fossasia.openevent.general.event
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -22,6 +20,7 @@ class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private lateinit var rootView: View
     private var eventId: Long = -1
+    private lateinit var eventShare: Event
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +40,7 @@ class EventDetailsFragment : Fragment() {
         eventViewModel.event.observe(this, Observer {
             it?.let {
                 loadEvent(it)
+                eventShare = it
             }
             loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
@@ -74,6 +74,11 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
+        //Add event to Calendar
+        val dateClickListener = View.OnClickListener { startCalendar(event) }
+        rootView.starts_on.setOnClickListener(dateClickListener)
+        rootView.ends_on.setOnClickListener(dateClickListener)
+
         rootView.event_share_fab.setOnClickListener {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
@@ -96,6 +101,11 @@ class EventDetailsFragment : Fragment() {
                 activity?.onBackPressed()
                 true
             }
+            R.id.add_to_calendar -> {
+                //Add event to Calendar
+                startCalendar(eventShare)
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -108,6 +118,26 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        menu?.setGroupVisible(R.id.event_menu, true)
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun startCalendar(event: Event){
+        val intent = Intent(Intent.ACTION_INSERT)
+        intent.type = "vnd.android.cursor.item/event"
+        intent.putExtra(CalendarContract.Events.TITLE, event.name)
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+        startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        val inflaterMenu = activity?.menuInflater
+        inflaterMenu?.inflate(R.menu.event_details, menu)
+    }
+  
     private fun loadTicketFragment(){
         //Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
