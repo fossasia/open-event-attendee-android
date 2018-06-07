@@ -34,4 +34,9 @@
     <!--add to calendar-->
     <string name="add_to_calendar">Add to Calendar</string>
 
+    <!--ticket details-->
+    <string name="sales_dates">Sales Dates</string>
+    <string name="order_range">Order Range</string>
+    <string name="tickets_available">Tickets Available</string>
+
 </resources>

@@ -8,16 +8,16 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         val eventsFlowable = eventDao.getAllEvents()
         return eventsFlowable.switchMap {
             if (it.isNotEmpty())
-                 eventsFlowable
+                eventsFlowable
             else
-            eventApi.getEvents()
-                    .map {
-                        eventDao.insertEvents(it)
-                    }
-                    .toFlowable()
-                    .flatMap {
-                        eventsFlowable
-                    }
+                eventApi.getEvents()
+                        .map {
+                            eventDao.insertEvents(it)
+                        }
+                        .toFlowable()
+                        .flatMap {
+                            eventsFlowable
+                        }
         }
     }
 

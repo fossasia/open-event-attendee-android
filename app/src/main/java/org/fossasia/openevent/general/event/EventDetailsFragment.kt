@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
-import kotlinx.android.synthetic.main.fragment_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
@@ -22,7 +21,6 @@ class EventDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private var eventId: Long = -1
     private lateinit var eventShare: Event
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +42,7 @@ class EventDetailsFragment : Fragment() {
                 loadEvent(it)
                 eventShare = it
             }
+            loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -137,5 +136,15 @@ class EventDetailsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         val inflaterMenu = activity?.menuInflater
         inflaterMenu?.inflate(R.menu.event_details, menu)
+    }
+  
+    private fun loadTicketFragment(){
+        //Initialise Ticket Fragment
+        val ticketFragment = TicketsFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", eventId)
+        ticketFragment.arguments = bundle
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 }
