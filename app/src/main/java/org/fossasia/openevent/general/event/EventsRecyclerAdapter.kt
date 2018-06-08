@@ -23,7 +23,7 @@ class EventsRecyclerAdapter : PagedListAdapter<Event,EventViewHolder>(EVENT_COMP
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)
-        return EventViewHolder(view, clickListener)
+        return EventViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {

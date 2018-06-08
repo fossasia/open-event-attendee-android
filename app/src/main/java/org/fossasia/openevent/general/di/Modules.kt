@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.search.SearchViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
@@ -34,11 +35,16 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(TicketApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
     factory { EventService(get(), get()) }
+    factory { TicketService(get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -47,6 +53,8 @@ val viewModelModule = applicationContext {
     viewModel { ProfileFragmentViewModel(get()) }
     viewModel { SignUpFragmentViewModel(get()) }
     viewModel { EventDetailsViewModel(get()) }
+    viewModel { SearchViewModel(get()) }
+    viewModel { TicketsViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -80,7 +88,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
@@ -93,6 +101,7 @@ val databaseModule = applicationContext {
     bean {
         Room.databaseBuilder(androidApplication(),
                 OpenEventDatabase::class.java, "open_event_database")
+                .fallbackToDestructiveMigration()
                 .build()
     }
 
