@@ -7,13 +7,11 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, eventId: Long) {
+    fun bind(ticket: Ticket) {
         if (!ticket.description.isNullOrEmpty()) {
             itemView.ticket_description.text = ticket.description
         }
         itemView.ticket_name.text = ticket.name
-
-        ticket.eventId = eventId
 
         if(ticket.salesEndsAt != null && ticket.salesStartsAt != null) {
             val salesStartsAt = EventUtils.getLocalizedDateTime(ticket.salesStartsAt)

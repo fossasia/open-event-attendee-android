@@ -25,7 +25,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     override fun onBindViewHolder(holder: TicketViewHolder, position: Int) {
         val event = tickets[position]
 
-        holder.bind(event, eventId)
+        holder.bind(event)
     }
 
     override fun getItemCount(): Int {

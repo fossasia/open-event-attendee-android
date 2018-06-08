@@ -28,5 +28,6 @@ data class Ticket(
         val salesStartsAt: String?,
         val salesEndsAt: String?,
         val minOrder: String?,
+        //event id
         var eventId: Long
 )
