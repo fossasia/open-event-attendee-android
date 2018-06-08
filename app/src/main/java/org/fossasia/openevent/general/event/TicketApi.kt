@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface TicketApi {
 
     @GET("events/{id}/tickets")
-    fun getTickets(@Path("id") id: Long): Flowable<List<Ticket>>
+    fun getTickets(@Path("id") id: Long): Single<List<Ticket>>
 
 }

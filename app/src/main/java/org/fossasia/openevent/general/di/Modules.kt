@@ -44,7 +44,7 @@ val apiModule = applicationContext {
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
     factory { EventService(get(), get()) }
-    factory { TicketService(get()) }
+    factory { TicketService(get(), get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -113,5 +113,9 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.userDao()
+    }
+    factory {
+        val database: OpenEventDatabase = get()
+        database.ticketsDao()
     }
 }
