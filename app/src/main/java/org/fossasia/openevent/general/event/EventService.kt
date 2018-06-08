@@ -16,7 +16,8 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         val events: Flowable<PagedList<Event>> = RxPagedListBuilder(
                 eventDao.getAllEvents(),
                 myPagingConfig
-        ).buildFlowable(BackpressureStrategy.LATEST)
+        ).setBoundaryCallback(BoundaryCallback(eventDao,eventApi))
+                .buildFlowable(BackpressureStrategy.LATEST)
 
         return events
     }
