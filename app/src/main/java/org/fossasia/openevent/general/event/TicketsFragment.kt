@@ -58,6 +58,9 @@ class TicketsFragment : Fragment() {
             ticketsRecyclerAdapter.notifyDataSetChanged()
         })
 
+        //set event id
+        ticketsRecyclerAdapter.setEventId(id)
+
         return rootView
     }
 

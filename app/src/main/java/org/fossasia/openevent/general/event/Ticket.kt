@@ -9,6 +9,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 
 @Type("ticket")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
+@Entity
 data class Ticket(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
@@ -26,6 +27,6 @@ data class Ticket(
         val isHidden: Boolean? = false,
         val salesStartsAt: String?,
         val salesEndsAt: String?,
-        val minOrder: String?
+        val minOrder: String?,
+        var eventId: Long
 )
-

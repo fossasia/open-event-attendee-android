@@ -9,6 +9,7 @@ import java.util.ArrayList
 class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
     private val tickets = ArrayList<Ticket>()
+    private var eventId: Long = -1
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
@@ -24,11 +25,15 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     override fun onBindViewHolder(holder: TicketViewHolder, position: Int) {
         val event = tickets[position]
 
-        holder.bind(event)
+        holder.bind(event, eventId)
     }
 
     override fun getItemCount(): Int {
         return tickets.size
+    }
+
+    fun setEventId(eventId: Long){
+        this.eventId = eventId
     }
 
 }
