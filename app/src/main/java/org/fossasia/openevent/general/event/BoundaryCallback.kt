@@ -13,16 +13,16 @@ class BoundaryCallback(
 ) : PagedList.BoundaryCallback<Event>() {
 
     companion object {
-        private const val NETWORK_PAGE_SIZE = 50
+        private const val NETWORK_PAGE_SIZE = 20
     }
 
     // keep the last requested page. When the request is successful, increment the page number.
     private var lastRequestedPage = 1
 
-    private val _networkErrors = MutableLiveData<String>()
+    private val viewNetworkErrors = MutableLiveData<String>()
     // LiveData of network errors.
     val networkErrors: LiveData<String>
-        get() = _networkErrors
+        get() = viewNetworkErrors
 
     // avoid triggering multiple requests in the same time
     private var isRequestInProgress = false
@@ -44,6 +44,10 @@ class BoundaryCallback(
     }
 
     private fun requestAndSaveData() {
+        service.getEvents(lastRequestedPage++).map {
+            eventDao.insertEvents(it)
+            it
+        }
 
     }
 }

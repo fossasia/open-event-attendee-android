@@ -10,7 +10,7 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
 
     fun getEvents(): Flowable<PagedList<Event>> {
         val myPagingConfig = PagedList.Config.Builder()
-                .setPageSize(50)
+                .setPageSize(20)
                 .setPrefetchDistance(150)
                 .build()
 
