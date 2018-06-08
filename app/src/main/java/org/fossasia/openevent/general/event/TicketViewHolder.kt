@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.event
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_ticket.view.*
-import org.fossasia.openevent.general.utils.nullToEmpty
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -13,7 +12,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         itemView.ticket_name.text = ticket.name
 
-        if(ticket.salesEndsAt != null && ticket.salesStartsAt != null) {
+        if (ticket.salesEndsAt != null && ticket.salesStartsAt != null) {
             val salesStartsAt = EventUtils.getLocalizedDateTime(ticket.salesStartsAt)
             val salesEndsAt = EventUtils.getLocalizedDateTime(ticket.salesEndsAt)
 

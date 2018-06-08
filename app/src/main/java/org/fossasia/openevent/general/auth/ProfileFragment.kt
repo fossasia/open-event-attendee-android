@@ -10,12 +10,12 @@ import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-import org.fossasia.openevent.general.AuthActivity
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()

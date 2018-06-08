@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.item_card_events.view.*
 import org.fossasia.openevent.general.R
 
 
-
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
@@ -28,11 +27,11 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(itemView.eventImage)
         }
 
-        itemView.setOnClickListener{
+        itemView.setOnClickListener {
             clickListener?.onClick(event.id)
         }
 
-        itemView.shareFab.setOnClickListener{
+        itemView.shareFab.setOnClickListener {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
 

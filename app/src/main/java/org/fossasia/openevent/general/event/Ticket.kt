@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler

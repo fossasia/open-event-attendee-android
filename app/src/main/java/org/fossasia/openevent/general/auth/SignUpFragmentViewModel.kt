@@ -65,7 +65,7 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
         compositeDisposable.clear()
     }
 
-    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean{
+    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
             return true

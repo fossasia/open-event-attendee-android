@@ -26,8 +26,8 @@ class ProfileFragmentViewModel(private val authService: AuthService) : ViewModel
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally {
-                    progress.value = false
-                }.subscribe({ user ->
+            progress.value = false
+        }.subscribe({ user ->
                     Timber.d("Response Success")
                     this.user.value = user
                 }) {

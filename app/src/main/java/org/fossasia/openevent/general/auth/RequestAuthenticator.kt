@@ -5,7 +5,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
-class RequestAuthenticator(private val authHolder: AuthHolder): Authenticator {
+class RequestAuthenticator(private val authHolder: AuthHolder) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         val authorization: String? = authHolder.getAuthorization()

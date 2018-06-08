@@ -52,15 +52,15 @@ object EventUtils {
             .toOffsetDateTime()
             .atZoneSameInstant(ZoneId.systemDefault())
 
-    fun getTimeInMilliSeconds(date: String): Long{
-        var testDate =  Date()
-        val dateString = date.replace("T"," ")
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            try {
-                testDate = dateFormat.parse(dateString)
-            } catch (e: ParseException) {
-                Timber.e(e,"Error Parsing Date")
-            }
+    fun getTimeInMilliSeconds(date: String): Long {
+        var testDate = Date()
+        val dateString = date.replace("T", " ")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        try {
+            testDate = dateFormat.parse(dateString)
+        } catch (e: ParseException) {
+            Timber.e(e, "Error Parsing Date")
+        }
         return testDate.time
     }
 }

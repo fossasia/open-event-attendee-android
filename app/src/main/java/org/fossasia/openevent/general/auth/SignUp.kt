@@ -9,9 +9,9 @@ import com.github.jasminb.jsonapi.annotations.Type
 @Type("user")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class SignUp(
-    @Id(IntegerIdHandler::class)
-    var firstName: String? = null,
-    var lastName: String? = null,
-    var email: String? = null,
-    var password: String? = null
+        @Id(IntegerIdHandler::class)
+        var firstName: String? = null,
+        var lastName: String? = null,
+        var email: String? = null,
+        var password: String? = null
 )
