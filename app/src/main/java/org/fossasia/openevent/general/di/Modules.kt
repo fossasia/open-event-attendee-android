@@ -13,6 +13,9 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.social.SocialLinkApi
+import org.fossasia.openevent.general.social.SocialLinksService
+import org.fossasia.openevent.general.social.SocialLinksViewModel
 import org.fossasia.openevent.general.ticket.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
@@ -40,12 +43,17 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(TicketApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(SocialLinkApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }
+    factory { SocialLinksService(get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -56,6 +64,7 @@ val viewModelModule = applicationContext {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { TicketsViewModel(get()) }
+    viewModel { SocialLinksViewModel(get()) }
 }
 
 val networkModule = applicationContext {

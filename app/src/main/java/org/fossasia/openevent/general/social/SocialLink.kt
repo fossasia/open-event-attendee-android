@@ -16,7 +16,5 @@ data class SocialLink(
         @PrimaryKey
         val id: Int,
         val link: String,
-        val name: String,
-        @Relationship("event")
-        val event: Event
+        val name: String
 )
