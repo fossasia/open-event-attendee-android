@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 
 
 class AuthService(private val authApi: AuthApi,
@@ -31,18 +32,16 @@ class AuthService(private val authApi: AuthApi,
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun logout(): Completable {
-        return Completable.fromAction({
-            var userFlowable = userDao.getUser(authHolder.getId())
-            userFlowable.map {
-                userDao.deleteUser(it)
-                authHolder.token = null
-            }
-        })
+        return Completable.fromAction {
+            authHolder.token = null
+            userDao.deleteUser(authHolder.getId())
+        }
     }
 
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
         return userDao.getUser(id)
                 .onErrorResumeNext {
+                    Timber.d(it, "User not found in Database %d", id)
                     authApi.getProfile(id)
                             .map {
                                 userDao.insertUser(it)
