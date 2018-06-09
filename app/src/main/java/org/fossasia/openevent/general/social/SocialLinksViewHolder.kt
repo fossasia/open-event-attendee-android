@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.social
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -9,11 +10,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_social_link.view.*
 import org.fossasia.openevent.general.R
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 
 class SocialLinksViewHolder(itemView: View, private var context: Context) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: SocialLink) {
-        itemView.img_social_link.setImageResource(getSocialLinkDrawableId(event.name))
+        val imageDrawable :Drawable? = ContextCompat.getDrawable(context, getSocialLinkDrawableId(event.name))
+        imageDrawable?.colorFilter = PorterDuffColorFilter(context.resources.getColor(R.color.greyMore), PorterDuff.Mode.SRC_IN)
+
+        itemView.img_social_link.setImageDrawable(imageDrawable)
 
         itemView.setOnClickListener{
             setUpCustomTab(context, event.link)
