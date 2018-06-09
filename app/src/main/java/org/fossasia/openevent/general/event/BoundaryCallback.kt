@@ -44,9 +44,14 @@ class BoundaryCallback(
     }
 
     private fun requestAndSaveData() {
+        if (isRequestInProgress) return
+
+        isRequestInProgress = true
         service.getEvents(lastRequestedPage++).map {
             eventDao.insertEvents(it)
             it
+        }.doOnSuccess {
+            isRequestInProgress = false
         }
 
     }
