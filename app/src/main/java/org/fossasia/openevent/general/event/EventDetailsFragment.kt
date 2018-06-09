@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.Fragment
@@ -74,10 +75,22 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
+        //load location to map
+        val mapClickListener = View.OnClickListener { startMap(event) }
+        if (event.locationName != null) {
+            rootView.location_under_map.visibility = View.VISIBLE
+            rootView.image_map.visibility = View.VISIBLE
+            loadLocation(event)
+            rootView.image_map.setOnClickListener(mapClickListener)
+            rootView.event_location_text_view.setOnClickListener(mapClickListener)
+        }
+
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.starts_on.setOnClickListener(dateClickListener)
         rootView.ends_on.setOnClickListener(dateClickListener)
+
+
 
         rootView.event_share_fab.setOnClickListener {
             val sendIntent = Intent()
@@ -146,5 +159,33 @@ class EventDetailsFragment : Fragment() {
         ticketFragment.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainer, ticketFragment).commit()
+    }
+
+    private fun loadLocation(event: Event){
+        //location handling
+        val mapUrlInitial = "https://maps.googleapis.com/maps/api/staticmap?center="
+        val mapUrlProperties = "&zoom=12&size=1200x390&markers=color:red%7C"
+        val mapUrlMapType = "&markers=size:mid&maptype=roadmap"
+
+        rootView.location_under_map.text = event.locationName
+
+        val latLong: String = "" +event.latitude + "," + event.longitude
+
+        val finalURL = mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
+        Picasso.get()
+                .load(finalURL)
+                .placeholder(R.drawable.map_placeholder)
+                .into(rootView.image_map)
+
+    }
+
+    private fun startMap(event: Event){
+        // start map intent
+        val gmmIntentUri = Uri.parse("geo:<"+event.latitude+">,<"+event.longitude+">?q=<"+event.latitude+">,<"+event.longitude+">")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.`package` = "com.google.android.apps.maps"
+        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(mapIntent)
+        }
     }
 }
