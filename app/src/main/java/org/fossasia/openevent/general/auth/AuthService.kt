@@ -40,7 +40,6 @@ class AuthService(private val authApi: AuthApi,
         })
     }
 
-
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
         return userDao.getUser(id)
                 .onErrorResumeNext {
@@ -50,9 +49,5 @@ class AuthService(private val authApi: AuthApi,
                                 it
                             }
                 }
-
     }
-
-
 }
-
