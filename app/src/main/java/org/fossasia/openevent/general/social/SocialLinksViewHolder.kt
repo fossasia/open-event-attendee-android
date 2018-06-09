@@ -44,7 +44,9 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
 
         val customTabsBuilder = CustomTabsIntent.Builder()
         customTabsBuilder.setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-        customTabsBuilder.setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_black_24dp))
+        customTabsBuilder.setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_white_cct_24dp))
+        customTabsBuilder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+        customTabsBuilder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
         val customTabsIntent = customTabsBuilder.build()
         customTabsIntent.launchUrl(context, Uri.parse(URL))
     }
