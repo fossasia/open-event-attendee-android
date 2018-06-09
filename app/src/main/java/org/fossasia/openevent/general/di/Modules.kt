@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
@@ -98,7 +99,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()

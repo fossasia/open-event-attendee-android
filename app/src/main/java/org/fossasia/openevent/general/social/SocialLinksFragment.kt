@@ -48,9 +48,6 @@ class SocialLinksFragment : Fragment() {
         rootView.socialLinksRecycler.adapter = socialLinksRecyclerAdapter
         rootView.socialLinksRecycler.isNestedScrollingEnabled = false
 
-        linearLayoutManager = LinearLayoutManager(context)
-        rootView.socialLinksRecycler.layoutManager = linearLayoutManager
-
         socialLinksViewModel.socialLinks.observe(this, Observer {
             it?.let {
                 socialLinksRecyclerAdapter.addAll(it)

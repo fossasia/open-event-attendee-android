@@ -158,6 +158,6 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         socialLinksFragemnt.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
-        transaction.add(R.id.frameContainer, socialLinksFragemnt).commit()
+        transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
     }
 }
