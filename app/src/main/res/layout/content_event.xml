@@ -204,20 +204,10 @@
 
             </FrameLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="Social"
-                android:textSize="20dp" />
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:id="@+id/frameContainerSocial"
                 android:layout_height="wrap_content">
-
             </FrameLayout>
 
         </LinearLayout>
