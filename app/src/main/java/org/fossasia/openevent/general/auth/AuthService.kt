@@ -35,23 +35,21 @@ class AuthService(private val authApi: AuthApi,
             var userFlowable = userDao.getUser(authHolder.getId())
             userFlowable.map {
                 userDao.deleteUser(it)
+                authHolder.token = null
             }
-            authHolder.token = null
         })
-
     }
 
 
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
-        val userSingle = userDao.getUser(id)
-        userSingle.onErrorResumeNext {
-            var profileSingle = authApi.getProfile(id)
-            profileSingle.map {
-                userDao.insertUser(it)
-            }
-            return@onErrorResumeNext profileSingle
-        }
-        return userSingle
+        return userDao.getUser(id)
+                .onErrorResumeNext {
+                    var profileSingle = authApi.getProfile(id)
+                    profileSingle.map {
+                        userDao.insertUser(it)
+                    }
+                    return@onErrorResumeNext profileSingle
+                }
 
     }
 
