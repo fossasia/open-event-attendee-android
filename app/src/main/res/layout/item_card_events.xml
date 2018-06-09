@@ -31,10 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:paddingTop="@dimen/padding_small"
-            android:paddingRight="@dimen/padding_small">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/eventImage"
