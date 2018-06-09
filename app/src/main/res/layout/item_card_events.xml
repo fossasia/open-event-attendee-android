@@ -12,7 +12,7 @@
         android:layout_margin="@dimen/layout_margin_medium"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="0dp">
+        app:cardElevation="@dimen/card_elevation">
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="@dimen/fab_width"
