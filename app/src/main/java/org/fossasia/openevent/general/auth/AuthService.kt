@@ -44,11 +44,11 @@ class AuthService(private val authApi: AuthApi,
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
         return userDao.getUser(id)
                 .onErrorResumeNext {
-                    var profileSingle = authApi.getProfile(id)
-                    profileSingle.map {
-                        userDao.insertUser(it)
-                    }
-                    return@onErrorResumeNext profileSingle
+                    authApi.getProfile(id)
+                            .map {
+                                userDao.insertUser(it)
+                                it
+                            }
                 }
 
     }
