@@ -13,6 +13,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     val progress = MutableLiveData<Boolean>()
     val event = MutableLiveData<Event>()
+    val mapUrl = MutableLiveData<String>()
     val error = MutableLiveData<String>()
 
     fun loadEvent(id : Long) {
@@ -33,6 +34,17 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
                     Timber.e(it, "Error fetching event %d",id)
                     error.value = "Error fetching event"
                 }))
+    }
+
+    fun loadMap(event: Event){
+        //location handling
+        val mapUrlInitial = "https://maps.googleapis.com/maps/api/staticmap?center="
+        val mapUrlProperties = "&zoom=12&size=1200x390&markers=color:red%7C"
+        val mapUrlMapType = "&markers=size:mid&maptype=roadmap"
+
+        val latLong: String = "" +event.latitude + "," + event.longitude
+
+        mapUrl.value = mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
     }
 
     override fun onCleared() {

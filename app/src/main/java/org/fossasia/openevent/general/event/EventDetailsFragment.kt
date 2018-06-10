@@ -42,6 +42,7 @@ class EventDetailsFragment : Fragment() {
             it?.let {
                 loadEvent(it)
                 eventShare = it
+                eventViewModel.loadMap(it)
             }
             loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
@@ -49,6 +50,13 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        eventViewModel.mapUrl.observe(this, Observer{
+            Picasso.get()
+                    .load(it)
+                    .placeholder(R.drawable.map_placeholder)
+                    .into(rootView.image_map)
         })
 
         eventViewModel.loadEvent(eventId)
@@ -76,11 +84,11 @@ class EventDetailsFragment : Fragment() {
         }
 
         //load location to map
+        rootView.location_under_map.text = event.locationName
         val mapClickListener = View.OnClickListener { startMap(event) }
         if (event.locationName != null) {
             rootView.location_under_map.visibility = View.VISIBLE
             rootView.image_map.visibility = View.VISIBLE
-            loadLocation(event)
             rootView.image_map.setOnClickListener(mapClickListener)
             rootView.event_location_text_view.setOnClickListener(mapClickListener)
         }
@@ -159,24 +167,6 @@ class EventDetailsFragment : Fragment() {
         ticketFragment.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainer, ticketFragment).commit()
-    }
-
-    private fun loadLocation(event: Event){
-        //location handling
-        val mapUrlInitial = "https://maps.googleapis.com/maps/api/staticmap?center="
-        val mapUrlProperties = "&zoom=12&size=1200x390&markers=color:red%7C"
-        val mapUrlMapType = "&markers=size:mid&maptype=roadmap"
-
-        rootView.location_under_map.text = event.locationName
-
-        val latLong: String = "" +event.latitude + "," + event.longitude
-
-        val finalURL = mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
-        Picasso.get()
-                .load(finalURL)
-                .placeholder(R.drawable.map_placeholder)
-                .into(rootView.image_map)
-
     }
 
     private fun startMap(event: Event){
