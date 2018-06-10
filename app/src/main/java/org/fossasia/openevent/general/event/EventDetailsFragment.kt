@@ -42,8 +42,6 @@ class EventDetailsFragment : Fragment() {
             it?.let {
                 loadEvent(it)
                 eventShare = it
-                eventViewModel.loadMap(it)
-                eventViewModel.loadMapIntent(it)
             }
             loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
@@ -51,13 +49,6 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        eventViewModel.mapUrl.observe(this, Observer{
-            Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.map_placeholder)
-                    .into(rootView.image_map)
         })
 
         eventViewModel.loadEvent(eventId)
@@ -86,7 +77,7 @@ class EventDetailsFragment : Fragment() {
 
         //load location to map
         rootView.location_under_map.text = event.locationName
-        val mapClickListener = View.OnClickListener { startMap() }
+        val mapClickListener = View.OnClickListener { startMap(event) }
         if (event.locationName != null) {
             rootView.location_under_map.visibility = View.VISIBLE
             rootView.image_map.visibility = View.VISIBLE
@@ -94,12 +85,15 @@ class EventDetailsFragment : Fragment() {
             rootView.event_location_text_view.setOnClickListener(mapClickListener)
         }
 
+        Picasso.get()
+                .load(eventViewModel.loadMap(event))
+                .placeholder(R.drawable.map_placeholder)
+                .into(rootView.image_map)
+
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.starts_on.setOnClickListener(dateClickListener)
         rootView.ends_on.setOnClickListener(dateClickListener)
-
-
 
         rootView.event_share_fab.setOnClickListener {
             val sendIntent = Intent()
@@ -170,14 +164,12 @@ class EventDetailsFragment : Fragment() {
         transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 
-    private fun startMap(){
+    private fun startMap(event: Event) {
         // start map intent
-        eventViewModel.mapIntentData.observe(this, Observer{
-            it?.let {
-                if (it.resolveActivity(activity?.packageManager) != null) {
-                    startActivity(it)
-                }
-            }
-        })
+        val mapUrl = eventViewModel.loadMapUrl(event)
+        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(mapIntent)
+        }
     }
 }

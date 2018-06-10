@@ -1,12 +1,8 @@
 package org.fossasia.openevent.general.event
 
-import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.support.v4.content.ContextCompat.startActivity
+
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,8 +14,6 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     val progress = MutableLiveData<Boolean>()
     val event = MutableLiveData<Event>()
-    val mapUrl = MutableLiveData<String>()
-    val mapIntentData = MutableLiveData<Intent>()
     val error = MutableLiveData<String>()
 
     fun loadEvent(id : Long) {
@@ -42,7 +36,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
                 }))
     }
 
-    fun loadMap(event: Event){
+    fun loadMap(event: Event): String{
         //location handling
         val mapUrlInitial = "https://maps.googleapis.com/maps/api/staticmap?center="
         val mapUrlProperties = "&zoom=12&size=1200x390&markers=color:red%7C"
@@ -50,14 +44,12 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
         val latLong: String = "" +event.latitude + "," + event.longitude
 
-        mapUrl.value = mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
+        return mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
     }
 
-    fun loadMapIntent(event: Event){
-        val gmmIntentUri = Uri.parse("geo:<"+event.latitude+">,<"+event.longitude+">?q=<"+event.latitude+">,<"+event.longitude+">")
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-        mapIntent.`package` = "com.google.android.apps.maps"
-        mapIntentData.value = mapIntent
+    fun loadMapUrl(event: Event): String{
+        //load map url
+        return "geo:<"+event.latitude+">,<"+event.longitude+">?q=<"+event.latitude+">,<"+event.longitude+">"
     }
 
     override fun onCleared() {
