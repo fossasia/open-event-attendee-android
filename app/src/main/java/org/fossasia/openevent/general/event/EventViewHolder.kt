@@ -13,13 +13,12 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
         itemView.eventName.text = event.name
-        itemView.description.text = event.description
+        itemView.locationName.text = event.locationName
 
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
 
         itemView.date.text = startsAt.dayOfMonth.toString()
         itemView.month.text = startsAt.month.name.slice(0 until 3)
-        itemView.year.text = startsAt.year.toString()
 
         event.originalImageUrl?.let {
             Picasso.get()
