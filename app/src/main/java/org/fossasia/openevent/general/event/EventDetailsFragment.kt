@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.Fragment
@@ -76,6 +77,21 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
+        //load location to map
+        rootView.location_under_map.text = event.locationName
+        val mapClickListener = View.OnClickListener { startMap(event) }
+        if (event.locationName != null) {
+            rootView.location_under_map.visibility = View.VISIBLE
+            rootView.image_map.visibility = View.VISIBLE
+            rootView.image_map.setOnClickListener(mapClickListener)
+            rootView.event_location_text_view.setOnClickListener(mapClickListener)
+        }
+
+        Picasso.get()
+                .load(eventViewModel.loadMap(event))
+                .placeholder(R.drawable.ic_map_black_24dp)
+                .into(rootView.image_map)
+
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.starts_on.setOnClickListener(dateClickListener)
@@ -149,5 +165,14 @@ class EventDetailsFragment : Fragment() {
         ticketFragment.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainer, ticketFragment).commit()
+    }
+
+    private fun startMap(event: Event) {
+        // start map intent
+        val mapUrl = eventViewModel.loadMapUrl(event)
+        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(mapIntent)
+        }
     }
 }
