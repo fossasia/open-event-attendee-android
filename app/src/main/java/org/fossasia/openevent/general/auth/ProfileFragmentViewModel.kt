@@ -17,7 +17,16 @@ class ProfileFragmentViewModel(private val authService: AuthService) : ViewModel
 
     fun isLoggedIn() = authService.isLoggedIn()
 
-    fun logout() = authService.logout()
+    fun logout() {
+        compositeDisposable.add(authService.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Logged out!")
+                }) {
+                    Timber.e(it, "Failure Logging out!")
+                })
+    }
 
     fun fetchProfile() {
         compositeDisposable.add(authService.getProfile()
