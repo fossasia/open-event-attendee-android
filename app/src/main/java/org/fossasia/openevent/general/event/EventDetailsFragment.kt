@@ -43,6 +43,7 @@ class EventDetailsFragment : Fragment() {
                 loadEvent(it)
                 eventShare = it
                 eventViewModel.loadMap(it)
+                eventViewModel.loadMapIntent(it, context)
             }
             loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
@@ -171,11 +172,8 @@ class EventDetailsFragment : Fragment() {
 
     private fun startMap(event: Event){
         // start map intent
-        val gmmIntentUri = Uri.parse("geo:<"+event.latitude+">,<"+event.longitude+">?q=<"+event.latitude+">,<"+event.longitude+">")
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-        mapIntent.`package` = "com.google.android.apps.maps"
-        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
-            startActivity(mapIntent)
-        }
+        eventViewModel.mapIntentData.observe(this, Observer{
+            startActivity(it)
+        })
     }
 }
