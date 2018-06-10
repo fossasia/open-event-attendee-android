@@ -19,7 +19,7 @@ class SearchViewModel(private val eventService: EventService) : ViewModel() {
     var searchEvent: String? = null
 
     fun loadEvents() {
-        val query = "[{\"name\":\"name\",\"op\":\"like\",\"val\":\"%$searchEvent%\"}]"
+        val query = "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
