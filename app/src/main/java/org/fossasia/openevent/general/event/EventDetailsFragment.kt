@@ -43,7 +43,7 @@ class EventDetailsFragment : Fragment() {
                 loadEvent(it)
                 eventShare = it
                 eventViewModel.loadMap(it)
-                eventViewModel.loadMapIntent(it, context)
+                eventViewModel.loadMapIntent(it)
             }
             loadTicketFragment()
             Timber.d("Fetched events of id %d", eventId)
@@ -86,7 +86,7 @@ class EventDetailsFragment : Fragment() {
 
         //load location to map
         rootView.location_under_map.text = event.locationName
-        val mapClickListener = View.OnClickListener { startMap(event) }
+        val mapClickListener = View.OnClickListener { startMap() }
         if (event.locationName != null) {
             rootView.location_under_map.visibility = View.VISIBLE
             rootView.image_map.visibility = View.VISIBLE
@@ -170,10 +170,14 @@ class EventDetailsFragment : Fragment() {
         transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 
-    private fun startMap(event: Event){
+    private fun startMap(){
         // start map intent
         eventViewModel.mapIntentData.observe(this, Observer{
-            startActivity(it)
+            it?.let {
+                if (it.resolveActivity(activity?.packageManager) != null) {
+                    startActivity(it)
+                }
+            }
         })
     }
 }

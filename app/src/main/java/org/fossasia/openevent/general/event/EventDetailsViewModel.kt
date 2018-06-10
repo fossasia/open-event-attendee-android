@@ -53,13 +53,11 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
         mapUrl.value = mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
     }
 
-    fun loadMapIntent(event: Event, context: Context?){
+    fun loadMapIntent(event: Event){
         val gmmIntentUri = Uri.parse("geo:<"+event.latitude+">,<"+event.longitude+">?q=<"+event.latitude+">,<"+event.longitude+">")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         mapIntent.`package` = "com.google.android.apps.maps"
-        if (mapIntent.resolveActivity(context?.packageManager) != null) {
-            mapIntentData.value = mapIntent
-        }
+        mapIntentData.value = mapIntent
     }
 
     override fun onCleared() {
