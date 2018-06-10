@@ -172,6 +172,7 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="Description" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
@@ -179,6 +180,43 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
+                android:background="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="Location"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/location_under_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="location" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                android:src="@drawable/placeholder"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:id="@+id/image_map"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/black" />
 
             <TextView
