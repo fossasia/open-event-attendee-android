@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.ticket.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
@@ -41,7 +42,7 @@ val apiModule = applicationContext {
     }
 
     factory { AuthHolder(get()) }
-    bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
+    factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }
