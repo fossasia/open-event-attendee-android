@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -60,7 +62,7 @@ class EventDetailsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.event_name.text = event.name
-        rootView.event_organiser_name.text = event.organizerName
+        rootView.event_organiser_name.text = "by " + event.organizerName.nullToEmpty()
         setTextField(rootView.event_description, event.description)
         setTextField(rootView.event_organiser_description, event.organizerDescription)
         rootView.event_location_text_view.text = event.locationName
@@ -95,13 +97,6 @@ class EventDetailsFragment : Fragment() {
         rootView.starts_on.setOnClickListener(dateClickListener)
         rootView.ends_on.setOnClickListener(dateClickListener)
 
-        rootView.event_share_fab.setOnClickListener {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-            sendIntent.type = "text/plain"
-            rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
-        }
     }
 
     override fun onDestroyView() {
@@ -120,6 +115,14 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
+                return true
+            }
+            R.id.event_share -> {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
+                sendIntent.type = "text/plain"
+                rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
                 return true
             }
             else -> super.onOptionsItemSelected(item)

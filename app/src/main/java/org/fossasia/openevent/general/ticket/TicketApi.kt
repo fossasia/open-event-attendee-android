@@ -1,7 +1,6 @@
-package org.fossasia.openevent.general.event
+package org.fossasia.openevent.general.ticket
 
 import io.reactivex.Flowable
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
