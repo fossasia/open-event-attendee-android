@@ -26,8 +26,8 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
                 }).subscribe({
                     socialLinks.value = it
                 }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
+                    Timber.e(it, "Error fetching Social Links")
+                    error.value = "Error Social Links"
                 }))
     }
 

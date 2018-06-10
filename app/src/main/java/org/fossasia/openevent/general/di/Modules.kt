@@ -54,7 +54,7 @@ val apiModule = applicationContext {
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }
-    factory { SocialLinksService(get()) }
+    factory { SocialLinksService(get(), get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -124,5 +124,10 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.userDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.socialLinksdDao()
     }
 }
