@@ -87,7 +87,7 @@ class EventDetailsFragment : Fragment() {
 
         Picasso.get()
                 .load(eventViewModel.loadMap(event))
-                .placeholder(R.drawable.map_placeholder)
+                .placeholder(R.drawable.ic_map_black_24dp)
                 .into(rootView.image_map)
 
         //Add event to Calendar
