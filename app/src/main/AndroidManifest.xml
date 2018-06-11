@@ -23,6 +23,7 @@
             android:name="org.fossasia.openevent.general.AuthActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity android:name=".auth.LoginActivity"></activity>
     </application>
 
 </manifest>

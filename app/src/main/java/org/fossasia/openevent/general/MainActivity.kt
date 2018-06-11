@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-       if(savedInstanceState==null)
-           loadFragment(EventsFragment())
+        if (savedInstanceState == null)
+            loadFragment(EventsFragment())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
