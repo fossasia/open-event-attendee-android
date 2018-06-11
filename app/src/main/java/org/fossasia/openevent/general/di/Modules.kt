@@ -8,7 +8,6 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.fossasia.openevent.general.MainActivityViewModel
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
@@ -57,7 +56,6 @@ val viewModelModule = applicationContext {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { TicketsViewModel(get()) }
-    viewModel { MainActivityViewModel() }
 }
 
 val networkModule = applicationContext {
