@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.search.SearchFragment
 import org.koin.android.architecture.ext.viewModel
 
 class MainActivity : AppCompatActivity() {
+
     private val mainActivityViewModel by viewModel<MainActivityViewModel>()
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -47,9 +48,9 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-        if(mainActivityViewModel.loadEventsAgain.value==null) {
+        if (mainActivityViewModel.loadEventsAgain.value == null) {
             loadFragment(EventsFragment())
-            mainActivityViewModel.loadEventsAgain.value=false
+            mainActivityViewModel.loadEventsAgain.value = false
         }
     }
 
