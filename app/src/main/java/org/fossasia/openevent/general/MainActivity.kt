@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
 
        if(savedInstanceState==null)
            loadFragment(EventsFragment())
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
