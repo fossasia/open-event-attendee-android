@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
