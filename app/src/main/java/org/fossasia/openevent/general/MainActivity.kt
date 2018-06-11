@@ -9,8 +9,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.search.SearchFragment
+import org.koin.android.architecture.ext.viewModel
 
 class MainActivity : AppCompatActivity() {
+    private val mainActivityViewModel by viewModel<MainActivityViewModel>()
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
@@ -45,7 +47,10 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-        loadFragment(EventsFragment())
+        if(mainActivityViewModel.loadEventsAgain.value==null) {
+            loadFragment(EventsFragment())
+            mainActivityViewModel.loadEventsAgain.value=false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
