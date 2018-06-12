@@ -2,20 +2,14 @@ package org.fossasia.openevent.general.social
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.provider.CalendarContract.Instances.EVENT_ID
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_social_links.view.*
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.event.EventsRecyclerAdapter
-import org.fossasia.openevent.general.event.EventsViewModel
-import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 

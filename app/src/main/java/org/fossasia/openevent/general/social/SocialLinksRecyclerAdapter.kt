@@ -1,12 +1,9 @@
 package org.fossasia.openevent.general.social
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ticket.Ticket
-import org.fossasia.openevent.general.ticket.TicketViewHolder
 import java.util.ArrayList
 
 class SocialLinksRecyclerAdapter : RecyclerView.Adapter<SocialLinksViewHolder>() {

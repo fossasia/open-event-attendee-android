@@ -6,6 +6,7 @@ import android.arch.persistence.room.TypeConverters
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventConverter
 import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
