@@ -1,10 +1,12 @@
 package org.fossasia.openevent.general.search
 
 import android.arch.lifecycle.Observer
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
+import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
@@ -92,8 +94,11 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchViewModel.searchEvent = query
+                if (!TextUtils.isEmpty(rootView.location_editText.text))
+                    searchViewModel.location = rootView.location_editText.text.toString()
+                rootView.search_linear_layout.visibility = View.GONE
                 searchViewModel.loadEvents()
-                loadEventsAgain=true
+                loadEventsAgain = true
                 return false
             }
 
