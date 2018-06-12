@@ -11,19 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/event_share_fab"
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:background="@color/colorAccent"
-            android:layout_gravity="end"
-            android:layout_marginTop="230dp"
-            android:scaleType="center"
-            app:backgroundTint="@color/colorAccent"
-            app:elevation="@dimen/fab_elevation"
-            app:srcCompat="@drawable/ic_share_white_24dp" />
-
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +19,7 @@
         <ImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:background="@drawable/placeholder"
             android:scaleType="centerCrop" />
 
@@ -57,14 +44,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Name"
-                    android:textSize="@dimen/text_size_expanded_title" />
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/event_organiser_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:text="by Organiser Name" />
 
@@ -131,6 +118,8 @@
                 android:layout_height="0.8dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:background="@color/black" />
 
             <TextView
@@ -159,6 +148,8 @@
                 android:layout_height="0.8dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:background="@color/black" />
 
             <TextView
@@ -181,11 +172,51 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="Description" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:background="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="Location"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/location_under_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="location" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                android:src="@drawable/placeholder"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:id="@+id/image_map"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/black" />
 
             <TextView

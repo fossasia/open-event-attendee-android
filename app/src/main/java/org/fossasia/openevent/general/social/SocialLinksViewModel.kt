@@ -27,7 +27,7 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
                     socialLinks.value = it
                 }, {
                     Timber.e(it, "Error fetching Social Links")
-                    error.value = "Error Social Links"
+                    error.value = "Error fetching Social Links"
                 }))
     }
 

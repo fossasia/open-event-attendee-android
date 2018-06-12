@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.social
 
 import io.reactivex.Single
-import timber.log.Timber
 
 class SocialLinksService(private val socialLinkApi: SocialLinkApi, private val socialLinksDao: SocialLinksDao) {
 
