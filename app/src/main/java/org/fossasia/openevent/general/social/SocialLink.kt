@@ -9,10 +9,11 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventId
 
 @Type("social-link")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = CASCADE))])
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["eventId"], onDelete = CASCADE))])
 data class SocialLink(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
@@ -20,5 +21,5 @@ data class SocialLink(
         val link: String,
         val name: String,
         @Relationship("event")
-        val event: Event
+        val eventId: EventId
 )
