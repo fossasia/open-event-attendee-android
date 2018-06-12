@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grey">
+    android:background="@color/white">
 
     <android.support.v7.widget.CardView
         android:id="@+id/all_events_card"
@@ -23,18 +23,15 @@
             android:layout_marginRight="@dimen/fab_margin_right"
             android:scaleType="center"
             app:elevation="@dimen/fab_elevation"
-            app:backgroundTint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_share_white_24dp"
-            android:background="@color/colorAccent" />
+            app:backgroundTint="@color/white"
+            app:srcCompat="@drawable/ic_share_grey_24dp"
+            android:background="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_small"
-            android:paddingTop="@dimen/padding_small"
-            android:paddingRight="@dimen/padding_small">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/eventImage"
@@ -62,17 +59,17 @@
                         android:id="@+id/month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryDark"
                         android:layout_marginTop="3dp"
                         android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"
                         tools:text="JAN" />
 
                     <TextView
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_marginBottom="@dimen/layout_margin_medium"
-                        android:textColor="@color/colorAccent"
                         android:textSize="@dimen/text_size_medium"
                         tools:text="15" />
                 </LinearLayout>
@@ -90,27 +87,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/layout_margin_small"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_expanded_title"
-                        android:textStyle="bold"
+                        android:textSize="20sp"
                         tools:text="Event Name" />
 
                     <TextView
-                        android:id="@+id/description"
+                        android:id="@+id/locationName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_small"
-                        android:textStyle="italic"
-                        tools:text="Description" />
+                        tools:text="Location Name" />
 
-                    <TextView
-                        android:id="@+id/year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/greyMore"
-                        android:textSize="@dimen/text_size_small"
-                        tools:text="2018" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

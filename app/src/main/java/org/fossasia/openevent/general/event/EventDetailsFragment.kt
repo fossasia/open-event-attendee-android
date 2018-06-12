@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.Fragment
@@ -14,6 +15,7 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -62,7 +64,7 @@ class EventDetailsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.event_name.text = event.name
-        rootView.event_organiser_name.text = event.organizerName
+        rootView.event_organiser_name.text = "by " + event.organizerName.nullToEmpty()
         setTextField(rootView.event_description, event.description)
         setTextField(rootView.event_organiser_description, event.organizerDescription)
         rootView.event_location_text_view.text = event.locationName
@@ -77,18 +79,26 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
+        //load location to map
+        rootView.location_under_map.text = event.locationName
+        val mapClickListener = View.OnClickListener { startMap(event) }
+        if (event.locationName != null) {
+            rootView.location_under_map.visibility = View.VISIBLE
+            rootView.image_map.visibility = View.VISIBLE
+            rootView.image_map.setOnClickListener(mapClickListener)
+            rootView.event_location_text_view.setOnClickListener(mapClickListener)
+        }
+
+        Picasso.get()
+                .load(eventViewModel.loadMap(event))
+                .placeholder(R.drawable.ic_map_black_24dp)
+                .into(rootView.image_map)
+
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.starts_on.setOnClickListener(dateClickListener)
         rootView.ends_on.setOnClickListener(dateClickListener)
 
-        rootView.event_share_fab.setOnClickListener {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-            sendIntent.type = "text/plain"
-            rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
-        }
     }
 
     override fun onDestroyView() {
@@ -107,6 +117,14 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
+                return true
+            }
+            R.id.event_share -> {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
+                sendIntent.type = "text/plain"
+                rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -159,5 +177,14 @@ class EventDetailsFragment : Fragment() {
         socialLinksFragemnt.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
+    }
+  
+    private fun startMap(event: Event) {
+        // start map intent
+        val mapUrl = eventViewModel.loadMapUrl(event)
+        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(mapIntent)
+        }
     }
 }

@@ -6,7 +6,7 @@ import retrofit2.http.Path
 
 interface SocialLinkApi {
 
-    @GET("events/{id}/social-links?include=event&fields[event]=id")
+  @GET("events/{id}/social-links?include=event&fields[event]=id")
     fun getSocialLinks(@Path("id") id: Long): Single<List<SocialLink>>
 
 }
