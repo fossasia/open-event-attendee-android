@@ -20,5 +20,5 @@ data class SocialLink(
         val link: String,
         val name: String,
         @Relationship("event")
-        var event: Event?
+        val event: Event
 )

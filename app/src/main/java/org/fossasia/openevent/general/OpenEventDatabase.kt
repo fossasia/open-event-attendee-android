@@ -11,7 +11,7 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
 
 @Database(entities = [Event::class, User::class, SocialLink::class], version = 1)
-@TypeConverters(Converter::class)
+@TypeConverters(EventConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun eventDao(): EventDao

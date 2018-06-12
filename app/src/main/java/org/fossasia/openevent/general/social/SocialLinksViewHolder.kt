@@ -15,14 +15,14 @@ import android.graphics.PorterDuffColorFilter
 
 class SocialLinksViewHolder(itemView: View, private var context: Context) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: SocialLink) {
-        val imageDrawable :Drawable? = ContextCompat.getDrawable(context, getSocialLinkDrawableId(event.name))
+    fun bind(socialLink: SocialLink) {
+        val imageDrawable :Drawable? = ContextCompat.getDrawable(context, getSocialLinkDrawableId(socialLink.name))
         imageDrawable?.colorFilter = PorterDuffColorFilter(context.resources.getColor(R.color.greyMore), PorterDuff.Mode.SRC_IN)
 
         itemView.img_social_link.setImageDrawable(imageDrawable)
 
         itemView.setOnClickListener{
-            setUpCustomTab(context, event.link)
+            setUpCustomTab(context, socialLink.link)
         }
     }
 
