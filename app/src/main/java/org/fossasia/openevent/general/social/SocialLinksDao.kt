@@ -11,6 +11,6 @@ interface SocialLinksDao {
     @Query("DELETE FROM SocialLink")
     fun deleteAll()
 
-    @Query("SELECT * from SocialLink WHERE eventId = :eventId")
+    @Query("SELECT * from SocialLink WHERE event = :eventId")
     fun getAllSocialLinks(eventId: Long): Single<List<SocialLink>>
 }

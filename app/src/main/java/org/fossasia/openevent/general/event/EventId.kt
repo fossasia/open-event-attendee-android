@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
+import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 
 @Type("event")

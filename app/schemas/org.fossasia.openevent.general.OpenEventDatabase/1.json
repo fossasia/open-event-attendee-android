@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9fe9bb175bd8a08af596433b03bec781",
+    "identityHash": "7a69ff210b6045820bff26cfc74ff9c8",
     "entities": [
       {
         "tableName": "Event",
@@ -442,7 +442,7 @@
       },
       {
         "tableName": "SocialLink",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `link` TEXT NOT NULL, `name` TEXT NOT NULL, `eventId` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`eventId`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `link` TEXT NOT NULL, `name` TEXT NOT NULL, `event` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -463,8 +463,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "eventId",
-            "columnName": "eventId",
+            "fieldPath": "event",
+            "columnName": "event",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -482,7 +482,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "eventId"
+              "event"
             ],
             "referencedColumns": [
               "id"
@@ -493,7 +493,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9fe9bb175bd8a08af596433b03bec781\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7a69ff210b6045820bff26cfc74ff9c8\")"
     ]
   }
 }
