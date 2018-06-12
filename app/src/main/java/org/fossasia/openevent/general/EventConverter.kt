@@ -8,7 +8,7 @@ class EventConverter {
 
     @TypeConverter
     fun fromEvent(eventId: EventId): Long{
-        Timber.d("HELLO " + eventId.id)
+        Timber.d("HELLO %s", eventId.id)
         return eventId.id
     }
 
