@@ -16,18 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_margin="@dimen/layout_margin_extra_large"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/go_out"
+                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/layout_margin_large"
                 android:textSize="@dimen/heading_text_size" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/in"
+                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/layout_margin_large"
                 android:textSize="@dimen/heading_text_size" />
 
             <EditText
@@ -35,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/anywhere"
+                android:layout_marginTop="@dimen/layout_margin_large"
                 android:textSize="@dimen/heading_text_size" />
         </LinearLayout>
 
