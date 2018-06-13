@@ -129,7 +129,8 @@
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="8dp"
                 android:text="About Event "
-                android:textSize="20dp" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/event_description"
@@ -137,11 +138,24 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_height="wrap_content"
-                android:lines="3"
+                android:lines="4"
                 android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:text="Description" />
+
+            <TextView
+                android:id="@+id/see_more"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/black"
+                android:text="See more" />
 
             <View
                 android:layout_width="match_parent"

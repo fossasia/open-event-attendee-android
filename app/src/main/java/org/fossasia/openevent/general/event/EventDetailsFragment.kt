@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.aboutEvent.AboutEventActivity
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
@@ -85,6 +86,20 @@ class EventDetailsFragment : Fragment() {
             rootView.image_map.visibility = View.VISIBLE
             rootView.image_map.setOnClickListener(mapClickListener)
             rootView.event_location_text_view.setOnClickListener(mapClickListener)
+        }
+
+        //About event on-click
+        val aboutEventOnClickListener = View.OnClickListener {
+            val aboutIntent  = Intent(context, AboutEventActivity::class.java)
+            aboutIntent.putExtra(EVENT_ID, eventId)
+            startActivity(aboutIntent)
+        }
+
+        if(rootView.event_description.lineCount > 3){
+            rootView.see_more.visibility = View.VISIBLE
+            //start about fragment
+            rootView.event_description.setOnClickListener(aboutEventOnClickListener)
+            rootView.see_more.setOnClickListener(aboutEventOnClickListener)
         }
 
         Picasso.get()
