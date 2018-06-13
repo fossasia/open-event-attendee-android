@@ -72,9 +72,10 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         progressBarAbout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
-        val maxScroll = appBarLayout!!.totalScrollRange
+        val maxScroll = appBarLayout.totalScrollRange
+
         Timber.d("MAX "+maxScroll)
         val percentage =  Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
 
