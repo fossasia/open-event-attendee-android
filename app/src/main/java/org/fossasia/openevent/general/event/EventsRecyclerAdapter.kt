@@ -1,12 +1,13 @@
 package org.fossasia.openevent.general.event
 
-import android.support.v7.widget.RecyclerView
+import android.arch.paging.PagedListAdapter
+import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
 import java.util.*
 
-class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
+class EventsRecyclerAdapter : PagedListAdapter<Event,EventViewHolder>(EVENT_COMPARATOR) {
     private val events = ArrayList<Event>()
     private var clickListener: RecyclerViewClickListener? = null
 
@@ -35,6 +36,15 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         return events.size
     }
 
+    companion object {
+        private val EVENT_COMPARATOR = object : DiffUtil.ItemCallback<Event>() {
+            override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean =
+                    oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean =
+                    oldItem == newItem
+        }
+    }
 }
 
 interface RecyclerViewClickListener {

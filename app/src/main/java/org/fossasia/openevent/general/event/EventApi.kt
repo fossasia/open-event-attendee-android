@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface EventApi {
 
     @GET("events")
-    fun getEvents(): Single<List<Event>>
+    fun getEvents(@Query("page[number]") sort: Int): Single<List<Event>>
 
     @GET("events")
     fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Single<List<Event>>

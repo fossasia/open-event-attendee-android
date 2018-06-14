@@ -1,25 +1,26 @@
 package org.fossasia.openevent.general.event
 
+import android.arch.paging.PagedList
+import android.arch.paging.RxPagedListBuilder
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 
 class EventService(private val eventApi: EventApi, private val eventDao: EventDao) {
 
-    fun getEvents(): Flowable<List<Event>> {
-        val eventsFlowable = eventDao.getAllEvents()
-        return eventsFlowable.switchMap {
-            if (it.isNotEmpty())
-                eventsFlowable
-            else
-                eventApi.getEvents()
-                        .map {
-                            eventDao.insertEvents(it)
-                        }
-                        .toFlowable()
-                        .flatMap {
-                            eventsFlowable
-                        }
-        }
+    fun getEvents(): Flowable<PagedList<Event>> {
+        val myPagingConfig = PagedList.Config.Builder()
+                .setPageSize(20)
+                .setPrefetchDistance(150)
+                .build()
+
+        val events: Flowable<PagedList<Event>> = RxPagedListBuilder(
+                eventDao.getAllEvents(),
+                myPagingConfig
+        ).setBoundaryCallback(BoundaryCallback(eventDao, eventApi))
+                .buildFlowable(BackpressureStrategy.LATEST)
+
+        return events
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {

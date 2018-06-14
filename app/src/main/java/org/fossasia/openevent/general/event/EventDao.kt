@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
@@ -18,7 +19,7 @@ interface EventDao {
     fun deleteAll()
 
     @Query("SELECT * from Event ORDER BY startsAt DESC")
-    fun getAllEvents(): Flowable<List<Event>>
+    fun getAllEvents(): DataSource.Factory<Int, Event>
 
     @Query("SELECT * from Event WHERE id = :id")
     fun getEvent(id: Long): Flowable<Event>
