@@ -44,7 +44,7 @@ class EventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
-                eventsViewModel.loadEventsAgain = true
+                eventsViewModel.loadEventsWithAnimation = false // No slide up animation
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
             }
         }
@@ -80,7 +80,7 @@ class EventsFragment : Fragment() {
         val lastVisible = linearLayoutManager.findLastVisibleItemPosition()
         val itemsChanged = lastVisible - firstVisible + 1 // + 1 because we start count items from 0
         val start = if (firstVisible - itemsChanged > 0) firstVisible - itemsChanged else 0
-        if (!eventsViewModel.loadEventsAgain)
+        if (eventsViewModel.loadEventsWithAnimation)
             eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
         else
             eventsRecyclerAdapter.notifyDataSetChanged()
