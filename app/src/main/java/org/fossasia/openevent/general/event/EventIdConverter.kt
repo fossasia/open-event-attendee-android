@@ -2,7 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.persistence.room.TypeConverter
 
-class EventConverter {
+class EventIdConverter {
 
     @TypeConverter
     fun fromEvent(eventId: EventId): Long{

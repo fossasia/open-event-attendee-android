@@ -125,6 +125,6 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.socialLinksdDao()
+        database.socialLinksDao()
     }
 }

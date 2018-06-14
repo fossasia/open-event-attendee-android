@@ -1,22 +1,22 @@
 package org.fossasia.openevent.general.social
 
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 class SocialLinksService(private val socialLinkApi: SocialLinkApi, private val socialLinksDao: SocialLinksDao) {
 
-    fun getSocialLinks(id: Long): Single<List<SocialLink>> {
+    fun getSocialLinks(id: Long): Flowable<List<SocialLink>> {
 
-        val socialSingle = socialLinksDao.getAllSocialLinks(id)
-        return socialSingle.flatMap {
+        val socialFlowable = socialLinksDao.getAllSocialLinks(id)
+        return socialFlowable.switchMap {
             if (it.isNotEmpty())
-                socialSingle
+                socialFlowable
             else
                 socialLinkApi.getSocialLinks(id)
                         .map {
                             socialLinksDao.insertSocialLinks(it)
                         }
                         .flatMap {
-                            socialSingle
+                            socialFlowable
                         }
         }
     }

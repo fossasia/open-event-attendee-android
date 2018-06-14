@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 @Dao
 interface SocialLinksDao {
@@ -15,5 +15,5 @@ interface SocialLinksDao {
     fun deleteAll()
 
     @Query("SELECT * from SocialLink WHERE event = :eventId")
-    fun getAllSocialLinks(eventId: Long): Single<List<SocialLink>>
+    fun getAllSocialLinks(eventId: Long): Flowable<List<SocialLink>>
 }
