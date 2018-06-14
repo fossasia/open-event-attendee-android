@@ -44,7 +44,7 @@ class EventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
-                eventsViewModel.loadEventsWithAnimation = false // No slide up animation
+                eventsViewModel.loadEventsWithAnimation = false
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
             }
         }
