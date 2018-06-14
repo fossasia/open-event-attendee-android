@@ -45,6 +45,10 @@ class EventsFragment : Fragment() {
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
                 eventsViewModel.loadEventsWithAnimation = false
+                /*
+                if the user opens up the details fragment and then returns to the events fragments,
+                the slide up animation won't be shown again
+                 */
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
             }
         }
