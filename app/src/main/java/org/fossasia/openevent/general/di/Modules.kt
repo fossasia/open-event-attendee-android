@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.social.*
 import org.fossasia.openevent.general.ticket.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
@@ -40,12 +41,17 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(TicketApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(SocialLinkApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get()) }
     factory { TicketService(get()) }
+    factory { SocialLinksService(get(), get()) }
 }
 
 val viewModelModule = applicationContext {
@@ -56,6 +62,7 @@ val viewModelModule = applicationContext {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { TicketsViewModel(get()) }
+    viewModel { SocialLinksViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -89,7 +96,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
@@ -114,5 +121,10 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.userDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.socialLinksDao()
     }
 }

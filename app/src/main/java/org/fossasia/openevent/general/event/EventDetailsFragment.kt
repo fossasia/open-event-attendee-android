@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
@@ -46,6 +47,7 @@ class EventDetailsFragment : Fragment() {
                 eventShare = it
             }
             loadTicketFragment()
+            loadSocialLinksFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -167,6 +169,16 @@ class EventDetailsFragment : Fragment() {
         transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 
+    private fun loadSocialLinksFragment(){
+        //Initialise SocialLinks Fragment
+        val socialLinksFragemnt = SocialLinksFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", eventId)
+        socialLinksFragemnt.arguments = bundle
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
+    }
+  
     private fun startMap(event: Event) {
         // start map intent
         val mapUrl = eventViewModel.loadMapUrl(event)

@@ -235,6 +235,12 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:id="@+id/frameContainerSocial"
+                android:layout_height="wrap_content">
+            </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>
