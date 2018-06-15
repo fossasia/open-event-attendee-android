@@ -1,13 +1,21 @@
 package org.fossasia.openevent.general.ticket
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.ForeignKey.CASCADE
+import android.arch.persistence.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
+import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventId
 
 @Type("ticket")
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = CASCADE))])
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class Ticket(
         @Id(IntegerIdHandler::class)
@@ -23,9 +31,13 @@ data class Ticket(
         val position: String?,
         val quantity: String?,
 
-        val isHidden: Boolean? = false,
+        val isHidden: Boolean?,
         val salesStartsAt: String?,
         val salesEndsAt: String?,
-        val minOrder: String?
+        val minOrder: String?,
+        @ColumnInfo(index = true)
+        @Relationship("event")
+        var event: EventId?
+
 )
 
