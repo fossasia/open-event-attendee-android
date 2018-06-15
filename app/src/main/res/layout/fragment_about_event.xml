@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             app:expandedTitleTextAppearance="@color/white"
             android:layout_height="220dp"
+            app:statusBarScrim="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ProgressBar
@@ -80,6 +81,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:background="@color/white"
+        android:id="@+id/nestedAboutScroll"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
