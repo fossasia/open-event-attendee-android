@@ -14,6 +14,7 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
+    var loadEventsWithAnimation: Boolean = true
 
     fun loadEvents() {
         compositeDisposable.add(eventService.getEvents()
