@@ -16,6 +16,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/aboutEventCollapsingLayout"
             android:layout_width="match_parent"
+            app:expandedTitleTextAppearance="@color/white"
             android:layout_height="220dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -38,6 +39,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/aboutEventToolbar"
                 android:layout_width="match_parent"
+                app:titleTextColor="@color/white"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
 

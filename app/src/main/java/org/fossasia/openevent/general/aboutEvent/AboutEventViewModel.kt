@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.ticket
+package org.fossasia.openevent.general.aboutEvent
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.EventUtils
 import timber.log.Timber
 
 class AboutEventViewModel(private val eventService: EventService) : ViewModel() {
@@ -34,6 +35,23 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
                     error.value = "Error fetching event"
                     Timber.e(it, "Error fetching event %d",id)
                 }))
+    }
+
+    fun getAboutEventFormattedDate(date: String): String{
+
+        val dateString = EventUtils.getLocalizedDateTime(date)
+
+        //Format Month
+        val month = dateString.dayOfWeek
+        val lowerCaseMonth = month.toString().toLowerCase()
+        val formatMonth = (lowerCaseMonth.substring(0, 1).toUpperCase() + lowerCaseMonth.substring(1)).substring(0, 3)
+
+        //Format Day
+        val day = dateString.month
+        val lowerCaseDay = day.toString().toLowerCase()
+        val formatDay = (lowerCaseDay.substring(0, 1).toUpperCase() + lowerCaseDay.substring(1)).substring(0, 3)
+
+        return formatMonth + ", " + formatDay + " " + dateString.dayOfMonth
     }
 
     override fun onCleared() {
