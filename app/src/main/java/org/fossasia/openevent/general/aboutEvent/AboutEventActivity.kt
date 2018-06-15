@@ -83,7 +83,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                 isHideToolbarView = !isHideToolbarView
             } else {
                 detailsHeader.visibility = View.GONE
-                aboutEventCollapsingLayout.title = eventExtra.name
+                aboutEventCollapsingLayout.title = " "
                 isHideToolbarView = !isHideToolbarView
             }
         } else if (percentage < 1f && !isHideToolbarView) {
