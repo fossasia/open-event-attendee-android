@@ -95,7 +95,7 @@ class EventDetailsFragment : Fragment() {
             startActivity(aboutIntent)
         }
 
-        if(rootView.event_description.lineCount > 3){
+        if (rootView.event_description.lineCount > 3) {
             rootView.see_more.visibility = View.VISIBLE
             //start about fragment
             rootView.event_description.setOnClickListener(aboutEventOnClickListener)

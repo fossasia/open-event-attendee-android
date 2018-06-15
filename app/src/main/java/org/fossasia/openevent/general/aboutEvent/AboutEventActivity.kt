@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AppCompatActivity
-import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -28,7 +27,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
         setSupportActionBar(aboutEventToolbar)
 
-        if (supportActionBar != null) supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         aboutEventCollapsingLayout.title = " "
         appbar.addOnOffsetChangedListener(this)
 
@@ -36,7 +35,6 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        val intent = intent
         id = intent.getLongExtra(EVENT_ID, -1)
 
         aboutEventViewModel.progressAboutEvent.observe(this, Observer {
@@ -77,16 +75,11 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
         if (percentage == 1f && isHideToolbarView) {
             //Collapsed
-            if (TextUtils.isEmpty(eventExtra.name)) {
-                detailsHeader.visibility = View.GONE
-                aboutEventCollapsingLayout.title = eventExtra.name
-                isHideToolbarView = !isHideToolbarView
-            } else {
-                detailsHeader.visibility = View.GONE
-                aboutEventCollapsingLayout.title = " "
-                isHideToolbarView = !isHideToolbarView
-            }
-        } else if (percentage < 1f && !isHideToolbarView) {
+            detailsHeader.visibility = View.GONE
+            aboutEventCollapsingLayout.title = eventExtra.name
+            isHideToolbarView = !isHideToolbarView
+        }
+        if (percentage < 1f && !isHideToolbarView) {
             //Not Collapsed
             detailsHeader.visibility = View.VISIBLE
             aboutEventCollapsingLayout.title = " "
