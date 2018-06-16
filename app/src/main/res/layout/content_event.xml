@@ -95,6 +95,7 @@
                 <LinearLayout
                     android:id="@+id/event_location_linear_layout"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 

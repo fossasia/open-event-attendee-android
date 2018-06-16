@@ -83,6 +83,7 @@ class EventDetailsFragment : Fragment() {
         rootView.location_under_map.text = event.locationName
         val mapClickListener = View.OnClickListener { startMap(event) }
         if (event.locationName != null) {
+            rootView.event_location_linear_layout.visibility = View.VISIBLE
             rootView.location_under_map.visibility = View.VISIBLE
             rootView.image_map.visibility = View.VISIBLE
             rootView.image_map.setOnClickListener(mapClickListener)
