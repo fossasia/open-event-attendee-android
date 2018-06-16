@@ -19,6 +19,7 @@ import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
+import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication

@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.fossasia.openevent.general.event.TicketService
 import timber.log.Timber
 
 class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
