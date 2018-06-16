@@ -75,11 +75,6 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        /*if (eventsViewModel.showAllEvents) {
-            eventsViewModel.loadEvents()
-            eventsViewModel.showAllEvents = false
-        }*/
-
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

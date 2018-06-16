@@ -15,7 +15,6 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
     var loadEventsWithAnimation: Boolean = true
-    var showAllEvents: Boolean = true
 
     var locationName: String? = null
 
