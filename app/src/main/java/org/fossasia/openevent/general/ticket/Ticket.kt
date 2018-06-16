@@ -38,6 +38,5 @@ data class Ticket(
         @ColumnInfo(index = true)
         @Relationship("event")
         var event: EventId? = null
-
 )
 
