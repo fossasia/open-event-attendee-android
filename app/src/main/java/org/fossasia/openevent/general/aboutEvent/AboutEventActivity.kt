@@ -3,11 +3,9 @@ package org.fossasia.openevent.general.aboutEvent
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_about_event.*
 import org.fossasia.openevent.general.R
@@ -60,6 +58,8 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         aboutEventDetails.text = dateString.append(aboutEventViewModel.getAboutEventFormattedDate(event.startsAt))
                                            .append(" - ")
                                            .append(aboutEventViewModel.getAboutEventFormattedDate(event.endsAt))
+                                           .append(" • ")
+                                           .append(aboutEventViewModel.getAboutEventFormattedTime(event.startsAt))
 
         eventName.text = event.name
     }
@@ -70,7 +70,6 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-
         val maxScroll = appBarLayout.totalScrollRange
         val percentage =  Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
 
@@ -87,7 +86,6 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             isHideToolbarView = !isHideToolbarView
         }
     }
-
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

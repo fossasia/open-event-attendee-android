@@ -25,6 +25,7 @@ class EventDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private var eventId: Long = -1
     private lateinit var eventShare: Event
+    private val LINE_COUNT: Int = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +96,7 @@ class EventDetailsFragment : Fragment() {
             startActivity(aboutIntent)
         }
 
-        if (rootView.event_description.lineCount > 3) {
+        if (rootView.event_description.lineCount > LINE_COUNT) {
             rootView.see_more.visibility = View.VISIBLE
             //start about fragment
             rootView.event_description.setOnClickListener(aboutEventOnClickListener)

@@ -48,4 +48,13 @@
     <dimen name="item_image_view_large">130dp</dimen>
     <dimen name="item_image_view_extra_large">250dp</dimen>
 
+    <!--event details-->
+    <dimen name="event_details_image">200dp</dimen>
+    <dimen name="event_details_headers">20sp</dimen>
+    <dimen name="event_details_content">12sp</dimen>
+    <dimen name="event_name">25sp</dimen>
+    <dimen name="event_details_divider">0.8dp</dimen>
+    <dimen name="divider_margin_bottom">20dp</dimen>
+    <dimen name="divider_margin_top">12dp</dimen>
+
 </resources>
