@@ -116,12 +116,12 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
+                android:layout_height="1.2dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -129,6 +129,7 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="8dp"
+                android:textColor="@color/black"
                 android:text="About Event "
                 android:textSize="20dp" />
 
@@ -139,19 +140,17 @@
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_height="wrap_content"
                 android:lines="3"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
                 android:text="Description" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
+                android:layout_height="1.2dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -159,6 +158,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
+                android:textColor="@color/black"
                 android:text="About Organiser "
                 android:textSize="20dp" />
 
@@ -167,21 +167,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="3"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="Description" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
+                android:layout_height="1.2dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -189,6 +187,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
+                android:textColor="@color/black"
                 android:text="Location"
                 android:textSize="20dp" />
 
@@ -197,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="2"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:visibility="gone"
                 android:textColor="@color/black"
@@ -215,10 +214,12 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
+                android:layout_height="1.2dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/black" />
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -227,6 +228,7 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="@string/tickets_available"
+                android:textColor="@color/black"
                 android:textSize="20dp" />
 
             <FrameLayout
