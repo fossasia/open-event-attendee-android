@@ -112,6 +112,44 @@
                         android:layout_margin="8dp"
                         android:text="Location" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/discount_code_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="8dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_baseline_redeem_24px" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/discount_code_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Discount Code" />
+
+                        <TextView
+                            android:id="@+id/discount_url"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="URL" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <View
