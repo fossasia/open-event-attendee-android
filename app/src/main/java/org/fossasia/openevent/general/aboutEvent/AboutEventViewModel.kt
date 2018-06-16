@@ -43,12 +43,10 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
     fun getAboutEventFormattedDate(date: String): String{
         val dateString = EventUtils.getLocalizedDateTime(date)
         //Format Month
-        val month = dateString.dayOfWeek
-        val lowerCaseMonth = month.toString().toLowerCase()
+        val lowerCaseMonth = dateString.dayOfWeek.toString().toLowerCase()
         val formatMonth = (lowerCaseMonth.substring(0, 1).toUpperCase() + lowerCaseMonth.substring(1)).substring(0, 3)
         //Format Day
-        val day = dateString.month
-        val lowerCaseDay = day.toString().toLowerCase()
+        val lowerCaseDay = dateString.month.toString().toLowerCase()
         val formatDay = (lowerCaseDay.substring(0, 1).toUpperCase() + lowerCaseDay.substring(1)).substring(0, 3)
 
         return formatMonth + ", " + formatDay + " " + dateString.dayOfMonth
