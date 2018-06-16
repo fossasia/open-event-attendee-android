@@ -30,6 +30,13 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
                 }
     }
 
+    fun getEventsByLocation(locationName: String): Single<List<Event>> {
+        return eventApi.searchEvents("name", locationName).map {
+            eventDao.insertEvents(it)
+            it
+        }
+    }
+
     fun getEvent(id: Long): Flowable<Event> {
         return eventDao.getEvent(id)
     }

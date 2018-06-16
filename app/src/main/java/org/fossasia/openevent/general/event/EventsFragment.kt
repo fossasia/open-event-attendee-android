@@ -1,9 +1,11 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,10 @@ import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -69,7 +75,23 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        eventsViewModel.loadEvents()
+        /*if (eventsViewModel.showAllEvents) {
+            eventsViewModel.loadEvents()
+            eventsViewModel.showAllEvents = false
+        }*/
+
+        rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
+
+                eventsViewModel.locationName = rootView.locationEdittext.text.toString()
+                eventsViewModel.loadEventsWithAnimation = false
+                eventsViewModel.loadLocationEvents()
+                return@OnEditorActionListener true
+            }
+            false
+        })
 
         return rootView
     }
