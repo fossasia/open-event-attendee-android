@@ -9,7 +9,7 @@
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
-    <string name="go_out">I want to go out\n\n\t\t\t\t\t\t\t\t\tIn</string>
+    <string name="go_out">I want to go out\n\nIn</string>
     <string name="anywhere">Anywhere</string>
 
     <!--profile details-->

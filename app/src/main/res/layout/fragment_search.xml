@@ -23,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/go_out"
+                android:gravity="center_horizontal"
                 android:textColor="@color/black"
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:textSize="@dimen/heading_text_size" />
