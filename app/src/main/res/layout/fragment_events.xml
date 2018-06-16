@@ -17,13 +17,13 @@
             android:textSize="@dimen/text_size_expanded_title"
             android:layout_marginTop="@dimen/layout_margin_extra_large"
             android:layout_gravity="center_horizontal"
-            android:text="What's good in"
+            android:text="@string/whats_good"
             android:layout_height="wrap_content" />
 
       <EditText
           android:layout_width="match_parent"
           android:id="@+id/locationEdittext"
-          android:hint="where?"
+          android:hint="@string/where"
           android:layout_marginTop="@dimen/layout_margin_extra_large"
           android:layout_marginRight="@dimen/layout_margin_extra_large"
           android:layout_marginLeft="@dimen/layout_margin_extra_large"
