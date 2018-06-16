@@ -17,7 +17,7 @@
             android:id="@+id/aboutEventCollapsingLayout"
             android:layout_width="match_parent"
             app:expandedTitleTextAppearance="@color/white"
-            android:layout_height="220dp"
+            android:layout_height="@dimen/collapsing_toolbar_height"
             app:statusBarScrim="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -29,7 +29,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="@dimen/collapsing_toolbar_height">
 
                 <View
                     android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 android:id="@+id/detailsHeader"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="@dimen/details_header_margin_top"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|start"
                 android:orientation="vertical">
