@@ -37,7 +37,7 @@ data class Ticket(
         val minOrder: String?,
         @ColumnInfo(index = true)
         @Relationship("event")
-        var event: EventId?
+        var event: EventId? = null
 
 )
 
