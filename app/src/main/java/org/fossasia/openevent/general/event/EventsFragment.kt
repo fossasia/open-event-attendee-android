@@ -77,8 +77,8 @@ class EventsFragment : Fragment() {
 
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
                 eventsViewModel.locationName = rootView.locationEdittext.text.toString()
                 eventsViewModel.loadEventsWithAnimation = false
