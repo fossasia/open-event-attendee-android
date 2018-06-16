@@ -49,7 +49,7 @@ class EventsFragment : Fragment() {
                 the slide up animation won't be shown again
                  */
                 eventsViewModel.loadEventsWithAnimation = false
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
