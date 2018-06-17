@@ -13,8 +13,14 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.social.*
-import org.fossasia.openevent.general.ticket.*
+import org.fossasia.openevent.general.social.SocialLink
+import org.fossasia.openevent.general.social.SocialLinkApi
+import org.fossasia.openevent.general.social.SocialLinksService
+import org.fossasia.openevent.general.social.SocialLinksViewModel
+import org.fossasia.openevent.general.ticket.Ticket
+import org.fossasia.openevent.general.ticket.TicketApi
+import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
@@ -50,7 +56,7 @@ val apiModule = applicationContext {
     factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get()) }
-    factory { TicketService(get()) }
+    factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
 }
 
@@ -121,6 +127,11 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.userDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.ticketsDao()
     }
 
     factory {
