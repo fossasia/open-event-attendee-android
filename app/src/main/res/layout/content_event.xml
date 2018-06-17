@@ -120,7 +120,7 @@
                 android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                 android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -181,9 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="3"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 tools:text="Description" />
@@ -195,7 +193,7 @@
                 android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -212,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="2"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:visibility="gone"
                 android:textColor="@color/black"
