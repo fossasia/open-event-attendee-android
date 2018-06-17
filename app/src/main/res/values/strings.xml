@@ -5,6 +5,7 @@
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
+    <string name="report_event">Report Event</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
