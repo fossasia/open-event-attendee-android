@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
 import android.widget.Toast
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
@@ -21,7 +20,6 @@ class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private var loadEventsAgain=false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +35,6 @@ class SearchFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        linearLayoutManager = LinearLayoutManager(context)
-        rootView.eventsRecycler.layoutManager = linearLayoutManager
-
-        val slideUp = SlideInUpAnimator()
-        slideUp.addDuration = 500
-        rootView.eventsRecycler.itemAnimator = slideUp
-
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
@@ -57,8 +48,8 @@ class SearchFragment : Fragment() {
         searchViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.notifyDataSetChanged()
             }
-            notifyEventItems()
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
@@ -109,14 +100,4 @@ class SearchFragment : Fragment() {
         rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun notifyEventItems() {
-        val firstVisible = linearLayoutManager.findFirstVisibleItemPosition()
-        val lastVisible = linearLayoutManager.findLastVisibleItemPosition()
-        val itemsChanged = lastVisible - firstVisible + 1 // + 1 because we start count items from 0
-        val start = if (firstVisible - itemsChanged > 0) firstVisible - itemsChanged else 0
-        if (!loadEventsAgain)
-            eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
-        else
-            eventsRecyclerAdapter.notifyDataSetChanged()
-    }
 }
