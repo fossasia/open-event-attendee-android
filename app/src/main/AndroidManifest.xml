@@ -24,7 +24,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.aboutEvent.AboutEventActivity"
+            android:name="org.fossasia.openevent.general.about.AboutEventActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
         </activity>

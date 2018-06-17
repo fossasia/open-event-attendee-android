@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.aboutEvent
+package org.fossasia.openevent.general.about
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_about_event.*
+import kotlinx.android.synthetic.main.activity_about_event.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.koin.android.architecture.ext.viewModel
@@ -23,7 +23,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_about_event)
+        setContentView(R.layout.activity_about_event)
 
         setSupportActionBar(aboutEventToolbar)
 

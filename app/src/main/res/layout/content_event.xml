@@ -29,12 +29,12 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
                 android:id="@+id/eventDetailsLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:orientation="vertical">
 
@@ -42,9 +42,9 @@
                     android:id="@+id/eventName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Event Name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/event_name" />
+                    android:textSize="@dimen/event_name"
+                    tools:text="Event Name" />
 
                 <TextView
                     android:id="@+id/eventOrganiserName"
@@ -94,8 +94,8 @@
                 <LinearLayout
                     android:id="@+id/eventLocationLinearLayout"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -135,9 +135,9 @@
             <TextView
                 android:id="@+id/eventDescription"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:layout_height="wrap_content"
                 android:lines="4"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/black"
@@ -146,9 +146,9 @@
             <TextView
                 android:id="@+id/see_more"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:layout_height="wrap_content"
                 android:lines="1"
                 android:visibility="gone"
                 android:textStyle="bold"
@@ -221,12 +221,12 @@
                 tools:text="location" />
 
             <ImageView
+                android:id="@+id/imageMap"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
                 android:visibility="gone"
                 android:src="@drawable/placeholder"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:id="@+id/imageMap"/>
+                android:layout_marginBottom="@dimen/layout_margin_medium" />
 
             <View
                 android:layout_width="match_parent"
@@ -245,15 +245,15 @@
                 android:textSize="@dimen/event_details_headers" />
 
             <FrameLayout
-                android:layout_width="match_parent"
                 android:id="@+id/frameContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             </FrameLayout>
 
             <FrameLayout
-                android:layout_width="match_parent"
                 android:id="@+id/frameContainerSocial"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </FrameLayout>
 

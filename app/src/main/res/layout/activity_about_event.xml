@@ -16,8 +16,8 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/aboutEventCollapsingLayout"
             android:layout_width="match_parent"
-            app:expandedTitleTextAppearance="@color/white"
             android:layout_height="@dimen/collapsing_toolbar_height"
+            app:expandedTitleTextAppearance="@color/white"
             app:statusBarScrim="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -33,23 +33,23 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:background="@color/white"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/aboutEventToolbar"
                 android:layout_width="match_parent"
-                app:titleTextColor="@color/white"
                 android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="@color/white"
                 app:layout_collapseMode="pin" />
 
             <LinearLayout
                 android:id="@+id/detailsHeader"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginTop="@dimen/details_header_margin_top"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center|start"
                 android:orientation="vertical">
 
@@ -77,11 +77,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedAboutScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:background="@color/white"
-        android:id="@+id/nestedAboutScroll"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -103,13 +103,13 @@
                 android:layout_marginTop="@dimen/layout_margin_medium">
 
                     <TextView
-                        tools:text="Lorem ipsum ipsum ipsum "
-                        android:textColor="@color/black"
                         android:id="@+id/aboutEventContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/layout_margin_medium"
-                        android:padding="@dimen/padding_medium"/>
+                        android:textColor="@color/black"
+                        android:padding="@dimen/padding_medium"
+                        tools:text="Lorem ipsum ipsum ipsum " />
 
             </android.support.v7.widget.CardView>
 
