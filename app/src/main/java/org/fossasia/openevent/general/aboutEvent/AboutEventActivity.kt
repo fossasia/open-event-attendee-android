@@ -53,7 +53,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
     private fun loadEvent(event: Event){
         eventExtra = event
         aboutEventContent.text = event.description
-        val dateString = StringBuilder("")
+        val dateString = StringBuilder()
 
         aboutEventDetails.text = dateString.append(aboutEventViewModel.getAboutEventFormattedDate(event.startsAt))
                                            .append(" - ")
