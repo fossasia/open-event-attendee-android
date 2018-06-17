@@ -160,7 +160,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun reportEvent(event: Event){
-        val email ="open.test24@gmail.com"
+        val email ="support@eventyay.com"
         val subject ="Report of ${event.name} (${event.identifier})"
         val body = "Let us know what's wrong"
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
