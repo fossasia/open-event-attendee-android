@@ -136,6 +136,13 @@ class EventDetailsFragment : Fragment() {
                 startCalendar(eventShare)
                 return true
             }
+            R.id.contactHost -> {
+                if (eventShare.paypalEmail == null)
+                    Toast.makeText(context, "email not available", Toast.LENGTH_LONG).show()
+                else
+                    contactHost(eventShare)
+                return true
+            }
             R.id.reportEvent -> {
                 reportEvent(eventShare)
                 return true
@@ -173,6 +180,17 @@ class EventDetailsFragment : Fragment() {
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
         startActivity(intent)
+    }
+
+    private fun contactHost(event: Event){
+        val email =event.paypalEmail
+        val subject ="Questions about ${event.name} (${event.identifier})"
+        val body = "Let us know what's wrong"
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body)
+
+        startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
     private fun reportEvent(event: Event){
