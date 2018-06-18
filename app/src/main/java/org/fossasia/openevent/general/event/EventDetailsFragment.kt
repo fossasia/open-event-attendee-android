@@ -131,16 +131,16 @@ class EventDetailsFragment : Fragment() {
                 activity?.onBackPressed()
                 true
             }
-            R.id.add_to_calendar -> {
+            R.id.addToCalendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
                 return true
             }
-            R.id.report_event -> {
+            R.id.reportEvent -> {
                 reportEvent(eventShare)
                 return true
             }
-            R.id.event_share -> {
+            R.id.eventShare -> {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))

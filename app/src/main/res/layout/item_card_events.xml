@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/all_events_card"
+        android:id="@+id/allEventsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_medium"

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:id="@+id/profile_menu">
+    <group android:id="@+id/profileMenu">
         <item
-            android:id="@+id/orga_app"
+            android:id="@+id/orgaApp"
             android:title="@string/manage_events" />
         <item
             android:id="@+id/logout"
             android:title="@string/logout" />
     </group>
 
-    <group android:id="@+id/search_menu">
+    <group android:id="@+id/searchMenu">
         <item
-            android:id="@+id/search_item"
+            android:id="@+id/searchItem"
             android:icon="@drawable/ic_search_grey_24dp"
             android:title="@string/search"
             app:actionViewClass="android.support.v7.widget.SearchView"
