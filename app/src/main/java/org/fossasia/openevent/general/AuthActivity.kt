@@ -16,13 +16,13 @@ class AuthActivity : AppCompatActivity() {
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
-            R.id.navigation_login -> {
+            R.id.navigationLogin -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_sign_up -> {
+            R.id.navigationSignUp -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
                 loadFragment(fragment)
@@ -36,7 +36,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        navigation_auth.setOnNavigationItemSelectedListener(listener)
+        navigationAuth.setOnNavigationItemSelectedListener(listener)
 
         supportActionBar?.title = "Login"
 
@@ -45,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_container_auth, fragment)
+                .replace(R.id.frameContainerAuth, fragment)
                 .commit()
     }
 }
