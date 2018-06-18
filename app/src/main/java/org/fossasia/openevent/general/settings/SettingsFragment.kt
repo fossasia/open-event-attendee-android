@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.settings
 
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -13,9 +14,14 @@ import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
+import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
+    private var email: String? = null
+    private val EMAIL: String = "EMAIL"
+    private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
+
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
         preferenceChange(evt)
     }
@@ -30,6 +36,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         activity?.supportActionBar?.title = "Settings"
         setHasOptionsMenu(true)
 
+        //Set Email
+        email = arguments?.getString(EMAIL)
+        prefScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
+
         //Set Build Version
         prefScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
     }
@@ -43,6 +53,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             //Send feedback to email
             sendToSupportEmail()
+            return true
+        }
+        if (preference?.key == resources.getString(R.string.key_profile)) {
+            //Show account
+            showDialog()
             return true
         }
         return false
@@ -86,5 +101,19 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(false)
         super.onDestroyView()
+    }
+
+    private fun showDialog() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(resources.getString(R.string.message))
+                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                    if(settingsViewModel.isLoggedIn()){
+                       settingsViewModel.logout()
+                       startActivity(Intent(context, MainActivity::class.java))
+                    }
+                }
+                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 }

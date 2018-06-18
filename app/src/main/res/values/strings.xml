@@ -63,5 +63,12 @@
     <string name="app_name_capital">OPEN EVENT ANDROID</string>
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_suggestion">suggestion</string>
+    <string name="key_profile">profile</string>
+    <string name="profile_settings">PROFILE</string>
+    <string name="logged_in_account">Account</string>
+
+    <!--settings profile dialog-->
+    <string name="message">Are you sure you want to log out?</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

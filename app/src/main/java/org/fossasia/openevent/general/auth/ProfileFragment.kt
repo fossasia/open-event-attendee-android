@@ -22,6 +22,8 @@ class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
 
     private lateinit var rootView: View
+    private var emailSettings: String? = null
+    private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
         startActivity(Intent(activity, AuthActivity::class.java))
@@ -51,6 +53,7 @@ class ProfileFragment : Fragment() {
             it?.let {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
+                emailSettings = it.email
 
                 Picasso.get()
                         .load(it.avatarUrl)
@@ -78,6 +81,9 @@ class ProfileFragment : Fragment() {
             }
             R.id.settings -> {
                 val fragment = SettingsFragment()
+                val bundle = Bundle()
+                bundle.putString(EMAIL, emailSettings)
+                fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
                 return true
             }

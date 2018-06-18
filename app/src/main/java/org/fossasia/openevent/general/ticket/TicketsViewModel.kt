@@ -24,7 +24,7 @@ class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progressTickets.value = true
-                }).doFinally({
+                }).doOnNext({
                     progressTickets.value = false
                 }).subscribe({ticketList ->
                     tickets.value = ticketList

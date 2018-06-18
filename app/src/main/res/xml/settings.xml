@@ -13,6 +13,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/profile_settings" >
+
+        <Preference
+            android:key="@string/key_profile"
+            android:title="@string/logged_in_account" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/app_name_capital" >
 
         <Preference
