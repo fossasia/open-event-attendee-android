@@ -1,18 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/PreferenceFixTheme.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.Preference">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="preferenceCategory_marginBottom">0dp</item>
-        <item name="android:dividerHeight">1dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Preference" parent="@style/PreferenceFixTheme.Light.DarkActionBar">
+        <item name="preferenceCategory_marginBottom">0dp</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
     <style name="AppTheme.AboutEvent" parent="ThemeOverlay.AppCompat.ActionBar"/>
