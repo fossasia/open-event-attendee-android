@@ -41,7 +41,7 @@ class SearchFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -66,7 +66,7 @@ class SearchFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.search_item -> {
+            R.id.searchItem -> {
                 return false
             }
 
@@ -75,10 +75,10 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.search_menu, true)
-        menu?.setGroupVisible(R.id.profile_menu, false)
+        menu?.setGroupVisible(R.id.searchMenu, true)
+        menu?.setGroupVisible(R.id.profileMenu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
+        val searchView:SearchView ?= menu?.findItem(R.id.searchItem)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search

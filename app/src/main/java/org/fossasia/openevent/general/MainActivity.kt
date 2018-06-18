@@ -15,19 +15,19 @@ class MainActivity : AppCompatActivity() {
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
-            R.id.navigation_events -> {
+            R.id.navigationEvents -> {
                 supportActionBar?.title = "Events"
                 fragment = EventsFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_search -> {
+            R.id.navigationSearch -> {
                 supportActionBar?.title = "Search"
                 fragment = SearchFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_profile -> {
+            R.id.navigationProfile -> {
                 supportActionBar?.title = "Profile"
                 fragment = ProfileFragment()
                 loadFragment(fragment)
@@ -56,14 +56,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.setGroupVisible(R.id.profile_menu, false)
-        menu?.setGroupVisible(R.id.search_menu, false)
+        menu?.setGroupVisible(R.id.profileMenu, false)
+        menu?.setGroupVisible(R.id.searchMenu, false)
         return super.onPrepareOptionsMenu(menu)
     }
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_container, fragment)
+                .replace(R.id.frameContainer, fragment)
                 .commit()
     }
 }
