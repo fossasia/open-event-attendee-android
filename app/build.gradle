@@ -64,9 +64,6 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
 
-    //recycler view animations
-    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
-
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'

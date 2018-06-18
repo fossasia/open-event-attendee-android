@@ -8,7 +8,7 @@
     android:background="@color/grey">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/all_tickets_card"
+        android:id="@+id/allTicketsCard"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/white"
@@ -26,7 +26,7 @@
                 android:textAlignment="center"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold"
-                android:id="@+id/ticket_name"
+                android:id="@+id/ticketName"
                 tools:text="Ticket Name"/>
 
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:id="@+id/sales_dates"
+                android:id="@+id/salesDates"
                 android:layout_marginTop="@dimen/layout_margin_medium"
                 android:textColor="@color/black"
                 android:text="@string/sales_dates"/>
@@ -56,7 +56,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/sales_starts_at"
+                    android:id="@+id/salesStartsAt"
                     android:layout_width="match_parent"
                     android:textSize="@dimen/text_size_small"
                     android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                     android:layout_margin="2dp" />
 
                 <TextView
-                    android:id="@+id/sales_ends_at"
+                    android:id="@+id/salesEndsAt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="Sales end at"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:id="@+id/order_range"
+                android:id="@+id/orderRange"
                 android:layout_marginTop="@dimen/layout_margin_medium"
                 android:textColor="@color/black"
                 android:text="@string/order_range"/>
@@ -102,7 +102,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:id="@+id/minimum_order"
+                    android:id="@+id/minimumOrder"
                     android:textColor="@color/black"
                     tools:text="Minimum Order"
                     android:gravity="end" />
@@ -119,7 +119,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:id="@+id/max_order"
+                    android:id="@+id/maxOrder"
                     android:textColor="@color/black"
                     tools:text="Max Order"
                     android:gravity="start" />
@@ -142,7 +142,7 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:visibility="gone"
-                android:id="@+id/ticket_description"
+                android:id="@+id/ticketDescription"
                 android:textColor="@color/black"
                 tools:text="Description"/>
 

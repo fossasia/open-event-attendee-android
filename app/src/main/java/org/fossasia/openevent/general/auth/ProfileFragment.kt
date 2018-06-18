@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.orga_app -> {
+            R.id.orgaApp -> {
                 startOrgaApp("org.fossasia.eventyay")
                 return true
             }
@@ -86,7 +86,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profile_menu, true)
+        menu?.setGroupVisible(R.id.profileMenu, true)
         super.onPrepareOptionsMenu(menu)
     }
 

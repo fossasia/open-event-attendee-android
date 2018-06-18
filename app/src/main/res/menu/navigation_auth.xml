@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_login"
+        android:id="@+id/navigationLogin"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="@string/login" />
 
     <item
-        android:id="@+id/navigation_sign_up"
+        android:id="@+id/navigationSignUp"
         android:icon="@drawable/ic_person_add_blue_24dp"
         android:title="@string/sign_up" />
 
