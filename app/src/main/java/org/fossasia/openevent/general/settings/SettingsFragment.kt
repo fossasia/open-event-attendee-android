@@ -110,6 +110,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                     if(settingsViewModel.isLoggedIn()){
                        settingsViewModel.logout()
                        startActivity(Intent(context, MainActivity::class.java))
+                       activity?.finish()
                     }
                 }
                 .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
