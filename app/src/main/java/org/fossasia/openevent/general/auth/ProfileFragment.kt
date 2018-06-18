@@ -16,6 +16,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import org.fossasia.openevent.general.AuthActivity
+import org.fossasia.openevent.general.settings.SettingsFragment
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
@@ -35,7 +36,6 @@ class ProfileFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
-
         if (!profileFragmentViewModel.isLoggedIn())
             redirectToLogin()
 
@@ -74,6 +74,11 @@ class ProfileFragment : Fragment() {
             R.id.logout -> {
                 profileFragmentViewModel.logout()
                 redirectToMain()
+                return true
+            }
+            R.id.settings -> {
+                val fragment = SettingsFragment()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

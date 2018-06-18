@@ -34,7 +34,6 @@ class SocialLinksFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_social_links, container, false)
 
         rootView.progressBarSocial.isIndeterminate = true
-
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.socialLinksRecycler.layoutManager = linearLayoutManager

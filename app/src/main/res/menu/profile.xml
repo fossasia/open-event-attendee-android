@@ -6,6 +6,9 @@
             android:id="@+id/orga_app"
             android:title="@string/manage_events" />
         <item
+            android:id="@+id/settings"
+            android:title="@string/settings" />
+        <item
             android:id="@+id/logout"
             android:title="@string/logout" />
     </group>
