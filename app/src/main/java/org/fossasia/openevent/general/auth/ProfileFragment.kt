@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.settings -> {
                 val fragment = SettingsFragment()
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
