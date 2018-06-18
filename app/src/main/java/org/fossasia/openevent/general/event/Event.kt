@@ -62,5 +62,5 @@ data class Event(
         val isTicketingEnabled: Boolean = false,
         val isTaxEnabled: Boolean = false,
         val isMapShown: Boolean = false,
-        val favourite: Boolean = false
+        val favorite: Boolean = false
 )

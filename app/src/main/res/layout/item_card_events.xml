@@ -30,7 +30,7 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
-            android:id="@+id/favouriteFab"
+            android:id="@+id/favoriteFab"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/fab_margin_top"
             android:layout_marginRight="@dimen/fab_margin_right"

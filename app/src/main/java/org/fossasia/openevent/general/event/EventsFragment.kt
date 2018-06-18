@@ -38,7 +38,7 @@ class EventsFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
-        val favouriteFabClickListener = object : FavouriteFabClickListener {
+        val favouriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(eventId: Long, isFavourite: Boolean) {
                 eventsViewModel.setFavourite(eventId, !isFavourite)
             }

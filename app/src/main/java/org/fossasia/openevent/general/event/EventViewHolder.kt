@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.R
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favouriteClickListener: FavouriteFabClickListener?) {
+    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteClickListener: FavoriteFabClickListener?) {
         itemView.eventName.text = event.name
         itemView.locationName.text = event.locationName
 
@@ -18,7 +18,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.date.text = startsAt.dayOfMonth.toString()
         itemView.month.text = startsAt.month.name.slice(0 until 3)
-        setFabBackground(event.favourite)
+        setFabBackground(event.favorite)
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
@@ -39,16 +39,16 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
         }
 
-        itemView.favouriteFab.setOnClickListener {
-            favouriteClickListener?.onClick(event.id, event.favourite)
+        itemView.favoriteFab.setOnClickListener {
+            favoriteClickListener?.onClick(event.id, event.favorite)
         }
     }
 
     fun setFabBackground(isFavourite: Boolean) {
         if (isFavourite) {
-            itemView.favouriteFab.setImageResource(R.drawable.ic_baseline_favorite_24px)
+            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24px)
         } else {
-            itemView.favouriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24px)
+            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24px)
         }
     }
 }
