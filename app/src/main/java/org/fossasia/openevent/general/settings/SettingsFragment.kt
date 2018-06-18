@@ -35,12 +35,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        if(preference?.key == resources.getString(R.string.key_rating)){
+        if (preference?.key == resources.getString(R.string.key_rating)) {
             //Open Orga app in play store
             startOrgaAppPlayStore("org.fossasia.eventyay")
             return true
         }
-        if(preference?.key == resources.getString(R.string.key_suggestion)){
+        if (preference?.key == resources.getString(R.string.key_suggestion)) {
             //Send feedback to test email
             sendToTestEmail()
             return true
