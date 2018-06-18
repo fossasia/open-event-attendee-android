@@ -59,7 +59,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private fun sendToSupportEmail() {
         val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.data = Uri.parse("mailto:")
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(resources.getString(R.string.testEmailId)))
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(resources.getString(R.string.supportEmailId)))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.emailSubject))
         emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.emailInfo))
 
