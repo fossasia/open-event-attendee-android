@@ -21,7 +21,7 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
             val imageDrawable: Drawable? = ContextCompat.getDrawable(context, drawableId)
             imageDrawable?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(context, R.color.greyMore), PorterDuff.Mode.SRC_IN)
 
-            itemView.img_social_link.setImageDrawable(imageDrawable)
+            itemView.imgSocialLink.setImageDrawable(imageDrawable)
         }
 
         itemView.setOnClickListener{

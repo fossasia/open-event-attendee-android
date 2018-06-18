@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/event_menu">
         <item
-            android:id="@+id/add_to_calendar"
+            android:id="@+id/addToCalendar"
             android:title="@string/add_to_calendar" />
         <item
-            android:id="@+id/report_event"
+            android:id="@+id/reportEvent"
             android:title="@string/report_event" />
     </group>
     <item
-        android:id="@+id/event_share"
+        android:id="@+id/eventShare"
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/add_to_calendar"
         app:showAsAction="always"/>
