@@ -1,13 +1,14 @@
 package org.fossasia.openevent.general.search
 
 import android.arch.lifecycle.Observer
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
+import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
@@ -21,7 +22,6 @@ class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private var loadEventsAgain=false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,28 +37,21 @@ class SearchFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        linearLayoutManager = LinearLayoutManager(context)
-        rootView.eventsRecycler.layoutManager = linearLayoutManager
-
-        val slideUp = SlideInUpAnimator()
-        slideUp.addDuration = 500
-        rootView.eventsRecycler.itemAnimator = slideUp
-
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         searchViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.notifyDataSetChanged()
             }
-            notifyEventItems()
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
@@ -75,7 +68,7 @@ class SearchFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.search_item -> {
+            R.id.searchItem -> {
                 return false
             }
 
@@ -84,16 +77,19 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.search_menu, true)
-        menu?.setGroupVisible(R.id.profile_menu, false)
+        menu?.setGroupVisible(R.id.searchMenu, true)
+        menu?.setGroupVisible(R.id.profileMenu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
+        val searchView:SearchView ?= menu?.findItem(R.id.searchItem)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchViewModel.searchEvent = query
+                if (!TextUtils.isEmpty(rootView.location_editText.text))
+                    searchViewModel.location = rootView.location_editText.text.toString()
+                rootView.search_linear_layout.visibility = View.GONE
                 searchViewModel.loadEvents()
-                loadEventsAgain=true
+                loadEventsAgain = true
                 return false
             }
 
@@ -109,14 +105,4 @@ class SearchFragment : Fragment() {
         rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun notifyEventItems() {
-        val firstVisible = linearLayoutManager.findFirstVisibleItemPosition()
-        val lastVisible = linearLayoutManager.findLastVisibleItemPosition()
-        val itemsChanged = lastVisible - firstVisible + 1 // + 1 because we start count items from 0
-        val start = if (firstVisible - itemsChanged > 0) firstVisible - itemsChanged else 0
-        if (!loadEventsAgain)
-            eventsRecyclerAdapter.notifyItemRangeChanged(start, itemsChanged + itemsChanged)
-        else
-            eventsRecyclerAdapter.notifyDataSetChanged()
-    }
 }

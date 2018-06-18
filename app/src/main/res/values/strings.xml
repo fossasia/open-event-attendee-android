@@ -8,10 +8,17 @@
     <string name="where">where?</string>
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
+    <string name="report_event">Report Event</string>
+    <string name="about_event">About Event</string>
+    <string name="see_more">See more</string>
+    <string name="about_organizer">About Organizer</string>
+    <string name="location">Location</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
+    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="anywhere">Anywhere</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
