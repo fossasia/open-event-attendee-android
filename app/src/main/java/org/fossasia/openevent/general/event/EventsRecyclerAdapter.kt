@@ -9,9 +9,14 @@ import java.util.*
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()
     private var clickListener: RecyclerViewClickListener? = null
+    private var favouriteFabClickListener: FavouriteFabClickListener? = null
 
     fun setListener(listener: RecyclerViewClickListener) {
         clickListener = listener
+    }
+
+    fun setFavouriteListener(listener: FavouriteFabClickListener) {
+        favouriteFabClickListener = listener
     }
 
     fun addAll(eventList: List<Event>) {
@@ -27,8 +32,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
-
-        holder.bind(event, clickListener)
+        holder.bind(event, clickListener, favouriteFabClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -39,4 +43,8 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
 interface RecyclerViewClickListener {
     fun onClick(eventID: Long)
+}
+
+interface FavouriteFabClickListener {
+    fun onClick(eventId: Long, isFavourite: Boolean)
 }
