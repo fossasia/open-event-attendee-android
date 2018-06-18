@@ -29,7 +29,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         aboutEventCollapsingLayout.title = " "
-        appbar.addOnOffsetChangedListener(this)
+        appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error.observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
