@@ -51,7 +51,6 @@
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
     <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
-    <string name="testEmailId">open.test24@gmail.com</string>
 
     <!--settings xml-->
     <string name="version_settings">Version</string>

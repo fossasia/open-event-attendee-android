@@ -37,18 +37,18 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_rating)) {
             //Open Orga app in play store
-            startOrgaAppPlayStore("org.fossasia.eventyay")
+            startOrgaAppPlayStore(activity?.packageName)
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
-            //Send feedback to test email
-            sendToTestEmail()
+            //Send feedback to email
+            sendToSupportEmail()
             return true
         }
         return false
     }
 
-    private fun startOrgaAppPlayStore(packageName: String) {
+    private fun startOrgaAppPlayStore(packageName: String?) {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)))
         } catch (error: ActivityNotFoundException) {
@@ -56,7 +56,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
     }
 
-    private fun sendToTestEmail() {
+    private fun sendToSupportEmail() {
         val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.data = Uri.parse("mailto:")
         emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(resources.getString(R.string.testEmailId)))
