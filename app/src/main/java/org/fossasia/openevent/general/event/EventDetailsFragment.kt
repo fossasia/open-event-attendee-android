@@ -136,6 +136,10 @@ class EventDetailsFragment : Fragment() {
                 startCalendar(eventShare)
                 return true
             }
+            R.id.report_event -> {
+                reportEvent(eventShare)
+                return true
+            }
             R.id.event_share -> {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -169,6 +173,17 @@ class EventDetailsFragment : Fragment() {
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
         startActivity(intent)
+    }
+
+    private fun reportEvent(event: Event){
+        val email ="support@eventyay.com"
+        val subject ="Report of ${event.name} (${event.identifier})"
+        val body = "Let us know what's wrong"
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body)
+
+        startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

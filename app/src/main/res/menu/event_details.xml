@@ -5,6 +5,9 @@
         <item
             android:id="@+id/add_to_calendar"
             android:title="@string/add_to_calendar" />
+        <item
+            android:id="@+id/report_event"
+            android:title="@string/report_event" />
     </group>
     <item
         android:id="@+id/event_share"
