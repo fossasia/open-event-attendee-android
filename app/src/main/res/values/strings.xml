@@ -4,15 +4,14 @@
     <string name="Profile">Profile</string>
 
     <!--event details-->
-    <string name="whats_good">What\'s good in</string>
-    <string name="where">where?</string>
-    <!--event details-->
     <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
     <string name="about_event">About Event</string>
     <string name="see_more">See more</string>
     <string name="about_organizer">About Organizer</string>
     <string name="location">Location</string>
+    <string name="whats_good">What\'s good in</string>
+    <string name="where">where?</string>
 
     <!--Search event details-->
     <string name="search">Search</string>

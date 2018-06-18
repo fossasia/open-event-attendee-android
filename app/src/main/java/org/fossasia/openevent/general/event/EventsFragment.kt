@@ -67,7 +67,6 @@ class EventsFragment : Fragment() {
                 imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
                 eventsViewModel.locationName = rootView.locationEdittext.text.toString()
-                eventsViewModel.loadEventsWithAnimation = false
                 eventsViewModel.loadLocationEvents()
                 return@OnEditorActionListener true
             }
