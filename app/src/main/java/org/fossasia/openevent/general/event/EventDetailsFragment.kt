@@ -182,9 +182,9 @@ class EventDetailsFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun contactHost(event: Event){
-        val email =event.paypalEmail
-        val subject ="Questions about ${event.name} (${event.identifier})"
+    private fun contactHost(event: Event) {
+        val email = event.paypalEmail
+        val subject = "Questions about ${event.name} (${event.identifier})"
         val body = "Let us know what's wrong"
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -193,9 +193,9 @@ class EventDetailsFragment : Fragment() {
         startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
-    private fun reportEvent(event: Event){
-        val email ="support@eventyay.com"
-        val subject ="Report of ${event.name} (${event.identifier})"
+    private fun reportEvent(event: Event) {
+        val email = "support@eventyay.com"
+        val subject = "Report of ${event.name} (${event.identifier})"
         val body = "Let us know what's wrong"
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
