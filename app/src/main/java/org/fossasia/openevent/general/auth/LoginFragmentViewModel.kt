@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 
-class LoginActivityViewModel(private val authService: AuthService) : ViewModel() {
+class LoginFragmentViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -18,6 +18,10 @@ class LoginActivityViewModel(private val authService: AuthService) : ViewModel()
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
+        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+            error.value = "Email or Password cannot be empty"
+            return
+        }
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

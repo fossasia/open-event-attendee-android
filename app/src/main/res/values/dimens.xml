@@ -3,7 +3,7 @@
     <!-- text size -->
     <dimen name="heading_text_size">20sp</dimen>
     <dimen name="text_size_expanded_title">22sp</dimen>
-    <dimen name="text_size_extra_large">18sp</dimen>
+    <dimen name="text_size_extra_large">32sp</dimen>
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
@@ -34,5 +34,29 @@
     <dimen name="fab_margin_top">125dp</dimen>
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="fab_elevation">3dp</dimen>
+
+    <!--view specifics -->
+    <dimen name="view_height">1dp</dimen>
+    <dimen name="home_logo_width">200dp</dimen>
+    <dimen name="app_bar_height">250dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <!--image view specifics -->
+    <dimen name="item_image_view_small">24dp</dimen>
+    <dimen name="item_image_view">50dp</dimen>
+    <dimen name="item_image_view_large">130dp</dimen>
+    <dimen name="item_image_view_extra_large">250dp</dimen>
+
+    <!--event details-->
+    <dimen name="event_details_image">200dp</dimen>
+    <dimen name="event_details_headers">20sp</dimen>
+    <dimen name="event_details_content">12sp</dimen>
+    <dimen name="event_name">25sp</dimen>
+    <dimen name="event_details_divider">0.8dp</dimen>
+    <dimen name="divider_margin_bottom">20dp</dimen>
+    <dimen name="divider_margin_top">12dp</dimen>
+    <dimen name="collapsing_toolbar_height">220dp</dimen>
+    <dimen name="details_header_margin_top">40dp</dimen>
 
 </resources>

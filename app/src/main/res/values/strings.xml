@@ -1,23 +1,31 @@
 <resources>
-    <string name="app_name">open-event-general</string>
+    <string name="app_name">open-event-android</string>
     <string name="Events">Events</string>
-    <string name="Title1">Title1</string>
-    <string name="Title2">Title2</string>
     <string name="Profile">Profile</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
+    <string name="report_event">Report Event</string>
+    <string name="about_event">About Event</string>
+    <string name="see_more">See more</string>
+    <string name="about_organizer">About Organizer</string>
+    <string name="location">Location</string>
+
+    <!--Search event details-->
+    <string name="search">Search</string>
+    <string name="search_hint">Search for. . .</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
     <string name="login">Login</string>
-    <string name="sign_in">No account yet? Create one</string>
+    <string name="sign_up">Sign Up</string>
     <string name="email">example@gmail.com</string>
     <string name="password">Password</string>
+    <string name="manage_events">Manage Events"</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="first_name_optional">First Name (Optional)</string>
+    <string name="last_name_optional">Last Name (Optional)</string>
 
     <!--eventyay-->
     <string name="eventyay_logo">eventyay</string>
@@ -30,5 +38,14 @@
     <string name="event_link">Event Link :&#160;</string>
     <string name="event_description">Event Description :&#160;</string>
     <string name="event_name">Event Name :&#160;</string>
+    <string name="share">Share</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">Add to Calendar</string>
+
+    <!--ticket details-->
+    <string name="sales_dates">Sales Dates</string>
+    <string name="order_range">Order Range</string>
+    <string name="tickets_available">Tickets Available</string>
 
 </resources>

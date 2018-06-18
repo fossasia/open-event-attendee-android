@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
@@ -30,16 +29,21 @@ class EventsFragment : Fragment() {
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        val slideup = SlideInUpAnimator()
-        slideup.addDuration = 500
-        rootView.eventsRecycler.itemAnimator = slideup
-
+        val recyclerViewClickListener = object : RecyclerViewClickListener {
+            override fun onClick(eventID: Long) {
+                val fragment = EventDetailsFragment()
+                val bundle = Bundle()
+                bundle.putLong(fragment.EVENT_ID, eventID)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frame_container, fragment)?.addToBackStack(null)?.commit()
+            }
+        }
+        eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
             }
-
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
@@ -60,4 +64,5 @@ class EventsFragment : Fragment() {
         rootView.progressBar.isIndeterminate = show
         rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
+
 }

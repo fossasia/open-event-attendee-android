@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.di
 
+import android.arch.persistence.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -7,13 +8,22 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.OpenEventDatabase
+import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventApi
-import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.event.EventsViewModel
+import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.social.SocialLink
+import org.fossasia.openevent.general.social.SocialLinkApi
+import org.fossasia.openevent.general.social.SocialLinksService
+import org.fossasia.openevent.general.social.SocialLinksViewModel
+import org.fossasia.openevent.general.ticket.Ticket
+import org.fossasia.openevent.general.ticket.TicketApi
+import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.architecture.ext.viewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -26,24 +36,41 @@ val commonModule = applicationContext {
 }
 
 val apiModule = applicationContext {
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    factory {
+    bean {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(TicketApi::class.java)
+    }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(SocialLinkApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
-    bean { AuthService(get(), get()) } // TODO: Convert to factory once database is implemented
+    factory { AuthService(get(), get(), get()) }
 
-    bean { EventService(get()) } // TODO: Convert to factory once database is implemented
+    factory { EventService(get(), get()) }
+    factory { TicketService(get(), get()) }
+    factory { SocialLinksService(get(), get()) }
 }
 
 val viewModelModule = applicationContext {
-    viewModel { LoginActivityViewModel(get()) }
+    viewModel { LoginFragmentViewModel(get()) }
     viewModel { EventsViewModel(get()) }
+    viewModel { ProfileFragmentViewModel(get()) }
+    viewModel { SignUpFragmentViewModel(get()) }
+    viewModel { EventDetailsViewModel(get()) }
+    viewModel { SearchViewModel(get()) }
+    viewModel { TicketsViewModel(get()) }
+    viewModel { AboutEventViewModel(get()) }
+    viewModel { SocialLinksViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -77,10 +104,40 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
     }
 
+}
+
+val databaseModule = applicationContext {
+
+    bean {
+        Room.databaseBuilder(androidApplication(),
+                OpenEventDatabase::class.java, "open_event_database")
+                .fallbackToDestructiveMigration()
+                .build()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.userDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.ticketsDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.socialLinksDao()
+    }
 }

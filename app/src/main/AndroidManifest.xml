@@ -5,15 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".OpenEventGeneral"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".OpenEventGeneral"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="org.fossasia.openevent.general.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.auth.LoginActivity">
+            android:name="org.fossasia.openevent.general.AuthActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
+            android:name="org.fossasia.openevent.general.about.AboutEventActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

@@ -8,8 +8,15 @@ import java.util.*
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()
+    private var clickListener: RecyclerViewClickListener? = null
+
+    fun setListener(listener: RecyclerViewClickListener) {
+        clickListener = listener
+    }
 
     fun addAll(eventList: List<Event>) {
+        if (events.isNotEmpty())
+            this.events.clear()
         this.events.addAll(eventList)
     }
 
@@ -21,10 +28,15 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
 
-        holder.bind(event)
+        holder.bind(event, clickListener)
     }
 
     override fun getItemCount(): Int {
         return events.size
     }
+
+}
+
+interface RecyclerViewClickListener {
+    fun onClick(eventID: Long)
 }

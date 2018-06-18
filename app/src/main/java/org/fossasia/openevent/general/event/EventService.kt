@@ -1,19 +1,37 @@
 package org.fossasia.openevent.general.event
 
+import io.reactivex.Flowable
 import io.reactivex.Single
 
-class EventService(private val eventApi: EventApi) {
+class EventService(private val eventApi: EventApi, private val eventDao: EventDao) {
 
-    private var events: List<Event>? = null // TODO: Cache to be later replaced by Database
+    fun getEvents(): Flowable<List<Event>> {
+        val eventsFlowable = eventDao.getAllEvents()
+        return eventsFlowable.switchMap {
+            if (it.isNotEmpty())
+                eventsFlowable
+            else
+                eventApi.getEvents()
+                        .map {
+                            eventDao.insertEvents(it)
+                        }
+                        .toFlowable()
+                        .flatMap {
+                            eventsFlowable
+                        }
+        }
+    }
 
-    fun getEvents(): Single<List<Event>> {
-        if (events != null)
-            return Single.just(events)
-        return eventApi.getEvents()
+    fun getSearchEvents(eventName: String): Single<List<Event>> {
+        return eventApi.searchEvents("name", eventName)
                 .map {
-                    events = it
+                    eventDao.insertEvents(it)
                     it
                 }
+    }
+
+    fun getEvent(id: Long): Flowable<Event> {
+        return eventDao.getEvent(id)
     }
 
 }

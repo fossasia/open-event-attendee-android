@@ -1,6 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
@@ -48,31 +47,5 @@
             android:textColor="@color/greyMore"
             android:textSize="@dimen/text_size_medium" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_large">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:text="@string/logout"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    app:srcCompat="@drawable/ic_exit_to_app_black_24dp" />
-            </FrameLayout>
-        </android.support.v7.widget.CardView>
     </LinearLayout>
 </FrameLayout>
