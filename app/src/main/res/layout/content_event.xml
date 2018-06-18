@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/event_details_image"
             android:background="@drawable/placeholder"
             android:scaleType="centerCrop" />
 
@@ -28,211 +28,231 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
+                android:id="@+id/eventDetailsLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:id="@+id/event_details_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="@dimen/layout_margin_large"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/event_name"
+                    android:id="@+id/eventName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Event Name"
                     android:textColor="@color/black"
-                    android:textSize="25sp" />
+                    android:textSize="@dimen/event_name"
+                    tools:text="Event Name" />
 
                 <TextView
-                    android:id="@+id/event_organiser_name"
+                    android:id="@+id/eventOrganiserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="@dimen/divider_margin_top"
                     android:textColor="@color/black"
-                    android:text="by Organiser Name" />
+                    tools:text="by Organiser Name" />
 
                 <LinearLayout
-                    android:id="@+id/event_timing_linear_layout"
+                    android:id="@+id/eventTimingLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="@dimen/layout_margin_small"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/layout_margin_medium"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_baseline_event__black_24px" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/layout_margin_medium"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/starts_on"
+                            android:id="@+id/startsOn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tuesday June 5" />
+                            tools:text="Tuesday June 5" />
 
                         <TextView
-                            android:id="@+id/ends_on"
+                            android:id="@+id/endsOn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Wed June 5" />
+                            tools:text="Wed June 5" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/event_location_linear_layout"
+                    android:id="@+id/eventLocationLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/layout_margin_medium"
                         app:srcCompat="@drawable/ic_location_on_black_24dp" />
 
                     <TextView
-                        android:id="@+id/event_location_text_view"
+                        android:id="@+id/eventLocationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Location" />
+                        android:layout_margin="@dimen/layout_margin_medium"
+                        tools:text="Location" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:layout_marginBottom="8dp"
-                android:text="About Event "
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/event_description"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
-                android:layout_height="wrap_content"
-                android:lines="3"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:text="@string/about_event"
                 android:textColor="@color/black"
-                android:text="Description" />
+                android:textSize="@dimen/event_details_headers" />
+
+            <TextView
+                android:id="@+id/eventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:lines="4"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/black"
+                tools:text="Description" />
+
+            <TextView
+                android:id="@+id/see_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:lines="1"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/divider_margin_top"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/black"
+                android:text="@string/see_more" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="About Organiser "
-                android:textSize="20dp" />
+                android:text="@string/about_organizer"
+                android:textColor="@color/black"
+                android:textSize="@dimen/event_details_headers" />
 
             <TextView
-                android:id="@+id/event_organiser_description"
+                android:id="@+id/eventOrganiserDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="3"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="Description" />
+                tools:text="Description" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:layout_marginTop="@dimen/divider_margin_top"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/black" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="Location"
-                android:textSize="20dp" />
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="@dimen/event_details_headers" />
 
             <TextView
-                android:id="@+id/location_under_map"
+                android:id="@+id/locationUnderMap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="2"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:visibility="gone"
                 android:textColor="@color/black"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="location" />
+                tools:text="location" />
 
             <ImageView
+                android:id="@+id/imageMap"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/home_logo_width"
                 android:visibility="gone"
                 android:src="@drawable/placeholder"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:id="@+id/image_map"/>
+                android:layout_marginBottom="@dimen/layout_margin_medium" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:background="@color/black" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="@string/tickets_available"
-                android:textSize="20dp" />
+                android:textSize="@dimen/event_details_headers" />
 
             <FrameLayout
-                android:layout_width="match_parent"
                 android:id="@+id/frameContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameContainerSocial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             </FrameLayout>
 
         </LinearLayout>

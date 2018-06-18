@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.event
+package org.fossasia.openevent.general.social
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -7,28 +7,27 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService) : ViewModel() {
+class SocialLinksViewModel(private val socialLinksService: SocialLinksService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
+    val socialLinks = MutableLiveData<List<SocialLink>>()
     val error = MutableLiveData<String>()
-    var loadEventsWithAnimation: Boolean = true
 
-    fun loadEvents() {
-        compositeDisposable.add(eventService.getEvents()
+    fun loadSocialLinks(id: Long) {
+        compositeDisposable.add(socialLinksService.getSocialLinks(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progress.value = true
-                }).doFinally({
+                }).doOnNext({
                     progress.value = false
                 }).subscribe({
-                    events.value = it
+                    socialLinks.value = it
                 }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
+                    Timber.e(it, "Error fetching Social Links")
+                    error.value = "Error fetching Social Links"
                 }))
     }
 

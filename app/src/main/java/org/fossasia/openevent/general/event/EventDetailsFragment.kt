@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.about.AboutEventActivity
+import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
@@ -24,6 +26,7 @@ class EventDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private var eventId: Long = -1
     private lateinit var eventShare: Event
+    private val LINE_COUNT: Int = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class EventDetailsFragment : Fragment() {
                 eventShare = it
             }
             loadTicketFragment()
+            loadSocialLinksFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -61,14 +65,14 @@ class EventDetailsFragment : Fragment() {
     private fun loadEvent(event: Event) {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        rootView.event_name.text = event.name
-        rootView.event_organiser_name.text = "by " + event.organizerName.nullToEmpty()
-        setTextField(rootView.event_description, event.description)
-        setTextField(rootView.event_organiser_description, event.organizerDescription)
-        rootView.event_location_text_view.text = event.locationName
+        rootView.eventName.text = event.name
+        rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
+        setTextField(rootView.eventDescription, event.description)
+        setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
+        rootView.eventLocationTextView.text = event.locationName
 
-        rootView.starts_on.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
-        rootView.ends_on.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
+        rootView.startsOn.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
+        rootView.endsOn.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
 
         event.originalImageUrl?.let {
             Picasso.get()
@@ -78,24 +82,39 @@ class EventDetailsFragment : Fragment() {
         }
 
         //load location to map
-        rootView.location_under_map.text = event.locationName
+        rootView.locationUnderMap.text = event.locationName
         val mapClickListener = View.OnClickListener { startMap(event) }
         if (event.locationName != null) {
-            rootView.location_under_map.visibility = View.VISIBLE
-            rootView.image_map.visibility = View.VISIBLE
-            rootView.image_map.setOnClickListener(mapClickListener)
-            rootView.event_location_text_view.setOnClickListener(mapClickListener)
+            rootView.eventLocationLinearLayout.visibility = View.VISIBLE
+            rootView.locationUnderMap.visibility = View.VISIBLE
+            rootView.imageMap.visibility = View.VISIBLE
+            rootView.imageMap.setOnClickListener(mapClickListener)
+            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
+        }
+
+        //About event on-click
+        val aboutEventOnClickListener = View.OnClickListener {
+            val aboutIntent  = Intent(context, AboutEventActivity::class.java)
+            aboutIntent.putExtra(EVENT_ID, eventId)
+            startActivity(aboutIntent)
+        }
+
+        if (rootView.eventDescription.lineCount > LINE_COUNT) {
+            rootView.see_more.visibility = View.VISIBLE
+            //start about fragment
+            rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+            rootView.see_more.setOnClickListener(aboutEventOnClickListener)
         }
 
         Picasso.get()
                 .load(eventViewModel.loadMap(event))
                 .placeholder(R.drawable.ic_map_black_24dp)
-                .into(rootView.image_map)
+                .into(rootView.imageMap)
 
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
-        rootView.starts_on.setOnClickListener(dateClickListener)
-        rootView.ends_on.setOnClickListener(dateClickListener)
+        rootView.startsOn.setOnClickListener(dateClickListener)
+        rootView.endsOn.setOnClickListener(dateClickListener)
 
     }
 
@@ -115,6 +134,10 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
+                return true
+            }
+            R.id.report_event -> {
+                reportEvent(eventShare)
                 return true
             }
             R.id.event_share -> {
@@ -152,6 +175,17 @@ class EventDetailsFragment : Fragment() {
         startActivity(intent)
     }
 
+    private fun reportEvent(event: Event){
+        val email ="support@eventyay.com"
+        val subject ="Report of ${event.name} (${event.identifier})"
+        val body = "Let us know what's wrong"
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body)
+
+        startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         val inflaterMenu = activity?.menuInflater
         inflaterMenu?.inflate(R.menu.event_details, menu)
@@ -167,6 +201,16 @@ class EventDetailsFragment : Fragment() {
         transaction.add(R.id.frameContainer, ticketFragment).commit()
     }
 
+    private fun loadSocialLinksFragment(){
+        //Initialise SocialLinks Fragment
+        val socialLinksFragemnt = SocialLinksFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", eventId)
+        socialLinksFragemnt.arguments = bundle
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
+    }
+  
     private fun startMap(event: Event) {
         // start map intent
         val mapUrl = eventViewModel.loadMapUrl(event)
