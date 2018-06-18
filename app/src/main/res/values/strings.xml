@@ -14,6 +14,8 @@
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
+    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="anywhere">Anywhere</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
