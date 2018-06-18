@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -25,6 +26,7 @@ class EventDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private var eventId: Long = -1
     private lateinit var eventShare: Event
+    private val LINE_COUNT: Int = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +92,20 @@ class EventDetailsFragment : Fragment() {
             rootView.eventLocationTextView.setOnClickListener(mapClickListener)
         }
 
+        //About event on-click
+        val aboutEventOnClickListener = View.OnClickListener {
+            val aboutIntent  = Intent(context, AboutEventActivity::class.java)
+            aboutIntent.putExtra(EVENT_ID, eventId)
+            startActivity(aboutIntent)
+        }
+
+        if (rootView.eventDescription.lineCount > LINE_COUNT) {
+            rootView.see_more.visibility = View.VISIBLE
+            //start about fragment
+            rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+            rootView.see_more.setOnClickListener(aboutEventOnClickListener)
+        }
+
         Picasso.get()
                 .load(eventViewModel.loadMap(event))
                 .placeholder(R.drawable.ic_map_black_24dp)
@@ -118,6 +134,10 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
+                return true
+            }
+            R.id.report_event -> {
+                reportEvent(eventShare)
                 return true
             }
             R.id.event_share -> {
@@ -153,6 +173,17 @@ class EventDetailsFragment : Fragment() {
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
         startActivity(intent)
+    }
+
+    private fun reportEvent(event: Event){
+        val email ="support@eventyay.com"
+        val subject ="Report of ${event.name} (${event.identifier})"
+        val body = "Let us know what's wrong"
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body)
+
+        startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
