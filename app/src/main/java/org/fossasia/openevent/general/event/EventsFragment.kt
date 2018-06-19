@@ -20,8 +20,6 @@ import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
 
 
-
-
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
