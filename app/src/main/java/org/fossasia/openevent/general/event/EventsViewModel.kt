@@ -15,6 +15,26 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
 
+    var locationName: String? = null
+
+    fun loadLocationEvents() {
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
+
+        compositeDisposable.add(eventService.getEventsByLocation(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe({
+                    progress.value = true
+                }).doFinally({
+                    progress.value = false
+                }).subscribe({
+                    events.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    error.value = "Error fetching events"
+                }))
+    }
+
     fun loadEvents() {
         compositeDisposable.add(eventService.getEvents()
                 .subscribeOn(Schedulers.io())
