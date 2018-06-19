@@ -17,6 +17,7 @@ import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
@@ -48,7 +49,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_rating)) {
             //Open Orga app in play store
-            startOrgaAppPlayStore(activity?.packageName)
+            startOrgaAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
@@ -66,11 +67,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         return false
     }
 
-    private fun startOrgaAppPlayStore(packageName: String?) {
+    private fun startOrgaAppPlayStore(packageName: String) {
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketAppLink(packageName))))
         } catch (error: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketWebLink(packageName))))
         }
     }
 
