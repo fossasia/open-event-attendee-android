@@ -24,5 +24,5 @@ interface EventDao {
     fun getEvent(id: Long): Flowable<Event>
 
     @Query("UPDATE Event SET favorite = :favorite WHERE id = :eventId")
-    fun setFavourite(eventId: Long, favourite: Boolean)
+    fun setFavorite(eventId: Long, favorite: Boolean)
 }

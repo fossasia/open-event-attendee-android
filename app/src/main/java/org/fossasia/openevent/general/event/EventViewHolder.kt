@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.R
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteClickListener: FavoriteFabClickListener?) {
+    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteListener: FavoriteFabListener?) {
         itemView.eventName.text = event.name
         itemView.locationName.text = event.locationName
 
@@ -40,7 +40,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         itemView.favoriteFab.setOnClickListener {
-            favoriteClickListener?.onClick(event.id, event.favorite)
+            favoriteListener?.onClick(event.id, event.favorite)
         }
     }
 

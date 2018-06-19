@@ -35,9 +35,9 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         return eventDao.getEvent(id)
     }
 
-    fun setFavourite(eventId: Long, favourite: Boolean): Completable {
+    fun setFavorite(eventId: Long, favourite: Boolean): Completable {
         return Completable.fromAction {
-            eventDao.setFavourite(eventId, favourite)
+            eventDao.setFavorite(eventId, favourite)
         }
     }
 }
