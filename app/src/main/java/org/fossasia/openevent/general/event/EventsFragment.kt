@@ -47,7 +47,13 @@ class EventsFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
+        val favouriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(eventId: Long, isFavourite: Boolean) {
+                eventsViewModel.setFavorite(eventId, !isFavourite)
+            }
+        }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
+        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
