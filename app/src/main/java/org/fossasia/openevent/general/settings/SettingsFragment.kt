@@ -11,7 +11,6 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceScreen
 import android.view.*
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
@@ -19,12 +18,10 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
 import org.koin.android.architecture.ext.viewModel
-import timber.log.Timber
-
-private const val EMAIL: String = "EMAIL"
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
+    val EMAIL: String = "EMAIL"
     private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -34,7 +31,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
-        val prefScreen: PreferenceScreen = preferenceScreen
 
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -43,10 +39,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
         //Set Email
         email = arguments?.getString(EMAIL)
-        prefScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
+        preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
 
         //Set Build Version
-        prefScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
+        preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
