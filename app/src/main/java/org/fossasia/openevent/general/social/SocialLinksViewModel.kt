@@ -25,6 +25,7 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
                     progress.value = false
                 }).subscribe({
                     socialLinks.value = it
+                    progress.value = false
                 }, {
                     Timber.e(it, "Error fetching Social Links")
                     error.value = "Error fetching Social Links"
