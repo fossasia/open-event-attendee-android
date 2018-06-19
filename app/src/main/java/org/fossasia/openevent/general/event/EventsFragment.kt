@@ -17,6 +17,9 @@ import timber.log.Timber
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
+import android.net.ConnectivityManager
+
+
 
 
 class EventsFragment : Fragment() {
@@ -73,7 +76,24 @@ class EventsFragment : Fragment() {
             false
         })
 
+        showNoInternetScreen(isNetworkConnected())
+
+        rootView.retry.setOnClickListener {
+            showNoInternetScreen(isNetworkConnected())
+        }
+
         return rootView
+    }
+
+    private fun showNoInternetScreen(show: Boolean) {
+        rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        return connectivityManager.activeNetworkInfo != null
     }
 
     private fun showProgressBar(show: Boolean) {
