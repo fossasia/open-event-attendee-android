@@ -2,9 +2,13 @@ package org.fossasia.openevent.general.settings
 
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceScreen
@@ -17,9 +21,10 @@ import org.fossasia.openevent.general.MainActivity
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
+private const val EMAIL: String = "EMAIL"
+
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
-    private val EMAIL: String = "EMAIL"
     private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -52,7 +57,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             //Send feedback to email
-            sendToSupportEmail()
+            context?.let {
+                openSuggestForm(it, resources.getString(R.string.suggestion_form_link))
+            }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_profile)) {
@@ -71,18 +78,19 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
     }
 
-    private fun sendToSupportEmail() {
-        val emailIntent = Intent(Intent.ACTION_SENDTO)
-        emailIntent.data = Uri.parse("mailto:")
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(resources.getString(R.string.supportEmailId)))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.emailSubject))
-        emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.emailInfo))
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send Suggestion"))
-        } catch (e: ActivityNotFoundException) {
-            Timber.e(e)
+    private fun openSuggestForm(context: Context, url: String) {
+        var finalUrl = url
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            finalUrl = "http://$url"
         }
+
+        CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_white_cct_24dp))
+                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
+                .build()
+                .launchUrl(context, Uri.parse(finalUrl))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

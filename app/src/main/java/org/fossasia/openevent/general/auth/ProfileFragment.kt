@@ -38,6 +38,7 @@ class ProfileFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
+
         if (!profileFragmentViewModel.isLoggedIn())
             redirectToLogin()
 

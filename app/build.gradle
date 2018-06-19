@@ -67,6 +67,7 @@ dependencies {
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.9.1"
     implementation 'com.github.jasminb:jsonapi-converter:0.8.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.3.0'
