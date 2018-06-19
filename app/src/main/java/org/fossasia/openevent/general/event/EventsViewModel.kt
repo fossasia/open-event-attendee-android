@@ -51,6 +51,18 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
                 }))
     }
 
+    fun setFavorite(eventId: Long, favourite: Boolean) {
+        compositeDisposable.add(eventService.setFavorite(eventId, favourite)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Success")
+                }, {
+                    Timber.e(it, "Error")
+                    error.value = "Error"
+                }))
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
