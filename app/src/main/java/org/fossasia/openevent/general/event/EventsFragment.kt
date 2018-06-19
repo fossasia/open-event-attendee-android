@@ -95,9 +95,9 @@ class EventsFragment : Fragment() {
     }
 
     private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
-        return connectivityManager.activeNetworkInfo != null
+        return connectivityManager?.activeNetworkInfo != null
     }
 
     private fun showProgressBar(show: Boolean) {
