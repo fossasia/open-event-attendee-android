@@ -12,6 +12,8 @@
     <string name="location">Location</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">where?</string>
+    <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
+    <string name="retry">RETRY</string>
 
     <!--Search event details-->
     <string name="search">Search</string>

@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/layout_margin_large"
-                        android:text="We're having difficulty connecting to the server. Check your connection or try again later."
+                        android:text="@string/no_internet_message"
                         android:textSize="@dimen/text_size_medium"
                         tools:text="No Internet" />
 
@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/layout_margin_large"
-                        android:text="RETRY"
+                        android:text="@string/retry"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_size_large"
                         tools:text="RETRY" />
