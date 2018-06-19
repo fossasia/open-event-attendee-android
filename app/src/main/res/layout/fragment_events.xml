@@ -10,7 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-      
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/whats_good"
+            android:layout_height="wrap_content" />
+
+      <EditText
+          android:layout_width="match_parent"
+          android:id="@+id/locationEdittext"
+          android:hint="@string/where"
+          android:layout_marginTop="@dimen/layout_margin_extra_large"
+          android:layout_marginRight="@dimen/layout_margin_extra_large"
+          android:layout_marginLeft="@dimen/layout_margin_extra_large"
+          android:imeOptions="actionSearch"
+          android:inputType="text"
+          android:layout_height="wrap_content" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -18,6 +38,7 @@
             <ProgressBar
                 android:layout_gravity="center"
                 android:id="@+id/progressBar"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
             </ProgressBar>
