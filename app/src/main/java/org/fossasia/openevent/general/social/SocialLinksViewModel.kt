@@ -21,8 +21,6 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progress.value = true
-                }).doOnNext({
-                    progress.value = false
                 }).subscribe({
                     socialLinks.value = it
                     progress.value = false
