@@ -77,7 +77,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.ticketIssues -> {
                 context?.let {
-                    openSupportPage(it, resources.getString(R.string.ticket_issues_url))
+                    openSupportPage(it)
                 }
                 return true
             }
@@ -107,19 +107,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun openSupportPage(context: Context, url: String) {
-        var finalUrl = url
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            finalUrl = "http://$url"
-        }
-
+    private fun openSupportPage(context: Context) {
         CustomTabsIntent.Builder()
                 .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
                 .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_white_cct_24dp))
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
-                .launchUrl(context, Uri.parse(finalUrl))
+                .launchUrl(context, Uri.parse(resources.getString(R.string.ticket_issues_url)))
     }
 
     private fun showInMarket(packageName: String) {

@@ -28,7 +28,7 @@
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
     <string name="ticket_issues">Ticket Issues</string>
-    <string name="ticket_issues_url">support.eventyay.com</string>
+    <string name="ticket_issues_url">http://support.eventyay.com</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>
