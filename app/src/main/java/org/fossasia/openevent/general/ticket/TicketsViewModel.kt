@@ -24,10 +24,9 @@ class TicketsViewModel(private val ticketService: TicketService) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progressTickets.value = true
-                }).doFinally({
-                    progressTickets.value = false
                 }).subscribe({ticketList ->
                     tickets.value = ticketList
+                    progressTickets.value = false
                 }, {
                     error.value = "Error fetching tickets"
                     Timber.e(it, "Error fetching tickets %d",id)
