@@ -12,9 +12,9 @@
         android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/homeScreenLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/homeScreenLL"
         android:orientation="vertical">
 
         <TextView
