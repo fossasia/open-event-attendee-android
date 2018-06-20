@@ -7,11 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.event.EventUtils
 import timber.log.Timber
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 
 class AboutEventViewModel(private val eventService: EventService) : ViewModel() {
 
@@ -38,31 +34,6 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
                     error.value = "Error fetching event"
                     Timber.e(it, "Error fetching event %d",id)
                 }))
-    }
-
-    fun getAboutEventFormattedDate(date: String): String{
-        val dateString = EventUtils.getLocalizedDateTime(date)
-        //Format Month
-        val lowerCaseMonth = dateString.dayOfWeek.toString().toLowerCase()
-        val formatMonth = (lowerCaseMonth.substring(0, 1).toUpperCase() + lowerCaseMonth.substring(1)).substring(0, 3)
-        //Format Day
-        val lowerCaseDay = dateString.month.toString().toLowerCase()
-        val formatDay = (lowerCaseDay.substring(0, 1).toUpperCase() + lowerCaseDay.substring(1)).substring(0, 3)
-
-        return formatMonth + ", " + formatDay + " " + dateString.dayOfMonth
-    }
-
-    fun getAboutEventFormattedTime(date: String): String{
-        var testDate =  Date()
-        val dateString = date.replace("T"," ")
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        try {
-            testDate = dateFormat.parse(dateString)
-        } catch (e: ParseException) {
-            Timber.e(e,"Error Parsing Date")
-        }
-        val dateFormatFinal = SimpleDateFormat("hh:mm a Z", Locale.getDefault())
-        return dateFormatFinal.format(testDate)
     }
 
     override fun onCleared() {
