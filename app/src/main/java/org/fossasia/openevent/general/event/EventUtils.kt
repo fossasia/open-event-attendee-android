@@ -7,9 +7,6 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 
 object EventUtils {
 
@@ -52,15 +49,27 @@ object EventUtils {
             .toOffsetDateTime()
             .atZoneSameInstant(ZoneId.systemDefault())
 
-    fun getTimeInMilliSeconds(date: String): Long{
-        var testDate =  Date()
-        val dateString = date.replace("T"," ")
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            try {
-                testDate = dateFormat.parse(dateString)
-            } catch (e: ParseException) {
-                Timber.e(e,"Error Parsing Date")
-            }
-        return testDate.time
+    fun getTimeInMilliSeconds(dateString: String): Long {
+        return getLocalizedDateTime(dateString).toInstant().toEpochMilli()
+    }
+
+    fun getFormattedDate(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getFormattedTime(date: ZonedDateTime): String {
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a Z")
+        try {
+            return timeFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
     }
 }
