@@ -19,12 +19,15 @@ import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
 import kotlinx.android.synthetic.main.content_no_internet.view.*
+import org.fossasia.openevent.general.data.Preference
 
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
+    private val preference: Preference = Preference()
+    private  val tokenKey = "LOCATION"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -69,12 +72,20 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
+        eventsViewModel.locationName = preference.getString(tokenKey)
+
+        if (eventsViewModel.locationName != null) {
+            rootView.locationEdittext.hint = eventsViewModel.locationName
+            eventsViewModel.loadLocationEvents()
+        }
+
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
                 eventsViewModel.locationName = rootView.locationEdittext.text.toString()
+                preference.putString(tokenKey, eventsViewModel.locationName)
                 eventsViewModel.loadLocationEvents()
                 return@OnEditorActionListener true
             }
