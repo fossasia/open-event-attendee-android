@@ -10,10 +10,14 @@
     <string name="see_more">See more</string>
     <string name="about_organizer">About Organizer</string>
     <string name="location">Location</string>
+    <string name="whats_good">What\'s good in</string>
+    <string name="where">where?</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
+    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="anywhere">Anywhere</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>

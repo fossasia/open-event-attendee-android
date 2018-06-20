@@ -8,10 +8,9 @@ import kotlinx.android.synthetic.main.item_card_events.view.*
 import org.fossasia.openevent.general.R
 
 
-
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: RecyclerViewClickListener?) {
+    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteListener: FavoriteFabListener?) {
         itemView.eventName.text = event.name
         itemView.locationName.text = event.locationName
 
@@ -19,7 +18,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.date.text = startsAt.dayOfMonth.toString()
         itemView.month.text = startsAt.month.name.slice(0 until 3)
-
+        setFabBackground(event.favorite)
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
@@ -27,17 +26,29 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(itemView.eventImage)
         }
 
-        itemView.setOnClickListener{
+        itemView.setOnClickListener {
             clickListener?.onClick(event.id)
         }
 
-        itemView.shareFab.setOnClickListener{
+        itemView.shareFab.setOnClickListener {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
 
             sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
             sendIntent.type = "text/plain"
             itemView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
+        }
+
+        itemView.favoriteFab.setOnClickListener {
+            favoriteListener?.onClick(event.id, event.favorite)
+        }
+    }
+
+    fun setFabBackground(isFavourite: Boolean) {
+        if (isFavourite) {
+            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24px)
+        } else {
+            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24px)
         }
     }
 }
