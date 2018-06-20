@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
+import kotlinx.android.synthetic.main.content_no_internet.view.*
 
 
 class EventsFragment : Fragment() {
