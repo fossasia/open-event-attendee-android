@@ -10,6 +10,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_about_event.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventUtils
 import org.koin.android.architecture.ext.viewModel
 import java.lang.StringBuilder
 
@@ -54,12 +55,13 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         eventExtra = event
         aboutEventContent.text = event.description
         val dateString = StringBuilder()
-
-        aboutEventDetails.text = dateString.append(aboutEventViewModel.getAboutEventFormattedDate(event.startsAt))
+        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
+        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        aboutEventDetails.text = dateString.append(EventUtils.getFormattedDate(startsAt))
                                            .append(" - ")
-                                           .append(aboutEventViewModel.getAboutEventFormattedDate(event.endsAt))
+                                           .append(EventUtils.getFormattedDate(endsAt))
                                            .append(" • ")
-                                           .append(aboutEventViewModel.getAboutEventFormattedTime(event.startsAt))
+                                           .append(EventUtils.getFormattedTime(startsAt))
 
         eventName.text = event.name
     }
