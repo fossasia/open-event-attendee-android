@@ -39,7 +39,7 @@ class SignUpFragment : Fragment() {
         }
 
         signUpActivityViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBarSignUp, it) }
         })
 
         signUpActivityViewModel.error.observe(this, Observer {

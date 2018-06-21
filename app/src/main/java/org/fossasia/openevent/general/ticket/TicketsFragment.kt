@@ -47,7 +47,7 @@ class TicketsFragment : Fragment() {
         })
 
         ticketsViewModel.progressTickets.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBarTicket, it) }
         })
 
         ticketsViewModel.loadTickets(id)

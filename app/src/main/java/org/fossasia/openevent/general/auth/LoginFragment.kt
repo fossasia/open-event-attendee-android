@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         loginActivityViewModel.error.observe(this, Observer {

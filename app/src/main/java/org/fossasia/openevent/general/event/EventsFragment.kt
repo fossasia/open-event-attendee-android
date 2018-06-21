@@ -67,7 +67,7 @@ class EventsFragment : Fragment() {
         })
 
         eventsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->

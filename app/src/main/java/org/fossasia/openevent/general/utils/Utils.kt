@@ -6,6 +6,7 @@ import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.R
 
@@ -26,8 +27,8 @@ object Utils {
                 .launchUrl(context, Uri.parse(URL))
     }
 
-    fun showProgressBar(rootView: View, show: Boolean) {
-        rootView.progressBar.isIndeterminate = show
-        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
+        progressBar.isIndeterminate = show
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

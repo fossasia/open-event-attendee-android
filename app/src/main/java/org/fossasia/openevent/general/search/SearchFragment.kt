@@ -60,7 +60,7 @@ class SearchFragment : Fragment() {
         })
 
         searchViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         return rootView

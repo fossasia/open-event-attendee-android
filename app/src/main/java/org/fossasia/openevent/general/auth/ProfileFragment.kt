@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
             redirectToLogin()
 
         profileFragmentViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         profileFragmentViewModel.error.observe(this, Observer {

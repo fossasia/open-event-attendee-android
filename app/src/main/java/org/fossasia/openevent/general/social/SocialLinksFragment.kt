@@ -56,7 +56,7 @@ class SocialLinksFragment : Fragment() {
         })
 
         socialLinksViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView, it) }
+            it?.let { Utils.showProgressBar(rootView.progressBarSocial, it) }
         })
 
         socialLinksViewModel.loadSocialLinks(id)
