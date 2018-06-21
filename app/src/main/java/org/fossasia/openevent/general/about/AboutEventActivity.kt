@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_about_event.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import java.lang.StringBuilder
 
@@ -39,7 +40,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         id = intent.getLongExtra(EVENT_ID, -1)
 
         aboutEventViewModel.progressAboutEvent.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(progressBarAbout, it) }
         })
 
         aboutEventViewModel.loadEvent(id)
@@ -64,11 +65,6 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                                            .append(EventUtils.getFormattedTime(startsAt))
 
         eventName.text = event.name
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        progressBarAbout.isIndeterminate = show
-        progressBarAbout.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {

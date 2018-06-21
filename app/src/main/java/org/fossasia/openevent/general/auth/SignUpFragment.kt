@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.fragment_signup.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 
 class SignUpFragment : Fragment() {
@@ -38,7 +39,10 @@ class SignUpFragment : Fragment() {
         }
 
         signUpActivityViewModel.progress.observe(this, Observer {
-            it?.let { showProgress(it) }
+            it?.let {
+                Utils.showProgressBar(rootView.progressBarSignUp, it)
+                signUpButton.isEnabled = !it
+            }
         })
 
         signUpActivityViewModel.error.observe(this, Observer {
@@ -56,11 +60,6 @@ class SignUpFragment : Fragment() {
         })
 
         return rootView
-    }
-
-    private fun showProgress(enabled: Boolean) {
-        signUpButton.isEnabled = !enabled
-        progressBarSignUp.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
     private fun redirectToMain() {
