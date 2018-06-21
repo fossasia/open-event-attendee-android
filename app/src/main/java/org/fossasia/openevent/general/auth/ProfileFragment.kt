@@ -2,14 +2,10 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -21,6 +17,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.settings.SettingsFragment
+import org.fossasia.openevent.general.utils.Utils
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
@@ -47,7 +44,7 @@ class ProfileFragment : Fragment() {
             redirectToLogin()
 
         profileFragmentViewModel.progress.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         profileFragmentViewModel.error.observe(this, Observer {
@@ -81,7 +78,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.ticketIssues -> {
                 context?.let {
-                    openSupportPage(it)
+                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
                 }
                 return true
             }
@@ -119,16 +116,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun openSupportPage(context: Context) {
-        CustomTabsIntent.Builder()
-                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_white_cct_24dp))
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
-                .build()
-                .launchUrl(context, Uri.parse(resources.getString(R.string.ticket_issues_url)))
-    }
-
     private fun showInMarket(packageName: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -142,11 +129,6 @@ class ProfileFragment : Fragment() {
         rootView.progressBar.isIndeterminate = true
         profileFragmentViewModel.fetchProfile()
 
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        rootView.progressBar.isIndeterminate = show
-        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }

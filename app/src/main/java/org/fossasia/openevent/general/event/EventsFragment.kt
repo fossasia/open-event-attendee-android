@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
 import kotlinx.android.synthetic.main.content_no_internet.view.*
+import org.fossasia.openevent.general.utils.Utils
 
 
 class EventsFragment : Fragment() {
@@ -66,7 +67,7 @@ class EventsFragment : Fragment() {
         })
 
         eventsViewModel.progress.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
@@ -99,11 +100,6 @@ class EventsFragment : Fragment() {
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
         return connectivityManager?.activeNetworkInfo != null
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        rootView.progressBar.isIndeterminate = show
-        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }

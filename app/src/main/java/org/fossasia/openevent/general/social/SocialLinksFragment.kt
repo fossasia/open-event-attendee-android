@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_social_links.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -55,7 +56,7 @@ class SocialLinksFragment : Fragment() {
         })
 
         socialLinksViewModel.progress.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(rootView.progressBarSocial, it) }
         })
 
         socialLinksViewModel.loadSocialLinks(id)
@@ -63,8 +64,4 @@ class SocialLinksFragment : Fragment() {
         return rootView
     }
 
-    private fun showProgressBar(show: Boolean) {
-        rootView.progressBarSocial.isIndeterminate = show
-        rootView.progressBarSocial.visibility = if (show) View.VISIBLE else View.GONE
-    }
 }

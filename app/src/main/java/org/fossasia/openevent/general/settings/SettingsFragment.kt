@@ -2,13 +2,9 @@ package org.fossasia.openevent.general.settings
 
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
@@ -18,6 +14,7 @@ import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
@@ -50,19 +47,19 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_rating)) {
-            //Open Orga app in play store
+            //Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
-            //Send feedback to email
+            //Links to suggestion form
             context?.let {
-                openSuggestForm(it, FORM_LINK)
+                Utils.openUrl(it, FORM_LINK)
             }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_profile)) {
-            //Show account
+            //Logout Dialog shown
             showDialog()
             return true
         }
@@ -75,21 +72,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         } catch (error: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketWebLink(packageName))))
         }
-    }
-
-    private fun openSuggestForm(context: Context, url: String) {
-        var finalUrl = url
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            finalUrl = "http://$url"
-        }
-
-        CustomTabsIntent.Builder()
-                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back_white_cct_24dp))
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
-                .build()
-                .launchUrl(context, Uri.parse(finalUrl))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

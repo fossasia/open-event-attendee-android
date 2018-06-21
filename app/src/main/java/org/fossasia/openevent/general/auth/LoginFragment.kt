@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 
 class LoginFragment : Fragment() {
@@ -32,7 +33,10 @@ class LoginFragment : Fragment() {
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
-            it?.let { showProgress(it) }
+            it?.let {
+                Utils.showProgressBar(rootView.progressBar, it)
+                loginButton.isEnabled = !it
+            }
         })
 
         loginActivityViewModel.error.observe(this, Observer {
@@ -53,8 +57,4 @@ class LoginFragment : Fragment() {
         activity?.finish()
     }
 
-    private fun showProgress(enabled: Boolean) {
-        loginButton.isEnabled = !enabled
-        progressBar.visibility = if (enabled) View.VISIBLE else View.GONE
-    }
 }
