@@ -12,7 +12,7 @@ import org.fossasia.openevent.general.R
 
 object Utils {
 
-    fun setUpCustomTab(context: Context, url: String) {
+    fun openUrl(context: Context, url: String) {
         var URL = url
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             URL = "http://$url"

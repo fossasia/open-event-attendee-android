@@ -74,7 +74,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.ticketIssues -> {
                 context?.let {
-                    Utils.setUpCustomTab(it, resources.getString(R.string.ticket_issues_url))
+                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
                 }
                 return true
             }

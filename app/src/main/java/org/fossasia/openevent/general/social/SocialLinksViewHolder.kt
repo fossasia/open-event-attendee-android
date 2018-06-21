@@ -23,7 +23,7 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
         }
 
         itemView.setOnClickListener{
-            Utils.setUpCustomTab(context, socialLink.link)
+            Utils.openUrl(context, socialLink.link)
         }
     }
 
