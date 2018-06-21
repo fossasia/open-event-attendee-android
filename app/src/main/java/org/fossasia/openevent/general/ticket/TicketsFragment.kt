@@ -11,7 +11,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.showProgressBar
 import org.koin.android.architecture.ext.viewModel
 
 class TicketsFragment : Fragment() {
