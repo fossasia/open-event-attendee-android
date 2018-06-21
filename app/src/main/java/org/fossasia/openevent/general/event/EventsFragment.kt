@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
 import kotlinx.android.synthetic.main.content_no_internet.view.*
 
+
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
