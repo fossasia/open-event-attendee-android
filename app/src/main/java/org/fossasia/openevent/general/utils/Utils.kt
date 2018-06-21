@@ -12,10 +12,10 @@ import org.fossasia.openevent.general.R
 
 object Utils {
 
-    fun openUrl(context: Context, url: String) {
-        var URL = url
+    fun openUrl(context: Context, link: String) {
+        var url = link
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            URL = "http://$url"
+            url = "http://$url"
         }
 
         CustomTabsIntent.Builder()
@@ -24,11 +24,10 @@ object Utils {
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
-                .launchUrl(context, Uri.parse(URL))
+                .launchUrl(context, Uri.parse(url))
     }
 
     fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
-        progressBar.isIndeterminate = show
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }
