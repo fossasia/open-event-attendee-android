@@ -19,14 +19,11 @@ import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
 import android.net.ConnectivityManager
 import kotlinx.android.synthetic.main.content_no_internet.view.*
-import org.fossasia.openevent.general.data.Preference
-
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
-    private val preference: Preference = Preference()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
