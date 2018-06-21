@@ -11,6 +11,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/homeScreenLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:textColor="@color/black"
@@ -49,5 +55,8 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
         </FrameLayout>
+    </LinearLayout>
+
+        <include layout="@layout/content_no_internet" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
