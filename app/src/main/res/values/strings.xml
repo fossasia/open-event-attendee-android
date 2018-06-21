@@ -10,10 +10,16 @@
     <string name="see_more">See more</string>
     <string name="about_organizer">About Organizer</string>
     <string name="location">Location</string>
+    <string name="whats_good">What\'s good in</string>
+    <string name="where">where?</string>
+    <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
+    <string name="retry">RETRY</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
+    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="anywhere">Anywhere</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
@@ -23,7 +29,9 @@
     <string name="sign_up">Sign Up</string>
     <string name="email">example@gmail.com</string>
     <string name="password">Password</string>
-    <string name="manage_events">Manage Events"</string>
+    <string name="manage_events">Manage Events</string>
+    <string name="ticket_issues">Ticket Issues</string>
+    <string name="ticket_issues_url" translatable="false">https://support.eventyay.com</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>

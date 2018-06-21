@@ -1,9 +1,11 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,12 @@ import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.net.ConnectivityManager
+import kotlinx.android.synthetic.main.content_no_internet.view.*
+
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -38,7 +46,13 @@ class EventsFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
+        val favouriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(eventId: Long, isFavourite: Boolean) {
+                eventsViewModel.setFavorite(eventId, !isFavourite)
+            }
+        }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
+        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
@@ -55,9 +69,36 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        eventsViewModel.loadEvents()
+        rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
+
+                eventsViewModel.locationName = rootView.locationEdittext.text.toString()
+                eventsViewModel.loadLocationEvents()
+                return@OnEditorActionListener true
+            }
+            false
+        })
+
+        showNoInternetScreen(isNetworkConnected())
+
+        rootView.retry.setOnClickListener {
+            showNoInternetScreen(isNetworkConnected())
+        }
 
         return rootView
+    }
+
+    private fun showNoInternetScreen(show: Boolean) {
+        rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
+        return connectivityManager?.activeNetworkInfo != null
     }
 
     private fun showProgressBar(show: Boolean) {

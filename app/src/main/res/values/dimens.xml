@@ -53,7 +53,7 @@
     <dimen name="event_details_headers">20sp</dimen>
     <dimen name="event_details_content">12sp</dimen>
     <dimen name="event_name">25sp</dimen>
-    <dimen name="event_details_divider">0.8dp</dimen>
+    <dimen name="event_details_divider">1.2dp</dimen>
     <dimen name="divider_margin_bottom">20dp</dimen>
     <dimen name="divider_margin_top">12dp</dimen>
     <dimen name="collapsing_toolbar_height">220dp</dimen>

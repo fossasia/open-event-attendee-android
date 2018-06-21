@@ -17,9 +17,13 @@ class SearchViewModel(private val eventService: EventService) : ViewModel() {
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
     var searchEvent: String? = null
+    var location: String? = null
 
     fun loadEvents() {
-        val query = "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
+        val query: String = if (location == null)
+            "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
+        else
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
