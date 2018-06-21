@@ -15,7 +15,7 @@ object Utils {
     fun openUrl(context: Context, link: String) {
         var url = link
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://$url"
+            url = "https://$url"
         }
 
         CustomTabsIntent.Builder()
