@@ -14,6 +14,7 @@ class EventsViewModel(private val eventService: EventService) : ViewModel() {
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
+    val tokenKey = "LOCATION"
 
     var locationName: String? = null
 

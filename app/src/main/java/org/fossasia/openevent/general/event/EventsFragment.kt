@@ -27,7 +27,6 @@ class EventsFragment : Fragment() {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference: Preference = Preference()
-    private  val tokenKey = "LOCATION"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -72,7 +71,7 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        eventsViewModel.locationName = preference.getString(tokenKey)
+        eventsViewModel.locationName = preference.getString(eventsViewModel.tokenKey)
 
         if (eventsViewModel.locationName != null) {
             rootView.locationEdittext.hint = eventsViewModel.locationName
@@ -85,7 +84,7 @@ class EventsFragment : Fragment() {
                 imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
                 eventsViewModel.locationName = rootView.locationEdittext.text.toString()
-                preference.putString(tokenKey, eventsViewModel.locationName)
+                preference.putString(eventsViewModel.tokenKey, eventsViewModel.locationName)
                 eventsViewModel.loadLocationEvents()
                 return@OnEditorActionListener true
             }
