@@ -2,14 +2,10 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -21,7 +17,6 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.showProgressBar
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
