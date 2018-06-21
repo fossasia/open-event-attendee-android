@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
 import android.view.*
@@ -33,7 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        val activity = activity as? MainActivity
+        val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Settings"
         setHasOptionsMenu(true)
@@ -49,7 +50,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_rating)) {
             //Open Orga app in play store
-            startOrgaAppPlayStore(activity?.packageName.nullToEmpty())
+            startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
@@ -67,7 +68,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         return false
     }
 
-    private fun startOrgaAppPlayStore(packageName: String) {
+    private fun startAppPlayStore(packageName: String) {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketAppLink(packageName))))
         } catch (error: ActivityNotFoundException) {
@@ -101,7 +102,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onDestroyView() {
-        val activity = activity as? MainActivity
+        val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(false)
