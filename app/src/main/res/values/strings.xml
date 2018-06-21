@@ -80,7 +80,6 @@
     <string name="cancel">Cancel</string>
 
     <!--suggestion details-->
-    <string name="spread_sheet_link">https://docs.google.com/spreadsheets/d/1SzR75MBEVrTY1sDM3KAMm9wltiulDAp0QT5hv9eJkKM/edit#gid=1676755229</string>
-    <string name="suggestion_form_link">https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform</string>
+    <string name="suggestion_form_link"></string>
 
 </resources>

@@ -24,6 +24,7 @@ import org.koin.android.architecture.ext.viewModel
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
     val EMAIL: String = "EMAIL"
+    val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
     private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -56,7 +57,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             //Send feedback to email
             context?.let {
-                openSuggestForm(it, resources.getString(R.string.suggestion_form_link))
+                openSuggestForm(it, FORM_LINK)
             }
             return true
         }
@@ -113,10 +114,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         val builder = AlertDialog.Builder(activity)
         builder.setMessage(resources.getString(R.string.message))
                 .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    if(settingsViewModel.isLoggedIn()){
-                       settingsViewModel.logout()
-                       startActivity(Intent(context, MainActivity::class.java))
-                       activity?.finish()
+                    if (settingsViewModel.isLoggedIn()) {
+                        settingsViewModel.logout()
+                        startActivity(Intent(context, MainActivity::class.java))
+                        activity?.finish()
                     }
                 }
                 .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
