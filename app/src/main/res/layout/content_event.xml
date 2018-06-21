@@ -236,22 +236,15 @@
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:background="@color/grey" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/buttonTickets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
-                android:text="@string/tickets_available"
-                android:textColor="@color/black"
-                android:textSize="@dimen/event_details_headers" />
-
-            <FrameLayout
-                android:id="@+id/frameContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </FrameLayout>
+                android:layout_margin="@dimen/layout_margin_large"
+                android:padding="@dimen/padding_medium"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="@string/tickets"/>
 
             <FrameLayout
                 android:id="@+id/frameContainerSocial"
