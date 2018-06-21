@@ -71,8 +71,6 @@ class EventsFragment : Fragment() {
             it?.let { showProgressBar(it) }
         })
 
-        eventsViewModel.locationName = preference.getString(eventsViewModel.tokenKey)
-
         if (eventsViewModel.locationName != null) {
             rootView.locationEdittext.hint = eventsViewModel.locationName
             eventsViewModel.loadLocationEvents()
@@ -84,7 +82,6 @@ class EventsFragment : Fragment() {
                 imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
                 eventsViewModel.locationName = rootView.locationEdittext.text.toString()
-                preference.putString(eventsViewModel.tokenKey, eventsViewModel.locationName)
                 eventsViewModel.loadLocationEvents()
                 return@OnEditorActionListener true
             }
