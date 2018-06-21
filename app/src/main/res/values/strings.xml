@@ -79,7 +79,4 @@
     <string name="message">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
 
-    <!--suggestion details-->
-    <string name="suggestion_form_link"></string>
-
 </resources>
