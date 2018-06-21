@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.view.View
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.R
 
 object Utils {
@@ -22,5 +24,10 @@ object Utils {
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
                 .launchUrl(context, Uri.parse(URL))
+    }
+
+    fun showProgressBar(rootView: View, show: Boolean) {
+        rootView.progressBar.isIndeterminate = show
+        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

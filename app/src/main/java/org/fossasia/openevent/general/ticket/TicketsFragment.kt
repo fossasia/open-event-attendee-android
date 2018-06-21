@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.showProgressBar
 import org.koin.android.architecture.ext.viewModel
 
 class TicketsFragment : Fragment() {
@@ -46,7 +48,7 @@ class TicketsFragment : Fragment() {
         })
 
         ticketsViewModel.progressTickets.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(rootView, it) }
         })
 
         ticketsViewModel.loadTickets(id)
@@ -61,8 +63,4 @@ class TicketsFragment : Fragment() {
         return rootView
     }
 
-    private fun showProgressBar(show: Boolean) {
-        rootView.progressBarTicket.isIndeterminate = show
-        rootView.progressBarTicket.visibility = if (show) View.VISIBLE else View.GONE
-    }
 }

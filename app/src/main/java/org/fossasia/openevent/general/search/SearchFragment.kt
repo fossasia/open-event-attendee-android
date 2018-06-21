@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsRecyclerAdapter
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -60,7 +61,7 @@ class SearchFragment : Fragment() {
         })
 
         searchViewModel.progress.observe(this, Observer {
-            it?.let { showProgressBar(it) }
+            it?.let { Utils.showProgressBar(rootView, it) }
         })
 
         return rootView
@@ -98,11 +99,6 @@ class SearchFragment : Fragment() {
             }
         })
         super.onPrepareOptionsMenu(menu)
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        rootView.progressBar.isIndeterminate = show
-        rootView.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }
