@@ -6,13 +6,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
 class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-     val tokenKey = "LOCATION"
+    private val tokenKey = "LOCATION"
 
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
