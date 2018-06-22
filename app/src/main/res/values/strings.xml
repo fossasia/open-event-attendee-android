@@ -65,14 +65,14 @@
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
-    <string name="about_settings">ABOUT</string>
+    <string name="about_settings">About</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
-    <string name="app_name_capital">OPEN EVENT ANDROID</string>
+    <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
-    <string name="profile_settings">PROFILE</string>
+    <string name="profile_settings">Profile</string>
     <string name="logged_in_account">Account</string>
 
     <!--settings profile dialog-->
