@@ -53,6 +53,10 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(SocialLinkApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(EventTopicApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
@@ -60,6 +64,8 @@ val apiModule = applicationContext {
     factory { EventService(get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
+    factory { EventTopicService(get()) }
+
 }
 
 val viewModelModule = applicationContext {
@@ -106,7 +112,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
