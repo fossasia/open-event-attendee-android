@@ -37,7 +37,6 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     Timber.e(it, "Error fetching events")
                     error.value = "Error fetching events"
                 }))
-
     }
 
     fun loadEvents() {
