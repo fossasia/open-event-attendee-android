@@ -70,13 +70,17 @@ class EventsFragment : Fragment() {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
+        if (eventsViewModel.savedLocation != null) {
+            rootView.locationEdittext.hint = eventsViewModel.savedLocation
+            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+        }
+
         rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
 
-                eventsViewModel.locationName = rootView.locationEdittext.text.toString()
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.loadLocationEvents(rootView.locationEdittext.text.toString())
                 return@OnEditorActionListener true
             }
             false

@@ -5,19 +5,22 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.data.Preference
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService) : ViewModel() {
+class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
+    private val tokenKey = "LOCATION"
 
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
 
-    var locationName: String? = null
+    val savedLocation by lazy { preference.getString(tokenKey) }
 
-    fun loadLocationEvents() {
+    fun loadLocationEvents(locationName: String) {
+        preference.putString(tokenKey, locationName)
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
 
         compositeDisposable.add(eventService.getEventsByLocation(query)

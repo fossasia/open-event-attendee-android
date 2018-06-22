@@ -70,7 +70,7 @@ val apiModule = applicationContext {
 
 val viewModelModule = applicationContext {
     viewModel { LoginFragmentViewModel(get()) }
-    viewModel { EventsViewModel(get()) }
+    viewModel { EventsViewModel(get(), get()) }
     viewModel { ProfileFragmentViewModel(get()) }
     viewModel { SignUpFragmentViewModel(get()) }
     viewModel { EventDetailsViewModel(get()) }
