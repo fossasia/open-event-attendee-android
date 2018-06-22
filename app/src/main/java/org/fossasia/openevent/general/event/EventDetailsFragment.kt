@@ -71,8 +71,8 @@ class EventDetailsFragment : Fragment() {
         setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
         rootView.eventLocationTextView.text = event.locationName
 
-        rootView.startsOn.text = "${startsAt.dayOfMonth} ${startsAt.month} ${startsAt.year}"
-        rootView.endsOn.text = "${endsAt.dayOfMonth} ${endsAt.month} ${endsAt.year}"
+        rootView.startsOn.text = EventUtils.getFormattedDate(startsAt)
+        rootView.endsOn.text = EventUtils.getFormattedDate(endsAt)
 
         event.originalImageUrl?.let {
             Picasso.get()
