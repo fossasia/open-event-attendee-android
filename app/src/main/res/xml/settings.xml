@@ -13,7 +13,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/profile_settings" >
+        android:title="@string/Profile" >
 
         <Preference
             android:key="@string/key_profile"

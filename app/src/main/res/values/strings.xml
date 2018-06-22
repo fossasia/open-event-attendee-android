@@ -72,7 +72,6 @@
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
-    <string name="profile_settings">Profile</string>
     <string name="logged_in_account">Account</string>
 
     <!--settings profile dialog-->
