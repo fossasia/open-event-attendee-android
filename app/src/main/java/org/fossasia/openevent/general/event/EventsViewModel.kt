@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
 class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
@@ -17,9 +18,9 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
 
-    var locationName: String? = preference.getString(tokenKey)
+    val savedLocation by lazy { preference.getString(tokenKey) }
 
-    fun loadLocationEvents() {
+    fun loadLocationEvents(locationName: String) {
         preference.putString(tokenKey, locationName)
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
 
@@ -36,6 +37,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     Timber.e(it, "Error fetching events")
                     error.value = "Error fetching events"
                 }))
+
     }
 
     fun loadEvents() {
