@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">open-event-android</string>
-    <string name="Events">Events</string>
-    <string name="Profile">Profile</string>
+    <string name="events">Events</string>
+    <string name="profile">Profile</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
