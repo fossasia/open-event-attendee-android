@@ -17,6 +17,7 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.event.*
 
 
 class SearchFragment : Fragment() {
@@ -42,7 +43,7 @@ class SearchFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
-                bundle.putLong(fragment.EVENT_ID, eventID)
+                bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }

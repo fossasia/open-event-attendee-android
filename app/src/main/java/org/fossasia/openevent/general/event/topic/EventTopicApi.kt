@@ -1,12 +1,13 @@
-package org.fossasia.openevent.general.event
+package org.fossasia.openevent.general.event.topic
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.event.Event
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface EventTopicApi {
 
-    @GET("event-topics/{id}/events")
+    @GET("event-topics/{id}/events?include=event-topic")
     fun getEventsUnderTopicId(@Path("id") id: Long): Single<List<Event>>
 
     @GET("event-topics")

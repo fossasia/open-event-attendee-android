@@ -15,6 +15,7 @@
     <string name="where">where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
     <string name="retry">RETRY</string>
+    <string name="more_like_this">More like this</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
