@@ -2,6 +2,7 @@
     <string name="app_name">open-event-android</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
+    <string name="likes">Likes</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>

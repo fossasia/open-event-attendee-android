@@ -8,6 +8,7 @@ import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
+import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.search.SearchFragment
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
             R.id.navigationProfile -> {
                 supportActionBar?.title = "Profile"
                 fragment = ProfileFragment()
+                loadFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigationFavorite -> {
+                supportActionBar?.title = "Likes"
+                fragment = FavoriteFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }

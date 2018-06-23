@@ -12,8 +12,13 @@
         android:title="@string/search" />
 
     <item
+        android:id="@+id/navigationFavorite"
+        android:icon="@drawable/ic_baseline_favorite_border_24px"
+        android:title="@string/likes" />
+
+    <item
         android:id="@+id/navigationProfile"
         android:icon="@drawable/ic_baseline_account_circle_24px"
         android:title="@string/profile" />
-
+    
 </menu>
