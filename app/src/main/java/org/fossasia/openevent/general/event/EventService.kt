@@ -31,6 +31,10 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
                 }
     }
 
+    fun getFavoriteEvents(): Flowable<List<Event>> {
+        return eventDao.getFavoriteEvents()
+    }
+
     fun getEventsByLocation(locationName: String): Single<List<Event>> {
         return eventApi.searchEvents("name", locationName).map {
             eventDao.insertEvents(it)

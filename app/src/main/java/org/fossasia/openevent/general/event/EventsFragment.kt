@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,17 +10,16 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.view.inputmethod.InputMethodManager
-import android.net.ConnectivityManager
-import kotlinx.android.synthetic.main.content_no_internet.view.*
-import org.fossasia.openevent.general.utils.Utils
 
 
 class EventsFragment : Fragment() {
@@ -47,6 +47,7 @@ class EventsFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
+
         val favouriteFabClickListener = object : FavoriteFabListener {
             override fun onClick(eventId: Long, isFavourite: Boolean) {
                 eventsViewModel.setFavorite(eventId, !isFavourite)
