@@ -233,6 +233,4 @@ class EventDetailsFragment : Fragment() {
             startActivity(mapIntent)
         }
     }
-
-
 }
