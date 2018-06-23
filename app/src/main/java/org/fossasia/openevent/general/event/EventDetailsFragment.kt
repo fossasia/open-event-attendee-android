@@ -65,8 +65,11 @@ class EventDetailsFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 if (scrollY > rootView.eventName.height + rootView.logo.height) {
+                    /*Toolbar title set to name of Event if scrolled more than
+                    combined height of eventImage and eventName views*/
                     activity?.supportActionBar?.title = eventShare.name
                 } else {
+                    //Toolbar title set to an empty string
                     activity?.supportActionBar?.title = " "
                 }
             }
