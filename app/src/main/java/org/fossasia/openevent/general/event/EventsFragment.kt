@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -103,6 +104,12 @@ class EventsFragment : Fragment() {
             showNoInternetScreen(isNetworkConnected)
         }
 
+        rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
+        rootView.swiperefresh.setOnRefreshListener({
+            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            rootView.swiperefresh.isRefreshing = false
+        })
+
         return rootView
     }
 
@@ -117,4 +124,9 @@ class EventsFragment : Fragment() {
         return connectivityManager?.activeNetworkInfo != null
     }
 
+    override fun onStop() {
+        if (rootView.swiperefresh != null)
+            rootView.swiperefresh.setOnRefreshListener(null)
+        super.onStop()
+    }
 }
