@@ -10,6 +10,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
+import org.fossasia.openevent.general.attendees.Attendee
+import org.fossasia.openevent.general.attendees.AttendeeApi
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
@@ -19,10 +21,7 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
-import org.fossasia.openevent.general.ticket.Ticket
-import org.fossasia.openevent.general.ticket.TicketApi
-import org.fossasia.openevent.general.ticket.TicketService
-import org.fossasia.openevent.general.ticket.TicketsViewModel
+import org.fossasia.openevent.general.ticket.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
@@ -56,6 +55,10 @@ val apiModule = applicationContext {
     bean {
         val retrofit: Retrofit = get()
         retrofit.create(EventTopicApi::class.java)
+    }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(AttendeeApi::class.java)
     }
 
     factory { AuthHolder(get()) }
@@ -112,7 +115,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
@@ -147,5 +150,10 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.socialLinksDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.attendeesDao()
     }
 }
