@@ -25,4 +25,7 @@ interface EventDao {
 
     @Query("UPDATE Event SET favorite = :favorite WHERE id = :eventId")
     fun setFavorite(eventId: Long, favorite: Boolean)
+
+    @Query("SELECT * from Event WHERE favorite = 1")
+    fun getFavoriteEvents(): Flowable<List<Event>>
 }
