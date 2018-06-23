@@ -19,6 +19,7 @@ import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+import android.os.Build
 
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
@@ -41,6 +42,7 @@ class EventDetailsFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.supportActionBar?.title = ""
         setHasOptionsMenu(true)
 
         eventViewModel.event.observe(this, Observer {
@@ -58,6 +60,17 @@ class EventDetailsFragment : Fragment() {
         })
 
         eventViewModel.loadEvent(eventId)
+
+        //Set toolbar title to event name
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                if (scrollY > rootView.eventName.height + rootView.logo.height) {
+                    activity?.supportActionBar?.title = eventShare.name
+                } else {
+                    activity?.supportActionBar?.title = " "
+                }
+            }
+        }
 
         return rootView
     }
@@ -121,6 +134,7 @@ class EventDetailsFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity?.supportActionBar?.title = resources.getString(R.string.events)
         setHasOptionsMenu(false)
         super.onDestroyView()
     }
@@ -219,4 +233,6 @@ class EventDetailsFragment : Fragment() {
             startActivity(mapIntent)
         }
     }
+
+
 }
