@@ -14,7 +14,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         if (!ticket.minOrder.isNullOrEmpty() && !ticket.maxOrder.isNullOrEmpty()) {
             val spinnerList = ArrayList<String>()
-            for (i in ticket.minOrder!!.toInt()..ticket.maxOrder!!.toInt()) {
+            for (i in (ticket.minOrder?.toInt() ?: 0)..(ticket.maxOrder?.toInt() ?: 0)) {
                 spinnerList.add(Integer.toString(i))
             }
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
