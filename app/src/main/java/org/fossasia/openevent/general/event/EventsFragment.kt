@@ -2,21 +2,19 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SearchLocationActivity
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
@@ -72,20 +70,16 @@ class EventsFragment : Fragment() {
         })
 
         if (eventsViewModel.savedLocation != null) {
-            rootView.locationEdittext.hint = eventsViewModel.savedLocation
+            rootView.locationTextView.text = eventsViewModel.savedLocation
             eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+        } else {
+            rootView.locationTextView.text = "where?"
         }
 
-        rootView.locationEdittext.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(rootView.locationEdittext.text)) {
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(rootView.locationEdittext.windowToken, 0)
-
-                eventsViewModel.loadLocationEvents(rootView.locationEdittext.text.toString())
-                return@OnEditorActionListener true
-            }
-            false
-        })
+        rootView.locationTextView.setOnClickListener {
+            val intent = Intent(activity, SearchLocationActivity::class.java)
+            startActivity(intent)
+        }
 
         showNoInternetScreen(isNetworkConnected())
 

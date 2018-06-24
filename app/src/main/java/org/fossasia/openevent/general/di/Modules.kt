@@ -15,6 +15,7 @@ import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
+import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
 import org.fossasia.openevent.general.social.SocialLink
@@ -80,6 +81,7 @@ val viewModelModule = applicationContext {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get()) }
+    viewModel { SearchLocationViewModel(get()) }
     viewModel { TicketsViewModel(get(),get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
