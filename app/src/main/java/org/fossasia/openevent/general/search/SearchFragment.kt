@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsRecyclerAdapter
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -63,6 +64,10 @@ class SearchFragment : Fragment() {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
+        if (searchViewModel.savedLocation != null) {
+            rootView.location_editText.hint = searchViewModel.savedLocation
+        }
+
         return rootView
     }
 
@@ -85,10 +90,11 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchViewModel.searchEvent = query
-                if (!TextUtils.isEmpty(rootView.location_editText.text))
-                    searchViewModel.location = rootView.location_editText.text.toString()
                 rootView.search_linear_layout.visibility = View.GONE
-                searchViewModel.loadEvents()
+                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.location_editText.text.toString()))
+                    searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty())
+                else
+                    searchViewModel.loadEvents(rootView.location_editText.text.toString().nullToEmpty())
                 loadEventsAgain = true
                 return false
             }
