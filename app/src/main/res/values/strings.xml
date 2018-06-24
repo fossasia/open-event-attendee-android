@@ -54,9 +54,14 @@
     <string name="add_to_calendar">Add to Calendar</string>
 
     <!--ticket details-->
+    <string name="tickets">Tickets</string>
     <string name="sales_dates">Sales Dates</string>
     <string name="order_range">Order Range</string>
     <string name="tickets_available">Tickets Available</string>
+    <string name="register">Register</string>
+    <string name="ticket_name">Ticket Name</string>
+    <string name="price">Price</string>
+    <string name="qty">Qty</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

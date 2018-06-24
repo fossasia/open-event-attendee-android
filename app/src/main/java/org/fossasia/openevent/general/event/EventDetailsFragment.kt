@@ -50,7 +50,11 @@ class EventDetailsFragment : Fragment() {
                 loadEvent(it)
                 eventShare = it
             }
-            loadTicketFragment()
+
+            rootView.buttonTickets.setOnClickListener {
+                    loadTicketFragment()
+            }
+
             loadSocialLinksFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
@@ -214,8 +218,8 @@ class EventDetailsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", eventId)
         ticketFragment.arguments = bundle
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.add(R.id.frameContainer, ticketFragment).commit()
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, ticketFragment)?.addToBackStack(null)?.commit()
+
     }
 
     private fun loadSocialLinksFragment(){
