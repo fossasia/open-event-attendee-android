@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import java.lang.StringBuilder
@@ -24,6 +27,8 @@ class TicketsFragment : Fragment() {
     private val EVENT_ID: String = "EVENT_ID"
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var ticketId: Int = -1
+    private var ticketQuantity: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,13 @@ class TicketsFragment : Fragment() {
         activity?.supportActionBar?.title = "Ticket Details"
         setHasOptionsMenu(true)
 
+        val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onSelected(id: Int, quantity: Int) {
+                ticketQuantity = quantity
+                ticketId = id
+            }
+        }
+        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
 
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
