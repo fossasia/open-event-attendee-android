@@ -59,4 +59,10 @@
     <dimen name="collapsing_toolbar_height">220dp</dimen>
     <dimen name="details_header_margin_top">40dp</dimen>
 
+    <!--fragment event details-->
+    <dimen name="event_details_divider_margin">35dp</dimen>
+    <dimen name="card_tickets_radius">20dp</dimen>
+    <dimen name="card_tickets_text_height">40dp</dimen>
+    <dimen name="card_tickets_elevation">1dp</dimen>
+
 </resources>

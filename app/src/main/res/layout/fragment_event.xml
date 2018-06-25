@@ -4,7 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/content_event" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonTickets"
+            android:layout_gravity="bottom"
+            app:cardElevation="@dimen/card_tickets_elevation"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="@dimen/card_tickets_radius"
+            android:layout_margin="@dimen/layout_margin_large">
 
+            <TextView
+                android:layout_gravity="bottom"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_tickets_text_height"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_large"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:text="@string/tickets"/>
+        </android.support.v7.widget.CardView>
+
+        <include layout="@layout/content_event"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/event_details_divider_margin"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/event_details_divider_margin"
+            android:layout_gravity="bottom"
+            android:background="@color/grey"
+            android:layout_height="@dimen/event_details_divider"/>
+
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

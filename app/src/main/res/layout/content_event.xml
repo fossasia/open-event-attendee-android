@@ -227,25 +227,6 @@
                 android:src="@drawable/placeholder"
                 android:layout_marginBottom="@dimen/layout_margin_medium" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/event_details_divider"
-                android:layout_marginBottom="@dimen/divider_margin_bottom"
-                android:layout_marginTop="@dimen/layout_margin_medium"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
-                android:background="@color/grey" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/buttonTickets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/layout_margin_large"
-                android:padding="@dimen/padding_medium"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:text="@string/tickets"/>
-
             <FrameLayout
                 android:id="@+id/frameContainerSocial"
                 android:layout_width="match_parent"
