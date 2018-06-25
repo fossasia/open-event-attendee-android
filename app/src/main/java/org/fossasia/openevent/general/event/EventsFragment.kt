@@ -113,6 +113,12 @@ class EventsFragment : Fragment() {
         return rootView
     }
 
+    override fun onDestroy() {
+        if (rootView.swiperefresh != null)
+            rootView.swiperefresh.setOnRefreshListener(null)
+        super.onDestroy()
+    }
+
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE

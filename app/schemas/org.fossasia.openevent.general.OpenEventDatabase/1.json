@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f309ce36fffadb9683ce583cfef593b1",
+    "identityHash": "543110f8fb8e0dd53d4fb8514df2e7a1",
     "entities": [
       {
         "tableName": "Event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `identifier` TEXT NOT NULL, `startsAt` TEXT NOT NULL, `endsAt` TEXT NOT NULL, `timezone` TEXT NOT NULL, `privacy` TEXT NOT NULL, `paymentCountry` TEXT, `paypalEmail` TEXT, `thumbnailImageUrl` TEXT, `schedulePublishedOn` TEXT, `paymentCurrency` TEXT, `organizerDescription` TEXT, `originalImageUrl` TEXT, `onsiteDetails` TEXT, `organizerName` TEXT, `largeImageUrl` TEXT, `deletedAt` TEXT, `ticketUrl` TEXT, `locationName` TEXT, `codeOfConduct` TEXT, `state` TEXT, `searchableLocationName` TEXT, `description` TEXT, `pentabarfUrl` TEXT, `xcalUrl` TEXT, `logoUrl` TEXT, `externalEventUrl` TEXT, `iconImageUrl` TEXT, `icalUrl` TEXT, `createdAt` TEXT, `bankDetails` TEXT, `chequeDetails` TEXT, `isComplete` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `canPayByStripe` INTEGER NOT NULL, `canPayByCheque` INTEGER NOT NULL, `canPayByBank` INTEGER NOT NULL, `canPayByPaypal` INTEGER NOT NULL, `canPayOnsite` INTEGER NOT NULL, `isSponsorsEnabled` INTEGER NOT NULL, `hasOrganizerInfo` INTEGER NOT NULL, `isSessionsSpeakersEnabled` INTEGER NOT NULL, `isTicketingEnabled` INTEGER NOT NULL, `isTaxEnabled` INTEGER NOT NULL, `isMapShown` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, `eventTopic` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `identifier` TEXT NOT NULL, `startsAt` TEXT NOT NULL, `endsAt` TEXT NOT NULL, `timezone` TEXT NOT NULL, `privacy` TEXT NOT NULL, `paymentCountry` TEXT, `paypalEmail` TEXT, `thumbnailImageUrl` TEXT, `schedulePublishedOn` TEXT, `paymentCurrency` TEXT, `organizerDescription` TEXT, `originalImageUrl` TEXT, `onsiteDetails` TEXT, `organizerName` TEXT, `largeImageUrl` TEXT, `deletedAt` TEXT, `ticketUrl` TEXT, `locationName` TEXT, `codeOfConduct` TEXT, `state` TEXT, `searchableLocationName` TEXT, `description` TEXT, `pentabarfUrl` TEXT, `xcalUrl` TEXT, `logoUrl` TEXT, `externalEventUrl` TEXT, `iconImageUrl` TEXT, `icalUrl` TEXT, `createdAt` TEXT, `bankDetails` TEXT, `chequeDetails` TEXT, `isComplete` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `canPayByStripe` INTEGER NOT NULL, `canPayByCheque` INTEGER NOT NULL, `canPayByBank` INTEGER NOT NULL, `canPayByPaypal` INTEGER NOT NULL, `canPayOnsite` INTEGER NOT NULL, `isSponsorsEnabled` INTEGER NOT NULL, `hasOrganizerInfo` INTEGER NOT NULL, `isSessionsSpeakersEnabled` INTEGER NOT NULL, `isTicketingEnabled` INTEGER NOT NULL, `isTaxEnabled` INTEGER NOT NULL, `isMapShown` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -295,12 +295,6 @@
             "columnName": "favorite",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "eventTopic",
-            "columnName": "eventTopic",
-            "affinity": "INTEGER",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -309,16 +303,7 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_Event_eventTopic",
-            "unique": false,
-            "columnNames": [
-              "eventTopic"
-            ],
-            "createSql": "CREATE  INDEX `index_Event_eventTopic` ON `${TABLE_NAME}` (`eventTopic`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": []
       },
       {
@@ -522,7 +507,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` REAL, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -569,7 +554,7 @@
           {
             "fieldPath": "price",
             "columnName": "price",
-            "affinity": "REAL",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -647,7 +632,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -656,14 +641,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "firstname",
-            "columnName": "firstname",
+            "fieldPath": "firstName",
+            "columnName": "firstName",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "lastname",
-            "columnName": "lastname",
+            "fieldPath": "lastName",
+            "columnName": "lastName",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -762,170 +747,11 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "EventTopic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT, `slug` TEXT, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "slug",
-            "columnName": "slug",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "event",
-            "columnName": "event",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [
-          {
-            "name": "index_EventTopic_event",
-            "unique": false,
-            "columnNames": [
-              "event"
-            ],
-            "createSql": "CREATE  INDEX `index_EventTopic_event` ON `${TABLE_NAME}` (`event`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "Event",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "event"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
-      },
-      {
-        "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `identifier` TEXT, `orderNotes` TEXT, `event` INTEGER, `attendees` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "paymentMode",
-            "columnName": "paymentMode",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "country",
-            "columnName": "country",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "status",
-            "columnName": "status",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "amount",
-            "columnName": "amount",
-            "affinity": "REAL",
-            "notNull": false
-          },
-          {
-            "fieldPath": "identifier",
-            "columnName": "identifier",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "orderNotes",
-            "columnName": "orderNotes",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "event",
-            "columnName": "event",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "attendees",
-            "columnName": "attendees",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [
-          {
-            "name": "index_Order_event",
-            "unique": false,
-            "columnNames": [
-              "event"
-            ],
-            "createSql": "CREATE  INDEX `index_Order_event` ON `${TABLE_NAME}` (`event`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "Event",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "event"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
-            "table": "Attendee",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "attendees"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f309ce36fffadb9683ce583cfef593b1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"543110f8fb8e0dd53d4fb8514df2e7a1\")"
     ]
   }
 }
