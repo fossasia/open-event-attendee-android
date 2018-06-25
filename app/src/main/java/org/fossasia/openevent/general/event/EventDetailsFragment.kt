@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 import android.os.Build
+import android.support.v4.content.ContextCompat
 
 class EventDetailsFragment : Fragment() {
     val EVENT_ID = "EVENT_ID"
@@ -28,6 +29,7 @@ class EventDetailsFragment : Fragment() {
     private var eventId: Long = -1
     private lateinit var eventShare: Event
     private val LINE_COUNT: Int = 3
+    private var menuActionBar: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,9 @@ class EventDetailsFragment : Fragment() {
                     loadTicketFragment()
             }
 
+            if (eventShare.favorite) {
+                setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
+            }
             loadSocialLinksFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
@@ -161,6 +166,15 @@ class EventDetailsFragment : Fragment() {
                 reportEvent(eventShare)
                 return true
             }
+            R.id.favoriteEvent -> {
+                eventViewModel.setFavorite(eventId, !(eventShare.favorite))
+                if (eventShare.favorite) {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white_24px)
+                } else {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
+                }
+                return true
+            }
             R.id.eventShare -> {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -210,6 +224,7 @@ class EventDetailsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         val inflaterMenu = activity?.menuInflater
         inflaterMenu?.inflate(R.menu.event_details, menu)
+        menuActionBar = menu
     }
   
     private fun loadTicketFragment(){
@@ -219,7 +234,6 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         ticketFragment.arguments = bundle
         activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, ticketFragment)?.addToBackStack(null)?.commit()
-
     }
 
     private fun loadSocialLinksFragment(){
@@ -239,5 +253,9 @@ class EventDetailsFragment : Fragment() {
         if (mapIntent.resolveActivity(activity?.packageManager) != null) {
             startActivity(mapIntent)
         }
+    }
+
+    private fun setFavoriteIcon(id: Int){
+        menuActionBar?.findItem(R.id.favoriteEvent)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
     }
 }
