@@ -24,7 +24,7 @@ data class Ticket(
         val description: String?,
         val type: String?,
         val name: String,
-        val maxOrder: String?,
+        val maxOrder: Int = 0,
         val isFeeAbsorbed: Boolean? = false,
         val isDescriptionVisible: Boolean? = false,
         val price: String?,
@@ -34,7 +34,7 @@ data class Ticket(
         val isHidden: Boolean?,
         val salesStartsAt: String?,
         val salesEndsAt: String?,
-        val minOrder: String?,
+        val minOrder: Int = 0,
         @ColumnInfo(index = true)
         @Relationship("event")
         var event: EventId? = null
