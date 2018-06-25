@@ -12,9 +12,9 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?) {
         itemView.ticketName.text = ticket.name
 
-        if (!ticket.minOrder.isNullOrEmpty() && !ticket.maxOrder.isNullOrEmpty()) {
+        if (ticket.minOrder != null && ticket.maxOrder != null) {
             val spinnerList = ArrayList<String>()
-            for (i in (ticket.minOrder?.toInt() ?: 0)..(ticket.maxOrder?.toInt() ?: 0)) {
+            for (i in ticket.minOrder..ticket.maxOrder) {
                 spinnerList.add(Integer.toString(i))
             }
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
