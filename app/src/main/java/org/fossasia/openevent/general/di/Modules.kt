@@ -12,6 +12,8 @@ import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeApi
+import org.fossasia.openevent.general.attendees.AttendeeService
+import org.fossasia.openevent.general.attendees.AttendeeViewModel
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
@@ -69,6 +71,7 @@ val apiModule = applicationContext {
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { EventTopicService(get()) }
+    factory { AttendeeService(get(), get()) }
 
 }
 
@@ -79,6 +82,7 @@ val viewModelModule = applicationContext {
     viewModel { SignUpFragmentViewModel(get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
+    viewModel { AttendeeViewModel(get()) }
     viewModel { TicketsViewModel(get(),get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
