@@ -113,10 +113,10 @@ class EventsFragment : Fragment() {
         return rootView
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         if (rootView.swiperefresh != null)
             rootView.swiperefresh.setOnRefreshListener(null)
-        super.onDestroy()
+        super.onStop()
     }
 
     private fun showNoInternetScreen(show: Boolean) {
