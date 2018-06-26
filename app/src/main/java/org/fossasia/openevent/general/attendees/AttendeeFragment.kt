@@ -49,7 +49,7 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
 
-        val attendee = AttendeeModel()
+        val attendee = AttendeeModel(1)
         rootView.register.setOnClickListener {
             attendee.email = email.text.toString()
             attendee.firstname = firstName.text.toString()
