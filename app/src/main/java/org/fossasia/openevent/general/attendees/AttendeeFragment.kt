@@ -52,8 +52,8 @@ class AttendeeFragment : Fragment() {
         val attendee = AttendeeModel()
         rootView.register.setOnClickListener {
             attendee.email = email.text.toString()
-            attendee.firstName = firstName.text.toString()
-            attendee.lastName = lastName.text.toString()
+            attendee.firstname = firstName.text.toString()
+            attendee.lastname = lastName.text.toString()
             attendee.ticket = ticketId
             attendee.event = eventId
             attendeeFragmentViewModel.createAttendee(attendee)

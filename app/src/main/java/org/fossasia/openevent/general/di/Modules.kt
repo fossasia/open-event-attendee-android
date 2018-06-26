@@ -10,10 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
-import org.fossasia.openevent.general.attendees.Attendee
-import org.fossasia.openevent.general.attendees.AttendeeApi
-import org.fossasia.openevent.general.attendees.AttendeeService
-import org.fossasia.openevent.general.attendees.AttendeeViewModel
+import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
@@ -121,7 +118,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java,AttendeeModel::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()

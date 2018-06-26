@@ -15,8 +15,8 @@ import org.fossasia.openevent.general.ticket.TicketId
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class AttendeeModel(
         @Id(IntegerIdHandler::class)
-        var firstName: String? = null,
-        var lastName: String? = null,
+        var firstname: String? = null,
+        var lastname: String? = null,
         var email: String? = null,
         var address: Float? = null,
         var city: Int? = null,

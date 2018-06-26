@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "543110f8fb8e0dd53d4fb8514df2e7a1",
+    "identityHash": "10e4ccfdab801b2d9320f6ea3c97912c",
     "entities": [
       {
         "tableName": "Event",
@@ -632,7 +632,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -641,14 +641,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "firstName",
-            "columnName": "firstName",
+            "fieldPath": "firstname",
+            "columnName": "firstname",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "lastName",
-            "columnName": "lastName",
+            "fieldPath": "lastname",
+            "columnName": "lastname",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -751,7 +751,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"543110f8fb8e0dd53d4fb8514df2e7a1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"10e4ccfdab801b2d9320f6ea3c97912c\")"
     ]
   }
 }
