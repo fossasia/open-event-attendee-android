@@ -7,6 +7,7 @@
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
+    <string name="contact_host">Contact the event host</string>
     <string name="about_event">About Event</string>
     <string name="see_more">See more</string>
     <string name="about_organizer">About Organizer</string>
