@@ -1,15 +1,13 @@
 package org.fossasia.openevent.general
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
-import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
-import org.fossasia.openevent.general.event.EventsFragment
 
 class AuthActivity : AppCompatActivity() {
 
@@ -47,5 +45,10 @@ class AuthActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainerAuth, fragment)
                 .commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }
