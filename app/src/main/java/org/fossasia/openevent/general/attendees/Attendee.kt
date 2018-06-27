@@ -21,9 +21,9 @@ import org.fossasia.openevent.general.ticket.TicketId
 data class Attendee(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
-        val id: Int,
-        val firstName: String? = null,
-        val lastName: String? = null,
+        val id: Long,
+        val firstname: String? = null,
+        val lastname: String? = null,
         val email: String? = null,
         val address: Float? = null,
         val city: Int? = null,
