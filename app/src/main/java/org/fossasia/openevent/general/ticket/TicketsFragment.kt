@@ -13,6 +13,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
@@ -83,6 +84,15 @@ class TicketsFragment : Fragment() {
             }
             ticketsRecyclerAdapter.notifyDataSetChanged()
         })
+
+        rootView.register.setOnClickListener {
+            val fragment = AttendeeFragment()
+            val bundle = Bundle()
+            bundle.putLong("EVENT_ID", id)
+            bundle.putLong("TICKET_ID", ticketId.toLong())
+            fragment.arguments = bundle
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+        }
 
         return rootView
     }

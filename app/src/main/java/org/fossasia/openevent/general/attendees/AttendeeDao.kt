@@ -10,6 +10,9 @@ interface AttendeeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAttendees(attendees: List<Attendee>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAttendee(attendee: Attendee)
+
     @Query("DELETE FROM Attendee")
     fun deleteAll()
 }
