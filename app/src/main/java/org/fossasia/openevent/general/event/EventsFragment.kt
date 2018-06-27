@@ -21,11 +21,19 @@ import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
+//String constants for event types
+const val EVENTS: String = "events"
+const val SIMILAR_EVENTS: String = "similarEvents"
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        eventsRecyclerAdapter.setEventLayout(EVENTS)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -42,7 +50,7 @@ class EventsFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
-                bundle.putLong(fragment.EVENT_ID, eventID)
+                bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }

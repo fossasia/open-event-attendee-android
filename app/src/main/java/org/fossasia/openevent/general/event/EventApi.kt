@@ -1,16 +1,15 @@
 package org.fossasia.openevent.general.event
 
-import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface EventApi {
 
-    @GET("events")
+    @GET("events?include=event-topic")
     fun getEvents(): Single<List<Event>>
 
-    @GET("events")
+    @GET("events?include=event-topic")
     fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Single<List<Event>>
 
     @GET

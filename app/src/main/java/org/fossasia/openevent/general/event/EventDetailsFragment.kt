@@ -20,14 +20,18 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 import android.os.Build
+import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
 
+const val EVENT_ID = "EVENT_ID"
+const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
+
 class EventDetailsFragment : Fragment() {
-    val EVENT_ID = "EVENT_ID"
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private lateinit var rootView: View
     private var eventId: Long = -1
+    private var eventTopicId: Long? = null
     private lateinit var eventShare: Event
     private val LINE_COUNT: Int = 3
     private var menuActionBar: Menu? = null
@@ -62,6 +66,7 @@ class EventDetailsFragment : Fragment() {
                 setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
             }
             loadSocialLinksFragment()
+            loadSimilarEventsFragment()
             Timber.d("Fetched events of id %d", eventId)
         })
 
@@ -99,6 +104,11 @@ class EventDetailsFragment : Fragment() {
 
         rootView.startsOn.text = EventUtils.getFormattedDate(startsAt)
         rootView.endsOn.text = EventUtils.getFormattedDate(endsAt)
+
+        //Set event topic id
+        if (event.eventTopic != null) {
+            eventTopicId = event.eventTopic?.id
+        }
 
         event.originalImageUrl?.let {
             Picasso.get()
@@ -245,6 +255,16 @@ class EventDetailsFragment : Fragment() {
         socialLinksFragemnt.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
+    }
+
+    private fun loadSimilarEventsFragment(){
+        //Initialise SimilarEvents Fragment
+        val similarEventsFragment = SimilarEventsFragment()
+        val bundle = Bundle()
+        bundle.putLong(EVENT_ID, eventId)
+        eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
+        similarEventsFragment.arguments = bundle
+        childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
   
     private fun startMap(event: Event) {
