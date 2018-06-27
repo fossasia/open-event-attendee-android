@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.attendees
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 
@@ -18,6 +20,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketId
+import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 
 
@@ -49,8 +52,13 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
 
+        attendeeFragmentViewModel.message.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
         rootView.register.setOnClickListener {
-            val attendee = Attendee(1,firstName.text.toString(),lastName.text.toString(),email.text.toString(),ticket = ticketId,event = eventId)
+            val attendee = Attendee(attendeeFragmentViewModel.id
+                    ,firstName.text.toString(),lastName.text.toString(),email.text.toString(),ticket = ticketId,event = eventId)
 
             attendeeFragmentViewModel.createAttendee(attendee)
         }
