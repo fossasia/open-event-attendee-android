@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.ticket.Ticket
 import timber.log.Timber
 
 class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService) : ViewModel() {
+
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
