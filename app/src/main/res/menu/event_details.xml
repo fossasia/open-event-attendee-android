@@ -14,4 +14,10 @@
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/add_to_calendar"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/favoriteEvent"
+        android:icon="@drawable/ic_baseline_favorite_border_white_24px"
+        android:title="@string/favorite_event"
+        app:showAsAction="always"/>
 </menu>

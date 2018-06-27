@@ -16,6 +16,7 @@
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
     <string name="retry">RETRY</string>
     <string name="more_like_this">More like this</string>
+    <string name="favorite_event">Favorite Event</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
@@ -29,7 +30,7 @@
     <string name="settings">Settings</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
-    <string name="email">example@gmail.com</string>
+    <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
     <string name="ticket_issues">Ticket Issues</string>
@@ -63,6 +64,12 @@
     <string name="ticket_name">Ticket Name</string>
     <string name="price">Price</string>
     <string name="qty">Qty</string>
+
+    <!--ticket details-->
+    <string name="your_info">Your Info</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

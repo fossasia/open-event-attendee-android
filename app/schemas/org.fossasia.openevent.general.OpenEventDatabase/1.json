@@ -522,7 +522,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` TEXT, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` TEXT, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -551,8 +551,8 @@
           {
             "fieldPath": "maxOrder",
             "columnName": "maxOrder",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "isFeeAbsorbed",
@@ -605,8 +605,8 @@
           {
             "fieldPath": "minOrder",
             "columnName": "minOrder",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "event",
@@ -647,7 +647,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -656,14 +656,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "firstName",
-            "columnName": "firstName",
+            "fieldPath": "firstname",
+            "columnName": "firstname",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "lastName",
-            "columnName": "lastName",
+            "fieldPath": "lastname",
+            "columnName": "lastname",
             "affinity": "TEXT",
             "notNull": false
           },

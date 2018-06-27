@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsRecyclerAdapter
+import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -48,6 +49,12 @@ class SearchFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
+        val favouriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(eventId: Long, isFavourite: Boolean) {
+                searchViewModel.setFavorite(eventId, !isFavourite)
+            }
+        }
+        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         searchViewModel.events.observe(this, Observer {
             it?.let {
