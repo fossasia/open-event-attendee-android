@@ -29,15 +29,15 @@ class AttendeeFragment : Fragment() {
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     lateinit var event: Event
     lateinit var ticket: List<Ticket>
-    private var ticketId: TicketId = TicketId(-1)
-    private var eventId: EventId = EventId(-1)
+    lateinit var ticketId: TicketId
+    lateinit var eventId: EventId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            eventId.id = bundle.getLong(EVENT_ID, -1)
-            ticketId.id = bundle.getLong(TICKET_ID, -1)
+            eventId = EventId(bundle.getLong(EVENT_ID, -1))
+            ticketId=TicketId( bundle.getLong(TICKET_ID, -1))
         }
     }
 
@@ -49,13 +49,9 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
 
-        val attendee = AttendeeModel(1)
         rootView.register.setOnClickListener {
-            attendee.email = email.text.toString()
-            attendee.firstname = firstName.text.toString()
-            attendee.lastname = lastName.text.toString()
-            attendee.ticket = ticketId
-            attendee.event = eventId
+            val attendee = Attendee(1,firstName.text.toString(),lastName.text.toString(),email.text.toString(),ticket = ticketId,event = eventId)
+
             attendeeFragmentViewModel.createAttendee(attendee)
         }
 

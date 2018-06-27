@@ -7,6 +7,6 @@ import retrofit2.http.POST
 interface AttendeeApi {
 
     @POST("attendees?include=event,ticket&fields[event]=id&fields[ticket]=id")
-    fun postAttendee(@Body attendee: AttendeeModel): Single<Attendee>
+    fun postAttendee(@Body attendee: Attendee): Single<Attendee>
 
 }

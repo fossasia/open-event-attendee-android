@@ -17,8 +17,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService) : ViewMode
     val event = MutableLiveData<Event>()
     val tickets = MutableLiveData<List<Ticket>>()
 
-    fun createAttendee(attendee: AttendeeModel) {
-
+    fun createAttendee(attendee: Attendee) {
         compositeDisposable.add(attendeeService.postAttendee(attendee)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

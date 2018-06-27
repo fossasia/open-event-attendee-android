@@ -8,5 +8,5 @@ import com.github.jasminb.jsonapi.annotations.Type
 @Type("event")
 data class EventId(
         @Id(LongIdHandler::class)
-        var id: Long
+        val id: Long
 )

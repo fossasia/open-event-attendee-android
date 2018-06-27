@@ -11,7 +11,7 @@ interface AttendeeDao {
     fun insertAttendees(attendees: List<Attendee>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAttendee(attendees: Attendee)
+    fun insertAttendee(attendee: Attendee)
 
     @Query("DELETE FROM Attendee")
     fun deleteAll()
