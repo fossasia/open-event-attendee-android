@@ -71,7 +71,7 @@ class AttendeeFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val attendee = Attendee(id = attendeeFragmentViewModel.id,
+            val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                     firstname = firstName.text.toString(),
                     lastname = lastName.text.toString(),
                     email = email.text.toString(),

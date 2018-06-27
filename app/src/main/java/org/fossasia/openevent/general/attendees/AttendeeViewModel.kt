@@ -18,7 +18,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val progress = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
-    val id: Long = authHolder.getId()
+
+    fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -57,5 +58,10 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     Timber.e(it, "Error fetching event %d", id)
                     message.value = "Error fetching event"
                 }))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
