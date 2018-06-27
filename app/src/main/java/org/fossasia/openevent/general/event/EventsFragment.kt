@@ -44,7 +44,7 @@ class EventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(fragment.EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }
         }
 

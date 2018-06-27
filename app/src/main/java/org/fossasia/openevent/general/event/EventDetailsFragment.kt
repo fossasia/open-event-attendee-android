@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 import android.os.Build
+import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
 
 class EventDetailsFragment : Fragment() {
