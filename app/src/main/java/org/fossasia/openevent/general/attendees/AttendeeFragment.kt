@@ -102,7 +102,7 @@ class AttendeeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        val activity = activity as? MainActivity
+        val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onDestroyView()
     }
