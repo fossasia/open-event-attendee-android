@@ -31,7 +31,7 @@
     <!--event fab specifics-->
     <dimen name="fab_width">40dp</dimen>
     <dimen name="fab_height">40dp</dimen>
-    <dimen name="fab_margin_top">125dp</dimen>
+    <dimen name="fab_margin_top">120dp</dimen>
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="fab_elevation">3dp</dimen>
 

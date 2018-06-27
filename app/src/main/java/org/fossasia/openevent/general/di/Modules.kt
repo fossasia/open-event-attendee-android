@@ -18,6 +18,9 @@ import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
+import org.fossasia.openevent.general.event.topic.EventTopic
+import org.fossasia.openevent.general.event.topic.EventTopicApi
+import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -65,10 +68,9 @@ val apiModule = applicationContext {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get()) }
+    factory { EventService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
-    factory { EventTopicService(get()) }
     factory { AttendeeService(get(), get()) }
 
 }
@@ -87,6 +89,7 @@ val viewModelModule = applicationContext {
     viewModel { SocialLinksViewModel(get()) }
     viewModel { FavouriteEventsViewModel(get()) }
     viewModel { SettingsFragmentViewModel(get()) }
+    viewModel { SimilarEventsViewModel(get()) }
 }
 
 val networkModule = applicationContext {
@@ -161,4 +164,5 @@ val databaseModule = applicationContext {
         val database: OpenEventDatabase = get()
         database.attendeesDao()
     }
+
 }

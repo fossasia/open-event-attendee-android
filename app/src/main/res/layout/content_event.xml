@@ -233,6 +233,31 @@
                 android:layout_height="wrap_content">
             </FrameLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:background="@color/grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:text="@string/more_like_this"
+                android:textColor="@color/black"
+                android:textSize="@dimen/event_details_headers" />
+
+            <FrameLayout
+                android:id="@+id/frameContainerSimilarEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>

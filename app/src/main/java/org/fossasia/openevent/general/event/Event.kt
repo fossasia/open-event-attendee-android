@@ -1,12 +1,15 @@
 package org.fossasia.openevent.general.event
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
+import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.event.topic.EventTopic
 
 @Type("event")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -62,5 +65,8 @@ data class Event(
         val isTicketingEnabled: Boolean = false,
         val isTaxEnabled: Boolean = false,
         val isMapShown: Boolean = false,
-        val favorite: Boolean = false
+        val favorite: Boolean = false,
+        @ColumnInfo(index = true)
+        @Relationship("event-topic")
+        var eventTopic: EventTopic? = null
 )

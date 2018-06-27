@@ -28,4 +28,8 @@ interface EventDao {
 
     @Query("SELECT * from Event WHERE favorite = 1")
     fun getFavoriteEvents(): Flowable<List<Event>>
+
+    @Query("SELECT * from Event WHERE eventTopic = :topicId")
+    fun getAllSimilarEvents(topicId: Long): Flowable<List<Event>>
+
 }
