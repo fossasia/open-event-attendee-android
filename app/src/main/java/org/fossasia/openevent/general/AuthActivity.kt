@@ -49,6 +49,6 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }
