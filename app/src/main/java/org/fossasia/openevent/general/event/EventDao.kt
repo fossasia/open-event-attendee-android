@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface EventDao {
@@ -25,6 +26,9 @@ interface EventDao {
 
     @Query("UPDATE Event SET favorite = :favorite WHERE id = :eventId")
     fun setFavorite(eventId: Long, favorite: Boolean)
+
+    @Query("SELECT id from Event WHERE favorite = 1")
+    fun getFavouriteEventIds(): Single<List<Long>>
 
     @Query("SELECT * from Event WHERE favorite = 1")
     fun getFavoriteEvents(): Flowable<List<Event>>
