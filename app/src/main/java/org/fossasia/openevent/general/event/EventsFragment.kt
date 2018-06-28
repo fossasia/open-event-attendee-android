@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
@@ -50,7 +51,7 @@ class EventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.coordinateLayout, fragment)?.addToBackStack(null)?.commit()
             }
         }
 

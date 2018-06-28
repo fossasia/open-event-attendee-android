@@ -245,7 +245,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:text="@string/more_like_this"
