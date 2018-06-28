@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.event
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 
 class EventService(private val eventApi: EventApi, private val eventDao: EventDao, private val eventTopicApi: EventTopicApi) {
@@ -26,11 +25,12 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
-        return Single.zip(
-                eventApi.searchEvents("name", eventName),
-                eventDao.getFavouriteEventIds(),
-                BiFunction<List<Event>, List<Long>, List<Event>> { t1, t2 -> updateFavorites(t1, t2) }
-        )
+        return eventApi.searchEvents("name", eventName).flatMap { apiList ->
+            var eventIds = apiList.map { it.id }.toList()
+            eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
+                updateFavorites(apiList, favIds)
+            }
+        }
     }
 
     fun getFavoriteEvents(): Flowable<List<Event>> {
@@ -38,17 +38,19 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getEventsByLocation(locationName: String): Single<List<Event>> {
-        return Single.zip(
-                eventApi.searchEvents("name", locationName),
-                eventDao.getFavouriteEventIds(),
-                BiFunction<List<Event>, List<Long>, List<Event>> { t1, t2 -> updateFavorites(t1, t2) }
-        )
+        return eventApi.searchEvents("name", locationName).flatMap { apiList ->
+            val eventIds = apiList.map { it.id }.toList()
+            eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
+                updateFavorites(apiList, favIds)
+            }
+        }
     }
 
-    fun updateFavorites(apiEvents: List<Event>, favEventIds: List<Long>): List<Event> {
+    fun updateFavorites(apiEvents: List<Event>, favEventIds: List<Long>): Single<List<Event>> {
         apiEvents.map { if (favEventIds.contains(it.id)) it.favorite = true }
         eventDao.insertEvents(apiEvents)
-        return apiEvents
+        val eventIds = apiEvents.map { it.id }.toList()
+        return eventDao.getEventWithIds(eventIds)
     }
 
     fun getEvent(id: Long): Flowable<Event> {
