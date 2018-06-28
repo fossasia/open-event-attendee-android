@@ -10,6 +10,7 @@ import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicIdConverter
+import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
 import org.fossasia.openevent.general.ticket.Ticket
@@ -29,5 +30,7 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun socialLinksDao(): SocialLinksDao
 
     abstract fun attendeesDao(): AttendeeDao
+
+    abstract fun eventTopicsDao(): EventTopicsDao
 
 }
