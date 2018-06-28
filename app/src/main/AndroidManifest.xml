@@ -30,6 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity android:name=".search.SearchLocationActivity"/>
     </application>
 
 </manifest>
