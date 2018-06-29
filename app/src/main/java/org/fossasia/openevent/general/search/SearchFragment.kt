@@ -10,19 +10,19 @@ import android.view.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.event.EventsRecyclerAdapter
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-import org.fossasia.openevent.general.event.*
 
 
 class SearchFragment : Fragment() {
-    private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
+    private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private var loadEventsAgain=false
