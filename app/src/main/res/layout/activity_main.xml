@@ -1,8 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/coordinateLayout"
+    android:background="@android:color/white"
+    android:id="@+id/rootLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -14,7 +14,7 @@
             android:id="@+id/frameContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/white"
+            android:background="@android:color/white"
             android:layout_weight="1"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
-            app:itemBackground="@color/white"
+            app:itemBackground="@android:color/white"
             android:foreground="?attr/selectableItemBackground"
             app:itemTextColor="@color/colorPrimaryDark"
             app:menu="@menu/navigation" />

@@ -17,8 +17,8 @@
             android:id="@+id/aboutEventCollapsingLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/collapsing_toolbar_height"
-            app:expandedTitleTextAppearance="@color/white"
-            app:statusBarScrim="@color/white"
+            app:expandedTitleTextAppearance="@android:color/white"
+            app:statusBarScrim="@android:color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ProgressBar
@@ -34,14 +34,14 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white" />
+                    android:background="@android:color/white" />
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/aboutEventToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@color/white"
+                app:titleTextColor="@android:color/white"
                 app:layout_collapseMode="pin" />
 
             <LinearLayout
@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:background="@color/white"
+        android:background="@android:color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -95,7 +95,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@android:color/white"
                 android:layout_marginEnd="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/padding_medium"
                 android:layout_marginRight="@dimen/padding_medium"
