@@ -7,4 +7,9 @@
     <color name="black">#000000</color>
     <color name="grey">#ece9e9</color>
     <color name="greyMore">#918e8e</color>
+
+    <color name="darkGrey">#333333</color>
+    <color name="lightGrey">#545454</color>
+    <color name="lighterGrey">#757575</color>
+
 </resources>

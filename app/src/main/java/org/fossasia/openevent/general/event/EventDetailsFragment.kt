@@ -23,6 +23,9 @@ import android.os.Build
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
+import kotlinx.android.synthetic.main.content_event.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
+import org.fossasia.openevent.general.CircleTransform
 
 const val EVENT_ID = "EVENT_ID"
 const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
@@ -96,20 +99,79 @@ class EventDetailsFragment : Fragment() {
     private fun loadEvent(event: Event) {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        rootView.eventName.text = event.name
-        rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
-        setTextField(rootView.eventDescription, event.description)
-        setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
-        rootView.eventLocationTextView.text = event.locationName
 
+        rootView.eventName.text = event.name
+
+        //Organizer Section
+        if (!event.organizerName.isNullOrEmpty()) {
+            rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
+            setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
+            rootView.organizerName.text = event.organizerName.nullToEmpty()
+            rootView.eventOrganiserName.visibility = View.VISIBLE
+            organizerContainer.visibility = View.VISIBLE
+
+            Picasso.get()
+                    .load(event.logoUrl)
+                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .transform(CircleTransform())
+                    .into(rootView.logoIcon)
+        }
+
+        //About event on-click
+        val aboutEventOnClickListener = View.OnClickListener {
+            val aboutIntent = Intent(context, AboutEventActivity::class.java)
+            aboutIntent.putExtra(EVENT_ID, eventId)
+            startActivity(aboutIntent)
+        }
+
+        //Event Description Section
+        if (!event.description.isNullOrEmpty()) {
+            setTextField(rootView.eventDescription, event.description)
+
+            if (rootView.eventDescription.lineCount > LINE_COUNT) {
+                rootView.seeMore.visibility = View.VISIBLE
+                //start about fragment
+                rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+                rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+            }
+        } else {
+            aboutEventContainer.visibility = View.GONE
+        }
+
+        //Map Section
+        if (!event.locationName.isNullOrEmpty()) {
+            locationContainer.visibility = View.VISIBLE
+            rootView.eventLocationTextView.text = event.locationName
+        }
+
+        //load location to map
+        val mapClickListener = View.OnClickListener { startMap(event) }
+        if (!event.locationName.isNullOrEmpty()) {
+            locationContainer.visibility = View.VISIBLE
+            rootView.locationUnderMap.text = event.locationName
+            rootView.eventLocationLinearLayout.visibility = View.VISIBLE
+            rootView.locationUnderMap.visibility = View.VISIBLE
+            rootView.imageMap.visibility = View.VISIBLE
+            rootView.imageMap.setOnClickListener(mapClickListener)
+            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
+
+            Picasso.get()
+                    .load(eventViewModel.loadMap(event))
+                    .placeholder(R.drawable.ic_map_black_24dp)
+                    .into(rootView.imageMap)
+        }
+
+        //Date and Time section
         rootView.startsOn.text = EventUtils.getFormattedDate(startsAt)
         rootView.endsOn.text = EventUtils.getFormattedDate(endsAt)
 
-        //Set event topic id
+        //Similar Events Section
         if (event.eventTopic != null) {
+            similarEventsContainer.visibility = View.VISIBLE
             eventTopicId = event.eventTopic?.id
         }
 
+        //Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
@@ -117,41 +179,10 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
-        //load location to map
-        rootView.locationUnderMap.text = event.locationName
-        val mapClickListener = View.OnClickListener { startMap(event) }
-        if (event.locationName != null) {
-            rootView.eventLocationLinearLayout.visibility = View.VISIBLE
-            rootView.locationUnderMap.visibility = View.VISIBLE
-            rootView.imageMap.visibility = View.VISIBLE
-            rootView.imageMap.setOnClickListener(mapClickListener)
-            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
-        }
-
-        //About event on-click
-        val aboutEventOnClickListener = View.OnClickListener {
-            val aboutIntent  = Intent(context, AboutEventActivity::class.java)
-            aboutIntent.putExtra(EVENT_ID, eventId)
-            startActivity(aboutIntent)
-        }
-
-        if (rootView.eventDescription.lineCount > LINE_COUNT) {
-            rootView.see_more.visibility = View.VISIBLE
-            //start about fragment
-            rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
-            rootView.see_more.setOnClickListener(aboutEventOnClickListener)
-        }
-
-        Picasso.get()
-                .load(eventViewModel.loadMap(event))
-                .placeholder(R.drawable.ic_map_black_24dp)
-                .into(rootView.imageMap)
-
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.startsOn.setOnClickListener(dateClickListener)
         rootView.endsOn.setOnClickListener(dateClickListener)
-
     }
 
     override fun onDestroyView() {

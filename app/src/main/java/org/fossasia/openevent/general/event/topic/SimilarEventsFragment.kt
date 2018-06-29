@@ -8,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.content_event.*
 import kotlinx.android.synthetic.main.fragment_similar_events.*
 import kotlinx.android.synthetic.main.fragment_similar_events.view.*
+import kotlinx.android.synthetic.main.fragment_social_links.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
@@ -63,6 +66,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.similarEvents.observe(this, Observer {
             it?.let {
                 similarEventsRecyclerAdapter.addAll(it)
+                handleVisibility(it)
                 similarEventsRecyclerAdapter.notifyDataSetChanged()
             }
             Timber.d("Fetched similar events of size %s", similarEventsRecyclerAdapter.itemCount)
@@ -80,5 +84,13 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.loadSimilarEvents(eventTopicId)
 
         return rootView
+    }
+
+    fun handleVisibility(similarEvents: List<Event>){
+        if (!similarEvents.isEmpty()) {
+            similarEventsDivider.visibility = View.VISIBLE
+            moreLikeThis.visibility = View.VISIBLE
+            similarEventsRecycler.visibility = View.VISIBLE
+        }
     }
 }
