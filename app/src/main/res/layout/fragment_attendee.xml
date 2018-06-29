@@ -83,7 +83,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:padding="@dimen/padding_medium"
         android:text="@string/register"
-        android:textColor="@color/white" />
+        android:textColor="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/progressBarAttendee"

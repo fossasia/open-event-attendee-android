@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:itemBackground="@color/white"
+        app:itemBackground="@android:color/white"
         android:foreground="?attr/selectableItemBackground"
         app:itemTextColor="@color/colorPrimaryDark"
         app:menu="@menu/navigation_auth" />
