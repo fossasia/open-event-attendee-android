@@ -244,7 +244,7 @@ class EventDetailsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", eventId)
         ticketFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, ticketFragment)?.addToBackStack(null)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, ticketFragment)?.addToBackStack(null)?.commit()
     }
 
     private fun loadSocialLinksFragment(){

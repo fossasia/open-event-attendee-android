@@ -11,5 +11,5 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="SocialLink"
         android:padding="@dimen/padding_large"
-        android:tint="@color/white" />
+        android:tint="@android:color/white" />
 </FrameLayout>

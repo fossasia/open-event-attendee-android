@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -101,6 +102,6 @@
             android:padding="@dimen/padding_medium"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/register"
-            android:textColor="@color/white" />
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
