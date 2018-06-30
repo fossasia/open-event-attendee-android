@@ -7,10 +7,10 @@
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
-    <string name="about_event">About</string>
+    <string name="about">About</string>
     <string name="see_more">See more</string>
     <string name="event_host_details">Event host details</string>
-    <string name="about_organizer">Organizer</string>
+    <string name="organizer">Organizer</string>
     <string name="location">Location</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">where?</string>

@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:textColor="@color/darkGrey"
+                        android:textColor="@color/dark_grey"
                         android:layout_marginBottom="@dimen/divider_margin_top"
                         android:textSize="@dimen/text_size_extra_large"
                         tools:text="Event Name" />
@@ -57,7 +57,7 @@
                         android:visibility="gone"
                         android:fontFamily="sans-serif-thin"
                         android:layout_marginBottom="@dimen/divider_margin_top"
-                        android:textColor="@color/darkGrey"
+                        android:textColor="@color/dark_grey"
                         tools:text="by Organiser Name" />
 
                     <LinearLayout
@@ -83,7 +83,7 @@
 
                             <TextView
                                 android:id="@+id/startsOn"
-                                android:textColor="@color/darkGrey"
+                                android:textColor="@color/dark_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 tools:text="Tuesday June 5" />
@@ -91,7 +91,7 @@
                             <TextView
                                 android:id="@+id/endsOn"
                                 android:layout_width="wrap_content"
-                                android:textColor="@color/darkGrey"
+                                android:textColor="@color/dark_grey"
                                 android:layout_height="wrap_content"
                                 tools:text="Wed June 5" />
 
@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_margin="@dimen/layout_margin_medium"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/darkGrey"
+                            android:textColor="@color/dark_grey"
                             tools:text="Location" />
                     </LinearLayout>
                 </LinearLayout>
@@ -145,9 +145,9 @@
                         android:layout_marginLeft="@dimen/layout_margin_large"
                         android:layout_marginRight="@dimen/layout_margin_large"
                         android:layout_marginBottom="@dimen/divider_margin_top"
-                        android:text="@string/about_event"
+                        android:text="@string/about"
                         android:textSize="@dimen/event_details_headers"
-                        android:textColor="@color/darkGrey" />
+                        android:textColor="@color/dark_grey" />
 
                     <TextView
                         android:id="@+id/eventDescription"
@@ -158,7 +158,7 @@
                         android:lines="4"
                         android:ellipsize="end"
                         android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textColor="@color/lightGrey"
+                        android:textColor="@color/light_grey"
                         tools:text="Description" />
 
                     <TextView
@@ -170,7 +170,7 @@
                         android:layout_marginBottom="@dimen/layout_margin_extra_large"
                         android:visibility="gone"
                         android:textStyle="bold"
-                        android:textColor="@color/darkGrey"
+                        android:textColor="@color/dark_grey"
                         android:text="@string/see_more" />
                 </LinearLayout>
 
@@ -197,7 +197,7 @@
                         android:layout_marginRight="@dimen/layout_margin_large"
                         android:text="@string/location"
                         android:textSize="@dimen/event_details_headers"
-                        android:textColor="@color/darkGrey" />
+                        android:textColor="@color/dark_grey" />
 
                     <TextView
                         android:id="@+id/locationUnderMap"
@@ -205,7 +205,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:visibility="gone"
-                        android:textColor="@color/darkGrey"
+                        android:textColor="@color/dark_grey"
                         android:layout_marginLeft="@dimen/layout_margin_large"
                         android:layout_marginBottom="@dimen/divider_margin_top"
                         android:layout_marginRight="@dimen/layout_margin_large"
@@ -241,9 +241,9 @@
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         android:layout_marginLeft="@dimen/layout_margin_large"
                         android:layout_marginRight="@dimen/layout_margin_large"
-                        android:text="@string/about_organizer"
+                        android:text="@string/organizer"
                         android:textSize="@dimen/event_details_headers"
-                        android:textColor="@color/darkGrey" />
+                        android:textColor="@color/dark_grey" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -275,7 +275,7 @@
                                 android:id="@+id/organizerName"
                                 android:textSize="@dimen/event_details_headers"
                                 android:layout_width="wrap_content"
-                                android:textColor="@color/lightGrey"
+                                android:textColor="@color/light_grey"
                                 android:layout_marginBottom="@dimen/layout_margin_medium"
                                 android:layout_height="wrap_content" />
 
@@ -286,7 +286,7 @@
                                 android:lines="3"
                                 android:layout_marginBottom="@dimen/layout_margin_small"
                                 android:ellipsize="end"
-                                android:textColor="@color/lightGrey"
+                                android:textColor="@color/light_grey"
                                 tools:text="Description" />
 
                             <FrameLayout

@@ -11,7 +11,7 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:layout_marginBottom="@dimen/layout_margin_large"
-        android:textColor="@color/darkGrey"
+        android:textColor="@color/dark_grey"
         android:text="@string/event_host_details" />
 
     <ProgressBar
