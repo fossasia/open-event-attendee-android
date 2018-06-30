@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.social
 
 import android.arch.lifecycle.Observer
+import android.icu.util.ValueIterator
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.content_event.*
+import kotlinx.android.synthetic.main.fragment_social_links.*
 import kotlinx.android.synthetic.main.fragment_social_links.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -46,6 +49,7 @@ class SocialLinksFragment : Fragment() {
         socialLinksViewModel.socialLinks.observe(this, Observer {
             it?.let {
                 socialLinksRecyclerAdapter.addAll(it)
+                handleVisibility(it)
             }
             socialLinksRecyclerAdapter.notifyDataSetChanged()
             Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
@@ -64,4 +68,10 @@ class SocialLinksFragment : Fragment() {
         return rootView
     }
 
+    fun handleVisibility(socialLinks: List<SocialLink>){
+        if (!socialLinks.isEmpty()) {
+            eventHostDetails.visibility = View.VISIBLE
+            socialLinksRecycler.visibility = View.VISIBLE
+        }
+    }
 }

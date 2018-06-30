@@ -8,8 +8,8 @@
         android:id="@+id/imgSocialLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/layout_margin_medium"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="SocialLink"
-        android:padding="@dimen/padding_large"
         android:tint="@android:color/white" />
 </FrameLayout>
