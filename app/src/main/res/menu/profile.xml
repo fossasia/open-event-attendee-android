@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/profile_menu">
         <item
-            android:id="@+id/orgaApp"
+            android:id="@+id/orga_app"
             android:title="@string/manage_events" />
         <item
             android:id="@+id/settings"
             android:title="@string/settings" />
         <item
-            android:id="@+id/ticketIssues"
+            android:id="@+id/ticket_issues"
             android:title="@string/ticket_issues" />
         <item
             android:id="@+id/logout"
@@ -18,7 +18,7 @@
 
     <group android:id="@+id/search_menu">
         <item
-            android:id="@+id/searchItem"
+            android:id="@+id/search_item"
             android:icon="@drawable/ic_search_grey_24dp"
             android:title="@string/search"
             app:actionViewClass="android.support.v7.widget.SearchView"

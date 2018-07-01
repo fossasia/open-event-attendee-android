@@ -199,16 +199,16 @@ class EventDetailsFragment : Fragment() {
                 activity?.onBackPressed()
                 true
             }
-            R.id.addToCalendar -> {
+            R.id.add_to_calendar -> {
                 //Add event to Calendar
                 startCalendar(eventShare)
                 return true
             }
-            R.id.reportEvent -> {
+            R.id.report_event -> {
                 reportEvent(eventShare)
                 return true
             }
-            R.id.favoriteEvent -> {
+            R.id.favorite_event -> {
                 eventViewModel.setFavorite(eventId, !(eventShare.favorite))
                 if (eventShare.favorite) {
                     setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white_24px)
@@ -217,7 +217,7 @@ class EventDetailsFragment : Fragment() {
                 }
                 return true
             }
-            R.id.eventShare -> {
+            R.id.event_share -> {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
@@ -309,6 +309,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int){
-        menuActionBar?.findItem(R.id.favoriteEvent)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
     }
 }

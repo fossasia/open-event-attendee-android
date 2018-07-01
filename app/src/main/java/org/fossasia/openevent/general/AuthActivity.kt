@@ -14,13 +14,13 @@ class AuthActivity : AppCompatActivity() {
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
-            R.id.navigationLogin -> {
+            R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigationSignUp -> {
+            R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
                 loadFragment(fragment)

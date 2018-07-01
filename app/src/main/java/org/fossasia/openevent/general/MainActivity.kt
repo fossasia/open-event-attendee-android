@@ -16,25 +16,25 @@ class MainActivity : AppCompatActivity() {
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
-            R.id.navigationEvents -> {
+            R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
                 fragment = EventsFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigationSearch -> {
+            R.id.navigation_search -> {
                 supportActionBar?.title = "Search"
                 fragment = SearchFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigationProfile -> {
+            R.id.navigation_profile -> {
                 supportActionBar?.title = "Profile"
                 fragment = ProfileFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigationFavorite -> {
+            R.id.navigation_favorite -> {
                 supportActionBar?.title = "Likes"
                 fragment = FavoriteFragment()
                 loadFragment(fragment)
