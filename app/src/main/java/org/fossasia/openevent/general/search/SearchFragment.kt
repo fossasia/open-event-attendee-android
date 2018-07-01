@@ -90,8 +90,8 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.searchMenu, true)
-        menu?.setGroupVisible(R.id.profileMenu, false)
+        menu?.setGroupVisible(R.id.search_menu, true)
+        menu?.setGroupVisible(R.id.profile_menu, false)
 
         val searchView:SearchView ?= menu?.findItem(R.id.searchItem)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
