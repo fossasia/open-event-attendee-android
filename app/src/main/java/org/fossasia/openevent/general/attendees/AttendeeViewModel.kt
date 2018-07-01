@@ -64,7 +64,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     }
 
     fun loadUser(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
         compositeDisposable.add(attendeeService.getAttendeeDetails(id)
