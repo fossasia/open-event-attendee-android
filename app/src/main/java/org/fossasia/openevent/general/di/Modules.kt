@@ -77,7 +77,7 @@ val apiModule = applicationContext {
     factory { EventService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
-    factory { AttendeeService(get(), get()) }
+    factory { AttendeeService(get(), get() ,get()) }
 
 }
 

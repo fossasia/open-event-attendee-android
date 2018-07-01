@@ -6,6 +6,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.auth.User
+import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
@@ -18,6 +20,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val progress = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
+    var attendee  = MutableLiveData<User>()
 
     fun getId() = authHolder.getId()
 
@@ -25,7 +28,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
 
     fun createAttendee(attendee: Attendee) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
-            message.value = "Please fill all the fields"
+            message.value = "Please fill in all the fields"
             return
         }
 
@@ -57,6 +60,20 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
                     message.value = "Error fetching event"
+                }))
+    }
+
+    fun loadUser(id: Long) {
+        if (id.equals(-1)) {
+            throw IllegalStateException("ID should never be -1")
+        }
+        compositeDisposable.add(attendeeService.getAttendeeDetails(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    attendee.value = it
+                }, {
+                    Timber.e(it, "Error fetching user %d", id)
                 }))
     }
 
