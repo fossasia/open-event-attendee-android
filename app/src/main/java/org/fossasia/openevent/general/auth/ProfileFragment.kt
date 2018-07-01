@@ -76,11 +76,11 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.orgaApp -> {
+            R.id.orga_app -> {
                 startOrgaApp("org.fossasia.eventyay")
                 return true
             }
-            R.id.ticketIssues -> {
+            R.id.ticket_issues -> {
                 context?.let {
                     Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
                 }
@@ -104,7 +104,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profileMenu, true)
+        menu?.setGroupVisible(R.id.profile_menu, true)
         super.onPrepareOptionsMenu(menu)
     }
 

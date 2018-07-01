@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/event_menu">
         <item
-            android:id="@+id/addToCalendar"
+            android:id="@+id/add_to_calendar"
             android:title="@string/add_to_calendar" />
         <item
-            android:id="@+id/reportEvent"
+            android:id="@+id/report_event"
             android:title="@string/report_event" />
     </group>
     <item
-        android:id="@+id/eventShare"
+        android:id="@+id/event_share"
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/add_to_calendar"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/favoriteEvent"
+        android:id="@+id/favorite_event"
         android:icon="@drawable/ic_baseline_favorite_border_white_24px"
         android:title="@string/favorite_event"
         app:showAsAction="always"/>

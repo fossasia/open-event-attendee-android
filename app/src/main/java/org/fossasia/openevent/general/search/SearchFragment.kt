@@ -81,7 +81,7 @@ class SearchFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.searchItem -> {
+            R.id.search_item -> {
                 return false
             }
 
@@ -90,10 +90,10 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.searchMenu, true)
-        menu?.setGroupVisible(R.id.profileMenu, false)
+        menu?.setGroupVisible(R.id.search_menu, true)
+        menu?.setGroupVisible(R.id.profile_menu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.searchItem)?.actionView as? SearchView
+        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
