@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/layout_margin_medium"
+    android:padding="@dimen/padding_medium"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.attendees.AttendeeFragment">
 
@@ -83,7 +84,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:padding="@dimen/padding_medium"
         android:text="@string/register"
-        android:textColor="@color/white" />
+        android:textColor="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/progressBarAttendee"

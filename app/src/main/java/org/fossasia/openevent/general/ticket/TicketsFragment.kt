@@ -91,7 +91,7 @@ class TicketsFragment : Fragment() {
             bundle.putLong("EVENT_ID", id)
             bundle.putLong("TICKET_ID", ticketId.toLong())
             fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
         }
 
         return rootView

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +11,14 @@ import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.nullToEmpty
+import org.koin.android.architecture.ext.viewModel
 
 class ProfileFragment : Fragment() {
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
@@ -34,14 +35,17 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java))
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (!profileFragmentViewModel.isLoggedIn())
+            redirectToLogin()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
-
-        if (!profileFragmentViewModel.isLoggedIn())
-            redirectToLogin()
 
         profileFragmentViewModel.progress.observe(this, Observer {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
@@ -72,11 +76,11 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.orgaApp -> {
+            R.id.orga_app -> {
                 startOrgaApp("org.fossasia.eventyay")
                 return true
             }
-            R.id.ticketIssues -> {
+            R.id.ticket_issues -> {
                 context?.let {
                     Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
                 }
@@ -100,7 +104,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profileMenu, true)
+        menu?.setGroupVisible(R.id.profile_menu, true)
         super.onPrepareOptionsMenu(menu)
     }
 

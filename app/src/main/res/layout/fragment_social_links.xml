@@ -3,6 +3,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/eventHostDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:textColor="@color/dark_grey"
+        android:text="@string/event_host_details" />
+
     <ProgressBar
         android:id="@+id/progressBarSocial"
         android:layout_width="wrap_content"
@@ -14,6 +25,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/socialLinksRecycler"
         android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/layout_margin_extra_large"
+        android:layout_marginBottom="@dimen/details_header_margin_top"
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
 </FrameLayout>

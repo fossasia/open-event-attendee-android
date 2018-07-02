@@ -21,6 +21,8 @@ import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderApi
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -63,6 +65,10 @@ val apiModule = applicationContext {
     bean {
         val retrofit: Retrofit = get()
         retrofit.create(AttendeeApi::class.java)
+    }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(OrderApi::class.java)
     }
 
     factory { AuthHolder(get()) }
@@ -123,7 +129,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
@@ -169,4 +175,10 @@ val databaseModule = applicationContext {
         val database: OpenEventDatabase = get()
         database.eventTopicsDao()
     }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.orderDao()
+    }
+
 }

@@ -65,7 +65,7 @@ data class Event(
         val isTicketingEnabled: Boolean = false,
         val isTaxEnabled: Boolean = false,
         val isMapShown: Boolean = false,
-        val favorite: Boolean = false,
+        var favorite: Boolean = false,
         @ColumnInfo(index = true)
         @Relationship("event-topic")
         var eventTopic: EventTopic? = null

@@ -1,28 +1,26 @@
 package org.fossasia.openevent.general
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
-import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
-import org.fossasia.openevent.general.event.EventsFragment
 
 class AuthActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
-            R.id.navigationLogin -> {
+            R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigationSignUp -> {
+            R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
                 loadFragment(fragment)
@@ -47,5 +45,10 @@ class AuthActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainerAuth, fragment)
                 .commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }

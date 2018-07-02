@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@android:color/white">
 
     <android.support.v7.widget.CardView
         android:id="@+id/allEventsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/card_corner_radius">
 
         <android.support.design.widget.FloatingActionButton
@@ -19,9 +19,9 @@
             android:layout_gravity="end"
             android:layout_marginRight="80dp"
             android:layout_marginTop="120dp"
-            android:background="@color/white"
+            android:background="@android:color/white"
             android:scaleType="center"
-            app:backgroundTint="@color/white"
+            app:backgroundTint="@android:color/white"
             app:srcCompat="@drawable/ic_share_grey_24dp" />
 
         <android.support.design.widget.FloatingActionButton
@@ -31,9 +31,9 @@
             android:layout_gravity="end"
             android:layout_marginRight="@dimen/fab_margin_right"
             android:layout_marginTop="120dp"
-            android:background="@color/white"
+            android:background="@android:color/white"
             android:scaleType="center"
-            app:backgroundTint="@color/white"
+            app:backgroundTint="@android:color/white"
             app:srcCompat="@drawable/ic_baseline_favorite_border_24px" />
 
         <LinearLayout
@@ -68,6 +68,8 @@
 
                     <TextView
                         android:id="@+id/eventName"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/layout_margin_small"
@@ -99,6 +101,8 @@
 
                     <TextView
                         android:id="@+id/locationName"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/layout_margin_large"

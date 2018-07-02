@@ -49,11 +49,12 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
-        return eventApi.searchEvents("name", eventName)
-                .map {
-                    eventDao.insertEvents(it)
-                    it
-                }
+        return eventApi.searchEvents("name", eventName).flatMap { apiList ->
+            var eventIds = apiList.map { it.id }.toList()
+            eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
+                updateFavorites(apiList, favIds)
+            }
+        }
     }
 
     fun getFavoriteEvents(): Flowable<List<Event>> {
@@ -61,11 +62,20 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getEventsByLocation(locationName: String): Single<List<Event>> {
-        return eventApi.searchEvents("name", locationName).map {
-            eventDao.insertEvents(it)
-            eventTopicsDao.insertEventTopics(getEventTopicList(it))
-            it
+        return eventApi.searchEvents("name", locationName).flatMap { apiList ->
+            val eventIds = apiList.map { it.id }.toList()
+            eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
+            eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
+                updateFavorites(apiList, favIds)
+            }
         }
+    }
+
+    fun updateFavorites(apiEvents: List<Event>, favEventIds: List<Long>): Single<List<Event>> {
+        apiEvents.map { if (favEventIds.contains(it.id)) it.favorite = true }
+        eventDao.insertEvents(apiEvents)
+        val eventIds = apiEvents.map { it.id }.toList()
+        return eventDao.getEventWithIds(eventIds)
     }
 
     fun getEvent(id: Long): Flowable<Event> {

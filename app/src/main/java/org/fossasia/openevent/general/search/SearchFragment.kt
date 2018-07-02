@@ -10,19 +10,19 @@ import android.view.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.event.EventsRecyclerAdapter
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-import org.fossasia.openevent.general.event.*
 
 
 class SearchFragment : Fragment() {
-    private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
+    private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private var loadEventsAgain=false
@@ -46,7 +46,7 @@ class SearchFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {
@@ -81,7 +81,7 @@ class SearchFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
-            R.id.searchItem -> {
+            R.id.search_item -> {
                 return false
             }
 
@@ -90,10 +90,10 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.searchMenu, true)
-        menu?.setGroupVisible(R.id.profileMenu, false)
+        menu?.setGroupVisible(R.id.search_menu, true)
+        menu?.setGroupVisible(R.id.profile_menu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.searchItem)?.actionView as? SearchView
+        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
