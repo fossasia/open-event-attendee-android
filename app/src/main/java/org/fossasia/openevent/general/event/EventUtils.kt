@@ -54,7 +54,27 @@ object EventUtils {
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {
-        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d")
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getFormattedDateShort(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d,")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getFormattedDateWithoutYear(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d")
         try {
             return dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
@@ -64,7 +84,17 @@ object EventUtils {
     }
 
     fun getFormattedTime(date: ZonedDateTime): String {
-        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a Z")
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+        try {
+            return timeFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedTimeZone(date: ZonedDateTime): String {
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("z")
         try {
             return timeFormat.format(date)
         } catch (e: IllegalArgumentException) {

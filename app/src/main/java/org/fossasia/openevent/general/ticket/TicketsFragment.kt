@@ -119,11 +119,26 @@ class TicketsFragment : Fragment() {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                .append(" - ")
-                .append(EventUtils.getFormattedDate(endsAt))
-                .append(" • ")
-                .append(EventUtils.getFormattedTime(startsAt))
+        if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt)) {
+            rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
+                    .append(" at ")
+                    .append(EventUtils.getFormattedTime(startsAt))
+                    .append(" - ")
+                    .append(EventUtils.getFormattedDate(endsAt))
+                    .append(" at ")
+                    .append(EventUtils.getFormattedTime(endsAt))
+                    .append(" ")
+                    .append(EventUtils.getFormattedTimeZone(endsAt))
+        } else {
+            rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
+                    .append(" from ")
+                    .append(EventUtils.getFormattedTime(startsAt))
+                    .append(" to ")
+                    .append(EventUtils.getFormattedTime(endsAt))
+                    .append(" (")
+                    .append(EventUtils.getFormattedTimeZone(endsAt))
+                    .append(")")
+        }
     }
 
 }

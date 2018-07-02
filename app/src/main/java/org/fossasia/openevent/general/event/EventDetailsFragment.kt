@@ -162,8 +162,13 @@ class EventDetailsFragment : Fragment() {
         }
 
         //Date and Time section
-        rootView.startsOn.text = EventUtils.getFormattedDate(startsAt)
-        rootView.endsOn.text = EventUtils.getFormattedDate(endsAt)
+        if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt)) {
+            rootView.eventDateDetailsFirst.text = "${EventUtils.getFormattedDateShort(startsAt)} ${EventUtils.getFormattedTime(startsAt)}"
+            rootView.eventDateDetailsSecond.text = "- ${EventUtils.getFormattedDateShort(endsAt)} ${EventUtils.getFormattedTime(endsAt)} ${EventUtils.getFormattedTimeZone(endsAt)}"
+        } else {
+            rootView.eventDateDetailsFirst.text = EventUtils.getFormattedDateWithoutYear(startsAt)
+            rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedTime(startsAt)} - ${EventUtils.getFormattedTime(endsAt)} ${EventUtils.getFormattedTimeZone(endsAt)}"
+        }
 
         //Similar Events Section
         if (event.eventTopic != null) {
@@ -181,8 +186,8 @@ class EventDetailsFragment : Fragment() {
 
         //Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
-        rootView.startsOn.setOnClickListener(dateClickListener)
-        rootView.endsOn.setOnClickListener(dateClickListener)
+        rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
+        rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
     }
 
     override fun onDestroyView() {
