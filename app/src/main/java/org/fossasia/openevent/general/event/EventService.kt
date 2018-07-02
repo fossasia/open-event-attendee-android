@@ -28,9 +28,8 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         }
     }
 
-    fun getEventTopicList(eventsList: List<Event>): List<EventTopic> {
+    private fun getEventTopicList(eventsList: List<Event>): List<EventTopic> {
         val eventTopicList = ArrayList<EventTopic>()
-
         Observable.just(eventsList)
                 .flatMap{ Observable.fromIterable(eventsList) }
                 .filter { it.eventTopic != null }
