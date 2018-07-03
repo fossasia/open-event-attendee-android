@@ -104,8 +104,10 @@ object EventUtils {
     }
 
     fun getFormattedEventDateTimeRange(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
         try {
-            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
+            if (startingDate != endingDate)
                 return "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
             else
                 return "${getFormattedDateWithoutYear(startsAt)}"
@@ -116,8 +118,10 @@ object EventUtils {
     }
 
     fun getFormattedEventDateTimeRangeSecond(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
         try {
-            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
+            if (startingDate != endingDate)
                 return "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
             else
                 return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
@@ -128,11 +132,13 @@ object EventUtils {
     }
 
     fun getFormattedDateTimeRangeDetailed(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
         try {
-            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
-                return "${getFormattedDate(startsAt)} at ${getFormattedTime(startsAt)} - ${getFormattedDate(endsAt)} at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+            if (startingDate != endingDate)
+                return "$startingDate at ${getFormattedTime(startsAt)} - $endingDate at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
             else
-                return "${getFormattedDate(startsAt)} from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+                return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""

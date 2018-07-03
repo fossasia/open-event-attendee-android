@@ -163,8 +163,7 @@ class EventDetailsFragment : Fragment() {
 
         //Date and Time section
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
-        rootView.eventDateDetailsSecond.text = EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)
-
+        rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)}"
         //Similar Events Section
         if (event.eventTopic != null) {
             similarEventsContainer.visibility = View.VISIBLE

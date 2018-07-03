@@ -118,7 +118,7 @@ class TicketsFragment : Fragment() {
         rootView.organizerName.text = "by ${event.organizerName.nullToEmpty()}"
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt,endsAt)
+        rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 
 }
