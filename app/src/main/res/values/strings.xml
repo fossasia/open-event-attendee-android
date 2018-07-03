@@ -87,7 +87,15 @@
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
+    <string name="key_legal">legal</string>
+    <string name="legal">Legal</string>
     <string name="logged_in_account">Account</string>
+    <string name="privacy">Privacy</string>
+    <string name="key_privacy">privacy</string>
+    <string name="cookie_policy">Cookie Policy</string>
+    <string name="key_cookie_policy">cookie_policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="key_terms_of_service">terms_of_service</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>

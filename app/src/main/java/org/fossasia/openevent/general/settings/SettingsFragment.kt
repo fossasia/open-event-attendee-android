@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
@@ -17,6 +18,8 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
+import android.view.ViewGroup
+import android.view.LayoutInflater
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
@@ -26,6 +29,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
         preferenceChange(evt)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        context?.let { ContextCompat.getColor(it, android.R.color.white) }?.let { view?.setBackgroundColor(it) }
+        return view
     }
 
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
@@ -63,6 +72,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             showDialog()
             return true
         }
+        if (preference?.key == resources.getString(R.string.key_legal)) {
+            //Initialise Legal Fragment
+            val legalFragment = LegalFragment()
+            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, legalFragment)?.addToBackStack(null)?.commit()
+        }
         return false
     }
 
@@ -82,6 +96,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        menu?.setGroupVisible(R.id.profile_menu, false)
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onDestroyView() {

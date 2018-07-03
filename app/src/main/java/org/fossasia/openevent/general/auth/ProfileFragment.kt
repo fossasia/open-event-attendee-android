@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

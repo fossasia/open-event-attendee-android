@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory>
+        <Preference
+            android:key="@string/key_privacy"
+            android:title="@string/privacy" />
+
+        <Preference
+            android:key="@string/key_terms_of_service"
+            android:title="@string/terms_of_service" />
+
+        <Preference
+            android:key="@string/key_cookie_policy"
+            android:title="@string/cookie_policy" />
+    </PreferenceCategory>
+</PreferenceScreen>

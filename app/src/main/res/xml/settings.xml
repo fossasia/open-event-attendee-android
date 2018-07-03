@@ -10,6 +10,10 @@
         <Preference
             android:key="@string/key_suggestion"
             android:title="@string/suggestion_settings" />
+
+        <Preference
+            android:key="@string/key_legal"
+            android:title="@string/legal" />
     </PreferenceCategory>
 
     <PreferenceCategory
