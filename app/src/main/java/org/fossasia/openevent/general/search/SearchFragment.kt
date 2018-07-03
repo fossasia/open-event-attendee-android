@@ -55,7 +55,6 @@ class SearchFragment : Fragment() {
                 eventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
-
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         searchViewModel.events.observe(this, Observer {
