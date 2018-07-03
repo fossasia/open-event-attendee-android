@@ -64,7 +64,7 @@ object EventUtils {
     }
 
     fun getFormattedDateShort(date: ZonedDateTime): String {
-        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d,")
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d")
         try {
             return dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
@@ -106,7 +106,7 @@ object EventUtils {
     fun getFormattedEventDateTimeRange(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         try {
             if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
-                return "${getFormattedDateShort(startsAt)} ${getFormattedTime(startsAt)}"
+                return "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
             else
                 return "${getFormattedDateWithoutYear(startsAt)}"
         } catch (e: IllegalArgumentException) {
@@ -118,7 +118,7 @@ object EventUtils {
     fun getFormattedEventDateTimeRangeSecond(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         try {
             if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
-                return "- ${getFormattedDateShort(endsAt)} ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+                return "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
             else
                 return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
         } catch (e: IllegalArgumentException) {

@@ -144,7 +144,7 @@ class EventUtilsTest {
         val event = getEvent()
         val localizedDateTime = getLocalizedDate(event.startsAt)
         assertEquals("""
-          Mon, Sep 15,
+          Mon, Sep 15
             """.trimIndent(), EventUtils.getFormattedDateShort(localizedDateTime))
     }
 
