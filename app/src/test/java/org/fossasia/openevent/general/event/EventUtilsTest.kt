@@ -9,6 +9,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.threeten.bp.ZonedDateTime
 import java.time.ZoneId
 import java.util.*
 
@@ -42,6 +43,8 @@ class EventUtilsTest {
                          link: String? = null) =
             Event(id, name, identifier, startsAt, endsAt, timeZone,
                     description = description, externalEventUrl = link)
+
+    private fun getLocalizedDate(dateTime: String): ZonedDateTime = EventUtils.getLocalizedDateTime(dateTime)
 
     private fun setupStringMock() {
         every { resource.getString(R.string.event_name) }.returns("Event Name : ")
@@ -107,6 +110,60 @@ class EventUtilsTest {
             Ends On : 19 Sep 2008 07:55 PM
             Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
+    }
+
+    @Test
+    fun `should get timezone name`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+           IST
+            """.trimIndent(), EventUtils.getFormattedTimeZone(localizedDateTime))
+    }
+
+    @Test
+    fun `should get timezone name with brackets`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+           (IST)
+            """.trimIndent(), EventUtils.getFormattedTimeZoneWithBrackets(localizedDateTime))
+    }
+
+    @Test
+    fun `should get formatted time`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+           04:23 PM
+            """.trimIndent(), EventUtils.getFormattedTime(localizedDateTime))
+    }
+
+    @Test
+    fun `should get formatted date and time without year`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+          Monday, Sep 15
+            """.trimIndent(), EventUtils.getFormattedDateWithoutYear(localizedDateTime))
+    }
+
+    @Test
+    fun `should get formatted date short`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+          Mon, Sep 15,
+            """.trimIndent(), EventUtils.getFormattedDateShort(localizedDateTime))
+    }
+
+    @Test
+    fun `should get formatted date`() {
+        val event = getEvent()
+        val localizedDateTime = getLocalizedDate(event.startsAt)
+        assertEquals("""
+          Monday, Sep 15, 2008
+            """.trimIndent(), EventUtils.getFormattedDate(localizedDateTime))
     }
 
 }

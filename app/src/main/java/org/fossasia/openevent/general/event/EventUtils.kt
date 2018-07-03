@@ -102,4 +102,15 @@ object EventUtils {
             return ""
         }
     }
+
+    fun getFormattedTimeZoneWithBrackets(date: ZonedDateTime): String {
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("(z)")
+        try {
+            return timeFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
 }

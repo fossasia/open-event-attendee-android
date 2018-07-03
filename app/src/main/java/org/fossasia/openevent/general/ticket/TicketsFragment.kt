@@ -128,16 +128,15 @@ class TicketsFragment : Fragment() {
                     .append(" at ")
                     .append(EventUtils.getFormattedTime(endsAt))
                     .append(" ")
-                    .append(EventUtils.getFormattedTimeZone(endsAt))
+                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
         } else {
             rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
                     .append(" from ")
                     .append(EventUtils.getFormattedTime(startsAt))
                     .append(" to ")
                     .append(EventUtils.getFormattedTime(endsAt))
-                    .append(" (")
-                    .append(EventUtils.getFormattedTimeZone(endsAt))
-                    .append(")")
+                    .append(" ")
+                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
         }
     }
 
