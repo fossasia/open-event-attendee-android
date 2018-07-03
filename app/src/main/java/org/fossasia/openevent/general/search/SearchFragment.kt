@@ -10,10 +10,7 @@ import android.view.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
-import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.event.FavoriteFabListener
-import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -25,7 +22,7 @@ class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
-    private var loadEventsAgain=false
+    private var loadEventsAgain = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,11 +46,16 @@ class SearchFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }
         }
+
         val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(eventId: Long, isFavourite: Boolean) {
-                searchViewModel.setFavorite(eventId, !isFavourite)
+            override fun onClick(event: Event, isFavourite: Boolean) {
+                val id = eventsRecyclerAdapter.getPos(event.id)
+                searchViewModel.setFavorite(event.id, !isFavourite)
+                event.favorite = !event.favorite
+                eventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
+
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         searchViewModel.events.observe(this, Observer {

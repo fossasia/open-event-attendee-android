@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import java.util.*
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -30,6 +29,10 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         if (events.isNotEmpty())
             this.events.clear()
         this.events.addAll(eventList)
+    }
+
+    fun getPos(id: Long): Int {
+        return events.map { it.id }.indexOf(id)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -58,5 +61,5 @@ interface RecyclerViewClickListener {
 }
 
 interface FavoriteFabListener {
-    fun onClick(eventId: Long, isFavourite: Boolean)
+    fun onClick(event: Event, isFavourite: Boolean)
 }

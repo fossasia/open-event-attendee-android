@@ -8,13 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.content_event.*
 import kotlinx.android.synthetic.main.fragment_similar_events.*
 import kotlinx.android.synthetic.main.fragment_similar_events.view.*
-import kotlinx.android.synthetic.main.fragment_social_links.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
-import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
@@ -57,8 +54,11 @@ class SimilarEventsFragment : Fragment() {
         }
 
         val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(eventId: Long, isFavourite: Boolean) {
-                similarEventsViewModel.setFavorite(eventId, !isFavourite)
+            override fun onClick(event: Event, isFavourite: Boolean) {
+                val id = similarEventsRecyclerAdapter.getPos(event.id)
+                similarEventsViewModel.setFavorite(event.id, !isFavourite)
+                event.favorite = !event.favorite
+                similarEventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
 
@@ -86,7 +86,7 @@ class SimilarEventsFragment : Fragment() {
         return rootView
     }
 
-    fun handleVisibility(similarEvents: List<Event>){
+    fun handleVisibility(similarEvents: List<Event>) {
         if (!similarEvents.isEmpty()) {
             similarEventsDivider.visibility = View.VISIBLE
             moreLikeThis.visibility = View.VISIBLE
