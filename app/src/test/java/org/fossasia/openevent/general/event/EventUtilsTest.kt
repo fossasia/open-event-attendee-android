@@ -157,4 +157,64 @@ class EventUtilsTest {
             """.trimIndent(), EventUtils.getFormattedDate(localizedDateTime))
     }
 
+    @Test
+    fun `should get formatted date range when start and end date are not same`() {
+        val event = getEvent()
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+         Mon, Sep 15, 04:23 PM
+            """.trimIndent(), EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range when start and end date are same`() {
+        val event = getEvent(endsAt = "2008-09-15T15:53:00+05:00")
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          Monday, Sep 15
+            """.trimIndent(), EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range when start and end date are not same in event details`() {
+        val event = getEvent()
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          - Fri, Sep 19, 07:55 PM IST
+            """.trimIndent(), EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range when start and end date are same in event details`() {
+        val event = getEvent(endsAt = "2008-09-15T15:53:00+05:00")
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          04:23 PM - 04:23 PM IST
+            """.trimIndent(), EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range when start and end date are not same in details`() {
+        val event = getEvent()
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          - Fri, Sep 19, 07:55 PM IST
+            """.trimIndent(), EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range when start and end date are same in details`() {
+        val event = getEvent(endsAt = "2008-09-15T15:53:00+05:00")
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          Monday, Sep 15, 2008 from 04:23 PM to 04:23 PM (IST)
+            """.trimIndent(), EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt))
+    }
+
 }
