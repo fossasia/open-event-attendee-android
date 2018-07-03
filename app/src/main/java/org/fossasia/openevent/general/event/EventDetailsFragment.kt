@@ -162,13 +162,8 @@ class EventDetailsFragment : Fragment() {
         }
 
         //Date and Time section
-        if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt)) {
-            rootView.eventDateDetailsFirst.text = "${EventUtils.getFormattedDateShort(startsAt)} ${EventUtils.getFormattedTime(startsAt)}"
-            rootView.eventDateDetailsSecond.text = "- ${EventUtils.getFormattedDateShort(endsAt)} ${EventUtils.getFormattedTime(endsAt)} ${EventUtils.getFormattedTimeZone(endsAt)}"
-        } else {
-            rootView.eventDateDetailsFirst.text = EventUtils.getFormattedDateWithoutYear(startsAt)
-            rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedTime(startsAt)} - ${EventUtils.getFormattedTime(endsAt)} ${EventUtils.getFormattedTimeZone(endsAt)}"
-        }
+        rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
+        rootView.eventDateDetailsSecond.text = EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)
 
         //Similar Events Section
         if (event.eventTopic != null) {

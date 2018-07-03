@@ -122,15 +122,6 @@ class EventUtilsTest {
     }
 
     @Test
-    fun `should get timezone name with brackets`() {
-        val event = getEvent()
-        val localizedDateTime = getLocalizedDate(event.startsAt)
-        assertEquals("""
-           (IST)
-            """.trimIndent(), EventUtils.getFormattedTimeZoneWithBrackets(localizedDateTime))
-    }
-
-    @Test
     fun `should get formatted time`() {
         val event = getEvent()
         val localizedDateTime = getLocalizedDate(event.startsAt)

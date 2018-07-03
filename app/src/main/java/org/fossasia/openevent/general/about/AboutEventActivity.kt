@@ -55,28 +55,9 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
     private fun loadEvent(event: Event){
         eventExtra = event
         aboutEventContent.text = event.description
-        val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt)) {
-            aboutEventDetails.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                    .append(" at ")
-                    .append(EventUtils.getFormattedTime(startsAt))
-                    .append(" - ")
-                    .append(EventUtils.getFormattedDate(endsAt))
-                    .append(" at ")
-                    .append(EventUtils.getFormattedTime(endsAt))
-                    .append(" ")
-                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
-        } else {
-            aboutEventDetails.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                    .append(" from ")
-                    .append(EventUtils.getFormattedTime(startsAt))
-                    .append(" to ")
-                    .append(EventUtils.getFormattedTime(endsAt))
-                    .append(" ")
-                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
-        }
+        aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
 
         eventName.text = event.name
     }

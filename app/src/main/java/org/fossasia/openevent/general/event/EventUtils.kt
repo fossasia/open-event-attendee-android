@@ -103,14 +103,39 @@ object EventUtils {
         }
     }
 
-    fun getFormattedTimeZoneWithBrackets(date: ZonedDateTime): String {
-        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("(z)")
+    fun getFormattedEventDateTimeRange(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         try {
-            return timeFormat.format(date)
+            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
+                return "${getFormattedDateShort(startsAt)} ${getFormattedTime(startsAt)}"
+            else
+                return "${getFormattedDateWithoutYear(startsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""
         }
     }
 
+    fun getFormattedEventDateTimeRangeSecond(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        try {
+            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
+                return "- ${getFormattedDateShort(endsAt)} ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+            else
+                return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedDateTimeRangeDetailed(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        try {
+            if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt))
+                return "${getFormattedDate(startsAt)} at ${getFormattedTime(startsAt)} - ${getFormattedDate(endsAt)} at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+            else
+                return "${getFormattedDate(startsAt)} from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
 }

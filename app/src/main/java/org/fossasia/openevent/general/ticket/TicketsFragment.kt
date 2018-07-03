@@ -116,28 +116,9 @@ class TicketsFragment : Fragment() {
     private fun loadEventDetails(event: Event) {
         rootView.eventName.text = event.name
         rootView.organizerName.text = "by ${event.organizerName.nullToEmpty()}"
-        val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        if (EventUtils.getFormattedDate(startsAt) != EventUtils.getFormattedDate(endsAt)) {
-            rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                    .append(" at ")
-                    .append(EventUtils.getFormattedTime(startsAt))
-                    .append(" - ")
-                    .append(EventUtils.getFormattedDate(endsAt))
-                    .append(" at ")
-                    .append(EventUtils.getFormattedTime(endsAt))
-                    .append(" ")
-                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
-        } else {
-            rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                    .append(" from ")
-                    .append(EventUtils.getFormattedTime(startsAt))
-                    .append(" to ")
-                    .append(EventUtils.getFormattedTime(endsAt))
-                    .append(" ")
-                    .append(EventUtils.getFormattedTimeZoneWithBrackets(endsAt))
-        }
+        rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt,endsAt)
     }
 
 }
