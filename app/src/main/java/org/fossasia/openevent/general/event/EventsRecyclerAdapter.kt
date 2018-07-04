@@ -12,7 +12,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private var clickListener: RecyclerViewClickListener? = null
     private var favoriteFabListener: FavoriteFabListener? = null
     private var eventLayout: String? = null
-    private var idEvent: Long = -1
+    private var eventId: Long = -1
     private lateinit var eventView: View
 
     fun setListener(listener: RecyclerViewClickListener) {
@@ -28,7 +28,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     }
 
     fun setEventId(id: Long) {
-        idEvent = id
+        eventId = id
     }
 
     fun addAll(eventList: List<Event>) {
@@ -56,13 +56,9 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     }
 
     private fun handleEventVisibility(event: Event, holder: EventViewHolder) {
-        if (eventLayout.equals(SIMILAR_EVENTS)) {
-            if (idEvent == event.id) {
-                eventView.layoutParams = RecyclerView.LayoutParams(0, 0)
-                eventView.visibility = View.GONE
-            } else {
-                holder.bind(event, clickListener, favoriteFabListener)
-            }
+        if (eventLayout.equals(SIMILAR_EVENTS) && eventId == event.id) {
+            eventView.layoutParams = RecyclerView.LayoutParams(0, 0)
+            eventView.visibility = View.GONE
         } else {
             holder.bind(event, clickListener, favoriteFabListener)
         }
