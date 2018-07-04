@@ -9,7 +9,6 @@ import android.support.v7.widget.SearchView
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_search_location.*
 import org.fossasia.openevent.general.MainActivity
-import org.fossasia.openevent.general.about.AboutEventActivity
 import org.koin.android.architecture.ext.viewModel
 
 
@@ -22,12 +21,25 @@ class SearchLocationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search_location)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar?.title = ""
+        val bundle = intent.extras
+        var fromSearchFragment = false
+
+        if (bundle != null) {
+            fromSearchFragment = bundle.getBoolean("FromSearchFragment")
+        }
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchLocationViewModel.saveSearch(query)
-                val startMainActivity  = Intent(this@SearchLocationActivity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+                if (fromSearchFragment) {
+                    val searchBundle = Bundle()
+                    searchBundle.putBoolean("ToSearchFragment", true)
+                    startMainActivity.putExtras(searchBundle)
+                }
+
                 startActivity(startMainActivity)
 
                 return false

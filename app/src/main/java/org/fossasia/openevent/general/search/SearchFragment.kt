@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -73,7 +74,15 @@ class SearchFragment : Fragment() {
         })
 
         if (searchViewModel.savedLocation != null) {
-            rootView.location_editText.hint = searchViewModel.savedLocation
+            rootView.locationTextView.text = searchViewModel.savedLocation
+        }
+
+        rootView.locationTextView.setOnClickListener {
+            val intent = Intent(activity, SearchLocationActivity::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("FromSearchFragment", true)
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
 
         return rootView
@@ -99,10 +108,10 @@ class SearchFragment : Fragment() {
                 //Do your search
                 searchViewModel.searchEvent = query
                 rootView.search_linear_layout.visibility = View.GONE
-                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.location_editText.text.toString()))
+                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()))
                     searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty())
                 else
-                    searchViewModel.loadEvents(rootView.location_editText.text.toString().nullToEmpty())
+                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty())
                 loadEventsAgain = true
                 return false
             }

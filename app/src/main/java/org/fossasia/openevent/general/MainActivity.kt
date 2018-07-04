@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
+import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
@@ -52,7 +53,17 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-        if (savedInstanceState == null)
+        val bundle = intent.extras
+        var openSearchFragment = false
+
+        if (bundle != null && bundle.getBoolean("ToSearchFragment")) {
+            loadFragment(SearchFragment())
+            supportActionBar?.title = "Search"
+            navigation.selectedItemId = navigation_search
+            openSearchFragment = true
+        }
+
+        if (savedInstanceState == null && !openSearchFragment)
             loadFragment(EventsFragment())
     }
 
