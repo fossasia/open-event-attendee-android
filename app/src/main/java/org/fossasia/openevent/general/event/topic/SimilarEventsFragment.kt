@@ -32,7 +32,7 @@ class SimilarEventsFragment : Fragment() {
             eventId = bundle.getLong(EVENT_ID, -1)
             eventTopicId = bundle.getLong(EVENT_TOPIC_ID, -1)
         }
-        similarEventsRecyclerAdapter.setEventId(eventId)
+        similarEventsViewModel.eventId = eventId
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

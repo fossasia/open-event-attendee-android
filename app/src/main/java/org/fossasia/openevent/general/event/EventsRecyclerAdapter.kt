@@ -12,8 +12,6 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private var clickListener: RecyclerViewClickListener? = null
     private var favoriteFabListener: FavoriteFabListener? = null
     private var eventLayout: String? = null
-    private var eventId: Long = -1
-    private lateinit var eventView: View
 
     fun setListener(listener: RecyclerViewClickListener) {
         clickListener = listener
@@ -27,10 +25,6 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         eventLayout = type
     }
 
-    fun setEventId(id: Long) {
-        eventId = id
-    }
-
     fun addAll(eventList: List<Event>) {
         if (events.isNotEmpty())
             this.events.clear()
@@ -38,6 +32,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
+        val eventView: View
         if (eventLayout.equals(SIMILAR_EVENTS)) {
             eventView = LayoutInflater.from(parent.context).inflate(R.layout.item_card_similar_events, parent, false)
         } else {
@@ -48,21 +43,13 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
-        handleEventVisibility(event, holder)
+        holder.bind(event, clickListener, favoriteFabListener)
     }
 
     override fun getItemCount(): Int {
         return events.size
     }
 
-    private fun handleEventVisibility(event: Event, holder: EventViewHolder) {
-        if (eventLayout.equals(SIMILAR_EVENTS) && eventId == event.id) {
-            eventView.layoutParams = RecyclerView.LayoutParams(0, 0)
-            eventView.visibility = View.GONE
-        } else {
-            holder.bind(event, clickListener, favoriteFabListener)
-        }
-    }
 }
 
 interface RecyclerViewClickListener {
