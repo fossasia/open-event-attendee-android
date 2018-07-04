@@ -82,14 +82,14 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/startsOn"
+                                android:id="@+id/eventDateDetailsFirst"
                                 android:textColor="@color/dark_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 tools:text="Tuesday June 5" />
 
                             <TextView
-                                android:id="@+id/endsOn"
+                                android:id="@+id/eventDateDetailsSecond"
                                 android:layout_width="wrap_content"
                                 android:textColor="@color/dark_grey"
                                 android:layout_height="wrap_content"

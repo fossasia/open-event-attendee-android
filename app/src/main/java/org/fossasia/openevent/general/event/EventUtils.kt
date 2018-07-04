@@ -54,6 +54,16 @@ object EventUtils {
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getFormattedDateShort(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d")
         try {
             return dateFormat.format(date)
@@ -63,10 +73,72 @@ object EventUtils {
         }
     }
 
+    fun getFormattedDateWithoutYear(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
     fun getFormattedTime(date: ZonedDateTime): String {
-        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a Z")
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
         try {
             return timeFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedTimeZone(date: ZonedDateTime): String {
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("z")
+        try {
+            return timeFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedEventDateTimeRange(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
+        try {
+            if (startingDate != endingDate)
+                return "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
+            else
+                return "${getFormattedDateWithoutYear(startsAt)}"
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedEventDateTimeRangeSecond(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
+        try {
+            if (startingDate != endingDate)
+                return "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+            else
+                return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
+
+    fun getFormattedDateTimeRangeDetailed(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDate(startsAt)
+        val endingDate = getFormattedDate(endsAt)
+        try {
+            if (startingDate != endingDate)
+                return "$startingDate at ${getFormattedTime(startsAt)} - $endingDate at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+            else
+                return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""
