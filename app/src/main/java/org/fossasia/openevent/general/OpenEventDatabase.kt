@@ -8,7 +8,9 @@ import org.fossasia.openevent.general.attendees.AttendeeDao
 import org.fossasia.openevent.general.attendees.AttendeeIdConverter
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
-import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDao
+import org.fossasia.openevent.general.event.EventIdConverter
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicIdConverter
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
