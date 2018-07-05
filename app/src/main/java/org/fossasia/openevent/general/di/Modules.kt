@@ -95,7 +95,7 @@ val viewModelModule = applicationContext {
     viewModel { SocialLinksViewModel(get()) }
     viewModel { FavouriteEventsViewModel(get()) }
     viewModel { SettingsFragmentViewModel(get()) }
-    viewModel { SimilarEventsViewModel(get()) }
+    viewModel { SimilarEventsViewModel(get(), get()) }
 }
 
 val networkModule = applicationContext {
