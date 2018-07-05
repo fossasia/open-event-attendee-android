@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.event.topic
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,18 +24,12 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
         }
         compositeDisposable.add(eventService.getSimilarEvents(id)
                 .subscribeOn(Schedulers.io())
-                .switchMap {
-                    Observable.fromIterable(it)
-                        .filter{ it.id != eventId }
-                        .toList()
-                        .toFlowable()
-                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progress.value = true
                 }).subscribe({
                     progress.value = false
-                    similarEvents.value = it
+                    similarEvents.value = it.filter { it.id != eventId }
                 }, {
                     Timber.e(it, "Error fetching similar events")
                     error.value = "Error fetching similar events"
