@@ -30,7 +30,7 @@ class AttendeeFragment : Fragment() {
     private var id: Long = -1
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private lateinit var eventId: EventId
-    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty: ArrayList<Pair<Int, Int>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,7 @@ class AttendeeFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            ticketIdAndQty.map {
+            ticketIdAndQty?.forEach {
                 if (it.second > 0) {
                     val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                             firstname = firstName.text.toString(),
