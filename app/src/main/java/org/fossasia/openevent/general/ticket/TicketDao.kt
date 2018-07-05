@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface TicketsDao {
@@ -16,4 +17,7 @@ interface TicketsDao {
 
     @Query("SELECT * from Ticket WHERE event = :eventId")
     fun getTicketsForEvent(eventId: Long): Flowable<List<Ticket>>
+
+    @Query("SELECT * from Ticket WHERE id = :id")
+    fun getTicketDetails(id: Long): Single<Ticket>
 }

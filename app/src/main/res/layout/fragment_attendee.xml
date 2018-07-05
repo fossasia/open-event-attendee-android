@@ -24,6 +24,15 @@
         android:textSize="@dimen/text_size_large"
         tools:text="May 24 - May 25" />
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,6 +83,39 @@
             android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/orderNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Order Notes" />
+
+    </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/paymentSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.AppCompatSpinner>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/register"
@@ -85,6 +127,10 @@
         android:padding="@dimen/padding_medium"
         android:text="@string/register"
         android:textColor="@android:color/white" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
 
     <ProgressBar
         android:id="@+id/progressBarAttendee"
