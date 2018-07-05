@@ -19,17 +19,17 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-import java.lang.StringBuilder
+
+const val EVENT_ID: String = "EVENT_ID"
+const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketId: Int = -1
-    private var ticketQuantity: Int = -1
+    private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +49,7 @@ class TicketsFragment : Fragment() {
 
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(id: Int, quantity: Int) {
-                ticketQuantity = quantity
-                ticketId = id
+                handleTicketSelect(id, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -88,13 +87,22 @@ class TicketsFragment : Fragment() {
         rootView.register.setOnClickListener {
             val fragment = AttendeeFragment()
             val bundle = Bundle()
-            bundle.putLong("EVENT_ID", id)
-            bundle.putLong("TICKET_ID", ticketId.toLong())
+            bundle.putLong(EVENT_ID, id)
+            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
             fragment.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
         }
 
         return rootView
+    }
+
+    private fun handleTicketSelect(id: Int, quantity: Int) {
+        val pos = tickeIdAndQty.map { it.first }.indexOf(id)
+        if (pos == -1) {
+            tickeIdAndQty.add(Pair(id, quantity))
+        } else {
+            tickeIdAndQty[pos] = Pair(id, quantity)
+        }
     }
 
     override fun onDestroyView() {
