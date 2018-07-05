@@ -16,6 +16,8 @@ private const val TO_SEARCH: String = "ToSearchFragment"
 
 class MainActivity : AppCompatActivity() {
 
+    private val TO_SEARCH: String = "ToSearchFragment"
+
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
