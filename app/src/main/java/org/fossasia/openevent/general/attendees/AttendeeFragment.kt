@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
 
@@ -50,12 +52,13 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
 
-        attendeeFragmentViewModel.loadEvent(id)
-
         if (!attendeeFragmentViewModel.isLoggedIn()) {
             redirectToLogin()
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
+
+        attendeeFragmentViewModel.loadUser(attendeeFragmentViewModel.getId())
+        attendeeFragmentViewModel.loadEvent(id)
 
         attendeeFragmentViewModel.message.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -67,6 +70,14 @@ class AttendeeFragment : Fragment() {
 
         attendeeFragmentViewModel.event.observe(this, Observer {
             it?.let { loadEventDetails(it) }
+        })
+
+        attendeeFragmentViewModel.attendee.observe(this, Observer {
+            it?.let {
+                firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
+                lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())
+                email.text = Editable.Factory.getInstance().newEditable(it.email.nullToEmpty())
+            }
         })
 
         rootView.register.setOnClickListener {
