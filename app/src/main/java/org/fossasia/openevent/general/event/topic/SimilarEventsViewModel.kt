@@ -16,6 +16,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
     val progress = MutableLiveData<Boolean>()
     val similarEvents = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
+    var eventId: Long = -1
 
     fun loadSimilarEvents(id: Long) {
         if(id == -1L){
@@ -26,10 +27,9 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progress.value = true
-                }).doFinally({
-                    progress.value = false
                 }).subscribe({
-                    similarEvents.value = it
+                    progress.value = false
+                    similarEvents.value = it.filter { it.id != eventId }
                 }, {
                     Timber.e(it, "Error fetching similar events")
                     error.value = "Error fetching similar events"

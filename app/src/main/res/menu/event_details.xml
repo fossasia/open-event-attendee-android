@@ -12,7 +12,7 @@
     <item
         android:id="@+id/event_share"
         android:icon="@drawable/ic_share_white_24dp"
-        android:title="@string/add_to_calendar"
+        android:title="@string/share"
         app:showAsAction="always"/>
 
     <item
