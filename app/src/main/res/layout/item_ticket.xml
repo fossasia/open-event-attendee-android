@@ -12,7 +12,7 @@
         android:layout_marginRight="@dimen/layout_margin_medium"
         android:background="@drawable/border"
         android:orientation="horizontal"
-        android:padding="@dimen/layout_margin_large"
+        android:padding="@dimen/layout_margin_medium"
         android:weightSum="4">
 
         <TextView
@@ -30,11 +30,17 @@
             android:layout_weight="1"
             android:textSize="@dimen/text_size_large"
             tools:text="$25" />
+        
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/filled_border"
+            android:layout_weight="1">
 
         <TextView
             android:id="@+id/order"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="end"
             android:spinnerMode="dialog"
@@ -44,9 +50,10 @@
         <Spinner
             android:id="@+id/orderRange"
             android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:spinnerMode="dialog"
-            android:textSize="@dimen/text_size_large" />
+            android:textSize="@dimen/text_size_small" />
+        </LinearLayout>
 
     </LinearLayout>
 
