@@ -37,7 +37,7 @@ class SimilarEventsViewModel(private val eventService: EventService, private val
                     progress.value = true
                 }).subscribe({
                     progress.value = false
-                    similarEvents.value = it
+                    similarEvents.value = it.filter { it.id != eventId }
                 }, {
                     Timber.e(it, "Error fetching similar events")
                     error.value = "Error fetching similar events"
