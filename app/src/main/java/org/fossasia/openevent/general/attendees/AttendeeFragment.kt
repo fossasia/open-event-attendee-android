@@ -30,7 +30,7 @@ class AttendeeFragment : Fragment() {
     private var id: Long = -1
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private lateinit var eventId: EventId
-    private var ticketIdAndQty: ArrayList<Pair<Int, Int>>? = null
+    private var ticketIdAndQty: List<Pair<Int, Int>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
