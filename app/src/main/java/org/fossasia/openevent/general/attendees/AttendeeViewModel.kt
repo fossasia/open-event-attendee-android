@@ -7,7 +7,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.User
-import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
@@ -23,13 +22,13 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val progress = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
-    var attendee  = MutableLiveData<User>()
+    var attendee = MutableLiveData<User>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun createAttendee(attendee: Attendee, eventId: Long, country: String, orderNotes: String, paymentOption: String) {
+    fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             message.value = "Please fill in all the fields"
             return
@@ -44,7 +43,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     if (attendee.ticket?.id != null) {
-                        loadTicket(attendee.ticket!!.id, country, orderNotes, eventId, paymentOption, it.id)
+                        loadTicket(attendee.ticket!!.id, country, eventId, paymentOption, it.id)
                     }
                     message.value = "Attendee created successfully!"
                     Timber.d("Success!")
@@ -54,7 +53,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun loadTicket(ticketId: Long, country: String, orderNotes: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+    fun loadTicket(ticketId: Long, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
         compositeDisposable.add(ticketService.getTicketDetails(ticketId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -65,7 +64,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                             country = country,
                             status = "pending",
                             amount = it.price?.toFloat(),
-                            orderNotes = orderNotes,
                             attendees = arrayListOf(AttendeeId(attendeeId)),
                             event = EventId(eventId))
                     createOrder(order)

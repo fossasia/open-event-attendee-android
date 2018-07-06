@@ -96,25 +96,11 @@
             android:hint="Country"/>
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/paymentSelector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium">
-
-        <EditText
-            android:id="@+id/orderNotes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Order Notes" />
-
-    </android.support.design.widget.TextInputLayout>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/paymentSelector"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.AppCompatSpinner>
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.AppCompatSpinner>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/register"

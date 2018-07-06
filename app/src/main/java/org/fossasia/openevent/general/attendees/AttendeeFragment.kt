@@ -113,6 +113,7 @@ class AttendeeFragment : Fragment() {
                     ticket = ticketId,
                     event = eventId)
             val country = country.text.toString()
+            attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
             val orderNotes = orderNotes.text.toString()
 
                     attendeeFragmentViewModel.createAttendee(attendee)
