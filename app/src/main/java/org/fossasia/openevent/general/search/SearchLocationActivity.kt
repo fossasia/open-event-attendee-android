@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.activity_search_location.*
 import org.fossasia.openevent.general.MainActivity
 import org.koin.android.architecture.ext.viewModel
 
+private const val FROM_SEARCH: String = "FromSearchFragment"
+private const val TO_SEARCH: String = "ToSearchFragment"
 
 class SearchLocationActivity : AppCompatActivity() {
 
@@ -25,7 +27,7 @@ class SearchLocationActivity : AppCompatActivity() {
         var fromSearchFragment = false
 
         if (bundle != null) {
-            fromSearchFragment = bundle.getBoolean("FromSearchFragment")
+            fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
         }
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -36,7 +38,7 @@ class SearchLocationActivity : AppCompatActivity() {
 
                 if (fromSearchFragment) {
                     val searchBundle = Bundle()
-                    searchBundle.putBoolean("ToSearchFragment", true)
+                    searchBundle.putBoolean(TO_SEARCH, true)
                     startMainActivity.putExtras(searchBundle)
                 }
 

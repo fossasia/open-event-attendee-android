@@ -12,6 +12,8 @@ import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.search.SearchFragment
 
+private const val TO_SEARCH: String = "ToSearchFragment"
+
 class MainActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val bundle = intent.extras
         var openSearchFragment = false
 
-        if (bundle != null && bundle.getBoolean("ToSearchFragment")) {
+        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
             loadFragment(SearchFragment())
             supportActionBar?.title = "Search"
             navigation.selectedItemId = navigation_search

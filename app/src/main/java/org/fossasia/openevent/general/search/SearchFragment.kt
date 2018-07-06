@@ -21,6 +21,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
+private const val FROM_SEARCH: String = "FromSearchFragment"
 
 class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
@@ -80,7 +81,7 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.setOnClickListener {
             val intent = Intent(activity, SearchLocationActivity::class.java)
             val bundle = Bundle()
-            bundle.putBoolean("FromSearchFragment", true)
+            bundle.putBoolean(FROM_SEARCH, true)
             intent.putExtras(bundle)
             startActivity(intent)
         }
