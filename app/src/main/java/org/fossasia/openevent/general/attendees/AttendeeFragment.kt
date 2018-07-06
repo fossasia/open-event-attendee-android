@@ -66,7 +66,6 @@ class AttendeeFragment : Fragment() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedPaymentOption = paymentOptions[p2]
             }
-
         }
         attendeeFragmentViewModel.loadEvent(id)
 
