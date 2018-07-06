@@ -27,11 +27,11 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
 
 
-    fun loadEvents(location: String,time:String) {
+    fun loadEvents(location: String, time: String) {
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
             "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
-        else if (time=="Anytime")
+        else if (time == "Anytime")
             "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
         else
             "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
