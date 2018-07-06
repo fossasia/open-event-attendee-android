@@ -41,21 +41,18 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_privacy)) {
-            //Opens our app in play store
             context?.let {
                 Utils.openUrl(it, PRIVACY_LINK)
             }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_terms_of_service)) {
-            //Links to suggestion form
             context?.let {
                 Utils.openUrl(it, TERMS_OF_SERVICE_LINK)
             }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_cookie_policy)) {
-            //Logout Dialog shown
             context?.let {
                 Utils.openUrl(it, COOKIE_POLICY_LINK)
             }
