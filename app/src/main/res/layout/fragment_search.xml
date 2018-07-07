@@ -28,13 +28,33 @@
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:textSize="@dimen/heading_text_size" />
 
-            <EditText
-                android:id="@+id/location_editText"
-                android:layout_width="match_parent"
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/anywhere"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:textSize="@dimen/heading_text_size" />
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_extra_large"
+                    tools:text="India" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/event_name_divider_height"
+                    android:layout_alignEnd="@id/locationTextView"
+                    android:layout_alignLeft="@+id/locationTextView"
+                    android:layout_alignRight="@id/locationTextView"
+                    android:layout_alignStart="@+id/locationTextView"
+                    android:layout_below="@id/locationTextView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/grey" />
+            </RelativeLayout>
         </LinearLayout>
 
         <FrameLayout
