@@ -57,8 +57,11 @@ class SimilarEventsFragment : Fragment() {
         }
 
         val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(eventId: Long, isFavourite: Boolean) {
-                similarEventsViewModel.setFavorite(eventId, !isFavourite)
+            override fun onClick(event: Event, isFavourite: Boolean) {
+                val id = similarEventsRecyclerAdapter.getPos(event.id)
+                similarEventsViewModel.setFavorite(event.id, !isFavourite)
+                event.favorite = !event.favorite
+                similarEventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
 
@@ -86,7 +89,7 @@ class SimilarEventsFragment : Fragment() {
         return rootView
     }
 
-    fun handleVisibility(similarEvents: List<Event>){
+    fun handleVisibility(similarEvents: List<Event>) {
         if (!similarEvents.isEmpty()) {
             similarEventsDivider.visibility = View.VISIBLE
             moreLikeThis.visibility = View.VISIBLE

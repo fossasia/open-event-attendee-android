@@ -31,6 +31,10 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         this.events.addAll(eventList)
     }
 
+    fun getPos(id: Long): Int {
+        return events.map { it.id }.indexOf(id)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val eventView: View
         if (eventLayout.equals(SIMILAR_EVENTS)) {
@@ -57,5 +61,5 @@ interface RecyclerViewClickListener {
 }
 
 interface FavoriteFabListener {
-    fun onClick(eventId: Long, isFavourite: Boolean)
+    fun onClick(event: Event, isFavourite: Boolean)
 }
