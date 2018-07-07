@@ -2,15 +2,12 @@ package org.fossasia.openevent.general.event.topic
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.text.TextUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.fossasia.openevent.general.R.string.location
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
 class SimilarEventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {

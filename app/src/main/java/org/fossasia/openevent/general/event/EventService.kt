@@ -64,6 +64,11 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     fun getSimilarEvents(id: Long, savedLocation: String): Single<List<Event>> {
-        return eventTopicApi.getEventsUnderTopicId(id, "name", savedLocation)
+        return eventTopicApi.getEventsUnderTopicId(id, "name", savedLocation).flatMap { apiList ->
+            val eventIds = apiList.map { it.id }.toList()
+            eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
+                updateFavorites(apiList, favIds)
+            }
+        }
     }
 }
