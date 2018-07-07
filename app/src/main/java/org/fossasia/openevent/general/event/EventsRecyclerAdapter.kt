@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import java.util.*
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -37,7 +38,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val eventView: View
-        if (eventLayout.equals(SIMILAR_EVENTS)) {
+        if (eventLayout.equals(Constants.SIMILAR_EVENTS)) {
             eventView = LayoutInflater.from(parent.context).inflate(R.layout.item_card_similar_events, parent, false)
         } else {
             eventView = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)

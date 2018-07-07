@@ -24,11 +24,8 @@ import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.content_event.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.CircleTransform
-
-const val EVENT_ID = "EVENT_ID"
-const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
+import org.fossasia.openevent.general.common.Constants
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -43,7 +40,7 @@ class EventDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            eventId = bundle.getLong(EVENT_ID, -1)
+            eventId = bundle.getLong(Constants.EVENT_ID, -1)
         }
     }
 
@@ -120,7 +117,7 @@ class EventDetailsFragment : Fragment() {
         //About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             val aboutIntent = Intent(context, AboutEventActivity::class.java)
-            aboutIntent.putExtra(EVENT_ID, eventId)
+            aboutIntent.putExtra(Constants.EVENT_ID, eventId)
             startActivity(aboutIntent)
         }
 
@@ -293,8 +290,8 @@ class EventDetailsFragment : Fragment() {
         //Initialise SimilarEvents Fragment
         val similarEventsFragment = SimilarEventsFragment()
         val bundle = Bundle()
-        bundle.putLong(EVENT_ID, eventId)
-        eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
+        bundle.putLong(Constants.EVENT_ID, eventId)
+        eventTopicId?.let { bundle.putLong(Constants.EVENT_TOPIC_ID, it) }
         similarEventsFragment.arguments = bundle
         childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }

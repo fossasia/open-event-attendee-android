@@ -11,6 +11,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_similar_events.*
 import kotlinx.android.synthetic.main.fragment_similar_events.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
@@ -25,12 +26,12 @@ class SimilarEventsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        similarEventsRecyclerAdapter.setEventLayout(SIMILAR_EVENTS)
+        similarEventsRecyclerAdapter.setEventLayout(Constants.SIMILAR_EVENTS)
         val bundle = this.arguments
         var eventId: Long = -1
         if (bundle != null) {
-            eventId = bundle.getLong(EVENT_ID, -1)
-            eventTopicId = bundle.getLong(EVENT_TOPIC_ID, -1)
+            eventId = bundle.getLong(Constants.EVENT_ID, -1)
+            eventTopicId = bundle.getLong(Constants.EVENT_TOPIC_ID, -1)
         }
         similarEventsViewModel.eventId = eventId
     }
@@ -50,7 +51,7 @@ class SimilarEventsFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
+                bundle.putLong(Constants.EVENT_ID, eventID)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }

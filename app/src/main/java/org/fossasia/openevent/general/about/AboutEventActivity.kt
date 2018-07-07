@@ -9,17 +9,16 @@ import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_about_event.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
-import java.lang.StringBuilder
 
 class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
     private var isHideToolbarView: Boolean = false
     private lateinit var eventExtra: Event
 
@@ -37,7 +36,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        id = intent.getLongExtra(EVENT_ID, -1)
+        id = intent.getLongExtra(Constants.EVENT_ID, -1)
 
         aboutEventViewModel.progressAboutEvent.observe(this, Observer {
             it?.let { Utils.showProgressBar(progressBarAbout, it) }

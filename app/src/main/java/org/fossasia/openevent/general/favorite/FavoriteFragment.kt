@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.*
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-
 
 class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
@@ -34,7 +34,7 @@ class FavoriteFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
+                bundle.putLong(Constants.EVENT_ID, eventID)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
             }

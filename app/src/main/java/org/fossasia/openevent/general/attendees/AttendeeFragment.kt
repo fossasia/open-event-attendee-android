@@ -15,16 +15,14 @@ import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-
 
 class AttendeeFragment : Fragment() {
 
@@ -38,9 +36,9 @@ class AttendeeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
+            id = bundle.getLong(Constants.EVENT_ID, -1)
             eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
+            ticketIdAndQty = bundle.getSerializable(Constants.TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
     }
 
