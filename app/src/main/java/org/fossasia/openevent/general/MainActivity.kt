@@ -8,11 +8,10 @@ import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.auth.ProfileFragment
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.search.SearchFragment
-
-private const val TO_SEARCH: String = "ToSearchFragment"
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         val bundle = intent.extras
         var openSearchFragment = false
 
-        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
+        if (bundle != null && bundle.getBoolean(Constants.TO_SEARCH)) {
             loadFragment(SearchFragment())
             supportActionBar?.title = "Search"
             navigation.selectedItemId = navigation_search

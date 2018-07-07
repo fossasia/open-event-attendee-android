@@ -7,11 +7,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.User
-import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.ticket.Ticket
 import timber.log.Timber
 
 class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService) : ViewModel() {

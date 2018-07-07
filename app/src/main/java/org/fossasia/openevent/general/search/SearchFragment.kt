@@ -11,14 +11,13 @@ import android.view.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
-
-private const val FROM_SEARCH: String = "FromSearchFragment"
 
 class SearchFragment : Fragment() {
     private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
@@ -43,7 +42,7 @@ class SearchFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
                 val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
+                bundle.putLong(Constants.EVENT_ID, eventID)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }
@@ -82,7 +81,7 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.setOnClickListener {
             val intent = Intent(activity, SearchLocationActivity::class.java)
             val bundle = Bundle()
-            bundle.putBoolean(FROM_SEARCH, true)
+            bundle.putBoolean(Constants.FROM_SEARCH, true)
             intent.putExtras(bundle)
             startActivity(intent)
         }

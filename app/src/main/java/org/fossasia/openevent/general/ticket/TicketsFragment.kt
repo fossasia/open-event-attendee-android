@@ -14,14 +14,12 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.AttendeeFragment
+import org.fossasia.openevent.general.common.Constants
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-
-const val EVENT_ID: String = "EVENT_ID"
-const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -35,7 +33,7 @@ class TicketsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
+            id = bundle.getLong(Constants.EVENT_ID, -1)
         }
     }
 
@@ -87,8 +85,8 @@ class TicketsFragment : Fragment() {
         rootView.register.setOnClickListener {
             val fragment = AttendeeFragment()
             val bundle = Bundle()
-            bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
+            bundle.putLong(Constants.EVENT_ID, id)
+            bundle.putSerializable(Constants.TICKET_ID_AND_QTY, tickeIdAndQty)
             fragment.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
         }
