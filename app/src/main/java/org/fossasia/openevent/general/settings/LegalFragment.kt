@@ -30,7 +30,6 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
-        // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.legal, rootKey)
 
         val activity =  activity as? AppCompatActivity

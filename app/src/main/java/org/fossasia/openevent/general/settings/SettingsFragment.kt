@@ -73,7 +73,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             return true
         }
         if (preference?.key == resources.getString(R.string.key_legal)) {
-            //Initialise Legal Fragment
             val legalFragment = LegalFragment()
             activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, legalFragment)?.addToBackStack(null)?.commit()
         }
