@@ -1,79 +1,94 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/search_linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_margin="@dimen/layout_margin_extra_large"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/searchLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/go_out"
-                android:gravity="center_horizontal"
-                android:textColor="@color/black"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:textSize="@dimen/heading_text_size" />
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+                android:layout_margin="@dimen/layout_margin_extra_large"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/locationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/layout_margin_large"
+                    android:gravity="center_horizontal"
+                    android:text="@string/go_out"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_extra_large"
-                    tools:text="India" />
+                    android:textSize="@dimen/heading_text_size" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/event_name_divider_height"
-                    android:layout_alignEnd="@id/locationTextView"
-                    android:layout_alignLeft="@+id/locationTextView"
-                    android:layout_alignRight="@id/locationTextView"
-                    android:layout_alignStart="@+id/locationTextView"
-                    android:layout_below="@id/locationTextView"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/grey" />
-            </RelativeLayout>
-        </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
 
-            <ProgressBar
-                android:layout_gravity="center"
-                android:id="@+id/progressBar"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </ProgressBar>
+                    <TextView
+                        android:id="@+id/locationTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/layout_margin_large"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_extra_large"
+                        tools:text="India" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/eventsRecycler"
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_alignEnd="@id/locationTextView"
+                        android:layout_alignLeft="@+id/locationTextView"
+                        android:layout_alignRight="@id/locationTextView"
+                        android:layout_alignStart="@+id/locationTextView"
+                        android:layout_below="@id/locationTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </FrameLayout>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/eventsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/layout_margin_large"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_baseline_arrow_forward_24px" />
+</FrameLayout>

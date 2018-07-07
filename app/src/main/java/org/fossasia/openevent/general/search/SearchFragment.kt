@@ -25,6 +25,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
     private var loadEventsAgain = false
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -100,16 +101,17 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.search_menu, true)
-        menu?.setGroupVisible(R.id.profile_menu, false)
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.setGroupVisible(R.id.search_menu, true)
+        menu.setGroupVisible(R.id.profile_menu, false)
 
-        val searchView:SearchView ?= menu?.findItem(R.id.search_item)?.actionView as? SearchView
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView = menu.findItem(R.id.search_item).actionView as SearchView
+        val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 //Do your search
                 searchViewModel.searchEvent = query
-                rootView.search_linear_layout.visibility = View.GONE
+                rootView.searchLinearLayout.visibility = View.GONE
+                rootView.fabSearch.visibility = View.GONE
                 if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()))
                     searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty())
                 else
@@ -121,8 +123,16 @@ class SearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }
-        })
+        }
+        searchView.setOnQueryTextListener(queryListener)
+        rootView.fabSearch.setOnClickListener {
+            queryListener.onQueryTextSubmit(searchView.query.toString())
+        }
         super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        searchView?.setOnQueryTextListener(null)
+    }
 }
