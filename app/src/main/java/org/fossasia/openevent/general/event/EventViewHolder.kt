@@ -40,7 +40,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         itemView.favoriteFab.setOnClickListener {
-            favoriteListener?.onClick(event.id, event.favorite)
+            favoriteListener?.onClick(event, event.favorite)
         }
     }
 

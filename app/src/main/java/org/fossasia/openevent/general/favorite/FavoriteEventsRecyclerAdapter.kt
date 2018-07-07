@@ -29,6 +29,10 @@ class FavoriteEventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         this.events.addAll(eventList)
     }
 
+    fun getPos(id: Long): Int {
+        return events.map { it.id }.indexOf(id)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_favorite_event, parent, false)
         return EventViewHolder(view)
