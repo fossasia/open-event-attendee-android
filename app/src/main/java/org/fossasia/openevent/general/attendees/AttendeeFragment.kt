@@ -106,20 +106,10 @@ class AttendeeFragment : Fragment() {
                             email = email.text.toString(),
                             ticket = TicketId(it.first.toLong()),
                             event = eventId)
-            val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
-                    firstname = firstName.text.toString(),
-                    lastname = lastName.text.toString(),
-                    email = email.text.toString(),
-                    ticket = ticketId,
-                    event = eventId)
-            val country = country.text.toString()
-            attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
-            val orderNotes = orderNotes.text.toString()
-
-                    attendeeFragmentViewModel.createAttendee(attendee)
+                    val country = country.text.toString()
+                    attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
                 }
             }
-            attendeeFragmentViewModel.createAttendee(attendee, id, country, orderNotes, selectedPaymentOption)
         }
 
         return rootView

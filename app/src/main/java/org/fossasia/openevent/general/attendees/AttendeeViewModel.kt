@@ -46,7 +46,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         loadTicket(attendee.ticket!!.id, country, eventId, paymentOption, it.id)
                     }
                     message.value = "Attendee created successfully!"
-                    Timber.d("Success!")
+                    Timber.d("Success!" + it.id)
                 }, {
                     message.value = "Unable to create Attendee!"
                     Timber.d(it, "Failed")
@@ -63,7 +63,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                             paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption,
                             country = country,
                             status = "pending",
-                            amount = it.price?.toFloat(),
+                            amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),
                             attendees = arrayListOf(AttendeeId(attendeeId)),
                             event = EventId(eventId))
                     createOrder(order)
@@ -82,7 +82,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     message.value = "Order created successfully!"
-                    Timber.d("Success Order placing!")
+                    Timber.d("Success placing order!")
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
