@@ -74,7 +74,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_legal)) {
             val legalFragment = LegalFragment()
-            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, legalFragment)?.addToBackStack(null)?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, legalFragment)?.addToBackStack(null)?.commit()
         }
         return false
     }
@@ -102,19 +102,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onDestroyView() {
-        val activity =  activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        setHasOptionsMenu(false)
-        super.onDestroyView()
-    }
-
-    override fun onResume() {
-        val activity =  activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Settings"
-        super.onResume()
-    }
-
     private fun showDialog() {
         val builder = AlertDialog.Builder(activity)
         builder.setMessage(resources.getString(R.string.message))
@@ -128,5 +115,20 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
+    }
+
+    override fun onResume() {
+        val activity =  activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.supportActionBar?.title = "Settings"
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        val activity =  activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity?.supportActionBar?.title = "Profile"
+        setHasOptionsMenu(false)
+        super.onDestroy()
     }
 }

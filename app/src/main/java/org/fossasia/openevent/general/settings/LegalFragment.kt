@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.Preference
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -70,11 +67,22 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
     }
 
-    override fun onDestroyView() {
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        menu?.setGroupVisible(R.id.profile_menu, false)
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onResume() {
         val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Settings"
+        activity?.supportActionBar?.title = "Legal"
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        val activity =  activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(false)
-        super.onDestroyView()
+        super.onDestroy()
     }
 }
