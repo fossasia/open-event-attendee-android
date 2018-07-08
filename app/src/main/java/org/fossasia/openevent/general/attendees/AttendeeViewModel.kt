@@ -43,17 +43,21 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     if (attendee.ticket?.id != null) {
-                        loadTicket(attendee.ticket!!.id, country, eventId, paymentOption, it.id)
+                        loadTicket(attendee.ticket?.id, country, eventId, paymentOption, it.id)
                     }
                     message.value = "Attendee created successfully!"
-                    Timber.d("Success!" + it.id)
+                    Timber.d("Success! %s", it.id)
                 }, {
                     message.value = "Unable to create Attendee!"
                     Timber.d(it, "Failed")
                 }))
     }
 
-    fun loadTicket(ticketId: Long, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+    fun loadTicket(ticketId: Long?, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+        if (ticketId == null) {
+            Timber.e("TicketId cannot be null")
+            return
+        }
         compositeDisposable.add(ticketService.getTicketDetails(ticketId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
