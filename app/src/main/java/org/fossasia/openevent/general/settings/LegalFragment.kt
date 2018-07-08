@@ -78,11 +78,4 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         activity?.supportActionBar?.title = "Legal"
         super.onResume()
     }
-
-    override fun onDestroy() {
-        val activity =  activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setHasOptionsMenu(false)
-        super.onDestroy()
-    }
 }

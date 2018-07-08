@@ -121,14 +121,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Settings"
+        setHasOptionsMenu(true)
         super.onResume()
-    }
-
-    override fun onDestroy() {
-        val activity =  activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Profile"
-        setHasOptionsMenu(false)
-        super.onDestroy()
     }
 }
