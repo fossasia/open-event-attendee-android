@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0eefd5eeb1887e3716e2f1f4b32f5c53",
+    "identityHash": "ecb795aa1c95b8e556fbff281a4e6913",
     "entities": [
       {
         "tableName": "Event",
@@ -824,7 +824,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `event` INTEGER, `attendee` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendee`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `orderNotes` TEXT, `event` INTEGER, `attendees` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -857,15 +857,21 @@
             "notNull": false
           },
           {
+            "fieldPath": "orderNotes",
+            "columnName": "orderNotes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "event",
             "columnName": "event",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "attendee",
-            "columnName": "attendee",
-            "affinity": "INTEGER",
+            "fieldPath": "attendees",
+            "columnName": "attendees",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -902,7 +908,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "attendee"
+              "attendees"
             ],
             "referencedColumns": [
               "id"
@@ -913,7 +919,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0eefd5eeb1887e3716e2f1f4b32f5c53\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ecb795aa1c95b8e556fbff281a4e6913\")"
     ]
   }
 }

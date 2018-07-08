@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
@@ -33,6 +35,7 @@ class AttendeeFragment : Fragment() {
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    private lateinit var selectedPaymentOption: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,20 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
+
+        val paymentOptions = ArrayList<String>()
+        paymentOptions.add("paypal")
+        paymentOptions.add("stripe")
+        rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
+        rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                selectedPaymentOption = paymentOptions[p2]
+            }
+        }
+        attendeeFragmentViewModel.loadEvent(id)
 
         if (!attendeeFragmentViewModel.isLoggedIn()) {
             redirectToLogin()
@@ -89,8 +106,8 @@ class AttendeeFragment : Fragment() {
                             email = email.text.toString(),
                             ticket = TicketId(it.first.toLong()),
                             event = eventId)
-
-                    attendeeFragmentViewModel.createAttendee(attendee)
+                    val country = country.text.toString()
+                    attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
                 }
             }
         }

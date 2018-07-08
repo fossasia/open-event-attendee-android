@@ -7,26 +7,28 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.User
-import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.ticket.Ticket
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.ticket.TicketService
 import timber.log.Timber
 
-class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService) : ViewModel() {
+class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService, private val orderService: OrderService, private val ticketService: TicketService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
-    var attendee  = MutableLiveData<User>()
+    var attendee = MutableLiveData<User>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun createAttendee(attendee: Attendee) {
+    fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             message.value = "Please fill in all the fields"
             return
@@ -40,11 +42,54 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
+                    if (attendee.ticket?.id != null) {
+                        loadTicket(attendee.ticket?.id, country, eventId, paymentOption, it.id)
+                    }
                     message.value = "Attendee created successfully!"
-                    Timber.d("Success!")
+                    Timber.d("Success! %s", it.id)
                 }, {
                     message.value = "Unable to create Attendee!"
                     Timber.d(it, "Failed")
+                }))
+    }
+
+    fun loadTicket(ticketId: Long?, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+        if (ticketId == null) {
+            Timber.e("TicketId cannot be null")
+            return
+        }
+        compositeDisposable.add(ticketService.getTicketDetails(ticketId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    val order = Order(
+                            id = getId(),
+                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption,
+                            country = country,
+                            status = "pending",
+                            amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),
+                            attendees = arrayListOf(AttendeeId(attendeeId)),
+                            event = EventId(eventId))
+                    createOrder(order)
+                }, {
+                    Timber.d(it, "Error loading Ticket!")
+                }))
+    }
+
+    fun createOrder(order: Order) {
+        compositeDisposable.add(orderService.placeOrder(order)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.doFinally {
+                    progress.value = false
+                }.subscribe({
+                    message.value = "Order created successfully!"
+                    Timber.d("Success placing order!")
+                }, {
+                    message.value = "Unable to create Order!"
+                    Timber.d(it, "Failed creating Order")
                 }))
     }
 
