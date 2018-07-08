@@ -23,10 +23,22 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
+    var ticketPriceList = MutableLiveData<List<String>>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun getTicketPricesWithIds(ids: List<Int>) {
+        compositeDisposable.add(ticketService.getTicketPriceWithIds(ids)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    ticketPriceList.value = it
+                }, {
+                    Timber.e(it, "Error Loading tickets!")
+                }))
+    }
 
     fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
@@ -64,7 +76,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribe({
                     val order = Order(
                             id = getId(),
-                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption,
+                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption.toLowerCase(),
                             country = country,
                             status = "pending",
                             amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),

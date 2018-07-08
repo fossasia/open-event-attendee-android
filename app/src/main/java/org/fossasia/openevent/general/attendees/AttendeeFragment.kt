@@ -54,10 +54,21 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
-
+        val ticketIds = ArrayList<Int>()
+        ticketIdAndQty?.forEach { if (it.second > 0) ticketIds.add(it.first) }
+        attendeeFragmentViewModel.getTicketPricesWithIds(ticketIds)
         val paymentOptions = ArrayList<String>()
-        paymentOptions.add("paypal")
-        paymentOptions.add("stripe")
+        paymentOptions.add("PayPal")
+        paymentOptions.add("Stripe")
+        attendeeFragmentViewModel.ticketPriceList.observe(this, Observer {
+            var total = 0.toFloat()
+            it?.forEach {
+                if (it.toFloat() > 0) total += it.toFloat()
+            }
+            if (total == 0.toFloat()) {
+                rootView.paymentSelector.visibility = View.GONE
+            }
+        })
         rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
