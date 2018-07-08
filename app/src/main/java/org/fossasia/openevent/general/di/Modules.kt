@@ -14,15 +14,17 @@ import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
-import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
-import org.fossasia.openevent.general.search.SearchLocationViewModel
-import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
+import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderApi
+import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -78,6 +80,7 @@ val apiModule = applicationContext {
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
+    factory { OrderService(get(), get()) }
 
 }
 
@@ -88,9 +91,10 @@ val viewModelModule = applicationContext {
     viewModel { SignUpFragmentViewModel(get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { AttendeeViewModel(get(), get(), get()) }
+    viewModel { AttendeeViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
-    viewModel { TicketsViewModel(get(),get()) }
+    viewModel { SearchTimeViewModel(get()) }
+    viewModel { TicketsViewModel(get(), get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
     viewModel { FavouriteEventsViewModel(get()) }

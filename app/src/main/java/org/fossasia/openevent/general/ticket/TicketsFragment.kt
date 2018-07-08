@@ -48,8 +48,8 @@ class TicketsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(id: Int, quantity: Int) {
-                handleTicketSelect(id, quantity)
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)

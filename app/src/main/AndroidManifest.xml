@@ -24,15 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.fossasia.openevent.general.AuthActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:name=".AuthActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name="org.fossasia.openevent.general.about.AboutEventActivity"
+            android:name=".about.AboutEventActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".search.SearchLocationActivity"/>
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".search.SearchLocationActivity" />
+        <activity android:name=".search.SearchTimeActivity"></activity>
     </application>
 
 </manifest>
