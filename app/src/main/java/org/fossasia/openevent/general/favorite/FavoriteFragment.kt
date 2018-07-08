@@ -11,10 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
-import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.event.FavoriteFabListener
-import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.event.*
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -43,8 +40,11 @@ class FavoriteFragment : Fragment() {
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(eventId: Long, isFavourite: Boolean) {
-                favoriteEventViewModel.setFavorite(eventId, !isFavourite)
+            override fun onClick(event: Event, isFavourite: Boolean) {
+                val id = favoriteEventsRecyclerAdapter.getPos(event.id)
+                favoriteEventViewModel.setFavorite(event.id, !isFavourite)
+                event.favorite = !event.favorite
+                favoriteEventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
 

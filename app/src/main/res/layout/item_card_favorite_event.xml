@@ -16,9 +16,9 @@
             android:id="@+id/shareFab"
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
-            android:layout_gravity="end"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="80dp"
-            android:layout_marginTop="120dp"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -28,9 +28,9 @@
             android:id="@+id/favoriteFab"
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
-            android:layout_gravity="end"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:layout_marginTop="120dp"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -52,6 +52,7 @@
                 <ImageView
                     android:id="@+id/eventImage"
                     android:layout_width="100dp"
+                    android:layout_gravity="center"
                     android:layout_height="100dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
@@ -62,7 +63,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:orientation="vertical">
 
