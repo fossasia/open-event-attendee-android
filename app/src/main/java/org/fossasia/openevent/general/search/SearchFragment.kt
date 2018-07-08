@@ -121,10 +121,10 @@ class SearchFragment : Fragment() {
                 searchViewModel.searchEvent = query
                 rootView.searchLinearLayout.visibility = View.GONE
                 rootView.fabSearch.visibility = View.GONE
-                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text=="Anytime")
-                    searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(),searchViewModel.savedDate.nullToEmpty())
+                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text == "Anytime")
+                    searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
                 else
-                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty(),rootView.timeTextView.text.toString().nullToEmpty())
+                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty(), rootView.timeTextView.text.toString().nullToEmpty())
                 loadEventsAgain = true
                 return false
             }
