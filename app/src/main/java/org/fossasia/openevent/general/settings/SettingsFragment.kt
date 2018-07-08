@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.settings
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
@@ -33,7 +33,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        context?.let { ContextCompat.getColor(it, android.R.color.white) }?.let { view?.setBackgroundColor(it) }
+        view?.setBackgroundColor(Color.WHITE)
         return view
     }
 
@@ -105,9 +105,14 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onDestroyView() {
         val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(false)
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        val activity =  activity as? AppCompatActivity
+        activity?.supportActionBar?.title = "Settings"
+        super.onResume()
     }
 
     private fun showDialog() {

@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.settings
 
+import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.Preference
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        context?.let { ContextCompat.getColor(it, android.R.color.white) }?.let { view?.setBackgroundColor(it) }
+        view?.setBackgroundColor(Color.WHITE)
         return view
     }
 
