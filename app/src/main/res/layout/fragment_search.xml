@@ -59,6 +59,43 @@
                         android:layout_gravity="center_horizontal"
                         android:background="@color/grey" />
                 </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/at"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:textSize="@dimen/heading_text_size" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/timeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/anytime"
+                        android:layout_marginTop="@dimen/layout_margin_large"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_extra_large"
+                        tools:text="India" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_alignEnd="@id/timeTextView"
+                        android:layout_alignLeft="@+id/timeTextView"
+                        android:layout_alignRight="@id/timeTextView"
+                        android:layout_alignStart="@+id/timeTextView"
+                        android:layout_below="@id/timeTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
             </LinearLayout>
 
             <FrameLayout

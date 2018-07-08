@@ -76,6 +76,15 @@ class SearchFragment : Fragment() {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
+        rootView.timeTextView.setOnClickListener {
+            val intent = Intent(activity, SearchTimeActivity::class.java)
+            startActivity(intent)
+        }
+
+        if (searchViewModel.savedDate != null) {
+            rootView.timeTextView.text = searchViewModel.savedDate
+        }
+
         if (searchViewModel.savedLocation != null) {
             rootView.locationTextView.text = searchViewModel.savedLocation
         }
@@ -112,10 +121,10 @@ class SearchFragment : Fragment() {
                 searchViewModel.searchEvent = query
                 rootView.searchLinearLayout.visibility = View.GONE
                 rootView.fabSearch.visibility = View.GONE
-                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()))
-                    searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty())
+                if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text == "Anytime")
+                    searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
                 else
-                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty())
+                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty(), rootView.timeTextView.text.toString().nullToEmpty())
                 loadEventsAgain = true
                 return false
             }
@@ -133,6 +142,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        searchView?.setOnQueryTextListener(null)
+        if (searchView != null)
+            searchView?.setOnQueryTextListener(null)
     }
 }
