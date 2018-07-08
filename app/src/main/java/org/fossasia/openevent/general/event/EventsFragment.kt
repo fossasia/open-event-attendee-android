@@ -96,8 +96,9 @@ class EventsFragment : Fragment() {
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
-            if (isNetworkConnected)
+            if (eventsViewModel.savedLocation != null && isNetworkConnected){
                 eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            }
             showNoInternetScreen(isNetworkConnected)
         }
 
