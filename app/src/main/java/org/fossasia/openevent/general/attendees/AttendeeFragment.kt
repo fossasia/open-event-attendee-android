@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
@@ -33,6 +35,7 @@ class AttendeeFragment : Fragment() {
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    private lateinit var selectedPaymentOption: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,47 +55,62 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
 
-        if (!attendeeFragmentViewModel.isLoggedIn()) {
-            redirectToLogin()
-            Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
-        }
+        val paymentOptions = ArrayList<String>()
+        paymentOptions.add("paypal")
+        paymentOptions.add("stripe")
+        rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
+        rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
 
-        attendeeFragmentViewModel.loadUser(attendeeFragmentViewModel.getId())
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                selectedPaymentOption = paymentOptions[p2]
+            }
+        }
         attendeeFragmentViewModel.loadEvent(id)
 
-        attendeeFragmentViewModel.message.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        if (attendeeFragmentViewModel.isLoggedIn()) {
 
-        attendeeFragmentViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBarAttendee, it) }
-        })
+            attendeeFragmentViewModel.loadUser(attendeeFragmentViewModel.getId())
+            attendeeFragmentViewModel.loadEvent(id)
 
-        attendeeFragmentViewModel.event.observe(this, Observer {
-            it?.let { loadEventDetails(it) }
-        })
+            attendeeFragmentViewModel.message.observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
-        attendeeFragmentViewModel.attendee.observe(this, Observer {
-            it?.let {
-                firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
-                lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())
-                email.text = Editable.Factory.getInstance().newEditable(it.email.nullToEmpty())
-            }
-        })
+            attendeeFragmentViewModel.progress.observe(this, Observer {
+                it?.let { Utils.showProgressBar(rootView.progressBarAttendee, it) }
+            })
 
-        rootView.register.setOnClickListener {
-            ticketIdAndQty?.forEach {
-                if (it.second > 0) {
-                    val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
-                            firstname = firstName.text.toString(),
-                            lastname = lastName.text.toString(),
-                            email = email.text.toString(),
-                            ticket = TicketId(it.first.toLong()),
-                            event = eventId)
+            attendeeFragmentViewModel.event.observe(this, Observer {
+                it?.let { loadEventDetails(it) }
+            })
 
-                    attendeeFragmentViewModel.createAttendee(attendee)
+            attendeeFragmentViewModel.attendee.observe(this, Observer {
+                it?.let {
+                    firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
+                    lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())
+                    email.text = Editable.Factory.getInstance().newEditable(it.email.nullToEmpty())
+                }
+            })
+
+            rootView.register.setOnClickListener {
+                ticketIdAndQty?.forEach {
+                    if (it.second > 0) {
+                        val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
+                                firstname = firstName.text.toString(),
+                                lastname = lastName.text.toString(),
+                                email = email.text.toString(),
+                                ticket = TicketId(it.first.toLong()),
+                                event = eventId)
+                        val country = country.text.toString()
+                        attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
+                    }
                 }
             }
+        } else {
+            redirectToLogin()
+            Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
 
         return rootView

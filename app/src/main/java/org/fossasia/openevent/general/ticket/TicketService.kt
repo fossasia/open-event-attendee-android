@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.ticket
 
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 class TicketService(private val ticketApi: TicketApi, private val ticketsDao: TicketsDao) {
 
@@ -19,4 +20,9 @@ class TicketService(private val ticketApi: TicketApi, private val ticketsDao: Ti
                         }
         }
     }
+
+    fun getTicketDetails(id: Long): Single<Ticket> {
+        return ticketsDao.getTicketDetails(id)
+    }
+
 }
