@@ -7,6 +7,7 @@ import io.reactivex.Single
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
+import java.util.Locale.filter
 import kotlin.collections.ArrayList
 
 class EventService(private val eventApi: EventApi, private val eventDao: EventDao, private val eventTopicApi: EventTopicApi, private val eventTopicsDao: EventTopicsDao) {
@@ -30,16 +31,10 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     }
 
     private fun getEventTopicList(eventsList: List<Event>): List<EventTopic> {
-        var eventTopicList = ArrayList<EventTopic>()
-
-        Observable.fromIterable(eventsList)
+        return eventsList
                 .filter { it.eventTopic != null }
                 .map { it -> it.eventTopic }
-                .toList()
-                .subscribe { topicList ->
-                    eventTopicList = topicList as ArrayList<EventTopic>
-                }
-        return eventTopicList
+                .toList() as List<EventTopic>
     }
 
     fun getEventTopics(): Flowable<List<EventTopic>> {
