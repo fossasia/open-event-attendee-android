@@ -25,4 +25,7 @@ class TicketService(private val ticketApi: TicketApi, private val ticketsDao: Ti
         return ticketsDao.getTicketDetails(id)
     }
 
+    fun getTicketPriceWithIds(ids: List<Int>): Single<List<String>> {
+        return ticketsDao.getTicketPriceWithIds(ids)
+    }
 }
