@@ -142,7 +142,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (searchView != null)
-            searchView?.setOnQueryTextListener(null)
+        if (this::searchView.isInitialized)
+            searchView.setOnQueryTextListener(null)
     }
 }
