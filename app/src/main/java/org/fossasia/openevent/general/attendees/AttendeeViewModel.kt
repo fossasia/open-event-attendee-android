@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.attendees
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.view.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -23,18 +24,29 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
-    var ticketPriceList = MutableLiveData<List<String>>()
+    var paymentSelectorVisibility = MutableLiveData<Int>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun getTicketPricesWithIds(ids: List<Int>) {
-        compositeDisposable.add(ticketService.getTicketPriceWithIds(ids)
+    fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
+        val ticketIds = ArrayList<Int>()
+        ticketIdAndQty?.forEach { if (it.second > 0) ticketIds.add(it.first) }
+
+        compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    ticketPriceList.value = it
+                    var total = 0.toFloat()
+                    it?.forEach {
+                        if (it.toFloat() > 0) total += it.toFloat()
+                    }
+                    if (total == 0.toFloat()) {
+                        paymentSelectorVisibility.value = View.GONE
+                    } else {
+                        paymentSelectorVisibility.value = View.VISIBLE
+                    }
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
