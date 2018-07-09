@@ -92,7 +92,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingRight="@dimen/padding_large"
-                    android:paddingBottom="@dimen/padding_large"
+                    android:paddingBottom="@dimen/padding_medium"
                     android:paddingTop="@dimen/padding_medium">
 
                     <TextView
