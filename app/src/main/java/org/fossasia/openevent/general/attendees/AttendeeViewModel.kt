@@ -24,6 +24,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
+    var totalAmount = MutableLiveData<Float>()
 
     fun getId() = authHolder.getId()
 
@@ -31,16 +32,25 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
-        ticketIdAndQty?.forEach { if (it.second > 0) ticketIds.add(it.first) }
+        val qty = ArrayList<Int>()
+
+        ticketIdAndQty?.forEach {
+            if (it.second > 0) {
+                ticketIds.add(it.first)
+                qty.add(it.second)
+            }
+        }
 
         compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     var total = 0.toFloat()
+                    var index = 0
                     it?.forEach {
-                        if (it.toFloat() > 0) total += it.toFloat()
+                        if (it.toFloat() > 0) total += it.toFloat() * qty[index++]
                     }
+                    totalAmount.value = total
                     paymentSelectorVisibility.value = total != 0.toFloat()
                 }, {
                     Timber.e(it, "Error Loading tickets!")

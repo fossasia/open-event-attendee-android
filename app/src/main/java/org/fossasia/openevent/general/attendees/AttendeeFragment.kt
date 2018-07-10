@@ -75,6 +75,19 @@ class AttendeeFragment : Fragment() {
                 selectedPaymentOption = paymentOptions[p2]
             }
         }
+
+        attendeeFragmentViewModel.totalAmount.observe(this, Observer {
+            rootView.amount.text="Total: $$it"
+        })
+
+        var qty=0
+        ticketIdAndQty?.forEach {
+            if (it.second > 0) {
+                qty+=it.second
+            }
+        }
+        rootView.qty.text=" — $qty items"
+
         attendeeFragmentViewModel.loadEvent(id)
 
         if (attendeeFragmentViewModel.isLoggedIn()) {
