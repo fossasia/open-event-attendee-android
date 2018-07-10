@@ -130,6 +130,12 @@
         android:layout_height="wrap_content">
     </android.support.v7.widget.AppCompatSpinner>
 
+            <com.stripe.android.view.CardInputWidget
+                android:id="@+id/cardInputWidget"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content" />
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/register"
         android:layout_width="match_parent"

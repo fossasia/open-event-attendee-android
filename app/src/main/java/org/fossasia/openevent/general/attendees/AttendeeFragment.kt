@@ -13,6 +13,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.stripe.android.Stripe
+import com.stripe.android.TokenCallback
+import com.stripe.android.model.Card
+import com.stripe.android.model.Token
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
@@ -38,6 +42,7 @@ class AttendeeFragment : Fragment() {
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
+    private val API_KEY = "Enter your Stripe API key"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +80,10 @@ class AttendeeFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedPaymentOption = paymentOptions[p2]
+                if (selectedPaymentOption == "Stripe")
+                    rootView.cardInputWidget.visibility = View.VISIBLE
+                else
+                    rootView.cardInputWidget.visibility = View.GONE
             }
         }
 
@@ -113,6 +122,9 @@ class AttendeeFragment : Fragment() {
             })
 
             rootView.register.setOnClickListener {
+                if (selectedPaymentOption == "Stripe")
+                    sendToken()
+
                 ticketIdAndQty?.forEach {
                     if (it.second > 0) {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
@@ -136,6 +148,31 @@ class AttendeeFragment : Fragment() {
 
     private fun redirectToLogin() {
         startActivity(Intent(activity, AuthActivity::class.java))
+    }
+
+    private fun sendToken() {
+        val cardDetails: Card? = cardInputWidget.card
+
+        if (cardDetails == null)
+            Toast.makeText(context, "Invalid card data", Toast.LENGTH_LONG).show()
+
+        cardDetails?.let {
+            context?.let { contextIt ->
+                Stripe(contextIt).createToken(
+                        it,
+                        API_KEY,
+                        object : TokenCallback {
+                            override fun onSuccess(token: Token) {
+                                //Send this token to server
+                                Toast.makeText(context, "Token received from Stripe", Toast.LENGTH_LONG).show()
+                            }
+
+                            override fun onError(error: Exception) {
+                                Toast.makeText(context, error.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                            }
+                        })
+            }
+        }
     }
 
     private fun loadEventDetails(event: Event) {
