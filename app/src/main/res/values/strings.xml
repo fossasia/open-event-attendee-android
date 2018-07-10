@@ -28,6 +28,7 @@
     <string name="what_time">What time works?</string>
     <string name="pick_date">Pick a date...</string>
     <string name="at">at</string>
+    <string name="no_search_results">No Search Results!\nTry another search</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
