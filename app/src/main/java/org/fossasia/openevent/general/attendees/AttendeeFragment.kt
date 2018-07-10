@@ -77,16 +77,16 @@ class AttendeeFragment : Fragment() {
         }
 
         attendeeFragmentViewModel.totalAmount.observe(this, Observer {
-            rootView.amount.text="Total: $$it"
+            rootView.amount.text = "Total: $$it"
         })
 
-        var qty=0
+        var qty = 0
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
-                qty+=it.second
+                qty += it.second
             }
         }
-        rootView.qty.text=" — $qty items"
+        rootView.qty.text = " — $qty items"
 
         attendeeFragmentViewModel.loadEvent(id)
 
