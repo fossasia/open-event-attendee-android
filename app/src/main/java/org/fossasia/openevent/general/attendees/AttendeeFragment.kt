@@ -26,6 +26,7 @@ import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
+import java.util.*
 
 
 class AttendeeFragment : Fragment() {
@@ -36,6 +37,7 @@ class AttendeeFragment : Fragment() {
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
+    private lateinit var paymentCurrency: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,7 @@ class AttendeeFragment : Fragment() {
         paymentOptions.add("PayPal")
         paymentOptions.add("Stripe")
         attendeeFragmentViewModel.paymentSelectorVisibility.observe(this, Observer {
-            if (it !=null && it) {
+            if (it != null && it) {
                 rootView.paymentSelector.visibility = View.VISIBLE
             } else {
                 rootView.paymentSelector.visibility = View.GONE
@@ -75,18 +77,6 @@ class AttendeeFragment : Fragment() {
                 selectedPaymentOption = paymentOptions[p2]
             }
         }
-
-        attendeeFragmentViewModel.totalAmount.observe(this, Observer {
-            rootView.amount.text = "Total: $$it"
-        })
-
-        var qty = 0
-        ticketIdAndQty?.forEach {
-            if (it.second > 0) {
-                qty += it.second
-            }
-        }
-        rootView.qty.text = " — $qty items"
 
         attendeeFragmentViewModel.loadEvent(id)
 
@@ -105,6 +95,13 @@ class AttendeeFragment : Fragment() {
 
             attendeeFragmentViewModel.event.observe(this, Observer {
                 it?.let { loadEventDetails(it) }
+                attendeeFragmentViewModel.totalAmount.observe(this, Observer {
+                    rootView.amount.text = "Total: $paymentCurrency $it"
+                })
+            })
+
+            attendeeFragmentViewModel.totalQty.observe(this, Observer {
+                rootView.qty.text = " — $it items"
             })
 
             attendeeFragmentViewModel.attendee.observe(this, Observer {
@@ -145,6 +142,8 @@ class AttendeeFragment : Fragment() {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val currency = Currency.getInstance(event.paymentCurrency)
+        paymentCurrency = currency.symbol
 
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))

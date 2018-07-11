@@ -25,6 +25,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     var attendee = MutableLiveData<User>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
     var totalAmount = MutableLiveData<Float>()
+    var totalQty = MutableLiveData<Int>()
 
     fun getId() = authHolder.getId()
 
@@ -33,11 +34,13 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
+        totalQty.value = 0
 
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
                 qty.add(it.second)
+                totalQty.value = totalQty.value?.plus(it.second)
             }
         }
 
