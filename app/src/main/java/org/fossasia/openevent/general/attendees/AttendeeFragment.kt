@@ -20,6 +20,7 @@ import com.stripe.android.model.Token
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
@@ -42,7 +43,8 @@ class AttendeeFragment : Fragment() {
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
-    private val API_KEY = "Enter your Stripe API key"
+
+    private val API_KEY = BuildConfig.STRIPE_API_TOKEN ?: "Enter your Stripe API key"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

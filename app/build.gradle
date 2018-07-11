@@ -25,6 +25,10 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        buildTypes.each {
+            it.buildConfigField "String", "STRIPE_API_TOKEN", "$System.env.STRIPE_API_TOKEN"
+        }
     }
     compileOptions {
         targetCompatibility 1.8
