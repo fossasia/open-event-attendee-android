@@ -27,7 +27,7 @@ android {
         }
 
         buildTypes.each {
-            it.buildConfigField "String", "STRIPE_API_TOKEN", "$System.env.STRIPE_API_TOKEN"
+            it.buildConfigField 'String', 'STRIPE_API_TOKEN', "$System.env.STRIPE_API_TOKEN"
         }
     }
     compileOptions {
