@@ -18,7 +18,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
 
         if (dateFormat == FAVORITE_EVENT_DATE_FORMAT) {
-            itemView.date.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+            itemView.date.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         } else {
             itemView.date.text = startsAt.dayOfMonth.toString()
             itemView.month.text = startsAt.month.name.slice(0 until 3)

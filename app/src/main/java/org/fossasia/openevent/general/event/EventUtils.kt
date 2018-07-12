@@ -144,4 +144,18 @@ object EventUtils {
             return ""
         }
     }
+
+    fun getFormattedDateTimeRangeBulleted(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
+        val startingDate = getFormattedDateShort(startsAt)
+        val endingDate = getFormattedDateShort(endsAt)
+        try {
+            if (startingDate != endingDate)
+                return "$startingDate - $endingDate • ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+            else
+                return "$startingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(endsAt)}"
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting time")
+            return ""
+        }
+    }
 }
