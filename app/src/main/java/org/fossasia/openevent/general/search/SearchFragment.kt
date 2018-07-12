@@ -64,6 +64,7 @@ class SearchFragment : Fragment() {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
+                handleVisibility(it)
             }
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
@@ -138,6 +139,10 @@ class SearchFragment : Fragment() {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    fun handleVisibility(events: List<Event>){
+        rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
     }
 
     override fun onDestroy() {
