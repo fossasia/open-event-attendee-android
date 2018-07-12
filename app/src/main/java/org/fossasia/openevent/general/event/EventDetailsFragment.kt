@@ -26,6 +26,7 @@ import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.content_event.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.CircleTransform
+import org.fossasia.openevent.general.ticket.CURRENCY
 
 const val EVENT_ID = "EVENT_ID"
 const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
@@ -36,6 +37,7 @@ class EventDetailsFragment : Fragment() {
     private var eventId: Long = -1
     private var eventTopicId: Long? = null
     private lateinit var eventShare: Event
+    private var currency: String? = null
     private val LINE_COUNT: Int = 3
     private var menuActionBar: Menu? = null
 
@@ -117,6 +119,7 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logoIcon)
         }
 
+        currency = event.paymentCurrency
         //About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             val aboutIntent = Intent(context, AboutEventActivity::class.java)
@@ -275,6 +278,7 @@ class EventDetailsFragment : Fragment() {
         val ticketFragment = TicketsFragment()
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", eventId)
+        bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
         activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, ticketFragment)?.addToBackStack(null)?.commit()
     }
