@@ -22,9 +22,9 @@ import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderApi
 import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
-import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -80,7 +80,7 @@ val apiModule = applicationContext {
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
-    factory { OrderService(get(), get()) }
+    factory { OrderService(get(), get(), get()) }
 
 }
 
