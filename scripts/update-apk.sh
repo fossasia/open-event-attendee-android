@@ -15,9 +15,23 @@ fi
 
 git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/open-event-android apk > /dev/null
 cd apk
+
+if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+	    /bin/rm -f *
+	else
+	    /bin/rm -f app-debug.apk app-release.apk
+fi
+
 \cp -r ../app/build/outputs/apk/*/**.apk .
 \cp -r ../app/build/outputs/apk/debug/output.json debug-output.json
 \cp -r ../app/build/outputs/apk/release/output.json release-output.json
+
+
+if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+		for file in app*; do
+			cp $file open-event-master-${file%%}
+		done
+fi
 
 # Create a new branch that will contains only latest apk
 git checkout --orphan temporary
