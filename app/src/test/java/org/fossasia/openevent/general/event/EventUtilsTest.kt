@@ -223,7 +223,7 @@ class EventUtilsTest {
         val startsAt = getLocalizedDate(event.startsAt)
         val endsAt = getLocalizedDate(event.endsAt)
         assertEquals("""
-          Mon, Sep 15 - Friday, Sep 19 • 04:23 PM IST
+          Mon, Sep 15 - Fri, Sep 19 • 04:23 PM IST
             """.trimIndent(), EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt))
     }
 
