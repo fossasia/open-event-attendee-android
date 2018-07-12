@@ -23,10 +23,29 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
+    var paymentSelectorVisibility = MutableLiveData<Boolean>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
+        val ticketIds = ArrayList<Int>()
+        ticketIdAndQty?.forEach { if (it.second > 0) ticketIds.add(it.first) }
+
+        compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    var total = 0.toFloat()
+                    it?.forEach {
+                        if (it.toFloat() > 0) total += it.toFloat()
+                    }
+                    paymentSelectorVisibility.value = total != 0.toFloat()
+                }, {
+                    Timber.e(it, "Error Loading tickets!")
+                }))
+    }
 
     fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
@@ -64,7 +83,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribe({
                     val order = Order(
                             id = getId(),
-                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption,
+                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption.toLowerCase(),
                             country = country,
                             status = "pending",
                             amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),
