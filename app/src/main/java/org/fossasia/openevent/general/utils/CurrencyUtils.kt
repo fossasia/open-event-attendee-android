@@ -1,8 +1,7 @@
 package org.fossasia.openevent.general.utils
 
 import timber.log.Timber
-import java.util.Currency
-import java.util.Locale
+import java.util.*
 
 object CurrencyUtils {
     private var currencyLocaleMap = HashMap<Currency, Locale>()
@@ -12,8 +11,8 @@ object CurrencyUtils {
             try {
                 val currency = Currency.getInstance(locale)
                 currencyLocaleMap.put(currency, locale)
-            } catch (e: Exception) {
-                Timber.e(e, "Failed!")
+            } catch (e: NullPointerException) {
+                Timber.d(e, "Failed!")
             }
         }
     }
