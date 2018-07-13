@@ -11,7 +11,7 @@ object CurrencyUtils {
             try {
                 val currency = Currency.getInstance(locale)
                 currencyLocaleMap.put(currency, locale)
-            } catch (e: NullPointerException) {
+            } catch (e: IllegalArgumentException) {
                 Timber.d(e, "Failed!")
             }
         }
