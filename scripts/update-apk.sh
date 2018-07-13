@@ -26,7 +26,6 @@ fi
 \cp -r ../app/build/outputs/apk/debug/output.json debug-output.json
 \cp -r ../app/build/outputs/apk/release/output.json release-output.json
 
-
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
 		cp $file open-event-master-${file%%}
