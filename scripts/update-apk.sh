@@ -8,8 +8,8 @@ export DEPLOY_BRANCH=${DEPLOY_BRANCH:-development}
 export PUBLISH_BRANCH=${PUBLISH_BRANCH:-master}
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-android" ] || ! [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" -o "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-    echo "We upload apk only for changes in development or master, and not PRs. So, let's skip this shall we ? :)"
-    exit 0
+	echo "We upload apk only for changes in development or master, and not PRs. So, let's skip this shall we ? :)"
+	exit 0
 fi
 
 
@@ -17,9 +17,9 @@ git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossa
 cd apk
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-	    /bin/rm -f *
-	else
-	    /bin/rm -f app-debug.apk app-release.apk
+	/bin/rm -f *
+else
+	/bin/rm -f app-debug.apk app-release.apk
 fi
 
 \cp -r ../app/build/outputs/apk/*/**.apk .
@@ -28,9 +28,9 @@ fi
 
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-		for file in app*; do
-			cp $file open-event-master-${file%%}
-		done
+	for file in app*; do
+		cp $file open-event-master-${file%%}
+	done
 fi
 
 # Create a new branch that will contains only latest apk
