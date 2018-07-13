@@ -27,7 +27,7 @@ data class Ticket(
         val maxOrder: Int = 0,
         val isFeeAbsorbed: Boolean? = false,
         val isDescriptionVisible: Boolean? = false,
-        val price: String?,
+        val price: Float?,
         val position: String?,
         val quantity: String?,
 
