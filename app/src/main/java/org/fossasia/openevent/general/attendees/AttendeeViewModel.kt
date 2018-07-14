@@ -51,7 +51,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     var total = 0.toFloat()
                     var index = 0
                     it?.forEach {
-                        if (it.toFloat() > 0) total += it.toFloat() * qty[index++]
+                        if (it > 0) total += it * qty[index++]
                     }
                     totalAmount.value = total
                     paymentSelectorVisibility.value = total != 0.toFloat()
@@ -96,10 +96,10 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribe({
                     val order = Order(
                             id = getId(),
-                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption.toLowerCase(),
+                            paymentMode = if (it.price == null || it.price <= 0) "free" else paymentOption.toLowerCase(),
                             country = country,
                             status = "pending",
-                            amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),
+                            amount = if (it.price == null || it.price <= 0) null else it.price,
                             attendees = arrayListOf(AttendeeId(attendeeId)),
                             event = EventId(eventId))
                     createOrder(order)
