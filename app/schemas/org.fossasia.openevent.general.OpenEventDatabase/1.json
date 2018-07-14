@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ecb795aa1c95b8e556fbff281a4e6913",
+    "identityHash": "7d7ec45b5212427d8dfeb400e6bdfa55",
     "entities": [
       {
         "tableName": "Event",
@@ -522,7 +522,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` TEXT, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` REAL, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -569,7 +569,7 @@
           {
             "fieldPath": "price",
             "columnName": "price",
-            "affinity": "TEXT",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -919,7 +919,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ecb795aa1c95b8e556fbff281a4e6913\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7d7ec45b5212427d8dfeb400e6bdfa55\")"
     ]
   }
 }

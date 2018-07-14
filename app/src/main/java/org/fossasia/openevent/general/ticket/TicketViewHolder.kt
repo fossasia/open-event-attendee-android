@@ -30,12 +30,12 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.adapter = ArrayAdapter(itemView.context, R.layout.select_dialog_singlechoice, spinnerList)
         }
 
-        if (!ticket.price.isNullOrEmpty()) {
+        if (ticket.price != null) {
             itemView.price.visibility = View.VISIBLE
             itemView.price.text = "$${ticket.price}"
         }
 
-        if (ticket.price.equals("0.0")) {
+        if (ticket.price == 0.toFloat()) {
             itemView.price.text = "Free"
         }
     }
