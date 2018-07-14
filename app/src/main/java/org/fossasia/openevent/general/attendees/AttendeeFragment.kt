@@ -56,7 +56,6 @@ class AttendeeFragment : Fragment() {
             eventId = EventId(id)
             ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
-
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
                 ?.metaData?.getString(STRIPE_KEY).toString()
     }
@@ -80,7 +79,6 @@ class AttendeeFragment : Fragment() {
             }
 
         })
-
         rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
