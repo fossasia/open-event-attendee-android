@@ -24,6 +24,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
+    var totalAmount = MutableLiveData<Float>()
+    var totalQty = MutableLiveData<Int>()
 
     fun getId() = authHolder.getId()
 
@@ -31,16 +33,27 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
-        ticketIdAndQty?.forEach { if (it.second > 0) ticketIds.add(it.first) }
+        val qty = ArrayList<Int>()
+        totalQty.value = 0
+
+        ticketIdAndQty?.forEach {
+            if (it.second > 0) {
+                ticketIds.add(it.first)
+                qty.add(it.second)
+                totalQty.value = totalQty.value?.plus(it.second)
+            }
+        }
 
         compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     var total = 0.toFloat()
+                    var index = 0
                     it?.forEach {
-                        if (it.toFloat() > 0) total += it.toFloat()
+                        if (it > 0) total += it * qty[index++]
                     }
+                    totalAmount.value = total
                     paymentSelectorVisibility.value = total != 0.toFloat()
                 }, {
                     Timber.e(it, "Error Loading tickets!")
@@ -83,10 +96,10 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribe({
                     val order = Order(
                             id = getId(),
-                            paymentMode = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) "free" else paymentOption.toLowerCase(),
+                            paymentMode = if (it.price == null || it.price <= 0) "free" else paymentOption.toLowerCase(),
                             country = country,
                             status = "pending",
-                            amount = if (it.price?.toFloat() == null || it.price.toFloat().compareTo(0) <= 0) null else it.price.toFloat(),
+                            amount = if (it.price == null || it.price <= 0) null else it.price,
                             attendees = arrayListOf(AttendeeId(attendeeId)),
                             event = EventId(eventId))
                     createOrder(order)
