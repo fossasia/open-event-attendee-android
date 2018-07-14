@@ -57,7 +57,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         aboutEventContent.text = event.description
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+        aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
 
         eventName.text = event.name
     }
