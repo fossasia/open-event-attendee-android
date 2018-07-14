@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.attendees
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -33,6 +34,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
+private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
 class AttendeeFragment : Fragment() {
 
@@ -44,7 +46,7 @@ class AttendeeFragment : Fragment() {
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
 
-    private val API_KEY = BuildConfig.STRIPE_API_TOKEN ?: "Enter your Stripe API key"
+    private lateinit var API_KEY:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,9 @@ class AttendeeFragment : Fragment() {
             eventId = EventId(id)
             ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
+
+        API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
+                ?.metaData?.getString(STRIPE_KEY).toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +80,7 @@ class AttendeeFragment : Fragment() {
             }
 
         })
+
         rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {

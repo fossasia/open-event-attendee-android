@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -14,6 +16,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        manifestPlaceholders = [
+                STRIPE_API_TOKEN: STRIPE_API_TOKEN
+        ]
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -26,9 +31,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        buildTypes.each {
-            it.buildConfigField 'String', 'STRIPE_API_TOKEN', "$System.env.STRIPE_API_TOKEN"
-        }
     }
     compileOptions {
         targetCompatibility 1.8
