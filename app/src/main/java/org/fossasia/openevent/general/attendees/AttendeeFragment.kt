@@ -46,7 +46,7 @@ class AttendeeFragment : Fragment() {
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
 
-    private lateinit var API_KEY:String
+    private lateinit var API_KEY: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
