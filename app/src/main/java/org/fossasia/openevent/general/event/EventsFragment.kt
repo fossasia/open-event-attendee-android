@@ -1,9 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -93,10 +91,10 @@ class EventsFragment : Fragment() {
             startActivity(intent)
         }
 
-        showNoInternetScreen(isNetworkConnected())
+        showNoInternetScreen(Utils.isNetworkConnected(context))
 
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected()
+            val isNetworkConnected = Utils.isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected){
                 eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
             }
@@ -110,11 +108,4 @@ class EventsFragment : Fragment() {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
     }
-
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        return connectivityManager?.activeNetworkInfo != null
-    }
-
 }

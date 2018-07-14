@@ -29,7 +29,11 @@ class LoginFragment : Fragment() {
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            loginActivityViewModel.login(username.text.toString(), password.text.toString())
+            if (Utils.isNetworkConnected(context)) {
+                loginActivityViewModel.login(username.text.toString(), password.text.toString())
+            } else {
+                Utils.showNoInternetDialog(activity)
+            }
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
@@ -57,5 +61,4 @@ class LoginFragment : Fragment() {
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }
-
 }

@@ -29,13 +29,16 @@ class SignUpFragment : Fragment() {
         val signUp = SignUp()
 
         rootView.signUpButton.setOnClickListener {
-            signUp.email = usernameSignUp.text.toString()
-            signUp.password = passwordSignUp.text.toString()
-            signUp.firstName = firstNameText.text.toString()
-            signUp.lastName = lastNameText.text.toString()
-            confirmPassword = confirmPasswords.text.toString()
-
-            signUpActivityViewModel.signUp(signUp, confirmPassword)
+            if (Utils.isNetworkConnected(context)) {
+                signUp.email = usernameSignUp.text.toString()
+                signUp.password = passwordSignUp.text.toString()
+                signUp.firstName = firstNameText.text.toString()
+                signUp.lastName = lastNameText.text.toString()
+                confirmPassword = confirmPasswords.text.toString()
+                signUpActivityViewModel.signUp(signUp, confirmPassword)
+            } else {
+                Utils.showNoInternetDialog(activity)
+            }
         }
 
         signUpActivityViewModel.progress.observe(this, Observer {
@@ -68,5 +71,4 @@ class SignUpFragment : Fragment() {
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }
-
 }
