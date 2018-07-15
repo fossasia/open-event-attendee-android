@@ -14,6 +14,8 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
+import android.text.Editable
+import android.text.TextWatcher
 
 class LoginFragment : Fragment() {
 
@@ -29,7 +31,7 @@ class LoginFragment : Fragment() {
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            loginActivityViewModel.login(username.text.toString(), password.text.toString())
+            loginActivityViewModel.login(email.text.toString(), password.text.toString())
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
@@ -47,6 +49,34 @@ class LoginFragment : Fragment() {
             Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
             redirectToMain()
         })
+
+        rootView.email.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
+                if (loginActivityViewModel.showForgotPassword(email.toString())) {
+                    rootView.forgotPassword.visibility = View.VISIBLE
+                } else {
+                    rootView.forgotPassword.visibility = View.GONE
+                }
+            }
+        })
+
+        loginActivityViewModel.requestTokenSuccess.observe(this, Observer {
+            rootView.sentEmailLayout.visibility = View.VISIBLE
+            rootView.loginLayout.visibility = View.GONE
+        })
+
+        rootView.tick.setOnClickListener {
+            rootView.sentEmailLayout.visibility = View.GONE
+            rootView.loginLayout.visibility = View.VISIBLE
+        }
+
+        rootView.forgotPassword.setOnClickListener {
+            loginActivityViewModel.sendResetPasswordEmail(email.text.toString())
+        }
 
         return rootView
     }

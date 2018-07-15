@@ -15,9 +15,6 @@ interface AuthApi {
     @POST("users")
     fun signUp(@Body signUp: SignUp): Single<User>
 
-    @PATCH("auth/reset-password")
-    fun submitToken(@Body submitToken: SubmitToken): Single<SubmitTokenResponse>
-
     @POST("auth/reset-password")
     fun requestToken(@Body requestToken: RequestToken): Single<RequestTokenResponse>
 
