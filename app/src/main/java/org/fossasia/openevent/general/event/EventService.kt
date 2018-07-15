@@ -63,13 +63,13 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         }
     }
 
-    fun getSimilarEvents(id: Long): Flowable<List<Event>> {
+    fun getSimilarEvents(id: Long, name: String): Flowable<List<Event>> {
         val eventsFlowable = eventDao.getAllSimilarEvents(id)
         return eventsFlowable.switchMap {
             if (it.isNotEmpty())
                 eventsFlowable
             else
-                eventTopicApi.getEventsUnderTopicId(id)
+                eventTopicApi.getEventsUnderTopicId(id,"name", name)
                         .toFlowable()
                         .map {
                             eventDao.insertEvents(it)
