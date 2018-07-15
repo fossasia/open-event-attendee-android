@@ -217,4 +217,23 @@ class EventUtilsTest {
             """.trimIndent(), EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt))
     }
 
+    @Test
+    fun `should get formatted date range bulleted when start and end date are not same in details`() {
+        val event = getEvent()
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          Mon, Sep 15 - Fri, Sep 19 • 04:23 PM IST
+            """.trimIndent(), EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt))
+    }
+
+    @Test
+    fun `should get formatted date range bulleted when start and end date are same in details`() {
+        val event = getEvent(endsAt = "2008-09-15T15:53:00+05:00")
+        val startsAt = getLocalizedDate(event.startsAt)
+        val endsAt = getLocalizedDate(event.endsAt)
+        assertEquals("""
+          Mon, Sep 15 • 04:23 PM IST
+            """.trimIndent(), EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt))
+    }
 }
