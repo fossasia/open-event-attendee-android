@@ -35,13 +35,13 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             price.append(eventCurrency)
         }
 
-        if (!ticket.price.isNullOrEmpty()) {
+        if (ticket.price != null) {
             price.append(ticket.price)
             itemView.price.visibility = View.VISIBLE
             itemView.price.text = price
         }
 
-        if (ticket.price.equals("0.0")) {
+        if (ticket.price == 0.toFloat()) {
             itemView.price.text = "Free"
         }
     }

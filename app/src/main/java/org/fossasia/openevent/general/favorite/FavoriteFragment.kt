@@ -15,6 +15,7 @@ import org.fossasia.openevent.general.event.*
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
+const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 
 class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
