@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
@@ -34,6 +35,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         navigationAuth.setOnNavigationItemSelectedListener(listener)
 
         supportActionBar?.title = "Login"
@@ -45,6 +47,17 @@ class AuthActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainerAuth, fragment)
                 .commit()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean{
+        when (item?.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+                return true
+            }
+        }
+        return false
     }
 
     override fun onBackPressed() {

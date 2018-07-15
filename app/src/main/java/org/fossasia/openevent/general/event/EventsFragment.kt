@@ -22,6 +22,7 @@ import timber.log.Timber
 //String constants for event types
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
+const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
