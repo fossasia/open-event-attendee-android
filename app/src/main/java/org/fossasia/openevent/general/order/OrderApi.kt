@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface OrderApi {
 
-    @POST("orders")
+    @POST("orders?include=event,attendees&fields[event]=id&fields[attendees]=id")
     fun placeOrder(@Body order: Order): Single<Order>
 
     @POST("orders/{orderIdentifier}/charge")
