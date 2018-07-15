@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_ticket.view.*
-import org.fossasia.openevent.general.utils.CurrencyUtils
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -33,7 +32,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val price = StringBuilder()
         if (!eventCurrency.isNullOrEmpty()) {
-            price.append(CurrencyUtils.getCurrencySymbol(eventCurrency))
+            price.append(eventCurrency)
         }
 
         if (!ticket.price.isNullOrEmpty()) {

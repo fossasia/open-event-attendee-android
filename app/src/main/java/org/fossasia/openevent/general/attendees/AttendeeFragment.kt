@@ -23,7 +23,6 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketId
-import org.fossasia.openevent.general.utils.CurrencyUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
@@ -143,7 +142,8 @@ class AttendeeFragment : Fragment() {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        paymentCurrency = CurrencyUtils.getCurrencySymbol(event.paymentCurrency).toString()
+        val currency = Currency.getInstance(event.paymentCurrency)
+        paymentCurrency = currency.symbol
 
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))

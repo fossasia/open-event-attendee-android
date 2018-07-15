@@ -24,9 +24,9 @@ import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.content_event.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.ticket.CURRENCY
+import java.util.*
 
 const val EVENT_ID = "EVENT_ID"
 const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
@@ -119,7 +119,7 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logoIcon)
         }
 
-        currency = event.paymentCurrency
+        currency = Currency.getInstance(event.paymentCurrency).symbol
         //About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             val aboutIntent = Intent(context, AboutEventActivity::class.java)
