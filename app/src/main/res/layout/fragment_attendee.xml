@@ -127,6 +127,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:background="@drawable/filled_border"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_medium">
+
+            <TextView
+                android:id="@+id/helloUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Hello user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_you"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Not you? " />
+
+            <TextView
+                android:id="@+id/signOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/details_margin_small"
+                android:text="@string/sign_out"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Sign out" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -195,7 +230,7 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/paymentSelector"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/stripePayment"

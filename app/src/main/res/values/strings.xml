@@ -87,6 +87,8 @@
     <string name="cvc">CVC</string>
     <string name="postal_code">Postal Code</string>
     <string name="payment_info">Payment Info</string>
+    <string name="not_you">Not you? </string>
+    <string name="sign_out">Sign out</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
