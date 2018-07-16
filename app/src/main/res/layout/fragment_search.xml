@@ -8,20 +8,21 @@
         android:id="@+id/noSearchResults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:visibility="gone"
-        android:layout_gravity="center">
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="@dimen/item_image_view"
             android:layout_height="@dimen/item_image_view"
-            app:srcCompat="@drawable/ic_search_grey_24dp"/>
+            app:srcCompat="@drawable/ic_search_grey_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_medium"
-            android:text="@string/no_search_results"/>
+            android:text="@string/no_search_results"
+            android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -33,16 +34,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-           >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/searchLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginTop="100dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -56,8 +56,7 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/timeTextView"
@@ -86,15 +85,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="In"
                     android:layout_marginTop="@dimen/layout_margin_large"
+                    android:text="In"
                     android:textSize="@dimen/text_size_large" />
 
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/locationTextView"
