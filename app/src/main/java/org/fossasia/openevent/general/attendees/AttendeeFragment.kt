@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -28,6 +29,7 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
+import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -41,6 +43,9 @@ class AttendeeFragment : Fragment() {
     private lateinit var rootView: View
     private var id: Long = -1
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
+    private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
+    private lateinit var linearLayoutManager: LinearLayoutManager
+
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
@@ -67,6 +72,17 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
+
+        rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
+        rootView.ticketsRecycler.isNestedScrollingEnabled = false
+
+        linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        rootView.ticketsRecycler.layoutManager = linearLayoutManager
+
+        attendeeFragmentViewModel.ticketDetails(ticketIdAndQty)
+
         attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
         val paymentOptions = ArrayList<String>()
         paymentOptions.add("PayPal")
@@ -93,6 +109,20 @@ class AttendeeFragment : Fragment() {
             }
         }
 
+        attendeeFragmentViewModel.qtyList.observe(this, Observer {
+            it?.let { it1 -> ticketsRecyclerAdapter.setQty(it1) }
+        })
+
+        rootView.view.setOnClickListener {
+            if (rootView.view.text == "(view)") {
+                rootView.ticketDetails.visibility = View.VISIBLE
+                rootView.view.text = "(hide)"
+            } else {
+                rootView.ticketDetails.visibility = View.GONE
+                rootView.view.text = "(view)"
+            }
+        }
+
         attendeeFragmentViewModel.loadEvent(id)
 
         if (attendeeFragmentViewModel.isLoggedIn()) {
@@ -113,6 +143,13 @@ class AttendeeFragment : Fragment() {
                 attendeeFragmentViewModel.totalAmount.observe(this, Observer {
                     rootView.amount.text = "Total: $paymentCurrency $it"
                 })
+            })
+
+            attendeeFragmentViewModel.tickets.observe(this, Observer {
+                it?.let {
+                    ticketsRecyclerAdapter.addAll(it)
+                }
+                ticketsRecyclerAdapter.notifyDataSetChanged()
             })
 
             attendeeFragmentViewModel.totalQty.observe(this, Observer {
