@@ -11,6 +11,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.ticket.Ticket
@@ -33,6 +34,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val cardType = ArrayList<String>()
+    lateinit var orderIdentifier: String
 
     fun getId() = authHolder.getId()
 
@@ -174,6 +176,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
+                    orderIdentifier = it.identifier.toString()
                     message.value = "Order created successfully!"
                     Timber.d("Success placing order!")
                 }, {
@@ -181,6 +184,24 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     Timber.d(it, "Failed creating Order")
                 }))
     }
+
+    fun completeOrder(charge: Charge) {
+        compositeDisposable.add(orderService.chargeOrder(orderIdentifier, charge)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.doFinally {
+                    progress.value = false
+                }.subscribe({
+                    message.value = "Payment completed successfully!"
+                    Timber.d("Success placing order!")
+                }, {
+                    message.value = "Payment not completed!"
+                    Timber.d(it, "Failed charging the user")
+                }))
+    }
+
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {

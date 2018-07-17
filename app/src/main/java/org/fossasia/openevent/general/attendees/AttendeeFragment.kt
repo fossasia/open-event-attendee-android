@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
@@ -254,7 +255,8 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 //Send this token to server
-                                Toast.makeText(context, "Token received from Stripe", Toast.LENGTH_LONG).show()
+                                val charge = Charge(attendeeFragmentViewModel.orderIdentifier, token.id, null)
+                                attendeeFragmentViewModel.completeOrder(charge)
                             }
 
                             override fun onError(error: Exception) {
