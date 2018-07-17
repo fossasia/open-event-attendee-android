@@ -66,6 +66,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.0'
