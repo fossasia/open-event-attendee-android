@@ -30,15 +30,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.adapter = ArrayAdapter(itemView.context, R.layout.select_dialog_singlechoice, spinnerList)
         }
 
-        val price = StringBuilder()
-        if (!eventCurrency.isNullOrEmpty()) {
-            price.append(eventCurrency)
-        }
-
         if (ticket.price != null) {
-            price.append(ticket.price)
-            itemView.price.visibility = View.VISIBLE
-            itemView.price.text = price
+            itemView.price.text = "${eventCurrency}${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {
