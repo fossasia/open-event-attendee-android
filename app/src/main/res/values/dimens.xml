@@ -13,6 +13,7 @@
     <dimen name="layout_margin_extra_small">2dp</dimen>
     <dimen name="layout_margin_small">6dp</dimen>
     <dimen name="layout_margin_medium">8dp</dimen>
+    <dimen name="layout_margin_moderate">10dp</dimen>
     <dimen name="layout_margin_large">16dp</dimen>
     <dimen name="layout_margin_extra_large">32dp</dimen>
 
@@ -26,7 +27,13 @@
     <!-- card details -->
     <dimen name="card_elevation">3dp</dimen>
     <dimen name="card_corner_radius">3dp</dimen>
+    <dimen name="image_corner_radius">6dp</dimen>
     <dimen name="avatar_medium">120dp</dimen>
+    <dimen name="details_margin_small">4dp</dimen>
+    <dimen name="details_text_size">13sp</dimen>
+    <dimen name="image_card_specific">100dp</dimen>
+    <dimen name="event_name_text_size">19sp</dimen>
+    <dimen name="details_box_margin">10dp</dimen>
 
     <!--event fab specifics-->
     <dimen name="fab_width">40dp</dimen>
