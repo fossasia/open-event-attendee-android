@@ -237,7 +237,6 @@ class AttendeeFragment : Fragment() {
         val cardDetails: Card? = Card(cardNumber.text.toString(), expiryMonth, expiryYear.toInt(), cvc.text.toString())
         cardDetails?.addressCountry = country.text.toString()
         cardDetails?.addressZip = postalCode.text.toString()
-        Toast.makeText(context, "$expiryYear $expiryMonth", Toast.LENGTH_LONG).show()
 
         if (cardDetails?.brand != null && cardDetails.brand != "Unknown")
             rootView.selectCard.text = "Pay by ${cardDetails?.brand}"
