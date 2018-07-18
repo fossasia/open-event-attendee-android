@@ -117,9 +117,7 @@ class LoginFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApi
                 Timber.d("Credential saved")
                 redirectToMain()
             } else {
-                Timber.d("Attempt to save credential failed " +
-                        status.statusMessage + " " +
-                        status.statusCode)
+                Timber.d("Attempt to save credential failed ${status.statusMessage} ${status.statusCode}")
                 resolveResult(status, SAVE_DATA)
             }
         }
@@ -145,7 +143,7 @@ class LoginFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApi
 
         if (status.hasResolution()) {
             try {
-                startIntentSenderForResult(status.resolution.intentSender, requestCode,null, 0, 0, 0, null)
+                startIntentSenderForResult(status.resolution.intentSender, requestCode, null, 0, 0, 0, null)
                 isResolving = true
             } catch (e: IntentSender.SendIntentException) {
                 Timber.e(e)
@@ -171,7 +169,6 @@ class LoginFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApi
             } else if (status.statusCode == CommonStatusCodes.RESOLUTION_REQUIRED) {
                 resolveResult(status, FETCH_DATA)
             }
-
         }
     }
 
