@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.AlertDialog
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.Observer
 import android.content.Intent
