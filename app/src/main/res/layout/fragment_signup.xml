@@ -43,7 +43,7 @@
             android:layout_marginBottom="@dimen/padding_medium">
 
             <EditText
-                android:id="@+id/usernameSignUp"
+                android:id="@+id/emailSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"

@@ -29,7 +29,7 @@ class SignUpFragment : Fragment() {
         val signUp = SignUp()
 
         rootView.signUpButton.setOnClickListener {
-            signUp.email = usernameSignUp.text.toString()
+            signUp.email = emailSignUp.text.toString()
             signUp.password = passwordSignUp.text.toString()
             signUp.firstName = firstNameText.text.toString()
             signUp.lastName = lastNameText.text.toString()
