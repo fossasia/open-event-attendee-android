@@ -55,10 +55,22 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
                 }.subscribe({
                     loggedIn.value = true
                     Timber.d("Success!")
+                    fetchProfile()
                 }, {
                     error.value = "Unable to Login automatically"
                     Timber.d(it, "Failed")
                 }))
+    }
+
+    fun fetchProfile() {
+        compositeDisposable.add(authService.getProfile()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ user ->
+                    Timber.d("Fetched User Details")
+                }) {
+                    Timber.e(it, "Error loading user details")
+                })
     }
 
     override fun onCleared() {
@@ -66,7 +78,7 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
         compositeDisposable.clear()
     }
 
-    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean{
+    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
             return true

@@ -32,6 +32,10 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".search.SearchLocationActivity" />
         <activity android:name=".search.SearchTimeActivity"></activity>
+
+        <meta-data
+            android:name="com.stripe.android.API_KEY"
+            android:value="${STRIPE_API_TOKEN}"/>
     </application>
 
 </manifest>
