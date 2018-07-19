@@ -29,7 +29,7 @@ class LoginFragment : Fragment() {
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            loginActivityViewModel.login(username.text.toString(), password.text.toString())
+            loginActivityViewModel.login(email.text.toString(), password.text.toString())
         }
 
         loginActivityViewModel.progress.observe(this, Observer {

@@ -2,20 +2,17 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-
 
 class AuthService(private val authApi: AuthApi,
                   private val authHolder: AuthHolder,
                   private val userDao: UserDao
 ) {
-    fun login(username: String, password: String): Single<LoginResponse> {
-        if (username.isEmpty() || password.isEmpty())
+    fun login(email: String, password: String): Single<LoginResponse> {
+        if (email.isEmpty() || password.isEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
 
-        return authApi.login(Login(username, password))
+        return authApi.login(Login(email, password))
                 .map {
                     authHolder.token = it.accessToken
                     it
