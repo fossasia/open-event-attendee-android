@@ -86,6 +86,7 @@
     <string name="expiration_date">Expiration Date</string>
     <string name="cvc">CVC</string>
     <string name="postal_code">Postal Code</string>
+    <string name="payment_info">Payment Info</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
