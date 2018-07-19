@@ -33,10 +33,10 @@ object Utils {
     }
 
     fun showNoInternetDialog(activity: Activity?) {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage(activity?.resources?.getString(R.string.no_internet_message))
-                    .setPositiveButton(activity?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
-            val alert = builder.create()
-            alert.show()
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(activity?.resources?.getString(R.string.no_internet_message))
+                .setPositiveButton(activity?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 }

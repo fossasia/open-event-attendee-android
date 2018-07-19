@@ -29,16 +29,13 @@ class SignUpFragment : Fragment() {
         val signUp = SignUp()
 
         rootView.signUpButton.setOnClickListener {
-            if (signUpActivityViewModel.isNetworkConnected()) {
-                signUp.email = usernameSignUp.text.toString()
-                signUp.password = passwordSignUp.text.toString()
-                signUp.firstName = firstNameText.text.toString()
-                signUp.lastName = lastNameText.text.toString()
-                confirmPassword = confirmPasswords.text.toString()
-                signUpActivityViewModel.signUp(signUp, confirmPassword)
-            } else {
-                Utils.showNoInternetDialog(activity)
-            }
+            signUp.email = usernameSignUp.text.toString()
+            signUp.password = passwordSignUp.text.toString()
+            signUp.firstName = firstNameText.text.toString()
+            signUp.lastName = lastNameText.text.toString()
+            confirmPassword = confirmPasswords.text.toString()
+            signUpActivityViewModel.signUp(signUp, confirmPassword)
+            if(!signUpActivityViewModel.isNetworkConnected()) Utils.showNoInternetDialog(activity)
         }
 
         signUpActivityViewModel.progress.observe(this, Observer {

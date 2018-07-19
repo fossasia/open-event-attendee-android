@@ -29,11 +29,8 @@ class LoginFragment : Fragment() {
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            if (loginActivityViewModel.isNetworkConnected()) {
-                loginActivityViewModel.login(username.text.toString(), password.text.toString())
-            } else {
-                Utils.showNoInternetDialog(activity)
-            }
+            loginActivityViewModel.login(username.text.toString(), password.text.toString())
+            if (!loginActivityViewModel.isNetworkConnected()) Utils.showNoInternetDialog(activity)
         }
 
         loginActivityViewModel.progress.observe(this, Observer {

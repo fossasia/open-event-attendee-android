@@ -19,10 +19,7 @@ class LoginFragmentViewModel(private val authService: AuthService, private val r
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            error.value = "Email or Password cannot be empty"
-            return
-        }
+        if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -35,6 +32,17 @@ class LoginFragmentViewModel(private val authService: AuthService, private val r
                 }, {
                     error.value = "Unable to Login. Please check your credentials"
                 }))
+    }
+
+    private fun hasErrors(email: String?, password: String?): Boolean {
+        if (!isNetworkConnected()) {
+            return true
+        }
+        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+            error.value = "Email or Password cannot be empty!"
+            return true
+        }
+        return false
     }
 
     override fun onCleared() {

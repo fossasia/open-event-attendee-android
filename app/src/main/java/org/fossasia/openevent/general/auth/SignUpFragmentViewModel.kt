@@ -79,6 +79,9 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
     }
 
     private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
+        if (!isNetworkConnected()) {
+            return true
+        }
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
             return true
