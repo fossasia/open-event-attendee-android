@@ -29,7 +29,7 @@ class SignUpFragment : Fragment() {
         val signUp = SignUp()
 
         rootView.signUpButton.setOnClickListener {
-            if (Utils.isNetworkConnected(context)) {
+            if (signUpActivityViewModel.isNetworkConnected()) {
                 signUp.email = usernameSignUp.text.toString()
                 signUp.password = passwordSignUp.text.toString()
                 signUp.firstName = firstNameText.text.toString()

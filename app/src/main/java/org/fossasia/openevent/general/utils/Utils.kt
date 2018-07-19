@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -31,12 +30,6 @@ object Utils {
 
     fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    fun isNetworkConnected(context: Context?): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        return connectivityManager?.activeNetworkInfo != null
     }
 
     fun showNoInternetDialog(activity: Activity?) {

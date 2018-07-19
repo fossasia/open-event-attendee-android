@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.AlertDialog
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.Observer
 import android.content.Intent
@@ -29,7 +30,7 @@ class LoginFragment : Fragment() {
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            if (Utils.isNetworkConnected(context)) {
+            if (loginActivityViewModel.isNetworkConnected()) {
                 loginActivityViewModel.login(username.text.toString(), password.text.toString())
             } else {
                 Utils.showNoInternetDialog(activity)

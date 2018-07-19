@@ -6,8 +6,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 
-class LoginFragmentViewModel(private val authService: AuthService) : ViewModel() {
+class LoginFragmentViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -39,6 +40,10 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    fun isNetworkConnected(): Boolean {
+        return resource.isNetworkConnected()
     }
 
 }

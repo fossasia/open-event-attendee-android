@@ -6,9 +6,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
+class EventsViewModel(private val eventService: EventService,
+                      private val preference: Preference,
+                      private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
@@ -64,6 +67,10 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     Timber.e(it, "Error")
                     error.value = "Error"
                 }))
+    }
+
+    fun isNetworkConnected(): Boolean {
+        return resource.isNetworkConnected()
     }
 
     override fun onCleared() {

@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit
 
 val commonModule = applicationContext {
     bean { Preference() }
+    bean { Resource() }
 }
 
 val apiModule = applicationContext {
@@ -85,10 +87,10 @@ val apiModule = applicationContext {
 }
 
 val viewModelModule = applicationContext {
-    viewModel { LoginFragmentViewModel(get()) }
-    viewModel { EventsViewModel(get(), get()) }
+    viewModel { LoginFragmentViewModel(get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get()) }
     viewModel { ProfileFragmentViewModel(get()) }
-    viewModel { SignUpFragmentViewModel(get()) }
+    viewModel { SignUpFragmentViewModel(get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get()) }

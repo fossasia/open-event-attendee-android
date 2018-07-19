@@ -6,10 +6,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
-class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel() {
+class SignUpFragmentViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -77,4 +78,7 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
         return false
     }
 
+    fun isNetworkConnected(): Boolean {
+        return resource.isNetworkConnected()
+    }
 }
