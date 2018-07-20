@@ -54,8 +54,8 @@
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="@dimen/image_card_specific"
-                    android:layout_height="@dimen/image_card_specific"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     app:cardCornerRadius="@dimen/image_corner_radius"
                     android:layout_marginBottom="@dimen/layout_margin_moderate"
                     android:layout_marginLeft="@dimen/layout_margin_large"
@@ -73,9 +73,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin_large"
-                    android:layout_marginBottom="@dimen/details_box_margin"
-                    android:layout_marginRight="@dimen/details_box_margin"
-                    android:layout_marginTop="@dimen/details_box_margin"
+                    android:layout_marginBottom="@dimen/layout_margin_moderate"
+                    android:layout_marginRight="@dimen/layout_margin_moderate"
+                    android:layout_marginTop="@dimen/layout_margin_moderate"
                     android:orientation="vertical">
 
                     <TextView
@@ -86,7 +86,7 @@
                         android:ellipsize="end"
                         android:layout_marginBottom="@dimen/details_margin_small"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/event_name_text_size"
+                        android:textSize="@dimen/heading_text_size"
                         tools:text="Event Name" />
 
                     <LinearLayout
