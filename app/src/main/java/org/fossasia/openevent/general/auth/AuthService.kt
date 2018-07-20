@@ -29,7 +29,10 @@ class AuthService(private val authApi: AuthApi,
         if (email.isNullOrEmpty() || password.isNullOrEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
 
-        return authApi.signUp(signUp)
+        return authApi.signUp(signUp).map {
+            userDao.insertUser(it)
+            it
+        }
     }
 
     fun isLoggedIn() = authHolder.isLoggedIn()
