@@ -7,7 +7,9 @@ import com.github.jasminb.jsonapi.annotations.Type
 @Type("charge")
 data class Charge(
         @Id(IntegerIdHandler::class)
-        val id: String,
+        val id: Int,
         val stripe: String? = null,
-        val paypal: String? = null
+        val paypal: String? = null,
+        val message: String? = null,
+        val status: Boolean? = null
 )

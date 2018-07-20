@@ -255,8 +255,9 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 //Send this token to server
-                                val charge = Charge(attendeeFragmentViewModel.orderIdentifier, token.id, null)
-                                attendeeFragmentViewModel.completeOrder(charge)
+                                    val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
+                                    attendeeFragmentViewModel.completeOrder(charge)
+
                             }
 
                             override fun onError(error: Exception) {

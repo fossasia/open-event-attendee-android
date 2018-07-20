@@ -34,7 +34,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val cardType = ArrayList<String>()
-    lateinit var orderIdentifier: String
+    var orderIdentifier: String? = null
 
     fun getId() = authHolder.getId()
 
@@ -186,7 +186,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     }
 
     fun completeOrder(charge: Charge) {
-        compositeDisposable.add(orderService.chargeOrder(orderIdentifier, charge)
+        compositeDisposable.add(orderService.chargeOrder(orderIdentifier.toString(), charge)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -194,8 +194,13 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
-                    message.value = "Payment completed successfully!"
-                    Timber.d("Success placing order!")
+                    if (it.status != null && it.status) {
+                        message.value = it.message
+                        Timber.d("Successfully  charged for the order!")
+                    } else {
+                        message.value = it.message
+                        Timber.d("Failed charging the user")
+                    }
                 }, {
                     message.value = "Payment not completed!"
                     Timber.d(it, "Failed charging the user")
