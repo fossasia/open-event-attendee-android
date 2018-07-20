@@ -9,7 +9,10 @@ class AuthHolder(private val preference: Preference) {
 
     var token: String? = null
         get() {
-            field = preference.getString(TOKEN_KEY)
+            if (field == null) {
+                field = preference.getString(TOKEN_KEY)
+            }
+
             return field
         }
         set(value) {
