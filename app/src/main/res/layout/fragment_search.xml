@@ -62,6 +62,7 @@
                         android:id="@+id/locationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/where"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/layout_margin_large"
                         android:textColor="@color/black"
