@@ -181,7 +181,7 @@ class AttendeeFragment : Fragment() {
             attendeeFragmentViewModel.event.observe(this, Observer {
                 it?.let { loadEventDetails(it) }
                 attendeeFragmentViewModel.totalAmount.observe(this, Observer {
-                    rootView.amount.text = "Total: $paymentCurrency $it"
+                    rootView.amount.text = "Total: $paymentCurrency$it"
                 })
             })
 
@@ -271,6 +271,7 @@ class AttendeeFragment : Fragment() {
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         val currency = Currency.getInstance(event.paymentCurrency)
         paymentCurrency = currency.symbol
+        ticketsRecyclerAdapter.setCurrency(paymentCurrency)
 
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
