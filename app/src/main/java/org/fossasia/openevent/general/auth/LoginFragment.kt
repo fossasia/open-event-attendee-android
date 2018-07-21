@@ -51,14 +51,14 @@ class LoginFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApi
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-        googleApiClient = context?.let {
-            activity?.let { it1 ->
-                GoogleApiClient.Builder(it)
-                        .addConnectionCallbacks(this)
-                        .enableAutoManage(it1, 0, this)
-                        .addApi(Auth.CREDENTIALS_API)
-                        .build()
-            }
+        val context = context
+        val activity = activity
+        if(context != null && activity!= null) {
+            googleApiClient =  GoogleApiClient.Builder(context)
+                    .addConnectionCallbacks(this)
+                    .enableAutoManage(activity, 0, this)
+                    .addApi(Auth.CREDENTIALS_API)
+                    .build()
         }
 
         if (loginActivityViewModel.isLoggedIn())
