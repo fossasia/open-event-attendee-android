@@ -28,6 +28,7 @@ data class Order(
         val country: String? = null,
         val status: String? = null,
         val amount: Float? = null,
+        val identifier: String? = null,
         val orderNotes: String? = null,
         @ColumnInfo(index = true)
         @Relationship("event")
