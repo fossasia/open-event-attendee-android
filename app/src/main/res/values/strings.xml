@@ -76,6 +76,17 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
+    <string name="item">Item</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="view">(view)</string>
+
+    <!--payment details-->
+    <string name="card_number">Card Number</string>
+    <string name="card_type">Card Type</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="cvc">CVC</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="payment_info">Payment Info</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

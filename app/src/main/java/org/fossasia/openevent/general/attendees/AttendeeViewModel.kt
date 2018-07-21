@@ -13,8 +13,10 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import timber.log.Timber
+import java.util.*
 
 class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService, private val orderService: OrderService, private val ticketService: TicketService) : ViewModel() {
 
@@ -23,13 +25,49 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
+    val tickets = MutableLiveData<List<Ticket>>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
     var totalAmount = MutableLiveData<Float>()
     var totalQty = MutableLiveData<Int>()
+    val qtyList = MutableLiveData<ArrayList<Int>>()
+    val month = ArrayList<String>()
+    val year = ArrayList<String>()
+    val cardType = ArrayList<String>()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun initializeSpinner() {
+        // initialize months
+        month.add("Month")
+        month.add("January")
+        month.add("February")
+        month.add("March")
+        month.add("April")
+        month.add("May")
+        month.add("June")
+        month.add("July")
+        month.add("August")
+        month.add("September")
+        month.add("October")
+        month.add("November")
+        month.add("December")
+
+        // initialize years
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        year.add("Year")
+        val a = currentYear + 20
+        for (i in currentYear..a) {
+            year.add(i.toString())
+        }
+
+        // initialize card types
+        cardType.add("Select a card type")
+        cardType.add("Pay by American Express")
+        cardType.add("Pay by MasterCard")
+        cardType.add("Pay by Visa")
+    }
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
@@ -43,6 +81,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 totalQty.value = totalQty.value?.plus(it.second)
             }
         }
+        qtyList.value = qty
 
         compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
@@ -51,10 +90,28 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     var total = 0.toFloat()
                     var index = 0
                     it?.forEach {
-                        if (it > 0) total += it * qty[index++]
+                        total += it * qty[index++]
                     }
                     totalAmount.value = total
                     paymentSelectorVisibility.value = total != 0.toFloat()
+                }, {
+                    Timber.e(it, "Error Loading tickets!")
+                }))
+    }
+
+    fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {
+        val ticketIds = ArrayList<Int>()
+        ticketIdAndQty?.forEach {
+            if (it.second > 0) {
+                ticketIds.add(it.first)
+            }
+        }
+
+        compositeDisposable.add(ticketService.getTicketsWithIds(ticketIds)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    tickets.value = it
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
