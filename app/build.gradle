@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.oss.licenses.plugin'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 
@@ -71,15 +72,16 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
 
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.9.1"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.8.1'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 
     // RxJava
