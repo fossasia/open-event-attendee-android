@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.*
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?) {
+    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?) {
         itemView.ticketName.text = ticket.name
 
         if (ticket.minOrder > 0 && ticket.maxOrder > 0) {
@@ -31,8 +31,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (ticket.price != null) {
-            itemView.price.visibility = View.VISIBLE
-            itemView.price.text = "$${ticket.price}"
+            itemView.price.text = "${eventCurrency}${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
 import android.view.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.R
@@ -61,6 +62,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_profile)) {
             //Logout Dialog shown
             showDialog()
+            return true
+        }
+        if (preference?.key == resources.getString(R.string.key_acknowledgements)) {
+            startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             return true
         }
         return false

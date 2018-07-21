@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
@@ -181,7 +182,7 @@ class AttendeeFragment : Fragment() {
             attendeeFragmentViewModel.event.observe(this, Observer {
                 it?.let { loadEventDetails(it) }
                 attendeeFragmentViewModel.totalAmount.observe(this, Observer {
-                    rootView.amount.text = "Total: $paymentCurrency $it"
+                    rootView.amount.text = "Total: $paymentCurrency$it"
                 })
             })
 
@@ -254,7 +255,9 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 //Send this token to server
-                                Toast.makeText(context, "Token received from Stripe", Toast.LENGTH_LONG).show()
+                                    val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
+                                    attendeeFragmentViewModel.completeOrder(charge)
+
                             }
 
                             override fun onError(error: Exception) {
@@ -271,6 +274,7 @@ class AttendeeFragment : Fragment() {
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         val currency = Currency.getInstance(event.paymentCurrency)
         paymentCurrency = currency.symbol
+        ticketsRecyclerAdapter.setCurrency(paymentCurrency)
 
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
