@@ -194,11 +194,10 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
+                    message.value = it.message
                     if (it.status != null && it.status) {
-                        message.value = it.message
                         Timber.d("Successfully  charged for the order!")
                     } else {
-                        message.value = it.message
                         Timber.d("Failed charging the user")
                     }
                 }, {
