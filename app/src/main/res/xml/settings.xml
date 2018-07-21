@@ -10,6 +10,10 @@
         <Preference
             android:key="@string/key_suggestion"
             android:title="@string/suggestion_settings" />
+
+        <Preference
+            android:key="@string/key_acknowledgements"
+            android:title="@string/acknowledgements_settings" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -93,6 +93,8 @@
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
+    <string name="key_acknowledgements">acknowledgements</string>
+    <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
