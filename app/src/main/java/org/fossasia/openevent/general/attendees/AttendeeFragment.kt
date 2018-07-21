@@ -8,6 +8,11 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -38,6 +43,8 @@ import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
+private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
+private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 
 class AttendeeFragment : Fragment() {
 
@@ -76,6 +83,49 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
+
+        val paragraph = SpannableStringBuilder()
+        val startText = "I accept the "
+        val termsText = "terms of service "
+        val middleText = "and have read the "
+        val privacyText = "privacy policy."
+
+        paragraph.append(startText)
+        paragraph.append(termsText)
+        paragraph.append(middleText)
+        paragraph.append(privacyText)
+
+        val termsSpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                context?.let {
+                    Utils.openUrl(it, TERMS_OF_SERVICE)
+                }
+            }
+        }
+
+        val privacyPolicySpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                context?.let {
+                    Utils.openUrl(it, PRIVACY_POLICY)
+                }
+            }
+        }
+
+        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
+
+        rootView.accept.text = paragraph
+        rootView.accept.movementMethod = LinkMovementMethod.getInstance()
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
@@ -261,8 +311,8 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 //Send this token to server
-                                    val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
-                                    attendeeFragmentViewModel.completeOrder(charge)
+                                val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
+                                attendeeFragmentViewModel.completeOrder(charge)
 
                             }
 
