@@ -65,7 +65,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             return true
         }
         if (preference?.key == resources.getString(R.string.key_acknowledgements)) {
-            //Logout Dialog shown
             startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             return true
         }
