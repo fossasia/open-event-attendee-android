@@ -22,7 +22,7 @@
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
-    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
     <string name="anytime">Anytime</string>
     <string name="what_time">What time works?</string>
