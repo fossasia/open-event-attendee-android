@@ -22,7 +22,7 @@
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
-    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
     <string name="anytime">Anytime</string>
     <string name="what_time">What time works?</string>
@@ -101,6 +101,8 @@
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
+    <string name="key_acknowledgements">key_acknowledgements</string>
+    <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>

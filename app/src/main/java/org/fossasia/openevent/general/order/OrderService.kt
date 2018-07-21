@@ -18,4 +18,9 @@ class OrderService(private val orderApi: OrderApi, private val orderDao: OrderDa
                     order
                 }
     }
+
+    fun chargeOrder(identifier: String, charge: Charge): Single<Charge> {
+        return orderApi.chargeOrder(identifier, charge)
+    }
+
 }
