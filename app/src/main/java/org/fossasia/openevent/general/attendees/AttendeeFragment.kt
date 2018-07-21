@@ -199,11 +199,17 @@ class AttendeeFragment : Fragment() {
 
             attendeeFragmentViewModel.attendee.observe(this, Observer {
                 it?.let {
+                    helloUser.text = "Hello ${it.firstName.nullToEmpty()}"
                     firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
                     lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())
                     email.text = Editable.Factory.getInstance().newEditable(it.email.nullToEmpty())
                 }
             })
+
+            rootView.signOut.setOnClickListener {
+                attendeeFragmentViewModel.logout()
+                redirectToLogin()
+            }
 
             rootView.register.setOnClickListener {
                 if (selectedPaymentOption == "Stripe")
