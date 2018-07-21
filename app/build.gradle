@@ -73,7 +73,7 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.9.1"
