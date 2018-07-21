@@ -21,12 +21,14 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
 const val EVENT_ID: String = "EVENT_ID"
+const val CURRENCY: String = "CURRENCY"
 const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
     private var id: Long = -1
+    private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
@@ -36,7 +38,9 @@ class TicketsFragment : Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
+            currency = bundle.getString(CURRENCY, null)
         }
+        ticketsRecyclerAdapter.setCurrency(currency)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
