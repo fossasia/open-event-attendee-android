@@ -92,6 +92,7 @@
     <string name="payment_info">Payment Info</string>
     <string name="not_you">Not you? </string>
     <string name="sign_out">Sign out</string>
+    <string name="all_fees">All fees included in price</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
