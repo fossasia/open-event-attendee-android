@@ -22,7 +22,7 @@
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
-    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
     <string name="anytime">Anytime</string>
     <string name="what_time">What time works?</string>
@@ -83,6 +83,16 @@
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
 
+    <!--payment details-->
+    <string name="card_number">Card Number</string>
+    <string name="card_type">Card Type</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="cvc">CVC</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="payment_info">Payment Info</string>
+    <string name="not_you">Not you? </string>
+    <string name="sign_out">Sign out</string>
+
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
     <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
@@ -96,6 +106,8 @@
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
+    <string name="key_acknowledgements">key_acknowledgements</string>
+    <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>

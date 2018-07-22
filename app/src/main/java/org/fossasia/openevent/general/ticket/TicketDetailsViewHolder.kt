@@ -5,12 +5,16 @@ import android.view.View
 import kotlinx.android.synthetic.main.item_ticket_details.view.*
 
 class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(ticket: Ticket, qty: ArrayList<Int>) {
+    fun bind(ticket: Ticket, qty: ArrayList<Int>, eventCurrency: String?) {
         itemView.ticketName.text = ticket.name
 
         if (ticket.price != null) {
             itemView.price.visibility = View.VISIBLE
             itemView.price.text = "$${ticket.price}"
+        }
+
+        if (ticket.price != null) {
+            itemView.price.text = "${eventCurrency}${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {

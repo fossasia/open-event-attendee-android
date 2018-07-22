@@ -9,12 +9,17 @@ import kotlin.collections.ArrayList
 class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolder>() {
 
     private val tickets = ArrayList<Ticket>()
+    private var eventCurrency: String? = null
     private var qty = ArrayList<Int>()
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
             this.tickets.clear()
         this.tickets.addAll(ticketList)
+    }
+
+    fun setCurrency(currencyCode: String?) {
+        eventCurrency = currencyCode
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketDetailsViewHolder {
@@ -29,7 +34,7 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
     override fun onBindViewHolder(holder: TicketDetailsViewHolder, position: Int) {
         val event = tickets[position]
 
-        holder.bind(event, qty)
+        holder.bind(event, qty, eventCurrency)
     }
 
     override fun getItemCount(): Int {

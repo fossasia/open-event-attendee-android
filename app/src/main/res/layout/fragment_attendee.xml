@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:orientation="vertical"
-        android:padding="@dimen/padding_medium"
+        android:padding="@dimen/padding_payment"
         tools:context="org.fossasia.openevent.general.attendees.AttendeeFragment">
 
         <TextView
@@ -127,6 +127,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:background="@drawable/filled_border"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_medium">
+
+            <TextView
+                android:id="@+id/helloUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Hello user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_you"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Not you? " />
+
+            <TextView
+                android:id="@+id/signOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/details_margin_small"
+                android:text="@string/sign_out"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Sign out" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -195,13 +230,154 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/paymentSelector"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.AppCompatSpinner>
+                android:layout_height="wrap_content" />
 
-            <com.stripe.android.view.CardInputWidget
-                android:id="@+id/cardInputWidget"
+            <LinearLayout
+                android:id="@+id/stripePayment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    android:text="@string/payment_info"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/heading_text_size" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_medium">
+
+                    <EditText
+                        android:id="@+id/cardNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/card_number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:text="@string/card_type"
+                    android:textSize="@dimen/text_size_large" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/filled_border"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/selectCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_large" />
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/cardSelector"
+                        android:layout_width="@dimen/spinner_width"
+                        android:layout_height="@dimen/spinner_width"
+                        android:layout_marginLeft="@dimen/layout_margin_medium"
+                        android:spinnerMode="dialog" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:text="@string/expiration_date"
+                    android:textSize="@dimen/text_size_large" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/filled_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_extra_small">
+
+                        <TextView
+                            android:id="@+id/monthText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:textSize="@dimen/text_size_large" />
+
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/month"
+                            android:layout_width="@dimen/spinner_width"
+                            android:layout_height="@dimen/spinner_width"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:spinnerMode="dialog" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/filled_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_extra_small">
+
+                        <TextView
+                            android:id="@+id/yearText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:textSize="@dimen/text_size_large" />
+
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/year"
+                            android:layout_width="@dimen/spinner_width"
+                            android:layout_height="@dimen/spinner_width"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:spinnerMode="dialog" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_medium">
+
+                    <EditText
+                        android:id="@+id/cvc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/cvc" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_medium">
+
+                    <EditText
+                        android:id="@+id/postalCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/postal_code" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register"
                 android:layout_width="match_parent"
