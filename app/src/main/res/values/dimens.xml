@@ -50,6 +50,7 @@
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>
+    <dimen name="item_image_view_medium">30dp</dimen>
     <dimen name="item_image_view">50dp</dimen>
     <dimen name="item_image_view_large">130dp</dimen>
     <dimen name="item_image_view_extra_large">250dp</dimen>

@@ -35,6 +35,9 @@
     <string name="logout">Log out</string>
     <string name="settings">Settings</string>
     <string name="login">Login</string>
+    <string name="forgot_password">I forgot my password</string>
+    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
