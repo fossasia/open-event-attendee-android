@@ -94,6 +94,11 @@
     <string name="sign_out">Sign out</string>
     <string name="all_fees">All fees included in price</string>
 
+    <!--order details-->
+    <string name="order_completed">ORDER COMPLETED</string>
+    <string name="add">+ ADD</string>
+    <string name="invite">INVITE</string>
+
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
     <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
