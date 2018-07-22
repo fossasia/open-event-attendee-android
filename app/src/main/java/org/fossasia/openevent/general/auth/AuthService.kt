@@ -2,8 +2,9 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.auth.forgot.Email
+import org.fossasia.openevent.general.auth.forgot.RequestToken
+import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
 import timber.log.Timber
 
 
@@ -53,5 +54,10 @@ class AuthService(private val authApi: AuthApi,
                                 it
                             }
                 }
+    }
+
+    fun sendResetPasswordEmail(email: String): Single<RequestTokenResponse> {
+        val requestToken = RequestToken(Email(email))
+        return authApi.requestToken(requestToken)
     }
 }

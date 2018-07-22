@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Patterns
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -13,6 +14,7 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
 
     val progress = MutableLiveData<Boolean>()
     val error = SingleLiveEvent<String>()
+    val requestTokenSuccess = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
 
     fun isLoggedIn() = authService.isLoggedIn()
@@ -34,6 +36,35 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
                 }, {
                     error.value = "Unable to Login. Please check your credentials"
                 }))
+    }
+
+    fun showForgotPassword(email: String): Boolean {
+        if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return true
+        }
+        return false
+    }
+
+    fun sendResetPasswordEmail(email: String) {
+        compositeDisposable.add(authService.sendResetPasswordEmail(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.doFinally {
+                    progress.value = false
+                }.subscribe({
+                    requestTokenSuccess.value = verifyMessage(it.message)
+                }, {
+                    error.value = "Email address not present in server. Please check your email"
+                }))
+    }
+
+    fun verifyMessage(message: String): Boolean {
+        if (message.equals("Email Sent")) {
+            return true
+        }
+        return false
     }
 
     override fun onCleared() {
