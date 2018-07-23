@@ -2,17 +2,20 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Patterns
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import timber.log.Timber
 
 class LoginFragmentViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
+    val user = MutableLiveData<User>()
     val error = SingleLiveEvent<String>()
     val requestTokenSuccess = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
@@ -65,6 +68,23 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
             return true
         }
         return false
+    }
+
+    fun fetchProfile() {
+        compositeDisposable.add(authService.getProfile()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe({
+                    progress.value = true
+                }).doFinally {
+                    progress.value = false
+                }.subscribe({ it ->
+                    Timber.d("User Fetched")
+                    user.value = it
+                }) {
+                    Timber.e(it, "Failure")
+                    error.value = "Failure"
+        })
     }
 
     override fun onCleared() {

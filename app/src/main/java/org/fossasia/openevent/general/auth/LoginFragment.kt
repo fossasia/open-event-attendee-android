@@ -78,6 +78,15 @@ class LoginFragment : Fragment() {
             loginActivityViewModel.sendResetPasswordEmail(email.text.toString())
         }
 
+        loginActivityViewModel.user.observe(this, Observer {
+            redirectToMain()
+        })
+
+        loginActivityViewModel.loggedIn.observe(this, Observer {
+            Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
+            loginActivityViewModel.fetchProfile()
+        })
+
         return rootView
     }
 
