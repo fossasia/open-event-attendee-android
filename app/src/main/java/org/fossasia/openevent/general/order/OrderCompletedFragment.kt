@@ -74,7 +74,6 @@ class OrderCompletedFragment : Fragment() {
                 .append(EventUtils.getFormattedTime(startsAt))
                 .append(" ")
                 .append(EventUtils.getFormattedTimeZone(startsAt))
-
     }
 
     private fun startCalendar(event: Event) {
