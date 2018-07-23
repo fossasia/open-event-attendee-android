@@ -24,10 +24,10 @@ fi
 
 \cp -r ../app/build/outputs/apk/playStore/*/**.apk .
 \cp -r ../app/build/outputs/apk/fdroid/*/**.apk .
-\cp -r ../app/build/outputs/apk/fdroid/debug/output.json fdroidDebug-output.json
-\cp -r ../app/build/outputs/apk/fdroid/release/output.json fdroidRelease-output.json
-\cp -r ../app/build/outputs/apk/playStore/debug/output.json playStoreDebug-output.json
-\cp -r ../app/build/outputs/apk/playStore/release/output.json playStoreRelease-output.json
+\cp -r ../app/build/outputs/apk/playStore/debug/output.json playStore-debug-output.json
+\cp -r ../app/build/outputs/apk/playStore/release/output.json playStore-release-output.json
+\cp -r ../app/build/outputs/apk/fdroid/debug/output.json fdroid-debug-output.json
+\cp -r ../app/build/outputs/apk/fdroid/release/output.json fdroid-release-output.json
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
