@@ -109,7 +109,9 @@ class OrderCompletedFragment : Fragment() {
         bundle.putLong("EVENT_ID", id)
         eventDetailsFragment.arguments = bundle
         activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, eventDetailsFragment)?.addToBackStack(null)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()?.
+                replace(R.id.rootLayout, eventDetailsFragment)?.
+                addToBackStack(null)?.commit()
     }
 
     override fun onDestroyView() {

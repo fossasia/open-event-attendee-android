@@ -353,7 +353,9 @@ class AttendeeFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", id)
         orderCompletedFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, orderCompletedFragment)?.addToBackStack(null)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()?.
+                replace(R.id.rootLayout, orderCompletedFragment)?.
+                addToBackStack(null)?.commit()
     }
 
     override fun onDestroyView() {
