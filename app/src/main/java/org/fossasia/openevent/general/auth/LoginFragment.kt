@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
 
         loginActivityViewModel.loggedIn.observe(this, Observer {
             Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
-            redirectToMain()
+            loginActivityViewModel.fetchProfile()
         })
 
         rootView.email.addTextChangedListener(object : TextWatcher {
@@ -80,11 +80,6 @@ class LoginFragment : Fragment() {
 
         loginActivityViewModel.user.observe(this, Observer {
             redirectToMain()
-        })
-
-        loginActivityViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
-            loginActivityViewModel.fetchProfile()
         })
 
         return rootView
