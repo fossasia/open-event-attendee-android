@@ -96,7 +96,11 @@ class TicketsFragment : Fragment() {
                 bundle.putLong(EVENT_ID, id)
                 bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
             } else {
                 handleNoTicketsSelected()
             }
@@ -140,9 +144,9 @@ class TicketsFragment : Fragment() {
 
     private fun handleNoTicketsSelected() {
         val builder = AlertDialog.Builder(activity)
-        builder.setMessage(activity?.resources?.getString(R.string.no_tickets_message))
-               .setTitle(activity?.resources?.getString(R.string.whoops))
-               .setPositiveButton(activity?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        builder.setMessage(resources.getString(R.string.no_tickets_message))
+               .setTitle(resources.getString(R.string.whoops))
+               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
     }
