@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Patterns
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
