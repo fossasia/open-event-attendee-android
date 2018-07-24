@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.settings
 
 import android.content.Context
-import android.content.Intent
 
 object AcknowledgementDecider {
 
