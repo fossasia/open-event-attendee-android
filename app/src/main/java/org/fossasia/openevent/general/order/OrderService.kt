@@ -23,4 +23,8 @@ class OrderService(private val orderApi: OrderApi, private val orderDao: OrderDa
         return orderApi.chargeOrder(identifier, charge)
     }
 
+    fun confirmOrder(identifier: String, order: ConfirmOrder): Single<Order> {
+        return orderApi.confirmOrder(identifier, order)
+    }
+
 }
