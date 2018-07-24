@@ -285,7 +285,7 @@ class AttendeeFragment : Fragment() {
                                 email = email.text.toString(),
                                 ticket = TicketId(it.first.toLong()),
                                 event = eventId)
-                        val country = country.text.toString()
+                        val country = if (country.text.toString().length > 0) country.text.toString() else null
                         attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
                     }
                 }

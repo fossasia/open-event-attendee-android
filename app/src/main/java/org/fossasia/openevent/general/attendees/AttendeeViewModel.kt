@@ -121,7 +121,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
+    fun createAttendee(attendee: Attendee, eventId: Long, country: String?, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             message.value = "Please fill in all the fields"
             return
@@ -146,7 +146,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun loadTicket(ticketId: Long?, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+    fun loadTicket(ticketId: Long?, country: String?, eventId: Long, paymentOption: String, attendeeId: Long) {
         if (ticketId == null) {
             Timber.e("TicketId cannot be null")
             return
