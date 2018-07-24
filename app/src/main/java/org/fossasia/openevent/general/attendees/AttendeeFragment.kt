@@ -33,6 +33,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
+import org.fossasia.openevent.general.order.OrderCompletedFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
@@ -247,6 +248,11 @@ class AttendeeFragment : Fragment() {
                 rootView.qty.text = " — $it items"
             })
 
+            attendeeFragmentViewModel.paymentCompleted.observe(this, Observer {
+                if (it != null && it)
+                    openOrderCompletedFragment()
+            })
+
             attendeeFragmentViewModel.attendee.observe(this, Observer {
                 it?.let {
                     helloUser.text = "Hello ${it.firstName.nullToEmpty()}"
@@ -338,6 +344,18 @@ class AttendeeFragment : Fragment() {
                 .append(EventUtils.getFormattedDate(endsAt))
                 .append(" • ")
                 .append(EventUtils.getFormattedTime(startsAt))
+    }
+
+    private fun openOrderCompletedFragment() {
+        attendeeFragmentViewModel.paymentCompleted.value = false
+        //Initialise Order Completed Fragment
+        val orderCompletedFragment = OrderCompletedFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", id)
+        orderCompletedFragment.arguments = bundle
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.rootLayout, orderCompletedFragment)
+                ?.addToBackStack(null)?.commit()
     }
 
     override fun onDestroyView() {

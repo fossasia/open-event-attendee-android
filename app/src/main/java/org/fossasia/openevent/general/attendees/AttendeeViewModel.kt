@@ -36,6 +36,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val year = ArrayList<String>()
     val cardType = ArrayList<String>()
     var orderIdentifier: String? = null
+    var paymentCompleted = MutableLiveData<Boolean>()
 
     fun getId() = authHolder.getId()
 
@@ -180,6 +181,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     orderIdentifier = it.identifier.toString()
                     message.value = "Order created successfully!"
                     Timber.d("Success placing order!")
+                    if (it.paymentMode == "free")
+                        paymentCompleted.value = true
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
@@ -196,6 +199,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     message.value = it.message
+                    paymentCompleted.value = it.status
+
                     if (it.status != null && it.status) {
                         Timber.d("Successfully  charged for the order!")
                     } else {
