@@ -248,6 +248,12 @@ class AttendeeFragment : Fragment() {
                 rootView.qty.text = " — $it items"
             })
 
+            attendeeFragmentViewModel.totalAmount.observe(this, Observer {
+                if (it != null && it <= 0) {
+                    rootView.country.visibility = View.GONE
+                }
+            })
+
             attendeeFragmentViewModel.paymentCompleted.observe(this, Observer {
                 if (it != null && it)
                     openOrderCompletedFragment()
