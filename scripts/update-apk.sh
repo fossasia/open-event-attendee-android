@@ -19,12 +19,15 @@ cd apk
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	/bin/rm -f *
 else
-	/bin/rm -f app-debug.apk app-release.apk
+	/bin/rm -f app-fdroid-debug.apk app-playStore-debug.apk app-playStore-release.apk app-fdroid-release.apk
 fi
 
-\cp -r ../app/build/outputs/apk/*/**.apk .
-\cp -r ../app/build/outputs/apk/debug/output.json debug-output.json
-\cp -r ../app/build/outputs/apk/release/output.json release-output.json
+\cp -r ../app/build/outputs/apk/playStore/*/**.apk .
+\cp -r ../app/build/outputs/apk/fdroid/*/**.apk .
+\cp -r ../app/build/outputs/apk/playStore/debug/output.json playStore-debug-output.json
+\cp -r ../app/build/outputs/apk/playStore/release/output.json playStore-release-output.json
+\cp -r ../app/build/outputs/apk/fdroid/debug/output.json fdroid-debug-output.json
+\cp -r ../app/build/outputs/apk/fdroid/release/output.json fdroid-release-output.json
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
