@@ -107,7 +107,7 @@
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
-    <string name="about_settings">About</string>
+    <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>

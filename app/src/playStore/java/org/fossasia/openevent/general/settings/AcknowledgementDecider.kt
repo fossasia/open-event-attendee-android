@@ -10,4 +10,8 @@ object AcknowledgementDecider {
         val intent = Intent(context, OssLicensesMenuActivity::class.java)
         context.startActivity(intent)
     }
+
+    fun showAcknowledgement():Boolean{
+        return true
+    }
 }
