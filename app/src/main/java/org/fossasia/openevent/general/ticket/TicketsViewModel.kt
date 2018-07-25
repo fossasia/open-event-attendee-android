@@ -51,8 +51,11 @@ class TicketsViewModel(private val ticketService: TicketService,private val even
                 }))
     }
 
-    fun totalTickets(tickeIdAndQty: List<Pair<Int, Int>>): Int {
-        return tickeIdAndQty.sumBy { it.second }
+    fun totalTicketsEmpty(tickeIdAndQty: List<Pair<Int, Int>>): Boolean {
+        if (tickeIdAndQty.sumBy { it.second } == 0) {
+            return true
+        }
+        return false
     }
 
     override fun onCleared() {

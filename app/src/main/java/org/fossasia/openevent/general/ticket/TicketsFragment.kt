@@ -90,7 +90,7 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            if (ticketsViewModel.totalTickets(tickeIdAndQty) != 0) {
+            if (ticketsViewModel.totalTicketsEmpty(tickeIdAndQty)) {
                 val fragment = AttendeeFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, id)
