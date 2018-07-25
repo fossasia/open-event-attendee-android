@@ -51,6 +51,10 @@ class TicketsViewModel(private val ticketService: TicketService,private val even
                 }))
     }
 
+    fun totalTickets(tickeIdAndQty: List<Pair<Int, Int>>): Int {
+        return tickeIdAndQty.sumBy { it.second }
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
