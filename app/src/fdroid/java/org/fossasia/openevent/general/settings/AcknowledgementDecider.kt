@@ -5,10 +5,10 @@ import android.content.Context
 object AcknowledgementDecider {
 
     fun decide(context: Context) {
-       // don't show acknowledgements in fdroid
+        // don't show acknowledgements in fdroid
     }
 
-    fun showAcknowledgement():Boolean{
-       return false
+    fun showAcknowledgement(): Boolean {
+        return false
     }
 }

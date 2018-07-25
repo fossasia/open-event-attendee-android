@@ -11,7 +11,7 @@ object AcknowledgementDecider {
         context.startActivity(intent)
     }
 
-    fun showAcknowledgement():Boolean{
+    fun showAcknowledgement(): Boolean {
         return true
     }
 }
