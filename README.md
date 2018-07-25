@@ -18,7 +18,7 @@ Planned features & enhancements are:
 
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
-Our chat channel is on gitter here:
+Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
 
 ## Screenshots
 
