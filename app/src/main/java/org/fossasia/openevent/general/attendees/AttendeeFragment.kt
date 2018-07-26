@@ -27,7 +27,6 @@ import com.stripe.android.model.Token
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
-import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
@@ -248,9 +247,9 @@ class AttendeeFragment : Fragment() {
                 rootView.qty.text = " — $it items"
             })
 
-            attendeeFragmentViewModel.totalAmount.observe(this, Observer {
-                if (it != null && it <= 0) {
-                    rootView.country.visibility = View.GONE
+            attendeeFragmentViewModel.countryVisibility.observe(this, Observer {
+                if (it != null) {
+                    rootView.countryArea.visibility = it
                 }
             })
 
@@ -285,7 +284,7 @@ class AttendeeFragment : Fragment() {
                                 email = email.text.toString(),
                                 ticket = TicketId(it.first.toLong()),
                                 event = eventId)
-                        val country = if (country.text.toString().length > 0) country.text.toString() else null
+                        val country = if (country.text.isEmpty()) country.text.toString() else null
                         attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
                     }
                 }

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.attendees
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.view.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -30,6 +31,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val tickets = MutableLiveData<List<Ticket>>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
     var totalAmount = MutableLiveData<Float>()
+    var countryVisibility = MutableLiveData<Int>()
     var totalQty = MutableLiveData<Int>()
     val qtyList = MutableLiveData<ArrayList<Int>>()
     val month = ArrayList<String>()
@@ -97,6 +99,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         total += it * qty[index++]
                     }
                     totalAmount.value = total
+                    if (total > 0) countryVisibility.value = View.VISIBLE else countryVisibility.value = View.GONE
                     paymentSelectorVisibility.value = total != 0.toFloat()
                 }, {
                     Timber.e(it, "Error Loading tickets!")
