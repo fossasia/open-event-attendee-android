@@ -1,8 +1,6 @@
 # open-event-android
-[![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-android?branch=development)
-[![codecov.io](https://codecov.io/github/fossasia/open-event-android/coverage.svg?branch=development)](https://codecov.io/github/fossasia/open-event-android?branch=development)
+[![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=development)](https://travis-ci.org/fossasia/open-event-android?branch=development)
 [![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-android?branch=master)
-[![codecov.io](https://codecov.io/github/fossasia/open-event-android/coverage.svg?branch=master)](https://codecov.io/github/fossasia/open-event-android?branch=master)
 [![Join the chat at https://gitter.im/fossasia/open-event-android](https://badges.gitter.im/fossasia/open-event-android.svg)](https://gitter.im/fossasia/open-event-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:open-event@googlegroups.com)
 
@@ -25,28 +23,32 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 
 ## Development
 
-A native Android app using  Java  for writing code. 
+A native Android app using Kotlin for writing code.
 
 ### Android App Development Set up
 
-Please find info about the set up of the Android app in your development environment [here](docs/Android_App_Setup.md).
+Please find info about the set up of the Android app in your development environment.
+
+### Sample App
+
+A sample app for testing purposes is automatically built after commits in the repository. Please download and test the app that is using the code from the dev branch [here](https://github.com/fossasia/open-event-android/blob/apk/app-release-unsigned.apk) and the code from the master branch [here](https://github.com/fossasia/open-event-android/blob/apk/open-event-master-app-release-unsigned.apk).
 
 ### Libraries used and their documentation
 
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
-- ButterKnife [Docs](http://jakewharton.github.io/butterknife/javadoc/)
 - Espresso [Docs](https://google.github.io/android-testing-support-library/docs/espresso/)
-- Tajchert Waiting Dots [Docs](https://github.com/tajchert/WaitingDots)
 - Picasso [Docs](http://square.github.io/picasso/)
-- LeonardoCardoso/Android-Link-Preview [Docs](https://github.com/LeonardoCardoso/Android-Link-Preview)
-- Gericop/Android-Support-Preference-V7-Fix [Docs](https://github.com/Gericop/Android-Support-Preference-V7-Fix)
-
+- Timber [Docs](http://jakewharton.github.io/timber/)
+- RxAndroid [Docs](https://github.com/ReactiveX/RxAndroid)
+- Stripe [Docs](https://github.com/stripe/stripe-android)
+- InsertKoinIO [Docs](https://github.com/InsertKoinIO/koin)
+- JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
+- OkHttp [Docs](http://square.github.io/okhttp/)
+- Room Persistence Library [Docs] (https://developer.android.com/topic/libraries/architecture/room)
 
 ### Project Conventions
 
 There are certain conventions we follow in the project, we recommend that you become familiar with these so that the development process is uniform for everyone:
-
-
 
 #### Project Structure
 
@@ -98,8 +100,8 @@ If you are a tester and want to test the app, you have two ways to do that:
 
 ## Open Event Android Suggestions
 
-Suggestion form link: [Form](https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform)
-Suggestion responses link: [Sheet](https://docs.google.com/spreadsheets/d/1SzR75MBEVrTY1sDM3KAMm9wltiulDAp0QT5hv9eJkKM/edit#gid=1676755229)
+- Suggestion form link: [Form](https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform)
+- Suggestion responses link: [Sheet](https://docs.google.com/spreadsheets/d/1SzR75MBEVrTY1sDM3KAMm9wltiulDAp0QT5hv9eJkKM/edit#gid=1676755229)
 
 ## License
 
