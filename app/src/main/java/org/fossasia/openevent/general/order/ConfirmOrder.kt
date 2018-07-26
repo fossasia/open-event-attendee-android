@@ -9,7 +9,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class ConfirmOrder(
         @Id()
-        var id: String,
-        var status: String? = null,
+        val id: String,
+        val status: String? = null,
         val orderNotes: String? = null
 )
