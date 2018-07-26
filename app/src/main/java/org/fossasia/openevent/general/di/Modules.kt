@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
+import org.fossasia.openevent.general.attendees.forms.AttendeeFormViewModel
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.*
@@ -98,6 +99,7 @@ val viewModelModule = applicationContext {
     viewModel { FavouriteEventsViewModel(get()) }
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
+    viewModel { AttendeeFormViewModel() }
     viewModel { OrderCompletedViewModel(get()) }
 }
 

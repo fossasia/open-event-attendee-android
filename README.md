@@ -25,7 +25,7 @@ Our chat channel is on gitter here:
 
 ## Development
 
-A native Android app using  Java  for writing code. 
+A native Android app using  Java  for writing code.
 
 ### Android App Development Set up
 

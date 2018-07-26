@@ -31,7 +31,7 @@ class TicketsFragment : Fragment() {
     private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Triple<String, Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +52,8 @@ class TicketsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
+            override fun onSelected(ticketName: String, ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketName,ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -92,7 +92,7 @@ class TicketsFragment : Fragment() {
             val fragment = AttendeeFragment()
             val bundle = Bundle()
             bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
+            bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
             fragment.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
         }
@@ -100,12 +100,12 @@ class TicketsFragment : Fragment() {
         return rootView
     }
 
-    private fun handleTicketSelect(id: Int, quantity: Int) {
-        val pos = tickeIdAndQty.map { it.first }.indexOf(id)
+    private fun handleTicketSelect(name: String, id: Int, quantity: Int) {
+        val pos = ticketIdAndQty.map { it.second }.indexOf(id)
         if (pos == -1) {
-            tickeIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Triple(name, id, quantity))
         } else {
-            tickeIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Triple(name, id, quantity)
         }
     }
 

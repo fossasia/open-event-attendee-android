@@ -73,16 +73,16 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
         cardType.add("Pay by Visa")
     }
 
-    fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
+    fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Triple<String, Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
         totalQty.value = 0
 
         ticketIdAndQty?.forEach {
-            if (it.second > 0) {
-                ticketIds.add(it.first)
-                qty.add(it.second)
-                totalQty.value = totalQty.value?.plus(it.second)
+            if (it.third > 0) {
+                ticketIds.add(it.second)
+                qty.add(it.third)
+                totalQty.value = totalQty.value?.plus(it.third)
             }
         }
         qtyList.value = qty
@@ -103,11 +103,11 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {
+    fun ticketDetails(ticketIdAndQty: List<Triple<String, Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
         ticketIdAndQty?.forEach {
-            if (it.second > 0) {
-                ticketIds.add(it.first)
+            if (it.third > 0) {
+                ticketIds.add(it.second)
             }
         }
 
