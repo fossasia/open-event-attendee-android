@@ -99,7 +99,7 @@ class TicketsFragment : Fragment() {
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             } else {
-                Toast.makeText(context, "Please select ticket Quantity!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Please select ticket to proceed!", Toast.LENGTH_LONG).show()
             }
 
         }
