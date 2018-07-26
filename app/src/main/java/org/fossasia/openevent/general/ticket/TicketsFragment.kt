@@ -31,7 +31,7 @@ class TicketsFragment : Fragment() {
     private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,23 +89,30 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val fragment = AttendeeFragment()
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
-            fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            var totalQty = 0
+            ticketIdAndQty.forEach { if (it.second > 0) totalQty += it.second }
+            if (totalQty > 0) {
+                val fragment = AttendeeFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, id)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            } else {
+                Toast.makeText(context, "Please select ticket Quantity!", Toast.LENGTH_LONG).show()
+            }
+
         }
 
         return rootView
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
-        val pos = tickeIdAndQty.map { it.first }.indexOf(id)
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            tickeIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Pair(id, quantity))
         } else {
-            tickeIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Pair(id, quantity)
         }
     }
 
