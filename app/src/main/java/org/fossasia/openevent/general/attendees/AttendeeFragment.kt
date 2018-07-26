@@ -249,10 +249,7 @@ class AttendeeFragment : Fragment() {
 
             attendeeFragmentViewModel.countryVisibility.observe(this, Observer {
                 if (it != null) {
-                    if (it)
-                        rootView.countryArea.visibility = View.VISIBLE
-                    else
-                        rootView.countryArea.visibility = View.GONE
+                    rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
                 }
             })
 
