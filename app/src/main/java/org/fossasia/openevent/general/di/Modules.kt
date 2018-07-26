@@ -18,10 +18,7 @@ import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
-import org.fossasia.openevent.general.order.Charge
-import org.fossasia.openevent.general.order.Order
-import org.fossasia.openevent.general.order.OrderApi
-import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.order.*
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
@@ -92,7 +89,7 @@ val viewModelModule = applicationContext {
     viewModel { SignUpFragmentViewModel(get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { AttendeeViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
     viewModel { SearchTimeViewModel(get()) }
     viewModel { TicketsViewModel(get(), get()) }
@@ -101,6 +98,7 @@ val viewModelModule = applicationContext {
     viewModel { FavouriteEventsViewModel(get()) }
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
+    viewModel { OrderCompletedViewModel(get()) }
 }
 
 val networkModule = applicationContext {

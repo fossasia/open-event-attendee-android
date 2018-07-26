@@ -122,6 +122,57 @@
                 android:id="@+id/ticketsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/layout_margin_medium">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_large"
+                    android:text="@string/all_fees" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:background="@drawable/filled_border"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_medium">
+
+            <TextView
+                android:id="@+id/helloUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Hello user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_you"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Not you? " />
+
+            <TextView
+                android:id="@+id/signOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/details_margin_small"
+                android:text="@string/sign_out"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_large"
+                tools:text="Sign out" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -195,7 +246,7 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/paymentSelector"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/stripePayment"
@@ -342,6 +393,12 @@
                         android:hint="@string/postal_code" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_moderate"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register"

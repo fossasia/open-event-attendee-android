@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
@@ -19,7 +20,7 @@ import org.fossasia.openevent.general.ticket.TicketService
 import timber.log.Timber
 import java.util.*
 
-class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService, private val orderService: OrderService, private val ticketService: TicketService) : ViewModel() {
+class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService, private val orderService: OrderService, private val ticketService: TicketService, private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
@@ -35,6 +36,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val year = ArrayList<String>()
     val cardType = ArrayList<String>()
     var orderIdentifier: String? = null
+    var paymentCompleted = MutableLiveData<Boolean>()
 
     fun getId() = authHolder.getId()
 
@@ -179,6 +181,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     orderIdentifier = it.identifier.toString()
                     message.value = "Order created successfully!"
                     Timber.d("Success placing order!")
+                    if (it.paymentMode == "free")
+                        paymentCompleted.value = true
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
@@ -195,6 +199,8 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     message.value = it.message
+                    paymentCompleted.value = it.status
+
                     if (it.status != null && it.status) {
                         Timber.d("Successfully  charged for the order!")
                     } else {
@@ -234,6 +240,17 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }, {
                     Timber.e(it, "Error fetching user %d", id)
                 }))
+    }
+
+    fun logout() {
+        compositeDisposable.add(authService.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Logged out!")
+                }) {
+                    Timber.e(it, "Failure Logging out!")
+                })
     }
 
     override fun onCleared() {

@@ -8,6 +8,11 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -28,6 +33,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
+import org.fossasia.openevent.general.order.OrderCompletedFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
@@ -38,6 +44,8 @@ import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
+private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
+private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 
 class AttendeeFragment : Fragment() {
 
@@ -76,6 +84,49 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Attendee Details"
         setHasOptionsMenu(true)
+
+        val paragraph = SpannableStringBuilder()
+        val startText = "I accept the "
+        val termsText = "terms of service "
+        val middleText = "and have read the "
+        val privacyText = "privacy policy."
+
+        paragraph.append(startText)
+        paragraph.append(termsText)
+        paragraph.append(middleText)
+        paragraph.append(privacyText)
+
+        val termsSpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                context?.let {
+                    Utils.openUrl(it, TERMS_OF_SERVICE)
+                }
+            }
+        }
+
+        val privacyPolicySpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                context?.let {
+                    Utils.openUrl(it, PRIVACY_POLICY)
+                }
+            }
+        }
+
+        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
+
+        rootView.accept.text = paragraph
+        rootView.accept.movementMethod = LinkMovementMethod.getInstance()
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
@@ -197,13 +248,24 @@ class AttendeeFragment : Fragment() {
                 rootView.qty.text = " — $it items"
             })
 
+            attendeeFragmentViewModel.paymentCompleted.observe(this, Observer {
+                if (it != null && it)
+                    openOrderCompletedFragment()
+            })
+
             attendeeFragmentViewModel.attendee.observe(this, Observer {
                 it?.let {
+                    helloUser.text = "Hello ${it.firstName.nullToEmpty()}"
                     firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
                     lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())
                     email.text = Editable.Factory.getInstance().newEditable(it.email.nullToEmpty())
                 }
             })
+
+            rootView.signOut.setOnClickListener {
+                attendeeFragmentViewModel.logout()
+                redirectToLogin()
+            }
 
             rootView.register.setOnClickListener {
                 if (selectedPaymentOption == "Stripe")
@@ -255,8 +317,8 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 //Send this token to server
-                                    val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
-                                    attendeeFragmentViewModel.completeOrder(charge)
+                                val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
+                                attendeeFragmentViewModel.completeOrder(charge)
 
                             }
 
@@ -282,6 +344,18 @@ class AttendeeFragment : Fragment() {
                 .append(EventUtils.getFormattedDate(endsAt))
                 .append(" • ")
                 .append(EventUtils.getFormattedTime(startsAt))
+    }
+
+    private fun openOrderCompletedFragment() {
+        attendeeFragmentViewModel.paymentCompleted.value = false
+        //Initialise Order Completed Fragment
+        val orderCompletedFragment = OrderCompletedFragment()
+        val bundle = Bundle()
+        bundle.putLong("EVENT_ID", id)
+        orderCompletedFragment.arguments = bundle
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.rootLayout, orderCompletedFragment)
+                ?.addToBackStack(null)?.commit()
     }
 
     override fun onDestroyView() {

@@ -35,6 +35,9 @@
     <string name="logout">Log out</string>
     <string name="settings">Settings</string>
     <string name="login">Login</string>
+    <string name="forgot_password">I forgot my password</string>
+    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
@@ -90,6 +93,14 @@
     <string name="cvc">CVC</string>
     <string name="postal_code">Postal Code</string>
     <string name="payment_info">Payment Info</string>
+    <string name="not_you">Not you? </string>
+    <string name="sign_out">Sign out</string>
+    <string name="all_fees">All fees included in price</string>
+
+    <!--order details-->
+    <string name="order_completed">ORDER COMPLETED</string>
+    <string name="add">+ ADD</string>
+    <string name="invite">INVITE</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
@@ -99,7 +110,7 @@
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
-    <string name="about_settings">About</string>
+    <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
