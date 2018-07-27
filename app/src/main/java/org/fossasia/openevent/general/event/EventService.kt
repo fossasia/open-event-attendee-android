@@ -30,11 +30,11 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
         }
     }
 
-    private fun getEventTopicList(eventsList: List<Event>): List<EventTopic> {
+    private fun getEventTopicList(eventsList: List<Event>): List<EventTopic?> {
         return eventsList
                 .filter { it.eventTopic != null }
                 .map { it -> it.eventTopic }
-                .toList() as List<EventTopic>
+                .toList() 
     }
 
     fun getEventTopics(): Flowable<List<EventTopic>> {

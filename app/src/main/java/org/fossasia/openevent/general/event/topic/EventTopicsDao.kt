@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 interface EventTopicsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertEventTopics(eventTopic: List<EventTopic>)
+    fun insertEventTopics(eventTopic: List<EventTopic?>)
 
     @Query("SELECT * from EventTopic")
     fun getAllEventTopics(): Flowable<List<EventTopic>>
