@@ -29,10 +29,6 @@ A native Android app using Kotlin for writing code.
 
 Please find info about the set up of the Android app in your development environment.
 
-### Sample App
-
-A sample app for testing purposes is automatically built after commits in the repository. Please download and test the app that is using the code from the dev branch [here](https://github.com/fossasia/open-event-android/blob/apk/app-release-unsigned.apk) and the code from the master branch [here](https://github.com/fossasia/open-event-android/blob/apk/open-event-master-app-release-unsigned.apk).
-
 ### Libraries used and their documentation
 
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
@@ -78,7 +74,7 @@ We have the following branches
 	 - _versionCode_ : **Integer** : To be monotonically incremented with each merge. Failure to do so will lead to 				publishing error, and thus is a crucial step before any merge
 	 - _versionName_ : **String** : User visible version of the app. To be changed following [semantic versioning](http://semver.org/)
  * **apk** This branch contains two apk's, that are automatically generated on the merged pull request a) debug apk and b) release apk.
-
+    - Please download and test the app that is using the code from the dev and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
 ### Code practices
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
