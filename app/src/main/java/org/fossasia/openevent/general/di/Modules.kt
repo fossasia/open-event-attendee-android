@@ -80,7 +80,7 @@ val apiModule = applicationContext {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
@@ -178,6 +178,11 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.attendeesDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventTopicsDao()
     }
 
     factory {

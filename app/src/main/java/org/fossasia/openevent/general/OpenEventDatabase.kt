@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.event.EventIdConverter
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicIdConverter
+import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderDao
 import org.fossasia.openevent.general.social.SocialLink
@@ -35,6 +36,8 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun socialLinksDao(): SocialLinksDao
 
     abstract fun attendeesDao(): AttendeeDao
+
+    abstract fun eventTopicsDao(): EventTopicsDao
 
     abstract fun orderDao(): OrderDao
 
