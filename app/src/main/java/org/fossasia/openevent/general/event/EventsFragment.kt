@@ -29,6 +29,7 @@ class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
+    private var showRefreshLayoutProgress: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +80,11 @@ class EventsFragment : Fragment() {
         })
 
         eventsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
+            it?.let {
+                Utils.showProgressBar(rootView.progressBar, it)
+                if (showRefreshLayoutProgress)
+                    rootView.swiperefresh.isRefreshing = it
+            }
         })
 
         if (eventsViewModel.savedLocation != null) {
@@ -98,7 +103,7 @@ class EventsFragment : Fragment() {
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
-            if (eventsViewModel.savedLocation != null && isNetworkConnected){
+            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
             }
             showNoInternetScreen(isNetworkConnected)
@@ -107,7 +112,7 @@ class EventsFragment : Fragment() {
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener({
             eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
-            rootView.swiperefresh.isRefreshing = false
+            showRefreshLayoutProgress = true
         })
 
         return rootView
