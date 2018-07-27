@@ -103,4 +103,4 @@ Suggestion responses link: [Sheet](https://docs.google.com/spreadsheets/d/1SzR75
 
 ## License
 
-This project is currently licensed under the Apache License Version 2.0. A copy of [LICENSE.md](https://github.com/fossasia/susi_android/blob/master/LICENSE) should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+This project is currently licensed under the Apache License Version 2.0. A copy of [LICENSE](https://github.com/fossasia/open-event-android/blob/development/LICENSE) should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.

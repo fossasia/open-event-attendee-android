@@ -10,6 +10,7 @@ import com.github.jasminb.jsonapi.IntegerIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import io.reactivex.annotations.NonNull
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeId
 import org.fossasia.openevent.general.event.Event
@@ -17,18 +18,21 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("order")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Attendee::class, parentColumns = ["id"], childColumns = ["attendee"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Attendee::class, parentColumns = ["id"], childColumns = ["attendees"], onDelete = ForeignKey.CASCADE))])
 data class Order(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
+        @NonNull
         val id: Long,
         val paymentMode: String? = null,
         val country: String? = null,
         val status: String? = null,
         val amount: Float? = null,
+        val identifier: String? = null,
+        val orderNotes: String? = null,
         @ColumnInfo(index = true)
         @Relationship("event")
         var event: EventId? = null,
-        @Relationship("attendee")
-        var attendee: AttendeeId? = null
+        @Relationship("attendees")
+        var attendees: List<AttendeeId>? = null
 )

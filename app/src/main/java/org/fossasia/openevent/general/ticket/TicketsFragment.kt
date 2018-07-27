@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -19,24 +20,28 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
-import java.lang.StringBuilder
+
+const val EVENT_ID: String = "EVENT_ID"
+const val CURRENCY: String = "CURRENCY"
+const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
+    private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketId: Int = -1
-    private var ticketQuantity: Int = -1
+    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
+            currency = bundle.getString(CURRENCY, null)
         }
+        ticketsRecyclerAdapter.setCurrency(currency)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +53,8 @@ class TicketsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(id: Int, quantity: Int) {
-                ticketQuantity = quantity
-                ticketId = id
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -86,15 +90,32 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val fragment = AttendeeFragment()
-            val bundle = Bundle()
-            bundle.putLong("EVENT_ID", id)
-            bundle.putLong("TICKET_ID", ticketId.toLong())
-            fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            if (ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                val fragment = AttendeeFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, id)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
+            } else {
+                handleNoTicketsSelected()
+            }
         }
 
         return rootView
+    }
+
+    private fun handleTicketSelect(id: Int, quantity: Int) {
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
+        if (pos == -1) {
+            ticketIdAndQty.add(Pair(id, quantity))
+        } else {
+            ticketIdAndQty[pos] = Pair(id, quantity)
+        }
     }
 
     override fun onDestroyView() {
@@ -119,6 +140,15 @@ class TicketsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+    }
+
+    private fun handleNoTicketsSelected() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(resources.getString(R.string.no_tickets_message))
+               .setTitle(resources.getString(R.string.whoops))
+               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 
 }

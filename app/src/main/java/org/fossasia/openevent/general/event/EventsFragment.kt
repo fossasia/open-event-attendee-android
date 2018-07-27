@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
@@ -23,6 +22,7 @@ import timber.log.Timber
 //String constants for event types
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
+const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -56,8 +56,11 @@ class EventsFragment : Fragment() {
         }
 
         val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(eventId: Long, isFavourite: Boolean) {
-                eventsViewModel.setFavorite(eventId, !isFavourite)
+            override fun onClick(event: Event, isFavourite: Boolean) {
+                val id = eventsRecyclerAdapter.getPos(event.id)
+                eventsViewModel.setFavorite(event.id, !isFavourite)
+                event.favorite = !event.favorite
+                eventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -93,7 +96,11 @@ class EventsFragment : Fragment() {
         showNoInternetScreen(isNetworkConnected())
 
         rootView.retry.setOnClickListener {
-            showNoInternetScreen(isNetworkConnected())
+            val isNetworkConnected = isNetworkConnected()
+            if (eventsViewModel.savedLocation != null && isNetworkConnected){
+                eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            }
+            showNoInternetScreen(isNetworkConnected)
         }
 
         return rootView
