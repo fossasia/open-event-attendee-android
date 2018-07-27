@@ -8,5 +8,4 @@ data class CreatePaypalPaymentResponse(
         val status: Boolean,
         val paymentId: String,
         val error: String
-
 )
