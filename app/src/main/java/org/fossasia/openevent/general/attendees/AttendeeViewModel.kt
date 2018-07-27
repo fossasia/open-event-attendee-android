@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.order.Charge
+import org.fossasia.openevent.general.order.ConfirmOrder
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.ticket.Ticket
@@ -38,6 +39,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val cardType = ArrayList<String>()
     var orderIdentifier: String? = null
     var paymentCompleted = MutableLiveData<Boolean>()
+    lateinit var confirmOrder: ConfirmOrder
 
     fun getId() = authHolder.getId()
 
@@ -181,13 +183,32 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
-                    message.value = "Order created successfully!"
+                    if (it.paymentMode == "free") {
+                        confirmOrder = ConfirmOrder(it.id.toString(), "placed")
+                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                    }
                     Timber.d("Success placing order!")
-                    if (it.paymentMode == "free")
-                        paymentCompleted.value = true
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
+                }))
+    }
+
+    fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
+        compositeDisposable.add(orderService.confirmOrder(identifier, order)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.doFinally {
+                    progress.value = false
+                }.subscribe({
+                    message.value = "Order created successfully!"
+                    Timber.d("Updated order status successfully !")
+                    paymentCompleted.value = true
+                }, {
+                    message.value = "Unable to create Order!"
+                    Timber.d(it, "Failed updating order status")
                 }))
     }
 
@@ -201,9 +222,9 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     progress.value = false
                 }.subscribe({
                     message.value = it.message
-                    paymentCompleted.value = it.status
 
                     if (it.status != null && it.status) {
+                        confirmOrderStatus(orderIdentifier.toString(), confirmOrder)
                         Timber.d("Successfully  charged for the order!")
                     } else {
                         Timber.d("Failed charging the user")
