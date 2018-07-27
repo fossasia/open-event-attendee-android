@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
+import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.*
@@ -42,7 +43,7 @@ import java.util.concurrent.TimeUnit
 
 val commonModule = applicationContext {
     bean { Preference() }
-    bean { Resource() }
+    bean { Network() }
 }
 
 val apiModule = applicationContext {

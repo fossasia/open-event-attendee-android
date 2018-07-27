@@ -26,12 +26,12 @@ class LoginFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
+        loginActivityViewModel.showNoInternetDialog()
 
         if (loginActivityViewModel.isLoggedIn())
             redirectToMain()
 
         rootView.loginButton.setOnClickListener {
-            if (!loginActivityViewModel.isNetworkConnected()) Utils.showNoInternetDialog(activity)
             loginActivityViewModel.login(email.text.toString(), password.text.toString())
         }
 
@@ -40,6 +40,10 @@ class LoginFragment : Fragment() {
                 Utils.showProgressBar(rootView.progressBar, it)
                 loginButton.isEnabled = !it
             }
+        })
+
+        loginActivityViewModel.showNoInternetDialog.observe(this, Observer {
+            Utils.showNoInternetDialog(activity)
         })
 
         loginActivityViewModel.error.observe(this, Observer {

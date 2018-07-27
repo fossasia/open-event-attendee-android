@@ -6,17 +6,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
-import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
-class SignUpFragmentViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
+class SignUpFragmentViewModel(private val authService: AuthService,
+                              private val network: Network) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
     val error = SingleLiveEvent<String>()
     val signedUp = MutableLiveData<User>()
+    val showNoInternetDialog = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
     var email: String? = null
     var password: String? = null
@@ -37,7 +39,11 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
                     signedUp.value = it
                     Timber.d("Success!")
                 }, {
-                    error.value = "Unable to SignUp!"
+                    if (!network.isNetworkConnected()) {
+                        showNoInternetDialog.value = true
+                    } else {
+                        error.value = "Unable to SignUp!"
+                    }
                     Timber.d(it, "Failed")
                 }))
     }
@@ -57,8 +63,12 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
                     Timber.d("Success!")
                     fetchProfile()
                 }, {
-                    error.value = "Unable to Login automatically"
-                    Timber.d(it, "Failed")
+                    if (!network.isNetworkConnected()) {
+                        showNoInternetDialog.value = true
+                    } else {
+                        error.value = "Unable to Login automatically"
+                        Timber.d(it, "Failed")
+                    }
                 }))
     }
 
@@ -69,7 +79,11 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
                 .subscribe({ user ->
                     Timber.d("Fetched User Details")
                 }) {
-                    Timber.e(it, "Error loading user details")
+                    if (!network.isNetworkConnected()) {
+                        showNoInternetDialog.value = true
+                    } else {
+                        Timber.e(it, "Error loading user details")
+                    }
                 })
     }
 
@@ -79,9 +93,6 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
     }
 
     private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
-        if (!isNetworkConnected()) {
-            return true
-        }
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
             return true
@@ -93,7 +104,7 @@ class SignUpFragmentViewModel(private val authService: AuthService, private val 
         return false
     }
 
-    fun isNetworkConnected(): Boolean {
-        return resource.isNetworkConnected()
+    fun showNoInternetDialog() {
+        showNoInternetDialog.value = network.isNetworkConnected()
     }
 }

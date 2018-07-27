@@ -1,7 +1,5 @@
 package org.fossasia.openevent.general.data
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.support.annotation.StringRes
 import org.fossasia.openevent.general.OpenEventGeneral
 
@@ -15,9 +13,4 @@ class Resource {
 
     fun getString(@StringRes resId: Int, vararg args: Any?) = context.getString(resId, args)
 
-    fun isNetworkConnected(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        return connectivityManager?.activeNetworkInfo != null
-    }
 }

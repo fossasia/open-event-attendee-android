@@ -28,6 +28,8 @@ class SignUpFragment : Fragment() {
         setHasOptionsMenu(true)
         val signUp = SignUp()
 
+        signUpActivityViewModel.showNoInternetDialog()
+
         rootView.signUpButton.setOnClickListener {
             signUp.email = usernameSignUp.text.toString()
             signUp.password = passwordSignUp.text.toString()
@@ -35,7 +37,6 @@ class SignUpFragment : Fragment() {
             signUp.lastName = lastNameText.text.toString()
             confirmPassword = confirmPasswords.text.toString()
             signUpActivityViewModel.signUp(signUp, confirmPassword)
-            if(!signUpActivityViewModel.isNetworkConnected()) Utils.showNoInternetDialog(activity)
         }
 
         signUpActivityViewModel.progress.observe(this, Observer {
@@ -43,6 +44,10 @@ class SignUpFragment : Fragment() {
                 Utils.showProgressBar(rootView.progressBarSignUp, it)
                 signUpButton.isEnabled = !it
             }
+        })
+
+        signUpActivityViewModel.showNoInternetDialog.observe(this, Observer {
+            Utils.showNoInternetDialog(activity)
         })
 
         signUpActivityViewModel.error.observe(this, Observer {

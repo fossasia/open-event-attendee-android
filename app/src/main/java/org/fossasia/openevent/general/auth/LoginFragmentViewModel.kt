@@ -7,16 +7,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
-import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.data.Network
 import timber.log.Timber
 
-class LoginFragmentViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
+class LoginFragmentViewModel(private val authService: AuthService,
+                             private val network: Network) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
     val user = MutableLiveData<User>()
     val error = SingleLiveEvent<String>()
+    val showNoInternetDialog = MutableLiveData<Boolean>()
     val requestTokenSuccess = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
 
@@ -34,14 +36,15 @@ class LoginFragmentViewModel(private val authService: AuthService, private val r
                 }.subscribe({
                     loggedIn.value = true
                 }, {
+                    if (!network.isNetworkConnected()) {
+                        showNoInternetDialog.value = true
+                    } else {
                     error.value = "Unable to Login. Please check your credentials"
+                    }
                 }))
     }
 
     private fun hasErrors(email: String?, password: String?): Boolean {
-        if (!isNetworkConnected()) {
-            return true
-        }
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
             return true
@@ -100,8 +103,7 @@ class LoginFragmentViewModel(private val authService: AuthService, private val r
         compositeDisposable.clear()
     }
 
-    fun isNetworkConnected(): Boolean {
-        return resource.isNetworkConnected()
+    fun showNoInternetDialog() {
+        showNoInternetDialog.value = network.isNetworkConnected()
     }
-
 }
