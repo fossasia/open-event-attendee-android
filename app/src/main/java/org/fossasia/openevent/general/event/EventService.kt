@@ -10,7 +10,11 @@ import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import java.util.Locale.filter
 import kotlin.collections.ArrayList
 
-class EventService(private val eventApi: EventApi, private val eventDao: EventDao, private val eventTopicApi: EventTopicApi, private val eventTopicsDao: EventTopicsDao) {
+class EventService(
+        private val eventApi: EventApi,
+        private val eventDao: EventDao,
+        private val eventTopicApi: EventTopicApi,
+        private val eventTopicsDao: EventTopicsDao) {
 
     fun getEvents(): Flowable<List<Event>> {
         val eventsFlowable = eventDao.getAllEvents()
