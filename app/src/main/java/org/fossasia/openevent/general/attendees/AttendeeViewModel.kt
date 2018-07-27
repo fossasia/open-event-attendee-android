@@ -31,6 +31,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val tickets = MutableLiveData<List<Ticket>>()
     var paymentSelectorVisibility = MutableLiveData<Boolean>()
     var totalAmount = MutableLiveData<Float>()
+    var countryVisibility = MutableLiveData<Boolean>()
     var totalQty = MutableLiveData<Int>()
     val qtyList = MutableLiveData<ArrayList<Int>>()
     val month = ArrayList<String>()
@@ -99,6 +100,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         total += it * qty[index++]
                     }
                     totalAmount.value = total
+                    countryVisibility.value = total > 0
                     paymentSelectorVisibility.value = total != 0.toFloat()
                 }, {
                     Timber.e(it, "Error Loading tickets!")
@@ -123,7 +125,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun createAttendee(attendee: Attendee, eventId: Long, country: String, paymentOption: String) {
+    fun createAttendee(attendee: Attendee, eventId: Long, country: String?, paymentOption: String) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             message.value = "Please fill in all the fields"
             return
@@ -148,7 +150,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }))
     }
 
-    fun loadTicket(ticketId: Long?, country: String, eventId: Long, paymentOption: String, attendeeId: Long) {
+    fun loadTicket(ticketId: Long?, country: String?, eventId: Long, paymentOption: String, attendeeId: Long) {
         if (ticketId == null) {
             Timber.e("TicketId cannot be null")
             return
