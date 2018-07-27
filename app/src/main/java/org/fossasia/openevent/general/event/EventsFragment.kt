@@ -81,15 +81,16 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.progress.observe(this, Observer {
             it?.let {
-                Utils.showProgressBar(rootView.progressBar, it)
                 if (showRefreshLayoutProgress)
                     rootView.swiperefresh.isRefreshing = it
+                else
+                    Utils.showProgressBar(rootView.progressBar, it)
             }
         })
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            eventsViewModel.loadLocationEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -104,14 +105,14 @@ class EventsFragment : Fragment() {
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+                eventsViewModel.loadLocationEvents()
             }
             showNoInternetScreen(isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            eventsViewModel.loadLocationEvents()
             showRefreshLayoutProgress = true
         })
 
@@ -130,8 +131,7 @@ class EventsFragment : Fragment() {
     }
 
     override fun onStop() {
-        if (rootView.swiperefresh != null)
-            rootView.swiperefresh.setOnRefreshListener(null)
+        rootView.swiperefresh?.setOnRefreshListener(null)
         super.onStop()
     }
 }
