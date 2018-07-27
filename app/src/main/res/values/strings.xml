@@ -82,6 +82,9 @@
     <string name="item">Item</string>
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="whoops">Whoops!</string>
+    <string name="ok">ok</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
@@ -107,7 +110,7 @@
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
-    <string name="about_settings">About</string>
+    <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
