@@ -1,85 +1,84 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/homeScreenLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/layout_margin_extra_large"
-                android:text="@string/whats_good"
-                android:textColor="@color/black"
-                android:textSize="@dimen/heading_text_size" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:id="@+id/homeScreenLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/locationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/layout_margin_large"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_extra_large"
-                    tools:text="India" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/event_name_divider_height"
-                    android:layout_alignEnd="@id/locationTextView"
-                    android:layout_alignLeft="@+id/locationTextView"
-                    android:layout_alignRight="@id/locationTextView"
-                    android:layout_alignStart="@+id/locationTextView"
-                    android:layout_below="@id/locationTextView"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/grey" />
-            </RelativeLayout>
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    android:text="@string/whats_good"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/heading_text_size" />
 
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone"></ProgressBar>
+                    android:layout_gravity="center_horizontal">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/eventsRecycler"
+                    <TextView
+                        android:id="@+id/locationTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/layout_margin_large"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_extra_large"
+                        tools:text="India" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_alignEnd="@id/locationTextView"
+                        android:layout_alignLeft="@+id/locationTextView"
+                        android:layout_alignRight="@id/locationTextView"
+                        android:layout_alignStart="@+id/locationTextView"
+                        android:layout_below="@id/locationTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical" />
-            </FrameLayout>
-        </LinearLayout>
+                    android:layout_height="match_parent">
 
-        <include layout="@layout/content_no_internet" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"></ProgressBar>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/eventsRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <include layout="@layout/content_no_internet" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>
