@@ -105,6 +105,7 @@ val viewModelModule = applicationContext {
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
+    viewModel { OrdersUnderUserVM(get(), get()) }
 }
 
 val networkModule = applicationContext {

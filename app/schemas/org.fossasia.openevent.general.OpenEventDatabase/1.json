@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f309ce36fffadb9683ce583cfef593b1",
+    "identityHash": "fc2dc68e55bb131e812d138216f9e4bd",
     "entities": [
       {
         "tableName": "Event",
@@ -824,7 +824,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `identifier` TEXT, `orderNotes` TEXT, `event` INTEGER, `attendees` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `event` INTEGER, `attendees` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -865,6 +865,60 @@
           {
             "fieldPath": "orderNotes",
             "columnName": "orderNotes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zipcode",
+            "columnName": "zipcode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paidVia",
+            "columnName": "paidVia",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountCodeId",
+            "columnName": "discountCodeId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketsPdfUrl",
+            "columnName": "ticketsPdfUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionId",
+            "columnName": "transactionId",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -925,7 +979,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f309ce36fffadb9683ce583cfef593b1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fc2dc68e55bb131e812d138216f9e4bd\")"
     ]
   }
 }
