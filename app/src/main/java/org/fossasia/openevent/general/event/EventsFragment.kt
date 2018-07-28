@@ -29,7 +29,6 @@ class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
-    private var showRefreshLayoutProgress: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +80,9 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.progress.observe(this, Observer {
             it?.let {
-                if (showRefreshLayoutProgress)
+                Utils.showProgressBar(rootView.progressBar, it)
+                if (!it)
                     rootView.swiperefresh.isRefreshing = it
-                else
-                    Utils.showProgressBar(rootView.progressBar, it)
             }
         })
 
@@ -113,7 +111,6 @@ class EventsFragment : Fragment() {
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener({
             eventsViewModel.loadLocationEvents()
-            showRefreshLayoutProgress = true
         })
 
         return rootView
