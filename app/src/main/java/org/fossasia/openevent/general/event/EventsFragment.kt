@@ -80,9 +80,7 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.progress.observe(this, Observer {
             it?.let {
-                Utils.showProgressBar(rootView.progressBar, it)
-                if (!it)
-                    rootView.swiperefresh.isRefreshing = it
+                rootView.swiperefresh.isRefreshing = it
             }
         })
 
