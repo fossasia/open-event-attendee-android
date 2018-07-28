@@ -82,6 +82,9 @@
     <string name="item">Item</string>
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="whoops">Whoops!</string>
+    <string name="ok">ok</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>

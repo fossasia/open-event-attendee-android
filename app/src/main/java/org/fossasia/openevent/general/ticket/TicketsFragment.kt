@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -31,7 +32,7 @@ class TicketsFragment : Fragment() {
     private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,23 +90,31 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val fragment = AttendeeFragment()
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
-            fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                val fragment = AttendeeFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, id)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
+            } else {
+                handleNoTicketsSelected()
+            }
         }
 
         return rootView
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
-        val pos = tickeIdAndQty.map { it.first }.indexOf(id)
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            tickeIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Pair(id, quantity))
         } else {
-            tickeIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Pair(id, quantity)
         }
     }
 
@@ -131,6 +140,15 @@ class TicketsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+    }
+
+    private fun handleNoTicketsSelected() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(resources.getString(R.string.no_tickets_message))
+               .setTitle(resources.getString(R.string.whoops))
+               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 
 }

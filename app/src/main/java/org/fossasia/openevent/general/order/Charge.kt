@@ -10,6 +10,8 @@ data class Charge(
         val id: Int,
         val stripe: String? = null,
         val paypal: String? = null,
+        val paypalPayerId: String? = null,
+        val paypalPaymentId: String? = null,
         val message: String? = null,
         val status: Boolean? = null
 )
