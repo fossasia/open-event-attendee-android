@@ -96,7 +96,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:paddingLeft="@dimen/layout_margin_medium"
                 android:layout_weight="0.95"
                 android:text="@string/invite"
                 android:textColor="@color/black" />
