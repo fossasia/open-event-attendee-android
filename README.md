@@ -25,10 +25,6 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 
 A native Android app using Kotlin for writing code.
 
-### Android App Development Set up
-
-Please find info about the set up of the Android app in your development environment.
-
 ### Libraries used and their documentation
 
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
@@ -101,4 +97,4 @@ If you are a tester and want to test the app, you have two ways to do that:
 
 ## License
 
-This project is currently licensed under the Apache License Version 2.0. A copy of [LICENSE](https://github.com/fossasia/open-event-android/blob/development/LICENSE) should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+This project is currently licensed under the Apache License Version 2.0. A copy of [LICENSE](LICENSE) should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
