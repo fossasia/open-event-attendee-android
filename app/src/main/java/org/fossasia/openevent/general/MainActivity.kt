@@ -10,6 +10,7 @@ import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
+import org.fossasia.openevent.general.order.OrdersUnderUserFragment
 import org.fossasia.openevent.general.search.SearchFragment
 
 private const val TO_SEARCH: String = "ToSearchFragment"
@@ -40,6 +41,12 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_favorite -> {
                 supportActionBar?.title = "Likes"
                 fragment = FavoriteFragment()
+                loadFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_tickets -> {
+                supportActionBar?.title = "Tickets"
+                fragment = OrdersUnderUserFragment()
                 loadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
