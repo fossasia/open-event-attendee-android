@@ -18,6 +18,7 @@
     <string name="retry">RETRY</string>
     <string name="more_like_this">More like this</string>
     <string name="favorite_event">Favorite Event</string>
+    <string name="refund_Policy">Refund Policy</string>
 
     <!--Search event details-->
     <string name="search">Search</string>

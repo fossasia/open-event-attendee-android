@@ -53,6 +53,7 @@ data class Event(
         val isComplete: Boolean = false,
         val latitude: Double? = null,
         val longitude: Double? = null,
+        val refundPolicy: String? = null,
 
         val canPayByStripe: Boolean = false,
         val canPayByCheque: Boolean = false,
