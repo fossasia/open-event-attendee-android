@@ -32,7 +32,7 @@ class TicketsFragment : Fragment() {
     private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketIdAndQty = ArrayList<Triple<String, Int, Int>>()
+    private var ticketDetailsAndQty = ArrayList<Triple<String, Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class TicketsFragment : Fragment() {
 
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(ticketName: String, ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketName,ticketId, quantity)
+                handleTicketSelect(ticketName, ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -106,11 +106,11 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketDetailsAndQty)) {
                 val fragment = AttendeeFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, id)
-                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketDetailsAndQty)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager
                         ?.beginTransaction()
@@ -126,11 +126,11 @@ class TicketsFragment : Fragment() {
     }
 
     private fun handleTicketSelect(name: String, id: Int, quantity: Int) {
-        val pos = ticketIdAndQty.map { it.second }.indexOf(id)
+        val pos = ticketDetailsAndQty.map { it.second }.indexOf(id)
         if (pos == -1) {
-            ticketIdAndQty.add(Triple(name, id, quantity))
+            ticketDetailsAndQty.add(Triple(name, id, quantity))
         } else {
-            ticketIdAndQty[pos] = Triple(name, id, quantity)
+            ticketDetailsAndQty[pos] = Triple(name, id, quantity)
         }
     }
 

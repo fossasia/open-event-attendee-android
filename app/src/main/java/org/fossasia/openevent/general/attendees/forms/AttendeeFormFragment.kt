@@ -16,14 +16,14 @@ import timber.log.Timber
 class AttendeeFormFragment : Fragment() {
     private val attendeeFormRecyclerAdapter: AttendeeFormRecyclerAdapter = AttendeeFormRecyclerAdapter()
     private val attendeeFormViewModel by viewModel<AttendeeFormViewModel>()
-    private var ticketIdAndQty: List<Triple<String, Int, Int>>? = null
+    private var ticketDetailsAndQty: List<Triple<String, Int, Int>>? = null
     private lateinit var rootView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Triple<String, Int, Int>>
+            ticketDetailsAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Triple<String, Int, Int>>
         }
     }
 
@@ -43,7 +43,7 @@ class AttendeeFormFragment : Fragment() {
             }
         })
 
-        attendeeFormViewModel.ticketDetails(ticketIdAndQty)
+        attendeeFormViewModel.ticketDetails(ticketDetailsAndQty)
 
         return rootView
     }

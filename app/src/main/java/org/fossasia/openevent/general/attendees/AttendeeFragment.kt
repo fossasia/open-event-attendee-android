@@ -57,7 +57,7 @@ class AttendeeFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private lateinit var eventId: EventId
-    private var ticketIdAndQty: List<Triple<String, Int, Int>>? = null
+    private var ticketDetailsAndQty: List<Triple<String, Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
     private var expiryMonth: Int = -1
@@ -72,7 +72,7 @@ class AttendeeFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
             eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Triple<String, Int, Int>>
+            ticketDetailsAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Triple<String, Int, Int>>
         }
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
                 ?.metaData?.getString(STRIPE_KEY).toString()
@@ -137,9 +137,9 @@ class AttendeeFragment : Fragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        attendeeFragmentViewModel.ticketDetails(ticketIdAndQty)
+        attendeeFragmentViewModel.ticketDetails(ticketDetailsAndQty)
 
-        attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
+        attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketDetailsAndQty)
         val paymentOptions = ArrayList<String>()
         paymentOptions.add("PayPal")
         paymentOptions.add("Stripe")
@@ -238,7 +238,6 @@ class AttendeeFragment : Fragment() {
                 })
             })
 
-
             attendeeFragmentViewModel.tickets.observe(this, Observer {
                 it?.let {
                     ticketsRecyclerAdapter.addAll(it)
@@ -279,7 +278,7 @@ class AttendeeFragment : Fragment() {
                 if (selectedPaymentOption == "Stripe")
                     sendToken()
 
-                ticketIdAndQty?.forEach {
+                ticketDetailsAndQty?.forEach {
                     if (it.third > 0) {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                                 firstname = firstName.text.toString(),
@@ -387,8 +386,8 @@ class AttendeeFragment : Fragment() {
     private fun loadAttendeeForms(){
         val attendeeFormFragment = AttendeeFormFragment()
         val bundle = Bundle()
-        val list = ticketIdAndQty as ArrayList<Triple<String, Int, Int>>
-        bundle.putSerializable(TICKET_ID_AND_QTY, list)
+        val ticketDetailsAndQtyList = ticketDetailsAndQty as ArrayList<Triple<String, Int, Int>>
+        bundle.putSerializable(TICKET_ID_AND_QTY, ticketDetailsAndQtyList)
         attendeeFormFragment.arguments = bundle
         childFragmentManager.beginTransaction().add(R.id.attendeeFormsLayout, attendeeFormFragment).commit()
     }

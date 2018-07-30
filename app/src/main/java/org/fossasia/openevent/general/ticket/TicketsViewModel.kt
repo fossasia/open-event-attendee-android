@@ -53,8 +53,8 @@ class TicketsViewModel(private val ticketService: TicketService, private val eve
                 }))
     }
 
-    fun totalTicketsEmpty(ticketIdAndQty: List<Triple<String, Int, Int>>): Boolean {
-        return ticketIdAndQty.sumBy { it.third } == 0
+    fun totalTicketsEmpty(ticketDetailsAndQty: List<Triple<String, Int, Int>>): Boolean {
+        return ticketDetailsAndQty.sumBy { it.third } == 0
     }
 
     override fun onCleared() {
