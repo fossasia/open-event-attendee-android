@@ -168,6 +168,9 @@ class EventDetailsFragment : Fragment() {
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
         rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)}"
 
+        //Refund policy
+        rootView.refundPolicy.text = event.refundPolicy
+
         //Similar Events Section
         if (event.eventTopic != null) {
             similarEventsContainer.visibility = View.VISIBLE
