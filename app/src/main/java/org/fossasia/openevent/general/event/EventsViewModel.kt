@@ -29,13 +29,13 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally({
-            progress.value = false
-        }).subscribe({
-            events.value = it
-        }, {
-            Timber.e(it, "Error fetching events")
-            error.value = "Error fetching events"
-        }))
+                    progress.value = false
+                }).subscribe({
+                    events.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    error.value = "Error fetching events"
+                }))
     }
 
     fun loadEvents() {
@@ -45,13 +45,13 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally({
-            progress.value = false
-        }).subscribe({
-            events.value = it
-        }, {
-            Timber.e(it, "Error fetching events")
-            error.value = "Error fetching events"
-        }))
+                    progress.value = false
+                }).subscribe({
+                    events.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    error.value = "Error fetching events"
+                }))
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
