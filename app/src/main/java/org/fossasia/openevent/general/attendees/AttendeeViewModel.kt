@@ -189,6 +189,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     }
                     Timber.d("Success placing order!")
                 }, {
+                    deleteAttendees(order.attendees)
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
                 }))
@@ -210,6 +211,19 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed updating order status")
                 }))
+    }
+
+    fun deleteAttendees(attendeeIds: List<AttendeeId>?) {
+        attendeeIds?.forEach {
+            compositeDisposable.add(attendeeService.deleteAttendee(it.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Timber.d("Deleted attendee $it.id")
+                    }, {
+                        Timber.d("Failed to delete attendee $it.id")
+                    }))
+        }
     }
 
     fun completeOrder(charge: Charge) {
