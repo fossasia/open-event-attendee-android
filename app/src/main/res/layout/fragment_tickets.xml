@@ -52,9 +52,25 @@
             android:elevation="@dimen/card_elevation"
             android:visibility="gone" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ticketInfoTextView"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:text="No tickets available!"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:background="@drawable/filled_border"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/ticketTableHeader"
             android:background="@drawable/filled_border"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="@dimen/layout_margin_medium"
