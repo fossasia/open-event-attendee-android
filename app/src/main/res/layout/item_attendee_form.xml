@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/layout_margin_extra_large"
+    android:background="@drawable/curved_border">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/divider_margin_top"
+        android:layout_margin="@dimen/layout_margin_extra_small"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ticketName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="@dimen/layout_margin_small"
+        tools:text="Ticket 1 - Android -11 -13 August 2018"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greyMore"
+        android:layout_marginBottom="@dimen/layout_margin_small"
+        android:text="@string/first_name"/>
+
+    <EditText
+        android:id="@+id/firstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curved_border"
+        android:padding="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        tools:text="First Name"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greyMore"
+        android:layout_marginBottom="@dimen/layout_margin_small"
+        android:text="@string/last_name"/>
+
+    <EditText
+        android:id="@+id/lastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:padding="@dimen/padding_small"
+        android:background="@drawable/curved_border"
+        tools:text="Last Name"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greyMore"
+        android:layout_marginBottom="@dimen/layout_margin_small"
+        android:text="@string/email"/>
+
+    <EditText
+        android:id="@+id/emailForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:background="@drawable/curved_border"
+        tools:text="Email"/>
+    </LinearLayout>
+</LinearLayout>

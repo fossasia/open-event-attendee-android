@@ -43,5 +43,5 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 }
 
 interface TicketSelectedListener {
-    fun onSelected(ticketId: Int, quantity: Int)
+    fun onSelected(ticketName: String, ticketId: Int, quantity: Int)
 }

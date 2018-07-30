@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.forms.AttendeeFormFragment
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
@@ -41,6 +42,7 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
@@ -55,7 +57,7 @@ class AttendeeFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private lateinit var eventId: EventId
-    private var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    private var ticketDetailsAndQty: List<Triple<String, Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
     private var expiryMonth: Int = -1
@@ -70,7 +72,7 @@ class AttendeeFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
             eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
+            ticketDetailsAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Triple<String, Int, Int>>
         }
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
                 ?.metaData?.getString(STRIPE_KEY).toString()
@@ -135,9 +137,9 @@ class AttendeeFragment : Fragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        attendeeFragmentViewModel.ticketDetails(ticketIdAndQty)
+        attendeeFragmentViewModel.ticketDetails(ticketDetailsAndQty)
 
-        attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
+        attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketDetailsAndQty)
         val paymentOptions = ArrayList<String>()
         paymentOptions.add("PayPal")
         paymentOptions.add("Stripe")
@@ -276,13 +278,13 @@ class AttendeeFragment : Fragment() {
                 if (selectedPaymentOption == "Stripe")
                     sendToken()
 
-                ticketIdAndQty?.forEach {
-                    if (it.second > 0) {
+                ticketDetailsAndQty?.forEach {
+                    if (it.third > 0) {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                                 firstname = firstName.text.toString(),
                                 lastname = lastName.text.toString(),
                                 email = email.text.toString(),
-                                ticket = TicketId(it.first.toLong()),
+                                ticket = TicketId(it.second.toLong()),
                                 event = eventId)
                         val country = if (country.text.isEmpty()) country.text.toString() else null
                         attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
@@ -293,6 +295,8 @@ class AttendeeFragment : Fragment() {
             redirectToLogin()
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
+
+        loadAttendeeForms()
 
         return rootView
     }
@@ -377,5 +381,14 @@ class AttendeeFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun loadAttendeeForms(){
+        val attendeeFormFragment = AttendeeFormFragment()
+        val bundle = Bundle()
+        val ticketDetailsAndQtyList = ticketDetailsAndQty as ArrayList<Triple<String, Int, Int>>
+        bundle.putSerializable(TICKET_ID_AND_QTY, ticketDetailsAndQtyList)
+        attendeeFormFragment.arguments = bundle
+        childFragmentManager.beginTransaction().add(R.id.attendeeFormsLayout, attendeeFormFragment).commit()
     }
 }
