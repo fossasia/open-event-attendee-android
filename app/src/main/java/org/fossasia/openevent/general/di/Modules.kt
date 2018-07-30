@@ -83,7 +83,7 @@ val apiModule = applicationContext {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
@@ -108,6 +108,7 @@ val viewModelModule = applicationContext {
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
+    viewModel { OrdersUnderUserVM(get(), get()) }
 }
 
 val networkModule = applicationContext {
@@ -181,6 +182,11 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.attendeesDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventTopicsDao()
     }
 
     factory {

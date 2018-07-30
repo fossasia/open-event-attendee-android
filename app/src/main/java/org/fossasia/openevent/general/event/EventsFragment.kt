@@ -2,6 +2,8 @@ package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -76,12 +78,14 @@ class EventsFragment : Fragment() {
         })
 
         eventsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
+            it?.let {
+                rootView.swiperefresh.isRefreshing = it
+            }
         })
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            eventsViewModel.loadLocationEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -95,11 +99,16 @@ class EventsFragment : Fragment() {
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = eventsViewModel.isNetworkConnected()
-            if (eventsViewModel.savedLocation != null && isNetworkConnected){
-                eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
+                eventsViewModel.loadLocationEvents()
             }
             showNoInternetScreen(isNetworkConnected)
         }
+
+        rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
+        rootView.swiperefresh.setOnRefreshListener({
+            eventsViewModel.loadLocationEvents()
+        })
 
         return rootView
     }
@@ -107,5 +116,10 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    override fun onStop() {
+        rootView.swiperefresh?.setOnRefreshListener(null)
+        super.onStop()
     }
 }

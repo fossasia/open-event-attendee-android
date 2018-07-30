@@ -22,9 +22,9 @@ class EventsViewModel(private val eventService: EventService,
 
     val savedLocation by lazy { preference.getString(tokenKey) }
 
-    fun loadLocationEvents(locationName: String) {
-        preference.putString(tokenKey, locationName)
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
+    fun loadLocationEvents() {
+        preference.putString(tokenKey, savedLocation)
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
 
         compositeDisposable.add(eventService.getEventsByLocation(query)
                 .subscribeOn(Schedulers.io())
