@@ -19,7 +19,7 @@ cd apk
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	/bin/rm -f open-event-master-app-debug.apk open-event-master-app-release-unsigned.apk 
 else
-	/bin/rm -f open-event-master-app-fdroid-debug.apk open-event-master-app-playStore-debug.apk open-event-master-app-playStore-release.apk open-event-master-app-fdroid-release.apk
+	/bin/rm -f open-event-dev-app-fdroid-debug.apk open-event-dev-app-playStore-debug.apk open-event-dev-app-playStore-release.apk open-event-dev-app-fdroid-release.apk
 fi
 
 \cp -r ../app/build/outputs/apk/playStore/*/**.apk .
@@ -31,12 +31,18 @@ fi
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
+		if [[ $file = *"dev"* ]]; then
+			continue
+		fi
 		cp $file open-event-master-${file%%}
 	done
 fi
 
 if [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
 	for file in app*; do
+		if [[ $file = *"master"* ]]; then
+			continue
+		fi
 		cp $file open-event-dev-${file%%}
 	done
 fi
