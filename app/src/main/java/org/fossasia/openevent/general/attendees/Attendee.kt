@@ -31,6 +31,7 @@ data class Attendee(
         val country: String? = null,
         val isCheckedIn: Boolean? = false,
         val pdfUrl: String? = null,
+        val ticketId: String? = null,
         @ColumnInfo(index = true)
         @Relationship("event")
         var event: EventId? = null,

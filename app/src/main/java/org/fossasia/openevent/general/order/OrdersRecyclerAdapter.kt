@@ -9,6 +9,11 @@ import kotlin.collections.ArrayList
 class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
     private val orders = ArrayList<Order>()
+    private var clickListener: OrderClickListener? = null
+
+    fun setListener(listener: OrderClickListener) {
+        clickListener = listener
+    }
 
     fun addAll(orderList: List<Order>) {
         if (orders.isNotEmpty())
@@ -23,11 +28,14 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
         val order = orders[position]
-        holder.bind(order)
+        holder.bind(order, clickListener)
     }
 
     override fun getItemCount(): Int {
         return orders.size
     }
 
+    interface OrderClickListener {
+        fun onClick(eventID: Long, orderIdentifier: String)
+    }
 }
