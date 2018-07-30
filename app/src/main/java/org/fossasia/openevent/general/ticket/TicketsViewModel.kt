@@ -9,15 +9,16 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class TicketsViewModel(private val ticketService: TicketService,private val eventService: EventService) : ViewModel() {
+class TicketsViewModel(private val ticketService: TicketService, private val eventService: EventService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val progressTickets = MutableLiveData<Boolean>()
     val tickets = MutableLiveData<List<Ticket>>()
     val error = MutableLiveData<String>()
     val event = MutableLiveData<Event>()
+    val ticketTableVisibility = MutableLiveData<Boolean>()
 
-    fun loadTickets(id : Long) {
+    fun loadTickets(id: Long) {
         if (id.equals(-1)) {
             error.value = "Error fetching tickets"
             return
@@ -27,12 +28,13 @@ class TicketsViewModel(private val ticketService: TicketService,private val even
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     progressTickets.value = true
-                }).subscribe({ticketList ->
+                }).subscribe({ ticketList ->
+                    ticketTableVisibility.value = ticketList.isNotEmpty()
                     tickets.value = ticketList
                     progressTickets.value = false
                 }, {
                     error.value = "Error fetching tickets"
-                    Timber.e(it, "Error fetching tickets %d",id)
+                    Timber.e(it, "Error fetching tickets %d", id)
                 }))
     }
 

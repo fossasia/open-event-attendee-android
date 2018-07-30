@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -78,6 +79,22 @@ class TicketsFragment : Fragment() {
             it?.let { loadEventDetails(it) }
         })
 
+        ticketsViewModel.ticketTableVisibility.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    rootView.ticketTableHeader.visibility = View.VISIBLE
+                    rootView.ticketsRecycler.visibility = View.VISIBLE
+                    rootView.register.visibility = View.VISIBLE
+                    rootView.ticketInfoTextView.visibility = View.GONE
+                } else {
+                    rootView.ticketTableHeader.visibility = View.GONE
+                    rootView.register.visibility = View.GONE
+                    rootView.ticketsRecycler.visibility = View.GONE
+                    rootView.ticketInfoTextView.visibility = View.VISIBLE
+                }
+            }
+        })
+
         ticketsViewModel.loadEvent(id)
         ticketsViewModel.loadTickets(id)
 
@@ -89,12 +106,20 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val fragment = AttendeeFragment()
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
-            fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                val fragment = AttendeeFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, id)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
+            } else {
+                handleNoTicketsSelected()
+            }
         }
 
         return rootView
@@ -131,6 +156,15 @@ class TicketsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+    }
+
+    private fun handleNoTicketsSelected() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(resources.getString(R.string.no_tickets_message))
+               .setTitle(resources.getString(R.string.whoops))
+               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 
 }

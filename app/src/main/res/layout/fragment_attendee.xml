@@ -232,6 +232,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                android:id="@+id/countryArea"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_medium">
