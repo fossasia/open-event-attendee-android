@@ -17,7 +17,7 @@ git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossa
 cd apk
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-	/bin/rm -f open-event-master-app-debug.apk open-event-master-app-release-unsigned.apk 
+	/bin/rm -f  open-event-master-app-playStore-release.apk open-event-master-app-fdroid-release.apk
 else
 	/bin/rm -f open-event-dev-app-fdroid-debug.apk open-event-dev-app-playStore-debug.apk open-event-dev-app-playStore-release.apk open-event-dev-app-fdroid-release.apk
 fi
