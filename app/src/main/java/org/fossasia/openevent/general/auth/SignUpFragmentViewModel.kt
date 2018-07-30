@@ -24,6 +24,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
     var password: String? = null
 
     fun signUp(signUp: SignUp, confirmPassword: String) {
+        isConnected()
         email = signUp.email
         password = signUp.password
 
@@ -39,16 +40,13 @@ class SignUpFragmentViewModel(private val authService: AuthService,
                     signedUp.value = it
                     Timber.d("Success!")
                 }, {
-                    if (!network.isNetworkConnected()) {
-                        showNoInternetDialog.value = true
-                    } else {
-                        error.value = "Unable to SignUp!"
-                    }
+                    error.value = "Unable to SignUp!"
                     Timber.d(it, "Failed")
                 }))
     }
 
     fun login(signUp: SignUp) {
+        isConnected()
         email = signUp.email
         password = signUp.password
         compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
@@ -63,27 +61,20 @@ class SignUpFragmentViewModel(private val authService: AuthService,
                     Timber.d("Success!")
                     fetchProfile()
                 }, {
-                    if (!network.isNetworkConnected()) {
-                        showNoInternetDialog.value = true
-                    } else {
-                        error.value = "Unable to Login automatically"
-                        Timber.d(it, "Failed")
-                    }
+                    error.value = "Unable to Login automatically"
+                    Timber.d(it, "Failed")
                 }))
     }
 
     fun fetchProfile() {
+        isConnected()
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ user ->
                     Timber.d("Fetched User Details")
                 }) {
-                    if (!network.isNetworkConnected()) {
-                        showNoInternetDialog.value = true
-                    } else {
-                        Timber.e(it, "Error loading user details")
-                    }
+                    Timber.e(it, "Error loading user details")
                 })
     }
 
@@ -106,5 +97,12 @@ class SignUpFragmentViewModel(private val authService: AuthService,
 
     fun showNoInternetDialog() {
         showNoInternetDialog.value = network.isNetworkConnected()
+    }
+
+    fun isConnected() {
+        if (!network.isNetworkConnected()) {
+            showNoInternetDialog.value = true
+            return
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -95,10 +96,10 @@ class EventsFragment : Fragment() {
             startActivity(intent)
         }
 
-        showNoInternetScreen(eventsViewModel.isNetworkConnected())
+        showNoInternetScreen(isNetworkConnected())
 
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = eventsViewModel.isNetworkConnected()
+            val isNetworkConnected = isNetworkConnected()
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.loadLocationEvents()
             }
@@ -116,6 +117,12 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
+        return connectivityManager?.activeNetworkInfo != null
     }
 
     override fun onStop() {

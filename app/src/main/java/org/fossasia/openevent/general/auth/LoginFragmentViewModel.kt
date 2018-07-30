@@ -25,6 +25,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
+        isConnected()
         if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
@@ -36,11 +37,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
                 }.subscribe({
                     loggedIn.value = true
                 }, {
-                    if (!network.isNetworkConnected()) {
-                        showNoInternetDialog.value = true
-                    } else {
                     error.value = "Unable to Login. Please check your credentials"
-                    }
                 }))
     }
 
@@ -60,6 +57,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     }
 
     fun sendResetPasswordEmail(email: String) {
+        isConnected()
         compositeDisposable.add(authService.sendResetPasswordEmail(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,6 +80,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     }
 
     fun fetchProfile() {
+        isConnected()
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,5 +104,12 @@ class LoginFragmentViewModel(private val authService: AuthService,
 
     fun showNoInternetDialog() {
         showNoInternetDialog.value = network.isNetworkConnected()
+    }
+
+    fun isConnected() {
+        if (!network.isNetworkConnected()) {
+            showNoInternetDialog.value = true
+            return
+        }
     }
 }

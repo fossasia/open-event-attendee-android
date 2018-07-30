@@ -5,13 +5,10 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService,
-                      private val preference: Preference,
-                      private val network: Network) : ViewModel() {
+class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
@@ -32,13 +29,13 @@ class EventsViewModel(private val eventService: EventService,
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally({
-                    progress.value = false
-                }).subscribe({
-                    events.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
-                }))
+            progress.value = false
+        }).subscribe({
+            events.value = it
+        }, {
+            Timber.e(it, "Error fetching events")
+            error.value = "Error fetching events"
+        }))
     }
 
     fun loadEvents() {
@@ -48,13 +45,13 @@ class EventsViewModel(private val eventService: EventService,
                 .doOnSubscribe({
                     progress.value = true
                 }).doFinally({
-                    progress.value = false
-                }).subscribe({
-                    events.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
-                }))
+            progress.value = false
+        }).subscribe({
+            events.value = it
+        }, {
+            Timber.e(it, "Error fetching events")
+            error.value = "Error fetching events"
+        }))
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
@@ -67,10 +64,6 @@ class EventsViewModel(private val eventService: EventService,
                     Timber.e(it, "Error")
                     error.value = "Error"
                 }))
-    }
-
-    fun isNetworkConnected(): Boolean {
-        return network.isNetworkConnected()
     }
 
     override fun onCleared() {
