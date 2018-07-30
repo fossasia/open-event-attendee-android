@@ -184,7 +184,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
                     if (it.paymentMode == "free") {
-                        confirmOrder = ConfirmOrder(it.id.toString(), "placed")
+                        confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
                     }
                     Timber.d("Success placing order!")
