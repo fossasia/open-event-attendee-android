@@ -79,6 +79,22 @@ class TicketsFragment : Fragment() {
             it?.let { loadEventDetails(it) }
         })
 
+        ticketsViewModel.ticketTableVisibility.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    rootView.ticketTableHeader.visibility = View.VISIBLE
+                    rootView.ticketsRecycler.visibility = View.VISIBLE
+                    rootView.register.visibility = View.VISIBLE
+                    rootView.ticketInfoTextView.visibility = View.GONE
+                } else {
+                    rootView.ticketTableHeader.visibility = View.GONE
+                    rootView.register.visibility = View.GONE
+                    rootView.ticketsRecycler.visibility = View.GONE
+                    rootView.ticketInfoTextView.visibility = View.VISIBLE
+                }
+            }
+        })
+
         ticketsViewModel.loadEvent(id)
         ticketsViewModel.loadTickets(id)
 
@@ -90,7 +106,7 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            if (ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
                 val fragment = AttendeeFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, id)
