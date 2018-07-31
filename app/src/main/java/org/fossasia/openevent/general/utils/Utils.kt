@@ -32,11 +32,10 @@ object Utils {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    fun showNoInternetDialog(activity: Activity?) {
-        val builder = AlertDialog.Builder(activity)
-        builder.setMessage(activity?.resources?.getString(R.string.no_internet_message))
-                .setPositiveButton(activity?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
+    fun showNoInternetDialog(context: Context?) {
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage(context?.resources?.getString(R.string.no_internet_message))
+               .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        builder.show()
     }
 }

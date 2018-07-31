@@ -45,7 +45,7 @@ class SignUpFragment : Fragment() {
         })
 
         signUpActivityViewModel.showNoInternetDialog.observe(this, Observer {
-            Utils.showNoInternetDialog(activity)
+            Utils.showNoInternetDialog(context)
         })
 
         signUpActivityViewModel.error.observe(this, Observer {

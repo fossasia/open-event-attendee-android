@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
         })
 
         loginActivityViewModel.showNoInternetDialog.observe(this, Observer {
-            Utils.showNoInternetDialog(activity)
+            Utils.showNoInternetDialog(context)
         })
 
         loginActivityViewModel.error.observe(this, Observer {
