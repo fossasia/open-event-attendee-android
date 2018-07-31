@@ -10,7 +10,9 @@ class Network {
         OpenEventGeneral.appContext!!
     }
 
-    private val connectivityManager by lazy { context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager }
+    private val connectivityManager by lazy {
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+    }
 
     fun isNetworkConnected(): Boolean {
         return connectivityManager?.activeNetworkInfo != null
