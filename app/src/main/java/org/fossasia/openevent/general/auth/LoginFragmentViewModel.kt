@@ -25,7 +25,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
-        isConnected()
+        if (!isConnected()) return
         if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
@@ -57,7 +57,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     }
 
     fun sendResetPasswordEmail(email: String) {
-        isConnected()
+        if (!isConnected()) return
         compositeDisposable.add(authService.sendResetPasswordEmail(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,7 +80,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     }
 
     fun fetchProfile() {
-        isConnected()
+        if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -102,14 +102,9 @@ class LoginFragmentViewModel(private val authService: AuthService,
         compositeDisposable.clear()
     }
 
-    fun showNoInternetDialog() {
-        showNoInternetDialog.value = network.isNetworkConnected()
-    }
-
-    fun isConnected() {
-        if (!network.isNetworkConnected()) {
-            showNoInternetDialog.value = true
-            return
-        }
+    fun isConnected(): Boolean {
+        val isConnected = network.isNetworkConnected()
+        showNoInternetDialog.value = !isConnected
+        return isConnected
     }
 }

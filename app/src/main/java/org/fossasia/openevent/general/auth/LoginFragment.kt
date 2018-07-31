@@ -26,8 +26,6 @@ class LoginFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-        loginActivityViewModel.showNoInternetDialog()
-
         if (loginActivityViewModel.isLoggedIn())
             redirectToMain()
 

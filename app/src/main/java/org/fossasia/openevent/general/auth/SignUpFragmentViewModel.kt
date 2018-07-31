@@ -24,7 +24,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
     var password: String? = null
 
     fun signUp(signUp: SignUp, confirmPassword: String) {
-        isConnected()
+        if (!isConnected()) return
         email = signUp.email
         password = signUp.password
 
@@ -46,7 +46,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
     }
 
     fun login(signUp: SignUp) {
-        isConnected()
+        if (!isConnected()) return
         email = signUp.email
         password = signUp.password
         compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
@@ -67,7 +67,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
     }
 
     fun fetchProfile() {
-        isConnected()
+        if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -95,14 +95,9 @@ class SignUpFragmentViewModel(private val authService: AuthService,
         return false
     }
 
-    fun showNoInternetDialog() {
-        showNoInternetDialog.value = network.isNetworkConnected()
-    }
-
-    fun isConnected() {
-        if (!network.isNetworkConnected()) {
-            showNoInternetDialog.value = true
-            return
-        }
+    fun isConnected(): Boolean {
+        val isConnected = network.isNetworkConnected()
+        showNoInternetDialog.value = !isConnected
+        return isConnected
     }
 }

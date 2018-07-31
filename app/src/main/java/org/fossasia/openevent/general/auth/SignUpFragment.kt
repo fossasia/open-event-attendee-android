@@ -28,8 +28,6 @@ class SignUpFragment : Fragment() {
         setHasOptionsMenu(true)
         val signUp = SignUp()
 
-        signUpActivityViewModel.showNoInternetDialog()
-
         rootView.signUpButton.setOnClickListener {
             signUp.email = usernameSignUp.text.toString()
             signUp.password = passwordSignUp.text.toString()
