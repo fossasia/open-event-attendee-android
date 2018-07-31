@@ -26,7 +26,6 @@ class LoginFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-
         if (loginActivityViewModel.isLoggedIn())
             redirectToMain()
 
@@ -39,6 +38,10 @@ class LoginFragment : Fragment() {
                 Utils.showProgressBar(rootView.progressBar, it)
                 loginButton.isEnabled = !it
             }
+        })
+
+        loginActivityViewModel.showNoInternetDialog.observe(this, Observer {
+            Utils.showNoInternetDialog(context)
         })
 
         loginActivityViewModel.error.observe(this, Observer {
@@ -91,5 +94,4 @@ class LoginFragment : Fragment() {
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }
-
 }

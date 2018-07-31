@@ -6,21 +6,25 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
-class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel() {
+class SignUpFragmentViewModel(private val authService: AuthService,
+                              private val network: Network) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
     val error = SingleLiveEvent<String>()
     val signedUp = MutableLiveData<User>()
+    val showNoInternetDialog = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
     var email: String? = null
     var password: String? = null
 
     fun signUp(signUp: SignUp, confirmPassword: String) {
+        if (!isConnected()) return
         email = signUp.email
         password = signUp.password
 
@@ -42,6 +46,7 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
     }
 
     fun login(signUp: SignUp) {
+        if (!isConnected()) return
         email = signUp.email
         password = signUp.password
         compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
@@ -62,6 +67,7 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
     }
 
     fun fetchProfile() {
+        if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -89,4 +95,9 @@ class SignUpFragmentViewModel(private val authService: AuthService) : ViewModel(
         return false
     }
 
+    fun isConnected(): Boolean {
+        val isConnected = network.isNetworkConnected()
+        showNoInternetDialog.value = !isConnected
+        return isConnected
+    }
 }
