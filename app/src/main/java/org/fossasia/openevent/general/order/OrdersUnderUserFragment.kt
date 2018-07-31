@@ -11,9 +11,12 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+
+const val ORDERS: String = "orders"
 
 class OrdersUnderUserFragment : Fragment() {
 
@@ -39,6 +42,18 @@ class OrdersUnderUserFragment : Fragment() {
         if (ordersUnderUserVM.isLoggedIn()) {
             ordersUnderUserVM.ordersUnderUser()
 
+            val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
+                override fun onClick(eventID: Long, orderIdentifier: String) {
+                    val fragment = OrderDetailsFragment()
+                    val bundle = Bundle()
+                    bundle.putLong(EVENT_ID, eventID)
+                    bundle.putString(ORDERS, orderIdentifier)
+                    fragment.arguments = bundle
+                    activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                }
+            }
+
+            ordersRecyclerAdapter.setListener(recyclerViewClickListener)
             ordersUnderUserVM.progress.observe(this, Observer {
                 it?.let { Utils.showProgressBar(rootView.progressBar, it) }
             })
