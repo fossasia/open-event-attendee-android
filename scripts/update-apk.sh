@@ -31,7 +31,7 @@ fi
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
-		if [[ $file = *"dev"* ]]; then
+		if [[ $file = "open-event"* ]]; then
 			continue
 		fi
 		cp $file open-event-master-${file%%}
@@ -40,7 +40,7 @@ fi
 
 if [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
 	for file in app*; do
-		if [[ $file = *"master"* ]]; then
+		if [[ $file = "open-event"* ]]; then
 			continue
 		fi
 		cp $file open-event-dev-${file%%}
