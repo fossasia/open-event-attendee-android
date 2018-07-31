@@ -102,6 +102,11 @@
     <string name="order_completed">ORDER COMPLETED</string>
     <string name="add">+ ADD</string>
     <string name="invite">INVITE</string>
+    <string name="name">Name</string>
+    <string name="event">Event</string>
+    <string name="date">Date</string>
+    <string name="order_identifier">Order Identifier</string>
+    <string name="event_summary">Event Summary</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EventApi {
@@ -14,5 +15,8 @@ interface EventApi {
 
     @GET
     fun getEvent(id: Long): Single<Event>
+
+    @GET("/v1/events/{eventIdentifier}")
+    fun getEventFromApi(@Path("eventIdentifier") eventIdentifier: Long): Single<Event>
 
 }
