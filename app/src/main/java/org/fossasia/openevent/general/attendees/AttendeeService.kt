@@ -1,7 +1,9 @@
 package org.fossasia.openevent.general.attendees
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
 
@@ -20,5 +22,9 @@ class AttendeeService(private val attendeeApi: AttendeeApi, private val attendee
 
     fun deleteAttendee(id: Long): Completable {
         return attendeeApi.deleteAttendee(id)
+    }
+
+    fun getCustomFormsForAttendees(id: Long): Flowable<List<CustomForm>> {
+        return attendeeApi.getCustomFormsForAttendees(id).toFlowable()
     }
 }
