@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:gravity="center"
         android:layout_marginRight="@dimen/layout_margin_medium"
         android:background="@drawable/border"
         android:orientation="horizontal"
@@ -34,17 +35,17 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:background="@drawable/filled_border"
             android:layout_weight="1">
 
         <TextView
             android:id="@+id/order"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:gravity="end"
+            android:gravity="center"
             android:spinnerMode="dialog"
-            android:textAlignment="center"
             android:textSize="@dimen/text_size_large" />
 
         <Spinner

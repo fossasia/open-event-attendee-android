@@ -79,6 +79,10 @@ class EventService(
         return eventDao.getEvent(id)
     }
 
+    fun getEventFromApi(id: Long): Single<Event> {
+        return eventApi.getEventFromApi(id)
+    }
+
     fun setFavorite(eventId: Long, favourite: Boolean): Completable {
         return Completable.fromAction {
             eventDao.setFavorite(eventId, favourite)

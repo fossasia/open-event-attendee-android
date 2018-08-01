@@ -7,25 +7,26 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Network
 import timber.log.Timber
 
-class LoginFragmentViewModel(private val authService: AuthService) : ViewModel() {
+class LoginFragmentViewModel(private val authService: AuthService,
+                             private val network: Network) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val progress = MutableLiveData<Boolean>()
     val user = MutableLiveData<User>()
     val error = SingleLiveEvent<String>()
+    val showNoInternetDialog = MutableLiveData<Boolean>()
     val requestTokenSuccess = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
 
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            error.value = "Email or Password cannot be empty"
-            return
-        }
+        if (!isConnected()) return
+        if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -40,6 +41,14 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
                 }))
     }
 
+    private fun hasErrors(email: String?, password: String?): Boolean {
+        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+            error.value = "Email or Password cannot be empty!"
+            return true
+        }
+        return false
+    }
+
     fun showForgotPassword(email: String): Boolean {
         if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
@@ -48,6 +57,7 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
     }
 
     fun sendResetPasswordEmail(email: String) {
+        if (!isConnected()) return
         compositeDisposable.add(authService.sendResetPasswordEmail(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -70,6 +80,7 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
     }
 
     fun fetchProfile() {
+        if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,4 +102,9 @@ class LoginFragmentViewModel(private val authService: AuthService) : ViewModel()
         compositeDisposable.clear()
     }
 
+    fun isConnected(): Boolean {
+        val isConnected = network.isNetworkConnected()
+        if (!isConnected) showNoInternetDialog.value = true
+        return isConnected
+    }
 }
