@@ -42,15 +42,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                             subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
                         }
                     }
-                    val formattedSubQuery = if (subQuery != "")
-                        subQuery.substring(1) // remove "," from the beginning
-                    else
-                        "" // if there are no orders
-
-                    query = if (idList.size == 1)
-                        "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
-                    else
-                        "[{\"or\":[$formattedSubQuery]}]"
+                    query = buildQuery(idList, eventId, subQuery)
 
                     if (idList.size != 0)
                         eventsUnderUser(query)
@@ -75,6 +67,18 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                     message.value = "Failed  to list events under a user"
                     Timber.d(it, "Failed  to list events under a user ")
                 }))
+    }
+
+    private fun buildQuery(idList: ArrayList<Long>, eventId: Long, subQuery: String): String {
+        val formattedSubQuery = if (subQuery != "")
+            subQuery.substring(1) // remove "," from the beginning
+        else
+            "" // if there are no orders
+
+        return if (idList.size == 1)
+            "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
+        else
+            "[{\"or\":[$formattedSubQuery]}]"
     }
 
     override fun onCleared() {
