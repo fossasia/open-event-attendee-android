@@ -18,9 +18,6 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
     val order = MutableLiveData<List<Order>>()
     val event = MutableLiveData<List<Event>>()
     val progress = MutableLiveData<Boolean>()
-    var query: String = ""
-    var subQuery: String = ""
-    var eventId: Long = -1
 
     fun getId() = authHolder.getId()
 
@@ -35,6 +32,9 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 }.subscribe({
                     order.value = it
                     val idList = ArrayList<Long>()
+                    var subQuery = ""
+                    var eventId: Long = -1
+
                     it.forEach {
                         it.event?.id?.let { it1 ->
                             idList.add(it1)
@@ -42,7 +42,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                             subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
                         }
                     }
-                    query = buildQuery(idList, eventId, subQuery)
+                    val query = buildQuery(idList, eventId, subQuery)
 
                     if (idList.size != 0)
                         eventsUnderUser(query)
