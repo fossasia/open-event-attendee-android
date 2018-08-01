@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.utils
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -7,7 +9,6 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.ProgressBar
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import org.fossasia.openevent.general.R
 
 object Utils {
@@ -29,5 +30,12 @@ object Utils {
 
     fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    fun showNoInternetDialog(context: Context?) {
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage(context?.resources?.getString(R.string.no_internet_message))
+               .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        builder.show()
     }
 }
