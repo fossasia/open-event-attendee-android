@@ -97,7 +97,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
 
     fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
-        showNoInternetDialog.value = !isConnected
+        if (!isConnected) showNoInternetDialog.value = true
         return isConnected
     }
 }
