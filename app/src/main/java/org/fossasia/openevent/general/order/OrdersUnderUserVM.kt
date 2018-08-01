@@ -18,6 +18,8 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
     val order = MutableLiveData<List<Order>>()
     val event = MutableLiveData<List<Event>>()
     val progress = MutableLiveData<Boolean>()
+    private var eventId: Long = -1
+    private val idList = ArrayList<Long>()
 
     fun getId() = authHolder.getId()
 
@@ -31,18 +33,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                     progress.value = true
                 }.subscribe({
                     order.value = it
-                    val idList = ArrayList<Long>()
-                    var subQuery = ""
-                    var eventId: Long = -1
-
-                    it.forEach {
-                        it.event?.id?.let { it1 ->
-                            idList.add(it1)
-                            eventId = it1
-                            subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
-                        }
-                    }
-                    val query = buildQuery(idList, eventId, subQuery)
+                    val query = buildQuery(it)
 
                     if (idList.size != 0)
                         eventsUnderUser(query)
@@ -69,7 +60,17 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 }))
     }
 
-    private fun buildQuery(idList: ArrayList<Long>, eventId: Long, subQuery: String): String {
+    private fun buildQuery(orderList: List<Order>): String {
+        var subQuery = ""
+
+        orderList.forEach {
+            it.event?.id?.let { it1 ->
+                idList.add(it1)
+                eventId = it1
+                subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
+            }
+        }
+
         val formattedSubQuery = if (subQuery != "")
             subQuery.substring(1) // remove "," from the beginning
         else
