@@ -276,6 +276,7 @@ class AttendeeFragment : Fragment() {
                 if (selectedPaymentOption == "Stripe")
                     sendToken()
 
+                val attendees = ArrayList<Attendee>()
                 ticketIdAndQty?.forEach {
                     if (it.second > 0) {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
@@ -284,10 +285,11 @@ class AttendeeFragment : Fragment() {
                                 email = email.text.toString(),
                                 ticket = TicketId(it.first.toLong()),
                                 event = eventId)
-                        val country = if (country.text.isEmpty()) country.text.toString() else null
-                        attendeeFragmentViewModel.createAttendee(attendee, id, country, selectedPaymentOption)
+                        attendees.add(attendee)
                     }
                 }
+                val country = if (country.text.isEmpty()) country.text.toString() else null
+                attendeeFragmentViewModel.createAttendees(attendees, country, selectedPaymentOption)
             }
         } else {
             redirectToLogin()
