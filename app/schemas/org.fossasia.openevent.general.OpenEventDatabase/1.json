@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "70ba78ce2189a5f0711289c6456ff2a3",
+    "identityHash": "1b5f1e5c95700e4c3b5563d4bca9e587",
     "entities": [
       {
         "tableName": "Event",
@@ -329,7 +329,7 @@
       },
       {
         "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `contact` TEXT, `details` TEXT, `thumbnailImageUrl` TEXT, `iconImageUrl` TEXT, `smallImageUrl` TEXT, `avatarUrl` TEXT, `facebookUrl` TEXT, `twitterUrl` TEXT, `instagramUrl` TEXT, `googlePlusUrl` TEXT, `originalImageUrl` TEXT, `isVerified` INTEGER NOT NULL, `isAdmin` INTEGER NOT NULL, `isSuperAdmin` INTEGER NOT NULL, `createdAt` TEXT, `lastAccessedAt` TEXT, `deletedAt` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `contact` TEXT, `details` TEXT, `thumbnailImageUrl` TEXT, `iconImageUrl` TEXT, `smallImageUrl` TEXT, `avatarUrl` TEXT, `facebookUrl` TEXT, `twitterUrl` TEXT, `instagramUrl` TEXT, `googlePlusUrl` TEXT, `originalImageUrl` TEXT, `isVerified` INTEGER NOT NULL, `isAdmin` INTEGER, `isSuperAdmin` INTEGER, `createdAt` TEXT, `lastAccessedAt` TEXT, `deletedAt` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -431,13 +431,13 @@
             "fieldPath": "isAdmin",
             "columnName": "isAdmin",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "isSuperAdmin",
             "columnName": "isSuperAdmin",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "createdAt",
@@ -991,7 +991,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"70ba78ce2189a5f0711289c6456ff2a3\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1b5f1e5c95700e4c3b5563d4bca9e587\")"
     ]
   }
 }

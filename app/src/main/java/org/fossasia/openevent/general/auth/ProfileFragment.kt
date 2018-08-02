@@ -79,6 +79,11 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
+            R.id.edit_profile -> {
+                val fragment = EditProfileFragment()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                return true
+            }
             R.id.orga_app -> {
                 startOrgaApp("org.fossasia.eventyay")
                 return true

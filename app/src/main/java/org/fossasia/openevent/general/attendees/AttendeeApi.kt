@@ -2,10 +2,8 @@ package org.fossasia.openevent.general.attendees
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.POST
-import retrofit2.http.Path
+import org.fossasia.openevent.general.attendees.forms.CustomForm
+import retrofit2.http.*
 
 interface AttendeeApi {
 
@@ -14,4 +12,7 @@ interface AttendeeApi {
 
     @DELETE("attendees/{attendeeId}")
     fun deleteAttendee(@Path("attendeeId") id: Long): Completable
+
+    @GET("events/{id}/custom-forms")
+    fun getCustomFormsForAttendees(@Path("id") id: Long): Single<List<CustomForm>>
 }

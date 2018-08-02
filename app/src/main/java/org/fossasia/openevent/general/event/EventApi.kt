@@ -19,4 +19,6 @@ interface EventApi {
     @GET("/v1/events/{eventIdentifier}")
     fun getEventFromApi(@Path("eventIdentifier") eventIdentifier: Long): Single<Event>
 
+    @GET("events")
+    fun eventsUnderUser( @Query("filter") eventId: String): Single<List<Event>>
 }
