@@ -86,7 +86,6 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 eventId = it1
                 subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
             }
-            Timber.d("harsimar " + eventIdAndTimes.toString())
         }
 
         val formattedSubQuery = if (subQuery != "")
