@@ -18,7 +18,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
     val order = MutableLiveData<List<Order>>()
     val event = MutableLiveData<List<Event>>()
     val progress = MutableLiveData<Boolean>()
-    var eventIdAndTimes = mutableMapOf<Long, Int>()
+    val eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
     private val idList = ArrayList<Long>()
 
@@ -72,19 +72,22 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
 
     private fun buildQuery(orderList: List<Order>): String {
         var subQuery = ""
-        
+
         eventIdAndTimes.clear()
         orderList.forEach {
             it.event?.id?.let { it1 ->
-                if (eventIdAndTimes.containsKey(it1) && eventIdAndTimes[it1] != null) {
-                    eventIdAndTimes[it1]?.plus(1)
+                val times = eventIdAndTimes[it1]
+                if (eventIdAndTimes.containsKey(it1) && times != null) {
+                    eventIdAndTimes[it1] = times + 1
                 } else {
                     eventIdAndTimes[it1] = 1
                 }
+                Timber.d("harsimar " + it1)
                 idList.add(it1)
                 eventId = it1
                 subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
             }
+            Timber.d("harsimar " + eventIdAndTimes.toString())
         }
 
         val formattedSubQuery = if (subQuery != "")
