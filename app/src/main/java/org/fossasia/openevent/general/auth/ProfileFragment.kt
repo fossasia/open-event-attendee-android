@@ -49,8 +49,6 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        setHasOptionsMenu(true)
-
         profileFragmentViewModel.progress.observe(this, Observer {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
@@ -142,8 +140,8 @@ class ProfileFragment : Fragment() {
     override fun onResume() {
         val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        setHasOptionsMenu(true)
         activity?.supportActionBar?.title = "Profile"
+        setHasOptionsMenu(true)
         super.onResume()
     }
 }

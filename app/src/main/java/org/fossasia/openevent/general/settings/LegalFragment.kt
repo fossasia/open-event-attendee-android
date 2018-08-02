@@ -28,11 +28,6 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.legal, rootKey)
-
-        val activity =  activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Legal"
-        setHasOptionsMenu(true)
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -76,6 +71,7 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         val activity =  activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Legal"
+        setHasOptionsMenu(true)
         super.onResume()
     }
 }

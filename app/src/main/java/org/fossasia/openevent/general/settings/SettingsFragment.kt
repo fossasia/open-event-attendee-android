@@ -42,10 +42,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setHasOptionsMenu(true)
-
         //Set Email
         email = arguments?.getString(EMAIL)
         preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
