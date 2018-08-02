@@ -63,6 +63,12 @@ class OrdersUnderUserFragment : Fragment() {
             })
 
             ordersUnderUserVM.order.observe(this, Observer {
+                it?.forEach {
+                    ordersRecyclerAdapter.setOrderIdentifier(it.identifier)
+                }
+            })
+
+            ordersUnderUserVM.event.observe(this, Observer {
                 it?.let {
                     ordersRecyclerAdapter.addAll(it)
                     ordersRecyclerAdapter.notifyDataSetChanged()
