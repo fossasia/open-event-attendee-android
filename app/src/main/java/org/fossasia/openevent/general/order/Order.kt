@@ -28,7 +28,17 @@ data class Order(
         val country: String? = null,
         val status: String? = null,
         val amount: Float? = null,
+        val identifier: String? = null,
         val orderNotes: String? = null,
+        val completedAt: String? = null,
+        val city: String? = null,
+        val address: String? = null,
+        val createdAt: String? = null,
+        val zipcode: String? = null,
+        val paidVia: String? = null,
+        val discountCodeId: String? = null,
+        val ticketsPdfUrl: String? = null,
+        val transactionId: String? = null,
         @ColumnInfo(index = true)
         @Relationship("event")
         var event: EventId? = null,

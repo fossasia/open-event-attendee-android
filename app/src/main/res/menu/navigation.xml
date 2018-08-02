@@ -17,6 +17,11 @@
         android:title="@string/likes" />
 
     <item
+        android:id="@+id/navigation_tickets"
+        android:icon="@drawable/ic_baseline_ticket_24dp"
+        android:title="@string/tickets" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_baseline_account_circle_24px"
         android:title="@string/profile" />

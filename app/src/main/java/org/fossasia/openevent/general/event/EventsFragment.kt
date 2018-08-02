@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -22,6 +23,7 @@ import timber.log.Timber
 //String constants for event types
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
+const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -77,12 +79,14 @@ class EventsFragment : Fragment() {
         })
 
         eventsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
+            it?.let {
+                rootView.swiperefresh.isRefreshing = it
+            }
         })
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents(eventsViewModel.savedLocation.toString())
+            eventsViewModel.loadLocationEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -95,8 +99,17 @@ class EventsFragment : Fragment() {
         showNoInternetScreen(isNetworkConnected())
 
         rootView.retry.setOnClickListener {
-            showNoInternetScreen(isNetworkConnected())
+            val isNetworkConnected = isNetworkConnected()
+            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
+                eventsViewModel.loadLocationEvents()
+            }
+            showNoInternetScreen(isNetworkConnected)
         }
+
+        rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
+        rootView.swiperefresh.setOnRefreshListener({
+            eventsViewModel.loadLocationEvents()
+        })
 
         return rootView
     }
@@ -112,4 +125,8 @@ class EventsFragment : Fragment() {
         return connectivityManager?.activeNetworkInfo != null
     }
 
+    override fun onStop() {
+        rootView.swiperefresh?.setOnRefreshListener(null)
+        super.onStop()
+    }
 }

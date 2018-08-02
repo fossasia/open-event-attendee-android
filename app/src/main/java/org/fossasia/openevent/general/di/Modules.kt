@@ -12,16 +12,19 @@ import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
+import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
-import org.fossasia.openevent.general.order.Order
-import org.fossasia.openevent.general.order.OrderApi
-import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.order.*
+import org.fossasia.openevent.general.paypal.Paypal
+import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
 import org.fossasia.openevent.general.social.SocialLink
@@ -40,6 +43,7 @@ import java.util.concurrent.TimeUnit
 
 val commonModule = applicationContext {
     bean { Preference() }
+    bean { Network() }
 }
 
 val apiModule = applicationContext {
@@ -71,33 +75,41 @@ val apiModule = applicationContext {
         val retrofit: Retrofit = get()
         retrofit.create(OrderApi::class.java)
     }
+    bean {
+        val retrofit: Retrofit = get()
+        retrofit.create(PaypalApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
-    factory { OrderService(get(), get()) }
+    factory { OrderService(get(), get(), get()) }
 
 }
 
 val viewModelModule = applicationContext {
-    viewModel { LoginFragmentViewModel(get()) }
+    viewModel { LoginFragmentViewModel(get(), get()) }
     viewModel { EventsViewModel(get(), get()) }
     viewModel { ProfileFragmentViewModel(get()) }
-    viewModel { SignUpFragmentViewModel(get()) }
+    viewModel { SignUpFragmentViewModel(get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { AttendeeViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
+    viewModel { SearchTimeViewModel(get()) }
     viewModel { TicketsViewModel(get(), get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
     viewModel { FavouriteEventsViewModel(get()) }
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
+    viewModel { OrderCompletedViewModel(get()) }
+    viewModel { OrdersUnderUserVM(get(), get()) }
+    viewModel { OrderDetailsViewModel(get(), get()) }
 }
 
 val networkModule = applicationContext {
@@ -131,7 +143,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
@@ -171,6 +183,11 @@ val databaseModule = applicationContext {
     factory {
         val database: OpenEventDatabase = get()
         database.attendeesDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.eventTopicsDao()
     }
 
     factory {

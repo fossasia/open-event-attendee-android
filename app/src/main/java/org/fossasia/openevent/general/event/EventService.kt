@@ -2,10 +2,19 @@ package org.fossasia.openevent.general.event
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
+import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
+import org.fossasia.openevent.general.event.topic.EventTopicsDao
+import java.util.Locale.filter
+import kotlin.collections.ArrayList
 
-class EventService(private val eventApi: EventApi, private val eventDao: EventDao, private val eventTopicApi: EventTopicApi) {
+class EventService(
+        private val eventApi: EventApi,
+        private val eventDao: EventDao,
+        private val eventTopicApi: EventTopicApi,
+        private val eventTopicsDao: EventTopicsDao) {
 
     fun getEvents(): Flowable<List<Event>> {
         val eventsFlowable = eventDao.getAllEvents()
@@ -16,12 +25,24 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
                 eventApi.getEvents()
                         .map {
                             eventDao.insertEvents(it)
+                            eventTopicsDao.insertEventTopics(getEventTopicList(it))
                         }
                         .toFlowable()
                         .flatMap {
                             eventsFlowable
                         }
         }
+    }
+
+    private fun getEventTopicList(eventsList: List<Event>): List<EventTopic?> {
+        return eventsList
+                .filter { it.eventTopic != null }
+                .map { it -> it.eventTopic }
+                .toList() 
+    }
+
+    fun getEventTopics(): Flowable<List<EventTopic>> {
+        return eventTopicsDao.getAllEventTopics()
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
@@ -40,6 +61,7 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
     fun getEventsByLocation(locationName: String): Single<List<Event>> {
         return eventApi.searchEvents("name", locationName).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()
+            eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
             eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
                 updateFavorites(apiList, favIds)
             }
@@ -55,6 +77,10 @@ class EventService(private val eventApi: EventApi, private val eventDao: EventDa
 
     fun getEvent(id: Long): Flowable<Event> {
         return eventDao.getEvent(id)
+    }
+
+    fun getEventFromApi(id: Long): Single<Event> {
+        return eventApi.getEventFromApi(id)
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean): Completable {

@@ -30,6 +30,7 @@ class ProfileFragment : Fragment() {
 
     private fun redirectToLogin() {
         startActivity(Intent(activity, AuthActivity::class.java))
+        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
     private fun redirectToMain() {
@@ -38,8 +39,10 @@ class ProfileFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (!profileFragmentViewModel.isLoggedIn())
+        if (!profileFragmentViewModel.isLoggedIn()) {
+            Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
             redirectToLogin()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

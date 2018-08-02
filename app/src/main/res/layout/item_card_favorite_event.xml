@@ -17,8 +17,10 @@
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
             android:layout_gravity="end|bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="80dp"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:layout_marginRight="@dimen/fab_width"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -28,9 +30,11 @@
             android:id="@+id/favoriteFab"
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
             android:layout_gravity="end|bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="@dimen/fab_margin_right"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:layout_marginRight="@dimen/layout_margin_small"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -40,8 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/layout_margin_medium"
             android:orientation="vertical">
 
             <LinearLayout
@@ -49,33 +53,40 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/eventImage"
+                <android.support.v7.widget.CardView
                     android:layout_width="100dp"
-                    android:layout_gravity="center"
                     android:layout_height="100dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder" />
-
+                    app:cardCornerRadius="@dimen/image_corner_radius"
+                    android:layout_marginBottom="@dimen/layout_margin_moderate"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:layout_marginTop="@dimen/layout_margin_moderate">
+                    <ImageView
+                        android:id="@+id/eventImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/placeholder" />
+                </android.support.v7.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_moderate"
+                    android:layout_marginRight="@dimen/layout_margin_moderate"
+                    android:layout_marginTop="@dimen/layout_margin_moderate"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/eventName"
-                        android:maxLines="2"
-                        android:ellipsize="end"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_small"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginBottom="@dimen/details_margin_small"
                         android:textColor="@color/black"
-                        android:textSize="22sp"
+                        android:textSize="@dimen/heading_text_size"
                         tools:text="Event Name" />
 
                     <LinearLayout
@@ -87,29 +98,29 @@
                             android:id="@+id/date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="13sp"
+                            android:textSize="@dimen/details_text_size"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             tools:text="28" />
 
                         <TextView
                             android:id="@+id/month"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:textSize="13sp"
+                            android:layout_marginLeft="@dimen/details_margin_small"
+                            android:textSize="@dimen/details_text_size"
                             tools:text="JUN" />
-
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/locationName"
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:layout_width="match_parent"
+                        android:layout_width="@dimen/item_image_view_large"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginTop="@dimen/layout_margin_small"
+                        android:textSize="@dimen/details_text_size"
                         tools:text="Location Name" />
-
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

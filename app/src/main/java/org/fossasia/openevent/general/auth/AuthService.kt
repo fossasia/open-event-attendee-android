@@ -2,6 +2,9 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.fossasia.openevent.general.auth.forgot.Email
+import org.fossasia.openevent.general.auth.forgot.RequestToken
+import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
 import timber.log.Timber
 
 
@@ -26,7 +29,10 @@ class AuthService(private val authApi: AuthApi,
         if (email.isNullOrEmpty() || password.isNullOrEmpty())
             throw IllegalArgumentException("Username or password cannot be empty")
 
-        return authApi.signUp(signUp)
+        return authApi.signUp(signUp).map {
+            userDao.insertUser(it)
+            it
+        }
     }
 
     fun isLoggedIn() = authHolder.isLoggedIn()
@@ -48,5 +54,10 @@ class AuthService(private val authApi: AuthApi,
                                 it
                             }
                 }
+    }
+
+    fun sendResetPasswordEmail(email: String): Single<RequestTokenResponse> {
+        val requestToken = RequestToken(Email(email))
+        return authApi.requestToken(requestToken)
     }
 }

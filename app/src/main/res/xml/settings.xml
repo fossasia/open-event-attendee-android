@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
-        android:title="@string/about_settings" >
+        android:key="@string/key_about"
+        android:title="@string/about" >
 
         <Preference
             android:key="@string/key_rating"
@@ -14,6 +15,9 @@
         <Preference
             android:key="@string/key_legal"
             android:title="@string/legal" />
+        <Preference
+            android:key="@string/key_acknowledgements"
+            android:title="@string/acknowledgements_settings" />
     </PreferenceCategory>
 
     <PreferenceCategory

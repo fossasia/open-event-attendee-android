@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -21,22 +22,26 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
 const val EVENT_ID: String = "EVENT_ID"
+const val CURRENCY: String = "CURRENCY"
 const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
     private var id: Long = -1
+    private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var tickeIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
+            currency = bundle.getString(CURRENCY, null)
         }
+        ticketsRecyclerAdapter.setCurrency(currency)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -74,6 +79,22 @@ class TicketsFragment : Fragment() {
             it?.let { loadEventDetails(it) }
         })
 
+        ticketsViewModel.ticketTableVisibility.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    rootView.ticketTableHeader.visibility = View.VISIBLE
+                    rootView.ticketsRecycler.visibility = View.VISIBLE
+                    rootView.register.visibility = View.VISIBLE
+                    rootView.ticketInfoTextView.visibility = View.GONE
+                } else {
+                    rootView.ticketTableHeader.visibility = View.GONE
+                    rootView.register.visibility = View.GONE
+                    rootView.ticketsRecycler.visibility = View.GONE
+                    rootView.ticketInfoTextView.visibility = View.VISIBLE
+                }
+            }
+        })
+
         ticketsViewModel.loadEvent(id)
         ticketsViewModel.loadTickets(id)
 
@@ -85,23 +106,31 @@ class TicketsFragment : Fragment() {
         })
 
         rootView.register.setOnClickListener {
-            val fragment = AttendeeFragment()
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, id)
-            bundle.putSerializable(TICKET_ID_AND_QTY, tickeIdAndQty)
-            fragment.arguments = bundle
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                val fragment = AttendeeFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, id)
+                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
+            } else {
+                handleNoTicketsSelected()
+            }
         }
 
         return rootView
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
-        val pos = tickeIdAndQty.map { it.first }.indexOf(id)
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            tickeIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Pair(id, quantity))
         } else {
-            tickeIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Pair(id, quantity)
         }
     }
 
@@ -127,6 +156,15 @@ class TicketsFragment : Fragment() {
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+    }
+
+    private fun handleNoTicketsSelected() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage(resources.getString(R.string.no_tickets_message))
+               .setTitle(resources.getString(R.string.whoops))
+               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 
 }

@@ -18,18 +18,27 @@
     <string name="retry">RETRY</string>
     <string name="more_like_this">More like this</string>
     <string name="favorite_event">Favorite Event</string>
+    <string name="refund_Policy">Refund Policy</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
     <string name="search_hint">Search for. . .</string>
-    <string name="go_out">I want to go out\n\nIn</string>
+    <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
+    <string name="anytime">Anytime</string>
+    <string name="what_time">What time works?</string>
+    <string name="pick_date">Pick a date...</string>
+    <string name="at">at</string>
+    <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
     <string name="logout">Log out</string>
     <string name="settings">Settings</string>
     <string name="login">Login</string>
+    <string name="forgot_password">I forgot my password</string>
+    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
@@ -71,6 +80,33 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
+    <string name="item">Item</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="view">(view)</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="whoops">Whoops!</string>
+    <string name="ok">ok</string>
+
+    <!--payment details-->
+    <string name="card_number">Card Number</string>
+    <string name="card_type">Card Type</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="cvc">CVC</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="payment_info">Payment Info</string>
+    <string name="not_you">Not you? </string>
+    <string name="sign_out">Sign out</string>
+    <string name="all_fees">All fees included in price</string>
+
+    <!--order details-->
+    <string name="order_completed">ORDER COMPLETED</string>
+    <string name="add">+ ADD</string>
+    <string name="invite">INVITE</string>
+    <string name="name">Name</string>
+    <string name="event">Event</string>
+    <string name="date">Date</string>
+    <string name="order_identifier">Order Identifier</string>
+    <string name="event_summary">Event Summary</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
@@ -80,11 +116,13 @@
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
-    <string name="about_settings">About</string>
+    <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
+    <string name="key_acknowledgements">key_acknowledgements</string>
+    <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="key_legal">legal</string>

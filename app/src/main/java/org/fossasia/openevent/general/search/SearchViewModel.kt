@@ -15,19 +15,26 @@ class SearchViewModel(private val eventService: EventService, private val prefer
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
+    private val tokenKeyDate = "DATE"
+    private val tokenKeyNextDate = "NEXT_DATE"
 
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
+    val savedDate by lazy { preference.getString(tokenKeyDate) }
+    val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
 
-    fun loadEvents(location: String) {
+
+    fun loadEvents(location: String, time: String) {
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
             "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
-        else
+        else if (time == "Anytime")
             "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
+        else
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
@@ -42,6 +49,9 @@ class SearchViewModel(private val eventService: EventService, private val prefer
                     Timber.e(it, "Error fetching events")
                     error.value = "Error fetching events"
                 }))
+
+        preference.remove(tokenKeyDate)
+        preference.remove(tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {

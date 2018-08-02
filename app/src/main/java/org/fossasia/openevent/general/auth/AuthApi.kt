@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.auth
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.auth.forgot.*
 import retrofit2.http.*
 
 interface AuthApi {
@@ -13,5 +14,8 @@ interface AuthApi {
 
     @POST("users")
     fun signUp(@Body signUp: SignUp): Single<User>
+
+    @POST("auth/reset-password")
+    fun requestToken(@Body requestToken: RequestToken): Single<RequestTokenResponse>
 
 }

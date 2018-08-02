@@ -34,7 +34,6 @@ class SignUpFragment : Fragment() {
             signUp.firstName = firstNameText.text.toString()
             signUp.lastName = lastNameText.text.toString()
             confirmPassword = confirmPasswords.text.toString()
-
             signUpActivityViewModel.signUp(signUp, confirmPassword)
         }
 
@@ -43,6 +42,10 @@ class SignUpFragment : Fragment() {
                 Utils.showProgressBar(rootView.progressBarSignUp, it)
                 signUpButton.isEnabled = !it
             }
+        })
+
+        signUpActivityViewModel.showNoInternetDialog.observe(this, Observer {
+            Utils.showNoInternetDialog(context)
         })
 
         signUpActivityViewModel.error.observe(this, Observer {
@@ -65,7 +68,7 @@ class SignUpFragment : Fragment() {
     private fun redirectToMain() {
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
+        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }
-
 }
