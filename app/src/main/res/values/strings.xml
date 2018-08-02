@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">open-event-android</string>
+    <string name="app_name">Eventyay Attendee</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
