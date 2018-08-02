@@ -18,6 +18,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
     val order = MutableLiveData<List<Order>>()
     val event = MutableLiveData<List<Event>>()
     val progress = MutableLiveData<Boolean>()
+    var eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
     private val idList = ArrayList<Long>()
 
@@ -53,7 +54,16 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 .doFinally {
                     progress.value = false
                 }.subscribe({
-                    event.value = it
+                    val events = ArrayList<Event>()
+                    it.map {
+                        val times = eventIdAndTimes[it.id]
+                        if (times != null) {
+                            for (i in 0..times) {
+                                events.add(it)
+                            }
+                        }
+                    }
+                    event.value = events
                 }, {
                     message.value = "Failed  to list events under a user"
                     Timber.d(it, "Failed  to list events under a user ")
@@ -62,9 +72,15 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
 
     private fun buildQuery(orderList: List<Order>): String {
         var subQuery = ""
-
+        
+        eventIdAndTimes.clear()
         orderList.forEach {
             it.event?.id?.let { it1 ->
+                if (eventIdAndTimes.containsKey(it1) && eventIdAndTimes[it1] != null) {
+                    eventIdAndTimes[it1]?.plus(1)
+                } else {
+                    eventIdAndTimes[it1] = 1
+                }
                 idList.add(it1)
                 eventId = it1
                 subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
