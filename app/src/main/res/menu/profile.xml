@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/profile_menu">
         <item
+            android:id="@+id/edit_profile"
+            android:title="@string/edit_profile" />
+        <item
             android:id="@+id/orga_app"
             android:title="@string/manage_events" />
         <item

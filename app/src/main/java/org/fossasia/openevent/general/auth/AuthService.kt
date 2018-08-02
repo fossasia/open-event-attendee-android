@@ -35,6 +35,13 @@ class AuthService(private val authApi: AuthApi,
         }
     }
 
+    fun updateUser(user: User, id: Long): Single<User> {
+        return authApi.updateUser(user, id).map {
+            userDao.insertUser(it)
+            it
+        }
+    }
+
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun logout(): Completable {
