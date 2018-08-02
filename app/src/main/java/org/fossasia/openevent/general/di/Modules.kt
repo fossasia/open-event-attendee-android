@@ -11,10 +11,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
@@ -108,8 +108,9 @@ val viewModelModule = applicationContext {
     viewModel { SettingsFragmentViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
-    viewModel { OrdersUnderUserVM(get(), get()) }
+    viewModel { OrdersUnderUserVM(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
+    viewModel { EditProfileViewModel(get(), get()) }
 }
 
 val networkModule = applicationContext {
@@ -143,7 +144,7 @@ val networkModule = applicationContext {
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java, CustomForm::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()

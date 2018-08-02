@@ -43,6 +43,7 @@
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="ticket_issues">Ticket Issues</string>
     <string name="ticket_issues_url" translatable="false">https://support.eventyay.com</string>
     <string name="confirm_password">Confirm Password</string>

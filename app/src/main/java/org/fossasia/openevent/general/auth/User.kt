@@ -14,7 +14,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 data class User(
         @Id(IntegerIdHandler::class)
         @PrimaryKey
-        val id: Int,
+        val id: Long,
         val firstName: String? = null,
         val lastName: String? = null,
         val email: String? = null,
@@ -31,8 +31,8 @@ data class User(
         val originalImageUrl: String? = null,
 
         val isVerified: Boolean = false,
-        val isAdmin: Boolean,
-        val isSuperAdmin: Boolean,
+        val isAdmin: Boolean? = false,
+        val isSuperAdmin: Boolean? = false,
         val createdAt: String? = null,
         val lastAccessedAt: String? = null,
         val deletedAt: String? = null
