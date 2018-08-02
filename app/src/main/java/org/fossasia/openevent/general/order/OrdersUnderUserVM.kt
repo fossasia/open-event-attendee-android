@@ -82,7 +82,6 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 } else {
                     eventIdAndTimes[it1] = 1
                 }
-                Timber.d("harsimar " + it1)
                 idList.add(it1)
                 eventId = it1
                 subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
