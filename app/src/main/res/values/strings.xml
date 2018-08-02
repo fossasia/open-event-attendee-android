@@ -43,6 +43,7 @@
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="ticket_issues">Ticket Issues</string>
     <string name="ticket_issues_url" translatable="false">https://support.eventyay.com</string>
     <string name="confirm_password">Confirm Password</string>
@@ -102,6 +103,11 @@
     <string name="order_completed">ORDER COMPLETED</string>
     <string name="add">+ ADD</string>
     <string name="invite">INVITE</string>
+    <string name="name">Name</string>
+    <string name="event">Event</string>
+    <string name="date">Date</string>
+    <string name="order_identifier">Order Identifier</string>
+    <string name="event_summary">Event Summary</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

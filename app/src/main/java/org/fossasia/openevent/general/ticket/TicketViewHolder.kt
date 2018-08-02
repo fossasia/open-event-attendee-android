@@ -30,6 +30,10 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.adapter = ArrayAdapter(itemView.context, R.layout.select_dialog_singlechoice, spinnerList)
         }
 
+        itemView.order.setOnClickListener {
+            itemView.orderRange.performClick()
+        }
+
         if (ticket.price != null) {
             itemView.price.text = "${eventCurrency}${ticket.price}"
         }

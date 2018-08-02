@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "33e5003c19e00834a89ca10b099a5f38",
+    "identityHash": "1b5f1e5c95700e4c3b5563d4bca9e587",
     "entities": [
       {
         "tableName": "Event",
@@ -329,7 +329,7 @@
       },
       {
         "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `contact` TEXT, `details` TEXT, `thumbnailImageUrl` TEXT, `iconImageUrl` TEXT, `smallImageUrl` TEXT, `avatarUrl` TEXT, `facebookUrl` TEXT, `twitterUrl` TEXT, `instagramUrl` TEXT, `googlePlusUrl` TEXT, `originalImageUrl` TEXT, `isVerified` INTEGER NOT NULL, `isAdmin` INTEGER NOT NULL, `isSuperAdmin` INTEGER NOT NULL, `createdAt` TEXT, `lastAccessedAt` TEXT, `deletedAt` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `contact` TEXT, `details` TEXT, `thumbnailImageUrl` TEXT, `iconImageUrl` TEXT, `smallImageUrl` TEXT, `avatarUrl` TEXT, `facebookUrl` TEXT, `twitterUrl` TEXT, `instagramUrl` TEXT, `googlePlusUrl` TEXT, `originalImageUrl` TEXT, `isVerified` INTEGER NOT NULL, `isAdmin` INTEGER, `isSuperAdmin` INTEGER, `createdAt` TEXT, `lastAccessedAt` TEXT, `deletedAt` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -431,13 +431,13 @@
             "fieldPath": "isAdmin",
             "columnName": "isAdmin",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "isSuperAdmin",
             "columnName": "isSuperAdmin",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "createdAt",
@@ -653,7 +653,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -712,6 +712,12 @@
           {
             "fieldPath": "pdfUrl",
             "columnName": "pdfUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketId",
+            "columnName": "ticketId",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -985,7 +991,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"33e5003c19e00834a89ca10b099a5f38\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1b5f1e5c95700e4c3b5563d4bca9e587\")"
     ]
   }
 }
