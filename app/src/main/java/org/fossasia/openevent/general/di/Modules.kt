@@ -14,7 +14,6 @@ import org.fossasia.openevent.general.attendees.*
 import org.fossasia.openevent.general.auth.*
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.*
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
@@ -110,6 +109,7 @@ val viewModelModule = applicationContext {
     viewModel { OrderCompletedViewModel(get()) }
     viewModel { OrdersUnderUserVM(get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
+    viewModel { EditProfileViewModel(get(), get()) }
 }
 
 val networkModule = applicationContext {
