@@ -11,6 +11,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val qrCode = QrCode()
 
     fun bind(attendee: Attendee, event: Event?, orderIdentifier: String?, eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?) {
         val formattedDateTime = EventUtils.getLocalizedDateTime(event?.startsAt.toString())
@@ -46,6 +47,13 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
         itemView.eventDetails.setOnClickListener {
             event?.let { it1 -> eventDetailsListener?.onClick(it1.id) }
+        }
+
+        val bitmap = qrCode.generateQrBitmap(orderIdentifier, 200, 200)
+        if (bitmap != null) {
+            itemView.qrCodeView.setImageBitmap(bitmap)
+        } else {
+            itemView.qrCodeView.visibility = View.GONE
         }
     }
 
