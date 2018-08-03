@@ -272,7 +272,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     }
 
     fun getCustomFormsForAttendees(eventId: Long) {
-        val filter = "[{\"name\":\"form\",\"op\":\"ilike\",\"val\":\"order\"}]"
+        val filter = "[{\"name\":\"form\",\"op\":\"eq\",\"val\":\"order\"}]"
         compositeDisposable.add(attendeeService.getCustomFormsForAttendees(eventId, filter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

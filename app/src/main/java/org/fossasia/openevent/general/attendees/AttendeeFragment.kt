@@ -23,7 +23,6 @@ import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
-import kotlinx.android.synthetic.main.content_attendee_information.view.*
 import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
@@ -276,7 +275,6 @@ class AttendeeFragment : Fragment() {
                 redirectToLogin()
             }
 
-            //Custom forms fetch
             attendeeFragmentViewModel.getCustomFormsForAttendees(eventId.id)
 
             attendeeFragmentViewModel.forms.observe(this, Observer {
