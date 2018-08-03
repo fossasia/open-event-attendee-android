@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.auth.User
@@ -44,6 +45,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     var paymentCompleted = MutableLiveData<Boolean>()
     val tickets = MutableLiveData<MutableList<Ticket>>()
     lateinit var confirmOrder: ConfirmOrder
+    val forms = MutableLiveData<List<CustomForm>>()
 
     fun getId() = authHolder.getId()
 
@@ -266,6 +268,22 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed updating order status")
+                }))
+    }
+
+    fun getCustomFormsForAttendees(eventId: Long) {
+        val filter = "[{\"name\":\"form\",\"op\":\"ilike\",\"val\":\"order\"}]"
+        compositeDisposable.add(attendeeService.getCustomFormsForAttendees(eventId, filter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.subscribe({
+                    progress.value = false
+                    forms.value = it
+                    Timber.d("Forms fetched successfully !")
+                }, {
+                    Timber.d(it, "Failed fetching forms")
                 }))
     }
 

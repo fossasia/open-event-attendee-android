@@ -396,6 +396,8 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
+            <include layout="@layout/content_attendee_information"/>
+
             <TextView
                 android:id="@+id/accept"
                 android:layout_width="wrap_content"
@@ -407,6 +409,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:layout_margin="@dimen/layout_margin_large"
                 android:backgroundTint="@color/colorPrimary"
                 android:padding="@dimen/padding_medium"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/attendeeInformation"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/layout_margin_medium"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/moreAttendeeInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="@dimen/heading_text_size"
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:text="@string/more_attendee_info" />
+
+</LinearLayout>

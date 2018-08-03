@@ -78,6 +78,7 @@
 
     <!--ticket details-->
     <string name="your_info">Your Info</string>
+    <string name="more_attendee_info">More Attendee Information</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
