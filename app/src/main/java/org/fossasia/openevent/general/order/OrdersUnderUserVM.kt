@@ -15,8 +15,9 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
 
     private val compositeDisposable = CompositeDisposable()
     val message = SingleLiveEvent<String>()
-    val order = MutableLiveData<List<Order>>()
-    val event = MutableLiveData<List<Event>>()
+    lateinit var order: List<Order>
+    val eventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
+    private var eventIdMap = mutableMapOf<Long, Event>()
     val progress = MutableLiveData<Boolean>()
     val eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
@@ -33,7 +34,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 .doOnSubscribe {
                     progress.value = true
                 }.subscribe({
-                    order.value = it
+                    order = it
                     val query = buildQuery(it)
 
                     if (idList.size != 0)
@@ -62,8 +63,15 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                                 events.add(it)
                             }
                         }
+                        eventIdMap[it.id] = it
                     }
-                    event.value = events
+                    val eventAndIdentifier = ArrayList<Pair<Event, String>>()
+                    order.forEach {
+                        val event = eventIdMap[it.event?.id]
+                        if (event != null && it.identifier != null)
+                            eventAndIdentifier.add(Pair(event, it.identifier))
+                    }
+                    eventAndOrderIdentifier.value = eventAndIdentifier
                 }, {
                     message.value = "Failed  to list events under a user"
                     Timber.d(it, "Failed  to list events under a user ")
