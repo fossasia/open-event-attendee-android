@@ -216,7 +216,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         message.value = "Order created successfully!"
                         Timber.d("Success placing order!")
                         if (it.paymentMode == "free") {
-                            confirmOrder = ConfirmOrder(it.id.toString(), "placed")
+                            confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                             confirmOrderStatus(it.identifier.toString(), confirmOrder)
                         }
                     }, {
@@ -227,28 +227,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
         } else {
             message.value = "Unable to create Order!"
         }
-    }
-    
-    fun createOrder(order: Order) {
-        compositeDisposable.add(orderService.placeOrder(order)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }.doFinally {
-                    progress.value = false
-                }.subscribe({
-                    orderIdentifier = it.identifier.toString()
-                    if (it.paymentMode == "free") {
-                        confirmOrder = ConfirmOrder(it.id.toString(), "completed")
-                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    }
-                    Timber.d("Success placing order!")
-                }, {
-                    deleteAttendees(order.attendees)
-                    message.value = "Unable to create Order!"
-                    Timber.d(it, "Failed creating Order")
-                }))
     }
 
     fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
