@@ -73,7 +73,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData != null && intentData.data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
             val imageUri = intentData.data
             var imageStream: InputStream? = null
             try {
