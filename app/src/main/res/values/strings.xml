@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">open-event-android</string>
+    <string name="app_name">Eventyay Attendee</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
@@ -30,6 +30,8 @@
     <string name="pick_date">Pick a date...</string>
     <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
+    <string name="event_details">Event details</string>
+    <string name="see_maps">See maps</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
@@ -43,6 +45,7 @@
     <string name="email_id">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="ticket_issues">Ticket Issues</string>
     <string name="ticket_issues_url" translatable="false">https://support.eventyay.com</string>
     <string name="confirm_password">Confirm Password</string>

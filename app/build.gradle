@@ -99,7 +99,7 @@ dependencies {
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.17'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
     //picasso
@@ -107,6 +107,9 @@ dependencies {
 
     //Stripe
     implementation 'com.stripe:stripe-android:8.0.0'
+
+    //QR Code
+    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.8.5"
