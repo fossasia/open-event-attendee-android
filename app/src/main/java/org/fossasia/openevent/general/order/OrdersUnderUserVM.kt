@@ -14,14 +14,14 @@ import timber.log.Timber
 class OrdersUnderUserVM(private val orderService: OrderService, private val eventService: EventService, private val authHolder: AuthHolder) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    val message = SingleLiveEvent<String>()
-    lateinit var order: List<Order>
-    val eventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
+    private lateinit var order: List<Order>
     private var eventIdMap = mutableMapOf<Long, Event>()
-    val progress = MutableLiveData<Boolean>()
-    val eventIdAndTimes = mutableMapOf<Long, Int>()
+    private val eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
     private val idList = ArrayList<Long>()
+    val message = SingleLiveEvent<String>()
+    val eventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
+    val progress = MutableLiveData<Boolean>()
 
     fun getId() = authHolder.getId()
 
