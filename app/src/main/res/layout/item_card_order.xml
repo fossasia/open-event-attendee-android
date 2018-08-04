@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/allEventsCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:layout_margin="@dimen/layout_margin_medium"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/card_corner_radius"
@@ -29,8 +29,8 @@
                 <LinearLayout
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginEnd="@dimen/padding_extra_small"
+                    android:layout_marginRight="@dimen/padding_extra_small"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/padding_medium">
@@ -39,7 +39,7 @@
                         android:id="@+id/month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/text_size_medium"
                         tools:text="JAN" />
@@ -55,16 +55,19 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/padding_large"
+                    android:layout_marginRight="@dimen/layout_margin_small"
                     android:paddingTop="@dimen/padding_medium">
 
                     <TextView
                         android:id="@+id/eventName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginTop="15dp"
                         android:layout_marginBottom="@dimen/layout_margin_small"
                         android:textColor="@color/black"
                         android:textSize="20sp"
@@ -74,6 +77,8 @@
                         android:id="@+id/time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         tools:text="Starts at 05:29 AM IST" />
 
@@ -86,9 +91,9 @@
 
                     <ImageView
                         android:id="@+id/eventImage"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitXY"
+                        android:layout_width="140dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/placeholder" />
                 </LinearLayout>
             </LinearLayout>
