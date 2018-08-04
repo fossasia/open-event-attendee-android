@@ -11,7 +11,7 @@ interface EventApi {
     fun getEvents(): Single<List<Event>>
 
     @GET("events?include=event-topic")
-    fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Single<List<Event>>
+    fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String, @Query("page[number]") page: Int): Single<List<Event>>
 
     @GET
     fun getEvent(id: Long): Single<Event>
@@ -20,5 +20,5 @@ interface EventApi {
     fun getEventFromApi(@Path("eventIdentifier") eventIdentifier: Long): Single<Event>
 
     @GET("events")
-    fun eventsUnderUser( @Query("filter") eventId: String): Single<List<Event>>
+    fun eventsUnderUser(@Query("filter") eventId: String): Single<List<Event>>
 }

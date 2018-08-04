@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.event.topic
 
 import android.arch.lifecycle.Observer
+import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -68,7 +69,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsRecyclerAdapter.setListener(recyclerViewClickListener)
         similarEventsViewModel.similarEvents.observe(this, Observer {
             it?.let {
-                similarEventsRecyclerAdapter.addAll(it)
+                similarEventsRecyclerAdapter.addAll(it as PagedList<Event>)
                 handleVisibility(it)
                 similarEventsRecyclerAdapter.notifyDataSetChanged()
             }

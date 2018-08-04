@@ -16,9 +16,9 @@ import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SearchLocationActivity
-import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
+
 
 //String constants for event types
 const val EVENTS: String = "events"
@@ -68,8 +68,9 @@ class EventsFragment : Fragment() {
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
-                eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.submitList(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
+                rootView.swiperefresh.isRefreshing = false
             }
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
@@ -83,13 +84,13 @@ class EventsFragment : Fragment() {
                 rootView.swiperefresh.isRefreshing = it
             }
         })
-
-        if (eventsViewModel.savedLocation != null) {
-            rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents()
-        } else {
-            rootView.locationTextView.text = "where?"
-        }
+//
+//        if (eventsViewModel.savedLocation != null) {
+//            rootView.locationTextView.text = eventsViewModel.savedLocation
+//            eventsViewModel.loadLocationEvents()
+//        } else {
+//            rootView.locationTextView.text = "where?"
+//        }
 
         rootView.locationTextView.setOnClickListener {
             val intent = Intent(activity, SearchLocationActivity::class.java)
@@ -98,18 +99,17 @@ class EventsFragment : Fragment() {
 
         showNoInternetScreen(isNetworkConnected())
 
-        rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected()
-            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents()
-            }
-            showNoInternetScreen(isNetworkConnected)
-        }
+//        rootView.retry.setOnClickListener {
+//            val isNetworkConnected = isNetworkConnected()
+//            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
+//                eventsViewModel.loadLocationEvents()
+//            }
+//            showNoInternetScreen(isNetworkConnected)
+//        }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents()
-        })
+        rootView.swiperefresh.setOnRefreshListener { eventsViewModel.swipeRefresh() }
+
 
         return rootView
     }

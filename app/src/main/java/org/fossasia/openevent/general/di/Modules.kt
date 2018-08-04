@@ -88,6 +88,8 @@ val apiModule = applicationContext {
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
+    factory { EventDataSource(get(), get()) }
+    factory { EventDataSourceFactory(get()) }
 
 }
 

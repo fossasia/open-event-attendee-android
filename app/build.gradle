@@ -107,6 +107,7 @@ dependencies {
 
     //Stripe
     implementation 'com.stripe:stripe-android:8.0.0'
+    implementation "android.arch.paging:runtime:1.0.0-alpha6"
 
     //QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
