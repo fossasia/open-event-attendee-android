@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -296,7 +297,21 @@ class AttendeeFragment : Fragment() {
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
 
+        attendeeFragmentViewModel.ticketSoldOut.observe(this, Observer {
+            it?.let {
+                showTicketSoldOutDialog(it)
+            }
+        })
         return rootView
+    }
+
+    private fun showTicketSoldOutDialog(show: Boolean) {
+        if (show) {
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage(context?.resources?.getString(R.string.tickets_sold_out))
+                    .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+            builder.show()
+        }
     }
 
     private fun redirectToLogin() {
