@@ -22,6 +22,7 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -78,7 +79,7 @@ class EditProfileFragment : Fragment() {
             try {
                 imageStream = activity?.contentResolver?.openInputStream(imageUri)
             } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+                Timber.d(e, "File Not Found Exception")
             }
 
             val selectedImage = BitmapFactory.decodeStream(imageStream)
