@@ -98,14 +98,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:layout_weight="0.1"
                 app:srcCompat="@drawable/ic_baseline_ticket_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.85"
+                android:layout_weight="0.87"
                 android:text="@string/tickets"
                 android:textColor="@color/black"
                 android:textSize="13sp"
