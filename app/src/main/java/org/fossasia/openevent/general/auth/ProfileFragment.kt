@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -143,4 +144,11 @@ class ProfileFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity?.supportActionBar?.title = "Profile"
+        setHasOptionsMenu(true)
+        super.onResume()
+    }
 }

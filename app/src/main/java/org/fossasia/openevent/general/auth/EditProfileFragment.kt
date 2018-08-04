@@ -21,10 +21,6 @@ class EditProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Edit Profile"
-        setHasOptionsMenu(true)
 
         editProfileViewModel.progress.observe(this, Observer {
             it?.let {
@@ -51,5 +47,13 @@ class EditProfileFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onResume() {
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.supportActionBar?.title = "Edit Profile"
+        setHasOptionsMenu(true)
+        super.onResume()
     }
 }
