@@ -9,11 +9,7 @@ class AuthHolder(private val preference: Preference) {
 
     var token: String? = null
         get() {
-            if (field == null) {
-                field = preference.getString(TOKEN_KEY)
-            }
-
-            return field
+            return preference.getString(TOKEN_KEY)
         }
         set(value) {
             if (value != null && JWTUtils.isExpired(value))

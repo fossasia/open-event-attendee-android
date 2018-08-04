@@ -10,6 +10,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_order_details.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
@@ -50,6 +51,17 @@ class OrderDetailsFragment : Fragment() {
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
 
+        val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
+            override fun onClick(eventID: Long) {
+                val fragment = EventDetailsFragment()
+                val bundle = Bundle()
+                bundle.putLong(EVENT_ID, eventID)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+            }
+        }
+
+        ordersRecyclerAdapter.setListener(eventDetailsListener)
         orderDetailsViewModel.event.observe(this, Observer {
             it?.let {
                 ordersRecyclerAdapter.setEvent(it)
