@@ -22,7 +22,6 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -60,7 +59,7 @@ class EditProfileFragment : Fragment() {
         }
 
         rootView.buttonUpdate.setOnClickListener {
-            editProfileViewModel.updateProfile(encodedImage,rootView.firstName.text.toString(), rootView.lastName.text.toString())
+            editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(), rootView.lastName.text.toString())
         }
 
         editProfileViewModel.message.observe(this, Observer {
@@ -70,12 +69,11 @@ class EditProfileFragment : Fragment() {
         return rootView
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val imageUri = data.data
-            Timber.d(imageUri!!.toString())
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intentData)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData != null && intentData.data != null) {
+            val imageUri = intentData.data
             var imageStream: InputStream? = null
             try {
                 imageStream = activity?.contentResolver?.openInputStream(imageUri)
