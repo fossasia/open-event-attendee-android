@@ -28,8 +28,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
     private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
 
-    override fun preferenceChange(evt: PreferenceChangeEvent?) {
-        preferenceChange(evt)
+    override fun preferenceChange(preferenceChangeEvent: PreferenceChangeEvent?) {
+        preferenceChange(preferenceChangeEvent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,14 +39,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
-        // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        //Set Email
         email = arguments?.getString(EMAIL)
         preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
 
-        //Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
 
         if (!AcknowledgementDecider.showAcknowledgement()) {

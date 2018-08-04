@@ -16,8 +16,8 @@ class LegalFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
     val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
 
-    override fun preferenceChange(evt: PreferenceChangeEvent?) {
-        preferenceChange(evt)
+    override fun preferenceChange(preferenceChangeEvent: PreferenceChangeEvent?) {
+        preferenceChange(preferenceChangeEvent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
