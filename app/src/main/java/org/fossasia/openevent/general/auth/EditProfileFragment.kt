@@ -40,10 +40,6 @@ class EditProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Edit Profile"
-        setHasOptionsMenu(true)
 
         editProfileViewModel.progress.observe(this, Observer {
             it?.let {
@@ -118,6 +114,14 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.supportActionBar?.title = "Edit Profile"
+        setHasOptionsMenu(true)
+        super.onResume()
+    }
+    
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
