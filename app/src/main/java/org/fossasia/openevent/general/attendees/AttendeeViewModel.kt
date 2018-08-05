@@ -145,12 +145,12 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
-                    attendees?.add(it)
-                    if (attendees != null && attendees?.size == totalAttendee) {
+                    attendees.add(it)
+                    if (attendees.size == totalAttendee) {
                         loadTicketsAndCreateOrder()
+                        message.value = "Attendees created successfully!"
                     }
-                    message.value = "Attendee created successfully!"
-                    Timber.d("Success! %s", attendees?.toList().toString())
+                    Timber.d("Success! %s", attendees.toList().toString())
                 }, {
                     if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
                         ticketSoldOut.value = true
@@ -166,7 +166,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     fun createAttendees(attendees: List<Attendee>, country: String?, paymentOption: String) {
         this.country = country
         this.paymentOption = paymentOption
-        this.attendees?.clear()
+        this.attendees.clear()
         attendees.forEach {
             createAttendee(it, attendees.size)
         }
