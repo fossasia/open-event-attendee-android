@@ -26,6 +26,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
 
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
+    val ticketSoldOut = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
@@ -44,6 +45,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     var paymentCompleted = MutableLiveData<Boolean>()
     val tickets = MutableLiveData<MutableList<Ticket>>()
     lateinit var confirmOrder: ConfirmOrder
+    private val TICKET_CONFLICT_MESSAGE = "HTTP 409 CONFLICT"
 
     fun getId() = authHolder.getId()
 
@@ -150,8 +152,14 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     }
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
-                    message.value = "Unable to create Attendee!"
-                    Timber.d(it, "Failed")
+                    if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
+                        ticketSoldOut.value = true
+                    } else {
+                        message.value = "Unable to create Attendee!"
+                        Timber.d(it, "Failed")
+                        ticketSoldOut.value = false
+                    }
+
                 }))
     }
 
