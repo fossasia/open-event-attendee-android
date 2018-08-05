@@ -2,12 +2,13 @@ package org.fossasia.openevent.general
 
 import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.*
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 
-class OpenEventGeneral : Application() {
+class OpenEventGeneral : MultiDexApplication() {
 
     companion object  {
         @JvmStatic
