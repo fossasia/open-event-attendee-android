@@ -143,7 +143,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        val activity =  activity as? AppCompatActivity
+        val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(true)
