@@ -17,14 +17,37 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
 
     fun isLoggedIn() = authService.isLoggedIn()
 
-    fun updateUser(firstName: String, lastName: String) {
+    fun updateProfile(encodedImage: String?, firstName: String, lastName: String) {
+        if (encodedImage.isNullOrEmpty()) {
+            updateUser(null, firstName, lastName)
+            return
+        }
+        compositeDisposable.add(authService.uploadImage(UploadImage(encodedImage))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }
+                .doFinally {
+                    progress.value = false
+                }
+                .subscribe({
+                    updateUser(it.url, firstName, lastName)
+                    message.value = "Image uploaded successfully!"
+                    Timber.d("Image uploaded " + it.url)
+                }) {
+                    message.value = "Error uploading image!"
+                    Timber.e(it, "Error uploading user!")
+                })
+    }
+
+    fun updateUser(url: String?, firstName: String, lastName: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
             message.value = "Please provide first name and last name!"
             return
         }
-
-        compositeDisposable.add(authService.updateUser(User(id = id, firstName = firstName, lastName = lastName), id)
+        compositeDisposable.add(authService.updateUser(User(id = id, firstName = firstName, lastName = lastName, avatarUrl = url), id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
