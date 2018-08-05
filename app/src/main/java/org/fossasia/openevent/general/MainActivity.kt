@@ -11,6 +11,7 @@ import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.order.OrdersUnderUserFragment
+import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.SearchFragment
 
 private const val TO_SEARCH: String = "ToSearchFragment"
@@ -63,16 +64,23 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Events"
 
         val bundle = intent.extras
-        var openSearchFragment = false
+        var openEventsFragment = true
 
         if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
             loadFragment(SearchFragment())
             supportActionBar?.title = "Search"
             navigation.selectedItemId = navigation_search
-            openSearchFragment = true
+            openEventsFragment = false
         }
 
-        if (savedInstanceState == null && !openSearchFragment)
+        if (bundle != null && bundle.getBoolean(TICKETS)) {
+            loadFragment(OrdersUnderUserFragment())
+            supportActionBar?.title = "Tickets"
+            navigation.selectedItemId = R.id.navigation_tickets
+            openEventsFragment = false
+        }
+
+        if (savedInstanceState == null && openEventsFragment)
             loadFragment(EventsFragment())
     }
 
