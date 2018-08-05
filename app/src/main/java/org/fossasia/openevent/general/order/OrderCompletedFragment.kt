@@ -18,6 +18,8 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.koin.android.architecture.ext.viewModel
 
+const val TICKETS: String = "OpenMyTickets"
+
 class OrderCompletedFragment : Fragment() {
 
     private lateinit var rootView: View
@@ -55,6 +57,10 @@ class OrderCompletedFragment : Fragment() {
 
         rootView.add.setOnClickListener {
             startCalendar(eventShare)
+        }
+
+        rootView.view.setOnClickListener {
+            openTicketDetails()
         }
 
         rootView.share.setOnClickListener {
@@ -111,6 +117,17 @@ class OrderCompletedFragment : Fragment() {
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.rootLayout, eventDetailsFragment)
                 ?.addToBackStack(null)?.commit()
+    }
+
+    private fun openTicketDetails() {
+        val searchBundle = Bundle()
+        searchBundle.putBoolean(TICKETS, true)
+        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val intent = Intent(activity, MainActivity::class.java)
+        intent.putExtras(searchBundle)
+        startActivity(intent)
+        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        activity?.finish()
     }
 
     override fun onDestroyView() {

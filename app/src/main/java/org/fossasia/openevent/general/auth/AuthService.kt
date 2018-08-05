@@ -42,6 +42,10 @@ class AuthService(private val authApi: AuthApi,
         }
     }
 
+    fun uploadImage(uploadImage: UploadImage): Single<ImageResponse> {
+        return authApi.uploadImage(uploadImage)
+    }
+
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun logout(): Completable {
