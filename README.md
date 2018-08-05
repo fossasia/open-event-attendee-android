@@ -28,7 +28,7 @@ A native Android app using Kotlin for writing code.
 ### Libraries used and their documentation
 
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
-- Espresso [Docs](https://google.github.io/android-testing-support-library/docs/espresso/)
+- Espresso [Docs](https://github.com/codepath/android_guides/wiki/UI-Testing-with-Espresso)
 - Picasso [Docs](http://square.github.io/picasso/)
 - Timber [Docs](http://jakewharton.github.io/timber/)
 - RxAndroid [Docs](https://github.com/ReactiveX/RxAndroid)
