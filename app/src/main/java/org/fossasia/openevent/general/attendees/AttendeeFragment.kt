@@ -279,13 +279,16 @@ class AttendeeFragment : Fragment() {
                 val attendees = ArrayList<Attendee>()
                 ticketIdAndQty?.forEach {
                     if (it.second > 0) {
-                        val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
-                                firstname = firstName.text.toString(),
-                                lastname = lastName.text.toString(),
-                                email = email.text.toString(),
-                                ticket = TicketId(it.first.toLong()),
-                                event = eventId)
-                        attendees.add(attendee)
+                        for (i in 0..it.second) {
+                            val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
+                                    firstname = firstName.text.toString(),
+                                    lastname = lastName.text.toString(),
+                                    email = email.text.toString(),
+                                    ticket = TicketId(it.first.toLong()),
+                                    event = eventId)
+                            attendees.add(attendee)
+                        }
+
                     }
                 }
                 val country = if (country.text.isEmpty()) country.text.toString() else null
