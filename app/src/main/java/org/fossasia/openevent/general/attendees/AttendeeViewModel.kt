@@ -148,7 +148,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         loadTicketsAndCreateOrder()
                         message.value = "Attendees created successfully!"
                     }
-
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
                     message.value = "Unable to create Attendee!"
