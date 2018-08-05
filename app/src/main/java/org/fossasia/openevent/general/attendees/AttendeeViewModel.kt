@@ -125,7 +125,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    tickets.value?.addAll(it)
+                    tickets.value = it as MutableList<Ticket>?
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
