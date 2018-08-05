@@ -22,4 +22,7 @@ interface AuthApi {
     @PATCH("users/{id}")
     fun updateUser(@Body user: User, @Path("id") id: Long): Single<User>
 
+    @POST("upload/image")
+    fun uploadImage(@Body uploadImage: UploadImage): Single<ImageResponse>
+
 }
