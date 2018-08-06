@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -135,8 +135,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_large"
-                    android:text="@string/all_fees" />
+                    android:text="@string/all_fees"
+                    android:textSize="@dimen/text_size_large" />
 
             </LinearLayout>
         </LinearLayout>
@@ -232,8 +232,8 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
                 android:id="@+id/countryArea"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_medium">
@@ -244,6 +244,11 @@
                     android:layout_height="wrap_content"
                     android:hint="Country" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/attendeeRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/paymentSelector"
@@ -396,38 +401,20 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/attendeeInformation"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/layout_margin_medium"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/moreAttendeeInformation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/heading_text_size"
-                    android:layout_marginBottom="@dimen/layout_margin_medium"
-                    android:text="@string/other_information" />
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_moderate"/>
+                android:layout_marginTop="@dimen/layout_margin_moderate" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:enabled="false"
                 android:layout_margin="@dimen/layout_margin_large"
                 android:backgroundTint="@color/colorPrimary"
+                android:enabled="false"
                 android:padding="@dimen/padding_medium"
                 android:text="@string/register"
                 android:textColor="@android:color/white" />
