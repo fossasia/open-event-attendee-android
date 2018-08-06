@@ -107,7 +107,7 @@ dependencies {
     implementation 'com.stripe:stripe-android:8.0.0'
 
     //QR Code
-    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.8.5"
