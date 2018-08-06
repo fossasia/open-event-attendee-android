@@ -294,7 +294,7 @@ class AttendeeFragment : Fragment() {
 
                 val attendees = ArrayList<Attendee>()
                 ticketIdAndQty?.forEach {
-                    if (it.second > 0) {
+                    for (i in 0..it.second) {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                                 firstname = firstName.text.toString(),
                                 lastname = lastName.text.toString(),
