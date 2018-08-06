@@ -89,5 +89,4 @@
             android:textSize="@dimen/heading_text_size"
             android:visibility="gone" />
     </LinearLayout>
-
 </LinearLayout>

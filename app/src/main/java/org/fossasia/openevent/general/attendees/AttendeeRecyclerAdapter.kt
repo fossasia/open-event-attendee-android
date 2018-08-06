@@ -12,7 +12,6 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     private val customForm = ArrayList<CustomForm>()
     var formsVisibility = false
 
-
     fun addAll(attendeesAndTickets: List<Pair<Attendee, Ticket>>) {
         if (attendeesAndTickets.isNotEmpty())
             this.attendeesAndTickets.clear()
@@ -42,5 +41,4 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     override fun getItemCount(): Int {
         return attendeesAndTickets.size
     }
-
 }
