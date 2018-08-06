@@ -23,7 +23,19 @@ class AttendeeService(private val attendeeApi: AttendeeApi, private val attendee
         return attendeeApi.deleteAttendee(id)
     }
 
-    fun getCustomFormsForAttendees(id: Long): Single<List<CustomForm>> {
-        return attendeeApi.getCustomFormsForAttendees(id)
+    fun getCustomFormsForAttendees(id: Long, filter: String): Single<List<CustomForm>> {
+        val formsSingle = attendeeDao.getCustomFormsForId(id)
+        return formsSingle.flatMap {
+            if (it.isNotEmpty())
+                formsSingle
+            else
+                attendeeApi.getCustomFormsForAttendees(id, filter)
+                        .map {
+                            attendeeDao.insertCustomForms(it)
+                        }
+                        .flatMap {
+                            formsSingle
+                        }
+        }
     }
 }

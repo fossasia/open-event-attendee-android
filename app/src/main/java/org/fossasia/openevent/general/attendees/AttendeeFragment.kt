@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -18,9 +19,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
@@ -29,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
@@ -42,6 +42,7 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
@@ -59,6 +60,8 @@ class AttendeeFragment : Fragment() {
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
+    private var identifierList = ArrayList<String>()
+    private var editTextList = ArrayList<EditText>()
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
@@ -273,6 +276,18 @@ class AttendeeFragment : Fragment() {
                 redirectToLogin()
             }
 
+            attendeeFragmentViewModel.getCustomFormsForAttendees(eventId.id)
+
+            attendeeFragmentViewModel.forms.observe(this, Observer {
+                it?.let {
+                    fillInformationSection(it)
+                    if (!it.isEmpty()) {
+                        rootView.moreAttendeeInformation.visibility = View.VISIBLE
+                    }
+                }
+                rootView.register.isEnabled = true
+            })
+
             rootView.register.setOnClickListener {
                 if (selectedPaymentOption == "Stripe")
                     sendToken()
@@ -283,6 +298,9 @@ class AttendeeFragment : Fragment() {
                         val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
                                 firstname = firstName.text.toString(),
                                 lastname = lastName.text.toString(),
+                                city = getAttendeeField("city"),
+                                address = getAttendeeField("address"),
+                                state = getAttendeeField("state"),
                                 email = email.text.toString(),
                                 ticket = TicketId(it.first.toLong()),
                                 event = eventId)
@@ -394,5 +412,27 @@ class AttendeeFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun fillInformationSection(forms: List<CustomForm>) {
+        val layout = rootView.attendeeInformation
+
+        for (form in forms) {
+            if (form.type == "text") {
+                val inputLayout = TextInputLayout(context)
+                val editTextSection = EditText(context)
+                editTextSection.hint = form.fieldIdentifier.capitalize()
+                inputLayout.addView(editTextSection)
+                inputLayout.setPadding( 0, 0, 0, 20)
+                layout.addView(inputLayout)
+                identifierList.add(form.fieldIdentifier)
+                editTextList.add(editTextSection)
+            }
+        }
+    }
+
+    fun getAttendeeField(identifier: String): String {
+        val index = identifierList.indexOf(identifier)
+        return if (index == -1) "" else index.let { editTextList[it] }.text.toString()
     }
 }
