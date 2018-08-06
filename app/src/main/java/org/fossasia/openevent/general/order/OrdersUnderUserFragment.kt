@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.*
 import org.fossasia.openevent.general.AuthActivity
@@ -62,15 +64,9 @@ class OrdersUnderUserFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             })
 
-            ordersUnderUserVM.order.observe(this, Observer {
-                it?.forEach {
-                    ordersRecyclerAdapter.setOrderIdentifier(it.identifier)
-                }
-            })
-
-            ordersUnderUserVM.event.observe(this, Observer {
+            ordersUnderUserVM.eventAndOrderIdentifier.observe(this, Observer {
                 it?.let {
-                    ordersRecyclerAdapter.addAll(it)
+                    ordersRecyclerAdapter.addAllPairs(it)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                 }
                 Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)

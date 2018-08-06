@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">open-event-android</string>
+    <string name="app_name">Eventyay Attendee</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
@@ -15,6 +15,7 @@
     <string name="whats_good">What\'s good in</string>
     <string name="where">where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
+    <string name="tickets_sold_out">Sorry, All tickets for this event have been sold out!</string>
     <string name="retry">RETRY</string>
     <string name="more_like_this">More like this</string>
     <string name="favorite_event">Favorite Event</string>
@@ -30,6 +31,8 @@
     <string name="pick_date">Pick a date...</string>
     <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
+    <string name="event_details">Event details</string>
+    <string name="see_maps">See maps</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
@@ -87,6 +90,7 @@
     <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
+    <string name="view_ticket">View</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>

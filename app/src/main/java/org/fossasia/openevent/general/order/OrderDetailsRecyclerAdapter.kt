@@ -10,18 +10,23 @@ import kotlin.collections.ArrayList
 
 class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>() {
 
-    private val orders = ArrayList<Attendee>()
+    private val attendees = ArrayList<Attendee>()
     private var event: Event? = null
     private var orderIdentifier: String? = null
+    private var eventDetailsListener: EventDetailsListener? = null
 
-    fun addAll(orderList: List<Attendee>) {
-        if (orders.isNotEmpty())
-            this.orders.clear()
-        this.orders.addAll(orderList)
+    fun addAll(attendeeList: List<Attendee>) {
+        if (attendees.isNotEmpty())
+            this.attendees.clear()
+        this.attendees.addAll(attendeeList)
     }
 
     fun setEvent(event: Event?) {
         this.event = event
+    }
+
+    fun setListener(listener: EventDetailsListener) {
+        eventDetailsListener = listener
     }
 
     fun setOrderIdentifier(orderId: String?) {
@@ -34,11 +39,15 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
     }
 
     override fun onBindViewHolder(holder: OrderDetailsViewHolder, position: Int) {
-        val order = orders[position]
-        holder.bind(order, event, orderIdentifier)
+        val order = attendees[position]
+        holder.bind(order, event, orderIdentifier, eventDetailsListener)
     }
 
     override fun getItemCount(): Int {
-        return orders.size
+        return attendees.size
+    }
+
+    interface EventDetailsListener {
+        fun onClick(eventID: Long)
     }
 }

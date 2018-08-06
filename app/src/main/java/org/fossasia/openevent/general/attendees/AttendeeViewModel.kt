@@ -26,6 +26,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
 
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
+    val ticketSoldOut = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
     var attendee = MutableLiveData<User>()
@@ -44,6 +45,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     var paymentCompleted = MutableLiveData<Boolean>()
     val tickets = MutableLiveData<MutableList<Ticket>>()
     lateinit var confirmOrder: ConfirmOrder
+    private val TICKET_CONFLICT_MESSAGE = "HTTP 409 CONFLICT"
 
     fun getId() = authHolder.getId()
 
@@ -123,7 +125,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    tickets.value?.addAll(it)
+                    tickets.value = it as MutableList<Ticket>?
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
@@ -143,22 +145,28 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }.doFinally {
                     progress.value = false
                 }.subscribe({
-                    attendees?.add(it)
-                    if (attendees != null && attendees?.size == totalAttendee) {
+                    attendees.add(it)
+                    if (attendees.size == totalAttendee) {
                         loadTicketsAndCreateOrder()
+                        message.value = "Attendees created successfully!"
                     }
-                    message.value = "Attendee created successfully!"
-                    Timber.d("Success! %s", attendees?.toList().toString())
+                    Timber.d("Success! %s", attendees.toList().toString())
                 }, {
-                    message.value = "Unable to create Attendee!"
-                    Timber.d(it, "Failed")
+                    if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
+                        ticketSoldOut.value = true
+                    } else {
+                        message.value = "Unable to create Attendee!"
+                        Timber.d(it, "Failed")
+                        ticketSoldOut.value = false
+                    }
+
                 }))
     }
 
     fun createAttendees(attendees: List<Attendee>, country: String?, paymentOption: String) {
         this.country = country
         this.paymentOption = paymentOption
-        this.attendees?.clear()
+        this.attendees.clear()
         attendees.forEach {
             createAttendee(it, attendees.size)
         }
@@ -216,7 +224,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                         message.value = "Order created successfully!"
                         Timber.d("Success placing order!")
                         if (it.paymentMode == "free") {
-                            confirmOrder = ConfirmOrder(it.id.toString(), "placed")
+                            confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                             confirmOrderStatus(it.identifier.toString(), confirmOrder)
                         }
                     }, {
@@ -227,28 +235,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
         } else {
             message.value = "Unable to create Order!"
         }
-    }
-    
-    fun createOrder(order: Order) {
-        compositeDisposable.add(orderService.placeOrder(order)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }.doFinally {
-                    progress.value = false
-                }.subscribe({
-                    orderIdentifier = it.identifier.toString()
-                    if (it.paymentMode == "free") {
-                        confirmOrder = ConfirmOrder(it.id.toString(), "completed")
-                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    }
-                    Timber.d("Success placing order!")
-                }, {
-                    deleteAttendees(order.attendees)
-                    message.value = "Unable to create Order!"
-                    Timber.d(it, "Failed creating Order")
-                }))
     }
 
     fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
