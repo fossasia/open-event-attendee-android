@@ -396,6 +396,24 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/attendeeInformation"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/moreAttendeeInformation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/heading_text_size"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:text="@string/other_information" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/accept"
                 android:layout_width="wrap_content"
@@ -407,6 +425,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:layout_margin="@dimen/layout_margin_large"
                 android:backgroundTint="@color/colorPrimary"
                 android:padding="@dimen/padding_medium"

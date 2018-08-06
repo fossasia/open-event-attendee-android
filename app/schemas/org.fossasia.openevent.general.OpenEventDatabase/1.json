@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1b5f1e5c95700e4c3b5563d4bca9e587",
+    "identityHash": "0b3cd25764884626e03f56b0600d1c76",
     "entities": [
       {
         "tableName": "Event",
@@ -653,7 +653,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` REAL, `city` INTEGER, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -682,13 +682,13 @@
           {
             "fieldPath": "address",
             "columnName": "address",
-            "affinity": "REAL",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "city",
             "columnName": "city",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -987,11 +987,91 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "CustomForm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `form` TEXT NOT NULL, `fieldIdentifier` TEXT NOT NULL, `type` TEXT NOT NULL, `isRequired` INTEGER, `isIncluded` INTEGER, `isFixed` INTEGER, `ticketsNumber` INTEGER, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "form",
+            "columnName": "form",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fieldIdentifier",
+            "columnName": "fieldIdentifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRequired",
+            "columnName": "isRequired",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isIncluded",
+            "columnName": "isIncluded",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFixed",
+            "columnName": "isFixed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketsNumber",
+            "columnName": "ticketsNumber",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1b5f1e5c95700e4c3b5563d4bca9e587\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0b3cd25764884626e03f56b0600d1c76\")"
     ]
   }
 }
