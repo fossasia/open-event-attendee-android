@@ -39,7 +39,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val attendees = ArrayList<Attendee>()
-    var createAttendeeIterations = 0
+    private var createAttendeeIterations = 0
     var country: String? = null
     lateinit var paymentOption: String
     val cardType = ArrayList<String>()
