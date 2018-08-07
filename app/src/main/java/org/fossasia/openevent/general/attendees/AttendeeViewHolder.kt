@@ -11,21 +11,28 @@ import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.ticket.TicketId
 
 class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var identifierList = ArrayList<String>()
+    private var editTextList = ArrayList<EditText>()
+    lateinit var textWatcher: TextWatcher
 
-    fun bind(attendeeRecyclerAdapter: AttendeeRecyclerAdapter, forms: List<CustomForm>, formVisibility: Boolean, position: Int) {
+    fun bind(attendeeRecyclerAdapter: AttendeeRecyclerAdapter, position: Int) {
+
         setText(itemView.attendeeItemCountry, attendeeRecyclerAdapter.attendeeList[position].country)
         setText(itemView.attendeeItemLastName, attendeeRecyclerAdapter.attendeeList[position].lastname)
         setText(itemView.attendeeItemEmail, attendeeRecyclerAdapter.attendeeList[position].email)
         setText(itemView.attendeeItemFirstName, attendeeRecyclerAdapter.attendeeList[position].firstname)
-        itemView.attendeeItemTicketName.text = "Ticket Name - " + attendeeRecyclerAdapter.ticketList[position].name
-        fillInformationSection(forms, formVisibility)
-        val textWatcher = object : TextWatcher {
+        itemView.attendeeItemTicketName.text = """Ticket Name - ${attendeeRecyclerAdapter.ticketList[position].name}"""
+        
+        textWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 val id = attendeeRecyclerAdapter.attendeeList[position].id
                 attendeeRecyclerAdapter.attendeeList.removeAt(position)
                 val attendee = Attendee(id, firstname = itemView.attendeeItemFirstName.text.toString(),
                         lastname = itemView.attendeeItemLastName.text.toString(),
                         email = itemView.attendeeItemEmail.text.toString(),
+                        city = getAttendeeField("city"),
+                        address = getAttendeeField("address"),
+                        state = getAttendeeField("state"),
                         country = itemView.attendeeItemCountry.text.toString(),
                         ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id.toLong()),
                         event = attendeeRecyclerAdapter.eventId)
@@ -42,9 +49,12 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.attendeeItemLastName.addTextChangedListener(textWatcher)
         itemView.attendeeItemEmail.addTextChangedListener(textWatcher)
         itemView.attendeeItemCountry.addTextChangedListener(textWatcher)
+
+        fillInformationSection(attendeeRecyclerAdapter.customForm)
+        if (attendeeRecyclerAdapter.customForm.isEmpty()) itemView.moreAttendeeInformation.visibility = View.GONE
         val price = attendeeRecyclerAdapter.ticketList[position].price
         if ((price != null && price.equals(0.toFloat())) || price == null) {
-            itemView.attendeeItemCountry.visibility = View.GONE
+            itemView.countryArea.visibility = View.GONE
         }
     }
 
@@ -53,21 +63,25 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             editText.setText(string)
     }
 
-    private fun fillInformationSection(forms: List<CustomForm>, formsVisibility: Boolean) {
+    private fun fillInformationSection(forms: List<CustomForm>) {
         val layout = itemView.attendeeInformation
-        if (!formsVisibility) {
-            layout.visibility == View.GONE
-            return
-        }
         for (form in forms) {
             if (form.type == "text") {
                 val inputLayout = TextInputLayout(itemView.context)
                 val editTextSection = EditText(itemView.context)
+                editTextSection.addTextChangedListener(textWatcher)
                 editTextSection.hint = form.fieldIdentifier.capitalize()
                 inputLayout.addView(editTextSection)
                 inputLayout.setPadding(0, 0, 0, 20)
                 layout.addView(inputLayout)
+                identifierList.add(form.fieldIdentifier)
+                editTextList.add(editTextSection)
             }
         }
+    }
+
+    fun getAttendeeField(identifier: String): String {
+        val index = identifierList.indexOf(identifier)
+        return if (index == -1) "" else index.let { editTextList[it] }.text.toString()
     }
 }
