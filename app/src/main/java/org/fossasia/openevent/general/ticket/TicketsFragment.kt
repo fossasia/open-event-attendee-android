@@ -72,7 +72,11 @@ class TicketsFragment : Fragment() {
         })
 
         ticketsViewModel.progressTickets.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBarTicket, it) }
+            it?.let {
+                Utils.showProgressBar(rootView.progressBarTicket, it)
+                rootView.ticketTableHeader.visibility = if (it) View.GONE else View.VISIBLE
+                rootView.register.visibility = if (it) View.GONE else View.VISIBLE
+            }
         })
 
         ticketsViewModel.event.observe(this, Observer {
@@ -161,8 +165,8 @@ class TicketsFragment : Fragment() {
     private fun handleNoTicketsSelected() {
         val builder = AlertDialog.Builder(activity)
         builder.setMessage(resources.getString(R.string.no_tickets_message))
-               .setTitle(resources.getString(R.string.whoops))
-               .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+                .setTitle(resources.getString(R.string.whoops))
+                .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
     }
