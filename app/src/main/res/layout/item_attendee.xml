@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_margin_extra_large"
+        android:layout_marginTop="@dimen/details_margin_small"
         android:id="@+id/attendeeItemTicketName"
         android:text="Ticket Name"
         android:textColor="@color/black"

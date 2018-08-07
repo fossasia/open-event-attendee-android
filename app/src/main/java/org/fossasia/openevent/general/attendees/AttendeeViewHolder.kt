@@ -17,7 +17,7 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         setText(itemView.attendeeItemLastName, attendeeRecyclerAdapter.attendeeList[position].lastname)
         setText(itemView.attendeeItemEmail, attendeeRecyclerAdapter.attendeeList[position].email)
         setText(itemView.attendeeItemFirstName, attendeeRecyclerAdapter.attendeeList[position].firstname)
-        itemView.attendeeItemTicketName.text = attendeeRecyclerAdapter.ticketList[position].name
+        itemView.attendeeItemTicketName.text = "Ticket Name - " + attendeeRecyclerAdapter.ticketList[position].name
         fillInformationSection(forms, formVisibility)
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -42,6 +42,10 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.attendeeItemLastName.addTextChangedListener(textWatcher)
         itemView.attendeeItemEmail.addTextChangedListener(textWatcher)
         itemView.attendeeItemCountry.addTextChangedListener(textWatcher)
+        val price = attendeeRecyclerAdapter.ticketList[position].price
+        if ((price != null && price.equals(0.toFloat())) || price == null) {
+            itemView.attendeeItemCountry.visibility = View.GONE
+        }
     }
 
     fun setText(editText: EditText, string: String?) {
