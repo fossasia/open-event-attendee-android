@@ -39,6 +39,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val attendees = ArrayList<Attendee>()
+    private var createAttendeeIterations = 0
     var country: String? = null
     lateinit var paymentOption: String
     val cardType = ArrayList<String>()
@@ -145,7 +146,9 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .doOnSubscribe {
                     progress.value = true
                 }.doFinally {
-                    progress.value = false
+                    createAttendeeIterations++
+                    if (createAttendeeIterations == totalAttendee)
+                        progress.value = false
                 }.subscribe({
                     attendees.add(it)
                     if (attendees.size == totalAttendee) {
@@ -154,13 +157,14 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     }
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
-                    if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
-                        ticketSoldOut.value = true
-                    } else {
-                        message.value = "Unable to create Attendee!"
-                        Timber.d(it, "Failed")
-                        ticketSoldOut.value = false
-                    }
+                    if (createAttendeeIterations + 1 == totalAttendee)
+                        if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
+                            ticketSoldOut.value = true
+                        } else {
+                            message.value = "Unable to create Attendee!"
+                            Timber.d(it, "Failed")
+                            ticketSoldOut.value = false
+                        }
 
                 }))
     }
@@ -169,6 +173,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
         this.country = country
         this.paymentOption = paymentOption
         this.attendees.clear()
+        createAttendeeIterations = 0
         attendees.forEach {
             createAttendee(it, attendees.size)
         }
