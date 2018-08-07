@@ -5,17 +5,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
+import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
 
 class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
-    private val attendeesAndTickets = ArrayList<Pair<Attendee, Ticket>>()
+    val attendeeList = ArrayList<Attendee>()
+    val ticketList = ArrayList<Ticket>()
+    var eventId = EventId(-1)
+
     private val customForm = ArrayList<CustomForm>()
     var formsVisibility = false
 
-    fun addAll(attendeesAndTickets: List<Pair<Attendee, Ticket>>) {
-        if (attendeesAndTickets.isNotEmpty())
-            this.attendeesAndTickets.clear()
-        this.attendeesAndTickets.addAll(attendeesAndTickets)
+    fun addAll(attendeeList: List<Attendee>, ticketList: List<Ticket>) {
+        if (attendeeList.isNotEmpty())
+            this.attendeeList.clear()
+        this.attendeeList.addAll(attendeeList)
+        if (ticketList.isNotEmpty())
+            this.ticketList.clear()
+        this.ticketList.addAll(ticketList)
     }
 
     fun addCustomForm(customForm: List<CustomForm>) {
@@ -24,8 +31,9 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
         this.customForm.addAll(customForm)
     }
 
-    fun add(attendeesAndTicket: Pair<Attendee, Ticket>) {
-        this.attendeesAndTickets.add(attendeesAndTicket)
+    fun add(attendeeList: Attendee, ticket: Ticket) {
+        this.attendeeList.add(attendeeList)
+        this.ticketList.add(ticket)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendeeViewHolder {
@@ -34,11 +42,10 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AttendeeViewHolder, position: Int) {
-        val attendeesAndTicket = attendeesAndTickets[position]
-        holder.bind(attendeesAndTicket, customForm, formsVisibility)
+        holder.bind(this, customForm, formsVisibility, position)
     }
 
     override fun getItemCount(): Int {
-        return attendeesAndTickets.size
+        return attendeeList.size
     }
 }
