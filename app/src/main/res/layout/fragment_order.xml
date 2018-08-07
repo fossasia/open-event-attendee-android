@@ -141,8 +141,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
-                android:paddingLeft="@dimen/layout_margin_medium"
                 android:layout_weight="0.95"
+                android:paddingLeft="@dimen/layout_margin_medium"
                 android:text="@string/invite"
                 android:textColor="@color/black" />
 
@@ -154,6 +154,8 @@
                 android:background="@android:color/white"
                 android:scaleType="center"
                 app:backgroundTint="@android:color/white"
+                app:borderWidth="0dp"
+                app:elevation="0dp"
                 app:srcCompat="@drawable/ic_share_grey_24dp" />
 
         </LinearLayout>
