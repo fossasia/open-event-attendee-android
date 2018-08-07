@@ -37,7 +37,6 @@ import org.fossasia.openevent.general.order.OrderCompletedFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
-import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
@@ -242,14 +241,13 @@ class AttendeeFragment : Fragment() {
                 })
             })
 
+            attendeeRecyclerAdapter.eventId = eventId
             attendeeFragmentViewModel.tickets.observe(this, Observer {
                 it?.let {
                     ticketsRecyclerAdapter.addAll(it)
                     ticketsRecyclerAdapter.notifyDataSetChanged()
                     it.forEach {
-                        val id = attendeeFragmentViewModel.getId()
-                        val attendeeTicketPair = Pair(Attendee(attendeeFragmentViewModel.getId()), it)
-                        attendeeRecyclerAdapter.add(attendeeTicketPair)
+                        attendeeRecyclerAdapter.add(Attendee(attendeeFragmentViewModel.getId()), it)
                         attendeeRecyclerAdapter.notifyDataSetChanged()
                     }
                 }
@@ -302,14 +300,9 @@ class AttendeeFragment : Fragment() {
 
                 val attendees = ArrayList<Attendee>()
                 ticketIdAndQty?.forEach {
+                    val position = attendeeRecyclerAdapter.ticketList.map { it.id }.indexOf(it.first)
                     for (i in 0 until it.second) {
-                        val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
-                                firstname = firstName.text.toString(),
-                                lastname = lastName.text.toString(),
-                                email = email.text.toString(),
-                                ticket = TicketId(it.first.toLong()),
-                                event = eventId)
-                        attendees.add(attendee)
+                        attendees.add(attendeeRecyclerAdapter.attendeeList[position])
                     }
                 }
                 val country = if (country.text.isEmpty()) country.text.toString() else null
