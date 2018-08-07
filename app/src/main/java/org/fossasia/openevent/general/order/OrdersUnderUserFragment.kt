@@ -56,12 +56,19 @@ class OrdersUnderUserFragment : Fragment() {
             }
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
+
             ordersUnderUserVM.progress.observe(this, Observer {
                 it?.let { Utils.showProgressBar(rootView.progressBar, it) }
             })
 
             ordersUnderUserVM.message.observe(this, Observer {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
+
+            ordersUnderUserVM.attendeesNumber.observe(this, Observer {
+                it?.let {
+                    ordersRecyclerAdapter.setAttendeeNumber(it)
+                }
             })
 
             ordersUnderUserVM.eventAndOrderIdentifier.observe(this, Observer {
