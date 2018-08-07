@@ -35,8 +35,8 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
         return eventAndOrderIdentifier.size
     }
 
-    fun setAttendeeNumber(number: List<Int?>) {
-        attendeesNumber = number as ArrayList<Int>
+    fun setAttendeeNumber(number: ArrayList<Int>) {
+        attendeesNumber = number
     }
 
     interface OrderClickListener {

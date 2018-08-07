@@ -15,7 +15,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
 
     private val compositeDisposable = CompositeDisposable()
     private lateinit var order: List<Order>
-    val attendeesNumber = MutableLiveData<List<Int?>>()
+    val attendeesNumber = MutableLiveData<ArrayList<Int>>()
     private var eventIdMap = mutableMapOf<Long, Event>()
     private val eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
@@ -36,7 +36,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                     progress.value = true
                 }.subscribe({
                     order = it
-                    attendeesNumber.value = it.map { it.attendees?.size }
+                    attendeesNumber.value = it.map { it.attendees?.size } as ArrayList<Int>
                     val query = buildQuery(it)
 
                     if (idList.size != 0)
