@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.auth.SignUpFragment
 
 class AuthActivity : AppCompatActivity() {
 
+    private var bundle: Bundle? = null
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
@@ -34,7 +35,9 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
+        if (this.intent.extras != null) {
+            bundle = this.intent.extras
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         navigationAuth.setOnNavigationItemSelectedListener(listener)
 
@@ -44,12 +47,14 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun loadFragment(fragment: Fragment) {
+        if (bundle != null)
+            fragment.arguments = bundle
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainerAuth, fragment)
                 .commit()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean{
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> {
                 onBackPressed()

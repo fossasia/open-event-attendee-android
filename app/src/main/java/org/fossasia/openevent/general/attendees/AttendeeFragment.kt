@@ -50,7 +50,6 @@ private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 class AttendeeFragment : Fragment() {
 
     private lateinit var rootView: View
-    private var id: Long = -1
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
@@ -63,7 +62,7 @@ class AttendeeFragment : Fragment() {
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
-
+    private var id: Long = -1
     private lateinit var API_KEY: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -332,7 +331,13 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
+        val intent = Intent(activity, AuthActivity::class.java)
+        val bundle = Bundle()
+        bundle.putLong(EVENT_ID, id.toLong())
+        if (ticketIdAndQty != null)
+            bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun sendToken() {
