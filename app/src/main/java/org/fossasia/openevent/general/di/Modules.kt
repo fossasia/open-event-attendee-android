@@ -138,7 +138,7 @@ val networkModule = applicationContext {
     }
 
     bean {
-        val baseUrl = "https://open-event-api-dev.herokuapp.com/v1/"
+        val baseUrl = "http://api.eventyay.com/v1/"
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
