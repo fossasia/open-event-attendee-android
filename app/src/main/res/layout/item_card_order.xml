@@ -59,7 +59,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.7"
+                    android:layout_weight="1.5"
                     android:orientation="vertical"
                     android:layout_marginRight="@dimen/layout_margin_small"
                     android:paddingTop="@dimen/padding_medium">
@@ -101,7 +101,7 @@
                         android:id="@+id/eventImage"
                         android:layout_width="0dp"
                         android:layout_height="125dp"
-                        android:layout_weight="0.9"
+                        android:layout_weight="1.1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/placeholder" />
             </LinearLayout>
