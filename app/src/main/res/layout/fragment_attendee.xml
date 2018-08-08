@@ -236,7 +236,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/country"
@@ -244,6 +245,24 @@
                     android:layout_height="wrap_content"
                     android:hint="Country" />
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/attendeeInformation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/moreAttendeeInformation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:text="@string/other_information"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/heading_text_size"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/attendeeRecycler"

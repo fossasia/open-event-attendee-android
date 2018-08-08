@@ -12,9 +12,7 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     val attendeeList = ArrayList<Attendee>()
     val ticketList = ArrayList<Ticket>()
     var eventId = EventId(-1)
-
-    private val customForm = ArrayList<CustomForm>()
-    var formsVisibility = false
+    val customForm = ArrayList<CustomForm>()
 
     fun addAll(attendeeList: List<Attendee>, ticketList: List<Ticket>) {
         if (attendeeList.isNotEmpty())
@@ -25,9 +23,8 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
         this.ticketList.addAll(ticketList)
     }
 
-    fun addCustomForm(customForm: List<CustomForm>) {
-        if (customForm.isNotEmpty())
-            this.customForm.clear()
+    fun setCustomForm(customForm: List<CustomForm>) {
+        this.customForm.clear()
         this.customForm.addAll(customForm)
     }
 
@@ -42,7 +39,7 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AttendeeViewHolder, position: Int) {
-        holder.bind(this, customForm, formsVisibility, position)
+        holder.bind(this, position)
     }
 
     override fun getItemCount(): Int {
