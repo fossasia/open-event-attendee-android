@@ -51,6 +51,9 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    packagingOptions {
+        pickFirst 'kotlin/**'
+    }
 }
 
 repositories {
