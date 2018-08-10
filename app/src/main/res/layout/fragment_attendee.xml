@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:text="(view)"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_large"
                 tools:text=" (View)" />
         </LinearLayout>
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/details_margin_small"
                 android:text="@string/sign_out"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_large"
                 tools:text="Sign out" />
 
@@ -432,7 +432,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_large"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/colorAccent"
                 android:enabled="false"
                 android:padding="@dimen/padding_medium"
                 android:text="@string/register"

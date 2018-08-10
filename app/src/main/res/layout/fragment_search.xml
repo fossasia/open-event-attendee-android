@@ -144,7 +144,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/layout_margin_large"
         android:clickable="true"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
         app:layout_anchorGravity="bottom|right|end"
         app:srcCompat="@drawable/ic_baseline_arrow_forward_24px" />
 </FrameLayout>
