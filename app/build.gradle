@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.google.gms.oss.licenses.plugin'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 
@@ -12,8 +11,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 1
-        versionName "0.0.1a"
+        versionCode 2
+        versionName "0.0.2a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -52,6 +51,9 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    packagingOptions {
+        pickFirst 'kotlin/**'
+    }
 }
 
 repositories {
@@ -85,7 +87,6 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
-    playStoreImplementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -109,10 +110,10 @@ dependencies {
     implementation 'com.stripe:stripe-android:8.0.0'
 
     //QR Code
-    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.8.5"
+    testImplementation "io.mockk:mockk:1.8.6"
     testImplementation 'org.threeten:threetenbp:1.3.6'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

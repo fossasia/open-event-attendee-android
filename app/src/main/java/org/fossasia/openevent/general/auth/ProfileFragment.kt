@@ -4,10 +4,12 @@ import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.content.res.AppCompatResources
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -63,9 +65,10 @@ class ProfileFragment : Fragment() {
                 rootView.email.text = it.email
                 emailSettings = it.email
 
+
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(R.drawable.ic_person_black_24dp)
+                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }

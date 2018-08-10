@@ -104,6 +104,7 @@ class OrderDetailsFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity?.supportActionBar?.title = "Tickets"
         setHasOptionsMenu(false)
         super.onDestroyView()
     }

@@ -39,9 +39,12 @@
 
 -dontwarn com.google.errorprone.**
 
--keep class org.fossasia.openevent.general.data.model.** {
+-keep class org.fossasia.openevent.general.** {
   *;
 }
+
+-dontwarn kotlin.reflect.**
+-keep class kotlin.** { *; }
 
 # Jackson
 -keepattributes *Annotation*,EnclosingMethod,Signature

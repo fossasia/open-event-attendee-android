@@ -1,7 +1,9 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -23,6 +25,7 @@ import android.os.Build
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import kotlinx.android.synthetic.main.content_event.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.ticket.CURRENCY
@@ -112,9 +115,11 @@ class EventDetailsFragment : Fragment() {
             rootView.eventOrganiserName.visibility = View.VISIBLE
             organizerContainer.visibility = View.VISIBLE
 
+
+
             Picasso.get()
                     .load(event.logoUrl)
-                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
         }

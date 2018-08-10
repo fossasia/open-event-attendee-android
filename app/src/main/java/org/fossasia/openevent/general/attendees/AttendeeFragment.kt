@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
@@ -29,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.*
 import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
@@ -42,6 +45,7 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
@@ -50,9 +54,9 @@ private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 class AttendeeFragment : Fragment() {
 
     private lateinit var rootView: View
-    private var id: Long = -1
     private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
+    private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private lateinit var eventId: EventId
@@ -62,8 +66,11 @@ class AttendeeFragment : Fragment() {
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
-
+    private var id: Long = -1
     private lateinit var API_KEY: String
+    private var singleTicket = false
+    private var identifierList = ArrayList<String>()
+    private var editTextList = ArrayList<EditText>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +80,7 @@ class AttendeeFragment : Fragment() {
             eventId = EventId(id)
             ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
+        singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
                 ?.metaData?.getString(STRIPE_KEY).toString()
     }
@@ -131,6 +139,10 @@ class AttendeeFragment : Fragment() {
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
+
+        rootView.attendeeRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.attendeeRecycler.adapter = attendeeRecyclerAdapter
+        rootView.attendeeRecycler.isNestedScrollingEnabled = false
 
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -237,11 +249,20 @@ class AttendeeFragment : Fragment() {
                 })
             })
 
+            attendeeRecyclerAdapter.eventId = eventId
             attendeeFragmentViewModel.tickets.observe(this, Observer {
                 it?.let {
                     ticketsRecyclerAdapter.addAll(it)
+                    ticketsRecyclerAdapter.notifyDataSetChanged()
+                    if (!singleTicket)
+                        it.forEach {
+                            val pos = ticketIdAndQty?.map { it.first }?.indexOf(it.id)
+                            val iterations = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.second } ?: 0
+                            for (i in 0 until iterations)
+                                attendeeRecyclerAdapter.add(Attendee(attendeeFragmentViewModel.getId()), it)
+                            attendeeRecyclerAdapter.notifyDataSetChanged()
+                        }
                 }
-                ticketsRecyclerAdapter.notifyDataSetChanged()
             })
 
             attendeeFragmentViewModel.totalQty.observe(this, Observer {
@@ -249,7 +270,7 @@ class AttendeeFragment : Fragment() {
             })
 
             attendeeFragmentViewModel.countryVisibility.observe(this, Observer {
-                if (it != null) {
+                if (it != null && singleTicket) {
                     rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
                 }
             })
@@ -273,21 +294,42 @@ class AttendeeFragment : Fragment() {
                 redirectToLogin()
             }
 
+            attendeeFragmentViewModel.getCustomFormsForAttendees(eventId.id)
+
+            attendeeFragmentViewModel.forms.observe(this, Observer {
+                it?.let {
+                    if (singleTicket)
+                        fillInformationSection(it)
+                    attendeeRecyclerAdapter.setCustomForm(it)
+                    if (singleTicket)
+                        if (!it.isEmpty()) {
+                            rootView.moreAttendeeInformation.visibility = View.VISIBLE
+                        }
+                    attendeeRecyclerAdapter.notifyDataSetChanged()
+                }
+                rootView.register.isEnabled = true
+            })
+
             rootView.register.setOnClickListener {
                 if (selectedPaymentOption == "Stripe")
                     sendToken()
 
                 val attendees = ArrayList<Attendee>()
-                ticketIdAndQty?.forEach {
-                    for (i in 0..it.second) {
-                        val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
-                                firstname = firstName.text.toString(),
-                                lastname = lastName.text.toString(),
-                                email = email.text.toString(),
-                                ticket = TicketId(it.first.toLong()),
-                                event = eventId)
-                        attendees.add(attendee)
-                    }
+                if (singleTicket) {
+                    val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
+                    val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
+                    val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
+                            firstname = firstName.text.toString(),
+                            lastname = lastName.text.toString(),
+                            city = getAttendeeField("city"),
+                            address = getAttendeeField("address"),
+                            state = getAttendeeField("state"),
+                            email = email.text.toString(),
+                            ticket = TicketId(ticket),
+                            event = eventId)
+                    attendees.add(attendee)
+                } else {
+                    attendees.addAll(attendeeRecyclerAdapter.attendeeList)
                 }
                 val country = if (country.text.isEmpty()) country.text.toString() else null
                 attendeeFragmentViewModel.createAttendees(attendees, country, selectedPaymentOption)
@@ -297,7 +339,8 @@ class AttendeeFragment : Fragment() {
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
 
-        attendeeFragmentViewModel.ticketSoldOut.observe(this, Observer {
+        attendeeFragmentViewModel.ticketSoldOut.observe(this, Observer
+        {
             it?.let {
                 showTicketSoldOutDialog(it)
             }
@@ -315,7 +358,13 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
+        val intent = Intent(activity, AuthActivity::class.java)
+        val bundle = Bundle()
+        bundle.putLong(EVENT_ID, id.toLong())
+        if (ticketIdAndQty != null)
+            bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun sendToken() {
@@ -394,5 +443,26 @@ class AttendeeFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun fillInformationSection(forms: List<CustomForm>) {
+        val layout = rootView.attendeeInformation
+        for (form in forms) {
+            if (form.type == "text") {
+                val inputLayout = TextInputLayout(context)
+                val editTextSection = EditText(context)
+                editTextSection.hint = form.fieldIdentifier.capitalize()
+                inputLayout.addView(editTextSection)
+                inputLayout.setPadding(0, 0, 0, 20)
+                layout.addView(inputLayout)
+                identifierList.add(form.fieldIdentifier)
+                editTextList.add(editTextSection)
+            }
+        }
+    }
+
+    fun getAttendeeField(identifier: String): String {
+        val index = identifierList.indexOf(identifier)
+        return if (index == -1) "" else index.let { editTextList[it] }.text.toString()
     }
 }

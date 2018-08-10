@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.auth.User
@@ -38,6 +39,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val attendees = ArrayList<Attendee>()
+    private var createAttendeeIterations = 0
     var country: String? = null
     lateinit var paymentOption: String
     val cardType = ArrayList<String>()
@@ -45,6 +47,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
     var paymentCompleted = MutableLiveData<Boolean>()
     val tickets = MutableLiveData<MutableList<Ticket>>()
     lateinit var confirmOrder: ConfirmOrder
+    val forms = MutableLiveData<List<CustomForm>>()
     private val TICKET_CONFLICT_MESSAGE = "HTTP 409 CONFLICT"
 
     fun getId() = authHolder.getId()
@@ -125,7 +128,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    tickets.value?.addAll(it)
+                    tickets.value = it as MutableList<Ticket>?
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
@@ -143,7 +146,9 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 .doOnSubscribe {
                     progress.value = true
                 }.doFinally {
-                    progress.value = false
+                    createAttendeeIterations++
+                    if (createAttendeeIterations == totalAttendee)
+                        progress.value = false
                 }.subscribe({
                     attendees.add(it)
                     if (attendees.size == totalAttendee) {
@@ -152,13 +157,14 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     }
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
-                    if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
-                        ticketSoldOut.value = true
-                    } else {
-                        message.value = "Unable to create Attendee!"
-                        Timber.d(it, "Failed")
-                        ticketSoldOut.value = false
-                    }
+                    if (createAttendeeIterations + 1 == totalAttendee)
+                        if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
+                            ticketSoldOut.value = true
+                        } else {
+                            message.value = "Unable to create Attendee!"
+                            Timber.d(it, "Failed")
+                            ticketSoldOut.value = false
+                        }
 
                 }))
     }
@@ -167,6 +173,7 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
         this.country = country
         this.paymentOption = paymentOption
         this.attendees.clear()
+        createAttendeeIterations = 0
         attendees.forEach {
             createAttendee(it, attendees.size)
         }
@@ -252,6 +259,22 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                 }, {
                     message.value = "Unable to create Order!"
                     Timber.d(it, "Failed updating order status")
+                }))
+    }
+
+    fun getCustomFormsForAttendees(eventId: Long) {
+        val filter = "[{\"name\":\"form\",\"op\":\"eq\",\"val\":\"order\"}]"
+        compositeDisposable.add(attendeeService.getCustomFormsForAttendees(eventId, filter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    progress.value = true
+                }.subscribe({
+                    progress.value = false
+                    forms.value = it
+                    Timber.d("Forms fetched successfully !")
+                }, {
+                    Timber.d(it, "Failed fetching forms")
                 }))
     }
 

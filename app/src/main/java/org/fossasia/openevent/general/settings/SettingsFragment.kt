@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceCategory
 import android.view.*
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
@@ -46,11 +45,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
         preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
 
-        if (!AcknowledgementDecider.showAcknowledgement()) {
-            val aboutCategory = findPreference(resources.getString(R.string.key_about)) as PreferenceCategory
-            val acknowledgementsPreference = findPreference(resources.getString(R.string.key_acknowledgements)) as Preference
-            aboutCategory.removePreference(acknowledgementsPreference)
-        }
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -74,10 +68,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_legal)) {
             val legalFragment = LegalFragment()
             activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, legalFragment)?.addToBackStack(null)?.commit()
-        }
-        if (preference?.key == resources.getString(R.string.key_acknowledgements)) {
-            context?.let { AcknowledgementDecider.decide(it) }
-            return true
         }
         return false
     }

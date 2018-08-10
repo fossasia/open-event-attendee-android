@@ -3,13 +3,16 @@ package org.fossasia.openevent.general.auth
 import android.Manifest
 import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.content.res.AppCompatResources
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -81,9 +84,11 @@ class EditProfileFragment : Fragment() {
             val selectedImage = BitmapFactory.decodeStream(imageStream)
             encodedImage = encodeImage(selectedImage)
 
+
+
             Picasso.get()
                     .load(imageUri)
-                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }

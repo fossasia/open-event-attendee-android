@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/curved_border"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/layout_margin_extra_large"
+    android:padding="@dimen/layout_margin_medium"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/details_margin_small"
+        android:id="@+id/attendeeItemTicketName"
+        android:text="Ticket Name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/heading_text_size" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/attendeeItemFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/first_name"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/attendeeItemLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/last_name"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/attendeeItemEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/countryArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_medium">
+
+        <EditText
+            android:id="@+id/attendeeItemCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country" />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/attendeeInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/moreAttendeeInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:text="@string/other_information"
+            android:textColor="@color/black"
+            android:textSize="@dimen/heading_text_size"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

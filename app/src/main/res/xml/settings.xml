@@ -15,9 +15,6 @@
         <Preference
             android:key="@string/key_legal"
             android:title="@string/legal" />
-        <Preference
-            android:key="@string/key_acknowledgements"
-            android:title="@string/acknowledgements_settings" />
     </PreferenceCategory>
 
     <PreferenceCategory
