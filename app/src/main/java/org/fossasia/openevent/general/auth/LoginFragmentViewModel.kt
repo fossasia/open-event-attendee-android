@@ -49,7 +49,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
         return false
     }
 
-    fun showForgotPassword(email: String): Boolean {
+    fun isCorrectEmail(email: String): Boolean {
         if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
         }

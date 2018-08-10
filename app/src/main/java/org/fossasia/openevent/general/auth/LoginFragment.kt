@@ -75,10 +75,12 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                if (loginActivityViewModel.showForgotPassword(email.toString())) {
+                if (loginActivityViewModel.isCorrectEmail(email.toString())) {
                     rootView.forgotPassword.visibility = View.VISIBLE
+                    rootView.loginButton.isEnabled = true
                 } else {
                     rootView.forgotPassword.visibility = View.GONE
+                    rootView.loginButton.isEnabled = false
                 }
             }
         })
