@@ -130,3 +130,7 @@ fabric.properties
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar
+
+fastlane.json
+key.jks
+secrets.tar
