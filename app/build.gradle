@@ -11,8 +11,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 2
-        versionName "0.0.2a"
+        versionCode 3
+        versionName "0.0.3a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
