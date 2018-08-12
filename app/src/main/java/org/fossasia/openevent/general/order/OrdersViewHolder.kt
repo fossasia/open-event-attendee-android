@@ -1,12 +1,15 @@
 package org.fossasia.openevent.general.order
 
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_order.view.*
+import org.fossasia.openevent.general.OpenEventGeneral.Companion.appContext
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+
 
 class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -33,7 +36,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(AppCompatResources.getDrawable(appContext!!, R.drawable.ic_launcher_background)!!)   //TODO: Make null safe
                     .into(itemView.eventImage)
         }
     }

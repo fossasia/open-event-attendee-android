@@ -1,9 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -24,7 +22,6 @@ import timber.log.Timber
 import android.os.Build
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
-import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import kotlinx.android.synthetic.main.content_event.*
 import org.fossasia.openevent.general.CircleTransform
@@ -165,7 +162,7 @@ class EventDetailsFragment : Fragment() {
 
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
-                    .placeholder(R.drawable.ic_map_black_24dp)
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_map_black_24dp)!!)   //TODO: Make null safe
                     .into(rootView.imageMap)
         }
 
@@ -186,7 +183,7 @@ class EventDetailsFragment : Fragment() {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_launcher_background)!!)   //TODO: Make null safe
                     .into(rootView.logo)
         }
 
@@ -321,6 +318,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int){
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { AppCompatResources.getDrawable(context!!, id)!! }   //TODO: Make null safe
     }
 }
