@@ -1,10 +1,12 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Intent
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*
+import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.favorite.FAVORITE_EVENT_DATE_FORMAT
 
@@ -28,7 +30,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(AppCompatResources.getDrawable(OpenEventGeneral.appContext!!, R.drawable.ic_launcher_background)!!)   //TODO: Make null safe
                     .into(itemView.eventImage)
         }
 
