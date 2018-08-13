@@ -47,6 +47,15 @@ if [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
 	done
 fi
 
+# Signing Apps
+
+if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+    echo "Push to master branch detected, signing the app..."
+    cp app-release-unsigned.apk app-release-unaligned.apk
+	jarsigner -verbose -tsa http://timestamp.comodoca.com/rfc3161 -sigalg SHA1withRSA -digestalg SHA1 -keystore ../scripts/key.jks -storepass $STORE_PASS -keypass $KEY_PASS app-release-unaligned.apk $ALIAS
+	${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 app-release-unaligned.apk app-release.apk
+fi
+
 # Create a new branch that will contains only latest apk
 git checkout --orphan temporary
 
@@ -61,3 +70,12 @@ git branch -m apk
 
 # Force push to origin since histories are unrelated
 git push origin apk --force --quiet > /dev/null
+
+# Publish App to Play Store
+if [ "$TRAVIS_BRANCH" != "$PUBLISH_BRANCH" ]; then
+    echo "We publish apk only for changes in master branch. So, let's skip this shall we ? :)"
+    exit 0
+fi
+
+gem install fastlane
+fastlane supply --apk test-app-release.apk --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME

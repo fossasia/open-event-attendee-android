@@ -15,7 +15,7 @@
             android:id="@+id/buttonTickets"
             android:layout_gravity="bottom"
             app:cardElevation="@dimen/card_tickets_elevation"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/colorAccent"
             app:cardCornerRadius="@dimen/card_tickets_radius"
             android:layout_margin="@dimen/layout_margin_large">
 
