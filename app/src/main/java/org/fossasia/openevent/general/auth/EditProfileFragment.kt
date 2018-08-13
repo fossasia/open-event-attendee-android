@@ -84,11 +84,9 @@ class EditProfileFragment : Fragment() {
             val selectedImage = BitmapFactory.decodeStream(imageStream)
             encodedImage = encodeImage(selectedImage)
 
-
-
             Picasso.get()
-                    .load(imageUri)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                    .load(imageUri).let{it1 ->
+                        ((context?.let {it2 -> AppCompatResources.getDrawable(it2, R.drawable.ic_person_black_24dp) })?.let {it1.placeholder(it)} ?: it1)}
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }
