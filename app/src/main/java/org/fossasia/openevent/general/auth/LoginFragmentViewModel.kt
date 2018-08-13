@@ -20,6 +20,7 @@ class LoginFragmentViewModel(private val authService: AuthService,
     val error = SingleLiveEvent<String>()
     val showNoInternetDialog = MutableLiveData<Boolean>()
     val requestTokenSuccess = MutableLiveData<Boolean>()
+    val isCorrectEmail = MutableLiveData<Boolean>()
     val loggedIn = SingleLiveEvent<Boolean>()
 
     fun isLoggedIn() = authService.isLoggedIn()
@@ -44,13 +45,6 @@ class LoginFragmentViewModel(private val authService: AuthService,
     private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             error.value = "Email or Password cannot be empty!"
-            return true
-        }
-        return false
-    }
-
-    fun isCorrectEmail(email: String): Boolean {
-        if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true
         }
         return false
@@ -100,6 +94,10 @@ class LoginFragmentViewModel(private val authService: AuthService,
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    fun checkEmail(email: String) {
+        isCorrectEmail.value = email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun isConnected(): Boolean {
