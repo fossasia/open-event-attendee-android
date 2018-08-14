@@ -51,9 +51,9 @@ fi
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     echo "Push to master branch detected, signing the app..."
-    cp open-event-master-app-playStore-release-unsigned.apk app-playStore-release-unaligned.apk
-	jarsigner -verbose -tsa http://timestamp.comodoca.com/rfc3161 -sigalg SHA1withRSA -digestalg SHA1 -keystore ../scripts/key.jks -storepass $STORE_PASS -keypass $KEY_PASS app-playStore-release-unaligned.apk $ALIAS
-	${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 app-playStore-release-unaligned.apk open-event-master-app-playStore-release.apk
+    cp open-event-master-app-playStore-release-unsigned.apk open-event-master-app-playStore-release-unaligned.apk
+    jarsigner -verbose -tsa http://timestamp.comodoca.com/rfc3161 -sigalg SHA1withRSA -digestalg SHA1 -keystore ../scripts/key.jks -storepass $STORE_PASS -keypass $KEY_PASS open-event-master-app-playStore-release-unaligned.apk $ALIAS
+    ${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 open-event-master-app-playStore-release-unaligned.apk open-event-master-app-playStore-release.apk
 fi
 
 # Create a new branch that will contains only latest apk
