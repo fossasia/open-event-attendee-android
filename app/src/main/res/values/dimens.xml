@@ -71,7 +71,7 @@
     <dimen name="logo_icon_height">40dp</dimen>
 
     <!--fragment event details-->
-    <dimen name="event_details_divider_margin">35dp</dimen>
+    <dimen name="event_details_divider_margin">72dp</dimen>
     <dimen name="card_tickets_radius">20dp</dimen>
     <dimen name="card_tickets_text_height">40dp</dimen>
     <dimen name="card_tickets_elevation">1dp</dimen>
