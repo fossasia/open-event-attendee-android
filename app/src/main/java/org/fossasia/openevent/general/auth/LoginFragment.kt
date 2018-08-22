@@ -75,17 +75,19 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                if (loginActivityViewModel.showForgotPassword(email.toString())) {
-                    rootView.forgotPassword.visibility = View.VISIBLE
-                } else {
-                    rootView.forgotPassword.visibility = View.GONE
-                }
+                loginActivityViewModel.checkEmail(email.toString())
             }
         })
 
         loginActivityViewModel.requestTokenSuccess.observe(this, Observer {
             rootView.sentEmailLayout.visibility = View.VISIBLE
             rootView.loginLayout.visibility = View.GONE
+        })
+
+        loginActivityViewModel.isCorrectEmail.observe(this, Observer {
+            it?.let {
+                onEmailEntered(it)
+            }
         })
 
         rootView.tick.setOnClickListener {
@@ -113,5 +115,10 @@ class LoginFragment : Fragment() {
         startActivity(intent)
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
+    }
+
+    private fun onEmailEntered(enable: Boolean) {
+        rootView.loginButton.isEnabled = enable
+        rootView.forgotPassword.visibility = if (enable) View.VISIBLE else View.GONE
     }
 }
