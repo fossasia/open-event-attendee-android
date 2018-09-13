@@ -63,7 +63,7 @@ repositories {
 dependencies {
     def lifecycle_version = "1.1.1"
     def koin_version = "0.9.3"
-    def roomVersion = '1.1.0'
+    def roomVersion = '1.1.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:multidex:1.0.3'
