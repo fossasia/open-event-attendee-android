@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.auth
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,6 +10,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -48,6 +50,7 @@ class LoginFragment : Fragment() {
 
         rootView.loginButton.setOnClickListener {
             loginActivityViewModel.login(email.text.toString(), password.text.toString())
+            hideSoftKeyboard()
         }
 
         loginActivityViewModel.progress.observe(this, Observer {
@@ -105,6 +108,11 @@ class LoginFragment : Fragment() {
         })
 
         return rootView
+    }
+
+    private fun hideSoftKeyboard() {
+        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view?.windowToken, InputMethodManager.SHOW_FORCED)
     }
 
     private fun redirectToMain(bundle: Bundle?) {
