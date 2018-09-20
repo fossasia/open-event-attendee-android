@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
+import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.OrdersUnderUserFragment
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.SearchFragment
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             openEventsFragment = false
         }
 
-        if (bundle != null && bundle.getBoolean(TICKETS)) {
+        if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
             loadFragment(OrdersUnderUserFragment())
             supportActionBar?.title = "Tickets"
             navigation.selectedItemId = R.id.navigation_tickets
