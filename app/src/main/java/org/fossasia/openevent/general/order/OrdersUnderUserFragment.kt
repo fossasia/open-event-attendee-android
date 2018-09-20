@@ -19,6 +19,7 @@ import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
 const val ORDERS: String = "orders"
+const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 
 class OrdersUnderUserFragment : Fragment() {
 
@@ -87,6 +88,9 @@ class OrdersUnderUserFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
+        val authIntent = Intent(activity, AuthActivity::class.java)
+        val redirectFromTickets = true
+        authIntent.putExtra(LAUNCH_TICKETS, redirectFromTickets)
+        startActivity(authIntent)
     }
 }
