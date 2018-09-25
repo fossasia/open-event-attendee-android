@@ -47,7 +47,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress" />
+                android:drawableLeft="@drawable/ic_email_black_24dp"
+                android:drawablePadding="@dimen/layout_margin_moderate"
+                android:inputType="textEmailAddress"
+                android:drawableStart="@drawable/ic_email_black_24dp" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -62,8 +65,11 @@
                 android:id="@+id/passwordSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
+                android:drawablePadding="@dimen/layout_margin_moderate"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:drawableStart="@drawable/ic_lock_black_24dp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -78,6 +84,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
+                android:drawablePadding="@dimen/layout_margin_moderate"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
@@ -114,7 +123,9 @@
             android:layout_marginTop="@dimen/padding_large"
             android:layout_marginBottom="@dimen/padding_large"
             android:padding="@dimen/padding_medium"
-            android:text="@string/sign_up" />
+            android:text="@string/sign_up"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorPrimary"/>
 
     </LinearLayout>
 </ScrollView>

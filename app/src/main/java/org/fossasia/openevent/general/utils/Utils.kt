@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.utils
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -8,6 +7,7 @@ import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import org.fossasia.openevent.general.R
 
@@ -37,5 +37,10 @@ object Utils {
         builder.setMessage(context?.resources?.getString(R.string.no_internet_message))
                .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         builder.show()
+    }
+
+    fun hideSoftKeyboard(context: Context?, view: View) {
+        val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
     }
 }

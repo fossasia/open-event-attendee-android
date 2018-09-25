@@ -41,8 +41,10 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
+                    android:drawableLeft="@drawable/ic_email_black_24dp"
+                    android:drawablePadding="@dimen/layout_margin_moderate"
+                    android:inputType="textEmailAddress"
+                    android:drawableStart="@drawable/ic_email_black_24dp" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Password Label -->
@@ -58,7 +60,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:drawableLeft="@drawable/ic_lock_black_24dp"
+                    android:drawablePadding="@dimen/layout_margin_moderate"
+                    android:inputType="textPassword"
+                    android:drawableStart="@drawable/ic_lock_black_24dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
@@ -69,6 +74,8 @@
                 android:layout_marginTop="@dimen/padding_large"
                 android:layout_marginBottom="@dimen/padding_large"
                 android:padding="@dimen/padding_medium"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="@string/login" />
 
             <TextView
