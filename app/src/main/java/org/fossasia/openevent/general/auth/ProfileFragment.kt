@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.orga_app -> {
-                startOrgaApp("org.fossasia.eventyay")
+                startOrgaApp("com.eventyay.organizer")
                 return true
             }
             R.id.ticket_issues -> {
