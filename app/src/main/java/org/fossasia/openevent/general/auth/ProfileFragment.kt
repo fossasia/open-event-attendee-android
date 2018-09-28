@@ -100,6 +100,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.logout -> {
                 profileFragmentViewModel.logout()
+                activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 redirectToMain()
                 return true
             }
