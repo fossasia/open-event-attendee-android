@@ -82,9 +82,9 @@
                 android:id="@+id/forgotPassword"
                 android:layout_width="fill_parent"
                 android:gravity="center"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/padding_large"
                 android:layout_marginBottom="@dimen/padding_large"
                 android:padding="@dimen/padding_medium"
@@ -107,44 +107,48 @@
             android:layout_margin="@dimen/layout_margin_medium"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/item_image_view_medium"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:layout_gravity="end"
-                android:layout_marginRight="@dimen/layout_margin_medium"
-                android:id="@+id/tick"
-                app:srcCompat="@drawable/ic_check_black_24dp"/>
-
             <View
                 android:layout_width="@dimen/fab_width"
                 android:layout_height="0dp"
                 android:visibility="invisible"
-                android:layout_weight="0.2"
+                android:layout_weight="0.35"
                 app:srcCompat="@drawable/ic_check_black_24dp"/>
 
             <ImageView
-                android:layout_width="@dimen/logo_icon_width"
+                android:id="@+id/tick"
+                android:layout_width="@dimen/item_image_view"
                 android:layout_height="0dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.13"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                app:srcCompat="@drawable/ic_check_black_24dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/logo_icon_width"
+                android:layout_height="@dimen/logo_icon_width"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_mail_outline_black_24dp"/>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:layout_marginLeft="8dp"
                 android:gravity="bottom"
+                android:layout_gravity="center_vertical"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_large"
                 android:text="@string/email_sent_alert"/>
-
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:textAlignment="center"
+                android:paddingTop="4dp"
                 android:text="@string/email_sent_message"/>
         </LinearLayout>
 
