@@ -7,6 +7,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
+const val USER_UPDATED = "User updated successfully!"
+
 class EditProfileViewModel(private val authService: AuthService, private val authHolder: AuthHolder) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -57,7 +59,7 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
                     progress.value = false
                 }
                 .subscribe({
-                    message.value = "User updated successfully!"
+                    message.value = USER_UPDATED
                     Timber.d("User updated")
                 }) {
                     message.value = "Error updating user!"
