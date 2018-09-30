@@ -76,6 +76,9 @@ class EditProfileFragment : Fragment() {
 
         editProfileViewModel.message.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            if (it.equals(USER_UPDATED)) {
+                activity?.onBackPressed()
+            }
         })
 
         return rootView
