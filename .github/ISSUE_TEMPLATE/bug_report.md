@@ -1,11 +1,5 @@
----
-name: Bug report
-about: Create a report to help us improve
-
----
-
 **Describe the bug**
-A clear and concise description of what the bug is.
+<!-- A clear and concise description of what the bug is. -->
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -15,19 +9,15 @@ Steps to reproduce the behavior:
 4. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+<!-- A clear and concise description of what you expected to happen. -->
 
-**Logs**
-Please add logs in case of any crash or applicable error. 
+**Stacktrace**
+<!-- If applicable, add stacktrace to help explain your problem. -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Additional details (please complete the following information):**
+ - OS: [e.g. MacOS, Ubuntu, CentOS]
+ - Python Version [e.g. `3.5`, `3.6`]
+ - `HEAD` Commit hash [e.g. `4629c62`]
 
 **Additional context**
-Add any other context about the problem here.
+<!-- Add any other context about the problem here. -->
