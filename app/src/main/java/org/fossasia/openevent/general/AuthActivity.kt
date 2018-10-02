@@ -19,13 +19,13 @@ class AuthActivity : AppCompatActivity() {
             R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
-                loadFragment(fragment)
+                loadFragment(fragment, "LoginFragment")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
-                loadFragment(fragment)
+                loadFragment(fragment, "SignUpFragment")
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -43,15 +43,20 @@ class AuthActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Login"
 
-        loadFragment(LoginFragment())
+        loadFragment(LoginFragment(), "LoginFragment")
     }
 
-    private fun loadFragment(fragment: Fragment) {
-        if (bundle != null)
-            fragment.arguments = bundle
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainerAuth, fragment)
-                .commit()
+    private fun loadFragment(fragment: Fragment, tag: String) {
+        var currentFragmentName: String = "InitialJunkValue"
+        if (supportFragmentManager.findFragmentById(R.id.frameContainerAuth) != null)
+            currentFragmentName = supportFragmentManager.findFragmentById(R.id.frameContainerAuth).tag.toString()
+        if (currentFragmentName != tag) {
+            if (bundle != null)
+                fragment.arguments = bundle
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameContainerAuth, fragment, tag)
+                    .commit()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
