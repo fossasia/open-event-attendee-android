@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.orga_app -> {
-                startOrgaApp("org.fossasia.eventyay")
+                startOrgaApp("com.eventyay.organizer")
                 return true
             }
             R.id.ticket_issues -> {
@@ -100,6 +100,7 @@ class ProfileFragment : Fragment() {
             }
             R.id.logout -> {
                 profileFragmentViewModel.logout()
+                activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 redirectToMain()
                 return true
             }
