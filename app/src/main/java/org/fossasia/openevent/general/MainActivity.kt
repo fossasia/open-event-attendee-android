@@ -16,6 +16,7 @@ import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.OrdersUnderUserFragment
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.SearchFragment
+import timber.log.Timber
 
 private const val TO_SEARCH: String = "ToSearchFragment"
 
@@ -27,31 +28,31 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
                 fragment = EventsFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
                 supportActionBar?.title = "Search"
                 fragment = SearchFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
                 supportActionBar?.title = "Profile"
                 fragment = ProfileFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorite -> {
                 supportActionBar?.title = "Likes"
                 fragment = FavoriteFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_tickets -> {
                 supportActionBar?.title = "Tickets"
                 fragment = OrdersUnderUserFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -106,9 +107,20 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    private fun checkAndLoadFragment(fragment: Fragment) {
+        val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
+        if (savedFragment != null) {
+            loadFragment(savedFragment)
+            Timber.d("""Loading fragment from stack ${fragment::class.java}""")
+        } else {
+            loadFragment(fragment)
+        }
+    }
+
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainer, fragment)
+                .replace(R.id.frameContainer, fragment, fragment::class.java.name)
+                .addToBackStack(null)
                 .commit()
     }
 }
