@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
         if (savedFragment != null) {
             loadFragment(savedFragment)
-            Timber.d("""Loading fragment from stack ${fragment::class.java}""")
+            Timber.d("Loading fragment from stack ${fragment::class.java}")
         } else {
             loadFragment(fragment)
         }
