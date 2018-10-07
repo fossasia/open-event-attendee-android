@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.text.TextUtils
@@ -31,6 +32,8 @@ class SearchFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.title = "Search"
         setHasOptionsMenu(true)
 
         rootView.progressBar.isIndeterminate = true
