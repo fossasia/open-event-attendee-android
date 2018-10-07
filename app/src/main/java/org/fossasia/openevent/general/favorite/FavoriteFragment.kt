@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.favorite
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -27,6 +28,10 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
+
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.title = "Likes"
+
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
                 LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
