@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -358,9 +359,10 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
+        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         val intent = Intent(activity, AuthActivity::class.java)
         val bundle = Bundle()
-        bundle.putLong(EVENT_ID, id.toLong())
+        bundle.putLong(EVENT_ID, id)
         if (ticketIdAndQty != null)
             bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
         intent.putExtras(bundle)
