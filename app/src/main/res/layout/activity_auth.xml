@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
+        android:background="@android:color/white"
         app:itemBackground="@android:color/white"
         android:foreground="?attr/selectableItemBackground"
         app:itemTextColor="@color/colorPrimaryDark"
