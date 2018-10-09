@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
-                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/details_margin_small"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_very_large"
                 android:text="@string/eventyay_logo"/>
@@ -55,6 +55,7 @@
 
         <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_medium"
