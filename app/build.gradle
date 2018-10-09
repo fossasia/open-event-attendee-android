@@ -9,7 +9,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.eventyay.attendee"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 3
         versionName "0.0.3a"
@@ -97,6 +97,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+
+    //Cards Shimmer Animation
+    implementation 'com.facebook.shimmer:shimmer:0.3.0'
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
