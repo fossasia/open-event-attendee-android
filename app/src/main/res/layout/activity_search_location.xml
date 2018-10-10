@@ -8,6 +8,7 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         app:iconifiedByDefault="false"
         app:queryHint="@string/where"
         app:searchIcon="@null" />
