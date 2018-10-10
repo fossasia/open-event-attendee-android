@@ -1,10 +1,12 @@
 package org.fossasia.openevent.general
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
@@ -20,11 +22,14 @@ import org.fossasia.openevent.general.search.SearchFragment
 import timber.log.Timber
 
 private const val TO_SEARCH: String = "ToSearchFragment"
+private var doubleBackToExitPressedOnce = false
+
 
 class MainActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
+
         when (item.itemId) {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
@@ -70,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         var openEventsFragment = true
+
 
         if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
             loadFragment(SearchFragment())
@@ -126,12 +132,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
-        if (currentFragment !is EventsFragment) {
-            loadFragment(EventsFragment())
-            navigation.selectedItemId = navigation_events
-        } else {
+        if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
+            return
         }
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 1000)
     }
 }
