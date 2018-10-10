@@ -22,7 +22,6 @@ import org.fossasia.openevent.general.search.SearchFragment
 import timber.log.Timber
 
 private const val TO_SEARCH: String = "ToSearchFragment"
-private var doubleBackToExitPressedOnce = false
 
 
 class MainActivity : AppCompatActivity() {
@@ -132,12 +131,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
-            return
+        val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
+        if (currentFragment !is EventsFragment) {
+            loadFragment(EventsFragment())
+            navigation.selectedItemId = navigation_events
         }
-        doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 1000)
+        if (currentFragment is EventsFragment) {
+            finish()
+        }
     }
+
 }
