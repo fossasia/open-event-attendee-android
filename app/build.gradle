@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 
-    //Cards Shimmer Animation
+    // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.3.0'
 
     // RxJava

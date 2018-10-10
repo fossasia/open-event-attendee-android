@@ -65,7 +65,6 @@ class EventsFragment : Fragment() {
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
-        eventsViewModel.setShowSchimmerEvents(true)
         eventsViewModel.events.observe(this, Observer {
             it?.let {
                 eventsRecyclerAdapter.addAll(it)
@@ -73,9 +72,10 @@ class EventsFragment : Fragment() {
             }
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
+
         eventsViewModel.showSchimmerEvents.observe(this, Observer {
             it?.let {
-                if(it) {
+                if (it) {
                     rootView.shimmerEvents.startShimmer()
                 } else {
                     rootView.shimmerEvents.stopShimmer()
@@ -96,7 +96,7 @@ class EventsFragment : Fragment() {
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents()
+            eventsViewModel.shimmerAndLoadEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -117,9 +117,9 @@ class EventsFragment : Fragment() {
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
+        rootView.swiperefresh.setOnRefreshListener {
             eventsViewModel.retryLoadLocationEvents()
-        })
+        }
 
         return rootView
     }

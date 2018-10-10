@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:scaleType="centerCrop"
-                android:background="@color/shimmerBackground"/>
+                android:background="@color/shimmer_background"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 <View
                     android:layout_width="45dp"
                     android:layout_height="50dp"
-                    android:background="@color/shimmerBackground"
+                    android:background="@color/shimmer_background"
                     android:layout_marginEnd="@dimen/padding_large"
                     android:layout_marginRight="@dimen/padding_large"
                     android:gravity="center_horizontal"
@@ -54,12 +54,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginBottom="@dimen/layout_margin_small"
-                        android:background="@color/shimmerBackground"/>
+                        android:background="@color/shimmer_background"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:background="@color/shimmerBackground"/>
+                        android:background="@color/shimmer_background"/>
 
                 </LinearLayout>
             </LinearLayout>

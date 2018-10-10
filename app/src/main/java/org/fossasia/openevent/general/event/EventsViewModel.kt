@@ -20,10 +20,6 @@ class EventsViewModel(private val eventService: EventService, private val prefer
 
     val savedLocation by lazy { preference.getString(tokenKey) }
 
-    fun setShowSchimmerEvents(value: Boolean) {
-        showSchimmerEvents.value = value
-    }
-
     fun loadLocationEvents() {
         preference.putString(tokenKey, savedLocation)
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
@@ -41,8 +37,14 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     error.value = "Error fetching events"
                 }))
     }
-    fun retryLoadLocationEvents(){
+
+    fun retryLoadLocationEvents() {
         progress.value = true
+        loadLocationEvents()
+    }
+
+    fun shimmerAndLoadEvents() {
+        showSchimmerEvents.value = true
         loadLocationEvents()
     }
 
