@@ -12,6 +12,10 @@
             android:key="@string/key_suggestion"
             android:title="@string/suggestion_settings" />
 
+        <Preference
+            android:key="@string/key_how_to_use"
+            android:title="@string/how_to_use" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -22,6 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
     val EMAIL: String = "EMAIL"
     val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
+    val SITE_LINK: String ="http://support.eventyay.com"
     private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -62,6 +63,13 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_profile)) {
             //Logout Dialog shown
             showDialog()
+            return true
+        }
+        if (preference?.key == resources.getString(R.string.key_how_to_use)) {
+            //Links to support site
+            context?.let {
+                Utils.openUrl(it, SITE_LINK)
+            }
             return true
         }
         return false

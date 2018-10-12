@@ -125,6 +125,8 @@
     <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
+    <string name="key_how_to_use">How to use</string>
+    <string name="how_to_use">How to use the app</string>
     <string name="app_name_capital">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_acknowledgements">key_acknowledgements</string>
