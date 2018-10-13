@@ -97,6 +97,12 @@ class SignUpFragmentViewModel(private val authService: AuthService,
             error.value = "Passwords do not match!"
             return true
         }
+
+        if (password.length < 6) {
+            error.value = "Password should be atleast 6 characters!"
+            return true
+        }
+
         return false
     }
 

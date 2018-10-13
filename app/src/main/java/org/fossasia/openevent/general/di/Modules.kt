@@ -8,6 +8,7 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
@@ -138,7 +139,7 @@ val networkModule = applicationContext {
     }
 
     bean {
-        val baseUrl = "http://api.eventyay.com/v1/"
+        val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
