@@ -1,4 +1,3 @@
-/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.di
 
 import android.arch.persistence.room.Room

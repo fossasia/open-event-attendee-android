@@ -1,4 +1,3 @@
-/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.ticket
 
 import android.support.v7.widget.RecyclerView
