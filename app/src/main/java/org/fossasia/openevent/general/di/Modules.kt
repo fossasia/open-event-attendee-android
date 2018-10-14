@@ -41,7 +41,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
 val commonModule = applicationContext {
     bean { Preference() }
     bean { Network() }
@@ -89,7 +88,6 @@ val apiModule = applicationContext {
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
-
 }
 
 val viewModelModule = applicationContext {
@@ -150,7 +148,6 @@ val networkModule = applicationContext {
                 .baseUrl(baseUrl)
                 .build()
     }
-
 }
 
 val databaseModule = applicationContext {
@@ -174,7 +171,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.ticketsDao()
+        database.ticketDao()
     }
 
     factory {
@@ -184,7 +181,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.attendeesDao()
+        database.attendeeDao()
     }
 
     factory {
@@ -196,5 +193,4 @@ val databaseModule = applicationContext {
         val database: OpenEventDatabase = get()
         database.orderDao()
     }
-
 }

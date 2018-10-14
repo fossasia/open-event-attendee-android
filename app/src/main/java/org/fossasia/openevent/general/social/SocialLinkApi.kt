@@ -8,5 +8,4 @@ interface SocialLinkApi {
 
     @GET("events/{id}/social-links?include=event&fields[event]=id&page[size]=0")
     fun getSocialLinks(@Path("id") id: Long): Flowable<List<SocialLink>>
-
 }

@@ -23,7 +23,11 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventViewModel by viewModel<FavouriteEventsViewModel>()
     private lateinit var rootView: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false)
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter

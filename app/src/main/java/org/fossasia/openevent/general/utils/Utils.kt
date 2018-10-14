@@ -33,10 +33,10 @@ object Utils {
     }
 
     fun showNoInternetDialog(context: Context?) {
-        val builder = AlertDialog.Builder(context)
-        builder.setMessage(context?.resources?.getString(R.string.no_internet_message))
-               .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
-        builder.show()
+        AlertDialog.Builder(context)
+            .setMessage(context?.resources?.getString(R.string.no_internet_message))
+            .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+            .show()
     }
 
     fun hideSoftKeyboard(context: Context?, view: View) {

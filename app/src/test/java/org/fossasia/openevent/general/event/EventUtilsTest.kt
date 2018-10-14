@@ -33,14 +33,16 @@ class EventUtilsTest {
         TimeZone.setDefault(timeZone)
     }
 
-    private fun getEvent(id: Long = 34,
-                         name: String = "Eva Event",
-                         identifier: String = "abcdefgh",
-                         startsAt: String = "2008-09-15T15:53:00+05:00",
-                         endsAt: String = "2008-09-19T19:25:00+05:00",
-                         timeZone: String = "Asia/Kolkata",
-                         description: String? = null,
-                         link: String? = null) =
+    private fun getEvent(
+        id: Long = 34,
+        name: String = "Eva Event",
+        identifier: String = "abcdefgh",
+        startsAt: String = "2008-09-15T15:53:00+05:00",
+        endsAt: String = "2008-09-19T19:25:00+05:00",
+        timeZone: String = "Asia/Kolkata",
+        description: String? = null,
+        link: String? = null
+    ) =
             Event(id, name, identifier, startsAt, endsAt, timeZone,
                     description = description, externalEventUrl = link)
 

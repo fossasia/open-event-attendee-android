@@ -28,8 +28,11 @@ class SearchFragment : Fragment() {
     private var loadEventsAgain = false
     private lateinit var searchView: SearchView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
         val activity = activity as? AppCompatActivity
@@ -121,7 +124,7 @@ class SearchFragment : Fragment() {
         searchView = menu.findItem(R.id.search_item).actionView as SearchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                //Do your search
+                // Do your search
                 searchViewModel.searchEvent = query
                 rootView.searchLinearLayout.visibility = View.GONE
                 rootView.fabSearch.visibility = View.GONE
@@ -144,7 +147,7 @@ class SearchFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    fun handleVisibility(events: List<Event>){
+    fun handleVisibility(events: List<Event>) {
         rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
     }
 

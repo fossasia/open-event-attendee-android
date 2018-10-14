@@ -23,7 +23,14 @@ import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AttendeeViewModel(private val attendeeService: AttendeeService, private val authHolder: AuthHolder, private val eventService: EventService, private val orderService: OrderService, private val ticketService: TicketService, private val authService: AuthService) : ViewModel() {
+class AttendeeViewModel(
+    private val attendeeService: AttendeeService,
+    private val authHolder: AuthHolder,
+    private val eventService: EventService,
+    private val orderService: OrderService,
+    private val ticketService: TicketService,
+    private val authService: AuthService
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val progress = MutableLiveData<Boolean>()
@@ -165,7 +172,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                             Timber.d(it, "Failed")
                             ticketSoldOut.value = false
                         }
-
                 }))
     }
 
@@ -313,7 +319,6 @@ class AttendeeViewModel(private val attendeeService: AttendeeService, private va
                     Timber.d(it, "Failed charging the user")
                 }))
     }
-
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {

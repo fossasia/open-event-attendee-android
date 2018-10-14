@@ -35,8 +35,11 @@ class OrderDetailsFragment : Fragment() {
         ordersRecyclerAdapter.setOrderIdentifier(orderId)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_order_details, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)

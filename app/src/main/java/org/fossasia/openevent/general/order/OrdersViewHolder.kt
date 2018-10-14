@@ -10,7 +10,12 @@ import org.fossasia.openevent.general.event.EventUtils
 
 class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: OrdersRecyclerAdapter.OrderClickListener?, orderIdentifier: String?, attendeesNumber: Int) {
+    fun bind(
+        event: Event,
+        clickListener: OrdersRecyclerAdapter.OrderClickListener?,
+        orderIdentifier: String?,
+        attendeesNumber: Int
+    ) {
         val formattedDateTime = EventUtils.getLocalizedDateTime(event.startsAt)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
@@ -22,9 +27,9 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (attendeesNumber == 1) {
-            itemView.ticketsNumber.text = "See ${attendeesNumber} Ticket"
+            itemView.ticketsNumber.text = "See $attendeesNumber Ticket"
         } else {
-            itemView.ticketsNumber.text = "See ${attendeesNumber} Tickets"
+            itemView.ticketsNumber.text = "See $attendeesNumber Tickets"
         }
 
         itemView.date.text = formattedDateTime.dayOfMonth.toString()

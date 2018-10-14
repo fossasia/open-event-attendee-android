@@ -13,7 +13,6 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
-import java.lang.StringBuilder
 
 class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
@@ -52,7 +51,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         })
     }
 
-    private fun loadEvent(event: Event){
+    private fun loadEvent(event: Event) {
         eventExtra = event
         aboutEventContent.text = event.description
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
@@ -64,16 +63,16 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
         val maxScroll = appBarLayout.totalScrollRange
-        val percentage =  Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
+        val percentage = Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
 
         if (percentage == 1f && isHideToolbarView) {
-            //Collapsed
+            // Collapsed
             detailsHeader.visibility = View.GONE
             aboutEventCollapsingLayout.title = eventExtra.name
             isHideToolbarView = !isHideToolbarView
         }
         if (percentage < 1f && !isHideToolbarView) {
-            //Not Collapsed
+            // Not Collapsed
             detailsHeader.visibility = View.VISIBLE
             aboutEventCollapsingLayout.title = " "
             isHideToolbarView = !isHideToolbarView

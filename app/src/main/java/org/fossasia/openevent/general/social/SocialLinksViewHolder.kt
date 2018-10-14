@@ -22,7 +22,7 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
             itemView.imgSocialLink.setImageDrawable(imageDrawable)
         }
 
-        itemView.setOnClickListener{
+        itemView.setOnClickListener {
             Utils.openUrl(context, socialLink.link)
         }
     }

@@ -34,9 +34,8 @@ interface EventDao {
     fun getFavoriteEvents(): Flowable<List<Event>>
 
     @Query("SELECT id from Event WHERE favorite = 1 AND id in (:ids)")
-    fun getFavoriteEventWithinIds(ids : List<Long>): Single<List<Long>>
+    fun getFavoriteEventWithinIds(ids: List<Long>): Single<List<Long>>
 
     @Query("SELECT * from Event WHERE eventTopic = :topicId")
     fun getAllSimilarEvents(topicId: Long): Flowable<List<Event>>
-
 }

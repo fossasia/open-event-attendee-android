@@ -44,8 +44,11 @@ class TicketsFragment : Fragment() {
         ticketsRecyclerAdapter.setCurrency(currency)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -170,5 +173,4 @@ class TicketsFragment : Fragment() {
         val alert = builder.create()
         alert.show()
     }
-
 }

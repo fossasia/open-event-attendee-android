@@ -16,11 +16,10 @@ import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SearchLocationActivity
-import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
-//String constants for event types
+// String constants for event types
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
@@ -35,8 +34,11 @@ class EventsFragment : Fragment() {
         eventsRecyclerAdapter.setEventLayout(EVENTS)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
 
         rootView.progressBar.isIndeterminate = true

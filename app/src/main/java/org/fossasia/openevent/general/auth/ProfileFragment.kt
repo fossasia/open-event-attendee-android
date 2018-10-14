@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -47,8 +46,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
@@ -67,10 +69,9 @@ class ProfileFragment : Fragment() {
                 rootView.email.text = it.email
                 emailSettings = it.email
 
-
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }
@@ -125,7 +126,7 @@ class ProfileFragment : Fragment() {
         val manager = activity?.packageManager
         try {
             val intent = manager?.getLaunchIntentForPackage(packageName)
-                    ?: throw  ActivityNotFoundException()
+                    ?: throw ActivityNotFoundException()
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
@@ -145,7 +146,6 @@ class ProfileFragment : Fragment() {
 
         rootView.progressBar.isIndeterminate = true
         profileFragmentViewModel.fetchProfile()
-
     }
 
     override fun onResume() {

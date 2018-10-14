@@ -6,6 +6,6 @@ import com.github.jasminb.jsonapi.annotations.Type
 
 @Type("attendee")
 data class AttendeeId(
-        @Id(LongIdHandler::class)
-        val id: Long
+    @Id(LongIdHandler::class)
+    val id: Long
 )
