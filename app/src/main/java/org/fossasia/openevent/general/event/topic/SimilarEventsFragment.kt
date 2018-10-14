@@ -35,8 +35,11 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.eventId = eventId
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_similar_events, container, false)
 
         linearLayoutManager = LinearLayoutManager(activity)

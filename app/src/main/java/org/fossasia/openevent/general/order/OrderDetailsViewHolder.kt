@@ -13,7 +13,12 @@ import org.fossasia.openevent.general.event.EventUtils
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
 
-    fun bind(attendee: Attendee, event: Event?, orderIdentifier: String?, eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?) {
+    fun bind(
+        attendee: Attendee,
+        event: Event?,
+        orderIdentifier: String?,
+        eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?
+    ) {
         val formattedDateTime = event?.startsAt?.let { EventUtils.getLocalizedDateTime(it) }
         val formattedDate = formattedDateTime?.let { EventUtils.getFormattedDateShort(it) }
         val formattedTime = formattedDateTime?.let { EventUtils.getFormattedTime(it) }
@@ -58,7 +63,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 
     fun loadMapUrl(event: Event): String {
-        //load map url
+        // load map url
         return "geo:<" + event.latitude + ">,<" + event.longitude + ">?q=<" + event.latitude + ">,<" + event.longitude + ">"
     }
 }

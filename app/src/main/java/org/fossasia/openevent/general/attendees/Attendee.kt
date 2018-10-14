@@ -19,22 +19,22 @@ import org.fossasia.openevent.general.ticket.TicketId
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 @Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Ticket::class, parentColumns = ["id"], childColumns = ["ticket"], onDelete = ForeignKey.CASCADE))])
 data class Attendee(
-        @Id(IntegerIdHandler::class)
-        @PrimaryKey
-        val id: Long,
-        val firstname: String? = null,
-        val lastname: String? = null,
-        val email: String? = null,
-        val address: String? = null,
-        val city: String? = null,
-        val state: String? = null,
-        val country: String? = null,
-        val isCheckedIn: Boolean? = false,
-        val pdfUrl: String? = null,
-        val ticketId: String? = null,
-        @ColumnInfo(index = true)
-        @Relationship("event")
-        var event: EventId? = null,
-        @Relationship("ticket")
-        var ticket: TicketId? = null
+    @Id(IntegerIdHandler::class)
+    @PrimaryKey
+    val id: Long,
+    val firstname: String? = null,
+    val lastname: String? = null,
+    val email: String? = null,
+    val address: String? = null,
+    val city: String? = null,
+    val state: String? = null,
+    val country: String? = null,
+    val isCheckedIn: Boolean? = false,
+    val pdfUrl: String? = null,
+    val ticketId: String? = null,
+    @ColumnInfo(index = true)
+    @Relationship("event")
+    var event: EventId? = null,
+    @Relationship("ticket")
+    var ticket: TicketId? = null
 )

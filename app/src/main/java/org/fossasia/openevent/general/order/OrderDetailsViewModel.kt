@@ -11,7 +11,10 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class OrderDetailsViewModel(private val eventService: EventService, private val orderService: OrderService) : ViewModel() {
+class OrderDetailsViewModel(
+    private val eventService: EventService,
+    private val orderService: OrderService
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val message = SingleLiveEvent<String>()

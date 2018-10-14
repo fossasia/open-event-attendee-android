@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.social
 
 import android.arch.lifecycle.Observer
-import android.icu.util.ValueIterator
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -33,8 +32,11 @@ class SocialLinksFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_social_links, container, false)
 
         rootView.progressBarSocial.isIndeterminate = true
@@ -68,7 +70,7 @@ class SocialLinksFragment : Fragment() {
         return rootView
     }
 
-    fun handleVisibility(socialLinks: List<SocialLink>){
+    fun handleVisibility(socialLinks: List<SocialLink>) {
         if (!socialLinks.isEmpty()) {
             eventHostDetails.visibility = View.VISIBLE
             socialLinksRecycler.visibility = View.VISIBLE

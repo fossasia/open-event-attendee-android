@@ -24,11 +24,11 @@ class SettingsFragmentViewModel(private val authService: AuthService) : ViewMode
                 })
     }
 
-    fun getMarketAppLink(packageName: String): String{
+    fun getMarketAppLink(packageName: String): String {
         return "market://details?id=" + packageName
     }
 
-    fun getMarketWebLink(packageName: String): String{
+    fun getMarketWebLink(packageName: String): String {
         return "https://play.google.com/store/apps/details?id=" + packageName
     }
 

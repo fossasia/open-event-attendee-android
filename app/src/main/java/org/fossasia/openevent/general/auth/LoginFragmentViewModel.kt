@@ -10,8 +10,10 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import timber.log.Timber
 
-class LoginFragmentViewModel(private val authService: AuthService,
-                             private val network: Network) : ViewModel() {
+class LoginFragmentViewModel(
+    private val authService: AuthService,
+    private val network: Network
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 

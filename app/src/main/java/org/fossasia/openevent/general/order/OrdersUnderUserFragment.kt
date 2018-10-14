@@ -28,8 +28,11 @@ class OrdersUnderUserFragment : Fragment() {
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.title = "Tickets"

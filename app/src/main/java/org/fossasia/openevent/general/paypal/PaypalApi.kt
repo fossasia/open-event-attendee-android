@@ -8,5 +8,4 @@ interface PaypalApi {
 
     @POST("orders/{orderIdentifier}/create-paypal-payment")
     fun createPaypalPayment(@Path("orderIdentifier") orderIdentifier: String, @Body paypal: Paypal)
-    
 }

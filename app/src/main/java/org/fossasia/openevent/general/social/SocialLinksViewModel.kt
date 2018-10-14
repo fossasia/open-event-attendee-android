@@ -34,5 +34,4 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }

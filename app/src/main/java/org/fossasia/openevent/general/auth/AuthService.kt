@@ -7,10 +7,10 @@ import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
 import timber.log.Timber
 
-
-class AuthService(private val authApi: AuthApi,
-                  private val authHolder: AuthHolder,
-                  private val userDao: UserDao
+class AuthService(
+    private val authApi: AuthApi,
+    private val authHolder: AuthHolder,
+    private val userDao: UserDao
 ) {
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())

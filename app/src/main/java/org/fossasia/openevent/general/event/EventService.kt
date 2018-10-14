@@ -2,19 +2,18 @@ package org.fossasia.openevent.general.event
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import java.util.Locale.filter
-import kotlin.collections.ArrayList
 
 class EventService(
-        private val eventApi: EventApi,
-        private val eventDao: EventDao,
-        private val eventTopicApi: EventTopicApi,
-        private val eventTopicsDao: EventTopicsDao) {
+    private val eventApi: EventApi,
+    private val eventDao: EventDao,
+    private val eventTopicApi: EventTopicApi,
+    private val eventTopicsDao: EventTopicsDao
+) {
 
     fun getEvents(): Flowable<List<Event>> {
         val eventsFlowable = eventDao.getAllEvents()
@@ -38,7 +37,7 @@ class EventService(
         return eventsList
                 .filter { it.eventTopic != null }
                 .map { it -> it.eventTopic }
-                .toList() 
+                .toList()
     }
 
     fun getEventTopics(): Flowable<List<EventTopic>> {

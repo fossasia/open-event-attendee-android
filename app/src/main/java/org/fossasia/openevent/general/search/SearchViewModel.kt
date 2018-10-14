@@ -26,7 +26,6 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val savedDate by lazy { preference.getString(tokenKeyDate) }
     val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
 
-
     fun loadEvents(location: String, time: String) {
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
@@ -70,5 +69,4 @@ class SearchViewModel(private val eventService: EventService, private val prefer
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }

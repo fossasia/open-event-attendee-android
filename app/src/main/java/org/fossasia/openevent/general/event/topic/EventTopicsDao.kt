@@ -17,5 +17,4 @@ interface EventTopicsDao {
 
     @Query("DELETE FROM EventTopic")
     fun deleteAll()
-
 }

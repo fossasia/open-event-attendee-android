@@ -80,5 +80,4 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }
