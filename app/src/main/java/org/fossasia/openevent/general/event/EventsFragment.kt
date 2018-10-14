@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.content_no_internet.view.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SearchLocationActivity
-import org.fossasia.openevent.general.utils.Utils
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -74,6 +73,17 @@ class EventsFragment : Fragment() {
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
+        eventsViewModel.showSchimmerEvents.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    rootView.shimmerEvents.startShimmer()
+                } else {
+                    rootView.shimmerEvents.stopShimmer()
+                    rootView.shimmerEvents.visibility = View.GONE
+                }
+            }
+        })
+
         eventsViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
@@ -86,7 +96,7 @@ class EventsFragment : Fragment() {
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents()
+            eventsViewModel.shimmerAndLoadEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -101,15 +111,15 @@ class EventsFragment : Fragment() {
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.retryLoadLocationEvents()
             }
             showNoInternetScreen(isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents()
-        })
+        rootView.swiperefresh.setOnRefreshListener {
+            eventsViewModel.retryLoadLocationEvents()
+        }
 
         return rootView
     }
