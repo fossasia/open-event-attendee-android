@@ -432,10 +432,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_large"
-                android:backgroundTint="@color/colorAccent"
                 android:enabled="false"
                 android:padding="@dimen/padding_medium"
                 android:text="@string/register"
+                style="@style/AppTheme.Button"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 

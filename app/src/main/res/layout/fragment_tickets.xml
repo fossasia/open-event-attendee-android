@@ -119,8 +119,8 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/layout_margin_large"
             android:padding="@dimen/padding_medium"
-            android:backgroundTint="@color/colorAccent"
             android:text="@string/register"
+            style="@style/AppTheme.Button"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
