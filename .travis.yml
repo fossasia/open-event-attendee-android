@@ -20,6 +20,7 @@ install:
   - echo yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-27"
 script:
   - ./gradlew build
+  - ./gradlew ktlint
 after_success:
     - bash scripts/prep-key.sh
     - bash scripts/update-apk.sh

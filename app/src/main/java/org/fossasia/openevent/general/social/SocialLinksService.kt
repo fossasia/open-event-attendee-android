@@ -13,8 +13,7 @@ class SocialLinksService(
         return socialFlowable.switchMap {
             if (it.isNotEmpty())
                 socialFlowable
-            else
-                socialLinkApi.getSocialLinks(id)
+            else socialLinkApi.getSocialLinks(id)
                         .map {
                             socialLinksDao.insertSocialLinks(it)
                         }

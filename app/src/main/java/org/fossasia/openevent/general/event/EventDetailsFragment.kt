@@ -1,3 +1,4 @@
+/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer

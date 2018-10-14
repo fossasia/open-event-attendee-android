@@ -10,8 +10,7 @@ class TicketService(private val ticketApi: TicketApi, private val ticketDao: Tic
         return ticketFlowable.switchMap {
             if (it.isNotEmpty())
                 ticketFlowable
-            else
-                ticketApi.getTickets(id)
+            else ticketApi.getTickets(id)
                         .map {
                             ticketDao.insertTickets(it)
                         }

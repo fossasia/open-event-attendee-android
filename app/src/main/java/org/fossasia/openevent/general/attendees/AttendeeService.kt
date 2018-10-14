@@ -32,8 +32,7 @@ class AttendeeService(
         return formsSingle.flatMap {
             if (it.isNotEmpty())
                 formsSingle
-            else
-                attendeeApi.getCustomFormsForAttendees(id, filter)
+            else attendeeApi.getCustomFormsForAttendees(id, filter)
                         .map {
                             attendeeDao.insertCustomForms(it)
                         }

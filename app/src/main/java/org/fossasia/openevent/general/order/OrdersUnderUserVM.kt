@@ -45,8 +45,7 @@ class OrdersUnderUserVM(
 
                     if (idList.size != 0)
                         eventsUnderUser(query)
-                    else
-                        progress.value = false
+                    else progress.value = false
                 }, {
                     message.value = "Failed  to list Orders under a user"
                     Timber.d(it, "Failed  to list Orders under a user ")
@@ -103,13 +102,11 @@ class OrdersUnderUserVM(
 
         val formattedSubQuery = if (subQuery != "")
             subQuery.substring(1) // remove "," from the beginning
-        else
-            "" // if there are no orders
+        else "" // if there are no orders
 
         return if (idList.size == 1)
             "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
-        else
-            "[{\"or\":[$formattedSubQuery]}]"
+        else "[{\"or\":[$formattedSubQuery]}]"
     }
 
     override fun onCleared() {

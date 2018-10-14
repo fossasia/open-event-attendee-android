@@ -1,3 +1,4 @@
+/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.search
 
 import android.app.DatePickerDialog

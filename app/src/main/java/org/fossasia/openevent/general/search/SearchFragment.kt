@@ -1,3 +1,4 @@
+/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.search
 
 import android.arch.lifecycle.Observer
@@ -130,8 +131,7 @@ class SearchFragment : Fragment() {
                 rootView.fabSearch.visibility = View.GONE
                 if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text == "Anytime")
                     searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
-                else
-                    searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty(), rootView.timeTextView.text.toString().nullToEmpty())
+                else searchViewModel.loadEvents(rootView.locationTextView.text.toString().nullToEmpty(), rootView.timeTextView.text.toString().nullToEmpty())
                 loadEventsAgain = true
                 return false
             }

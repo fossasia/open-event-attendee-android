@@ -109,8 +109,7 @@ object EventUtils {
         try {
             if (startingDate != endingDate)
                 return "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
-            else
-                return "${getFormattedDateWithoutYear(startsAt)}"
+            else return "${getFormattedDateWithoutYear(startsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""
@@ -123,8 +122,7 @@ object EventUtils {
         try {
             if (startingDate != endingDate)
                 return "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
-            else
-                return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+            else return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""
@@ -137,8 +135,7 @@ object EventUtils {
         try {
             if (startingDate != endingDate)
                 return "$startingDate at ${getFormattedTime(startsAt)} - $endingDate at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
-            else
-                return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+            else return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""
@@ -151,8 +148,7 @@ object EventUtils {
         try {
             if (startingDate != endingDate)
                 return "$startingDate - $endingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
-            else
-                return "$startingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
+            else return "$startingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
             return ""

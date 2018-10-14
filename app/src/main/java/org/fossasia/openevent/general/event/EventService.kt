@@ -20,8 +20,7 @@ class EventService(
         return eventsFlowable.switchMap {
             if (it.isNotEmpty())
                 eventsFlowable
-            else
-                eventApi.getEvents()
+            else eventApi.getEvents()
                         .map {
                             eventDao.insertEvents(it)
                             eventTopicsDao.insertEventTopics(getEventTopicList(it))
@@ -97,8 +96,7 @@ class EventService(
         return eventsFlowable.switchMap {
             if (it.isNotEmpty())
                 eventsFlowable
-            else
-                eventTopicApi.getEventsUnderTopicId(id)
+            else eventTopicApi.getEventsUnderTopicId(id)
                         .toFlowable()
                         .map {
                             eventDao.insertEvents(it)

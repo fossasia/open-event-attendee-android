@@ -1,3 +1,4 @@
+/* ktlint-disable no-wildcard-imports */
 package org.fossasia.openevent.general.attendees
 
 import android.app.AlertDialog
@@ -174,8 +175,7 @@ class AttendeeFragment : Fragment() {
                 selectedPaymentOption = paymentOptions[p2]
                 if (selectedPaymentOption == "Stripe")
                     rootView.stripePayment.visibility = View.VISIBLE
-                else
-                    rootView.stripePayment.visibility = View.GONE
+                else rootView.stripePayment.visibility = View.GONE
             }
         }
 
