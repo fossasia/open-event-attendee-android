@@ -67,10 +67,9 @@ class ProfileFragment : Fragment() {
                 rootView.email.text = it.email
                 emailSettings = it.email
 
-
                 Picasso.get()
-                        .load(it.avatarUrl)
-                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                        .load(it.avatarUrl).let{it1 ->
+                            ((context?.let {it2 -> AppCompatResources.getDrawable(it2, R.drawable.ic_person_black_24dp) })?.let {it1.placeholder(it)} ?: it1)}
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }
