@@ -76,6 +76,17 @@ class EventsFragment : Fragment() {
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
+        eventsViewModel.showSchimmerEvents.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    rootView.shimmerEvents.startShimmer()
+                } else {
+                    rootView.shimmerEvents.stopShimmer()
+                    rootView.shimmerEvents.visibility = View.GONE
+                }
+            }
+        })
+
         eventsViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
@@ -88,7 +99,7 @@ class EventsFragment : Fragment() {
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents()
+            eventsViewModel.shimmerAndLoadEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }
@@ -103,15 +114,15 @@ class EventsFragment : Fragment() {
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.retryLoadLocationEvents()
             }
             showNoInternetScreen(isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents()
-        })
+        rootView.swiperefresh.setOnRefreshListener {
+            eventsViewModel.retryLoadLocationEvents()
+        }
 
         return rootView
     }
