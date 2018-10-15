@@ -137,12 +137,12 @@ task ktlint(type: JavaExec, group: "verification") {
     description = "Check Kotlin code style."
     classpath = configurations.ktlint
     main = "com.github.shyiko.ktlint.Main"
-    args "--androidsrc/**/*.kt"
+    args "--android src/**/*.kt"
 }
 
 task ktlintFormat(type: JavaExec, group: "formatting") {
     description = "Fix Kotlin code style deviations."
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint
-    args "-F", "--androidsrc/**/*.kt"
+    args "-F", "--android src/**/*.kt"
 }
