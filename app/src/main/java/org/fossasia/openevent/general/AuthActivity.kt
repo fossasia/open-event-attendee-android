@@ -9,6 +9,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
+import timber.log.Timber
 
 class AuthActivity : AppCompatActivity() {
 
@@ -19,13 +20,13 @@ class AuthActivity : AppCompatActivity() {
             R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
-                loadFragment(fragment)
+                checkAndLoadFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -43,14 +44,25 @@ class AuthActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Login"
 
-        loadFragment(LoginFragment())
+        checkAndLoadFragment(LoginFragment())
+    }
+
+    private fun checkAndLoadFragment(fragment: Fragment) {
+        val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
+        if (savedFragment != null) {
+            loadFragment(savedFragment)
+            Timber.d("Loading fragment from stack ${fragment::class.java}")
+        } else {
+            loadFragment(fragment)
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
         if (bundle != null)
             fragment.arguments = bundle
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainerAuth, fragment)
+                .replace(R.id.frameContainerAuth, fragment, fragment::class.java.name)
+                .addToBackStack(null)
                 .commit()
     }
 
