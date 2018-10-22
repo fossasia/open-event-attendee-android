@@ -22,7 +22,7 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketIdConverter
-import org.fossasia.openevent.general.ticket.TicketsDao
+import org.fossasia.openevent.general.ticket.TicketDao
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class, EventTopic::class, Order::class, CustomForm::class], version = 1)
 @TypeConverters(EventIdConverter::class, EventTopicIdConverter::class, TicketIdConverter::class, AttendeeIdConverter::class, ListAttendeeIdConverter::class)
@@ -32,14 +32,13 @@ abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
 
-    abstract fun ticketsDao(): TicketsDao
+    abstract fun ticketDao(): TicketDao
 
     abstract fun socialLinksDao(): SocialLinksDao
 
-    abstract fun attendeesDao(): AttendeeDao
+    abstract fun attendeeDao(): AttendeeDao
 
     abstract fun eventTopicsDao(): EventTopicsDao
 
     abstract fun orderDao(): OrderDao
-
 }

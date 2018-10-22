@@ -4,7 +4,11 @@ import io.reactivex.Single
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeDao
 
-class OrderService(private val orderApi: OrderApi, private val orderDao: OrderDao, private val attendeeDao: AttendeeDao) {
+class OrderService(
+    private val orderApi: OrderApi,
+    private val orderDao: OrderDao,
+    private val attendeeDao: AttendeeDao
+) {
     fun placeOrder(order: Order): Single<Order> {
         return orderApi.placeOrder(order)
                 .map { order ->
@@ -35,5 +39,4 @@ class OrderService(private val orderApi: OrderApi, private val orderDao: OrderDa
     fun attendeesUnderOrder(orderIdentifier: String): Single<List<Attendee>> {
         return orderApi.attendeesUnderOrder(orderIdentifier)
     }
-
 }

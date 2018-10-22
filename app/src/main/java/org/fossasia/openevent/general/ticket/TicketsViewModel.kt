@@ -9,7 +9,10 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class TicketsViewModel(private val ticketService: TicketService, private val eventService: EventService) : ViewModel() {
+class TicketsViewModel(
+    private val ticketService: TicketService,
+    private val eventService: EventService
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val progressTickets = MutableLiveData<Boolean>()

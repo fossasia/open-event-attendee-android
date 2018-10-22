@@ -39,7 +39,6 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     override fun getItemCount(): Int {
         return tickets.size
     }
-
 }
 
 interface TicketSelectedListener {

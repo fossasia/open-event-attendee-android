@@ -24,5 +24,4 @@ interface AuthApi {
 
     @POST("upload/image")
     fun uploadImage(@Body uploadImage: UploadImage): Single<ImageResponse>
-
 }

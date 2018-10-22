@@ -12,5 +12,4 @@ class Resource {
     fun getString(@StringRes resId: Int) = context?.getString(resId)
 
     fun getString(@StringRes resId: Int, vararg args: Any?) = context?.getString(resId, args)
-
 }

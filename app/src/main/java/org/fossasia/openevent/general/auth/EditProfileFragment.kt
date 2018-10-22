@@ -30,7 +30,6 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
 
-
 class EditProfileFragment : Fragment() {
 
     private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
@@ -42,7 +41,11 @@ class EditProfileFragment : Fragment() {
     private var encodedImage: String? = null
     private val REQUEST_CODE = 1
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
         profileFragmentViewModel.user.observe(this, Observer {
@@ -84,7 +87,6 @@ class EditProfileFragment : Fragment() {
         return rootView
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
@@ -99,11 +101,9 @@ class EditProfileFragment : Fragment() {
             val selectedImage = BitmapFactory.decodeStream(imageStream)
             encodedImage = encodeImage(selectedImage)
 
-
-
             Picasso.get()
                     .load(imageUri)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }
@@ -141,8 +141,12 @@ class EditProfileFragment : Fragment() {
         setHasOptionsMenu(true)
         super.onResume()
     }
-    
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true

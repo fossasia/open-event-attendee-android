@@ -2,7 +2,10 @@ package org.fossasia.openevent.general.social
 
 import io.reactivex.Flowable
 
-class SocialLinksService(private val socialLinkApi: SocialLinkApi, private val socialLinksDao: SocialLinksDao) {
+class SocialLinksService(
+    private val socialLinkApi: SocialLinkApi,
+    private val socialLinksDao: SocialLinksDao
+) {
 
     fun getSocialLinks(id: Long): Flowable<List<SocialLink>> {
 

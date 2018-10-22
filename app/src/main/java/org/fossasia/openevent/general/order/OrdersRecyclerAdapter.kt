@@ -10,7 +10,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
     private val eventAndOrderIdentifier = ArrayList<Pair<Event, String>>()
     private var clickListener: OrderClickListener? = null
-    var attendeesNumber =  ArrayList<Int>()
+    var attendeesNumber = ArrayList<Int>()
 
     fun setListener(listener: OrderClickListener) {
         clickListener = listener

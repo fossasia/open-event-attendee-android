@@ -11,9 +11,9 @@ import org.mockito.Mockito.mock
 
 class DependencyTest : KoinTest {
     @Test
-    fun testDependencies(){
+    fun testDependencies() {
         // start Koin
-        startKoin(listOf(commonModule, apiModule, viewModelModule, networkModule, databaseModule))  with mock(Application::class.java)
+        startKoin(listOf(commonModule, apiModule, viewModelModule, networkModule, databaseModule)) with mock(Application::class.java)
         // dry run of given module list
         dryRun()
     }

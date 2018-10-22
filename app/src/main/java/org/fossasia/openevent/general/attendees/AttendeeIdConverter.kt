@@ -5,7 +5,7 @@ import android.arch.persistence.room.TypeConverter
 class AttendeeIdConverter {
 
     @TypeConverter
-    fun fromAttendeeId(attendeeId: AttendeeId): Long{
+    fun fromAttendeeId(attendeeId: AttendeeId): Long {
         return attendeeId.id
     }
 

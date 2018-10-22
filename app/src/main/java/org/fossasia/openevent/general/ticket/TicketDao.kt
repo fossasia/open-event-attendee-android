@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
-interface TicketsDao {
+interface TicketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTickets(tickets: List<Ticket>)
 
@@ -22,7 +22,7 @@ interface TicketsDao {
     fun getTicketDetails(id: Long): Single<Ticket>
 
     @Query("SELECT price from Ticket WHERE id in (:ids)")
-    fun getTicketPriceWithIds(ids : List<Int>): Single<List<Float>>
+    fun getTicketPriceWithIds(ids: List<Int>): Single<List<Float>>
 
     @Query("SELECT * from Ticket WHERE id in (:ids)")
     fun getTicketsWithIds(ids: List<Int>): Single<List<Ticket>>

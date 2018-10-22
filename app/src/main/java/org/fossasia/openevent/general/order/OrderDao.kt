@@ -11,5 +11,4 @@ interface OrderDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrder(order: Order)
-
 }

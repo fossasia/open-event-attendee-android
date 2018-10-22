@@ -1,9 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -52,8 +50,11 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -84,7 +85,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.loadEvent(eventId)
 
-        //Set toolbar title to event name
+        // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 if (scrollY > rootView.eventName.height + rootView.logo.height) {
@@ -92,7 +93,7 @@ class EventDetailsFragment : Fragment() {
                     combined height of eventImage and eventName views*/
                     activity?.supportActionBar?.title = eventShare.name
                 } else {
-                    //Toolbar title set to an empty string
+                    // Toolbar title set to an empty string
                     activity?.supportActionBar?.title = " "
                 }
             }
@@ -107,7 +108,7 @@ class EventDetailsFragment : Fragment() {
 
         rootView.eventName.text = event.name
 
-        //Organizer Section
+        // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
             rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
             setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
@@ -115,30 +116,28 @@ class EventDetailsFragment : Fragment() {
             rootView.eventOrganiserName.visibility = View.VISIBLE
             organizerContainer.visibility = View.VISIBLE
 
-
-
             Picasso.get()
                     .load(event.logoUrl)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
         }
 
         currency = Currency.getInstance(event.paymentCurrency).symbol
-        //About event on-click
+        // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             val aboutIntent = Intent(context, AboutEventActivity::class.java)
             aboutIntent.putExtra(EVENT_ID, eventId)
             startActivity(aboutIntent)
         }
 
-        //Event Description Section
+        // Event Description Section
         if (!event.description.isNullOrEmpty()) {
             setTextField(rootView.eventDescription, event.description)
 
             if (rootView.eventDescription.lineCount > LINE_COUNT) {
                 rootView.seeMore.visibility = View.VISIBLE
-                //start about fragment
+                // start about fragment
                 rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
                 rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
             }
@@ -146,13 +145,13 @@ class EventDetailsFragment : Fragment() {
             aboutEventContainer.visibility = View.GONE
         }
 
-        //Map Section
+        // Map Section
         if (!event.locationName.isNullOrEmpty()) {
             locationContainer.visibility = View.VISIBLE
             rootView.eventLocationTextView.text = event.locationName
         }
 
-        //load location to map
+        // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
         if (!event.locationName.isNullOrEmpty()) {
             locationContainer.visibility = View.VISIBLE
@@ -169,20 +168,20 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.imageMap)
         }
 
-        //Date and Time section
+        // Date and Time section
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
         rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)}"
 
-        //Refund policy
+        // Refund policy
         rootView.refundPolicy.text = event.refundPolicy
 
-        //Similar Events Section
+        // Similar Events Section
         if (event.eventTopic != null) {
             similarEventsContainer.visibility = View.VISIBLE
             eventTopicId = event.eventTopic?.id
         }
 
-        //Set Cover Image
+        // Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
@@ -190,7 +189,7 @@ class EventDetailsFragment : Fragment() {
                     .into(rootView.logo)
         }
 
-        //Add event to Calendar
+        // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
         rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
@@ -211,7 +210,7 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.add_to_calendar -> {
-                //Add event to Calendar
+                // Add event to Calendar
                 startCalendar(eventShare)
                 return true
             }
@@ -254,7 +253,7 @@ class EventDetailsFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    private fun startCalendar(event: Event){
+    private fun startCalendar(event: Event) {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
@@ -264,9 +263,9 @@ class EventDetailsFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun reportEvent(event: Event){
-        val email ="support@eventyay.com"
-        val subject ="Report of ${event.name} (${event.identifier})"
+    private fun reportEvent(event: Event) {
+        val email = "support@eventyay.com"
+        val subject = "Report of ${event.name} (${event.identifier})"
         val body = "Let us know what's wrong"
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -280,9 +279,9 @@ class EventDetailsFragment : Fragment() {
         inflaterMenu?.inflate(R.menu.event_details, menu)
         menuActionBar = menu
     }
-  
-    private fun loadTicketFragment(){
-        //Initialise Ticket Fragment
+
+    private fun loadTicketFragment() {
+        // Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", eventId)
@@ -291,8 +290,8 @@ class EventDetailsFragment : Fragment() {
         activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, ticketFragment)?.addToBackStack(null)?.commit()
     }
 
-    private fun loadSocialLinksFragment(){
-        //Initialise SocialLinks Fragment
+    private fun loadSocialLinksFragment() {
+        // Initialise SocialLinks Fragment
         val socialLinksFragemnt = SocialLinksFragment()
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", eventId)
@@ -301,8 +300,8 @@ class EventDetailsFragment : Fragment() {
         transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
     }
 
-    private fun loadSimilarEventsFragment(){
-        //Initialise SimilarEvents Fragment
+    private fun loadSimilarEventsFragment() {
+        // Initialise SimilarEvents Fragment
         val similarEventsFragment = SimilarEventsFragment()
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, eventId)
@@ -310,7 +309,7 @@ class EventDetailsFragment : Fragment() {
         similarEventsFragment.arguments = bundle
         childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
-  
+
     private fun startMap(event: Event) {
         // start map intent
         val mapUrl = eventViewModel.loadMapUrl(event)
@@ -320,7 +319,7 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    private fun setFavoriteIcon(id: Int){
+    private fun setFavoriteIcon(id: Int) {
         menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
     }
 }

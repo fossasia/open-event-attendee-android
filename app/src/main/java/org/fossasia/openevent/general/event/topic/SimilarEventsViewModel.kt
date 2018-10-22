@@ -19,7 +19,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
     var eventId: Long = -1
 
     fun loadSimilarEvents(id: Long) {
-        if(id == -1L){
+        if (id == -1L) {
             return
         }
         compositeDisposable.add(eventService.getSimilarEvents(id)

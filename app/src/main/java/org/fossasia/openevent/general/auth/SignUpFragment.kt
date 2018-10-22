@@ -22,8 +22,11 @@ class SignUpFragment : Fragment() {
     private val signUpActivityViewModel by viewModel<SignUpFragmentViewModel>()
     private lateinit var rootView: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
         lateinit var confirmPassword: String
 
@@ -74,8 +77,8 @@ class SignUpFragment : Fragment() {
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {/*Implement here*/}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {/*Implement here*/}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
         })
 
         return rootView

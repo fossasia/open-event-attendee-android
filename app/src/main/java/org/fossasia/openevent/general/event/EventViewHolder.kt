@@ -10,7 +10,12 @@ import org.fossasia.openevent.general.favorite.FAVORITE_EVENT_DATE_FORMAT
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteListener: FavoriteFabListener?, dateFormat: String) {
+    fun bind(
+        event: Event,
+        clickListener: RecyclerViewClickListener?,
+        favoriteListener: FavoriteFabListener?,
+        dateFormat: String
+    ) {
         itemView.eventName.text = event.name
         itemView.locationName.text = event.locationName
 
