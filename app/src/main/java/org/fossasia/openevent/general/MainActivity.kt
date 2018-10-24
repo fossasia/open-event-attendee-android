@@ -1,14 +1,11 @@
 package org.fossasia.openevent.general
 
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
@@ -23,12 +20,10 @@ import timber.log.Timber
 
 private const val TO_SEARCH: String = "ToSearchFragment"
 
-
 class MainActivity : AppCompatActivity() {
 
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
-
         when (item.itemId) {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
@@ -74,7 +69,6 @@ class MainActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         var openEventsFragment = true
-
 
         if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
             loadFragment(SearchFragment())
@@ -131,14 +125,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
-        if (currentFragment !is EventsFragment) {
+        val fragmentsInStack = supportFragmentManager.backStackEntryCount
+        val fm = supportFragmentManager
+        val count = fm.backStackEntryCount
+        if (fragmentsInStack > 1) {
+            for (i in 0 until count) {
+                fm.popBackStackImmediate()
+            }
             loadFragment(EventsFragment())
-            navigation.selectedItemId = navigation_events
-        }
-        if (currentFragment is EventsFragment) {
+            supportActionBar?.title = "Events"
+        } else if (fragmentsInStack == 1) {
             finish()
+        } else {
+            super.onBackPressed()
         }
     }
-
 }
