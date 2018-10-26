@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_favorite.*
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
@@ -64,6 +65,8 @@ class FavoriteFragment : Fragment() {
             it?.let {
                 favoriteEventsRecyclerAdapter.addAll(it)
                 favoriteEventsRecyclerAdapter.notifyDataSetChanged()
+                if (favoriteEventsRecyclerAdapter.itemCount != 0)
+                    noLikedText.visibility = View.GONE
             }
             Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
         })
