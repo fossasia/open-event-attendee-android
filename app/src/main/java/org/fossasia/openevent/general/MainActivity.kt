@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
+import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
@@ -132,8 +133,7 @@ class MainActivity : AppCompatActivity() {
             for (i in 0 until count) {
                 fm.popBackStackImmediate()
             }
-            loadFragment(EventsFragment())
-            supportActionBar?.title = "Events"
+            navigation.selectedItemId = navigation_events
         } else if (fragmentsInStack == 1) {
             finish()
         } else {
