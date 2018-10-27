@@ -92,6 +92,8 @@
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
+    <string name="no_ticket_message">Not seeing your tickets? Learn more about how to find them.</string>
+    <string name="find_my_tickets">Find my tickets</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
