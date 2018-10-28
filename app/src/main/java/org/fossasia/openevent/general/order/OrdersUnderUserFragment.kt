@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.content_no_tickets.*
+import kotlinx.android.synthetic.main.fragment_orders_under_user.*
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
@@ -69,6 +71,10 @@ class OrdersUnderUserFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             })
 
+            ordersUnderUserVM.noTickets.observe(this, Observer {
+                it?.let { showNoTicketsScreen(it) }
+            })
+
             ordersUnderUserVM.attendeesNumber.observe(this, Observer {
                 it?.let {
                     ordersRecyclerAdapter.setAttendeeNumber(it)
@@ -88,6 +94,15 @@ class OrdersUnderUserFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    private fun showNoTicketsScreen(show: Boolean) {
+        noTicketsScreen.visibility = if (show) View.VISIBLE else View.GONE
+        findMyTickets.setOnClickListener {
+            context?.let {
+                Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
+            }
+        }
     }
 
     private fun redirectToLogin() {

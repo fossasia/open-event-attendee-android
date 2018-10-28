@@ -25,5 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <include layout="@layout/content_no_tickets"
+            android:id="@+id/noTicketsScreen"
+            android:visibility="gone"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
