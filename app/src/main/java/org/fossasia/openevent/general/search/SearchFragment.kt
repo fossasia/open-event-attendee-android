@@ -141,6 +141,7 @@ class SearchFragment : Fragment() {
             }
         }
         searchView.setOnQueryTextListener(queryListener)
+        searchView.maxWidth = Int.MAX_VALUE
         rootView.fabSearch.setOnClickListener {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
