@@ -4,29 +4,31 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
-import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils
 
 class AuthActivity : AppCompatActivity() {
 
-    private var bundle: Bundle? = null
+    val manager:FragmentManager = supportFragmentManager
+    val containerID:Int = R.id.frameContainerAuth
     private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val fragment: Fragment
         when (item.itemId) {
             R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
-                checkAndLoadFragment(fragment)
+                Utils.checkAndLoadFragment(fragment,manager,containerID)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
-                checkAndLoadFragment(fragment)
+                Utils.checkAndLoadFragment(fragment,manager,containerID)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -37,33 +39,14 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         if (this.intent.extras != null) {
-            bundle = this.intent.extras
+            Utils.bundle = this.intent.extras
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         navigationAuth.setOnNavigationItemSelectedListener(listener)
 
         supportActionBar?.title = "Login"
 
-        checkAndLoadFragment(LoginFragment())
-    }
-
-    private fun checkAndLoadFragment(fragment: Fragment) {
-        val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
-        if (savedFragment != null) {
-            loadFragment(savedFragment)
-            Timber.d("Loading fragment from stack ${fragment::class.java}")
-        } else {
-            loadFragment(fragment)
-        }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        if (bundle != null)
-            fragment.arguments = bundle
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainerAuth, fragment, fragment::class.java.name)
-                .addToBackStack(null)
-                .commit()
+        Utils.checkAndLoadFragment(LoginFragment(),manager,containerID)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

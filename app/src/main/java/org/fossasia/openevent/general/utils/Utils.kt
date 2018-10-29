@@ -4,14 +4,19 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import org.fossasia.openevent.general.R
+import timber.log.Timber
 
 object Utils {
+
+    var bundle: Bundle? = null
 
     fun openUrl(context: Context, link: String) {
         var url = link
@@ -32,10 +37,28 @@ object Utils {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    fun checkAndLoadFragment(fragment: Fragment, manager: android.support.v4.app.FragmentManager, containerID: Int) {
+        val savedFragment = manager.findFragmentByTag(fragment::class.java.name)
+        if (savedFragment != null) {
+            loadFragment(savedFragment, manager, containerID)
+            Timber.d("Loading fragment from stack ${fragment::class.java}")
+        } else {
+            loadFragment(fragment, manager, containerID)
+        }
+    }
+
+    fun loadFragment(fragment: Fragment, manager: android.support.v4.app.FragmentManager, containerID: Int) {
+        fragment.arguments = bundle
+        manager.beginTransaction()
+                .replace(containerID, fragment, fragment::class.java.name)
+                .addToBackStack(null)
+                .commit()
+    }
+
     fun showNoInternetDialog(context: Context?) {
         val builder = AlertDialog.Builder(context)
         builder.setMessage(context?.resources?.getString(R.string.no_internet_message))
-               .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+                .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         builder.show()
     }
 
