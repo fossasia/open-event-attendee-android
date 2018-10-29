@@ -44,7 +44,7 @@ class SignUpFragment : Fragment() {
 
         signUpActivityViewModel.progress.observe(this, Observer {
             it?.let {
-                Utils.showProgressBar(rootView.progressBarSignUp, it)
+                Utils.showProgressBar(rootView.progressBarSignUp, rootView.signupBG, it)
                 signUpButton.isEnabled = !it
             }
         })
@@ -77,8 +77,11 @@ class SignUpFragment : Fragment() {
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
         })
 
         return rootView

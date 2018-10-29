@@ -8,6 +8,7 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import org.fossasia.openevent.general.R
 
@@ -30,6 +31,11 @@ object Utils {
 
     fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    fun showProgressBar(progressBar: ProgressBar, background:FrameLayout, show: Boolean) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        background.visibility = if(show) View.VISIBLE else View.GONE
     }
 
     fun showNoInternetDialog(context: Context?) {
