@@ -48,7 +48,8 @@ object Utils {
     }
 
     fun loadFragment(fragment: Fragment, manager: android.support.v4.app.FragmentManager, containerID: Int) {
-        fragment.arguments = bundle
+        if (bundle != null)
+            fragment.arguments = bundle
         manager.beginTransaction()
                 .replace(containerID, fragment, fragment::class.java.name)
                 .addToBackStack(null)
