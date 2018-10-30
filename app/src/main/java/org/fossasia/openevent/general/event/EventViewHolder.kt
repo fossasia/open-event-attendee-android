@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Intent
+import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
@@ -21,7 +22,6 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-
         if (dateFormat == FAVORITE_EVENT_DATE_FORMAT) {
             itemView.date.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         } else {
@@ -44,10 +44,13 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.shareFab.setOnClickListener {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-
             sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
             sendIntent.type = "text/plain"
+            itemView.shareFab.isEnabled = false
             itemView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
+            Handler().postDelayed({
+                itemView.shareFab.isEnabled = true
+            },100)
         }
 
         itemView.favoriteFab.setOnClickListener {

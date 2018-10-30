@@ -49,6 +49,7 @@ class FavoriteFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }
         }
+
         val favouriteFabClickListener = object : FavoriteFabListener {
             override fun onClick(event: Event, isFavourite: Boolean) {
                 val id = favoriteEventsRecyclerAdapter.getPos(event.id)

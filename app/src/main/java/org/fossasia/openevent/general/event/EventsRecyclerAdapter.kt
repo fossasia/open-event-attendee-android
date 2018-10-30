@@ -48,6 +48,7 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.bind(event, clickListener, favoriteFabListener, EVENT_DATE_FORMAT)
+
     }
 
     override fun getItemCount(): Int {
