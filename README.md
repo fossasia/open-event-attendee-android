@@ -44,7 +44,7 @@ A native Android app using Kotlin for writing code.
 - InsertKoinIO [Docs](https://github.com/InsertKoinIO/koin)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - OkHttp [Docs](http://square.github.io/okhttp/)
-- Room Persistence Library [Docs] (https://developer.android.com/topic/libraries/architecture/room)
+- Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
 
 ### Project Conventions
 
