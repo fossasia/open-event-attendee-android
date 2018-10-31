@@ -124,7 +124,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.8.9"
-    testImplementation 'org.threeten:threetenbp:1.3.7'
+    testImplementation 'org.threeten:threetenbp:1.3.8'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
