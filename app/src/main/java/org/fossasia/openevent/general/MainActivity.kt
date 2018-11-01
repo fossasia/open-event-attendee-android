@@ -6,11 +6,11 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
-import org.fossasia.openevent.general.R.id.navigation_events
-import org.fossasia.openevent.general.R.id.navigation_search
+import org.fossasia.openevent.general.R.id.*
 import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
 import org.fossasia.openevent.general.auth.ProfileFragment
+import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
@@ -127,7 +127,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
-        if (currentFragment !is EventsFragment) {
+        val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)
+        if (currentFragment !is EventsFragment && rootFragment !is EventDetailsFragment) {
             loadFragment(EventsFragment())
             navigation.selectedItemId = navigation_events
         } else {
