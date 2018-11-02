@@ -56,6 +56,7 @@ class FavoriteFragment : Fragment() {
                 favoriteEventViewModel.setFavorite(event.id, !isFavourite)
                 event.favorite = !event.favorite
                 favoriteEventsRecyclerAdapter.notifyItemChanged(id)
+                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
         }
 
@@ -65,8 +66,7 @@ class FavoriteFragment : Fragment() {
             it?.let {
                 favoriteEventsRecyclerAdapter.addAll(it)
                 favoriteEventsRecyclerAdapter.notifyDataSetChanged()
-                if (favoriteEventsRecyclerAdapter.itemCount != 0)
-                    noLikedText.visibility = View.GONE
+                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
             Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
         })
@@ -81,6 +81,10 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.loadFavoriteEvents()
         return rootView
+    }
+
+    private fun showEmptyMessage(itemCount: Int) {
+        noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     private fun showProgressBar(show: Boolean) {
