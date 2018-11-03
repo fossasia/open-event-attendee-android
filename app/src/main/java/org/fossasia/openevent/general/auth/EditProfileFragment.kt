@@ -58,7 +58,7 @@ class EditProfileFragment : Fragment() {
                 context?.let { ctx ->
                     val drawable = AppCompatResources.getDrawable(ctx, R.drawable.ic_account_circle_grey_24dp)
                     drawable?.let { icon ->
-                        if(!imageUrl.equals("")) { // picasso requires the imageUrl to be non empty
+                        if(!imageUrl.isEmpty()) { // picasso requires the imageUrl to be non empty
                             Picasso.get()
                                 .load(imageUrl)
                                 .placeholder(icon)
