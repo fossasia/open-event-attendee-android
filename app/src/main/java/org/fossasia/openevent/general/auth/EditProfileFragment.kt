@@ -58,11 +58,14 @@ class EditProfileFragment : Fragment() {
                 context?.let { ctx ->
                     val drawable = AppCompatResources.getDrawable(ctx, R.drawable.ic_account_circle_grey_24dp)
                     drawable?.let { icon ->
-                        Picasso.get()
-                            .load(imageUrl)
-                            .placeholder(icon)
-                            .transform(CircleTransform())
-                            .into(rootView.profilePhoto)
+                        if(!imageUrl.equals("")) { // picasso requires the imageUrl to be non empty
+                            Picasso.get()
+                                .load(imageUrl)
+                                .placeholder(icon)
+                                .transform(CircleTransform())
+                                .into(rootView.profilePhoto)
+
+                        }
                     }
                 }
             }
