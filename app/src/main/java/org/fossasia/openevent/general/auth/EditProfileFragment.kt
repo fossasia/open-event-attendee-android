@@ -55,7 +55,7 @@ class EditProfileFragment : Fragment() {
                 val imageUrl = it.avatarUrl.nullToEmpty()
                 rootView.firstName.setText(userFirstName)
                 rootView.lastName.setText(userLastName)
-                if(!imageUrl.isEmpty()){ // picasso requires the imageUrl to be non empty
+                if (!imageUrl.isEmpty()) { // picasso requires the imageUrl to be non empty
                     context?.let { ctx ->
                         val drawable = AppCompatResources.getDrawable(ctx, R.drawable.ic_account_circle_grey_24dp)
                         drawable?.let{ icon ->
