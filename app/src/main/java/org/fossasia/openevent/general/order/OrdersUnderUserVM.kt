@@ -11,7 +11,11 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class OrdersUnderUserVM(private val orderService: OrderService, private val eventService: EventService, private val authHolder: AuthHolder) : ViewModel() {
+class OrdersUnderUserVM(
+    private val orderService: OrderService,
+    private val eventService: EventService,
+    private val authHolder: AuthHolder
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private lateinit var order: List<Order>
@@ -23,6 +27,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
     val message = SingleLiveEvent<String>()
     val eventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
     val progress = MutableLiveData<Boolean>()
+    val noTickets = MutableLiveData<Boolean>()
 
     fun getId() = authHolder.getId()
 
@@ -34,6 +39,7 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     progress.value = true
+                    noTickets.value = false
                 }.subscribe({
                     order = it
                     attendeesNumber.value = it.map { it.attendees?.size } as ArrayList<Int>
@@ -41,9 +47,10 @@ class OrdersUnderUserVM(private val orderService: OrderService, private val even
 
                     if (idList.size != 0)
                         eventsUnderUser(query)
-                    else
+                    else {
                         progress.value = false
-
+                        noTickets.value = true
+                    }
                 }, {
                     message.value = "Failed  to list Orders under a user"
                     Timber.d(it, "Failed  to list Orders under a user ")

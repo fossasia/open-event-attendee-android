@@ -33,7 +33,7 @@ class SearchTimeActivity : AppCompatActivity() {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
 
             searchTimeViewModel.saveDate(simpleDateFormat.format(calendar.time))
-            calendar.add(Calendar.DATE,1)
+            calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextDate(simpleDateFormat.format(calendar.time))
 
             val intent = Intent(this, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

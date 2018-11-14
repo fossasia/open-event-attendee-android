@@ -18,5 +18,4 @@ interface EventTopicApi {
 
     @GET("event-topics/{id}")
     fun getEventTopic(@Path("id") id: Long): Single<EventTopic>
-
 }

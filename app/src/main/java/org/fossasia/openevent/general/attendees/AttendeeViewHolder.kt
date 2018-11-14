@@ -22,7 +22,7 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         setText(itemView.attendeeItemEmail, attendeeRecyclerAdapter.attendeeList[position].email)
         setText(itemView.attendeeItemFirstName, attendeeRecyclerAdapter.attendeeList[position].firstname)
         itemView.attendeeItemTicketName.text = "Ticket Name - ${attendeeRecyclerAdapter.ticketList[position].name}"
-        
+
         textWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 val id = attendeeRecyclerAdapter.attendeeList[position].id

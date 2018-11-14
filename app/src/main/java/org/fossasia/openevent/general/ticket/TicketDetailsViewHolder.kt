@@ -24,6 +24,5 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         val subTotal: Float? = ticket.price?.toFloat()?.times(qty[adapterPosition])
         itemView.qty.text = qty[adapterPosition].toString()
         itemView.subTotal.text = "$$subTotal"
-
     }
 }

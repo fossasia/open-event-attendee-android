@@ -14,12 +14,12 @@ import org.fossasia.openevent.general.event.EventId
 @Type("event-topic")
 @Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE))])
 data class EventTopic(
-        @Id(LongIdHandler::class)
-        @PrimaryKey
-        val id: Long?,
-        val name: String?,
-        val slug: String?,
-        @ColumnInfo(index = true)
-        @Relationship("event")
-        var event: EventId? = null
+    @Id(LongIdHandler::class)
+    @PrimaryKey
+    val id: Long?,
+    val name: String?,
+    val slug: String?,
+    @ColumnInfo(index = true)
+    @Relationship("event")
+    var event: EventId? = null
 )

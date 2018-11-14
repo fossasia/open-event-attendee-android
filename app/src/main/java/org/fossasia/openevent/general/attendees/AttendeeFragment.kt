@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -85,8 +86,11 @@ class AttendeeFragment : Fragment() {
                 ?.metaData?.getString(STRIPE_KEY).toString()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_attendee, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -160,7 +164,6 @@ class AttendeeFragment : Fragment() {
             } else {
                 rootView.paymentSelector.visibility = View.GONE
             }
-
         })
         rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -197,11 +200,10 @@ class AttendeeFragment : Fragment() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 expiryYear = attendeeFragmentViewModel.year[p2]
                 if (expiryYear == "Year")
-                    expiryYear = "2017" //invalid year, if the user hasn't selected the year
+                    expiryYear = "2017" // invalid year, if the user hasn't selected the year
                 rootView.yearText.text = attendeeFragmentViewModel.year[p2]
             }
         }
-
 
         rootView.cardSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeFragmentViewModel.cardType)
         rootView.cardSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -358,9 +360,10 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
+        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         val intent = Intent(activity, AuthActivity::class.java)
         val bundle = Bundle()
-        bundle.putLong(EVENT_ID, id.toLong())
+        bundle.putLong(EVENT_ID, id)
         if (ticketIdAndQty != null)
             bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
         intent.putExtras(bundle)
@@ -387,10 +390,9 @@ class AttendeeFragment : Fragment() {
                         API_KEY,
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
-                                //Send this token to server
+                                // Send this token to server
                                 val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
                                 attendeeFragmentViewModel.completeOrder(charge)
-
                             }
 
                             override fun onError(error: Exception) {
@@ -419,7 +421,7 @@ class AttendeeFragment : Fragment() {
 
     private fun openOrderCompletedFragment() {
         attendeeFragmentViewModel.paymentCompleted.value = false
-        //Initialise Order Completed Fragment
+        // Initialise Order Completed Fragment
         val orderCompletedFragment = OrderCompletedFragment()
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", id)

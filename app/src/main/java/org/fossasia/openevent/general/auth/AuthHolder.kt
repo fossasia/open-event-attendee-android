@@ -36,5 +36,4 @@ class AuthHolder(private val preference: Preference) {
     fun getId(): Long {
         return if (!isLoggedIn()) -1 else JWTUtils.getIdentity(token)
     }
-
 }

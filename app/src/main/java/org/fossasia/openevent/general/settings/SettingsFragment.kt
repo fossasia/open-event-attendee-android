@@ -37,30 +37,29 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         activity?.supportActionBar?.title = "Settings"
         setHasOptionsMenu(true)
 
-        //Set Email
+        // Set Email
         email = arguments?.getString(EMAIL)
         preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
 
-        //Set Build Version
+        // Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
-
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == resources.getString(R.string.key_rating)) {
-            //Opens our app in play store
+            // Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
-            //Links to suggestion form
+            // Links to suggestion form
             context?.let {
                 Utils.openUrl(it, FORM_LINK)
             }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_profile)) {
-            //Logout Dialog shown
+            // Logout Dialog shown
             showDialog()
             return true
         }

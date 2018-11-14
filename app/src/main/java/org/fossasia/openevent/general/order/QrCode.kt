@@ -20,5 +20,4 @@ class QrCode {
         }
         return null
     }
-
 }

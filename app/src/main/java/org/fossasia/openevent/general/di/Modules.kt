@@ -8,6 +8,7 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.*
@@ -39,7 +40,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
-
 
 val commonModule = applicationContext {
     bean { Preference() }
@@ -88,7 +88,6 @@ val apiModule = applicationContext {
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
-
 }
 
 val viewModelModule = applicationContext {
@@ -138,7 +137,7 @@ val networkModule = applicationContext {
     }
 
     bean {
-        val baseUrl = "http://api.eventyay.com/v1/"
+        val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
@@ -149,7 +148,6 @@ val networkModule = applicationContext {
                 .baseUrl(baseUrl)
                 .build()
     }
-
 }
 
 val databaseModule = applicationContext {
@@ -173,7 +171,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.ticketsDao()
+        database.ticketDao()
     }
 
     factory {
@@ -183,7 +181,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.attendeesDao()
+        database.attendeeDao()
     }
 
     factory {
@@ -195,5 +193,4 @@ val databaseModule = applicationContext {
         val database: OpenEventDatabase = get()
         database.orderDao()
     }
-
 }

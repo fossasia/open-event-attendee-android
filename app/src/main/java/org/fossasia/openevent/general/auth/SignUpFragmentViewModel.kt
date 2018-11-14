@@ -10,9 +10,10 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
-
-class SignUpFragmentViewModel(private val authService: AuthService,
-                              private val network: Network) : ViewModel() {
+class SignUpFragmentViewModel(
+    private val authService: AuthService,
+    private val network: Network
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -41,7 +42,7 @@ class SignUpFragmentViewModel(private val authService: AuthService,
                     signedUp.value = it
                     Timber.d("Success!")
                 }, {
-                    when{
+                    when {
                         it.toString().contains("HTTP 409 CONFLICT") -> error.value = "Unable to SignUp: Email already exists!"
                         it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") -> error.value = "Unable to SignUp: Not a valid email address!"
                         else -> error.value = "Unable to SignUp!"
@@ -97,6 +98,12 @@ class SignUpFragmentViewModel(private val authService: AuthService,
             error.value = "Passwords do not match!"
             return true
         }
+
+        if (password.length < 6) {
+            error.value = "Password should be atleast 6 characters!"
+            return true
+        }
+
         return false
     }
 

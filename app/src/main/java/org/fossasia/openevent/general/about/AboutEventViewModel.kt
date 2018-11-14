@@ -16,7 +16,7 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
     val event = MutableLiveData<Event>()
     val error = MutableLiveData<String>()
 
-    fun loadEvent(id : Long) {
+    fun loadEvent(id: Long) {
         if (id.equals(-1)) {
             error.value = "Error fetching event"
             return
@@ -28,11 +28,11 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
                     progressAboutEvent.value = true
                 }).doFinally({
                     progressAboutEvent.value = false
-                }).subscribe({eventList ->
+                }).subscribe({ eventList ->
                     event.value = eventList
                 }, {
                     error.value = "Error fetching event"
-                    Timber.e(it, "Error fetching event %d",id)
+                    Timber.e(it, "Error fetching event %d", id)
                 }))
     }
 

@@ -3,12 +3,14 @@ package org.fossasia.openevent.general.favorite
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_favorite.*
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
@@ -22,11 +24,19 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventViewModel by viewModel<FavouriteEventsViewModel>()
     private lateinit var rootView: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false)
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
+
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.title = "Likes"
+
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
                 LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
@@ -46,6 +56,7 @@ class FavoriteFragment : Fragment() {
                 favoriteEventViewModel.setFavorite(event.id, !isFavourite)
                 event.favorite = !event.favorite
                 favoriteEventsRecyclerAdapter.notifyItemChanged(id)
+                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
         }
 
@@ -55,6 +66,7 @@ class FavoriteFragment : Fragment() {
             it?.let {
                 favoriteEventsRecyclerAdapter.addAll(it)
                 favoriteEventsRecyclerAdapter.notifyDataSetChanged()
+                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
             Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
         })
@@ -69,6 +81,10 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.loadFavoriteEvents()
         return rootView
+    }
+
+    private fun showEmptyMessage(itemCount: Int) {
+        noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     private fun showProgressBar(show: Boolean) {

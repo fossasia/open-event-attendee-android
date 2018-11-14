@@ -53,7 +53,6 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     override fun getItemCount(): Int {
         return events.size
     }
-
 }
 
 interface RecyclerViewClickListener {

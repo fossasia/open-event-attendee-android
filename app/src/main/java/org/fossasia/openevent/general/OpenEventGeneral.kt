@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general
 
-import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDexApplication
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -10,7 +9,7 @@ import timber.log.Timber
 
 class OpenEventGeneral : MultiDexApplication() {
 
-    companion object  {
+    companion object {
         @JvmStatic
         var appContext: Context? = null
             private set

@@ -32,7 +32,7 @@ class SearchLocationActivity : AppCompatActivity() {
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                //Do your search
+                // Do your search
                 searchLocationViewModel.saveSearch(query)
                 val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
@@ -62,5 +62,4 @@ class SearchLocationActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }

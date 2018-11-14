@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.content_no_tickets.*
+import kotlinx.android.synthetic.main.fragment_orders_under_user.*
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.*
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
@@ -19,6 +21,7 @@ import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
 const val ORDERS: String = "orders"
+const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 
 class OrdersUnderUserFragment : Fragment() {
 
@@ -27,8 +30,11 @@ class OrdersUnderUserFragment : Fragment() {
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.title = "Tickets"
@@ -65,6 +71,10 @@ class OrdersUnderUserFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             })
 
+            ordersUnderUserVM.noTickets.observe(this, Observer {
+                it?.let { showNoTicketsScreen(it) }
+            })
+
             ordersUnderUserVM.attendeesNumber.observe(this, Observer {
                 it?.let {
                     ordersRecyclerAdapter.setAttendeeNumber(it)
@@ -86,7 +96,19 @@ class OrdersUnderUserFragment : Fragment() {
         return rootView
     }
 
+    private fun showNoTicketsScreen(show: Boolean) {
+        noTicketsScreen.visibility = if (show) View.VISIBLE else View.GONE
+        findMyTickets.setOnClickListener {
+            context?.let {
+                Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
+            }
+        }
+    }
+
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
+        val authIntent = Intent(activity, AuthActivity::class.java)
+        val redirectFromTickets = true
+        authIntent.putExtra(LAUNCH_TICKETS, redirectFromTickets)
+        startActivity(authIntent)
     }
 }

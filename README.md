@@ -6,6 +6,14 @@
 
 An events app to discover events happening around the world using the Open Event Platform
 
+Application is available here:
+
+[Google Play Store](https://play.google.com/store/apps/details?id=com.eventyay.attendee) and
+[F-Droid](https://f-droid.org/en/packages/com.eventyay.attendee/).
+
+<a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
+<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='https://f-droid.org/assets/fdroid-logo.svg' height="80"/></a>
+
 ## Roadmap
 
 Planned features & enhancements are:
@@ -36,7 +44,7 @@ A native Android app using Kotlin for writing code.
 - InsertKoinIO [Docs](https://github.com/InsertKoinIO/koin)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - OkHttp [Docs](http://square.github.io/okhttp/)
-- Room Persistence Library [Docs] (https://developer.android.com/topic/libraries/architecture/room)
+- Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
 
 ### Project Conventions
 

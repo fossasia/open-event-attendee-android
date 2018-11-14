@@ -30,5 +30,4 @@ class SocialLinksRecyclerAdapter : RecyclerView.Adapter<SocialLinksViewHolder>()
     override fun getItemCount(): Int {
         return socialLinks.size
     }
-
 }
