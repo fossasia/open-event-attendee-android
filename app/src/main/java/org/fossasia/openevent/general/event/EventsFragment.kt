@@ -107,9 +107,14 @@ class EventsFragment : Fragment() {
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents()
-        })
+        rootView.swiperefresh.setOnRefreshListener {
+            showNoInternetScreen(isNetworkConnected())
+            if (!isNetworkConnected()) {
+                rootView.swiperefresh.isRefreshing = false
+            } else {
+                eventsViewModel.loadLocationEvents()
+            }
+        }
 
         return rootView
     }
