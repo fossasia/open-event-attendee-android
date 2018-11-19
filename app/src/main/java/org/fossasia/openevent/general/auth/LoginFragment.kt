@@ -22,6 +22,7 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.koin.android.architecture.ext.viewModel
 
 const val LAUNCH_ATTENDEE: String = "LAUNCH_ATTENDEE"
+
 class LoginFragment : Fragment() {
 
     private val loginActivityViewModel by viewModel<LoginFragmentViewModel>()
@@ -71,7 +72,7 @@ class LoginFragment : Fragment() {
         })
 
         loginActivityViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, "logged in", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.logged_in), Toast.LENGTH_LONG).show()
             loginActivityViewModel.fetchProfile()
         })
 

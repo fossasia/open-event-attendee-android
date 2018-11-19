@@ -17,6 +17,10 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
     val user = MutableLiveData<User>()
     val message = MutableLiveData<String>()
 
+    val liveFirstName = MutableLiveData<String>()
+    val liveLastName = MutableLiveData<String>()
+
+
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun updateProfile(encodedImage: String?, firstName: String, lastName: String) {
@@ -25,22 +29,22 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
             return
         }
         compositeDisposable.add(authService.uploadImage(UploadImage(encodedImage))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }
-                .doFinally {
-                    progress.value = false
-                }
-                .subscribe({
-                    updateUser(it.url, firstName, lastName)
-                    message.value = "Image uploaded successfully!"
-                    Timber.d("Image uploaded " + it.url)
-                }) {
-                    message.value = "Error uploading image!"
-                    Timber.e(it, "Error uploading user!")
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                progress.value = true
+            }
+            .doFinally {
+                progress.value = false
+            }
+            .subscribe({
+                updateUser(it.url, firstName, lastName)
+                message.value = "Image uploaded successfully!"
+                Timber.d("Image uploaded " + it.url)
+            }) {
+                message.value = "Error uploading image!"
+                Timber.e(it, "Error uploading user!")
+            })
     }
 
     fun updateUser(url: String?, firstName: String, lastName: String) {
@@ -50,21 +54,21 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
             return
         }
         compositeDisposable.add(authService.updateUser(User(id = id, firstName = firstName, lastName = lastName, avatarUrl = url), id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }
-                .doFinally {
-                    progress.value = false
-                }
-                .subscribe({
-                    message.value = USER_UPDATED
-                    Timber.d("User updated")
-                }) {
-                    message.value = "Error updating user!"
-                    Timber.e(it, "Error updating user!")
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                progress.value = true
+            }
+            .doFinally {
+                progress.value = false
+            }
+            .subscribe({
+                message.value = USER_UPDATED
+                Timber.d("User updated")
+            }) {
+                message.value = "Error updating user!"
+                Timber.e(it, "Error updating user!")
+            })
     }
 
     override fun onCleared() {

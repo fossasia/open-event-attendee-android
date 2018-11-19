@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.content.res.AppCompatResources
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -50,8 +52,16 @@ class EditProfileFragment : Fragment() {
 
         profileFragmentViewModel.user.observe(this, Observer {
             it?.let {
-                val userFirstName = it.firstName.nullToEmpty()
-                val userLastName = it.lastName.nullToEmpty()
+                val userFirstName: String = if (editProfileViewModel.liveFirstName.value != null) {
+                    editProfileViewModel.liveFirstName.value!!
+                } else {
+                    it.firstName.nullToEmpty()
+                }
+                val userLastName = if (editProfileViewModel.liveLastName.value != null) {
+                    editProfileViewModel.liveLastName.value!!
+                } else {
+                    it.lastName.nullToEmpty()
+                }
                 val imageUrl = it.avatarUrl.nullToEmpty()
                 rootView.firstName.setText(userFirstName)
                 rootView.lastName.setText(userLastName)
@@ -60,16 +70,34 @@ class EditProfileFragment : Fragment() {
                         val drawable = AppCompatResources.getDrawable(ctx, R.drawable.ic_account_circle_grey_24dp)
                         drawable?.let { icon ->
                             Picasso.get()
-                                    .load(imageUrl)
-                                    .placeholder(icon)
-                                    .transform(CircleTransform())
-                                    .into(rootView.profilePhoto)
+                                .load(imageUrl)
+                                .placeholder(icon)
+                                .transform(CircleTransform())
+                                .into(rootView.profilePhoto)
                         }
                     }
                 }
             }
         })
         profileFragmentViewModel.fetchProfile()
+
+        rootView.firstName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                editProfileViewModel.liveFirstName.value = s.toString()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        rootView.lastName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                editProfileViewModel.liveLastName.value = s.toString()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         editProfileViewModel.progress.observe(this, Observer {
             it?.let {
@@ -115,10 +143,10 @@ class EditProfileFragment : Fragment() {
             encodedImage = encodeImage(selectedImage)
 
             Picasso.get()
-                    .load(imageUri)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
-                    .transform(CircleTransform())
-                    .into(rootView.profilePhoto)
+                .load(imageUri)
+                .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
+                .transform(CircleTransform())
+                .into(rootView.profilePhoto)
         }
     }
 
