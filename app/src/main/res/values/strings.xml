@@ -52,6 +52,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>
+    <string name="logged_in">Welcome back!</string>
 
     <!--eventyay-->
     <string name="eventyay_logo">eventyay</string>
