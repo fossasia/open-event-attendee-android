@@ -71,8 +71,7 @@ class LoginFragment : Fragment() {
         })
 
         loginActivityViewModel.loggedIn.observe(this, Observer {
-            val loggedIn: String = getString(R.string.logged_in)
-            Toast.makeText(context, loggedIn , Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.logged_in) , Toast.LENGTH_LONG).show()
             loginActivityViewModel.fetchProfile()
         })
 
