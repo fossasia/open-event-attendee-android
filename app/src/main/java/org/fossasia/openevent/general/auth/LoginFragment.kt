@@ -71,7 +71,7 @@ class LoginFragment : Fragment() {
         })
 
         loginActivityViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
             loginActivityViewModel.fetchProfile()
         })
 
