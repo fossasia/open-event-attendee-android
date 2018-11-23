@@ -27,7 +27,9 @@ Please join our mailing list to discuss questions regarding the project: https:/
 Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
 
 ## Screenshots
-
+![final1](https://user-images.githubusercontent.com/41234408/48956163-70f43780-ef77-11e8-8337-70d0ce9eb91a.png) ![final5](https://user-images.githubusercontent.com/41234408/48956182-96814100-ef77-11e8-9312-5d2b3b4d88ce.png)  
+![final6](https://user-images.githubusercontent.com/41234408/48956189-a567f380-ef77-11e8-89b7-fd83319def1e.png) ![final4](https://user-images.githubusercontent.com/41234408/48956200-b7e22d00-ef77-11e8-960f-865bfe423db3.png)
+![final2](https://user-images.githubusercontent.com/41234408/48956208-c4668580-ef77-11e8-8a24-69f8b8031113.png) ![final3](https://user-images.githubusercontent.com/41234408/48956215-d0524780-ef77-11e8-8b92-eb9159a24b03.png)
 
 ## Development
 
@@ -60,9 +62,9 @@ A notable exception to this is the `helper` module and data classes like Models 
 
 Lastly, each class should only perform one task, do it well, and be unit tested for it. For example, if a presenter is doing more than it should, i.e., parsing dates or implementing search logic, better move it in its own class. There can be exceptions to this practice, but if the functionality can be generalised and reused, it should most definitely be transferred in its own class and unit tested.
 
-## Contributions Best Practices
+### Best Contribution Practices
 
-### For first time Contributor
+### For first time Contributors
 
 First time contributors can read ContributionHelp.md file for help regarding creating issues and sending pull requests.
 
@@ -81,7 +83,7 @@ We have the following branches
     - Please download and test the app that is using the code from the dev and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
 ### Code practices
 
-Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
+Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
  * Single commit per pull request
  * For writing commit messages please read the COMMITSTYLE carefully. Kindly adhere to the guidelines.
