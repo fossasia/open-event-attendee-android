@@ -62,7 +62,7 @@ A notable exception to this is the `helper` module and data classes like Models 
 
 Lastly, each class should only perform one task, do it well, and be unit tested for it. For example, if a presenter is doing more than it should, i.e., parsing dates or implementing search logic, better move it in its own class. There can be exceptions to this practice, but if the functionality can be generalised and reused, it should most definitely be transferred in its own class and unit tested.
 
-### Best Contribution Practices
+### Contributions Best Practices
 
 ### For first time Contributors
 
