@@ -6,12 +6,13 @@ import android.text.TextUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class SearchViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
+class SearchViewModel(private val eventService: EventService, private val preference: Preference, private val network: Network) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
@@ -21,12 +22,14 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
+    val showNoInternetError = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(tokenKeyDate) }
     val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
 
     fun loadEvents(location: String, time: String) {
+        if (!isConnected()) return
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
             "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
@@ -63,6 +66,12 @@ class SearchViewModel(private val eventService: EventService, private val prefer
                     Timber.e(it, "Error adding %d to favorites", eventId)
                     error.value = "Error adding to favorites"
                 }))
+    }
+
+    fun isConnected(): Boolean {
+        val isConnected = network.isNetworkConnected()
+        showNoInternetError.value = !isConnected
+        return isConnected
     }
 
     override fun onCleared() {
