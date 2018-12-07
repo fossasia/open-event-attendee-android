@@ -170,4 +170,11 @@ class EditProfileFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        val activity = activity as? AppCompatActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        setHasOptionsMenu(false)
+        super.onDestroyView()
+    }
 }
