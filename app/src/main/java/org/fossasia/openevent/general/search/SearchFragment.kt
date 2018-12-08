@@ -88,6 +88,10 @@ class SearchFragment : Fragment() {
             it?.let { showNoInternetError(it) }
         })
 
+        searchViewModel.isSearched.observe(this, Observer {
+            it?.let { showSearchLayout(!it) }
+        })
+
         rootView.timeTextView.setOnClickListener {
             val intent = Intent(activity, SearchTimeActivity::class.java)
             startActivity(intent)
@@ -135,8 +139,6 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Do your search
                 searchViewModel.searchEvent = query
-                rootView.searchLinearLayout.visibility = View.GONE
-                rootView.fabSearch.visibility = View.GONE
                 if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text == "Anytime")
                     searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
                 else
@@ -157,6 +159,11 @@ class SearchFragment : Fragment() {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun showSearchLayout(show: Boolean) {
+        rootView.searchLinearLayout.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.fabSearch.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun handleVisibility(events: List<Event>) {
