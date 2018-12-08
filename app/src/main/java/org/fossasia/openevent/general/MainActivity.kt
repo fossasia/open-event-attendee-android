@@ -128,11 +128,18 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
         val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)
-        if (currentFragment !is EventsFragment && rootFragment !is EventDetailsFragment) {
-            loadFragment(EventsFragment())
-            navigation.selectedItemId = navigation_events
-        } else {
+        if (rootFragment is EventDetailsFragment)
             super.onBackPressed()
-        }
+        else
+            when(currentFragment) {
+                is SearchFragment,
+                is FavoriteFragment,
+                is OrdersUnderUserFragment,
+                is ProfileFragment -> {
+                    loadFragment(EventsFragment())
+                    navigation.selectedItemId = navigation_events
+                }
+                else -> super.onBackPressed()
+            }
     }
 }
