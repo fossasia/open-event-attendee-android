@@ -121,7 +121,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainer, fragment, fragment::class.java.name)
-                .addToBackStack(null)
                 .commit()
     }
 
@@ -138,10 +137,6 @@ class MainActivity : AppCompatActivity() {
                 is ProfileFragment -> {
                     loadFragment(EventsFragment())
                     navigation.selectedItemId = navigation_events
-                }
-                is EventsFragment -> {
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(1);
                 }
                 else -> super.onBackPressed()
             }
