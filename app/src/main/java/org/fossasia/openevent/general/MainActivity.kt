@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(EventsFragment())
                     navigation.selectedItemId = navigation_events
                 }
+                is EventsFragment -> finish()
                 else -> super.onBackPressed()
             }
     }
