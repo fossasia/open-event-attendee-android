@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameContainer, fragment, fragment::class.java.name)
+                .addToBackStack(null)
                 .commit()
     }
 
@@ -138,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(EventsFragment())
                     navigation.selectedItemId = navigation_events
                 }
+                is EventsFragment -> finish()
                 else -> super.onBackPressed()
             }
     }
