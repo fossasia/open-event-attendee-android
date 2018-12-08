@@ -5,11 +5,14 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import org.fossasia.openevent.general.R
+import timber.log.Timber
 
 object Utils {
 
@@ -42,5 +45,28 @@ object Utils {
     fun hideSoftKeyboard(context: Context?, view: View) {
         val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
+    }
+
+    fun checkAndLoadFragment(fragmentManager: FragmentManager,
+                             fragment: Fragment,
+                             frameLayout: Int,
+                             addToBackStack: Boolean = true) {
+        val savedFragment = fragmentManager.findFragmentByTag(fragment::class.java.name)
+        if (savedFragment != null) {
+            loadFragment(fragmentManager, savedFragment, frameLayout, addToBackStack)
+            Timber.d("Loading fragment from stack ${fragment::class.java}")
+        } else {
+            loadFragment(fragmentManager, fragment, frameLayout, addToBackStack)
+        }
+    }
+
+    fun loadFragment(fragmentManager: FragmentManager,
+                     fragment: Fragment,
+                     frameLayout: Int,
+                     addToBackStack: Boolean = true) {
+        val fragmentTransaction = fragmentManager.beginTransaction()
+            .replace(frameLayout, fragment, fragment::class.java.name)
+        if (addToBackStack) fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }

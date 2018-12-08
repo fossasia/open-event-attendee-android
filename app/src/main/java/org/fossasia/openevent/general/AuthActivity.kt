@@ -9,6 +9,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_auth.*
 import org.fossasia.openevent.general.auth.LoginFragment
 import org.fossasia.openevent.general.auth.SignUpFragment
+import org.fossasia.openevent.general.utils.Utils.loadFragment
 
 class AuthActivity : AppCompatActivity() {
 
@@ -19,13 +20,13 @@ class AuthActivity : AppCompatActivity() {
             R.id.navigation_login -> {
                 supportActionBar?.title = "Login"
                 fragment = LoginFragment()
-                loadFragment(fragment)
+                setFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sign_up -> {
                 supportActionBar?.title = "Sign Up"
                 fragment = SignUpFragment()
-                loadFragment(fragment)
+                setFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -43,15 +44,13 @@ class AuthActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Login"
 
-        loadFragment(LoginFragment())
+        setFragment(LoginFragment())
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun setFragment(fragment: Fragment) {
         if (bundle != null)
             fragment.arguments = bundle
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainerAuth, fragment)
-                .commit()
+        loadFragment(supportFragmentManager, fragment, frameContainerAuth.id, false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
