@@ -10,6 +10,7 @@ import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
@@ -83,6 +84,10 @@ class SearchFragment : Fragment() {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
+        searchViewModel.showNoInternetError.observe(this, Observer {
+            it?.let { showNoInternetError(it) }
+        })
+
         rootView.timeTextView.setOnClickListener {
             val intent = Intent(activity, SearchTimeActivity::class.java)
             startActivity(intent)
@@ -105,6 +110,10 @@ class SearchFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    private fun showNoInternetError(show: Boolean) {
+        errorTextView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -142,6 +151,9 @@ class SearchFragment : Fragment() {
         }
         searchView.setOnQueryTextListener(queryListener)
         rootView.fabSearch.setOnClickListener {
+            queryListener.onQueryTextSubmit(searchView.query.toString())
+        }
+        rootView.errorTextView.setOnClickListener {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
         super.onPrepareOptionsMenu(menu)
