@@ -26,13 +26,6 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_very_large"
                 android:text="@string/eventyay_logo"/>
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:id="@+id/progressBarSignUp"
-                android:visibility="gone" />
         </FrameLayout>
 
         <!-- Email Label -->
@@ -127,6 +120,13 @@
             android:text="@string/sign_up"
             android:textColor="@android:color/white"
             android:backgroundTint="@color/colorPrimary"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/progressBarSignUp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>
