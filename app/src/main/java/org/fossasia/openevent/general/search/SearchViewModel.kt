@@ -18,6 +18,11 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     private val tokenKey = "LOCATION"
     private val tokenKeyDate = "DATE"
     private val tokenKeyNextDate = "NEXT_DATE"
+    private val tokenKeyNextToNextDate = "NEXT_TO_NEXT_DATE"
+    private val tokenKeyWeekendDate = "WEEKEND"
+    private val tokenKeyWeekendNextDate = "WEEKEND_NEXT_DATE"
+    private val tokenKeyNextMonth = "NEXT_MONTH"
+    private val tokenKeyNextToNextMonth = "NEXT_TO_NEXT_MONTH"
 
     val progress = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
@@ -28,8 +33,14 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(tokenKeyDate) }
     val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
+    val savedNextToNextDate by lazy { preference.getString(tokenKeyNextToNextDate) }
+    val savedWeekendDate by lazy { preference.getString(tokenKeyWeekendDate) }
+    val savedWeekendNextDate by lazy { preference.getString(tokenKeyWeekendNextDate) }
+    val savedNextMonth by lazy { preference.getString(tokenKeyNextMonth) }
+    val savedNextToNextMonth by lazy { preference.getString(tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
+
         isSearched.value = true
         if (!isConnected()) return
         preference.putString(tokenKey, location)
@@ -37,6 +48,14 @@ class SearchViewModel(private val eventService: EventService, private val prefer
             "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
         else if (time == "Anytime")
             "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
+        else if (time=="Today")
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
+        else if (time == "Tomorrow")
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedNextDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextToNextDate%\"}]}]"
+        else if (time == "This Weekend")
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedWeekendDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedWeekendNextDate%\"}]}]"
+        else if (time == "In the next month")
+            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedNextMonth%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextToNextMonth%\"}]}]"
         else
             "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
 

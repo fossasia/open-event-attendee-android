@@ -6,6 +6,11 @@ import org.fossasia.openevent.general.data.Preference
 class SearchTimeViewModel(private val preference: Preference) : ViewModel() {
     private val tokenKeyDate = "DATE"
     private val tokenKeyNextDate = "NEXT_DATE"
+    private val tokenKeyNextToNextDate="NEXT_TO_NEXT_DATE"
+    private val tokenKeyWeekendDate = "WEEKEND"
+    private val tokenKeyWeekendNextDate = "WEEKEND_NEXT_DATE"
+    private val tokenKeyNextMonth = "NEXT_MONTH"
+    private val tokenKeyNextToNextMonth = "NEXT_TO_NEXT_MONTH"
 
     fun saveDate(time: String) {
         preference.putString(tokenKeyDate, time)
@@ -14,4 +19,21 @@ class SearchTimeViewModel(private val preference: Preference) : ViewModel() {
     fun saveNextDate(time: String) {
         preference.putString(tokenKeyNextDate, time)
     }
+    fun saveNextToNextDate(time: String){
+        preference.putString(tokenKeyNextToNextDate, time)
+    }
+    fun saveWeekendDate(time: String) {
+        preference.putString(tokenKeyWeekendDate, time)
+    }
+    fun saveNextToWeekendDate(time: String){
+        preference.putString(tokenKeyWeekendNextDate, time)
+    }
+    fun saveNextMonth(time: String){
+        preference.putString(tokenKeyNextMonth, time)
+    }
+    fun saveNextToNextMonth(time: String){
+        preference.putString(tokenKeyNextToNextMonth, time)
+    }
+
+
 }
