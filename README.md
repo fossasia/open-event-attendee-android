@@ -8,11 +8,8 @@ An events app to discover events happening around the world using the Open Event
 
 Application is available here:
 
-[Google Play Store](https://play.google.com/store/apps/details?id=com.eventyay.attendee) and
-[F-Droid](https://f-droid.org/en/packages/com.eventyay.attendee/).
-
 <a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
-<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='https://f-droid.org/assets/fdroid-logo.svg' height="80"/></a>
+<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='https://f-droid.org/badge/get-it-on.png' height="80"/></a>
 
 ## Roadmap
 
