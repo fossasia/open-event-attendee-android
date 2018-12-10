@@ -10,6 +10,7 @@ import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
@@ -83,6 +84,14 @@ class SearchFragment : Fragment() {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
+        searchViewModel.showNoInternetError.observe(this, Observer {
+            it?.let { showNoInternetError(it) }
+        })
+
+        searchViewModel.isSearched.observe(this, Observer {
+            it?.let { showSearchLayout(!it) }
+        })
+
         rootView.timeTextView.setOnClickListener {
             val intent = Intent(activity, SearchTimeActivity::class.java)
             startActivity(intent)
@@ -107,6 +116,10 @@ class SearchFragment : Fragment() {
         return rootView
     }
 
+    private fun showNoInternetError(show: Boolean) {
+        errorTextView.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
             R.id.search_item -> {
@@ -126,8 +139,6 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Do your search
                 searchViewModel.searchEvent = query
-                rootView.searchLinearLayout.visibility = View.GONE
-                rootView.fabSearch.visibility = View.GONE
                 if (searchViewModel.savedLocation != null && TextUtils.isEmpty(rootView.locationTextView.text.toString()) && rootView.timeTextView.text == "Anytime")
                     searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
                 else
@@ -144,7 +155,15 @@ class SearchFragment : Fragment() {
         rootView.fabSearch.setOnClickListener {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
+        rootView.errorTextView.setOnClickListener {
+            queryListener.onQueryTextSubmit(searchView.query.toString())
+        }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun showSearchLayout(show: Boolean) {
+        rootView.searchLinearLayout.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.fabSearch.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun handleVisibility(events: List<Event>) {

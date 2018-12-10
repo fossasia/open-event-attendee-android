@@ -96,7 +96,7 @@ val viewModelModule = applicationContext {
     viewModel { ProfileFragmentViewModel(get()) }
     viewModel { SignUpFragmentViewModel(get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
     viewModel { SearchTimeViewModel(get()) }
