@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.ticket
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat.invalidateOptionsMenu
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -144,7 +145,9 @@ class TicketsFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        invalidateOptionsMenu(activity)
         super.onDestroyView()
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

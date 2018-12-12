@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 import android.os.Build
+import android.support.v4.app.ActivityCompat
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
@@ -203,6 +204,7 @@ class EventDetailsFragment : Fragment() {
         super.onDestroyView()
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -248,6 +250,9 @@ class EventDetailsFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
+        val activity = activity as? MainActivity
+        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.supportActionBar?.title = ""
         menu?.setGroupVisible(R.id.search_menu, false)
         menu?.setGroupVisible(R.id.event_menu, true)
         super.onPrepareOptionsMenu(menu)
@@ -280,6 +285,7 @@ class EventDetailsFragment : Fragment() {
         menuActionBar = menu
     }
 
+
     private fun loadTicketFragment() {
         // Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
@@ -287,7 +293,7 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, ticketFragment)?.addToBackStack(null)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.coordinatorLayout, ticketFragment)?.addToBackStack(null)?.commit()
     }
 
     private fun loadSocialLinksFragment() {

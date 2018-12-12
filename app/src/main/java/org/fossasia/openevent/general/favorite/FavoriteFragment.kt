@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -47,7 +48,7 @@ class FavoriteFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {
@@ -91,4 +92,8 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteProgressBar.isIndeterminate = show
         rootView.favoriteProgressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
+
+
+
+
 }
