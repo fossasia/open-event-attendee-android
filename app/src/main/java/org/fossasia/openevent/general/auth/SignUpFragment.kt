@@ -86,7 +86,7 @@ class SignUpFragment : Fragment() {
 
     private fun redirectToMain() {
         val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }

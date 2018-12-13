@@ -1,22 +1,31 @@
 package org.fossasia.openevent.general.search
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import org.fossasia.openevent.general.R
-
 import android.support.v7.widget.SearchView
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_search_location.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.fossasia.openevent.general.MainActivity
 import org.koin.android.architecture.ext.viewModel
+import java.util.*
+
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 private const val TO_SEARCH: String = "ToSearchFragment"
+const val LOCATION_PERMISSION_REQUEST = 1000
 
 class SearchLocationActivity : AppCompatActivity() {
 
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
+    val geoLocationUI = GeoLocationUI()
+    var fromSearchFragment = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +33,9 @@ class SearchLocationActivity : AppCompatActivity() {
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar?.title = ""
         val bundle = intent.extras
-        var fromSearchFragment = false
+        locationProgressBar.visibility = View.GONE
+
+        geoLocationUI.configure(this,currentLocation,fromSearchFragment, searchLocationViewModel)
 
         if (bundle != null) {
             fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
@@ -51,6 +62,18 @@ class SearchLocationActivity : AppCompatActivity() {
                 return false
             }
         })
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) { LOCATION_PERMISSION_REQUEST -> {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                geoLocationUI.configure(this,currentLocation,fromSearchFragment, searchLocationViewModel)
+            } else {
+                Toast.makeText(applicationContext, "Error fetching Location without permission", Toast.LENGTH_SHORT).show()
+            }
+        }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

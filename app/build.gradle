@@ -92,6 +92,9 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
 
+    //Location Play Service
+    playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
+
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'

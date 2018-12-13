@@ -35,7 +35,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        startActivity(Intent(activity, MainActivity::class.java))
+        startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
     override fun onAttach(context: Context?) {
