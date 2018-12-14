@@ -204,7 +204,6 @@ class EventDetailsFragment : Fragment() {
         super.onDestroyView()
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
