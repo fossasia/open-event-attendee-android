@@ -284,7 +284,6 @@ class EventDetailsFragment : Fragment() {
         menuActionBar = menu
     }
 
-
     private fun loadTicketFragment() {
         // Initialise Ticket Fragment
         val ticketFragment = TicketsFragment()
