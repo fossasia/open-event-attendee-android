@@ -92,8 +92,4 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteProgressBar.isIndeterminate = show
         rootView.favoriteProgressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
-
-
-
-
 }
