@@ -248,10 +248,7 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = ""
+    override fun onPrepareOptionsMenu(menu: Menu?) 
         menu?.setGroupVisible(R.id.search_menu, false)
         menu?.setGroupVisible(R.id.event_menu, true)
         super.onPrepareOptionsMenu(menu)
