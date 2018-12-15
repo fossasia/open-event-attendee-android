@@ -248,7 +248,7 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) 
+    override fun onPrepareOptionsMenu(menu: Menu?) {
         menu?.setGroupVisible(R.id.search_menu, false)
         menu?.setGroupVisible(R.id.event_menu, true)
         super.onPrepareOptionsMenu(menu)
