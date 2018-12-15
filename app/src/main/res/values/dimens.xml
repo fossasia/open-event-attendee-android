@@ -18,6 +18,7 @@
     <dimen name="layout_margin_large">16dp</dimen>
     <dimen name="layout_margin_extra_large">32dp</dimen>
     <dimen name="layout_margin_extreme_large">56dp</dimen>
+    <dimen name="layout_margin_search_view">100dp</dimen>
 
     <!-- padding specifics -->
     <dimen name="padding_extra_small">2dp</dimen>
