@@ -145,9 +145,7 @@ class TicketsFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        invalidateOptionsMenu(activity)
         super.onDestroyView()
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
