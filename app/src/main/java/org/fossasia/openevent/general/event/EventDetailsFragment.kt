@@ -198,7 +198,13 @@ class EventDetailsFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? MainActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = resources.getString(R.string.events)
+
+        val currentFragment = fragmentManager?.findFragmentById(R.id.frameContainer)
+        if(currentFragment == EventsFragment())
+            activity?.supportActionBar?.title = resources.getString(R.string.events)
+        else
+            activity?.supportActionBar?.title = resources.getString(R.string.likes)
+
         setHasOptionsMenu(false)
         super.onDestroyView()
     }
