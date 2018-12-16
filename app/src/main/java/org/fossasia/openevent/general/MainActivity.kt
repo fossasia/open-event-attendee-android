@@ -70,31 +70,30 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Events"
 
         val bundle = intent.extras
-        var openEventsFragment = true
 
-        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
-            loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
-            supportActionBar?.title = "Search"
-            navigation.selectedItemId = navigation_search
-            openEventsFragment = false
-        }
-
-        if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
-            val fragment = AttendeeFragment()
-            fragment.arguments = bundle
-            loadFragment(supportFragmentManager, fragment, frameContainer.id)
-            openEventsFragment = false
-        }
-
-        if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
-            loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
-            supportActionBar?.title = "Tickets"
-            navigation.selectedItemId = R.id.navigation_tickets
-            openEventsFragment = false
-        }
-
-        if (savedInstanceState == null && openEventsFragment)
+        if (savedInstanceState == null) {
             loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
+        }
+
+        else {
+            if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
+                loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
+                supportActionBar?.title = "Search"
+                navigation.selectedItemId = navigation_search
+            }
+
+            if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
+                val fragment = AttendeeFragment()
+                fragment.arguments = bundle
+                loadFragment(supportFragmentManager, fragment, frameContainer.id)
+            }
+
+            if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
+                loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
+                supportActionBar?.title = "Tickets"
+                navigation.selectedItemId = R.id.navigation_tickets
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
