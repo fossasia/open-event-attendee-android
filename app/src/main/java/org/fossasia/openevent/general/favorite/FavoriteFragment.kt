@@ -1,8 +1,10 @@
 package org.fossasia.openevent.general.favorite
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -10,10 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.search.SearchFragment
 import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 
@@ -41,6 +45,15 @@ class FavoriteFragment : Fragment() {
                 LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
 
+        rootView.gotoFind.setOnClickListener{
+            val manager : FragmentManager? = fragmentManager
+            var fragment : Fragment? = manager?.findFragmentById(R.id.searchLayout)
+            if (fragment == null){
+                fragment = SearchFragment()
+                manager?.beginTransaction()?.replace(R.id.frameContainer,fragment)?.commit()
+            }
+
+        }
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
                 val fragment = EventDetailsFragment()
@@ -85,6 +98,7 @@ class FavoriteFragment : Fragment() {
 
     private fun showEmptyMessage(itemCount: Int) {
         noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+
     }
 
     private fun showProgressBar(show: Boolean) {

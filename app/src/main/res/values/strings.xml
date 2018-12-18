@@ -146,7 +146,7 @@
 
     <!--liked events tab -->
     <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
-    <string name="find_something_to_do">Find something to do!!</string>
+    <string name="explore">Go Explore!</string>
 
 
 </resources>

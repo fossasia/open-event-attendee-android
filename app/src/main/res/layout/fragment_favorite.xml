@@ -1,54 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:orientation="vertical">
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:orientation="vertical"
-               android:layout_gravity="center"
-               android:gravity="center_vertical"
-               android:textAlignment="center"
-               android:id="@+id/noLikedText"
-               android:layout_margin="5dp">
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="@string/nothing_planned_yet"
-                   android:textSize="15sp"
-                   android:layout_gravity="center_horizontal"
-                   android:textAlignment="center"/>
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="@string/find_something_to_do"
-                   android:textSize="25sp"
-                   android:textAlignment="center"/>
 
-           </LinearLayout>
-
-        <ProgressBar
-            android:layout_gravity="center"
-            android:id="@+id/favoriteProgressBar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ProgressBar>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/favoriteEventsRecycler"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
-       </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/noLikedText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:textAlignment="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/nothing_planned_yet"
+                    android:textAlignment="center"
+                    android:textSize="15sp"
+                    />
+
+                <Button
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/gotoFind"
+                    android:layout_width="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/favoriteProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"></ProgressBar>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/favoriteEventsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </LinearLayout>
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
