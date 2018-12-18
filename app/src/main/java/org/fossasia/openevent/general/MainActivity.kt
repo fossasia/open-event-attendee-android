@@ -17,7 +17,8 @@ import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.OrdersUnderUserFragment
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.SearchFragment
-import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.checkAndLoadFragment
+import org.fossasia.openevent.general.utils.Utils.loadFragment
 
 private const val TO_SEARCH: String = "ToSearchFragment"
 
@@ -29,31 +30,31 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_events -> {
                 supportActionBar?.title = "Events"
                 fragment = EventsFragment()
-                checkAndLoadFragment(fragment)
+                checkAndLoadFragment(supportFragmentManager, fragment, frameContainer.id)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
                 supportActionBar?.title = "Search"
                 fragment = SearchFragment()
-                checkAndLoadFragment(fragment)
+                checkAndLoadFragment(supportFragmentManager, fragment, frameContainer.id)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
                 supportActionBar?.title = "Profile"
                 fragment = ProfileFragment()
-                checkAndLoadFragment(fragment)
+                checkAndLoadFragment(supportFragmentManager, fragment, frameContainer.id)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorite -> {
                 supportActionBar?.title = "Likes"
                 fragment = FavoriteFragment()
-                checkAndLoadFragment(fragment)
+                checkAndLoadFragment(supportFragmentManager, fragment, frameContainer.id)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_tickets -> {
                 supportActionBar?.title = "Tickets"
                 fragment = OrdersUnderUserFragment()
-                checkAndLoadFragment(fragment)
+                checkAndLoadFragment(supportFragmentManager, fragment, frameContainer.id)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -69,31 +70,30 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Events"
 
         val bundle = intent.extras
-        var openEventsFragment = true
 
-        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
-            loadFragment(SearchFragment())
-            supportActionBar?.title = "Search"
-            navigation.selectedItemId = navigation_search
-            openEventsFragment = false
+        if (savedInstanceState == null) {
+            loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
         }
 
-        if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
-            val fragment = AttendeeFragment()
-            fragment.arguments = bundle
-            loadFragment(fragment)
-            openEventsFragment = false
-        }
+        else {
+            if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
+                loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
+                supportActionBar?.title = "Search"
+                navigation.selectedItemId = navigation_search
+            }
 
-        if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
-            loadFragment(OrdersUnderUserFragment())
-            supportActionBar?.title = "Tickets"
-            navigation.selectedItemId = R.id.navigation_tickets
-            openEventsFragment = false
-        }
+            if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
+                val fragment = AttendeeFragment()
+                fragment.arguments = bundle
+                loadFragment(supportFragmentManager, fragment, frameContainer.id)
+            }
 
-        if (savedInstanceState == null && openEventsFragment)
-            loadFragment(EventsFragment())
+            if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
+                loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
+                supportActionBar?.title = "Tickets"
+                navigation.selectedItemId = R.id.navigation_tickets
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,31 +108,22 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun checkAndLoadFragment(fragment: Fragment) {
-        val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
-        if (savedFragment != null) {
-            loadFragment(savedFragment)
-            Timber.d("Loading fragment from stack ${fragment::class.java}")
-        } else {
-            loadFragment(fragment)
-        }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainer, fragment, fragment::class.java.name)
-                .addToBackStack(null)
-                .commit()
-    }
-
     override fun onBackPressed() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
         val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)
-        if (currentFragment !is EventsFragment && rootFragment !is EventDetailsFragment) {
-            loadFragment(EventsFragment())
-            navigation.selectedItemId = navigation_events
-        } else {
+        if (rootFragment is EventDetailsFragment)
             super.onBackPressed()
-        }
+        else
+            when(currentFragment) {
+                is SearchFragment,
+                is FavoriteFragment,
+                is OrdersUnderUserFragment,
+                is ProfileFragment -> {
+                    loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
+                    navigation.selectedItemId = navigation_events
+                }
+                is EventsFragment -> finish()
+                else -> super.onBackPressed()
+            }
     }
 }
