@@ -7,12 +7,28 @@
     android:layout_height="match_parent"
     tools:context="org.fossasia.openevent.general.SearchResultsActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerSearch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/placeholder_item_card_search" />
+
+            <include layout="@layout/placeholder_item_card_search" />
+
+            <include layout="@layout/placeholder_item_card_search" />
+
+            <include layout="@layout/placeholder_item_card_search" />
+
+            <include layout="@layout/placeholder_item_card_search" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/noSearchResults"
