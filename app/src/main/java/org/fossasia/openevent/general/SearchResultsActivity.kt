@@ -32,7 +32,6 @@ class SearchResultsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = resources.getString(R.string.search_results)
 
-        progressBar.isIndeterminate = true
         eventsRecycler.layoutManager = LinearLayoutManager(this)
 
         eventsRecycler.adapter = eventsRecyclerAdapter
@@ -68,8 +67,16 @@ class SearchResultsActivity : AppCompatActivity() {
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
-        searchViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(progressBar, it) }
+        searchViewModel.showShimmerResults.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    shimmerSearch.startShimmer()
+                    shimmerSearch.visibility = View.VISIBLE
+                } else {
+                    shimmerSearch.stopShimmer()
+                    shimmerSearch.visibility = View.GONE
+                }
+            }
         })
 
         searchViewModel.showNoInternetError.observe(this, Observer {
