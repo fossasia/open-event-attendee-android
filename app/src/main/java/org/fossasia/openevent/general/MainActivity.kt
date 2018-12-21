@@ -69,26 +69,21 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-        val bundle = intent.extras
-
-        if (savedInstanceState == null) {
-            loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
-        }
-
-        else {
-            if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
+        val bundle = if (savedInstanceState == null) intent.extras else null
+        if (bundle != null) {
+            if (bundle.getBoolean(TO_SEARCH)) {
                 loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
                 supportActionBar?.title = "Search"
                 navigation.selectedItemId = navigation_search
             }
 
-            if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
+            if (bundle.getBoolean(LAUNCH_ATTENDEE)) {
                 val fragment = AttendeeFragment()
                 fragment.arguments = bundle
                 loadFragment(supportFragmentManager, fragment, frameContainer.id)
             }
 
-            if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
+            if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS)) {
                 loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
                 supportActionBar?.title = "Tickets"
                 navigation.selectedItemId = R.id.navigation_tickets
