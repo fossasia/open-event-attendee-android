@@ -24,7 +24,7 @@ import org.koin.android.architecture.ext.viewModel
 const val LAUNCH_ATTENDEE: String = "LAUNCH_ATTENDEE"
 class LoginFragment : Fragment() {
 
-    private val loginActivityViewModel by viewModel<LoginFragmentViewModel>()
+    private val loginFragmentViewModel by viewModel<LoginFragmentViewModel>()
     private lateinit var rootView: View
     private var bundle: Bundle? = null
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
@@ -47,32 +47,32 @@ class LoginFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-        if (loginActivityViewModel.isLoggedIn())
+        if (loginFragmentViewModel.isLoggedIn())
             redirectToMain(bundle)
 
         rootView.loginButton.setOnClickListener {
-            loginActivityViewModel.login(email.text.toString(), password.text.toString())
+            loginFragmentViewModel.login(email.text.toString(), password.text.toString())
             hideSoftKeyboard(context, rootView)
         }
 
-        loginActivityViewModel.progress.observe(this, Observer {
+        loginFragmentViewModel.progress.observe(this, Observer {
             it?.let {
                 Utils.showProgressBar(rootView.progressBar, it)
                 loginButton.isEnabled = !it
             }
         })
 
-        loginActivityViewModel.showNoInternetDialog.observe(this, Observer {
+        loginFragmentViewModel.showNoInternetDialog.observe(this, Observer {
             Utils.showNoInternetDialog(context)
         })
 
-        loginActivityViewModel.error.observe(this, Observer {
+        loginFragmentViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        loginActivityViewModel.loggedIn.observe(this, Observer {
+        loginFragmentViewModel.loggedIn.observe(this, Observer {
             Toast.makeText(context, getString(R.string.welcome_back) , Toast.LENGTH_LONG).show()
-            loginActivityViewModel.fetchProfile()
+            loginFragmentViewModel.fetchProfile()
         })
 
         rootView.email.addTextChangedListener(object : TextWatcher {
@@ -81,16 +81,16 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                loginActivityViewModel.checkEmail(email.toString())
+                loginFragmentViewModel.checkEmail(email.toString())
             }
         })
 
-        loginActivityViewModel.requestTokenSuccess.observe(this, Observer {
+        loginFragmentViewModel.requestTokenSuccess.observe(this, Observer {
             rootView.sentEmailLayout.visibility = View.VISIBLE
             rootView.loginLayout.visibility = View.GONE
         })
 
-        loginActivityViewModel.isCorrectEmail.observe(this, Observer {
+        loginFragmentViewModel.isCorrectEmail.observe(this, Observer {
             it?.let {
                 onEmailEntered(it)
             }
@@ -103,10 +103,10 @@ class LoginFragment : Fragment() {
 
         rootView.forgotPassword.setOnClickListener {
             hideSoftKeyboard(context, rootView)
-            loginActivityViewModel.sendResetPasswordEmail(email.text.toString())
+            loginFragmentViewModel.sendResetPasswordEmail(email.text.toString())
         }
 
-        loginActivityViewModel.user.observe(this, Observer {
+        loginFragmentViewModel.user.observe(this, Observer {
             redirectToMain(bundle)
         })
 
