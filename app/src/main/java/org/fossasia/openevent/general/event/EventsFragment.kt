@@ -76,10 +76,11 @@ class EventsFragment : Fragment() {
             Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
         })
 
-        eventsViewModel.showSchimmerEvents.observe(this, Observer {
+        eventsViewModel.showShimmerEvents.observe(this, Observer {
             it?.let {
                 if (it) {
                     rootView.shimmerEvents.startShimmer()
+                    rootView.shimmerEvents.visibility = View.VISIBLE
                 } else {
                     rootView.shimmerEvents.stopShimmer()
                     rootView.shimmerEvents.visibility = View.GONE
@@ -99,7 +100,7 @@ class EventsFragment : Fragment() {
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.shimmerAndLoadEvents()
+            eventsViewModel.loadLocationEvents()
         } else {
             rootView.locationTextView.text = "where?"
         }

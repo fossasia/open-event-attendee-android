@@ -11,8 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.*
-import org.fossasia.openevent.general.MainActivity
-import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
@@ -24,9 +22,13 @@ import android.support.v4.app.ActivityCompat
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.content.res.AppCompatResources
 import kotlinx.android.synthetic.main.content_event.*
 import org.fossasia.openevent.general.CircleTransform
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.ticket.CURRENCY
 import java.util.*
 
@@ -57,9 +59,11 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = ""
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = ""
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         setHasOptionsMenu(true)
 
         eventViewModel.event.observe(this, Observer {
@@ -89,13 +93,14 @@ class EventDetailsFragment : Fragment() {
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                if (scrollY > rootView.eventName.height + rootView.logo.height) {
-                    /*Toolbar title set to name of Event if scrolled more than
-                    combined height of eventImage and eventName views*/
-                    activity?.supportActionBar?.title = eventShare.name
-                } else {
-                    // Toolbar title set to an empty string
-                    activity?.supportActionBar?.title = " "
+                if (thisActivity is AppCompatActivity) {
+                    if (scrollY > rootView.eventName.height + rootView.logo.height)
+                        /*Toolbar title set to name of Event if scrolled more than
+                        combined height of eventImage and eventName views*/
+                        thisActivity.supportActionBar?.title = eventShare.name
+                    else
+                        // Toolbar title set to an empty string
+                        thisActivity.supportActionBar?.title = ""
                 }
             }
         }
@@ -197,9 +202,14 @@ class EventDetailsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = resources.getString(R.string.events)
+        val thisActivity = activity
+        when (thisActivity) {
+            is SearchResultsActivity -> thisActivity.supportActionBar?.title = resources.getString(R.string.search_results)
+            is MainActivity -> {
+                thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                thisActivity.supportActionBar?.title = resources.getString(R.string.events)
+            }
+        }
         setHasOptionsMenu(false)
         super.onDestroyView()
     }
