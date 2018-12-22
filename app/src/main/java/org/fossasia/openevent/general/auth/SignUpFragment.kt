@@ -19,7 +19,7 @@ import org.koin.android.architecture.ext.viewModel
 
 class SignUpFragment : Fragment() {
 
-    private val signUpFragmentViewModel by viewModel<SignUpFragmentViewModel>()
+    private val signUpViewModel by viewModel<SignUpViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -39,30 +39,30 @@ class SignUpFragment : Fragment() {
             signUp.firstName = firstNameText.text.toString()
             signUp.lastName = lastNameText.text.toString()
             confirmPassword = confirmPasswords.text.toString()
-            signUpFragmentViewModel.signUp(signUp, confirmPassword)
+            signUpViewModel.signUp(signUp, confirmPassword)
         }
 
-        signUpFragmentViewModel.progress.observe(this, Observer {
+        signUpViewModel.progress.observe(this, Observer {
             it?.let {
                 Utils.showProgressBar(rootView.progressBarSignUp, it)
                 signUpButton.isEnabled = !it
             }
         })
 
-        signUpFragmentViewModel.showNoInternetDialog.observe(this, Observer {
+        signUpViewModel.showNoInternetDialog.observe(this, Observer {
             Utils.showNoInternetDialog(context)
         })
 
-        signUpFragmentViewModel.error.observe(this, Observer {
+        signUpViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        signUpFragmentViewModel.signedUp.observe(this, Observer {
+        signUpViewModel.signedUp.observe(this, Observer {
             Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
-            signUpFragmentViewModel.login(signUp)
+            signUpViewModel.login(signUp)
         })
 
-        signUpFragmentViewModel.loggedIn.observe(this, Observer {
+        signUpViewModel.loggedIn.observe(this, Observer {
             Toast.makeText(context, "Logged in Automatically!", Toast.LENGTH_LONG).show()
             redirectToMain()
         })
