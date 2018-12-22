@@ -18,6 +18,7 @@ const val TOMORROW = "Tomorrow"
 const val WEEKEND = "This Weekend"
 const val MONTH = "In the next month"
 
+
 class SearchTimeActivity : AppCompatActivity() {
     private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
     private val TO_SEARCH: String = "ToSearchFragment"
@@ -87,6 +88,11 @@ class SearchTimeActivity : AppCompatActivity() {
             calendar.add(Calendar.MONTH, 1)
             searchTimeViewModel.saveNextToNextMonth(simpleDateFormat.format(calendar.time))
             searchTimeViewModel.saveDate(MONTH)
+            redirectToSearch()
+        }
+
+        anytimeTextView.setOnClickListener {
+            searchTimeViewModel.saveDate(ANYTIME)
             redirectToSearch()
         }
 
