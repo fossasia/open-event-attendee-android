@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthService
 import timber.log.Timber
 
-class SettingsFragmentViewModel(private val authService: AuthService) : ViewModel() {
+class SettingsViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 

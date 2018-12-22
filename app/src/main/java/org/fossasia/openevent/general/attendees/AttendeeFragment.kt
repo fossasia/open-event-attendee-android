@@ -55,7 +55,7 @@ private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 class AttendeeFragment : Fragment() {
 
     private lateinit var rootView: View
-    private val attendeeFragmentViewModel by viewModel<AttendeeViewModel>()
+    private val attendeeViewModel by viewModel<AttendeeViewModel>()
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -152,13 +152,13 @@ class AttendeeFragment : Fragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        attendeeFragmentViewModel.ticketDetails(ticketIdAndQty)
+        attendeeViewModel.ticketDetails(ticketIdAndQty)
 
-        attendeeFragmentViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
+        attendeeViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
         val paymentOptions = ArrayList<String>()
         paymentOptions.add("PayPal")
         paymentOptions.add("Stripe")
-        attendeeFragmentViewModel.paymentSelectorVisibility.observe(this, Observer {
+        attendeeViewModel.paymentSelectorVisibility.observe(this, Observer {
             if (it != null && it) {
                 rootView.paymentSelector.visibility = View.VISIBLE
             } else {
@@ -179,43 +179,43 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        attendeeFragmentViewModel.initializeSpinner()
+        attendeeViewModel.initializeSpinner()
 
-        rootView.month.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeFragmentViewModel.month)
+        rootView.month.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.month)
         rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 expiryMonth = p2
-                rootView.monthText.text = attendeeFragmentViewModel.month[p2]
+                rootView.monthText.text = attendeeViewModel.month[p2]
             }
         }
 
-        rootView.year.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeFragmentViewModel.year)
+        rootView.year.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.year)
         rootView.year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                expiryYear = attendeeFragmentViewModel.year[p2]
+                expiryYear = attendeeViewModel.year[p2]
                 if (expiryYear == "Year")
                     expiryYear = "2017" // invalid year, if the user hasn't selected the year
-                rootView.yearText.text = attendeeFragmentViewModel.year[p2]
+                rootView.yearText.text = attendeeViewModel.year[p2]
             }
         }
 
-        rootView.cardSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeFragmentViewModel.cardType)
+        rootView.cardSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.cardType)
         rootView.cardSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                cardBrand = attendeeFragmentViewModel.cardType[p2]
+                cardBrand = attendeeViewModel.cardType[p2]
                 rootView.selectCard.text = cardBrand
             }
         }
-        attendeeFragmentViewModel.qtyList.observe(this, Observer {
+        attendeeViewModel.qtyList.observe(this, Observer {
             it?.let { it1 -> ticketsRecyclerAdapter.setQty(it1) }
         })
 
@@ -229,30 +229,30 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        attendeeFragmentViewModel.loadEvent(id)
+        attendeeViewModel.loadEvent(id)
 
-        if (attendeeFragmentViewModel.isLoggedIn()) {
+        if (attendeeViewModel.isLoggedIn()) {
 
-            attendeeFragmentViewModel.loadUser(attendeeFragmentViewModel.getId())
-            attendeeFragmentViewModel.loadEvent(id)
+            attendeeViewModel.loadUser(attendeeViewModel.getId())
+            attendeeViewModel.loadEvent(id)
 
-            attendeeFragmentViewModel.message.observe(this, Observer {
+            attendeeViewModel.message.observe(this, Observer {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             })
 
-            attendeeFragmentViewModel.progress.observe(this, Observer {
+            attendeeViewModel.progress.observe(this, Observer {
                 it?.let { Utils.showProgressBar(rootView.progressBarAttendee, it) }
             })
 
-            attendeeFragmentViewModel.event.observe(this, Observer {
+            attendeeViewModel.event.observe(this, Observer {
                 it?.let { loadEventDetails(it) }
-                attendeeFragmentViewModel.totalAmount.observe(this, Observer {
+                attendeeViewModel.totalAmount.observe(this, Observer {
                     rootView.amount.text = "Total: $paymentCurrency$it"
                 })
             })
 
             attendeeRecyclerAdapter.eventId = eventId
-            attendeeFragmentViewModel.tickets.observe(this, Observer {
+            attendeeViewModel.tickets.observe(this, Observer {
                 it?.let {
                     ticketsRecyclerAdapter.addAll(it)
                     ticketsRecyclerAdapter.notifyDataSetChanged()
@@ -261,28 +261,28 @@ class AttendeeFragment : Fragment() {
                             val pos = ticketIdAndQty?.map { it.first }?.indexOf(it.id)
                             val iterations = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.second } ?: 0
                             for (i in 0 until iterations)
-                                attendeeRecyclerAdapter.add(Attendee(attendeeFragmentViewModel.getId()), it)
+                                attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), it)
                             attendeeRecyclerAdapter.notifyDataSetChanged()
                         }
                 }
             })
 
-            attendeeFragmentViewModel.totalQty.observe(this, Observer {
+            attendeeViewModel.totalQty.observe(this, Observer {
                 rootView.qty.text = " — $it items"
             })
 
-            attendeeFragmentViewModel.countryVisibility.observe(this, Observer {
+            attendeeViewModel.countryVisibility.observe(this, Observer {
                 if (it != null && singleTicket) {
                     rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
                 }
             })
 
-            attendeeFragmentViewModel.paymentCompleted.observe(this, Observer {
+            attendeeViewModel.paymentCompleted.observe(this, Observer {
                 if (it != null && it)
                     openOrderCompletedFragment()
             })
 
-            attendeeFragmentViewModel.attendee.observe(this, Observer {
+            attendeeViewModel.attendee.observe(this, Observer {
                 it?.let {
                     helloUser.text = "Hello ${it.firstName.nullToEmpty()}"
                     firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
@@ -292,13 +292,13 @@ class AttendeeFragment : Fragment() {
             })
 
             rootView.signOut.setOnClickListener {
-                attendeeFragmentViewModel.logout()
+                attendeeViewModel.logout()
                 redirectToLogin()
             }
 
-            attendeeFragmentViewModel.getCustomFormsForAttendees(eventId.id)
+            attendeeViewModel.getCustomFormsForAttendees(eventId.id)
 
-            attendeeFragmentViewModel.forms.observe(this, Observer {
+            attendeeViewModel.forms.observe(this, Observer {
                 it?.let {
                     if (singleTicket)
                         fillInformationSection(it)
@@ -320,7 +320,7 @@ class AttendeeFragment : Fragment() {
                 if (singleTicket) {
                     val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
                     val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                    val attendee = Attendee(id = attendeeFragmentViewModel.getId(),
+                    val attendee = Attendee(id = attendeeViewModel.getId(),
                             firstname = firstName.text.toString(),
                             lastname = lastName.text.toString(),
                             city = getAttendeeField("city"),
@@ -334,14 +334,14 @@ class AttendeeFragment : Fragment() {
                     attendees.addAll(attendeeRecyclerAdapter.attendeeList)
                 }
                 val country = if (country.text.isEmpty()) country.text.toString() else null
-                attendeeFragmentViewModel.createAttendees(attendees, country, selectedPaymentOption)
+                attendeeViewModel.createAttendees(attendees, country, selectedPaymentOption)
             }
         } else {
             redirectToLogin()
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
         }
 
-        attendeeFragmentViewModel.ticketSoldOut.observe(this, Observer
+        attendeeViewModel.ticketSoldOut.observe(this, Observer
         {
             it?.let {
                 showTicketSoldOutDialog(it)
@@ -391,8 +391,8 @@ class AttendeeFragment : Fragment() {
                         object : TokenCallback {
                             override fun onSuccess(token: Token) {
                                 // Send this token to server
-                                val charge = Charge(attendeeFragmentViewModel.getId().toInt(), token.id, null)
-                                attendeeFragmentViewModel.completeOrder(charge)
+                                val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
+                                attendeeViewModel.completeOrder(charge)
                             }
 
                             override fun onError(error: Exception) {
@@ -420,7 +420,7 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun openOrderCompletedFragment() {
-        attendeeFragmentViewModel.paymentCompleted.value = false
+        attendeeViewModel.paymentCompleted.value = false
         // Initialise Order Completed Fragment
         val orderCompletedFragment = OrderCompletedFragment()
         val bundle = Bundle()

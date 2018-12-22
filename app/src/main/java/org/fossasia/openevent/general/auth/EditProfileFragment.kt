@@ -32,7 +32,7 @@ import java.io.InputStream
 
 class EditProfileFragment : Fragment() {
 
-    private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
     private lateinit var rootView: View
     private var permissionGranted = false
@@ -48,7 +48,7 @@ class EditProfileFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-        profileFragmentViewModel.user.observe(this, Observer {
+        profileViewModel.user.observe(this, Observer {
             it?.let {
                 val userFirstName = it.firstName.nullToEmpty()
                 val userLastName = it.lastName.nullToEmpty()
@@ -69,7 +69,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
         })
-        profileFragmentViewModel.fetchProfile()
+        profileViewModel.fetchProfile()
 
         editProfileViewModel.progress.observe(this, Observer {
             it?.let {

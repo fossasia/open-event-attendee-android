@@ -23,6 +23,7 @@
 
     <!--Search event details-->
     <string name="search">Search</string>
+    <string name="search_results">Search results</string>
     <string name="search_hint">Search for. . .</string>
     <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
@@ -38,6 +39,7 @@
     <string name="event_details">Event details</string>
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
+    <string name="in">In</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>

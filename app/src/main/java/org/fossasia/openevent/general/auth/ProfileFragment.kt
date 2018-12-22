@@ -23,7 +23,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
 
 class ProfileFragment : Fragment() {
-    private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
 
     private lateinit var rootView: View
     private var emailSettings: String? = null
@@ -35,12 +35,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        startActivity(Intent(activity, MainActivity::class.java))
+        startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (!profileFragmentViewModel.isLoggedIn()) {
+        if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
             redirectToLogin()
         }
@@ -55,15 +55,15 @@ class ProfileFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        profileFragmentViewModel.progress.observe(this, Observer {
+        profileViewModel.progress.observe(this, Observer {
             it?.let { Utils.showProgressBar(rootView.progressBar, it) }
         })
 
-        profileFragmentViewModel.error.observe(this, Observer {
+        profileViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        profileFragmentViewModel.user.observe(this, Observer {
+        profileViewModel.user.observe(this, Observer {
             it?.let {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.logout -> {
-                profileFragmentViewModel.logout()
+                profileViewModel.logout()
                 activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 redirectToMain()
                 return true
@@ -141,11 +141,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun fetchProfile() {
-        if (!profileFragmentViewModel.isLoggedIn())
+        if (!profileViewModel.isLoggedIn())
             return
 
         rootView.progressBar.isIndeterminate = true
-        profileFragmentViewModel.fetchProfile()
+        profileViewModel.fetchProfile()
     }
 
     override fun onResume() {
