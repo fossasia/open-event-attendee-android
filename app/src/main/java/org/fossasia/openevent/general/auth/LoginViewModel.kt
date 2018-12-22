@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import timber.log.Timber
 
-class LoginFragmentViewModel(
+class LoginViewModel(
     private val authService: AuthService,
     private val network: Network
 ) : ViewModel() {

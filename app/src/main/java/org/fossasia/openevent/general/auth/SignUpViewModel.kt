@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
-class SignUpFragmentViewModel(
+class SignUpViewModel(
     private val authService: AuthService,
     private val network: Network
 ) : ViewModel() {

@@ -27,7 +27,7 @@ import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
+import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -91,10 +91,10 @@ val apiModule = applicationContext {
 }
 
 val viewModelModule = applicationContext {
-    viewModel { LoginFragmentViewModel(get(), get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { EventsViewModel(get(), get()) }
-    viewModel { ProfileFragmentViewModel(get()) }
-    viewModel { SignUpFragmentViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get()) }
+    viewModel { SignUpViewModel(get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
@@ -104,7 +104,7 @@ val viewModelModule = applicationContext {
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
     viewModel { FavouriteEventsViewModel(get()) }
-    viewModel { SettingsFragmentViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
     viewModel { OrdersUnderUserVM(get(), get(), get()) }
