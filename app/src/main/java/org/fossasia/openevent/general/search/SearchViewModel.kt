@@ -40,8 +40,6 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val savedNextToNextMonth by lazy { preference.getString(tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
-
-        isSearched.value = true
         if (!isConnected()) return
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
