@@ -6,23 +6,23 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.Preference
-import android.view.*
-import java.util.prefs.PreferenceChangeEvent
-import java.util.prefs.PreferenceChangeListener
-import org.fossasia.openevent.general.R
+import android.view.MenuItem
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.android.architecture.ext.viewModel
+import java.util.prefs.PreferenceChangeEvent
+import java.util.prefs.PreferenceChangeListener
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
     val EMAIL: String = "EMAIL"
     val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
-    private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
         preferenceChange(evt)

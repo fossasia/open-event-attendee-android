@@ -19,18 +19,16 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     private val tokenKeyDate = "DATE"
     private val tokenKeyNextDate = "NEXT_DATE"
 
-    val progress = MutableLiveData<Boolean>()
+    val showShimmerResults = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
     val showNoInternetError = MutableLiveData<Boolean>()
-    val isSearched = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(tokenKeyDate) }
     val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
 
     fun loadEvents(location: String, time: String) {
-        isSearched.value = true
         if (!isConnected()) return
         preference.putString(tokenKey, location)
         val query: String = if (TextUtils.isEmpty(location))
@@ -43,11 +41,11 @@ class SearchViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    progress.value = true
-                }).doFinally({
-                    progress.value = false
-                }).subscribe({
+                .doOnSubscribe {
+                    showShimmerResults.value = true
+                }.doFinally {
+                    showShimmerResults.value = false
+                }.subscribe({
                     events.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
@@ -73,6 +71,7 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
         showNoInternetError.value = !isConnected
+        showShimmerResults.value = isConnected
         return isConnected
     }
 

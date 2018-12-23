@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general.auth
 
-import android.support.v4.app.Fragment
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import org.koin.android.architecture.ext.viewModel
 
 class SignUpFragment : Fragment() {
 
-    private val signUpActivityViewModel by viewModel<SignUpFragmentViewModel>()
+    private val signUpViewModel by viewModel<SignUpViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -39,30 +39,30 @@ class SignUpFragment : Fragment() {
             signUp.firstName = firstNameText.text.toString()
             signUp.lastName = lastNameText.text.toString()
             confirmPassword = confirmPasswords.text.toString()
-            signUpActivityViewModel.signUp(signUp, confirmPassword)
+            signUpViewModel.signUp(signUp, confirmPassword)
         }
 
-        signUpActivityViewModel.progress.observe(this, Observer {
+        signUpViewModel.progress.observe(this, Observer {
             it?.let {
                 Utils.showProgressBar(rootView.progressBarSignUp, it)
                 signUpButton.isEnabled = !it
             }
         })
 
-        signUpActivityViewModel.showNoInternetDialog.observe(this, Observer {
+        signUpViewModel.showNoInternetDialog.observe(this, Observer {
             Utils.showNoInternetDialog(context)
         })
 
-        signUpActivityViewModel.error.observe(this, Observer {
+        signUpViewModel.error.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        signUpActivityViewModel.signedUp.observe(this, Observer {
+        signUpViewModel.signedUp.observe(this, Observer {
             Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
-            signUpActivityViewModel.login(signUp)
+            signUpViewModel.login(signUp)
         })
 
-        signUpActivityViewModel.loggedIn.observe(this, Observer {
+        signUpViewModel.loggedIn.observe(this, Observer {
             Toast.makeText(context, "Logged in Automatically!", Toast.LENGTH_LONG).show()
             redirectToMain()
         })

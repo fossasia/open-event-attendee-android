@@ -36,5 +36,6 @@
         <meta-data
             android:name="com.stripe.android.API_KEY"
             android:value="${STRIPE_API_TOKEN}"/>
+        <activity android:name=".SearchResultsActivity"></activity>
     </application>
 </manifest>

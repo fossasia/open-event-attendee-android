@@ -14,7 +14,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     private val tokenKey = "LOCATION"
 
     val progress = MutableLiveData<Boolean>()
-    val showSchimmerEvents = MutableLiveData<Boolean>()
+    val showShimmerEvents = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
     val error = MutableLiveData<String>()
 
@@ -27,10 +27,10 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getEventsByLocation(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally({
+                .doFinally{
                     progress.value = false
-                    showSchimmerEvents.value = false
-                }).subscribe({
+                    showShimmerEvents.value = false
+                }.subscribe({
                     events.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
@@ -39,12 +39,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     }
 
     fun retryLoadLocationEvents() {
-        progress.value = true
-        loadLocationEvents()
-    }
-
-    fun shimmerAndLoadEvents() {
-        showSchimmerEvents.value = true
+        showShimmerEvents.value = true
         loadLocationEvents()
     }
 

@@ -69,32 +69,26 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Events"
 
-        val bundle = intent.extras
-        var openEventsFragment = true
+        val bundle = if (savedInstanceState == null) intent.extras else null
+        if (bundle != null) {
+            if (bundle.getBoolean(TO_SEARCH)) {
+                loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
+                supportActionBar?.title = "Search"
+                navigation.selectedItemId = navigation_search
+            }
 
-        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
-            loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
-            supportActionBar?.title = "Search"
-            navigation.selectedItemId = navigation_search
-            openEventsFragment = false
+            if (bundle.getBoolean(LAUNCH_ATTENDEE)) {
+                val fragment = AttendeeFragment()
+                fragment.arguments = bundle
+                loadFragment(supportFragmentManager, fragment, frameContainer.id)
+            }
+
+            if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS)) {
+                loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
+                supportActionBar?.title = "Tickets"
+                navigation.selectedItemId = R.id.navigation_tickets
+            }
         }
-
-        if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
-            val fragment = AttendeeFragment()
-            fragment.arguments = bundle
-            loadFragment(supportFragmentManager, fragment, frameContainer.id)
-            openEventsFragment = false
-        }
-
-        if (bundle != null && (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))) {
-            loadFragment(supportFragmentManager, OrdersUnderUserFragment(), frameContainer.id)
-            supportActionBar?.title = "Tickets"
-            navigation.selectedItemId = R.id.navigation_tickets
-            openEventsFragment = false
-        }
-
-        if (savedInstanceState == null && openEventsFragment)
-            loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
