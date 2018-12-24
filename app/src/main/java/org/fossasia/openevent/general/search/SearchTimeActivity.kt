@@ -15,8 +15,8 @@ import java.util.*
 const val ANYTIME = "Anytime"
 const val TODAY  = "Today"
 const val TOMORROW = "Tomorrow"
-const val WEEKEND = "This Weekend"
-const val MONTH = "In the next month"
+const val THIS_WEEKEND = "This Weekend"
+const val NEXT_MONTH = "In the next month"
 
 
 class SearchTimeActivity : AppCompatActivity() {
@@ -73,7 +73,7 @@ class SearchTimeActivity : AppCompatActivity() {
             searchTimeViewModel.saveWeekendDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextToWeekendDate(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(WEEKEND)
+            searchTimeViewModel.saveDate(THIS_WEEKEND)
             redirectToSearch()
         }
 
@@ -84,7 +84,7 @@ class SearchTimeActivity : AppCompatActivity() {
             searchTimeViewModel.saveNextMonth(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.MONTH, 1)
             searchTimeViewModel.saveNextToNextMonth(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(MONTH)
+            searchTimeViewModel.saveDate(NEXT_MONTH)
             redirectToSearch()
         }
 
