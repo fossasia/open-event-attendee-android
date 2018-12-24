@@ -91,18 +91,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.profile, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.setGroupVisible(R.id.profile_menu, false)
-        menu?.setGroupVisible(R.id.search_menu, false)
-        return super.onPrepareOptionsMenu(menu)
-    }
-
     override fun onBackPressed() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
         val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)

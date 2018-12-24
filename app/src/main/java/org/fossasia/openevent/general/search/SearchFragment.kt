@@ -67,10 +67,12 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.setGroupVisible(R.id.search_menu, true)
-        menu.setGroupVisible(R.id.profile_menu, false)
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.search, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
         searchView = menu.findItem(R.id.search_item).actionView as SearchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
