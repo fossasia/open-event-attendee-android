@@ -16,13 +16,6 @@ class SearchViewModel(private val eventService: EventService, private val prefer
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
-    private val tokenKeyDate = "DATE"
-    private val tokenKeyNextDate = "NEXT_DATE"
-    private val tokenKeyNextToNextDate = "NEXT_TO_NEXT_DATE"
-    private val tokenKeyWeekendDate = "WEEKEND"
-    private val tokenKeyWeekendNextDate = "WEEKEND_NEXT_DATE"
-    private val tokenKeyNextMonth = "NEXT_MONTH"
-    private val tokenKeyNextToNextMonth = "NEXT_TO_NEXT_MONTH"
 
     val showShimmerResults = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
@@ -30,13 +23,13 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val showNoInternetError = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
-    val savedDate by lazy { preference.getString(tokenKeyDate) }
-    val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
-    val savedNextToNextDate by lazy { preference.getString(tokenKeyNextToNextDate) }
-    val savedWeekendDate by lazy { preference.getString(tokenKeyWeekendDate) }
-    val savedWeekendNextDate by lazy { preference.getString(tokenKeyWeekendNextDate) }
-    val savedNextMonth by lazy { preference.getString(tokenKeyNextMonth) }
-    val savedNextToNextMonth by lazy { preference.getString(tokenKeyNextToNextMonth) }
+    val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
+    val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
+    val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
+    val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
+    val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
+    val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
+    val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
@@ -70,8 +63,8 @@ class SearchViewModel(private val eventService: EventService, private val prefer
                     error.value = "Error fetching events"
                 }))
 
-        preference.remove(tokenKeyDate)
-        preference.remove(tokenKeyNextDate)
+        preference.remove(SearchTimeViewModel.tokenKeyDate)
+        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {

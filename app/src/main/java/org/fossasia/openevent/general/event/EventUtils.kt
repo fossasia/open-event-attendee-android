@@ -7,6 +7,8 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 object EventUtils {
 
@@ -55,6 +57,16 @@ object EventUtils {
 
     fun getFormattedDate(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getSimpleFormattedDate(date: Date):String{
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         try {
             return dateFormat.format(date)
         } catch (e: IllegalArgumentException) {

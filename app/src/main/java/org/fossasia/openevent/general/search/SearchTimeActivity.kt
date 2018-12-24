@@ -8,8 +8,8 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_search_time.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import org.koin.android.architecture.ext.viewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 const val ANYTIME = "Anytime"
@@ -30,18 +30,15 @@ class SearchTimeActivity : AppCompatActivity() {
         this.supportActionBar?.title = ""
 
         val calendar = Calendar.getInstance()
-        val dateFormat = "yyyy-MM-dd"
-        val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
-
 
         val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-            searchTimeViewModel.saveDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             redirectToSearch()
         }
 
@@ -51,18 +48,18 @@ class SearchTimeActivity : AppCompatActivity() {
         }
 
         todayTextView.setOnClickListener {
-            searchTimeViewModel.saveDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             searchTimeViewModel.saveDate(TODAY)
             redirectToSearch()
         }
 
         tomorrowTextView.setOnClickListener {
             calendar.add(Calendar.DATE,1)
-            searchTimeViewModel.saveNextDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE,1)
-            searchTimeViewModel.saveNextToNextDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextToNextDate(getSimpleFormattedDate(calendar.time))
             searchTimeViewModel.saveDate(TOMORROW)
             redirectToSearch()
         }
@@ -73,9 +70,9 @@ class SearchTimeActivity : AppCompatActivity() {
                 val offset = Calendar.SATURDAY - today
                 calendar.add(Calendar.DATE, offset)
             }
-            searchTimeViewModel.saveWeekendDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveWeekendDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextToWeekendDate(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextToWeekendDate(getSimpleFormattedDate(calendar.time))
             searchTimeViewModel.saveDate(WEEKEND)
             redirectToSearch()
         }
@@ -84,9 +81,9 @@ class SearchTimeActivity : AppCompatActivity() {
             val today = calendar.get(Calendar.DAY_OF_MONTH)
             val offset = 30-today
             calendar.add(Calendar.DATE, offset)
-            searchTimeViewModel.saveNextMonth(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextMonth(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.MONTH, 1)
-            searchTimeViewModel.saveNextToNextMonth(simpleDateFormat.format(calendar.time))
+            searchTimeViewModel.saveNextToNextMonth(getSimpleFormattedDate(calendar.time))
             searchTimeViewModel.saveDate(MONTH)
             redirectToSearch()
         }
