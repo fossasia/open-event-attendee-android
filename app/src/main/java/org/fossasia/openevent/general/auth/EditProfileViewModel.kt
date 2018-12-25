@@ -49,7 +49,11 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
             message.value = "Please provide first name and last name!"
             return
         }
-        compositeDisposable.add(authService.updateUser(User(id = id, firstName = firstName, lastName = lastName, avatarUrl = url), id)
+        compositeDisposable.add(authService.updateUser(
+            User(id = id,
+                firstName = firstName,
+                lastName = lastName,
+                avatarUrl = url), id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

@@ -27,7 +27,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getEventsByLocation(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally{
+                .doFinally {
                     progress.value = false
                     showShimmerEvents.value = false
                 }.subscribe({

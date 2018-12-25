@@ -8,7 +8,6 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
-import java.util.*
 
 class FavoriteEventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()

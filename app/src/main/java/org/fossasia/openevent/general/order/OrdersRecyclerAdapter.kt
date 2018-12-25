@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.order
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 
@@ -28,7 +28,10 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        holder.bind(eventAndOrderIdentifier[position].first, clickListener, eventAndOrderIdentifier[position].second, attendeesNumber[position])
+        holder.bind(eventAndOrderIdentifier[position].first,
+            clickListener,
+            eventAndOrderIdentifier[position].second,
+            attendeesNumber[position])
     }
 
     override fun getItemCount(): Int {

@@ -4,12 +4,12 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
-import kotlinx.android.synthetic.main.item_social_link.view.*
-import org.fossasia.openevent.general.utils.Utils
+import kotlinx.android.synthetic.main.item_social_link.view.imgSocialLink
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
 
 class SocialLinksViewHolder(itemView: View, private var context: Context) : RecyclerView.ViewHolder(itemView) {
 
@@ -17,7 +17,8 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
         val drawableId = getSocialLinkDrawableId(socialLink.name)
         if (drawableId != -1) {
             val imageDrawable: Drawable? = ContextCompat.getDrawable(context, drawableId)
-            imageDrawable?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(context, R.color.greyMore), PorterDuff.Mode.SRC_IN)
+            imageDrawable?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(context, R.color.greyMore),
+                PorterDuff.Mode.SRC_IN)
 
             itemView.imgSocialLink.setImageDrawable(imageDrawable)
         }

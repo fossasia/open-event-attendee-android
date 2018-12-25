@@ -1,15 +1,9 @@
 package org.fossasia.openevent.general.attendees
 
 import android.app.AlertDialog
-import androidx.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import com.google.android.material.textfield.TextInputLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -24,13 +18,48 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
-import kotlinx.android.synthetic.main.fragment_attendee.*
-import kotlinx.android.synthetic.main.fragment_attendee.view.*
+import kotlinx.android.synthetic.main.fragment_attendee.cardNumber
+import kotlinx.android.synthetic.main.fragment_attendee.country
+import kotlinx.android.synthetic.main.fragment_attendee.cvc
+import kotlinx.android.synthetic.main.fragment_attendee.email
+import kotlinx.android.synthetic.main.fragment_attendee.firstName
+import kotlinx.android.synthetic.main.fragment_attendee.helloUser
+import kotlinx.android.synthetic.main.fragment_attendee.lastName
+import kotlinx.android.synthetic.main.fragment_attendee.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.accept
+import kotlinx.android.synthetic.main.fragment_attendee.view.amount
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
+import kotlinx.android.synthetic.main.fragment_attendee.view.countryArea
+import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
+import kotlinx.android.synthetic.main.fragment_attendee.view.month
+import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
+import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
+import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
+import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
+import kotlinx.android.synthetic.main.fragment_attendee.view.qty
+import kotlinx.android.synthetic.main.fragment_attendee.view.register
+import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
+import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
+import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
+import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
+import kotlinx.android.synthetic.main.fragment_attendee.view.ticketsRecycler
+import kotlinx.android.synthetic.main.fragment_attendee.view.time
+import kotlinx.android.synthetic.main.fragment_attendee.view.view
+import kotlinx.android.synthetic.main.fragment_attendee.view.year
+import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -46,8 +75,7 @@ import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Currency
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
@@ -80,7 +108,7 @@ class AttendeeFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
             eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
+            val ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
@@ -135,8 +163,10 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
+        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length - 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
 
         rootView.accept.text = paragraph
         rootView.accept.movementMethod = LinkMovementMethod.getInstance()
@@ -166,9 +196,11 @@ class AttendeeFragment : Fragment() {
                 rootView.paymentSelector.visibility = View.GONE
             }
         })
-        rootView.paymentSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, paymentOptions)
+        rootView.paymentSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                // Do nothing
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -182,9 +214,11 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.initializeSpinner()
 
-        rootView.month.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.month)
+        rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            attendeeViewModel.month)
         rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                // Do nothing
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -193,9 +227,11 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        rootView.year.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.year)
+        rootView.year.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            attendeeViewModel.year)
         rootView.year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                // Do nothing
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -206,7 +242,8 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        rootView.cardSelector.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, attendeeViewModel.cardType)
+        rootView.cardSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            attendeeViewModel.cardType)
         rootView.cardSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -283,8 +320,8 @@ class AttendeeFragment : Fragment() {
                     openOrderCompletedFragment()
             })
 
-            attendeeViewModel.attendee.observe(this, Observer {
-                it?.let {
+            attendeeViewModel.attendee.observe(this, Observer { user ->
+                user?.let {
                     helloUser.text = "Hello ${it.firstName.nullToEmpty()}"
                     firstName.text = Editable.Factory.getInstance().newEditable(it.firstName.nullToEmpty())
                     lastName.text = Editable.Factory.getInstance().newEditable(it.lastName.nullToEmpty())

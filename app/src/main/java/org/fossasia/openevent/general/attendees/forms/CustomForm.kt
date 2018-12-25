@@ -14,7 +14,8 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("custom-form")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"],
+    childColumns = ["event"], onDelete = ForeignKey.CASCADE))])
 data class CustomForm(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

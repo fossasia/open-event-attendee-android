@@ -1,19 +1,24 @@
 package org.fossasia.openevent.general.favorite
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_favorite.*
-import kotlinx.android.synthetic.main.fragment_favorite.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
+import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
+import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.FavoriteFabListener
+import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -47,7 +52,11 @@ class FavoriteFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.add(R.id.rootLayout, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {

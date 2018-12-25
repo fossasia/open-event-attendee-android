@@ -24,11 +24,11 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
         compositeDisposable.add(eventService.getEvent(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
+                .doOnSubscribe {
                     progress.value = true
-                }).doFinally({
+                }.doFinally {
                     progress.value = false
-                }).subscribe({
+                }.subscribe({
                     event.value = it
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
@@ -45,11 +45,6 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
         val latLong: String = "" + event.latitude + "," + event.longitude
 
         return mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
-    }
-
-    fun loadMapUrl(event: Event): String {
-        // load map url
-        return "geo:<" + event.latitude + ">,<" + event.longitude + ">?q=<" + event.latitude + ">,<" + event.longitude + ">"
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
