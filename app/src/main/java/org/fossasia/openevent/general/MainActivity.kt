@@ -68,8 +68,6 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(listener)
 
-        supportActionBar?.title = "Events"
-
         val bundle = if (savedInstanceState == null) intent.extras else null
         if (bundle != null) {
             if (bundle.getBoolean(TO_SEARCH)) {
@@ -89,6 +87,9 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = "Tickets"
                 navigation.selectedItemId = R.id.navigation_tickets
             }
+        } else {
+            supportActionBar?.title = "Events"
+            loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
         }
     }
 
