@@ -18,6 +18,8 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.core.view.MenuItemCompat
+import org.fossasia.openevent.general.MainActivity
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
@@ -80,7 +82,10 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        searchView = menu.findItem(R.id.search_item).actionView as SearchView
+        val searchItem = menu.findItem(R.id.search_item)
+        val thisActivity = activity
+        if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
+        MenuItemCompat.setActionView(searchItem, searchView)
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val intent = Intent(activity, SearchResultsActivity::class.java)
