@@ -1,15 +1,24 @@
 package org.fossasia.openevent.general.order
 
-import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.appcompat.app.AppCompatActivity
-import android.view.*
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_order.view.*
+import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_order.view.add
+import kotlinx.android.synthetic.main.fragment_order.view.name
+import kotlinx.android.synthetic.main.fragment_order.view.share
+import kotlinx.android.synthetic.main.fragment_order.view.time
+import kotlinx.android.synthetic.main.fragment_order.view.view
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
@@ -77,7 +86,7 @@ class OrderCompletedFragment : Fragment() {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
 
-        rootView.name.text = "${event.name}"
+        rootView.name.text = event.name
         rootView.time.text = dateString.append(EventUtils.getFormattedDateShort(startsAt))
                 .append(" • ")
                 .append(EventUtils.getFormattedTime(startsAt))

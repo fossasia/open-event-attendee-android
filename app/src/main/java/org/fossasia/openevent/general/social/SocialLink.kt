@@ -16,7 +16,8 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("social-link")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = CASCADE))])
+@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"],
+    childColumns = ["event"], onDelete = CASCADE))])
 data class SocialLink(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

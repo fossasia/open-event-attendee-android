@@ -1,24 +1,32 @@
 package org.fossasia.openevent.general.auth
 
-import androidx.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.avatar
+import kotlinx.android.synthetic.main.fragment_profile.view.email
+import kotlinx.android.synthetic.main.fragment_profile.view.name
+import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -71,7 +79,7 @@ class ProfileFragment : Fragment() {
 
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }
@@ -86,7 +94,10 @@ class ProfileFragment : Fragment() {
         when (item.itemId) {
             R.id.edit_profile -> {
                 val fragment = EditProfileFragment()
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.frameContainer, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
                 return true
             }
             R.id.orga_app -> {
@@ -110,7 +121,10 @@ class ProfileFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.frameContainer, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

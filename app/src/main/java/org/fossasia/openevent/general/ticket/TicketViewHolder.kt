@@ -1,11 +1,13 @@
 package org.fossasia.openevent.general.ticket
 
-import android.R
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import kotlinx.android.synthetic.main.item_ticket.view.*
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_ticket.view.order
+import kotlinx.android.synthetic.main.item_ticket.view.orderRange
+import kotlinx.android.synthetic.main.item_ticket.view.price
+import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -27,7 +29,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            itemView.orderRange.adapter = ArrayAdapter(itemView.context, R.layout.select_dialog_singlechoice, spinnerList)
+            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
+                spinnerList)
         }
 
         itemView.order.setOnClickListener {

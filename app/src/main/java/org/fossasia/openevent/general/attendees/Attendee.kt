@@ -17,7 +17,11 @@ import org.fossasia.openevent.general.ticket.TicketId
 
 @Type("attendee")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Ticket::class, parentColumns = ["id"], childColumns = ["ticket"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [
+    (ForeignKey(entity = Event::class, parentColumns = ["id"],
+        childColumns = ["event"], onDelete = ForeignKey.CASCADE)),
+    (ForeignKey(entity = Ticket::class, parentColumns = ["id"],
+        childColumns = ["ticket"], onDelete = ForeignKey.CASCADE))])
 data class Attendee(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

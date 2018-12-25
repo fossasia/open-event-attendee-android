@@ -2,33 +2,37 @@ package org.fossasia.openevent.general.auth
 
 import android.Manifest
 import android.app.Activity
-import androidx.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
-import java.io.InputStream
 
 class EditProfileFragment : Fragment() {
 
@@ -87,7 +91,8 @@ class EditProfileFragment : Fragment() {
 
         rootView.buttonUpdate.setOnClickListener {
             hideSoftKeyboard(context, rootView)
-            editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(), rootView.lastName.text.toString())
+            editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
+                rootView.lastName.text.toString())
         }
 
         editProfileViewModel.message.observe(this, Observer {
@@ -103,20 +108,19 @@ class EditProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
-            val imageUri = intentData.data
-            var imageStream: InputStream? = null
+            val imageUri = intentData.data ?: return
+
             try {
-                imageStream = activity?.contentResolver?.openInputStream(imageUri)
+                val imageStream = activity?.contentResolver?.openInputStream(imageUri)
+                val selectedImage = BitmapFactory.decodeStream(imageStream)
+                encodedImage = encodeImage(selectedImage)
             } catch (e: FileNotFoundException) {
                 Timber.d(e, "File Not Found Exception")
             }
 
-            val selectedImage = BitmapFactory.decodeStream(imageStream)
-            encodedImage = encodeImage(selectedImage)
-
             Picasso.get()
                     .load(imageUri)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }
@@ -163,10 +167,12 @@ class EditProfileFragment : Fragment() {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                Toast.makeText(context, "Permission to Access External Storage Granted !", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Permission to Access External Storage Granted !",
+                    Toast.LENGTH_SHORT).show()
                 showFileChooser()
             } else {
-                Toast.makeText(context, "Permission to Access External Storage Denied :(", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Permission to Access External Storage Denied :(",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }

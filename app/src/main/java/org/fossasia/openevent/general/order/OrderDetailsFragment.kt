@@ -1,13 +1,17 @@
 package org.fossasia.openevent.general.order
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_order_details.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
+import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
@@ -30,7 +34,13 @@ class OrderDetailsFragment : Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
-            orderId = bundle.getString(ORDERS)
+            val orderId = bundle.getString(ORDERS)
+
+            if (orderId == null) {
+                Timber.e("Order ID must be provided")
+            } else {
+                this.orderId = orderId
+            }
         }
         ordersRecyclerAdapter.setOrderIdentifier(orderId)
     }
@@ -60,7 +70,10 @@ class OrderDetailsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.rootLayout, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
         }
 

@@ -20,8 +20,7 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
 
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
@@ -224,7 +223,8 @@ class AttendeeViewModel(
         }
         val eventId = event.value?.id
         if (eventId != null) {
-            val order = Order(getId(), paymentMode, country, "pending", amount, attendees = attendeeList, event = EventId(eventId))
+            val order = Order(getId(), paymentMode, country, "pending", amount,
+                attendees = attendeeList, event = EventId(eventId))
             compositeDisposable.add(orderService.placeOrder(order)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -18,7 +18,11 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("order")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Attendee::class, parentColumns = ["id"], childColumns = ["attendees"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [
+    (ForeignKey(entity = Event::class, parentColumns = ["id"],
+        childColumns = ["event"], onDelete = ForeignKey.CASCADE)),
+    (ForeignKey(entity = Attendee::class, parentColumns = ["id"],
+        childColumns = ["attendees"], onDelete = ForeignKey.CASCADE))])
 data class Order(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

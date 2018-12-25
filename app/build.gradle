@@ -1,3 +1,7 @@
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.16.0"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -57,6 +61,14 @@ android {
     }
     packagingOptions {
         pickFirst 'kotlin/**'
+    }
+}
+
+spotless {
+    kotlin {
+        ktlint().userData(['android': 'true', 'color': 'true',
+                           'max_line_length': '120', 'reporter': 'checkstyle'])
+        target '**/*.kt'
     }
 }
 

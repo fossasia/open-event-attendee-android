@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.search
 
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.text.TextUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,7 +12,11 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class SearchViewModel(private val eventService: EventService, private val preference: Preference, private val network: Network) : ViewModel() {
+class SearchViewModel(
+    private val eventService: EventService,
+    private val preference: Preference,
+    private val network: Network
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
@@ -31,12 +35,43 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
         preference.putString(tokenKey, location)
-        val query: String = if (TextUtils.isEmpty(location))
-            "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
-        else if (time == "Anytime")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
-        else
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
+        val query: String = when {
+            TextUtils.isEmpty(location) -> """[{
+                |   'name':'name',
+                |   'op':'ilike',
+                |   'val':'%$searchEvent%'
+                |}]""".trimMargin().replace("'", "'")
+            time == "Anytime" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |    }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+            else -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+        }
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())

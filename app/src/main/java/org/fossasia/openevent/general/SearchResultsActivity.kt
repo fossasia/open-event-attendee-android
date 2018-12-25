@@ -1,22 +1,28 @@
 package org.fossasia.openevent.general
 
-import androidx.lifecycle.Observer
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_search_results.*
-import org.fossasia.openevent.general.event.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_search_results.errorTextView
+import kotlinx.android.synthetic.main.activity_search_results.eventsRecycler
+import kotlinx.android.synthetic.main.activity_search_results.noSearchResults
+import kotlinx.android.synthetic.main.activity_search_results.shimmerSearch
+import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.FavoriteFabListener
+import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.search.DATE
 import org.fossasia.openevent.general.search.LOCATION
 import org.fossasia.openevent.general.search.QUERY
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -44,7 +50,10 @@ class SearchResultsActivity : AppCompatActivity() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                supportFragmentManager?.beginTransaction()?.replace(R.id.searchRootLayout, fragment)?.addToBackStack(null)?.commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.searchRootLayout, fragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         }
 
@@ -98,7 +107,9 @@ class SearchResultsActivity : AppCompatActivity() {
         val date = intent?.getStringExtra(DATE)
         searchViewModel.searchEvent = query
         if (searchViewModel.savedLocation != null && TextUtils.isEmpty(location) && date == "Anytime")
-            searchViewModel.loadEvents(searchViewModel.savedLocation.nullToEmpty(), searchViewModel.savedDate.nullToEmpty())
+            searchViewModel.loadEvents(
+                searchViewModel.savedLocation.nullToEmpty(),
+                searchViewModel.savedDate.nullToEmpty())
         else
             searchViewModel.loadEvents(location.toString(), date.toString())
     }

@@ -43,8 +43,10 @@ class SignUpViewModel(
                     Timber.d("Success!")
                 }, {
                     when {
-                        it.toString().contains("HTTP 409 CONFLICT") -> error.value = "Unable to SignUp: Email already exists!"
-                        it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") -> error.value = "Unable to SignUp: Not a valid email address!"
+                        it.toString().contains("HTTP 409 CONFLICT") ->
+                            error.value = "Unable to SignUp: Email already exists!"
+                        it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") ->
+                            error.value = "Unable to SignUp: Not a valid email address!"
                         else -> error.value = "Unable to SignUp!"
                     }
                     Timber.d(it, "Failed")

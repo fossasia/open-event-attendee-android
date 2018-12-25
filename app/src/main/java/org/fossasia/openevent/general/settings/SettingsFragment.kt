@@ -5,9 +5,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
-import android.view.MenuItem
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
@@ -20,8 +20,9 @@ import java.util.prefs.PreferenceChangeListener
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private var email: String? = null
-    val EMAIL: String = "EMAIL"
-    val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
+    private val EMAIL: String = "EMAIL"
+    private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
+        "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -39,10 +40,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
         // Set Email
         email = arguments?.getString(EMAIL)
-        preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
+        preferenceScreen.findPreference(resources.getString(R.string.key_profile))
+            .summary = email
 
         // Set Build Version
-        preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
+        preferenceScreen.findPreference(resources.getString(R.string.key_version))
+            .title = "Version " + BuildConfig.VERSION_NAME
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {

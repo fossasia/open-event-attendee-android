@@ -1,11 +1,11 @@
 package org.fossasia.openevent.general.event
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
-import java.util.*
+import java.util.ArrayList
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()
@@ -36,11 +36,12 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val eventView: View
-        if (eventLayout.equals(SIMILAR_EVENTS)) {
-            eventView = LayoutInflater.from(parent.context).inflate(R.layout.item_card_similar_events, parent, false)
+        val eventView: View = if (eventLayout.equals(SIMILAR_EVENTS)) {
+            LayoutInflater.from(parent.context).inflate(R.layout.item_card_similar_events, parent,
+                false)
         } else {
-            eventView = LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent,
+                false)
         }
         return EventViewHolder(eventView)
     }
