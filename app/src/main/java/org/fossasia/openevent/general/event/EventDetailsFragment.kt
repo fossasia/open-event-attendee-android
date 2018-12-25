@@ -257,12 +257,6 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.search_menu, false)
-        menu?.setGroupVisible(R.id.event_menu, true)
-        super.onPrepareOptionsMenu(menu)
-    }
-
     private fun startCalendar(event: Event) {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"

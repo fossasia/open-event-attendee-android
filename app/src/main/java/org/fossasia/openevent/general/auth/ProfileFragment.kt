@@ -117,9 +117,9 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profile_menu, true)
-        super.onPrepareOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun startOrgaApp(packageName: String) {
