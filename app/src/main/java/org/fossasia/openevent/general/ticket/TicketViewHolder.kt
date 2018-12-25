@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.ticket
 
 import android.R
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter

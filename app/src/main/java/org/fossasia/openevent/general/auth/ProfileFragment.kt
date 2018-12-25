@@ -1,14 +1,14 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import android.view.*
 import android.widget.Toast
 import com.squareup.picasso.Picasso
@@ -20,7 +20,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
@@ -82,8 +82,8 @@ class ProfileFragment : Fragment() {
         return rootView
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.edit_profile -> {
                 val fragment = EditProfileFragment()
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
@@ -117,8 +117,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.profile, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.profile, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

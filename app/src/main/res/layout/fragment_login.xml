@@ -29,7 +29,7 @@
                 android:textSize="@dimen/text_size_very_large"
                 android:text="@string/eventyay_logo"/>
             <!-- Email Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
@@ -45,10 +45,10 @@
                     android:drawablePadding="@dimen/layout_margin_moderate"
                     android:inputType="textEmailAddress"
                     android:drawableStart="@drawable/ic_email_black_24dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
@@ -64,9 +64,9 @@
                     android:drawablePadding="@dimen/layout_margin_moderate"
                     android:inputType="textPassword"
                     android:drawableStart="@drawable/ic_lock_black_24dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginButton"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

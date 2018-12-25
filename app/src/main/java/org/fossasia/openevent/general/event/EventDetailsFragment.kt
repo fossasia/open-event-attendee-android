@@ -1,11 +1,11 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -15,20 +15,20 @@ import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
 import timber.log.Timber
 import android.os.Build
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import kotlinx.android.synthetic.main.fragment_event.view.*
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import kotlinx.android.synthetic.main.content_event.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.ticket.CURRENCY
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 const val EVENT_ID = "EVENT_ID"
@@ -278,9 +278,8 @@ class EventDetailsFragment : Fragment() {
         startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        val inflaterMenu = activity?.menuInflater
-        inflaterMenu?.inflate(R.menu.event_details, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.event_details, menu)
         menuActionBar = menu
     }
 
