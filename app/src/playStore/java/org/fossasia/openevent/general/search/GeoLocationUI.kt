@@ -12,13 +12,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.view.View
-import android.widget.LinearLayout
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.activity_search_location.view.*
+import kotlinx.android.synthetic.main.activity_search_location.*
 import org.fossasia.openevent.general.MainActivity
 import timber.log.Timber
 import java.io.IOException
@@ -28,9 +26,7 @@ private const val TO_SEARCH: String = "ToSearchFragment"
 
 class GeoLocationUI {
 
-    var query = ""
-
-    fun configure(activity: Activity){
+    fun configure(activity: Activity, searchLocationViewModel: SearchLocationViewModel) {
         val permission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
@@ -42,36 +38,38 @@ class GeoLocationUI {
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             activity.startActivity(intent)
         }
-        val locationRequest: LocationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                if (locationResult == null) {
-                    return
-                }
-                for (location in locationResult.locations) {
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        try {
-                            val geocoder = Geocoder(activity, Locale.getDefault())
-                            val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
-                            for (address: Address in addresses) {
-                                if (address.locality != null && address.locality.length > 0) {
-                                    query = address.locality
+        activity.currentLocation.setOnClickListener {
+            val locationRequest: LocationRequest = LocationRequest.create()
+            locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult?) {
+                    if (locationResult == null) {
+                        return
+                    }
+                    for (location in locationResult.locations) {
+                        if (location != null) {
+                            val latitude = location.latitude
+                            val longitude = location.longitude
+                            try {
+                                val geocoder = Geocoder(activity, Locale.getDefault())
+                                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
+                                for (address: Address in addresses) {
+                                    if (address.locality != null) {
+                                        search(activity, SearchLocationActivity().fromSearchFragment, searchLocationViewModel, address.locality)
+                                    }
                                 }
+                            } catch (exception: IOException) {
+                                Timber.e(exception, "Error Fetching Location")
                             }
-                        } catch (exception: IOException) {
-                            Timber.e(exception, "Error Fetching Location")
                         }
                     }
                 }
             }
+            LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
         }
-        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
-    fun search(activity: Activity,fromSearchFragment: Boolean , searchLocationViewModel: SearchLocationViewModel){
+    fun search(activity: Activity, fromSearchFragment: Boolean, searchLocationViewModel: SearchLocationViewModel, query: String) {
         searchLocationViewModel.saveSearch(query)
         val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (fromSearchFragment) {

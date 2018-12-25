@@ -11,10 +11,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_search_location.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import org.fossasia.openevent.general.MainActivity
 import org.koin.android.architecture.ext.viewModel
-import java.util.*
 
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
@@ -35,24 +33,11 @@ class SearchLocationActivity : AppCompatActivity() {
         val bundle = intent.extras
         locationProgressBar.visibility = View.GONE
 
-        geoLocationUI.configure(this)
-        if(geoLocationUI.query.equals("fdroid")){
-            currentLocation.visibility = View.GONE
-        }
-        else{
-            currentLocation.setOnClickListener {
-                locationProgressBar.visibility = View.VISIBLE
-                geoLocationUI.search(this, fromSearchFragment,searchLocationViewModel)
-            }
-        }
         if (bundle != null) {
             fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
         }
 
-
-        if (bundle != null) {
-            fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
-        }
+        geoLocationUI.configure(this, searchLocationViewModel)
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -81,7 +66,7 @@ class SearchLocationActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) { LOCATION_PERMISSION_REQUEST -> {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                geoLocationUI.configure(this)
+                geoLocationUI.configure(this, searchLocationViewModel)
             } else {
                 Toast.makeText(applicationContext, "Error fetching Location without permission", Toast.LENGTH_SHORT).show()
             }
