@@ -35,7 +35,20 @@ class SearchLocationActivity : AppCompatActivity() {
         val bundle = intent.extras
         locationProgressBar.visibility = View.GONE
 
-        geoLocationUI.configure(this,currentLocation,fromSearchFragment, searchLocationViewModel)
+        geoLocationUI.configure(this)
+        if(geoLocationUI.query.equals("fdroid")){
+            currentLocation.visibility = View.GONE
+        }
+        else{
+            currentLocation.setOnClickListener {
+                locationProgressBar.visibility = View.VISIBLE
+                geoLocationUI.search(this, fromSearchFragment,searchLocationViewModel)
+            }
+        }
+        if (bundle != null) {
+            fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
+        }
+
 
         if (bundle != null) {
             fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
@@ -68,7 +81,7 @@ class SearchLocationActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) { LOCATION_PERMISSION_REQUEST -> {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                geoLocationUI.configure(this,currentLocation,fromSearchFragment, searchLocationViewModel)
+                geoLocationUI.configure(this)
             } else {
                 Toast.makeText(applicationContext, "Error fetching Location without permission", Toast.LENGTH_SHORT).show()
             }

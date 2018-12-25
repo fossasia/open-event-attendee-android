@@ -21,13 +21,16 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_search_location.view.*
 import org.fossasia.openevent.general.MainActivity
 import timber.log.Timber
+import java.io.IOException
 import java.util.*
 
 private const val TO_SEARCH: String = "ToSearchFragment"
 
 class GeoLocationUI {
 
-    fun configure(activity: Activity, view: LinearLayout, fromSearchFragment: Boolean , searchLocationViewModel: SearchLocationViewModel){
+    var query = ""
+
+    fun configure(activity: Activity){
         val permission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
@@ -39,44 +42,43 @@ class GeoLocationUI {
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             activity.startActivity(intent)
         }
-        view.setOnClickListener{
-            view.locationProgressBar.visibility = View.VISIBLE
-            val locationRequest: LocationRequest = LocationRequest.create()
-            locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
-            val locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    if (locationResult == null) {
-                        return
-                    }
-                    for (location in locationResult.locations) {
-                        if (location != null) {
-                            val latitude = location.latitude
-                            val longitude = location.longitude
-                            try {
-                                val geocoder = Geocoder(activity, Locale.getDefault())
-                                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
-                                for (address: Address in addresses) {
-                                    if (address.locality != null && address.locality.length > 0) {
-                                        view.locationProgressBar.visibility = View.GONE
-                                        searchLocationViewModel.saveSearch(address.locality)
-                                        val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                        if (fromSearchFragment) {
-                                            val searchBundle = Bundle()
-                                            searchBundle.putBoolean(TO_SEARCH, true)
-                                            startMainActivity.putExtras(searchBundle)
-                                        }
-                                        activity.startActivity(startMainActivity)
-                                        return
-                                    }
+        val locationRequest: LocationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                if (locationResult == null) {
+                    return
+                }
+                for (location in locationResult.locations) {
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        try {
+                            val geocoder = Geocoder(activity, Locale.getDefault())
+                            val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
+                            for (address: Address in addresses) {
+                                if (address.locality != null && address.locality.length > 0) {
+                                    query = address.locality
                                 }
-                            } catch (exception: Exception) {
-                                Timber.e(exception, "Error Fetching Location")
                             }
+                        } catch (exception: IOException) {
+                            Timber.e(exception, "Error Fetching Location")
                         }
                     }
                 }
             }
-            LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
         }
+        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    fun search(activity: Activity,fromSearchFragment: Boolean , searchLocationViewModel: SearchLocationViewModel){
+        searchLocationViewModel.saveSearch(query)
+        val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (fromSearchFragment) {
+            val searchBundle = Bundle()
+            searchBundle.putBoolean(TO_SEARCH, true)
+            startMainActivity.putExtras(searchBundle)
+        }
+        activity.startActivity(startMainActivity)
     }
 }
