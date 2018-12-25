@@ -1,34 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/searchRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.fossasia.openevent.general.SearchResultsActivity">
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include layout="@layout/placeholder_item_card_search" />
-
-            <include layout="@layout/placeholder_item_card_search" />
-
-            <include layout="@layout/placeholder_item_card_search" />
-
-            <include layout="@layout/placeholder_item_card_search" />
-
-            <include layout="@layout/placeholder_item_card_search" />
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/noSearchResults"
@@ -51,7 +28,7 @@
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -61,6 +38,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/placeholder_item_card_search" />
+
+                    <include layout="@layout/placeholder_item_card_search" />
+
+                    <include layout="@layout/placeholder_item_card_search" />
+
+                    <include layout="@layout/placeholder_item_card_search" />
+
+                    <include layout="@layout/placeholder_item_card_search" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
                 android:id="@+id/errorTextView"
@@ -74,12 +74,12 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/eventsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.design.widget.CoordinatorLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

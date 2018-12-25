@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general.order
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler
@@ -18,7 +18,11 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("order")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Attendee::class, parentColumns = ["id"], childColumns = ["attendees"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [
+    (ForeignKey(entity = Event::class, parentColumns = ["id"],
+        childColumns = ["event"], onDelete = ForeignKey.CASCADE)),
+    (ForeignKey(entity = Attendee::class, parentColumns = ["id"],
+        childColumns = ["attendees"], onDelete = ForeignKey.CASCADE))])
 data class Order(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

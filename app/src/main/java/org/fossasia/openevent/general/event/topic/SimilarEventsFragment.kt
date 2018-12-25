@@ -1,19 +1,29 @@
 package org.fossasia.openevent.general.event.topic
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_similar_events.*
-import kotlinx.android.synthetic.main.fragment_similar_events.view.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
+import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
+import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivider
+import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsRecycler
+import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsRecycler
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.event.EVENT_TOPIC_ID
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.EventsRecyclerAdapter
+import org.fossasia.openevent.general.event.FavoriteFabListener
+import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.event.SIMILAR_EVENTS
 import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class SimilarEventsFragment : Fragment() {
@@ -55,7 +65,11 @@ class SimilarEventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.rootLayout, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
         }
 
@@ -92,7 +106,7 @@ class SimilarEventsFragment : Fragment() {
         return rootView
     }
 
-    fun handleVisibility(similarEvents: List<Event>) {
+    private fun handleVisibility(similarEvents: List<Event>) {
         if (!similarEvents.isEmpty()) {
             similarEventsDivider.visibility = View.VISIBLE
             moreLikeThis.visibility = View.VISIBLE

@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.data
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import org.fossasia.openevent.general.OpenEventGeneral
 
 class Resource {

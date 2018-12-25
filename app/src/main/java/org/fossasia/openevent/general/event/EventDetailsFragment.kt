@@ -1,35 +1,59 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.support.v4.app.Fragment
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_event.view.*
-import org.fossasia.openevent.general.about.AboutEventActivity
-import org.fossasia.openevent.general.social.SocialLinksFragment
-import org.fossasia.openevent.general.ticket.TicketsFragment
-import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
-import timber.log.Timber
-import android.os.Build
-import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
-import kotlinx.android.synthetic.main.fragment_event.view.*
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
-import kotlinx.android.synthetic.main.content_event.*
+import kotlinx.android.synthetic.main.content_event.aboutEventContainer
+import kotlinx.android.synthetic.main.content_event.locationContainer
+import kotlinx.android.synthetic.main.content_event.organizerContainer
+import kotlinx.android.synthetic.main.content_event.similarEventsContainer
+import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsFirst
+import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsSecond
+import kotlinx.android.synthetic.main.content_event.view.eventDescription
+import kotlinx.android.synthetic.main.content_event.view.eventLocationLinearLayout
+import kotlinx.android.synthetic.main.content_event.view.eventLocationTextView
+import kotlinx.android.synthetic.main.content_event.view.eventName
+import kotlinx.android.synthetic.main.content_event.view.eventOrganiserDescription
+import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
+import kotlinx.android.synthetic.main.content_event.view.imageMap
+import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
+import kotlinx.android.synthetic.main.content_event.view.logo
+import kotlinx.android.synthetic.main.content_event.view.logoIcon
+import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
+import kotlinx.android.synthetic.main.content_event.view.organizerName
+import kotlinx.android.synthetic.main.content_event.view.refundPolicy
+import kotlinx.android.synthetic.main.content_event.view.seeMore
+import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.SearchResultsActivity
+import org.fossasia.openevent.general.about.AboutEventActivity
+import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
+import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.CURRENCY
-import java.util.*
+import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.nullToEmpty
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
+import java.util.Currency
 
 const val EVENT_ID = "EVENT_ID"
 const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
@@ -123,7 +147,7 @@ class EventDetailsFragment : Fragment() {
 
             Picasso.get()
                     .load(event.logoUrl)
-                    .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
         }
@@ -203,7 +227,8 @@ class EventDetailsFragment : Fragment() {
     override fun onDestroyView() {
         val thisActivity = activity
         when (thisActivity) {
-            is SearchResultsActivity -> thisActivity.supportActionBar?.title = resources.getString(R.string.search_results)
+            is SearchResultsActivity -> thisActivity.supportActionBar
+                ?.title = resources.getString(R.string.search_results)
             is MainActivity -> {
                 thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 thisActivity.supportActionBar?.title = resources.getString(R.string.events)
@@ -257,12 +282,6 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.search_menu, false)
-        menu?.setGroupVisible(R.id.event_menu, true)
-        super.onPrepareOptionsMenu(menu)
-    }
-
     private fun startCalendar(event: Event) {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"
@@ -284,9 +303,8 @@ class EventDetailsFragment : Fragment() {
         startActivity(Intent.createChooser(emailIntent, "Chooser Title"))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        val inflaterMenu = activity?.menuInflater
-        inflaterMenu?.inflate(R.menu.event_details, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.event_details, menu)
         menuActionBar = menu
     }
 
@@ -297,7 +315,10 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, ticketFragment)?.addToBackStack(null)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.rootLayout, ticketFragment)
+            ?.addToBackStack(null)
+            ?.commit()
     }
 
     private fun loadSocialLinksFragment() {
@@ -322,9 +343,10 @@ class EventDetailsFragment : Fragment() {
 
     private fun startMap(event: Event) {
         // start map intent
-        val mapUrl = eventViewModel.loadMapUrl(event)
+        val mapUrl = loadMapUrl(event)
         val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
-        if (mapIntent.resolveActivity(activity?.packageManager) != null) {
+        val packageManager = activity?.packageManager
+        if (packageManager != null && mapIntent.resolveActivity(packageManager) != null) {
             startActivity(mapIntent)
         }
     }

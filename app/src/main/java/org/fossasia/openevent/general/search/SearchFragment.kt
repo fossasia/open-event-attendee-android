@@ -2,15 +2,22 @@ package org.fossasia.openevent.general.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.view.*
-import kotlinx.android.synthetic.main.fragment_search.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
+import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
+import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
@@ -57,20 +64,22 @@ class SearchFragment : Fragment() {
         return rootView
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.search_item -> {
-                return false
+                false
             }
 
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.setGroupVisible(R.id.search_menu, true)
-        menu.setGroupVisible(R.id.profile_menu, false)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
         searchView = menu.findItem(R.id.search_item).actionView as SearchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

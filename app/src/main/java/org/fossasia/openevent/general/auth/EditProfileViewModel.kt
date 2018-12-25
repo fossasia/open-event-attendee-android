@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -49,7 +49,11 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
             message.value = "Please provide first name and last name!"
             return
         }
-        compositeDisposable.add(authService.updateUser(User(id = id, firstName = firstName, lastName = lastName, avatarUrl = url), id)
+        compositeDisposable.add(authService.updateUser(
+            User(id = id,
+                firstName = firstName,
+                lastName = lastName,
+                avatarUrl = url), id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
