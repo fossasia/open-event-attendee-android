@@ -1,15 +1,15 @@
 package org.fossasia.openevent.general.search
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.fossasia.openevent.general.R
 
-import android.support.v7.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_search_location.*
 import org.fossasia.openevent.general.MainActivity
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 private const val TO_SEARCH: String = "ToSearchFragment"

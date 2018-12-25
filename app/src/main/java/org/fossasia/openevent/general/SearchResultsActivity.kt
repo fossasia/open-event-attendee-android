@@ -1,10 +1,10 @@
 package org.fossasia.openevent.general
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +18,7 @@ import org.fossasia.openevent.general.search.QUERY
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class SearchResultsActivity : AppCompatActivity() {

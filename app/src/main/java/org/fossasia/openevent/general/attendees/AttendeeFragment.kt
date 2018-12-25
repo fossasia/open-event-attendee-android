@@ -1,15 +1,15 @@
 package org.fossasia.openevent.general.attendees
 
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.textfield.TextInputLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -24,6 +24,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
@@ -44,7 +45,7 @@ import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -149,7 +150,7 @@ class AttendeeFragment : Fragment() {
         rootView.attendeeRecycler.isNestedScrollingEnabled = false
 
         linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
         attendeeViewModel.ticketDetails(ticketIdAndQty)

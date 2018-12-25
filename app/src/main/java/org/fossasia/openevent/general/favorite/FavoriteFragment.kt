@@ -1,11 +1,11 @@
 package org.fossasia.openevent.general.favorite
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_favorite.*
 import kotlinx.android.synthetic.main.fragment_favorite.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.*
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
@@ -38,7 +38,7 @@ class FavoriteFragment : Fragment() {
         activity?.supportActionBar?.title = "Likes"
 
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
-                LinearLayoutManager.VERTICAL)
+            LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {

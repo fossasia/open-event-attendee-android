@@ -4,10 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.support.customtabs.CustomTabsIntent
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.core.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar

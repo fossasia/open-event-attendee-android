@@ -1,10 +1,10 @@
 package org.fossasia.openevent.general.order
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_order_details.view.*
@@ -13,7 +13,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class OrderDetailsFragment : Fragment() {

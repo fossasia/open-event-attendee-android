@@ -3,7 +3,7 @@ package org.fossasia.openevent.general.order
 import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_card_order_details.view.*
 import org.fossasia.openevent.general.attendees.Attendee
