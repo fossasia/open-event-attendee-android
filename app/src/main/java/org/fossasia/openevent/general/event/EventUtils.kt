@@ -8,7 +8,8 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object EventUtils {
 
