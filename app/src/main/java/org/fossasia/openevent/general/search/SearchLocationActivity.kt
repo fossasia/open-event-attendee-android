@@ -3,10 +3,10 @@ package org.fossasia.openevent.general.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import android.os.Bundle
 import org.fossasia.openevent.general.R
-import android.support.v7.widget.SearchView
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
