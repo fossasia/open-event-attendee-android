@@ -34,20 +34,119 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
         preference.putString(tokenKey, location)
-        val query: String = if (TextUtils.isEmpty(location))
-            "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
-        else if (time == "Anytime")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
-        else if (time=="Today")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
-        else if (time == "Tomorrow")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedNextDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextToNextDate%\"}]}]"
-        else if (time == "This Weekend")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedWeekendDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedWeekendNextDate%\"}]}]"
-        else if (time == "In the next month")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedNextMonth%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextToNextMonth%\"}]}]"
-        else
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
+        val query: String = when {
+            TextUtils.isEmpty(location) -> """[{
+                |   'name':'name',
+                |   'op':'ilike',
+                |   'val':'%$searchEvent%'
+                |}]""".trimMargin().replace("'", "'")
+            time == "Anytime" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |    }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Today" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Tomorrow" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "This Weekend" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedWeekendDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedWeekendNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "In the next month" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextMonth%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextMonth%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            else -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+        }
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
