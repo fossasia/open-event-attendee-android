@@ -20,8 +20,6 @@ class SearchViewModel(
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
-    private val tokenKeyDate = "DATE"
-    private val tokenKeyNextDate = "NEXT_DATE"
 
     val showShimmerResults = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
@@ -29,8 +27,13 @@ class SearchViewModel(
     val showNoInternetError = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
-    val savedDate by lazy { preference.getString(tokenKeyDate) }
-    val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
+    val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
+    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
+    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
+    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
+    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
+    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
+    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
@@ -51,6 +54,82 @@ class SearchViewModel(
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
                 |    }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Today" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Tomorrow" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "This Weekend" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedWeekendDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedWeekendNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "In the next month" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextMonth%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextMonth%'
+                |   }]
                 |}]""".trimMargin().replace("'", "\"")
             else -> """[{
                 |   'and':[{
@@ -87,8 +166,8 @@ class SearchViewModel(
                     error.value = "Error fetching events"
                 }))
 
-        preference.remove(tokenKeyDate)
-        preference.remove(tokenKeyNextDate)
+        preference.remove(SearchTimeViewModel.tokenKeyDate)
+        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {

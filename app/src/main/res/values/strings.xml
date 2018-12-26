@@ -28,6 +28,10 @@
     <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
     <string name="anytime">Anytime</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="weekend">This weekend</string>
+    <string name="month">In the next month</string>
     <string name="what_time">What time works?</string>
     <string name="pick_date">Pick a date...</string>
     <string name="at">at</string>
