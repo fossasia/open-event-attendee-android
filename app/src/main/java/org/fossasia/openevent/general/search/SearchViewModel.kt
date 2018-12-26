@@ -24,12 +24,12 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
-    val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
-    val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
-    val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
-    val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
-    val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
-    val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
+    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
+    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
+    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
+    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
+    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
+    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
