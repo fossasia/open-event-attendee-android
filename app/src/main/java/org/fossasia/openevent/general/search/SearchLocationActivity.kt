@@ -64,13 +64,12 @@ class SearchLocationActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) { LOCATION_PERMISSION_REQUEST -> {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                geoLocationUI.configure(this, searchLocationViewModel)
-            } else {
-                Toast.makeText(applicationContext, "Error fetching Location without permission", Toast.LENGTH_SHORT).show()
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    geoLocationUI.configure(this, searchLocationViewModel)
+                }
             }
-        }
         }
     }
 
