@@ -5,14 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_search_time.anytimeTextView
-import kotlinx.android.synthetic.main.activity_search_time.timeTextView
+import kotlinx.android.synthetic.main.activity_search_time.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
-import java.util.Locale
 
 const val ANYTIME = "Anytime"
 const val TODAY  = "Today"
