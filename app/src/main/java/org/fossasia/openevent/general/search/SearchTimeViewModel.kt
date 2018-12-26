@@ -22,7 +22,7 @@ class SearchTimeViewModel(private val preference: Preference) : ViewModel() {
         preference.putString(tokenKeyNextDate, time)
     }
 
-    fun saveNextToNextDate(time: String){
+    fun saveNextToNextDate(time: String) {
         preference.putString(tokenKeyNextToNextDate, time)
     }
 
@@ -30,17 +30,15 @@ class SearchTimeViewModel(private val preference: Preference) : ViewModel() {
         preference.putString(tokenKeyWeekendDate, time)
     }
 
-    fun saveNextToWeekendDate(time: String){
+    fun saveNextToWeekendDate(time: String) {
         preference.putString(tokenKeyWeekendNextDate, time)
     }
 
-    fun saveNextMonth(time: String){
+    fun saveNextMonth(time: String) {
         preference.putString(tokenKeyNextMonth, time)
     }
 
-    fun saveNextToNextMonth(time: String){
+    fun saveNextToNextMonth(time: String) {
         preference.putString(tokenKeyNextToNextMonth, time)
     }
-
-
 }

@@ -13,11 +13,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
 
 const val ANYTIME = "Anytime"
-const val TODAY  = "Today"
+const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
 const val THIS_WEEKEND = "This Weekend"
 const val NEXT_MONTH = "In the next month"
-
 
 class SearchTimeActivity : AppCompatActivity() {
     private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
@@ -56,9 +55,9 @@ class SearchTimeActivity : AppCompatActivity() {
         }
 
         tomorrowTextView.setOnClickListener {
-            calendar.add(Calendar.DATE,1)
+            calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
-            calendar.add(Calendar.DATE,1)
+            calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextToNextDate(getSimpleFormattedDate(calendar.time))
             searchTimeViewModel.saveDate(TOMORROW)
             redirectToSearch()
@@ -79,7 +78,7 @@ class SearchTimeActivity : AppCompatActivity() {
 
         nextMonthTextView.setOnClickListener {
             val today = calendar.get(Calendar.DAY_OF_MONTH)
-            val offset = 30-today
+            val offset = 30 - today
             calendar.add(Calendar.DATE, offset)
             searchTimeViewModel.saveNextMonth(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.MONTH, 1)

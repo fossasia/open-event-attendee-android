@@ -69,7 +69,7 @@ object EventUtils {
         }
     }
 
-    fun getSimpleFormattedDate(date: Date):String{
+    fun getSimpleFormattedDate(date: Date): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         try {
             return dateFormat.format(date)
