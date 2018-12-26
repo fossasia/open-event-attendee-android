@@ -1,26 +1,34 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.Observer
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.avatar
+import kotlinx.android.synthetic.main.fragment_profile.view.email
+import kotlinx.android.synthetic.main.fragment_profile.view.name
+import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
@@ -38,7 +46,7 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (!profileViewModel.isLoggedIn()) {
             Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
@@ -71,7 +79,7 @@ class ProfileFragment : Fragment() {
 
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!) // TODO: Make null safe
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
             }
@@ -82,11 +90,14 @@ class ProfileFragment : Fragment() {
         return rootView
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.edit_profile -> {
                 val fragment = EditProfileFragment()
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.frameContainer, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
                 return true
             }
             R.id.orga_app -> {
@@ -110,16 +121,19 @@ class ProfileFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.frameContainer, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profile_menu, true)
-        super.onPrepareOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun startOrgaApp(packageName: String) {

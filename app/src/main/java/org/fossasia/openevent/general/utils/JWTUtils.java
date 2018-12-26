@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.utils;
 
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;

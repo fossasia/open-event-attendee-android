@@ -1,16 +1,17 @@
 package org.fossasia.openevent.general.ticket
 
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_tickets.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -19,7 +20,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val EVENT_ID: String = "EVENT_ID"
 const val CURRENCY: String = "CURRENCY"
@@ -67,7 +68,7 @@ class TicketsFragment : Fragment() {
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
 
         linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
         ticketsViewModel.error.observe(this, Observer {

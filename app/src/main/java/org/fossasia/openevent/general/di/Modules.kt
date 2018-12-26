@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.di
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -11,17 +11,42 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
-import org.fossasia.openevent.general.attendees.*
+import org.fossasia.openevent.general.attendees.Attendee
+import org.fossasia.openevent.general.attendees.AttendeeApi
+import org.fossasia.openevent.general.attendees.AttendeeId
+import org.fossasia.openevent.general.attendees.AttendeeService
+import org.fossasia.openevent.general.attendees.AttendeeViewModel
 import org.fossasia.openevent.general.attendees.forms.CustomForm
-import org.fossasia.openevent.general.auth.*
+import org.fossasia.openevent.general.auth.AuthApi
+import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.auth.AuthService
+import org.fossasia.openevent.general.auth.EditProfileViewModel
+import org.fossasia.openevent.general.auth.LoginViewModel
+import org.fossasia.openevent.general.auth.ProfileViewModel
+import org.fossasia.openevent.general.auth.RequestAuthenticator
+import org.fossasia.openevent.general.auth.SignUp
+import org.fossasia.openevent.general.auth.SignUpViewModel
+import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventApi
+import org.fossasia.openevent.general.event.EventDetailsViewModel
+import org.fossasia.openevent.general.event.EventId
+import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
-import org.fossasia.openevent.general.order.*
+import org.fossasia.openevent.general.order.Charge
+import org.fossasia.openevent.general.order.ConfirmOrder
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderApi
+import org.fossasia.openevent.general.order.OrderCompletedViewModel
+import org.fossasia.openevent.general.order.OrderDetailsViewModel
+import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.order.OrdersUnderUserVM
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.SearchLocationViewModel
@@ -32,50 +57,54 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
-import org.fossasia.openevent.general.ticket.*
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.ticket.Ticket
+import org.fossasia.openevent.general.ticket.TicketApi
+import org.fossasia.openevent.general.ticket.TicketId
+import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module.applicationContext
+import org.koin.androidx.viewmodel.ext.koin.viewModel
+import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val commonModule = applicationContext {
-    bean { Preference() }
-    bean { Network() }
+val commonModule = module {
+    single { Preference() }
+    single { Network() }
 }
 
-val apiModule = applicationContext {
-    bean {
+val apiModule = module {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(TicketApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(SocialLinkApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(EventTopicApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(AttendeeApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(OrderApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(PaypalApi::class.java)
     }
@@ -90,7 +119,7 @@ val apiModule = applicationContext {
     factory { OrderService(get(), get(), get()) }
 }
 
-val viewModelModule = applicationContext {
+val viewModelModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { EventsViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
@@ -112,17 +141,17 @@ val viewModelModule = applicationContext {
     viewModel { EditProfileViewModel(get(), get()) }
 }
 
-val networkModule = applicationContext {
+val networkModule = module {
 
-    bean {
+    single {
         val objectMapper = jacksonObjectMapper()
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         objectMapper
     }
 
-    bean { RequestAuthenticator(get()) as Authenticator }
+    single { RequestAuthenticator(get()) as Authenticator }
 
-    bean {
+    single {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
 
@@ -136,23 +165,27 @@ val networkModule = applicationContext {
                 .build()
     }
 
-    bean {
+    single {
         val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
                 .client(get())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java, CustomForm::class.java))
+                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
+                    SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+                    EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+                    AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+                    CustomForm::class.java))
                 .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(baseUrl)
                 .build()
     }
 }
 
-val databaseModule = applicationContext {
+val databaseModule = module {
 
-    bean {
+    single {
         Room.databaseBuilder(androidApplication(),
                 OpenEventDatabase::class.java, "open_event_database")
                 .fallbackToDestructiveMigration()
