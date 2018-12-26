@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.frameContainer
 import kotlinx.android.synthetic.main.activity_main.navigation
+import kotlinx.android.synthetic.main.activity_main.rootLayout
 import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.attendees.AttendeeFragment
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             if (bundle.getBoolean(LAUNCH_ATTENDEE)) {
                 val fragment = AttendeeFragment()
                 fragment.arguments = bundle
-                loadFragment(supportFragmentManager, fragment, frameContainer.id)
+                loadFragment(supportFragmentManager, fragment, rootLayout.id)
             }
 
             if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS)) {
