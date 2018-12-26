@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.search
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.text.TextUtils
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,12 +12,14 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class SearchViewModel(private val eventService: EventService, private val preference: Preference, private val network: Network) : ViewModel() {
+class SearchViewModel(
+    private val eventService: EventService,
+    private val preference: Preference,
+    private val network: Network
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
-    private val tokenKeyDate = "DATE"
-    private val tokenKeyNextDate = "NEXT_DATE"
 
     val showShimmerResults = MutableLiveData<Boolean>()
     val events = MutableLiveData<List<Event>>()
@@ -25,18 +27,130 @@ class SearchViewModel(private val eventService: EventService, private val prefer
     val showNoInternetError = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
-    val savedDate by lazy { preference.getString(tokenKeyDate) }
-    val savedNextDate by lazy { preference.getString(tokenKeyNextDate) }
+    val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
+    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
+    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
+    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
+    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
+    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
+    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
 
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
         preference.putString(tokenKey, location)
-        val query: String = if (TextUtils.isEmpty(location))
-            "[{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]"
-        else if (time == "Anytime")
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"}]}]"
-        else
-            "[{\"and\":[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"},{\"name\":\"name\",\"op\":\"ilike\",\"val\":\"%$searchEvent%\"},{\"name\":\"starts-at\",\"op\":\"ge\",\"val\":\"$savedDate%\"},{\"name\":\"starts-at\",\"op\":\"lt\",\"val\":\"$savedNextDate%\"}]}]"
+        val query: String = when {
+            TextUtils.isEmpty(location) -> """[{
+                |   'name':'name',
+                |   'op':'ilike',
+                |   'val':'%$searchEvent%'
+                |}]""".trimMargin().replace("'", "'")
+            time == "Anytime" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |    }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Today" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "Tomorrow" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "This Weekend" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedWeekendDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedWeekendNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            time == "In the next month" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedNextMonth%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextToNextMonth%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+            else -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |   }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'ge',
+                |       'val':'$savedDate%'
+                |   }, {
+                |       'name':'starts-at',
+                |       'op':'lt',
+                |       'val':'$savedNextDate%'
+                |   }]
+                |}]""".trimMargin().replace("'", "\"")
+        }
 
         compositeDisposable.add(eventService.getSearchEvents(query)
                 .subscribeOn(Schedulers.io())
@@ -52,8 +166,8 @@ class SearchViewModel(private val eventService: EventService, private val prefer
                     error.value = "Error fetching events"
                 }))
 
-        preference.remove(tokenKeyDate)
-        preference.remove(tokenKeyNextDate)
+        preference.remove(SearchTimeViewModel.tokenKeyDate)
+        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {

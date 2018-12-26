@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 
 class TicketIdConverter {
 

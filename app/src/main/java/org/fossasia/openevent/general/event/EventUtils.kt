@@ -7,6 +7,9 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object EventUtils {
 
@@ -17,7 +20,7 @@ object EventUtils {
 
     private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    private val frontendUrl: String = "https://open-event-frontend-dev.herokuapp.com/e/"
+    private const val frontendUrl = "https://open-event-frontend-dev.herokuapp.com/e/"
 
     fun getSharableInfo(event: Event, resource: Resource = sharedResource): String {
         val description = event.description.nullToEmpty()
@@ -45,6 +48,9 @@ object EventUtils {
         return message.toString()
     }
 
+    fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
+        "?q=<${event.latitude}>,<${event.longitude}>"
+
     fun getLocalizedDateTime(dateString: String): ZonedDateTime = ZonedDateTime.parse(dateString)
             .toOffsetDateTime()
             .atZoneSameInstant(ZoneId.systemDefault())
@@ -55,6 +61,16 @@ object EventUtils {
 
     fun getFormattedDate(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getSimpleFormattedDate(date: Date): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         try {
             return dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
@@ -134,14 +150,16 @@ object EventUtils {
     fun getFormattedDateTimeRangeDetailed(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         val startingDate = getFormattedDate(startsAt)
         val endingDate = getFormattedDate(endsAt)
-        try {
+        return try {
             if (startingDate != endingDate)
-                return "$startingDate at ${getFormattedTime(startsAt)} - $endingDate at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+                "$startingDate at ${getFormattedTime(startsAt)} - $endingDate" +
+                    " at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
             else
-                return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+                "$startingDate from ${getFormattedTime(startsAt)}" +
+                    " to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 

@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LAUNCH_ATTENDEE: String = "LAUNCH_ATTENDEE"
 class LoginFragment : Fragment() {
@@ -71,7 +71,7 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.welcome_back) , Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.welcome_back), Toast.LENGTH_LONG).show()
             loginViewModel.fetchProfile()
         })
 

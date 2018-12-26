@@ -1,23 +1,25 @@
 package org.fossasia.openevent.general.order
 
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.content_no_tickets.*
-import kotlinx.android.synthetic.main.fragment_orders_under_user.*
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
+import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
 import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val ORDERS: String = "orders"
@@ -44,7 +46,7 @@ class OrdersUnderUserFragment : Fragment() {
         rootView.ordersRecycler.isNestedScrollingEnabled = false
 
         linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
         if (ordersUnderUserVM.isLoggedIn()) {
@@ -57,7 +59,10 @@ class OrdersUnderUserFragment : Fragment() {
                     bundle.putLong(EVENT_ID, eventID)
                     bundle.putString(ORDERS, orderIdentifier)
                     fragment.arguments = bundle
-                    activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.rootLayout, fragment)
+                        ?.addToBackStack(null)
+                        ?.commit()
                 }
             }
 

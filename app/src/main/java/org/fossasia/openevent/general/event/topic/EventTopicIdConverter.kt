@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.event.topic
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 
 class EventTopicIdConverter {
 

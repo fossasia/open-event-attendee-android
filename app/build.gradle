@@ -1,3 +1,7 @@
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.16.0"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -6,14 +10,14 @@ apply plugin: 'kotlin-android-extensions'
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.eventyay.attendee"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 3
         versionName "0.0.3a"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         manifestPlaceholders = [
@@ -60,37 +64,45 @@ android {
     }
 }
 
+spotless {
+    kotlin {
+        ktlint().userData(['android': 'true', 'color': 'true',
+                           'max_line_length': '120', 'reporter': 'checkstyle'])
+        target '**/*.kt'
+    }
+}
+
 repositories {
+    google()
     mavenCentral()
 }
 
 dependencies {
-    def lifecycle_version = "1.1.1"
-    def koin_version = "0.9.3"
-    def roomVersion = '1.1.1'
+    def lifecycle_version = "2.1.0-alpha01"
+    def koin_version = "1.0.2"
+    def roomVersion = '2.1.0-alpha03'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation "com.android.support:customtabs:27.1.1"
-    implementation 'com.android.support:exifinterface:27.1.1'
-    implementation "com.takisoft.fix:preference-v7:27.1.1.2"
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation "androidx.browser:browser:1.0.0"
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycle_version}"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:${lifecycle_version}"
+    implementation "androidx.room:room-runtime:${roomVersion}"
+    implementation "androidx.room:room-rxjava2:${roomVersion}"
+    kapt "androidx.room:room-compiler:${roomVersion}"
+    testImplementation "androidx.room:room-testing:${roomVersion}"
+    implementation "com.takisoft.fix:preference-v7:28.0.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-android-architecture:$koin_version"
-    testImplementation "org.koin:koin-test:$koin_version"
-    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
-    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
-    implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
-    testImplementation "android.arch.core:core-testing:$lifecycle_version"
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
-    implementation "android.arch.persistence.room:rxjava2:$roomVersion"
-    testImplementation "android.arch.persistence.room:testing:$roomVersion"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     //Location Play Service
     playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
@@ -101,9 +113,9 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.3.0'
@@ -125,6 +137,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.8.13"
     testImplementation 'org.threeten:threetenbp:1.3.8'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "org.koin:koin-test:$koin_version"
+    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }

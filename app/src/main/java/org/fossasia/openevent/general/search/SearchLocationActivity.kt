@@ -12,7 +12,7 @@ import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_search_location.*
 import org.fossasia.openevent.general.MainActivity
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
@@ -36,14 +36,14 @@ class SearchLocationActivity : AppCompatActivity() {
         if (bundle != null) {
             fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
         }
-
         geoLocationUI.configure(this, searchLocationViewModel)
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Do your search
                 searchLocationViewModel.saveSearch(query)
-                val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
                 if (fromSearchFragment) {
                     val searchBundle = Bundle()
