@@ -1,22 +1,28 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.content_no_internet.view.*
-import kotlinx.android.synthetic.main.fragment_events.view.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
+import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
+import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
+import kotlinx.android.synthetic.main.fragment_events.view.progressBar
+import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SearchLocationActivity
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 // String constants for event types
@@ -54,7 +60,10 @@ class EventsFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.rootLayout, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
         }
 

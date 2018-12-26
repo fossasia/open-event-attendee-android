@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.order
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_order.view.*

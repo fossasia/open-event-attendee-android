@@ -1,20 +1,25 @@
 package org.fossasia.openevent.general.favorite
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_favorite.*
-import kotlinx.android.synthetic.main.fragment_favorite.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
+import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
+import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.*
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.FavoriteFabListener
+import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
@@ -38,7 +43,7 @@ class FavoriteFragment : Fragment() {
         activity?.supportActionBar?.title = "Likes"
 
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
-                LinearLayoutManager.VERTICAL)
+            LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
@@ -47,7 +52,11 @@ class FavoriteFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.add(R.id.rootLayout, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {

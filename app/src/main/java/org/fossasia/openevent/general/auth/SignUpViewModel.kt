@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -43,8 +43,10 @@ class SignUpViewModel(
                     Timber.d("Success!")
                 }, {
                     when {
-                        it.toString().contains("HTTP 409 CONFLICT") -> error.value = "Unable to SignUp: Email already exists!"
-                        it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") -> error.value = "Unable to SignUp: Not a valid email address!"
+                        it.toString().contains("HTTP 409 CONFLICT") ->
+                            error.value = "Unable to SignUp: Email already exists!"
+                        it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") ->
+                            error.value = "Unable to SignUp: Not a valid email address!"
                         else -> error.value = "Unable to SignUp!"
                     }
                     Timber.d(it, "Failed")

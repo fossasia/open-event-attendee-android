@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +27,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getEventsByLocation(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally{
+                .doFinally {
                     progress.value = false
                     showShimmerEvents.value = false
                 }.subscribe({

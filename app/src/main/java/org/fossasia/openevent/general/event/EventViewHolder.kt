@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_events.view.*

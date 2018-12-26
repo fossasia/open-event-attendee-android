@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general.attendees
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.IntegerIdHandler
@@ -17,7 +17,11 @@ import org.fossasia.openevent.general.ticket.TicketId
 
 @Type("attendee")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
-@Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"], childColumns = ["event"], onDelete = ForeignKey.CASCADE)), (ForeignKey(entity = Ticket::class, parentColumns = ["id"], childColumns = ["ticket"], onDelete = ForeignKey.CASCADE))])
+@Entity(foreignKeys = [
+    (ForeignKey(entity = Event::class, parentColumns = ["id"],
+        childColumns = ["event"], onDelete = ForeignKey.CASCADE)),
+    (ForeignKey(entity = Ticket::class, parentColumns = ["id"],
+        childColumns = ["ticket"], onDelete = ForeignKey.CASCADE))])
 data class Attendee(
     @Id(IntegerIdHandler::class)
     @PrimaryKey

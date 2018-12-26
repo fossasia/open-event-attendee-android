@@ -1,9 +1,13 @@
 package org.fossasia.openevent.general
 
 import android.content.Context
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.jakewharton.threetenabp.AndroidThreeTen
-import org.fossasia.openevent.general.di.*
+import org.fossasia.openevent.general.di.apiModule
+import org.fossasia.openevent.general.di.commonModule
+import org.fossasia.openevent.general.di.databaseModule
+import org.fossasia.openevent.general.di.networkModule
+import org.fossasia.openevent.general.di.viewModelModule
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 

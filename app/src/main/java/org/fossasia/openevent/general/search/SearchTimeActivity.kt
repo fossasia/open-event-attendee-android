@@ -2,15 +2,17 @@ package org.fossasia.openevent.general.search
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_search_time.*
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_search_time.anytimeTextView
+import kotlinx.android.synthetic.main.activity_search_time.timeTextView
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
-import org.koin.android.architecture.ext.viewModel
-import java.util.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Calendar
+import java.util.Locale
 
 const val ANYTIME = "Anytime"
 const val TODAY  = "Today"

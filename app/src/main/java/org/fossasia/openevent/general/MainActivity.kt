@@ -1,12 +1,13 @@
 package org.fossasia.openevent.general
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import kotlinx.android.synthetic.main.activity_main.*
-import org.fossasia.openevent.general.R.id.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.frameContainer
+import kotlinx.android.synthetic.main.activity_main.navigation
+import org.fossasia.openevent.general.R.id.navigation_events
+import org.fossasia.openevent.general.R.id.navigation_search
 import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
 import org.fossasia.openevent.general.auth.ProfileFragment
@@ -67,8 +68,6 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(listener)
 
-        supportActionBar?.title = "Events"
-
         val bundle = if (savedInstanceState == null) intent.extras else null
         if (bundle != null) {
             if (bundle.getBoolean(TO_SEARCH)) {
@@ -88,19 +87,10 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = "Tickets"
                 navigation.selectedItemId = R.id.navigation_tickets
             }
+        } else {
+            supportActionBar?.title = "Events"
+            loadFragment(supportFragmentManager, EventsFragment(), frameContainer.id)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.profile, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.setGroupVisible(R.id.profile_menu, false)
-        menu?.setGroupVisible(R.id.search_menu, false)
-        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onBackPressed() {
@@ -109,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         if (rootFragment is EventDetailsFragment)
             super.onBackPressed()
         else
-            when(currentFragment) {
+            when (currentFragment) {
                 is SearchFragment,
                 is FavoriteFragment,
                 is OrdersUnderUserFragment,

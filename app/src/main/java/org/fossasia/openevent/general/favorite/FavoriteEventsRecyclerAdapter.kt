@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.favorite
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
@@ -8,7 +8,6 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
-import java.util.*
 
 class FavoriteEventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
     private val events = ArrayList<Event>()
