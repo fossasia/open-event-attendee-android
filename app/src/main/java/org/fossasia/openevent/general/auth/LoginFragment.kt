@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.fossasia.openevent.general.MainActivity
@@ -88,6 +90,10 @@ class LoginFragment : Fragment() {
         loginViewModel.requestTokenSuccess.observe(this, Observer {
             rootView.sentEmailLayout.visibility = View.VISIBLE
             rootView.loginLayout.visibility = View.GONE
+            activity?.findViewById<BottomNavigationView>(R.id.navigationAuth)?.visibility=View.GONE
+            (activity as AppCompatActivity).supportActionBar?.hide()
+            rootView
+
         })
 
         loginViewModel.isCorrectEmail.observe(this, Observer {
