@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,7 +22,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -103,6 +103,8 @@ class AttendeeFragment : Fragment() {
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
     private var editTextList = ArrayList<EditText>()
+    private val AUTH_REQUEST_CODE = 1
+    private var amount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -276,125 +278,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.loadEvent(id)
 
         if (attendeeViewModel.isLoggedIn()) {
-
-            attendeeViewModel.loadUser(attendeeViewModel.getId())
-            attendeeViewModel.loadEvent(id)
-
-            attendeeViewModel.message
-                .nonNull()
-                .observe(this, Observer {
-                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                })
-
-            attendeeViewModel.progress
-                .nonNull()
-                .observe(this, Observer {
-                    rootView.progressBarAttendee.isVisible = it
-                })
-
-            attendeeViewModel.event
-                .nonNull()
-                .observe(this, Observer {
-                    loadEventDetails(it)
-                })
-
-            attendeeViewModel.totalAmount
-                .nonNull()
-                .observe(this, Observer {
-                    rootView.amount.text = "Total: $paymentCurrency$it"
-                })
-
-            attendeeRecyclerAdapter.eventId = eventId
-            attendeeViewModel.tickets
-                .nonNull()
-                .observe(this, Observer { tickets ->
-                    ticketsRecyclerAdapter.addAll(tickets)
-                    ticketsRecyclerAdapter.notifyDataSetChanged()
-                    if (!singleTicket)
-                        tickets.forEach { ticket ->
-                            val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id)
-                            val iterations = pos?.let { ticketIdAndQty?.get(it)?.second } ?: 0
-                            for (i in 0 until iterations)
-                                attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), ticket)
-                            attendeeRecyclerAdapter.notifyDataSetChanged()
-                        }
-                })
-
-            attendeeViewModel.totalQty
-                .nonNull()
-                .observe(this, Observer {
-                    rootView.qty.text = " — $it items"
-                })
-
-            attendeeViewModel.countryVisibility
-                .nonNull()
-                .observe(this, Observer {
-                    if (singleTicket) {
-                        rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
-                    }
-                })
-
-            attendeeViewModel.paymentCompleted
-                .nonNull()
-                .observe(this, Observer {
-                    if (it)
-                        openOrderCompletedFragment()
-                })
-
-            attendeeViewModel.attendee
-                .nonNull()
-                .observe(this, Observer { user ->
-                    helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
-                    firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
-                    lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
-                    email.text = Editable.Factory.getInstance().newEditable(user.email.nullToEmpty())
-                })
-
-            rootView.signOut.setOnClickListener {
-                attendeeViewModel.logout()
-                redirectToLogin()
-            }
-
-            attendeeViewModel.getCustomFormsForAttendees(eventId.id)
-
-            attendeeViewModel.forms
-                .nonNull()
-                .observe(this, Observer {
-                    if (singleTicket)
-                        fillInformationSection(it)
-                    attendeeRecyclerAdapter.setCustomForm(it)
-                    if (singleTicket)
-                        if (!it.isEmpty()) {
-                            rootView.moreAttendeeInformation.visibility = View.VISIBLE
-                        }
-                    attendeeRecyclerAdapter.notifyDataSetChanged()
-                    rootView.register.isEnabled = true
-                })
-
-            rootView.register.setOnClickListener {
-                if (selectedPaymentOption == "Stripe")
-                    sendToken()
-
-                val attendees = ArrayList<Attendee>()
-                if (singleTicket) {
-                    val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
-                    val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                    val attendee = Attendee(id = attendeeViewModel.getId(),
-                            firstname = firstName.text.toString(),
-                            lastname = lastName.text.toString(),
-                            city = getAttendeeField("city"),
-                            address = getAttendeeField("address"),
-                            state = getAttendeeField("state"),
-                            email = email.text.toString(),
-                            ticket = TicketId(ticket),
-                            event = eventId)
-                    attendees.add(attendee)
-                } else {
-                    attendees.addAll(attendeeRecyclerAdapter.attendeeList)
-                }
-                val country = if (country.text.isEmpty()) country.text.toString() else null
-                attendeeViewModel.createAttendees(attendees, country, selectedPaymentOption)
-            }
+            loadUser()
         } else {
             redirectToLogin()
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
@@ -408,6 +292,127 @@ class AttendeeFragment : Fragment() {
         return rootView
     }
 
+    private fun loadUser() {
+        attendeeViewModel.loadUser(attendeeViewModel.getId())
+        attendeeViewModel.loadEvent(id)
+
+        attendeeViewModel.message
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
+
+        attendeeViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBarAttendee.isVisible = it
+            })
+
+        attendeeViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        attendeeViewModel.totalAmount
+            .nonNull()
+            .observe(this, Observer {
+                amount = it
+            })
+
+        attendeeRecyclerAdapter.eventId = eventId
+        attendeeViewModel.tickets
+            .nonNull()
+            .observe(this, Observer { tickets ->
+                ticketsRecyclerAdapter.addAll(tickets)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+                if (!singleTicket)
+                    tickets.forEach { ticket ->
+                        val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id)
+                        val iterations = pos?.let { ticketIdAndQty?.get(it)?.second } ?: 0
+                        for (i in 0 until iterations)
+                            attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), ticket)
+                        attendeeRecyclerAdapter.notifyDataSetChanged()
+                    }
+            })
+
+        attendeeViewModel.totalQty
+            .nonNull()
+            .observe(this, Observer {
+                rootView.qty.text = " — $it items"
+            })
+
+        attendeeViewModel.countryVisibility
+            .nonNull()
+            .observe(this, Observer {
+                if (singleTicket) {
+                    rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
+                }
+            })
+
+        attendeeViewModel.paymentCompleted
+            .nonNull()
+            .observe(this, Observer {
+                if (it)
+                    openOrderCompletedFragment()
+            })
+
+        attendeeViewModel.attendee
+            .nonNull()
+            .observe(this, Observer { user ->
+                helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
+                firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
+                lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
+                email.text = Editable.Factory.getInstance().newEditable(user.email.nullToEmpty())
+            })
+
+        rootView.signOut.setOnClickListener {
+            attendeeViewModel.logout()
+            redirectToLogin()
+        }
+
+        attendeeViewModel.getCustomFormsForAttendees(eventId.id)
+
+        attendeeViewModel.forms
+            .nonNull()
+            .observe(this, Observer {
+                if (singleTicket)
+                    fillInformationSection(it)
+                attendeeRecyclerAdapter.setCustomForm(it)
+                if (singleTicket)
+                    if (!it.isEmpty()) {
+                        rootView.moreAttendeeInformation.visibility = View.VISIBLE
+                    }
+                attendeeRecyclerAdapter.notifyDataSetChanged()
+                rootView.register.isEnabled = true
+            })
+
+        rootView.register.setOnClickListener {
+            if (selectedPaymentOption == "Stripe")
+                sendToken()
+
+            val attendees = ArrayList<Attendee>()
+            if (singleTicket) {
+                val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
+                val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
+                val attendee = Attendee(id = attendeeViewModel.getId(),
+                    firstname = firstName.text.toString(),
+                    lastname = lastName.text.toString(),
+                    city = getAttendeeField("city"),
+                    address = getAttendeeField("address"),
+                    state = getAttendeeField("state"),
+                    email = email.text.toString(),
+                    ticket = TicketId(ticket),
+                    event = eventId)
+                attendees.add(attendee)
+            } else {
+                attendees.addAll(attendeeRecyclerAdapter.attendeeList)
+            }
+            val country = if (country.text.isEmpty()) country.text.toString() else null
+            attendeeViewModel.createAttendees(attendees, country, selectedPaymentOption)
+        }
+    }
+
     private fun showTicketSoldOutDialog(show: Boolean) {
         if (show) {
             val builder = AlertDialog.Builder(context)
@@ -418,14 +423,23 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         val intent = Intent(activity, AuthActivity::class.java)
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
         if (ticketIdAndQty != null)
             bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
         intent.putExtras(bundle)
-        startActivity(intent)
+        startActivityForResult(intent, AUTH_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == AUTH_REQUEST_CODE) {
+            if (resultCode == RESULT_OK)
+                loadUser()
+            else
+                Toast.makeText(context, "Sign in failed!", Toast.LENGTH_SHORT).show()
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun sendToken() {
@@ -466,6 +480,7 @@ class AttendeeFragment : Fragment() {
         ticketsRecyclerAdapter.setCurrency(paymentCurrency)
 
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
+        rootView.amount.text = "Total: $paymentCurrency$amount"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
                 .append(" - ")
                 .append(EventUtils.getFormattedDate(endsAt))
