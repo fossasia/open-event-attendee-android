@@ -81,6 +81,8 @@ dependencies {
     def lifecycle_version = "2.1.0-alpha01"
     def koin_version = "1.0.2"
     def roomVersion = '2.1.0-alpha03'
+    def ktx_version = "1.0.0"
+    def ktx2_version = "2.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -100,11 +102,19 @@ dependencies {
     testImplementation "androidx.room:room-testing:${roomVersion}"
     implementation "com.takisoft.fix:preference-v7:28.0.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // KTX
+    implementation "androidx.core:core-ktx:$ktx_version"
+    implementation "androidx.fragment:fragment-ktx:$ktx_version"
+    implementation "androidx.collection:collection-ktx:$ktx_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$ktx2_version"
+
+    // Koin
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
-    //Timber
+    // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
 
@@ -122,13 +132,13 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
-    //picasso
+    // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    //Stripe
+    // Stripe
     implementation 'com.stripe:stripe-android:8.1.0'
 
-    //QR Code
+    // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     testImplementation 'junit:junit:4.12'

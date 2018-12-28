@@ -25,6 +25,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val TICKETS: String = "OpenMyTickets"
@@ -56,16 +57,18 @@ class OrderCompletedFragment : Fragment() {
         setHasOptionsMenu(true)
 
         orderCompletedViewModel.loadEvent(id)
-        orderCompletedViewModel.event.observe(this, Observer {
-            it?.let {
+        orderCompletedViewModel.event
+            .nonNull()
+            .observe(this, Observer {
                 loadEventDetails(it)
                 eventShare = it
-            }
-        })
+            })
 
-        orderCompletedViewModel.message.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        orderCompletedViewModel.message
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
         rootView.add.setOnClickListener {
             startCalendar(eventShare)

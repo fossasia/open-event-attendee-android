@@ -19,9 +19,9 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
         compositeDisposable.add(socialLinksService.getSocialLinks(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
+                .doOnSubscribe {
                     progress.value = true
-                }).subscribe({
+                }.subscribe({
                     socialLinks.value = it
                     progress.value = false
                 }, {
