@@ -50,8 +50,9 @@ class ProfileFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
-                "You need to log in first!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(
+                getActivity()?.findViewById(android.R.id.content)!!,
+                "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 1000)
@@ -72,7 +73,8 @@ class ProfileFragment : Fragment() {
         })
 
         profileViewModel.error.observe(this, Observer {
-            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+            Snackbar.make(
+                getActivity()?.findViewById(android.R.id.content)!!,
                 it, Snackbar.LENGTH_SHORT).show()
         })
 

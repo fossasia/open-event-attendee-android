@@ -74,7 +74,8 @@ class OrdersUnderUserFragment : Fragment() {
             })
 
             ordersUnderUserVM.message.observe(this, Observer {
-                Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+                Snackbar.make(
+                    getActivity()?.findViewById(android.R.id.content)!!,
                     it, Snackbar.LENGTH_LONG).show()
             })
 
@@ -96,8 +97,9 @@ class OrdersUnderUserFragment : Fragment() {
                 Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
             })
         } else {
-            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
-                "You need to log in first!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(
+                getActivity()?.findViewById(android.R.id.content)!!,
+                "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 500)

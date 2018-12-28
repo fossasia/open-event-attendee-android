@@ -67,12 +67,14 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.error.observe(this, Observer {
-            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+            Snackbar.make(
+                getActivity()?.findViewById(android.R.id.content)!!,
                 it, Snackbar.LENGTH_LONG).show()
         })
 
         loginViewModel.loggedIn.observe(this, Observer {
-            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+            Snackbar.make(
+                getActivity()?.findViewById(android.R.id.content)!!,
                 getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
             loginViewModel.fetchProfile()
         })
