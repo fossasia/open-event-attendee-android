@@ -1,20 +1,30 @@
 package org.fossasia.openevent.general.auth
 
-import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_signup.*
-import kotlinx.android.synthetic.main.fragment_signup.view.*
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
+import kotlinx.android.synthetic.main.fragment_signup.firstNameText
+import kotlinx.android.synthetic.main.fragment_signup.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.signUpButton
+import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
+import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignUpFragment : Fragment() {
@@ -42,30 +52,38 @@ class SignUpFragment : Fragment() {
             signUpViewModel.signUp(signUp, confirmPassword)
         }
 
-        signUpViewModel.progress.observe(this, Observer {
-            it?.let {
-                Utils.showProgressBar(rootView.progressBarSignUp, it)
+        signUpViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBarSignUp.isVisible = it
                 signUpButton.isEnabled = !it
-            }
-        })
+            })
 
-        signUpViewModel.showNoInternetDialog.observe(this, Observer {
-            Utils.showNoInternetDialog(context)
-        })
+        signUpViewModel.showNoInternetDialog
+            .nonNull()
+            .observe(this, Observer {
+                Utils.showNoInternetDialog(context)
+            })
 
-        signUpViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        signUpViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
-        signUpViewModel.signedUp.observe(this, Observer {
-            Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
-            signUpViewModel.login(signUp)
-        })
+        signUpViewModel.signedUp
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
+                signUpViewModel.login(signUp)
+            })
 
-        signUpViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, "Logged in Automatically!", Toast.LENGTH_LONG).show()
-            redirectToMain()
-        })
+        signUpViewModel.loggedIn
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, "Logged in Automatically!", Toast.LENGTH_LONG).show()
+                redirectToMain()
+            })
 
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {

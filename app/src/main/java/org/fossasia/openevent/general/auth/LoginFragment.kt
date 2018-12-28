@@ -1,17 +1,26 @@
 package org.fossasia.openevent.general.auth
 
-import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_login.email
+import kotlinx.android.synthetic.main.fragment_login.loginButton
+import kotlinx.android.synthetic.main.fragment_login.password
+import kotlinx.android.synthetic.main.fragment_login.view.email
+import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
+import kotlinx.android.synthetic.main.fragment_login.view.loginButton
+import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
+import kotlinx.android.synthetic.main.fragment_login.view.progressBar
+import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
+import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
@@ -19,6 +28,7 @@ import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LAUNCH_ATTENDEE: String = "LAUNCH_ATTENDEE"
@@ -55,29 +65,35 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
-        loginViewModel.progress.observe(this, Observer {
-            it?.let {
-                Utils.showProgressBar(rootView.progressBar, it)
+        loginViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBar.isVisible = it
                 loginButton.isEnabled = !it
-            }
-        })
+            })
 
-        loginViewModel.showNoInternetDialog.observe(this, Observer {
-            Utils.showNoInternetDialog(context)
-        })
+        loginViewModel.showNoInternetDialog
+            .nonNull()
+            .observe(this, Observer {
+                Utils.showNoInternetDialog(context)
+            })
 
-        loginViewModel.error.observe(this, Observer {
-            Snackbar.make(
+        loginViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(
                 getActivity()?.findViewById(android.R.id.content)!!,
                 it, Snackbar.LENGTH_LONG).show()
-        })
+            })
 
-        loginViewModel.loggedIn.observe(this, Observer {
-            Snackbar.make(
+        loginViewModel.loggedIn
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(
                 getActivity()?.findViewById(android.R.id.content)!!,
                 getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
-            loginViewModel.fetchProfile()
-        })
+                loginViewModel.fetchProfile()
+            })
 
         rootView.email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -89,16 +105,18 @@ class LoginFragment : Fragment() {
             }
         })
 
-        loginViewModel.requestTokenSuccess.observe(this, Observer {
-            rootView.sentEmailLayout.visibility = View.VISIBLE
-            rootView.loginLayout.visibility = View.GONE
-        })
+        loginViewModel.requestTokenSuccess
+            .nonNull()
+            .observe(this, Observer {
+                rootView.sentEmailLayout.visibility = View.VISIBLE
+                rootView.loginLayout.visibility = View.GONE
+            })
 
-        loginViewModel.isCorrectEmail.observe(this, Observer {
-            it?.let {
+        loginViewModel.isCorrectEmail
+            .nonNull()
+            .observe(this, Observer {
                 onEmailEntered(it)
-            }
-        })
+            })
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
@@ -110,9 +128,11 @@ class LoginFragment : Fragment() {
             loginViewModel.sendResetPasswordEmail(email.text.toString())
         }
 
-        loginViewModel.user.observe(this, Observer {
-            redirectToMain(bundle)
-        })
+        loginViewModel.user
+            .nonNull()
+            .observe(this, Observer {
+                redirectToMain(bundle)
+            })
 
         return rootView
     }
@@ -120,7 +140,7 @@ class LoginFragment : Fragment() {
     private fun redirectToMain(bundle: Bundle?) {
         val intent = Intent(activity, MainActivity::class.java)
         if (bundle != null) {
-            if (!id.equals(-1) && ticketIdAndQty != null) {
+            if (id != -1L && ticketIdAndQty != null) {
                 intent.putExtra(LAUNCH_ATTENDEE, true)
             }
             intent.putExtras(bundle)
@@ -132,6 +152,6 @@ class LoginFragment : Fragment() {
 
     private fun onEmailEntered(enable: Boolean) {
         rootView.loginButton.isEnabled = enable
-        rootView.forgotPassword.visibility = if (enable) View.VISIBLE else View.GONE
+        rootView.forgotPassword.isVisible = enable
     }
 }

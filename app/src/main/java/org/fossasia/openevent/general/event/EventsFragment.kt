@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SearchLocationActivity
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -77,35 +79,36 @@ class EventsFragment : Fragment() {
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
-        eventsViewModel.events.observe(this, Observer {
-            it?.let {
+        eventsViewModel.events
+            .nonNull()
+            .observe(this, Observer {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
-            }
-            Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-        })
+                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+            })
 
-        eventsViewModel.showShimmerEvents.observe(this, Observer {
-            it?.let {
+        eventsViewModel.showShimmerEvents
+            .nonNull()
+            .observe(this, Observer {
                 if (it) {
                     rootView.shimmerEvents.startShimmer()
-                    rootView.shimmerEvents.visibility = View.VISIBLE
                 } else {
                     rootView.shimmerEvents.stopShimmer()
-                    rootView.shimmerEvents.visibility = View.GONE
                 }
-            }
-        })
+                rootView.shimmerEvents.isVisible = it
+            })
 
-        eventsViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        eventsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
-        eventsViewModel.progress.observe(this, Observer {
-            it?.let {
+        eventsViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
                 rootView.swiperefresh.isRefreshing = it
-            }
-        })
+            })
 
         if (eventsViewModel.savedLocation != null) {
             rootView.locationTextView.text = eventsViewModel.savedLocation
