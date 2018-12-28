@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.auth
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -63,7 +62,7 @@ class ProfileFragment : Fragment() {
 
         if (!profileViewModel.isLoggedIn()) {
             Snackbar.make(
-                CoordinatorLayout,"You need to log in first!", Snackbar.LENGTH_SHORT).show()
+                CoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 1000)
