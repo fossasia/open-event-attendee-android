@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -68,31 +70,37 @@ class OrdersUnderUserFragment : Fragment() {
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
 
-            ordersUnderUserVM.progress.observe(this, Observer {
-                it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-            })
+            ordersUnderUserVM.progress
+                .nonNull()
+                .observe(this, Observer {
+                    rootView.progressBar.isVisible = true
+                })
 
-            ordersUnderUserVM.message.observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            })
+            ordersUnderUserVM.message
+                .nonNull()
+                .observe(this, Observer {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                })
 
-            ordersUnderUserVM.noTickets.observe(this, Observer {
-                it?.let { showNoTicketsScreen(it) }
-            })
+            ordersUnderUserVM.noTickets
+                .nonNull()
+                .observe(this, Observer {
+                    showNoTicketsScreen(it)
+                })
 
-            ordersUnderUserVM.attendeesNumber.observe(this, Observer {
-                it?.let {
+            ordersUnderUserVM.attendeesNumber
+                .nonNull()
+                .observe(this, Observer {
                     ordersRecyclerAdapter.setAttendeeNumber(it)
-                }
-            })
+                })
 
-            ordersUnderUserVM.eventAndOrderIdentifier.observe(this, Observer {
-                it?.let {
+            ordersUnderUserVM.eventAndOrderIdentifier
+                .nonNull()
+                .observe(this, Observer {
                     ordersRecyclerAdapter.addAllPairs(it)
                     ordersRecyclerAdapter.notifyDataSetChanged()
-                }
-                Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
-            })
+                    Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
+                })
         } else {
             redirectToLogin()
             Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()

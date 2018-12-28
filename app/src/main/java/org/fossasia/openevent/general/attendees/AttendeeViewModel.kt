@@ -19,6 +19,7 @@ import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.utils.HttpErrors
 import timber.log.Timber
 import java.util.Calendar
 
@@ -32,29 +33,33 @@ class AttendeeViewModel(
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
+
     val progress = MutableLiveData<Boolean>()
     val ticketSoldOut = MutableLiveData<Boolean>()
     val message = SingleLiveEvent<String>()
     val event = MutableLiveData<Event>()
-    var attendee = MutableLiveData<User>()
-    var paymentSelectorVisibility = MutableLiveData<Boolean>()
-    var totalAmount = MutableLiveData<Float>()
-    var countryVisibility = MutableLiveData<Boolean>()
-    var totalQty = MutableLiveData<Int>()
+    val attendee = MutableLiveData<User>()
+    val paymentSelectorVisibility = MutableLiveData<Boolean>()
+    val totalAmount = MutableLiveData<Float>()
+    val countryVisibility = MutableLiveData<Boolean>()
+    val totalQty = MutableLiveData<Int>()
     val qtyList = MutableLiveData<ArrayList<Int>>()
+    val paymentCompleted = MutableLiveData<Boolean>()
+    val tickets = MutableLiveData<MutableList<Ticket>>()
+    val forms = MutableLiveData<List<CustomForm>>()
+
     val month = ArrayList<String>()
     val year = ArrayList<String>()
     val attendees = ArrayList<Attendee>()
+    val cardType = ArrayList<String>()
+
     private var createAttendeeIterations = 0
     var country: String? = null
-    lateinit var paymentOption: String
-    val cardType = ArrayList<String>()
+        private set
     var orderIdentifier: String? = null
-    var paymentCompleted = MutableLiveData<Boolean>()
-    val tickets = MutableLiveData<MutableList<Ticket>>()
-    lateinit var confirmOrder: ConfirmOrder
-    val forms = MutableLiveData<List<CustomForm>>()
-    private val TICKET_CONFLICT_MESSAGE = "HTTP 409 CONFLICT"
+        private set
+    private lateinit var paymentOption: String
+    private lateinit var confirmOrder: ConfirmOrder
 
     fun getId() = authHolder.getId()
 
@@ -108,10 +113,10 @@ class AttendeeViewModel(
         compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe({ prices ->
                     var total = 0.toFloat()
                     var index = 0
-                    it?.forEach {
+                    prices?.forEach {
                         total += it * qty[index++]
                     }
                     totalAmount.value = total
@@ -140,7 +145,7 @@ class AttendeeViewModel(
                 }))
     }
 
-    fun createAttendee(attendee: Attendee, totalAttendee: Int) {
+    private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             message.value = "Please fill in all the fields"
             return
@@ -164,7 +169,7 @@ class AttendeeViewModel(
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
                     if (createAttendeeIterations + 1 == totalAttendee)
-                        if (it.message.equals(TICKET_CONFLICT_MESSAGE)) {
+                        if (it.message.equals(HttpErrors.CONFLICT)) {
                             ticketSoldOut.value = true
                         } else {
                             message.value = "Unable to create Attendee!"
@@ -184,17 +189,17 @@ class AttendeeViewModel(
         }
     }
 
-    fun loadTicketsAndCreateOrder() {
+    private fun loadTicketsAndCreateOrder() {
         if (this.tickets.value == null) {
             this.tickets.value = ArrayList()
         }
         this.tickets.value?.clear()
-        attendees?.forEach {
+        attendees.forEach {
             loadTicket(it.ticket?.id)
         }
     }
 
-    fun loadTicket(ticketId: Long?) {
+    private fun loadTicket(ticketId: Long?) {
         if (ticketId == null) {
             Timber.e("TicketId cannot be null")
             return
@@ -205,7 +210,7 @@ class AttendeeViewModel(
                 .subscribe({
                     tickets.value?.add(it)
                     Timber.d("Loaded tickets! %s", tickets.value?.toList().toString())
-                    if (tickets.value?.size == attendees?.size) {
+                    if (tickets.value?.size == attendees.size) {
                         createOrder()
                     }
                 }, {
@@ -213,10 +218,10 @@ class AttendeeViewModel(
                 }))
     }
 
-    fun createOrder() {
-        val attendeeList = attendees?.map { AttendeeId(it.id) }?.toList()
+    private fun createOrder() {
+        val attendeeList = attendees.map { AttendeeId(it.id) }.toList()
         var amount = totalAmount.value
-        var paymentMode = paymentOption?.toLowerCase()
+        var paymentMode = paymentOption.toLowerCase()
         if (amount == null || amount <= 0) {
             paymentMode = "free"
             amount = null
@@ -250,7 +255,7 @@ class AttendeeViewModel(
         }
     }
 
-    fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
+    private fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
         compositeDisposable.add(orderService.confirmOrder(identifier, order)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -284,13 +289,13 @@ class AttendeeViewModel(
                 }))
     }
 
-    fun deleteAttendees(attendeeIds: List<AttendeeId>?) {
-        attendeeIds?.forEach {
-            compositeDisposable.add(attendeeService.deleteAttendee(it.id)
+    private fun deleteAttendees(attendeeIds: List<AttendeeId>?) {
+        attendeeIds?.forEach { attendeeId ->
+            compositeDisposable.add(attendeeService.deleteAttendee(attendeeId.id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        Timber.d("Deleted attendee $it.id")
+                        Timber.d("Deleted attendee $attendeeId.id")
                     }, {
                         Timber.d("Failed to delete attendee $it.id")
                     }))
@@ -321,7 +326,7 @@ class AttendeeViewModel(
     }
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
         compositeDisposable.add(eventService.getEvent(id)
