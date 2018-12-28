@@ -9,7 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.fossasia.openevent.general.MainActivity
@@ -67,11 +67,13 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+                it, Snackbar.LENGTH_LONG).show()
         })
 
         loginViewModel.loggedIn.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.welcome_back), Toast.LENGTH_LONG).show()
+            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+                getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
             loginViewModel.fetchProfile()
         })
 

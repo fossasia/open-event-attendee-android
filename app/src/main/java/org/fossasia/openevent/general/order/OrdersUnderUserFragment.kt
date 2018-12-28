@@ -2,15 +2,16 @@ package org.fossasia.openevent.general.order
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
@@ -73,7 +74,8 @@ class OrdersUnderUserFragment : Fragment() {
             })
 
             ordersUnderUserVM.message.observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+                    it, Snackbar.LENGTH_LONG).show()
             })
 
             ordersUnderUserVM.noTickets.observe(this, Observer {
@@ -94,8 +96,11 @@ class OrdersUnderUserFragment : Fragment() {
                 Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
             })
         } else {
-            redirectToLogin()
-            Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
+            Snackbar.make(getActivity()!!.findViewById(android.R.id.content),
+                "You need to log in first!", Snackbar.LENGTH_SHORT).show();
+            Handler().postDelayed({
+                redirectToLogin()
+            }, 500)
         }
 
         return rootView
