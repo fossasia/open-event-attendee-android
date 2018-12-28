@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,6 +32,7 @@ const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 class OrdersUnderUserFragment : Fragment() {
 
     private lateinit var rootView: View
+    private lateinit var CoordinatorLayout: CoordinatorLayout
     private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -41,6 +43,7 @@ class OrdersUnderUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
+        CoordinatorLayout = rootView.findViewById(R.id.ordersUnderUserCoordinatorLayout)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.title = "Tickets"
 
@@ -81,8 +84,7 @@ class OrdersUnderUserFragment : Fragment() {
                 .nonNull()
                 .observe(this, Observer {
                     Snackbar.make(
-                    getActivity()?.findViewById(android.R.id.content)!!,
-                    it, Snackbar.LENGTH_LONG).show()
+                    CoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
                 })
 
             ordersUnderUserVM.noTickets
@@ -106,8 +108,7 @@ class OrdersUnderUserFragment : Fragment() {
                 })
         } else {
             Snackbar.make(
-                getActivity()?.findViewById(android.R.id.content)!!,
-                "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+                CoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 500)

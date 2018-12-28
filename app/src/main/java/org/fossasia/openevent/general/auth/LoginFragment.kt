@@ -7,10 +7,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
@@ -36,6 +37,7 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
+    private lateinit var CoordinatorLayout: CoordinatorLayout
     private var bundle: Bundle? = null
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private var id: Long = -1
@@ -56,7 +58,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
-
+        CoordinatorLayout = rootView.findViewById(R.id.loginCoordinatorLayout)
         if (loginViewModel.isLoggedIn())
             redirectToMain(bundle)
 
@@ -82,16 +84,14 @@ class LoginFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 Snackbar.make(
-                getActivity()?.findViewById(android.R.id.content)!!,
-                it, Snackbar.LENGTH_LONG).show()
+                CoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
                 Snackbar.make(
-                getActivity()?.findViewById(android.R.id.content)!!,
-                getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
+                CoordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
                 loginViewModel.fetchProfile()
             })
 

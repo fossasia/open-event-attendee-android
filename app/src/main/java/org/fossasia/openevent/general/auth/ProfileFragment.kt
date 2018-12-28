@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,6 +38,7 @@ class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
 
     private lateinit var rootView: View
+    private lateinit var CoordinatorLayout: CoordinatorLayout
     private var emailSettings: String? = null
     private val EMAIL: String = "EMAIL"
 
@@ -49,26 +51,23 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(
-                getActivity()?.findViewById(android.R.id.content)!!,
-                "You need to log in first!", Snackbar.LENGTH_SHORT).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 1000)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+        CoordinatorLayout = rootView.findViewById(R.id.profileCoordinatorLayout)
 
         setHasOptionsMenu(true)
+
+        if (!profileViewModel.isLoggedIn()) {
+            Snackbar.make(
+                CoordinatorLayout,"You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Handler().postDelayed({
+                redirectToLogin()
+            }, 1000)
+        }
 
         profileViewModel.progress
             .nonNull()
@@ -80,8 +79,7 @@ class ProfileFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 Snackbar.make(
-                getActivity()?.findViewById(android.R.id.content)!!,
-                it, Snackbar.LENGTH_SHORT).show()
+                CoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
             })
 
         profileViewModel.user
