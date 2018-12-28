@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_search_results.errorTextView
@@ -23,6 +24,7 @@ import org.fossasia.openevent.general.search.DATE
 import org.fossasia.openevent.general.search.LOCATION
 import org.fossasia.openevent.general.search.QUERY
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -67,34 +69,37 @@ class SearchResultsActivity : AppCompatActivity() {
         }
         eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        searchViewModel.events.observe(this, Observer {
-            it?.let {
+        searchViewModel.events
+            .nonNull()
+            .observe(this, Observer {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
                 showNoSearchResults(it)
-            }
-            Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-        })
+                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+            })
 
-        searchViewModel.showShimmerResults.observe(this, Observer {
-            it?.let {
+        searchViewModel.showShimmerResults
+            .nonNull()
+            .observe(this, Observer {
                 if (it) {
                     shimmerSearch.startShimmer()
-                    shimmerSearch.visibility = View.VISIBLE
                 } else {
                     shimmerSearch.stopShimmer()
-                    shimmerSearch.visibility = View.GONE
                 }
-            }
-        })
+                shimmerSearch.isVisible = it
+            })
 
-        searchViewModel.showNoInternetError.observe(this, Observer {
-            it?.let { showNoInternetError(it) }
-        })
+        searchViewModel.showNoInternetError
+            .nonNull()
+            .observe(this, Observer {
+                showNoInternetError(it)
+            })
 
-        searchViewModel.error.observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        })
+        searchViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            })
 
         errorTextView.setOnClickListener {
             performSearch(intent)

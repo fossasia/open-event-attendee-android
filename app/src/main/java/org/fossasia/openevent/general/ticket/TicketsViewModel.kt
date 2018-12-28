@@ -22,16 +22,16 @@ class TicketsViewModel(
     val ticketTableVisibility = MutableLiveData<Boolean>()
 
     fun loadTickets(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             error.value = "Error fetching tickets"
             return
         }
         compositeDisposable.add(ticketService.getTickets(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
+                .doOnSubscribe {
                     progressTickets.value = true
-                }).subscribe({ ticketList ->
+                }.subscribe({ ticketList ->
                     ticketTableVisibility.value = ticketList.isNotEmpty()
                     tickets.value = ticketList
                     progressTickets.value = false
@@ -42,7 +42,7 @@ class TicketsViewModel(
     }
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
         compositeDisposable.add(eventService.getEvent(id)

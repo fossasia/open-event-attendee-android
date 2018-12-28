@@ -1,24 +1,33 @@
 package org.fossasia.openevent.general.ticket
 
 import android.app.AlertDialog
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_tickets.view.*
+import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
+import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
+import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
+import kotlinx.android.synthetic.main.fragment_tickets.view.register
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketInfoTextView
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
+import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -71,47 +80,44 @@ class TicketsFragment : Fragment() {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        ticketsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
-        ticketsViewModel.progressTickets.observe(this, Observer {
-            it?.let {
-                Utils.showProgressBar(rootView.progressBarTicket, it)
-                rootView.ticketTableHeader.visibility = if (it) View.GONE else View.VISIBLE
-                rootView.register.visibility = if (it) View.GONE else View.VISIBLE
-            }
-        })
+        ticketsViewModel.progressTickets
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBarTicket.isVisible = it
+                rootView.ticketTableHeader.isGone = it
+                rootView.register.isGone = it
+            })
 
-        ticketsViewModel.event.observe(this, Observer {
-            it?.let { loadEventDetails(it) }
-        })
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
 
-        ticketsViewModel.ticketTableVisibility.observe(this, Observer {
-            it?.let {
-                if (it) {
-                    rootView.ticketTableHeader.visibility = View.VISIBLE
-                    rootView.ticketsRecycler.visibility = View.VISIBLE
-                    rootView.register.visibility = View.VISIBLE
-                    rootView.ticketInfoTextView.visibility = View.GONE
-                } else {
-                    rootView.ticketTableHeader.visibility = View.GONE
-                    rootView.register.visibility = View.GONE
-                    rootView.ticketsRecycler.visibility = View.GONE
-                    rootView.ticketInfoTextView.visibility = View.VISIBLE
-                }
-            }
-        })
+        ticketsViewModel.ticketTableVisibility
+            .nonNull()
+            .observe(this, Observer { ticketTableVisible ->
+                rootView.ticketTableHeader.isVisible = ticketTableVisible
+                rootView.register.isVisible = ticketTableVisible
+                rootView.ticketsRecycler.isVisible = ticketTableVisible
+                rootView.ticketInfoTextView.isGone = ticketTableVisible
+            })
 
         ticketsViewModel.loadEvent(id)
         ticketsViewModel.loadTickets(id)
 
-        ticketsViewModel.tickets.observe(this, Observer {
-            it?.let {
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
                 ticketsRecyclerAdapter.addAll(it)
-            }
-            ticketsRecyclerAdapter.notifyDataSetChanged()
-        })
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
 
         rootView.register.setOnClickListener {
             if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {

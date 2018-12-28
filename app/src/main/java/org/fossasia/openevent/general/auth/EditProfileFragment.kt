@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
@@ -25,9 +25,9 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -40,9 +40,9 @@ class EditProfileFragment : Fragment() {
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
     private lateinit var rootView: View
     private var permissionGranted = false
+    private var encodedImage: String? = null
     private val PICK_IMAGE_REQUEST = 100
     private val READ_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private var encodedImage: String? = null
     private val REQUEST_CODE = 1
 
     override fun onCreateView(
@@ -52,36 +52,32 @@ class EditProfileFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-        profileViewModel.user.observe(this, Observer {
-            it?.let {
+        profileViewModel.user
+            .nonNull()
+            .observe(this, Observer {
                 val userFirstName = it.firstName.nullToEmpty()
                 val userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
                 rootView.firstName.setText(userFirstName)
                 rootView.lastName.setText(userLastName)
-                if (!imageUrl.isEmpty()) { // picasso requires the imageUrl to be non empty
-                    context?.let { ctx ->
-                        val drawable = AppCompatResources.getDrawable(ctx, R.drawable.ic_account_circle_grey_24dp)
-                        drawable?.let { icon ->
-                            Picasso.get()
-                                    .load(imageUrl)
-                                    .placeholder(icon)
-                                    .transform(CircleTransform())
-                                    .into(rootView.profilePhoto)
-                        }
-                    }
+                if (!imageUrl.isEmpty()) {
+                    val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp)
+                    Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(drawable)
+                        .transform(CircleTransform())
+                        .into(rootView.profilePhoto)
                 }
-            }
-        })
+            })
         profileViewModel.fetchProfile()
 
-        editProfileViewModel.progress.observe(this, Observer {
-            it?.let {
-                Utils.showProgressBar(rootView.progressBar, it)
-            }
-        })
+        editProfileViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        rootView.profilePhoto.setOnClickListener { v ->
+        rootView.profilePhoto.setOnClickListener {
             if (permissionGranted) {
                 showFileChooser()
             } else {
@@ -95,12 +91,14 @@ class EditProfileFragment : Fragment() {
                 rootView.lastName.text.toString())
         }
 
-        editProfileViewModel.message.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            if (it.equals(USER_UPDATED)) {
-                activity?.onBackPressed()
-            }
-        })
+        editProfileViewModel.message
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                if (it == USER_UPDATED) {
+                    activity?.onBackPressed()
+                }
+            })
 
         return rootView
     }
