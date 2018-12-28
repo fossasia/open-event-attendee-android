@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.auth
 
+import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -68,8 +68,8 @@ class LoginViewModel(
                 }))
     }
 
-    fun verifyMessage(message: String): Boolean {
-        if (message.equals("Email Sent")) {
+    private fun verifyMessage(message: String): Boolean {
+        if (message == "Email Sent") {
             return true
         }
         return false
@@ -80,9 +80,9 @@ class LoginViewModel(
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
+                .doOnSubscribe {
                     progress.value = true
-                }).doFinally {
+                }.doFinally {
                     progress.value = false
                 }.subscribe({ it ->
                     Timber.d("User Fetched")
@@ -102,7 +102,7 @@ class LoginViewModel(
         isCorrectEmail.value = email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun isConnected(): Boolean {
+    private fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
         if (!isConnected) showNoInternetDialog.value = true
         return isConnected

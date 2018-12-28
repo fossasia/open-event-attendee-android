@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,6 +20,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -71,22 +73,28 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventsRecyclerAdapter.setListener(recyclerViewClickListener)
         favoriteEventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
-        favoriteEventViewModel.events.observe(this, Observer {
-            it?.let {
+        favoriteEventViewModel.events
+            .nonNull()
+            .observe(this, Observer {
                 favoriteEventsRecyclerAdapter.addAll(it)
                 favoriteEventsRecyclerAdapter.notifyDataSetChanged()
                 showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
-            }
-            Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
-        })
 
-        favoriteEventViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+            })
 
-        favoriteEventViewModel.progress.observe(this, Observer {
-            it?.let { showProgressBar(it) }
-        })
+        favoriteEventViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
+
+        favoriteEventViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.favoriteProgressBar.isIndeterminate = it
+                rootView.favoriteProgressBar.isVisible = it
+            })
 
         favoriteEventViewModel.loadFavoriteEvents()
         return rootView
@@ -94,10 +102,5 @@ class FavoriteFragment : Fragment() {
 
     private fun showEmptyMessage(itemCount: Int) {
         noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        rootView.favoriteProgressBar.isIndeterminate = show
-        rootView.favoriteProgressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

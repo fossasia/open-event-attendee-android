@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
@@ -27,6 +28,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -63,16 +65,21 @@ class ProfileFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        profileViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-        })
+        profileViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        profileViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        profileViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
-        profileViewModel.user.observe(this, Observer {
-            it?.let {
+        profileViewModel.user
+            .nonNull()
+            .observe(this, Observer {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
@@ -82,8 +89,7 @@ class ProfileFragment : Fragment() {
                         .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
-            }
-        })
+            })
 
         fetchProfile()
 

@@ -74,12 +74,12 @@ class SignUpViewModel(
                 }))
     }
 
-    fun fetchProfile() {
+    private fun fetchProfile() {
         if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ user ->
+                .subscribe({
                     Timber.d("Fetched User Details")
                 }) {
                     Timber.e(it, "Error loading user details")
@@ -109,7 +109,7 @@ class SignUpViewModel(
         return false
     }
 
-    fun isConnected(): Boolean {
+    private fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
         if (!isConnected) showNoInternetDialog.value = true
         return isConnected
