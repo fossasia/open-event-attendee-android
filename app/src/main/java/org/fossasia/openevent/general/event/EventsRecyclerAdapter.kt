@@ -3,6 +3,9 @@ package org.fossasia.openevent.general.event
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import kotlinx.android.synthetic.main.item_card_events.view.shareFab
+import kotlinx.android.synthetic.main.item_card_events.view.favoriteFab
 import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 import java.util.ArrayList
@@ -43,6 +46,8 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
             LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent,
                 false)
         }
+        eventView.shareFab.scaleType = ImageView.ScaleType.CENTER
+        eventView.favoriteFab.scaleType = ImageView.ScaleType.CENTER
         return EventViewHolder(eventView)
     }
 
