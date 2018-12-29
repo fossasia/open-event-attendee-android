@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,10 +14,14 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
 
-    val progress = MutableLiveData<Boolean>()
-    val showShimmerEvents = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
-    val error = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableEvents = MutableLiveData<List<Event>>()
+    val events: LiveData<List<Event>> = mutableEvents
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
+    val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
 
     val savedLocation by lazy { preference.getString(tokenKey) }
 
@@ -28,18 +33,18 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
-                    progress.value = false
-                    showShimmerEvents.value = false
+                    mutableProgress.value = false
+                    mutableShowShimmerEvents.value = false
                 }.subscribe({
-                    events.value = it
+                mutableEvents.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
+                mutableError.value = "Error fetching events"
                 }))
     }
 
     fun retryLoadLocationEvents() {
-        showShimmerEvents.value = true
+        mutableShowShimmerEvents.value = true
         loadLocationEvents()
     }
 
@@ -48,14 +53,14 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    progress.value = true
+                    mutableProgress.value = true
                 }).doFinally({
-                    progress.value = false
+                mutableProgress.value = false
                 }).subscribe({
-                    events.value = it
+                mutableEvents.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
+                mutableError.value = "Error fetching events"
                 }))
     }
 
@@ -67,7 +72,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     Timber.d("Success")
                 }, {
                     Timber.e(it, "Error")
-                    error.value = "Error"
+                    mutableError.value = "Error"
                 }))
     }
 

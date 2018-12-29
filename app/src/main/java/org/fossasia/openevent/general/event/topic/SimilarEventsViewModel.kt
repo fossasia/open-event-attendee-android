@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event.topic
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,9 +14,13 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val similarEvents = MutableLiveData<List<Event>>()
-    val error = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
+    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+
     var eventId: Long = -1
 
     fun loadSimilarEvents(id: Long) {
@@ -26,13 +31,13 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    progress.value = true
+                    mutableProgress.value = true
                 }).subscribe({
-                    progress.value = false
-                    similarEvents.value = it.filter { it.id != eventId }
+                mutableProgress.value = false
+                mutableSimilarEvents.value = it.filter { it.id != eventId }
                 }, {
                     Timber.e(it, "Error fetching similar events")
-                    error.value = "Error fetching similar events"
+                mutableError.value = "Error fetching similar events"
                 }))
     }
 
@@ -44,7 +49,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
                     Timber.d("Success")
                 }, {
                     Timber.e(it, "Error")
-                    error.value = "Error"
+                    mutableError.value = "Error"
                 }))
     }
 

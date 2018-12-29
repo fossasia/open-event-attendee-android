@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,28 +16,33 @@ class TicketsViewModel(
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    val progressTickets = MutableLiveData<Boolean>()
+
+    private val mutableProgressTickets = MutableLiveData<Boolean>()
+    val progressTickets: LiveData<Boolean> = mutableProgressTickets
     val tickets = MutableLiveData<List<Ticket>>()
-    val error = MutableLiveData<String>()
-    val event = MutableLiveData<Event>()
-    val ticketTableVisibility = MutableLiveData<Boolean>()
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableEvent = MutableLiveData<Event>()
+    val event: LiveData<Event> = mutableEvent
+    private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
+    val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
 
     fun loadTickets(id: Long) {
         if (id == -1L) {
-            error.value = "Error fetching tickets"
+            mutableError.value = "Error fetching tickets"
             return
         }
         compositeDisposable.add(ticketService.getTickets(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progressTickets.value = true
+                    mutableProgressTickets.value = true
                 }.subscribe({ ticketList ->
-                    ticketTableVisibility.value = ticketList.isNotEmpty()
+                mutableTicketTableVisibility.value = ticketList.isNotEmpty()
                     tickets.value = ticketList
-                    progressTickets.value = false
+                    mutableProgressTickets.value = false
                 }, {
-                    error.value = "Error fetching tickets"
+                    mutableError.value = "Error fetching tickets"
                     Timber.e(it, "Error fetching tickets %d", id)
                 }))
     }
@@ -49,10 +55,10 @@ class TicketsViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    event.value = it
+                    mutableEvent.value = it
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
-                    error.value = "Error fetching event"
+                    mutableError.value = "Error fetching event"
                 }))
     }
 

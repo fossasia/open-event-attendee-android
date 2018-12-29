@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.text.TextUtils
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,10 +22,14 @@ class SearchViewModel(
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
 
-    val showShimmerResults = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
-    val error = MutableLiveData<String>()
-    val showNoInternetError = MutableLiveData<Boolean>()
+    private val mutableShowShimmerResults = MutableLiveData<Boolean>()
+    val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
+    private val mutableEvents = MutableLiveData<List<Event>>()
+    val events: LiveData<List<Event>> = mutableEvents
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableShowNoInternetError = MutableLiveData<Boolean>()
+    val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
@@ -156,14 +161,14 @@ class SearchViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    showShimmerResults.value = true
+                    mutableShowShimmerResults.value = true
                 }.doFinally {
-                    showShimmerResults.value = false
+                mutableShowShimmerResults.value = false
                 }.subscribe({
-                    events.value = it
+                    mutableEvents.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
+                    mutableError.value = "Error fetching events"
                 }))
 
         preference.remove(SearchTimeViewModel.tokenKeyDate)
@@ -178,14 +183,14 @@ class SearchViewModel(
                     Timber.d("Successfully added %d to favorites", eventId)
                 }, {
                     Timber.e(it, "Error adding %d to favorites", eventId)
-                    error.value = "Error adding to favorites"
+                    mutableError.value = "Error adding to favorites"
                 }))
     }
 
     fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
-        showNoInternetError.value = !isConnected
-        showShimmerResults.value = isConnected
+        mutableShowNoInternetError.value = !isConnected
+        mutableShowShimmerResults.value = isConnected
         return isConnected
     }
 

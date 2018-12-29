@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,9 +12,12 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val user = MutableLiveData<User>()
-    val error = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -33,15 +37,15 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    progress.value = true
+                    mutableProgress.value = true
                 }).doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({ user ->
                     Timber.d("Response Success")
-                    this.user.value = user
+                    this.mutableUser.value = user
                 }) {
                     Timber.e(it, "Failure")
-                    error.value = "Failure"
+                mutableError.value = "Failure"
                 })
     }
 

@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,9 +14,12 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val user = MutableLiveData<User>()
-    val message = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableMessage = MutableLiveData<String>()
+    val message: LiveData<String> = mutableMessage
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -28,17 +32,17 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }
                 .doFinally {
-                    progress.value = false
+                    mutableProgress.value = false
                 }
                 .subscribe({
                     updateUser(it.url, firstName, lastName)
-                    message.value = "Image uploaded successfully!"
+                    mutableMessage.value = "Image uploaded successfully!"
                     Timber.d("Image uploaded " + it.url)
                 }) {
-                    message.value = "Error uploading image!"
+                    mutableMessage.value = "Error uploading image!"
                     Timber.e(it, "Error uploading user!")
                 })
     }
@@ -46,7 +50,7 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
     fun updateUser(url: String?, firstName: String, lastName: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
-            message.value = "Please provide first name and last name!"
+            mutableMessage.value = "Please provide first name and last name!"
             return
         }
         compositeDisposable.add(authService.updateUser(
@@ -57,16 +61,16 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }
                 .doFinally {
-                    progress.value = false
+                    mutableProgress.value = false
                 }
                 .subscribe({
-                    message.value = USER_UPDATED
+                    mutableMessage.value = USER_UPDATED
                     Timber.d("User updated")
                 }) {
-                    message.value = "Error updating user!"
+                    mutableMessage.value = "Error updating user!"
                     Timber.e(it, "Error updating user!")
                 })
     }

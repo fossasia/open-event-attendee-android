@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,19 +35,32 @@ class AttendeeViewModel(
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val ticketSoldOut = MutableLiveData<Boolean>()
-    val message = SingleLiveEvent<String>()
-    val event = MutableLiveData<Event>()
-    val attendee = MutableLiveData<User>()
-    val paymentSelectorVisibility = MutableLiveData<Boolean>()
-    val totalAmount = MutableLiveData<Float>()
-    val countryVisibility = MutableLiveData<Boolean>()
-    val totalQty = MutableLiveData<Int>()
-    val qtyList = MutableLiveData<ArrayList<Int>>()
-    val paymentCompleted = MutableLiveData<Boolean>()
-    val tickets = MutableLiveData<MutableList<Ticket>>()
-    val forms = MutableLiveData<List<CustomForm>>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableTicketSoldOut = MutableLiveData<Boolean>()
+    val ticketSoldOut: LiveData<Boolean> = mutableTicketSoldOut
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
+    private val mutableEvent = MutableLiveData<Event>()
+    val event: LiveData<Event> = mutableEvent
+    private val mutableAttendee = MutableLiveData<User>()
+    val attendee: LiveData<User> = mutableAttendee
+    private val mutablePaymentSelectorVisibility = MutableLiveData<Boolean>()
+    val paymentSelectorVisibility: LiveData<Boolean> = mutablePaymentSelectorVisibility
+    private val mutableTotalAmount = MutableLiveData<Float>()
+    val totalAmount: LiveData<Float> = mutableTotalAmount
+    private val mutableCountryVisibility = MutableLiveData<Boolean>()
+    val countryVisibility: LiveData<Boolean> = mutableCountryVisibility
+    private val mutableTotalQty = MutableLiveData<Int>()
+    val totalQty: LiveData<Int> = mutableTotalQty
+    private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
+    val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
+    private val mutablePaymentCompleted = MutableLiveData<Boolean>()
+    val paymentCompleted: LiveData<Boolean> = mutablePaymentCompleted
+    private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
+    val tickets: LiveData<MutableList<Ticket>> = mutableTickets
+    private val mutableForms = MutableLiveData<List<CustomForm>>()
+    val forms: LiveData<List<CustomForm>> = mutableForms
 
     val month = ArrayList<String>()
     val year = ArrayList<String>()
@@ -99,16 +113,16 @@ class AttendeeViewModel(
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
-        totalQty.value = 0
+        mutableTotalQty.value = 0
 
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
                 qty.add(it.second)
-                totalQty.value = totalQty.value?.plus(it.second)
+                mutableTotalQty.value = totalQty.value?.plus(it.second)
             }
         }
-        qtyList.value = qty
+        mutableQtyList.value = qty
 
         compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
                 .subscribeOn(Schedulers.io())
@@ -119,9 +133,9 @@ class AttendeeViewModel(
                     prices?.forEach {
                         total += it * qty[index++]
                     }
-                    totalAmount.value = total
-                    countryVisibility.value = total > 0
-                    paymentSelectorVisibility.value = total != 0.toFloat()
+                    mutableTotalAmount.value = total
+                    mutableCountryVisibility.value = total > 0
+                    mutablePaymentSelectorVisibility.value = total != 0.toFloat()
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
@@ -139,7 +153,7 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    tickets.value = it as MutableList<Ticket>?
+                    mutableTickets.value = it as MutableList<Ticket>?
                 }, {
                     Timber.e(it, "Error Loading tickets!")
                 }))
@@ -147,7 +161,7 @@ class AttendeeViewModel(
 
     private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
-            message.value = "Please fill in all the fields"
+            mutableMessage.value = "Please fill in all the fields"
             return
         }
 
@@ -155,26 +169,26 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
                     createAttendeeIterations++
                     if (createAttendeeIterations == totalAttendee)
-                        progress.value = false
+                        mutableProgress.value = false
                 }.subscribe({
                     attendees.add(it)
                     if (attendees.size == totalAttendee) {
                         loadTicketsAndCreateOrder()
-                        message.value = "Attendees created successfully!"
+                        mutableMessage.value = "Attendees created successfully!"
                     }
                     Timber.d("Success! %s", attendees.toList().toString())
                 }, {
                     if (createAttendeeIterations + 1 == totalAttendee)
                         if (it.message.equals(HttpErrors.CONFLICT)) {
-                            ticketSoldOut.value = true
+                            mutableTicketSoldOut.value = true
                         } else {
-                            message.value = "Unable to create Attendee!"
+                            mutableMessage.value = "Unable to create Attendee!"
                             Timber.d(it, "Failed")
-                            ticketSoldOut.value = false
+                            mutableTicketSoldOut.value = false
                         }
                 }))
     }
@@ -191,7 +205,7 @@ class AttendeeViewModel(
 
     private fun loadTicketsAndCreateOrder() {
         if (this.tickets.value == null) {
-            this.tickets.value = ArrayList()
+            this.mutableTickets.value = ArrayList()
         }
         this.tickets.value?.clear()
         attendees.forEach {
@@ -234,24 +248,24 @@ class AttendeeViewModel(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {
-                        progress.value = true
+                        mutableProgress.value = true
                     }.doFinally {
-                        progress.value = false
+                    mutableProgress.value = false
                     }.subscribe({
                         orderIdentifier = it.identifier.toString()
-                        message.value = "Order created successfully!"
+                    mutableMessage.value = "Order created successfully!"
                         Timber.d("Success placing order!")
                         if (it.paymentMode == "free") {
                             confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                             confirmOrderStatus(it.identifier.toString(), confirmOrder)
                         }
                     }, {
-                        message.value = "Unable to create Order!"
+                    mutableMessage.value = "Unable to create Order!"
                         Timber.d(it, "Failed creating Order")
                         deleteAttendees(order.attendees)
                     }))
         } else {
-            message.value = "Unable to create Order!"
+            mutableMessage.value = "Unable to create Order!"
         }
     }
 
@@ -260,15 +274,15 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({
-                    message.value = "Order created successfully!"
+                mutableMessage.value = "Order created successfully!"
                     Timber.d("Updated order status successfully !")
-                    paymentCompleted.value = true
+                    mutablePaymentCompleted.value = true
                 }, {
-                    message.value = "Unable to create Order!"
+                mutableMessage.value = "Unable to create Order!"
                     Timber.d(it, "Failed updating order status")
                 }))
     }
@@ -279,10 +293,10 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.subscribe({
-                    progress.value = false
-                    forms.value = it
+                mutableProgress.value = false
+                    mutableForms.value = it
                     Timber.d("Forms fetched successfully !")
                 }, {
                     Timber.d(it, "Failed fetching forms")
@@ -307,11 +321,11 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({
-                    message.value = it.message
+                mutableMessage.value = it.message
 
                     if (it.status != null && it.status) {
                         confirmOrderStatus(orderIdentifier.toString(), confirmOrder)
@@ -320,7 +334,7 @@ class AttendeeViewModel(
                         Timber.d("Failed charging the user")
                     }
                 }, {
-                    message.value = "Payment not completed!"
+                mutableMessage.value = "Payment not completed!"
                     Timber.d(it, "Failed charging the user")
                 }))
     }
@@ -333,10 +347,10 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    event.value = it
+                    mutableEvent.value = it
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
-                    message.value = "Error fetching event"
+                    mutableMessage.value = "Error fetching event"
                 }))
     }
 
@@ -348,7 +362,7 @@ class AttendeeViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    attendee.value = it
+                    mutableAttendee.value = it
                 }, {
                     Timber.e(it, "Error fetching user %d", id)
                 }))

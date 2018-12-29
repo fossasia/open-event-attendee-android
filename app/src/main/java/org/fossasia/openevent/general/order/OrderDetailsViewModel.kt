@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,9 +19,12 @@ class OrderDetailsViewModel(
 
     private val compositeDisposable = CompositeDisposable()
     val message = SingleLiveEvent<String>()
-    val event = MutableLiveData<Event>()
-    val attendees = MutableLiveData<List<Attendee>>()
-    val progress = MutableLiveData<Boolean>()
+    private val mutableEvent = MutableLiveData<Event>()
+    val event: LiveData<Event> = mutableEvent
+    private val mutableAttendees = MutableLiveData<List<Attendee>>()
+    val attendees: LiveData<List<Attendee>> = mutableAttendees
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
@@ -31,7 +35,7 @@ class OrderDetailsViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    event.value = it
+                    mutableEvent.value = it
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
                     message.value = "Error fetching event"
@@ -47,11 +51,11 @@ class OrderDetailsViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({
-                    attendees.value = it
+                mutableAttendees.value = it
                 }, {
                     Timber.e(it, "Error fetching attendee details")
                     message.value = "Error fetching attendee details"

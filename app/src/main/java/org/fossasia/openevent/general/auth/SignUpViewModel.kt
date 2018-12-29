@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,11 +18,17 @@ class SignUpViewModel(
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val error = SingleLiveEvent<String>()
-    val signedUp = MutableLiveData<User>()
-    val showNoInternetDialog = MutableLiveData<Boolean>()
-    val loggedIn = SingleLiveEvent<Boolean>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableSignedUp = MutableLiveData<User>()
+    val signedUp: LiveData<User> = mutableSignedUp
+    private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
+    val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
+    private val mutableLoggedIn = SingleLiveEvent<Boolean>()
+    var loggedIn: LiveData<Boolean> = mutableLoggedIn
+
     var email: String? = null
     var password: String? = null
 
@@ -35,19 +42,19 @@ class SignUpViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({
-                    signedUp.value = it
+                mutableSignedUp.value = it
                     Timber.d("Success!")
                 }, {
                     when {
                         it.toString().contains("HTTP 409 CONFLICT") ->
-                            error.value = "Unable to SignUp: Email already exists!"
+                            mutableError.value = "Unable to SignUp: Email already exists!"
                         it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") ->
-                            error.value = "Unable to SignUp: Not a valid email address!"
-                        else -> error.value = "Unable to SignUp!"
+                            mutableError.value = "Unable to SignUp: Not a valid email address!"
+                        else -> mutableError.value = "Unable to SignUp!"
                     }
                     Timber.d(it, "Failed")
                 }))
@@ -61,15 +68,15 @@ class SignUpViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    progress.value = true
+                    mutableProgress.value = true
                 }.doFinally {
-                    progress.value = false
+                mutableProgress.value = false
                 }.subscribe({
-                    loggedIn.value = true
+                mutableLoggedIn.value = true
                     Timber.d("Success!")
                     fetchProfile()
                 }, {
-                    error.value = "Unable to Login automatically"
+                mutableError.value = "Unable to Login automatically"
                     Timber.d(it, "Failed")
                 }))
     }
@@ -93,16 +100,16 @@ class SignUpViewModel(
 
     private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            error.value = "Email or Password cannot be empty!"
+            mutableError.value = "Email or Password cannot be empty!"
             return true
         }
         if (password != confirmPassword) {
-            error.value = "Passwords do not match!"
+            mutableError.value = "Passwords do not match!"
             return true
         }
 
         if (password.length < 6) {
-            error.value = "Password should be atleast 6 characters!"
+            mutableError.value = "Password should be atleast 6 characters!"
             return true
         }
 
@@ -111,7 +118,7 @@ class SignUpViewModel(
 
     private fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
-        if (!isConnected) showNoInternetDialog.value = true
+        if (!isConnected) mutableShowNoInternetDialog.value = true
         return isConnected
     }
 }
