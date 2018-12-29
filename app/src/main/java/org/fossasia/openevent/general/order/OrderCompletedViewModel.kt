@@ -26,14 +26,15 @@ class OrderCompletedViewModel(private val eventService: EventService) : ViewMode
         }
 
         compositeDisposable.add(eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mutableEvent.value = it
-                }, {
-                    Timber.e(it, "Error fetching event %d", id)
-                    mutableMessage.value = "Error fetching event"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEvent.value = it
+            }, {
+                Timber.e(it, "Error fetching event %d", id)
+                mutableMessage.value = "Error fetching event"
+            })
+        )
     }
 
     override fun onCleared() {
