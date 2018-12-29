@@ -28,29 +28,31 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
             return
         }
         compositeDisposable.add(eventService.getSimilarEvents(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    mutableProgress.value = true
-                }).subscribe({
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe({
+                mutableProgress.value = true
+            }).subscribe({
                 mutableProgress.value = false
                 mutableSimilarEvents.value = it.filter { it.id != eventId }
-                }, {
-                    Timber.e(it, "Error fetching similar events")
+            }, {
+                Timber.e(it, "Error fetching similar events")
                 mutableError.value = "Error fetching similar events"
-                }))
+            })
+        )
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
         compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Success")
-                }, {
-                    Timber.e(it, "Error")
-                    mutableError.value = "Error"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Success")
+            }, {
+                Timber.e(it, "Error")
+                mutableError.value = "Error"
+            })
+        )
     }
 
     override fun onCleared() {

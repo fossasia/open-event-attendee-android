@@ -39,25 +39,26 @@ class SignUpViewModel(
 
         if (hasErrors(email, password, confirmPassword)) return
         compositeDisposable.add(authService.signUp(signUp)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
                 mutableProgress.value = false
-                }.subscribe({
+            }.subscribe({
                 mutableSignedUp.value = it
-                    Timber.d("Success!")
-                }, {
-                    when {
-                        it.toString().contains("HTTP 409 CONFLICT") ->
-                            mutableError.value = "Unable to SignUp: Email already exists!"
-                        it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") ->
-                            mutableError.value = "Unable to SignUp: Not a valid email address!"
-                        else -> mutableError.value = "Unable to SignUp!"
-                    }
-                    Timber.d(it, "Failed")
-                }))
+                Timber.d("Success!")
+            }, {
+                when {
+                    it.toString().contains("HTTP 409 CONFLICT") ->
+                        mutableError.value = "Unable to SignUp: Email already exists!"
+                    it.toString().contains("HTTP 422 UNPROCESSABLE ENTITY") ->
+                        mutableError.value = "Unable to SignUp: Not a valid email address!"
+                    else -> mutableError.value = "Unable to SignUp!"
+                }
+                Timber.d(it, "Failed")
+            })
+        )
     }
 
     fun login(signUp: SignUp) {
@@ -65,32 +66,33 @@ class SignUpViewModel(
         email = signUp.email
         password = signUp.password
         compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
                 mutableProgress.value = false
-                }.subscribe({
+            }.subscribe({
                 mutableLoggedIn.value = true
-                    Timber.d("Success!")
-                    fetchProfile()
-                }, {
+                Timber.d("Success!")
+                fetchProfile()
+            }, {
                 mutableError.value = "Unable to Login automatically"
-                    Timber.d(it, "Failed")
-                }))
+                Timber.d(it, "Failed")
+            })
+        )
     }
 
     private fun fetchProfile() {
         if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Fetched User Details")
-                }) {
-                    Timber.e(it, "Error loading user details")
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Fetched User Details")
+            }) {
+                Timber.e(it, "Error loading user details")
+            })
     }
 
     override fun onCleared() {

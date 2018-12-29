@@ -22,29 +22,31 @@ class FavouriteEventsViewModel(private val eventService: EventService) : ViewMod
     val events: LiveData<List<Event>> = mutableEvents
 
     fun loadFavoriteEvents() {
-        compositeDisposable.add(eventService.getFavoriteEvents()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                mutableEvents.value = it
-                mutableProgress.value = false
-            }, {
-                Timber.e(it, "Error fetching favorite events")
-                mutableError.value = "Error fetching favorite events"
-            })
+        compositeDisposable.add(
+            eventService.getFavoriteEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    mutableEvents.value = it
+                    mutableProgress.value = false
+                }, {
+                    Timber.e(it, "Error fetching favorite events")
+                    mutableError.value = "Error fetching favorite events"
+                })
         )
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Timber.d("Success")
-            }, {
-                Timber.e(it, "Error")
-                mutableError.value = "Error"
-            })
+        compositeDisposable.add(
+            eventService.setFavorite(eventId, favourite)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Success")
+                }, {
+                    Timber.e(it, "Error")
+                    mutableError.value = "Error"
+                })
         )
     }
 

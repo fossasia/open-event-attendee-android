@@ -158,18 +158,19 @@ class SearchViewModel(
         }
 
         compositeDisposable.add(eventService.getSearchEvents(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableShowShimmerResults.value = true
-                }.doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmerResults.value = true
+            }.doFinally {
                 mutableShowShimmerResults.value = false
-                }.subscribe({
-                    mutableEvents.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    mutableError.value = "Error fetching events"
-                }))
+            }.subscribe({
+                mutableEvents.value = it
+            }, {
+                Timber.e(it, "Error fetching events")
+                mutableError.value = "Error fetching events"
+            })
+        )
 
         preference.remove(SearchTimeViewModel.tokenKeyDate)
         preference.remove(SearchTimeViewModel.tokenKeyNextDate)
@@ -177,14 +178,15 @@ class SearchViewModel(
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
         compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Successfully added %d to favorites", eventId)
-                }, {
-                    Timber.e(it, "Error adding %d to favorites", eventId)
-                    mutableError.value = "Error adding to favorites"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Successfully added %d to favorites", eventId)
+            }, {
+                Timber.e(it, "Error adding %d to favorites", eventId)
+                mutableError.value = "Error adding to favorites"
+            })
+        )
     }
 
     fun isConnected(): Boolean {

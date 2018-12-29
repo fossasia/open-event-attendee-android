@@ -32,14 +32,15 @@ class OrderDetailsViewModel(
         }
 
         compositeDisposable.add(eventService.getEventFromApi(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mutableEvent.value = it
-                }, {
-                    Timber.e(it, "Error fetching event %d", id)
-                    message.value = "Error fetching event"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEvent.value = it
+            }, {
+                Timber.e(it, "Error fetching event %d", id)
+                message.value = "Error fetching event"
+            })
+        )
     }
 
     fun loadAttendeeDetails(id: String) {
@@ -48,18 +49,19 @@ class OrderDetailsViewModel(
         }
 
         compositeDisposable.add(orderService.attendeesUnderOrder(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
                 mutableProgress.value = false
-                }.subscribe({
+            }.subscribe({
                 mutableAttendees.value = it
-                }, {
-                    Timber.e(it, "Error fetching attendee details")
-                    message.value = "Error fetching attendee details"
-                }))
+            }, {
+                Timber.e(it, "Error fetching attendee details")
+                message.value = "Error fetching attendee details"
+            })
+        )
     }
 
     override fun onCleared() {

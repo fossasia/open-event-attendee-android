@@ -25,15 +25,16 @@ class OrderCompletedViewModel(private val eventService: EventService) : ViewMode
             throw IllegalStateException("ID should never be -1")
         }
 
-        compositeDisposable.add(eventService.getEvent(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                mutableEvent.value = it
-            }, {
-                Timber.e(it, "Error fetching event %d", id)
-                mutableMessage.value = "Error fetching event"
-            })
+        compositeDisposable.add(
+            eventService.getEvent(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    mutableEvent.value = it
+                }, {
+                    Timber.e(it, "Error fetching event %d", id)
+                    mutableMessage.value = "Error fetching event"
+                })
         )
     }
 

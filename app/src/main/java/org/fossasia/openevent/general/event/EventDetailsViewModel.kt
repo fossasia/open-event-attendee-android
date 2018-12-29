@@ -29,18 +29,19 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
             return
         }
         compositeDisposable.add(eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
                 mutableProgress.value = false
-                }.subscribe({
+            }.subscribe({
                 mutableEvent.value = it
-                }, {
-                    Timber.e(it, "Error fetching event %d", id)
+            }, {
+                Timber.e(it, "Error fetching event %d", id)
                 mutableError.value = "Error fetching event"
-                }))
+            })
+        )
     }
 
     fun loadMap(event: Event): String {
@@ -56,14 +57,15 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
         compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Success")
-                }, {
-                    Timber.e(it, "Error")
-                    mutableError.value = "Error"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Success")
+            }, {
+                Timber.e(it, "Error")
+                mutableError.value = "Error"
+            })
+        )
     }
 
     override fun onCleared() {

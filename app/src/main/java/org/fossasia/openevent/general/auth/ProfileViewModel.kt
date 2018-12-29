@@ -23,30 +23,30 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
 
     fun logout() {
         compositeDisposable.add(authService.logout()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Logged out!")
-                }) {
-                    Timber.e(it, "Failure Logging out!")
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Logged out!")
+            }) {
+                Timber.e(it, "Failure Logging out!")
+            })
     }
 
     fun fetchProfile() {
         compositeDisposable.add(authService.getProfile()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    mutableProgress.value = true
-                }).doFinally {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe({
+                mutableProgress.value = true
+            }).doFinally {
                 mutableProgress.value = false
-                }.subscribe({ user ->
-                    Timber.d("Response Success")
-                    this.mutableUser.value = user
-                }) {
-                    Timber.e(it, "Failure")
+            }.subscribe({ user ->
+                Timber.d("Response Success")
+                this.mutableUser.value = user
+            }) {
+                Timber.e(it, "Failure")
                 mutableError.value = "Failure"
-                })
+            })
     }
 
     override fun onCleared() {

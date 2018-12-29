@@ -9,7 +9,8 @@ import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.data.Preference
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService, private val preference: Preference) : ViewModel() {
+class EventsViewModel(private val eventService: EventService, private val preference: Preference) :
+    ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
@@ -30,17 +31,18 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
 
         compositeDisposable.add(eventService.getEventsByLocation(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    mutableProgress.value = false
-                    mutableShowShimmerEvents.value = false
-                }.subscribe({
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally {
+                mutableProgress.value = false
+                mutableShowShimmerEvents.value = false
+            }.subscribe({
                 mutableEvents.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
+            }, {
+                Timber.e(it, "Error fetching events")
                 mutableError.value = "Error fetching events"
-                }))
+            })
+        )
     }
 
     fun retryLoadLocationEvents() {
@@ -50,30 +52,32 @@ class EventsViewModel(private val eventService: EventService, private val prefer
 
     fun loadEvents() {
         compositeDisposable.add(eventService.getEvents()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    mutableProgress.value = true
-                }).doFinally({
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe({
+                mutableProgress.value = true
+            }).doFinally({
                 mutableProgress.value = false
-                }).subscribe({
+            }).subscribe({
                 mutableEvents.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
+            }, {
+                Timber.e(it, "Error fetching events")
                 mutableError.value = "Error fetching events"
-                }))
+            })
+        )
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
         compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Success")
-                }, {
-                    Timber.e(it, "Error")
-                    mutableError.value = "Error"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Success")
+            }, {
+                Timber.e(it, "Error")
+                mutableError.value = "Error"
+            })
+        )
     }
 
     override fun onCleared() {

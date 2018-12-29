@@ -33,18 +33,19 @@ class TicketsViewModel(
             return
         }
         compositeDisposable.add(ticketService.getTickets(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgressTickets.value = true
-                }.subscribe({ ticketList ->
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgressTickets.value = true
+            }.subscribe({ ticketList ->
                 mutableTicketTableVisibility.value = ticketList.isNotEmpty()
-                    tickets.value = ticketList
-                    mutableProgressTickets.value = false
-                }, {
-                    mutableError.value = "Error fetching tickets"
-                    Timber.e(it, "Error fetching tickets %d", id)
-                }))
+                tickets.value = ticketList
+                mutableProgressTickets.value = false
+            }, {
+                mutableError.value = "Error fetching tickets"
+                Timber.e(it, "Error fetching tickets %d", id)
+            })
+        )
     }
 
     fun loadEvent(id: Long) {
@@ -52,14 +53,15 @@ class TicketsViewModel(
             throw IllegalStateException("ID should never be -1")
         }
         compositeDisposable.add(eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mutableEvent.value = it
-                }, {
-                    Timber.e(it, "Error fetching event %d", id)
-                    mutableError.value = "Error fetching event"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEvent.value = it
+            }, {
+                Timber.e(it, "Error fetching event %d", id)
+                mutableError.value = "Error fetching event"
+            })
+        )
     }
 
     fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
