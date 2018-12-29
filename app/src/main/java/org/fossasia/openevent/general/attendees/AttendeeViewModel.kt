@@ -55,8 +55,7 @@ class AttendeeViewModel(
     val totalQty: LiveData<Int> = mutableTotalQty
     private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
     val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
-    private val mutablePaymentCompleted = MutableLiveData<Boolean>()
-    val paymentCompleted: LiveData<Boolean> = mutablePaymentCompleted
+    val paymentCompleted = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
     val tickets: LiveData<MutableList<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -280,7 +279,7 @@ class AttendeeViewModel(
                 }.subscribe({
                 mutableMessage.value = "Order created successfully!"
                     Timber.d("Updated order status successfully !")
-                    mutablePaymentCompleted.value = true
+                    paymentCompleted.value = true
                 }, {
                 mutableMessage.value = "Unable to create Order!"
                     Timber.d(it, "Failed updating order status")
