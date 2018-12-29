@@ -21,17 +21,18 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
 
     fun loadSocialLinks(id: Long) {
         compositeDisposable.add(socialLinksService.getSocialLinks(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.subscribe({
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.subscribe({
                 mutableSocialLinks.value = it
                 mutableProgress.value = false
-                }, {
-                    Timber.e(it, "Error fetching Social Links")
+            }, {
+                Timber.e(it, "Error fetching Social Links")
                 mutableError.value = "Error fetching Social Links"
-                }))
+            })
+        )
     }
 
     override fun onCleared() {

@@ -27,18 +27,19 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
             return
         }
         compositeDisposable.add(eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    mutableProgressAboutEvent.value = true
-                }).doFinally({
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe({
+                mutableProgressAboutEvent.value = true
+            }).doFinally({
                 mutableProgressAboutEvent.value = false
-                }).subscribe({ eventList ->
+            }).subscribe({ eventList ->
                 mutableEvent.value = eventList
-                }, {
+            }, {
                 mutableError.value = "Error fetching event"
-                    Timber.e(it, "Error fetching event %d", id)
-                }))
+                Timber.e(it, "Error fetching event %d", id)
+            })
+        )
     }
 
     override fun onCleared() {

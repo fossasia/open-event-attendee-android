@@ -29,7 +29,8 @@ class OrdersUnderUserVM(
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
     private val mutableEventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
-    val eventAndOrderIdentifier: LiveData<List<Pair<Event, String>>> = mutableEventAndOrderIdentifier
+    val eventAndOrderIdentifier: LiveData<List<Pair<Event, String>>> =
+        mutableEventAndOrderIdentifier
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     private val mutablenoTickets = MutableLiveData<Boolean>()
@@ -41,56 +42,58 @@ class OrdersUnderUserVM(
 
     fun ordersUnderUser() {
         compositeDisposable.add(orderService.orderUser(getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                    mutablenoTickets.value = false
-                }.subscribe({
-                    order = it
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+                mutablenoTickets.value = false
+            }.subscribe({
+                order = it
                 mutableAttendeesNumber.value = it.map { it.attendees?.size } as ArrayList<Int>
-                    val query = buildQuery(it)
+                val query = buildQuery(it)
 
-                    if (idList.size != 0)
-                        eventsUnderUser(query)
-                    else {
-                        mutableProgress.value = false
-                        mutablenoTickets.value = true
-                    }
-                }, {
-                    mutableMessage.value = "Failed  to list Orders under a user"
-                    Timber.d(it, "Failed  to list Orders under a user ")
-                }))
+                if (idList.size != 0)
+                    eventsUnderUser(query)
+                else {
+                    mutableProgress.value = false
+                    mutablenoTickets.value = true
+                }
+            }, {
+                mutableMessage.value = "Failed  to list Orders under a user"
+                Timber.d(it, "Failed  to list Orders under a user ")
+            })
+        )
     }
 
     private fun eventsUnderUser(eventIds: String) {
         compositeDisposable.add(eventService.getEventsUnderUser(eventIds)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    mutableProgress.value = false
-                }.subscribe({
-                    val events = ArrayList<Event>()
-                    it.map {
-                        val times = eventIdAndTimes[it.id]
-                        if (times != null) {
-                            for (i in 0..times) {
-                                events.add(it)
-                            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                val events = ArrayList<Event>()
+                it.map {
+                    val times = eventIdAndTimes[it.id]
+                    if (times != null) {
+                        for (i in 0..times) {
+                            events.add(it)
                         }
-                        eventIdMap[it.id] = it
                     }
-                    val eventAndIdentifier = ArrayList<Pair<Event, String>>()
-                    order.forEach {
-                        val event = eventIdMap[it.event?.id]
-                        if (event != null && it.identifier != null)
-                            eventAndIdentifier.add(Pair(event, it.identifier))
-                    }
-                    mutableEventAndOrderIdentifier.value = eventAndIdentifier
-                }, {
-                    mutableMessage.value = "Failed  to list events under a user"
-                    Timber.d(it, "Failed  to list events under a user ")
-                }))
+                    eventIdMap[it.id] = it
+                }
+                val eventAndIdentifier = ArrayList<Pair<Event, String>>()
+                order.forEach {
+                    val event = eventIdMap[it.event?.id]
+                    if (event != null && it.identifier != null)
+                        eventAndIdentifier.add(Pair(event, it.identifier))
+                }
+                mutableEventAndOrderIdentifier.value = eventAndIdentifier
+            }, {
+                mutableMessage.value = "Failed  to list events under a user"
+                Timber.d(it, "Failed  to list events under a user ")
+            })
+        )
     }
 
     private fun buildQuery(orderList: List<Order>): String {
