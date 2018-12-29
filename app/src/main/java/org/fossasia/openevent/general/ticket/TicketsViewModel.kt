@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,30 +16,36 @@ class TicketsViewModel(
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    val progressTickets = MutableLiveData<Boolean>()
+
+    private val mutableProgressTickets = MutableLiveData<Boolean>()
+    val progressTickets: LiveData<Boolean> = mutableProgressTickets
     val tickets = MutableLiveData<List<Ticket>>()
-    val error = MutableLiveData<String>()
-    val event = MutableLiveData<Event>()
-    val ticketTableVisibility = MutableLiveData<Boolean>()
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableEvent = MutableLiveData<Event>()
+    val event: LiveData<Event> = mutableEvent
+    private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
+    val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
 
     fun loadTickets(id: Long) {
         if (id == -1L) {
-            error.value = "Error fetching tickets"
+            mutableError.value = "Error fetching tickets"
             return
         }
         compositeDisposable.add(ticketService.getTickets(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progressTickets.value = true
-                }.subscribe({ ticketList ->
-                    ticketTableVisibility.value = ticketList.isNotEmpty()
-                    tickets.value = ticketList
-                    progressTickets.value = false
-                }, {
-                    error.value = "Error fetching tickets"
-                    Timber.e(it, "Error fetching tickets %d", id)
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgressTickets.value = true
+            }.subscribe({ ticketList ->
+                mutableTicketTableVisibility.value = ticketList.isNotEmpty()
+                tickets.value = ticketList
+                mutableProgressTickets.value = false
+            }, {
+                mutableError.value = "Error fetching tickets"
+                Timber.e(it, "Error fetching tickets %d", id)
+            })
+        )
     }
 
     fun loadEvent(id: Long) {
@@ -46,14 +53,15 @@ class TicketsViewModel(
             throw IllegalStateException("ID should never be -1")
         }
         compositeDisposable.add(eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    event.value = it
-                }, {
-                    Timber.e(it, "Error fetching event %d", id)
-                    error.value = "Error fetching event"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEvent.value = it
+            }, {
+                Timber.e(it, "Error fetching event %d", id)
+                mutableError.value = "Error fetching event"
+            })
+        )
     }
 
     fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {

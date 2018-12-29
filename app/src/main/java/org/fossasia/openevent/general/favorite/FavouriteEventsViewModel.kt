@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.favorite
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,33 +14,40 @@ class FavouriteEventsViewModel(private val eventService: EventService) : ViewMod
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
-    val error = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableEvents = MutableLiveData<List<Event>>()
+    val events: LiveData<List<Event>> = mutableEvents
 
     fun loadFavoriteEvents() {
-        compositeDisposable.add(eventService.getFavoriteEvents()
+        compositeDisposable.add(
+            eventService.getFavoriteEvents()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    events.value = it
-                    progress.value = false
+                    mutableEvents.value = it
+                    mutableProgress.value = false
                 }, {
                     Timber.e(it, "Error fetching favorite events")
-                    error.value = "Error fetching favorite events"
-                }))
+                    mutableError.value = "Error fetching favorite events"
+                })
+        )
     }
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favourite)
+        compositeDisposable.add(
+            eventService.setFavorite(eventId, favourite)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d("Success")
                 }, {
                     Timber.e(it, "Error")
-                    error.value = "Error"
-                }))
+                    mutableError.value = "Error"
+                })
+        )
     }
 
     override fun onCleared() {
