@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -33,7 +32,6 @@ const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 class OrdersUnderUserFragment : Fragment() {
 
     private lateinit var rootView: View
-    private lateinit var coordinatorLayout: CoordinatorLayout
     private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -44,7 +42,6 @@ class OrdersUnderUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-        coordinatorLayout = rootView.ordersUnderUserCoordinatorLayout
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.title = "Tickets"
 
@@ -84,7 +81,9 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.message
                 .nonNull()
                 .observe(this, Observer {
-                    Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        rootView.ordersUnderUserCoordinatorLayout, it, Snackbar.LENGTH_LONG
+                    ).show()
                 })
 
             ordersUnderUserVM.noTickets
@@ -107,7 +106,9 @@ class OrdersUnderUserFragment : Fragment() {
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
         } else {
-            Snackbar.make(coordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                rootView.ordersUnderUserCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT
+            ).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 500)

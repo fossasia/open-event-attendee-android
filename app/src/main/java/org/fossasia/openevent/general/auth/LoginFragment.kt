@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,7 +37,6 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
-    private lateinit var coordinatorLayout: CoordinatorLayout
     private var bundle: Bundle? = null
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private var id: Long = -1
@@ -59,7 +57,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
-        coordinatorLayout = rootView.loginCoordinatorLayout
         if (loginViewModel.isLoggedIn())
             redirectToMain(bundle)
 
@@ -84,13 +81,15 @@ class LoginFragment : Fragment() {
         loginViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(coordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    rootView.loginCoordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG
+                ).show()
                 loginViewModel.fetchProfile()
             })
 

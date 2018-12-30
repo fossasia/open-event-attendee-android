@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,7 +37,6 @@ class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
 
     private lateinit var rootView: View
-    private lateinit var coordinatorLayout: CoordinatorLayout
     private var emailSettings: String? = null
     private val EMAIL: String = "EMAIL"
 
@@ -57,12 +55,11 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-        coordinatorLayout = rootView.profileCoordinatorLayout
 
         setHasOptionsMenu(true)
 
         if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(coordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(rootView.profileCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 1000)
@@ -77,7 +74,7 @@ class ProfileFragment : Fragment() {
         profileViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootView.profileCoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
             })
 
         profileViewModel.user
