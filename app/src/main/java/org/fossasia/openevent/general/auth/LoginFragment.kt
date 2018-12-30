@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.view.email
+import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
 import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
@@ -37,7 +38,7 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
-    private lateinit var CoordinatorLayout: CoordinatorLayout
+    private lateinit var coordinatorLayout: CoordinatorLayout
     private var bundle: Bundle? = null
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
     private var id: Long = -1
@@ -58,7 +59,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
-        CoordinatorLayout = rootView.findViewById(R.id.loginCoordinatorLayout)
+        coordinatorLayout = rootView.loginCoordinatorLayout
         if (loginViewModel.isLoggedIn())
             redirectToMain(bundle)
 
@@ -83,15 +84,13 @@ class LoginFragment : Fragment() {
         loginViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                CoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                CoordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(coordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG).show()
                 loginViewModel.fetchProfile()
             })
 

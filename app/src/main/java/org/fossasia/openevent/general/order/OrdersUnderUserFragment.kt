@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
 import org.fossasia.openevent.general.AuthActivity
@@ -32,7 +33,7 @@ const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 class OrdersUnderUserFragment : Fragment() {
 
     private lateinit var rootView: View
-    private lateinit var CoordinatorLayout: CoordinatorLayout
+    private lateinit var coordinatorLayout: CoordinatorLayout
     private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -43,7 +44,7 @@ class OrdersUnderUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-        CoordinatorLayout = rootView.findViewById(R.id.ordersUnderUserCoordinatorLayout)
+        coordinatorLayout = rootView.ordersUnderUserCoordinatorLayout
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.title = "Tickets"
 
@@ -83,8 +84,7 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.message
                 .nonNull()
                 .observe(this, Observer {
-                    Snackbar.make(
-                    CoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG).show()
                 })
 
             ordersUnderUserVM.noTickets
@@ -107,8 +107,7 @@ class OrdersUnderUserFragment : Fragment() {
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
         } else {
-            Snackbar.make(
-                CoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(coordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 500)

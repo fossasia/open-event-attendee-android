@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
@@ -37,9 +38,10 @@ class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
 
     private lateinit var rootView: View
-    private lateinit var CoordinatorLayout: CoordinatorLayout
+    private lateinit var coordinatorLayout: CoordinatorLayout
     private var emailSettings: String? = null
     private val EMAIL: String = "EMAIL"
+
 
     private fun redirectToLogin() {
         startActivity(Intent(activity, AuthActivity::class.java))
@@ -56,13 +58,12 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-        CoordinatorLayout = rootView.findViewById(R.id.profileCoordinatorLayout)
+        coordinatorLayout = rootView.profileCoordinatorLayout
 
         setHasOptionsMenu(true)
 
         if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(
-                CoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(coordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 1000)
@@ -77,8 +78,7 @@ class ProfileFragment : Fragment() {
         profileViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                CoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
             })
 
         profileViewModel.user
