@@ -1,159 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/loginCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
-    
-    <androidx.core.widget.NestedScrollView
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/loginLayout"
-            android:layout_width="match_parent"
-            android:paddingRight="@dimen/padding_extra_large"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_extra_large"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:paddingTop="@dimen/padding_extra_large">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/layout_margin_large"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_very_large"
-                android:text="@string/eventyay_logo"/>
-            <!-- Email Label -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:layout_marginBottom="@dimen/padding_medium"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress" >
-
-                <EditText
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_email_black_24dp"
-                    android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:inputType="textEmailAddress"
-                    android:drawableStart="@drawable/ic_email_black_24dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Password Label -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:layout_marginBottom="@dimen/padding_medium"
-                app:passwordToggleEnabled="true">
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/password"
-                    android:drawableLeft="@drawable/ic_lock_black_24dp"
-                    android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:inputType="textPassword"
-                    android:drawableStart="@drawable/ic_lock_black_24dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/loginButton"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:layout_marginTop="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_large"
-                android:padding="@dimen/padding_medium"
-                android:textColor="@android:color/white"
-                android:backgroundTint="@color/colorPrimary"
-                android:text="@string/login" />
-
-            <TextView
-                android:id="@+id/forgotPassword"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_large"
-                android:padding="@dimen/padding_medium"
-                android:text="@string/forgot_password" />
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/progressBar"
-                android:visibility="gone" />
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/loginCoordinatorLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            android:id="@+id/sentEmailLayout"
-            android:layout_margin="@dimen/layout_margin_medium"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/item_image_view_medium"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:layout_gravity="end"
-                android:layout_marginRight="@dimen/layout_margin_medium"
-                android:id="@+id/tick"
-                app:srcCompat="@drawable/ic_check_black_24dp"/>
-
-            <View
-                android:layout_width="@dimen/fab_width"
-                android:layout_height="0dp"
-                android:visibility="invisible"
-                android:layout_weight="0.2"
-                app:srcCompat="@drawable/ic_check_black_24dp"/>
-
-            <ImageView
-                android:layout_width="@dimen/logo_icon_width"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_mail_outline_black_24dp"/>
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/loginLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:textAlignment="center"
-                android:gravity="bottom"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_large"
-                android:text="@string/email_sent_alert"/>
+                android:paddingRight="@dimen/padding_extra_large"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding_extra_large"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:paddingTop="@dimen/padding_extra_large">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_very_large"
+                    android:text="@string/eventyay_logo"/>
+                <!-- Email Label -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" >
 
-            <TextView
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_email_black_24dp"
+                        android:drawablePadding="@dimen/layout_margin_moderate"
+                        android:inputType="textEmailAddress"
+                        android:drawableStart="@drawable/ic_email_black_24dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Password Label -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:drawableLeft="@drawable/ic_lock_black_24dp"
+                        android:drawablePadding="@dimen/layout_margin_moderate"
+                        android:inputType="textPassword"
+                        android:drawableStart="@drawable/ic_lock_black_24dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/loginButton"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:padding="@dimen/padding_medium"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="@string/login" />
+
+                <TextView
+                    android:id="@+id/forgotPassword"
+                    android:layout_width="fill_parent"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:padding="@dimen/padding_medium"
+                    android:text="@string/forgot_password" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/progressBar"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.5"
-                android:textAlignment="center"
-                android:text="@string/email_sent_message"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:id="@+id/sentEmailLayout"
+                android:layout_margin="@dimen/layout_margin_medium"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/item_image_view_medium"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="@dimen/layout_margin_medium"
+                    android:id="@+id/tick"
+                    app:srcCompat="@drawable/ic_check_black_24dp"/>
+
+                <View
+                    android:layout_width="@dimen/fab_width"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    android:layout_weight="0.2"
+                    app:srcCompat="@drawable/ic_check_black_24dp"/>
+
+                <ImageView
+                    android:layout_width="@dimen/logo_icon_width"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_mail_outline_black_24dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.1"
+                    android:textAlignment="center"
+                    android:gravity="bottom"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_large"
+                    android:text="@string/email_sent_alert"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:textAlignment="center"
+                    android:text="@string/email_sent_message"/>
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>
