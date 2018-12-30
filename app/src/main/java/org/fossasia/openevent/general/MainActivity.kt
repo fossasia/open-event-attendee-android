@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.frameContainer
 import kotlinx.android.synthetic.main.activity_main.navigation
-import kotlinx.android.synthetic.main.activity_main.rootLayout
 import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
-import org.fossasia.openevent.general.attendees.AttendeeFragment
-import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsFragment
@@ -75,12 +72,6 @@ class MainActivity : AppCompatActivity() {
                 loadFragment(supportFragmentManager, SearchFragment(), frameContainer.id)
                 supportActionBar?.title = "Search"
                 navigation.selectedItemId = navigation_search
-            }
-
-            if (bundle.getBoolean(LAUNCH_ATTENDEE)) {
-                val fragment = AttendeeFragment()
-                fragment.arguments = bundle
-                loadFragment(supportFragmentManager, fragment, rootLayout.id)
             }
 
             if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS)) {

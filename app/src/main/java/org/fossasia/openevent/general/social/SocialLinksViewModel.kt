@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.social
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,23 +12,27 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val socialLinks = MutableLiveData<List<SocialLink>>()
-    val error = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
+    val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
 
     fun loadSocialLinks(id: Long) {
         compositeDisposable.add(socialLinksService.getSocialLinks(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }.subscribe({
-                    socialLinks.value = it
-                    progress.value = false
-                }, {
-                    Timber.e(it, "Error fetching Social Links")
-                    error.value = "Error fetching Social Links"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.subscribe({
+                mutableSocialLinks.value = it
+                mutableProgress.value = false
+            }, {
+                Timber.e(it, "Error fetching Social Links")
+                mutableError.value = "Error fetching Social Links"
+            })
+        )
     }
 
     override fun onCleared() {

@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -9,13 +10,19 @@ import timber.log.Timber
 
 const val USER_UPDATED = "User updated successfully!"
 
-class EditProfileViewModel(private val authService: AuthService, private val authHolder: AuthHolder) : ViewModel() {
+class EditProfileViewModel(
+    private val authService: AuthService,
+    private val authHolder: AuthHolder
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val user = MutableLiveData<User>()
-    val message = MutableLiveData<String>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableMessage = MutableLiveData<String>()
+    val message: LiveData<String> = mutableMessage
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -25,50 +32,53 @@ class EditProfileViewModel(private val authService: AuthService, private val aut
             return
         }
         compositeDisposable.add(authService.uploadImage(UploadImage(encodedImage))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }
-                .doFinally {
-                    progress.value = false
-                }
-                .subscribe({
-                    updateUser(it.url, firstName, lastName)
-                    message.value = "Image uploaded successfully!"
-                    Timber.d("Image uploaded " + it.url)
-                }) {
-                    message.value = "Error uploading image!"
-                    Timber.e(it, "Error uploading user!")
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }
+            .doFinally {
+                mutableProgress.value = false
+            }
+            .subscribe({
+                updateUser(it.url, firstName, lastName)
+                mutableMessage.value = "Image uploaded successfully!"
+                Timber.d("Image uploaded " + it.url)
+            }) {
+                mutableMessage.value = "Error uploading image!"
+                Timber.e(it, "Error uploading user!")
+            })
     }
 
     fun updateUser(url: String?, firstName: String, lastName: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
-            message.value = "Please provide first name and last name!"
+            mutableMessage.value = "Please provide first name and last name!"
             return
         }
         compositeDisposable.add(authService.updateUser(
-            User(id = id,
+            User(
+                id = id,
                 firstName = firstName,
                 lastName = lastName,
-                avatarUrl = url), id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }
-                .doFinally {
-                    progress.value = false
-                }
-                .subscribe({
-                    message.value = USER_UPDATED
-                    Timber.d("User updated")
-                }) {
-                    message.value = "Error updating user!"
-                    Timber.e(it, "Error updating user!")
-                })
+                avatarUrl = url
+            ), id
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }
+            .doFinally {
+                mutableProgress.value = false
+            }
+            .subscribe({
+                mutableMessage.value = USER_UPDATED
+                Timber.d("User updated")
+            }) {
+                mutableMessage.value = "Error updating user!"
+                Timber.e(it, "Error updating user!")
+            })
     }
 
     override fun onCleared() {

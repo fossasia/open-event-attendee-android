@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -32,7 +33,6 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val LAUNCH_ATTENDEE: String = "LAUNCH_ATTENDEE"
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
@@ -141,11 +141,12 @@ class LoginFragment : Fragment() {
         val intent = Intent(activity, MainActivity::class.java)
         if (bundle != null) {
             if (id != -1L && ticketIdAndQty != null) {
-                intent.putExtra(LAUNCH_ATTENDEE, true)
+                activity?.setResult(RESULT_OK, intent)
+            } else {
+                intent.putExtras(bundle)
+                startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             }
-            intent.putExtras(bundle)
         }
-        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
     }
