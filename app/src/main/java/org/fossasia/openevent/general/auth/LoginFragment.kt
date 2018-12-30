@@ -25,9 +25,7 @@ import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.order.LAUNCH_TICKETS
-import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
+import org.fossasia.openevent.general.ticket.REDIRECTED_FROM_TICKETS
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -38,17 +36,10 @@ class LoginFragment : Fragment() {
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
     private var bundle: Bundle? = null
-    private var ticketIdAndQty: List<Pair<Int, Int>>? = null
-    private var id: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null && !bundle.getBoolean(LAUNCH_TICKETS)) {
-            id = bundle.getLong(EVENT_ID, -1)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
-        }
-        this.bundle = bundle
+        bundle = this.arguments
     }
 
     override fun onCreateView(
@@ -138,7 +129,7 @@ class LoginFragment : Fragment() {
     private fun redirectToMain(bundle: Bundle?) {
         val intent = Intent(activity, MainActivity::class.java)
         if (bundle != null) {
-            if (id != -1L && ticketIdAndQty != null) {
+            if (bundle.getBoolean(REDIRECTED_FROM_TICKETS)) {
                 activity?.setResult(RESULT_OK, intent)
             } else {
                 intent.putExtras(bundle)
