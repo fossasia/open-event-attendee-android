@@ -60,6 +60,8 @@ class AttendeeViewModel(
     val tickets: LiveData<MutableList<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
     val forms: LiveData<List<CustomForm>> = mutableForms
+    private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
+    val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
 
     val month = ArrayList<String>()
     val year = ArrayList<String>()
@@ -75,8 +77,6 @@ class AttendeeViewModel(
     private lateinit var confirmOrder: ConfirmOrder
 
     fun getId() = authHolder.getId()
-
-    fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun initializeSpinner() {
         // initialize months
@@ -163,6 +163,7 @@ class AttendeeViewModel(
     private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             mutableMessage.value = "Please fill in all the fields"
+            mutableIsAttendeeCreated.value = false
             return
         }
 
@@ -179,6 +180,7 @@ class AttendeeViewModel(
                 attendees.add(it)
                 if (attendees.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
+                    mutableIsAttendeeCreated.value = true
                     mutableMessage.value = "Attendees created successfully!"
                 }
                 Timber.d("Success! %s", attendees.toList().toString())
@@ -365,7 +367,8 @@ class AttendeeViewModel(
         )
     }
 
-    fun loadUser(id: Long) {
+    fun loadUser() {
+        val id = getId()
         if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }

@@ -1,8 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -61,7 +59,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.time
 import kotlinx.android.synthetic.main.fragment_attendee.view.view
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -80,8 +77,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
-private const val PRIVACY_POLICY = "https://eventyay.com/privacy-policy/"
-private const val TERMS_OF_SERVICE = "https://eventyay.com/terms/"
 
 class AttendeeFragment : Fragment() {
 
@@ -93,7 +88,7 @@ class AttendeeFragment : Fragment() {
 
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
-    private lateinit var selectedPaymentOption: String
+    private var selectedPaymentOption: Int = -1
     private lateinit var paymentCurrency: String
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
@@ -103,7 +98,6 @@ class AttendeeFragment : Fragment() {
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
     private var editTextList = ArrayList<EditText>()
-    private val AUTH_REQUEST_CODE = 1
     private var amount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,14 +121,14 @@ class AttendeeFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_attendee, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Attendee Details"
+        activity?.supportActionBar?.title = getString(R.string.attendee_details)
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()
-        val startText = "I accept the "
-        val termsText = "terms of service "
-        val middleText = "and have read the "
-        val privacyText = "privacy policy."
+        val startText = getString(R.string.start_text)
+        val termsText = getString(R.string.terms_text)
+        val middleText = getString(R.string.middle_text)
+        val privacyText = getString(R.string.privacy_text)
 
         paragraph.append(startText)
         paragraph.append(termsText)
@@ -149,7 +143,7 @@ class AttendeeFragment : Fragment() {
 
             override fun onClick(widget: View) {
                 context?.let {
-                    Utils.openUrl(it, TERMS_OF_SERVICE)
+                    Utils.openUrl(it, getString(R.string.terms_of_service))
                 }
             }
         }
@@ -162,7 +156,7 @@ class AttendeeFragment : Fragment() {
 
             override fun onClick(widget: View) {
                 context?.let {
-                    Utils.openUrl(it, PRIVACY_POLICY)
+                    Utils.openUrl(it, getString(R.string.privacy_policy))
                 }
             }
         }
@@ -191,8 +185,8 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
         val paymentOptions = ArrayList<String>()
-        paymentOptions.add("PayPal")
-        paymentOptions.add("Stripe")
+        paymentOptions.add(getString(R.string.paypal))
+        paymentOptions.add(getString(R.string.stripe))
         attendeeViewModel.paymentSelectorVisibility
             .nonNull()
             .observe(this, Observer {
@@ -209,9 +203,9 @@ class AttendeeFragment : Fragment() {
                 // Do nothing
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                selectedPaymentOption = paymentOptions[p2]
-                if (selectedPaymentOption == "Stripe")
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                selectedPaymentOption = position
+                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
                     rootView.stripePayment.visibility = View.VISIBLE
                 else
                     rootView.stripePayment.visibility = View.GONE
@@ -275,27 +269,6 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        attendeeViewModel.loadEvent(id)
-
-        if (attendeeViewModel.isLoggedIn()) {
-            loadUser()
-        } else {
-            redirectToLogin()
-            Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
-        }
-
-        attendeeViewModel.ticketSoldOut
-            .nonNull()
-            .observe(this, Observer {
-                showTicketSoldOutDialog(it)
-            })
-        return rootView
-    }
-
-    private fun loadUser() {
-        attendeeViewModel.loadUser(attendeeViewModel.getId())
-        attendeeViewModel.loadEvent(id)
-
         attendeeViewModel.message
             .nonNull()
             .observe(this, Observer {
@@ -357,6 +330,9 @@ class AttendeeFragment : Fragment() {
                     openOrderCompletedFragment()
             })
 
+        attendeeViewModel.loadUser()
+        attendeeViewModel.loadEvent(id)
+
         attendeeViewModel.attendee
             .nonNull()
             .observe(this, Observer { user ->
@@ -368,7 +344,7 @@ class AttendeeFragment : Fragment() {
 
         rootView.signOut.setOnClickListener {
             attendeeViewModel.logout()
-            redirectToLogin()
+            activity?.onBackPressed()
         }
 
         attendeeViewModel.getCustomFormsForAttendees(eventId.id)
@@ -388,9 +364,6 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.register.setOnClickListener {
-            if (selectedPaymentOption == "Stripe")
-                sendToken()
-
             val attendees = ArrayList<Attendee>()
             if (singleTicket) {
                 val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
@@ -409,37 +382,31 @@ class AttendeeFragment : Fragment() {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
             val country = if (country.text.isEmpty()) country.text.toString() else null
-            attendeeViewModel.createAttendees(attendees, country, selectedPaymentOption)
+            attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+
+            attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
+                if (isAttendeeCreated && selectedPaymentOption == paymentOptions.indexOf(getString(R.string.stripe))) {
+                    sendToken()
+                }
+            })
         }
+
+        attendeeViewModel.ticketSoldOut
+            .nonNull()
+            .observe(this, Observer {
+                showTicketSoldOutDialog(it)
+            })
+
+        return rootView
     }
 
     private fun showTicketSoldOutDialog(show: Boolean) {
         if (show) {
             val builder = AlertDialog.Builder(context)
-            builder.setMessage(context?.resources?.getString(R.string.tickets_sold_out))
-                    .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+            builder.setMessage(getString(R.string.tickets_sold_out))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             builder.show()
         }
-    }
-
-    private fun redirectToLogin() {
-        val intent = Intent(activity, AuthActivity::class.java)
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, id)
-        if (ticketIdAndQty != null)
-            bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty as ArrayList)
-        intent.putExtras(bundle)
-        startActivityForResult(intent, AUTH_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AUTH_REQUEST_CODE) {
-            if (resultCode == RESULT_OK)
-                loadUser()
-            else
-                Toast.makeText(context, "Sign in failed!", Toast.LENGTH_SHORT).show()
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun sendToken() {
@@ -451,24 +418,21 @@ class AttendeeFragment : Fragment() {
             rootView.selectCard.text = "Pay by ${card.brand}"
 
         val validDetails: Boolean? = card.validateCard()
-        if (validDetails != null && !validDetails) {
+        if (validDetails != null && !validDetails)
             Toast.makeText(context, "Invalid card data", Toast.LENGTH_LONG).show()
-        }
+        else
+            Stripe(requireContext())
+                .createToken(card, API_KEY, object : TokenCallback {
+                    override fun onSuccess(token: Token) {
+                        // Send this token to server
+                        val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
+                        attendeeViewModel.completeOrder(charge)
+                    }
 
-        Stripe(requireContext()).createToken(
-            card,
-            API_KEY,
-            object : TokenCallback {
-                override fun onSuccess(token: Token) {
-                    // Send this token to server
-                    val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
-                    attendeeViewModel.completeOrder(charge)
-                }
-
-                override fun onError(error: Exception) {
-                    Toast.makeText(context, error.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-                }
-            })
+                    override fun onError(error: Exception) {
+                        Toast.makeText(context, error.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                    }
+                })
     }
 
     private fun loadEventDetails(event: Event) {

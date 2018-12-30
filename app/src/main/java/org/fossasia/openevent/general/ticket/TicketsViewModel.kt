@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
 class TicketsViewModel(
     private val ticketService: TicketService,
-    private val eventService: EventService
+    private val eventService: EventService,
+    private val authHolder: AuthHolder
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -26,6 +28,8 @@ class TicketsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
+
+    fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun loadTickets(id: Long) {
         if (id == -1L) {
