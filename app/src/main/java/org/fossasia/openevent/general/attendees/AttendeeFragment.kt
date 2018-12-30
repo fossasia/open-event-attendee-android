@@ -1,6 +1,8 @@
 package org.fossasia.openevent.general.attendees
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -24,6 +26,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
+import com.paypal.android.sdk.payments.PayPalConfiguration
+import com.paypal.android.sdk.payments.PayPalPayment
+import com.paypal.android.sdk.payments.PayPalService
+import com.paypal.android.sdk.payments.PaymentActivity
+import com.paypal.android.sdk.payments.PaymentConfirmation
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
@@ -74,9 +81,14 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.math.BigDecimal
 import java.util.Currency
+import timber.log.Timber
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
+private const val PAYPAL_KEY = "com.paypal.android.API_KEY"
+private const val STRIPE = "Stripe"
+private const val PAYPAL = "PayPal"
 
 class AttendeeFragment : Fragment() {
 
@@ -88,17 +100,19 @@ class AttendeeFragment : Fragment() {
 
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
-    private var selectedPaymentOption: Int = -1
+    private lateinit var selectedPaymentOption: String
     private lateinit var paymentCurrency: String
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
     private var id: Long = -1
-    private lateinit var API_KEY: String
+    private lateinit var STRIPE_API_KEY: String
+    private lateinit var PAYPAL_API_KEY: String
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
     private var editTextList = ArrayList<EditText>()
     private var amount: Float = 0.0f
+    private val PAYPAL_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,8 +123,10 @@ class AttendeeFragment : Fragment() {
             ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
         }
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
-        API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
-                ?.metaData?.getString(STRIPE_KEY).toString()
+        STRIPE_API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
+            ?.metaData?.getString(STRIPE_KEY).toString()
+        PAYPAL_API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
+            ?.metaData?.getString(PAYPAL_KEY).toString()
     }
 
     override fun onCreateView(
@@ -204,8 +220,8 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                selectedPaymentOption = position
-                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
+                selectedPaymentOption = paymentOptions[position]
+                if (selectedPaymentOption == STRIPE)
                     rootView.stripePayment.visibility = View.VISIBLE
                 else
                     rootView.stripePayment.visibility = View.GONE
@@ -382,11 +398,14 @@ class AttendeeFragment : Fragment() {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
             val country = if (country.text.isEmpty()) country.text.toString() else null
-            attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+            attendeeViewModel.createAttendees(attendees, country, selectedPaymentOption)
 
             attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                if (isAttendeeCreated && selectedPaymentOption == paymentOptions.indexOf(getString(R.string.stripe))) {
-                    sendToken()
+                if (isAttendeeCreated) {
+                    if (selectedPaymentOption == STRIPE)
+                        sendToken()
+                    if (selectedPaymentOption == PAYPAL)
+                        startPayPal()
                 }
             })
         }
@@ -422,7 +441,7 @@ class AttendeeFragment : Fragment() {
             Toast.makeText(context, "Invalid card data", Toast.LENGTH_LONG).show()
         else
             Stripe(requireContext())
-                .createToken(card, API_KEY, object : TokenCallback {
+                .createToken(card, STRIPE_API_KEY, object : TokenCallback {
                     override fun onSuccess(token: Token) {
                         // Send this token to server
                         val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
@@ -433,6 +452,38 @@ class AttendeeFragment : Fragment() {
                         Toast.makeText(context, error.localizedMessage.toString(), Toast.LENGTH_LONG).show()
                     }
                 })
+    }
+
+    private fun startPayPal() {
+        val payPalConfiguration = PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX) //Set to LIVE API CREDENTIALS
+            .clientId(PAYPAL_API_KEY) //LIVE API Client ID
+        val payment = PayPalPayment(BigDecimal(amount.toString()), "USD", "Pay for tickets",
+            PayPalPayment.PAYMENT_INTENT_SALE)
+        val intent = Intent(context, PaymentActivity::class.java)
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPalConfiguration)
+        activity?.startService(intent)
+        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment)
+        startActivityForResult(intent, PAYPAL_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == PAYPAL_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val paymentConfirmation = data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
+                if (paymentConfirmation != null) {
+                    val paymentInfo = paymentConfirmation.toJSONObject()
+                    val tokenId = paymentInfo.getJSONObject("response").getString("id")
+                    Timber.d(paymentInfo.toString(4))
+                    // Send the token to server
+                    val charge = Charge(attendeeViewModel.getId().toInt(), tokenId, null)
+                    attendeeViewModel.completeOrder(charge)
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED)
+                Toast.makeText(context, "Payment canceled!", Toast.LENGTH_SHORT).show()
+            else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID)
+                Toast.makeText(context, "Invalid Payment Configuration", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadEventDetails(event: Event) {
@@ -467,6 +518,7 @@ class AttendeeFragment : Fragment() {
     override fun onDestroyView() {
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        activity?.stopService(Intent(context, PaymentActivity::class.java))
         super.onDestroyView()
     }
 

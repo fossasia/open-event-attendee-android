@@ -36,6 +36,10 @@
         <meta-data
             android:name="com.stripe.android.API_KEY"
             android:value="${STRIPE_API_TOKEN}"/>
+
+        <meta-data
+            android:name="com.paypal.android.API_KEY"
+            android:value="${PAYPAL_CLIENT_ID}"/>
         <activity android:name=".SearchResultsActivity"></activity>
     </application>
 

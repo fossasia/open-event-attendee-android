@@ -138,6 +138,9 @@ dependencies {
     // Stripe
     implementation 'com.stripe:stripe-android:8.1.0'
 
+    //PayPal
+    compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
