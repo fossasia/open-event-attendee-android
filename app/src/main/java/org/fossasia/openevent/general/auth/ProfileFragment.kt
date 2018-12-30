@@ -42,7 +42,6 @@ class ProfileFragment : Fragment() {
     private var emailSettings: String? = null
     private val EMAIL: String = "EMAIL"
 
-
     private fun redirectToLogin() {
         startActivity(Intent(activity, AuthActivity::class.java))
         activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
