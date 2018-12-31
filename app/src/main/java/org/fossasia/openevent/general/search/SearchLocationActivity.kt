@@ -10,7 +10,8 @@ import org.fossasia.openevent.general.R
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_search_location.*
+import kotlinx.android.synthetic.main.activity_search_location.search
+import kotlinx.android.synthetic.main.activity_search_location.locationProgressBar
 import org.fossasia.openevent.general.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
