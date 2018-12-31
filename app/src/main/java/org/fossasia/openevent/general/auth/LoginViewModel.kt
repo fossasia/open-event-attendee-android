@@ -1,8 +1,9 @@
 package org.fossasia.openevent.general.auth
 
+import android.util.Patterns
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -17,13 +18,20 @@ class LoginViewModel(
 
     private val compositeDisposable = CompositeDisposable()
 
-    val progress = MutableLiveData<Boolean>()
-    val user = MutableLiveData<User>()
-    val error = SingleLiveEvent<String>()
-    val showNoInternetDialog = MutableLiveData<Boolean>()
-    val requestTokenSuccess = MutableLiveData<Boolean>()
-    val isCorrectEmail = MutableLiveData<Boolean>()
-    val loggedIn = SingleLiveEvent<Boolean>()
+    private val mutableProgress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
+    val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
+    private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
+    val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
+    private val mutableIsCorrectEmail = MutableLiveData<Boolean>()
+    val isCorrectEmail: LiveData<Boolean> = mutableIsCorrectEmail
+    private val mutableLoggedIn = SingleLiveEvent<Boolean>()
+    var loggedIn: LiveData<Boolean> = mutableLoggedIn
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -31,22 +39,23 @@ class LoginViewModel(
         if (!isConnected()) return
         if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }.doFinally {
-                    progress.value = false
-                }.subscribe({
-                    loggedIn.value = true
-                }, {
-                    error.value = "Unable to Login. Please check your credentials"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableLoggedIn.value = true
+            }, {
+                mutableError.value = "Unable to Login. Please check your credentials"
+            })
+        )
     }
 
     private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            error.value = "Email or Password cannot be empty!"
+            mutableError.value = "Email or Password cannot be empty!"
             return true
         }
         return false
@@ -55,21 +64,22 @@ class LoginViewModel(
     fun sendResetPasswordEmail(email: String) {
         if (!isConnected()) return
         compositeDisposable.add(authService.sendResetPasswordEmail(email)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    progress.value = true
-                }.doFinally {
-                    progress.value = false
-                }.subscribe({
-                    requestTokenSuccess.value = verifyMessage(it.message)
-                }, {
-                    error.value = "Email address not present in server. Please check your email"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableRequestTokenSuccess.value = verifyMessage(it.message)
+            }, {
+                mutableError.value = "Email address not present in server. Please check your email"
+            })
+        )
     }
 
-    fun verifyMessage(message: String): Boolean {
-        if (message.equals("Email Sent")) {
+    private fun verifyMessage(message: String): Boolean {
+        if (message == "Email Sent") {
             return true
         }
         return false
@@ -78,19 +88,19 @@ class LoginViewModel(
     fun fetchProfile() {
         if (!isConnected()) return
         compositeDisposable.add(authService.getProfile()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
-                    progress.value = true
-                }).doFinally {
-                    progress.value = false
-                }.subscribe({ it ->
-                    Timber.d("User Fetched")
-                    user.value = it
-                }) {
-                    Timber.e(it, "Failure")
-                    error.value = "Failure"
-        })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({ it ->
+                Timber.d("User Fetched")
+                mutableUser.value = it
+            }) {
+                Timber.e(it, "Failure")
+                mutableError.value = "Failure"
+            })
     }
 
     override fun onCleared() {
@@ -99,12 +109,13 @@ class LoginViewModel(
     }
 
     fun checkEmail(email: String) {
-        isCorrectEmail.value = email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        mutableIsCorrectEmail.value = email.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun isConnected(): Boolean {
+    private fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
-        if (!isConnected) showNoInternetDialog.value = true
+        if (!isConnected) mutableShowNoInternetDialog.value = true
         return isConnected
     }
 }

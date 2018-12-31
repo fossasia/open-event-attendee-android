@@ -1,21 +1,23 @@
 package org.fossasia.openevent.general.auth
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
@@ -27,6 +29,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -46,14 +49,6 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (!profileViewModel.isLoggedIn()) {
-            Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
-            redirectToLogin()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,16 +58,28 @@ class ProfileFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        profileViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-        })
+        if (!profileViewModel.isLoggedIn()) {
+            Snackbar.make(rootView.profileCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Handler().postDelayed({
+                redirectToLogin()
+            }, 1000)
+        }
 
-        profileViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        profileViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        profileViewModel.user.observe(this, Observer {
-            it?.let {
+        profileViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(rootView.profileCoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
+            })
+
+        profileViewModel.user
+            .nonNull()
+            .observe(this, Observer {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
@@ -82,8 +89,7 @@ class ProfileFragment : Fragment() {
                         .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
-            }
-        })
+            })
 
         fetchProfile()
 

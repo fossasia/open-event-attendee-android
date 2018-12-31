@@ -3,6 +3,9 @@ package org.fossasia.openevent.general.favorite
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import kotlinx.android.synthetic.main.item_card_favorite_event.view.shareFab
+import kotlinx.android.synthetic.main.item_card_favorite_event.view.favoriteFab
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventViewHolder
@@ -34,6 +37,8 @@ class FavoriteEventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_favorite_event, parent, false)
+        view.shareFab.scaleType = ImageView.ScaleType.CENTER
+        view.favoriteFab.scaleType = ImageView.ScaleType.CENTER
         return EventViewHolder(view)
     }
 

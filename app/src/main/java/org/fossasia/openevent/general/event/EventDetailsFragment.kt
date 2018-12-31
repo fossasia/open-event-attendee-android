@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
@@ -50,6 +51,7 @@ import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.CURRENCY
 import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -89,27 +91,29 @@ class EventDetailsFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        eventViewModel.event.observe(this, Observer {
-            it?.let {
+        eventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
                 loadEvent(it)
                 eventShare = it
-            }
 
-            rootView.buttonTickets.setOnClickListener {
+                rootView.buttonTickets.setOnClickListener {
                     loadTicketFragment()
-            }
+                }
 
-            if (eventShare.favorite) {
-                setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
-            }
-            loadSocialLinksFragment()
-            loadSimilarEventsFragment()
-            Timber.d("Fetched events of id %d", eventId)
-        })
+                if (eventShare.favorite) {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
+                }
+                loadSocialLinksFragment()
+                loadSimilarEventsFragment()
+                Timber.d("Fetched events of id %d", eventId)
+            })
 
-        eventViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        eventViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
         eventViewModel.loadEvent(eventId)
 
@@ -182,12 +186,14 @@ class EventDetailsFragment : Fragment() {
 
         // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
-        if (!event.locationName.isNullOrEmpty()) {
-            locationContainer.visibility = View.VISIBLE
+
+        val locationNameIsEmpty = event.locationName.isNullOrEmpty()
+        locationContainer.isGone = locationNameIsEmpty
+        rootView.eventLocationLinearLayout.isGone = locationNameIsEmpty
+        rootView.locationUnderMap.isGone = locationNameIsEmpty
+        rootView.imageMap.isGone = locationNameIsEmpty
+        if (!locationNameIsEmpty) {
             rootView.locationUnderMap.text = event.locationName
-            rootView.eventLocationLinearLayout.visibility = View.VISIBLE
-            rootView.locationUnderMap.visibility = View.VISIBLE
-            rootView.imageMap.visibility = View.VISIBLE
             rootView.imageMap.setOnClickListener(mapClickListener)
             rootView.eventLocationTextView.setOnClickListener(mapClickListener)
 
@@ -199,7 +205,7 @@ class EventDetailsFragment : Fragment() {
 
         // Date and Time section
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
-        rootView.eventDateDetailsSecond.text = "${EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)}"
+        rootView.eventDateDetailsSecond.text = EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)
 
         // Refund policy
         rootView.refundPolicy.text = event.refundPolicy

@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.text.TextUtils
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,10 +22,14 @@ class SearchViewModel(
     private val compositeDisposable = CompositeDisposable()
     private val tokenKey = "LOCATION"
 
-    val showShimmerResults = MutableLiveData<Boolean>()
-    val events = MutableLiveData<List<Event>>()
-    val error = MutableLiveData<String>()
-    val showNoInternetError = MutableLiveData<Boolean>()
+    private val mutableShowShimmerResults = MutableLiveData<Boolean>()
+    val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
+    private val mutableEvents = MutableLiveData<List<Event>>()
+    val events: LiveData<List<Event>> = mutableEvents
+    private val mutableError = MutableLiveData<String>()
+    val error: LiveData<String> = mutableError
+    private val mutableShowNoInternetError = MutableLiveData<Boolean>()
+    val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
@@ -153,18 +158,19 @@ class SearchViewModel(
         }
 
         compositeDisposable.add(eventService.getSearchEvents(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    showShimmerResults.value = true
-                }.doFinally {
-                    showShimmerResults.value = false
-                }.subscribe({
-                    events.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    error.value = "Error fetching events"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmerResults.value = true
+            }.doFinally {
+                mutableShowShimmerResults.value = false
+            }.subscribe({
+                mutableEvents.value = it
+            }, {
+                Timber.e(it, "Error fetching events")
+                mutableError.value = "Error fetching events"
+            })
+        )
 
         preference.remove(SearchTimeViewModel.tokenKeyDate)
         preference.remove(SearchTimeViewModel.tokenKeyNextDate)
@@ -172,20 +178,21 @@ class SearchViewModel(
 
     fun setFavorite(eventId: Long, favourite: Boolean) {
         compositeDisposable.add(eventService.setFavorite(eventId, favourite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Timber.d("Successfully added %d to favorites", eventId)
-                }, {
-                    Timber.e(it, "Error adding %d to favorites", eventId)
-                    error.value = "Error adding to favorites"
-                }))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Successfully added %d to favorites", eventId)
+            }, {
+                Timber.e(it, "Error adding %d to favorites", eventId)
+                mutableError.value = "Error adding to favorites"
+            })
+        )
     }
 
     fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
-        showNoInternetError.value = !isConnected
-        showShimmerResults.value = isConnected
+        mutableShowNoInternetError.value = !isConnected
+        mutableShowShimmerResults.value = isConnected
         return isConnected
     }
 
