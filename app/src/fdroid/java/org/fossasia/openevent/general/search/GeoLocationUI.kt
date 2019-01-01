@@ -10,5 +10,6 @@ class GeoLocationUI {
         activity.currentLocation.visibility = View.GONE
     }
 
-    fun search(activity: Activity, fromSearchFragment: Boolean, searchLocationViewModel: SearchLocationViewModel, query: String) {}
+    fun search(activity: Activity, fromSearchFragment: Boolean,
+               searchLocationViewModel: SearchLocationViewModel, query: String) {}
 }
