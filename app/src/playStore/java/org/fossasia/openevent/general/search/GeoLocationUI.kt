@@ -31,7 +31,8 @@ class GeoLocationUI {
     fun configure(activity: Activity, searchLocationViewModel: SearchLocationViewModel) {
         val permission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
             return
         }
         val service = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -57,7 +58,8 @@ class GeoLocationUI {
                                 val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
                                 for (address: Address in addresses) {
                                     if (address.locality != null) {
-                                        search(activity, SearchLocationActivity().fromSearchFragment, searchLocationViewModel, address.locality)
+                                        search(activity, SearchLocationActivity().fromSearchFragment,
+                                            searchLocationViewModel, address.locality)
                                     }
                                 }
                             } catch (exception: IOException) {
