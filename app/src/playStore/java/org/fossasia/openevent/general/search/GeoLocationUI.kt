@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,16 +17,17 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.activity_search_location.*
+import kotlinx.android.synthetic.main.activity_search_location.currentLocation
 import org.fossasia.openevent.general.MainActivity
 import timber.log.Timber
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 private const val TO_SEARCH: String = "ToSearchFragment"
 
 class GeoLocationUI {
 
+    @SuppressLint("MissingPermission")
     fun configure(activity: Activity, searchLocationViewModel: SearchLocationViewModel) {
         val permission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
