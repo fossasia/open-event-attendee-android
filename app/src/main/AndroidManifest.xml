@@ -36,6 +36,9 @@
         <meta-data
             android:name="com.stripe.android.API_KEY"
             android:value="${STRIPE_API_TOKEN}"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_API_KEY}"/>
         <activity android:name=".SearchResultsActivity"></activity>
     </application>
 

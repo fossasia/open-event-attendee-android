@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import kotlinx.android.synthetic.main.activity_search_location.search
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
+import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 private const val TO_SEARCH: String = "ToSearchFragment"
@@ -24,11 +27,11 @@ class SearchLocationActivity : AppCompatActivity() {
         this.supportActionBar?.title = ""
         val bundle = intent.extras
         val fromSearchFragment = bundle?.getBoolean(FROM_SEARCH) ?: false
-
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Do your search
-                searchLocationViewModel.saveSearch(query)
+        val autocompleteFragment = fragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                // Save Searched Place String
+                searchLocationViewModel.saveSearch(place.name as String)
                 val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
@@ -39,12 +42,11 @@ class SearchLocationActivity : AppCompatActivity() {
                 }
 
                 startActivity(startMainActivity)
-
-                return false
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
+            override fun onError(status: Status) {
+                Timber.d(status.statusMessage, "Failed getting location")
+
             }
         })
     }

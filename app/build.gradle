@@ -102,6 +102,8 @@ dependencies {
     testImplementation "androidx.room:room-testing:${roomVersion}"
     implementation "com.takisoft.fix:preference-v7:28.0.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+
 
     // KTX
     implementation "androidx.core:core-ktx:$ktx_version"
