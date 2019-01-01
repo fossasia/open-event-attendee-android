@@ -69,7 +69,8 @@ class GeoLocationUI {
                     }
                 }
             }
-            LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
+            LocationServices.getFusedLocationProviderClient(activity).
+                requestLocationUpdates(locationRequest, locationCallback, null)
         }
     }
 
