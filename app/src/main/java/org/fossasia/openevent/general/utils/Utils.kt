@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
 import androidx.appcompat.content.res.AppCompatResources
@@ -33,10 +32,6 @@ object Utils {
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
                 .launchUrl(context, Uri.parse(url))
-    }
-
-    fun showProgressBar(progressBar: ProgressBar, show: Boolean) {
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun showNoInternetDialog(context: Context?) {

@@ -1,17 +1,25 @@
 package org.fossasia.openevent.general.about
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import com.google.android.material.appbar.AppBarLayout
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_about_event.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_about_event.aboutEventCollapsingLayout
+import kotlinx.android.synthetic.main.activity_about_event.aboutEventContent
+import kotlinx.android.synthetic.main.activity_about_event.aboutEventDetails
+import kotlinx.android.synthetic.main.activity_about_event.aboutEventToolbar
+import kotlinx.android.synthetic.main.activity_about_event.appBar
+import kotlinx.android.synthetic.main.activity_about_event.detailsHeader
+import kotlinx.android.synthetic.main.activity_about_event.eventName
+import kotlinx.android.synthetic.main.activity_about_event.progressBarAbout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
@@ -32,23 +40,27 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         aboutEventCollapsingLayout.title = " "
         appBar.addOnOffsetChangedListener(this)
 
-        aboutEventViewModel.error.observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        })
+        aboutEventViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            })
 
         id = intent.getLongExtra(EVENT_ID, -1)
 
-        aboutEventViewModel.progressAboutEvent.observe(this, Observer {
-            it?.let { Utils.showProgressBar(progressBarAbout, it) }
-        })
+        aboutEventViewModel.progressAboutEvent
+            .nonNull()
+            .observe(this, Observer {
+                progressBarAbout.isVisible = it
+            })
 
         aboutEventViewModel.loadEvent(id)
 
-        aboutEventViewModel.event.observe(this, Observer {
-            it?.let {
+        aboutEventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
                 loadEvent(it)
-            }
-        })
+            })
     }
 
     private fun loadEvent(event: Event) {

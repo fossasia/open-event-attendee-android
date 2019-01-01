@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,7 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -78,28 +79,32 @@ class OrderDetailsFragment : Fragment() {
         }
 
         ordersRecyclerAdapter.setListener(eventDetailsListener)
-        orderDetailsViewModel.event.observe(this, Observer {
-            it?.let {
+        orderDetailsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
                 ordersRecyclerAdapter.setEvent(it)
                 ordersRecyclerAdapter.notifyDataSetChanged()
-            }
-        })
+            })
 
-        orderDetailsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-        })
+        orderDetailsViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        orderDetailsViewModel.attendees.observe(this, Observer {
-            it?.let {
+        orderDetailsViewModel.attendees
+            .nonNull()
+            .observe(this, Observer {
                 ordersRecyclerAdapter.addAll(it)
                 ordersRecyclerAdapter.notifyDataSetChanged()
-            }
-            Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
-        })
+                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
+            })
 
-        orderDetailsViewModel.message.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        orderDetailsViewModel.message
+            .nonNull()
+            .observe(this, Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
 
         orderDetailsViewModel.loadEvent(id)
         orderDetailsViewModel.loadAttendeeDetails(orderId)
