@@ -27,7 +27,8 @@ class SearchLocationActivity : AppCompatActivity() {
         this.supportActionBar?.title = ""
         val bundle = intent.extras
         val fromSearchFragment = bundle?.getBoolean(FROM_SEARCH) ?: false
-        val autocompleteFragment = fragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
+        val autocompleteFragment = fragmentManager
+            .findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 // Save Searched Place String
