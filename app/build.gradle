@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
+def GOOGLE_API_KEY = System.getenv('GOOGLE_API_KEY ') ?: "YOUR_API_KEY"
+
 
 android {
     compileSdkVersion 28
@@ -21,7 +23,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         manifestPlaceholders = [
-                STRIPE_API_TOKEN: STRIPE_API_TOKEN
+                STRIPE_API_TOKEN: STRIPE_API_TOKEN,
+                GOOGLE_API_KEY: GOOGLE_API_KEY
+
         ]
         javaCompileOptions {
             annotationProcessorOptions {
