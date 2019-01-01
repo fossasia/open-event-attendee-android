@@ -69,9 +69,8 @@ class SearchLocationActivity : AppCompatActivity() {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationUI.configure(this, searchLocationViewModel)
-                }
-                else {
-                    Toast.makeText(applicationContext,"Cannot fetch location",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, "Cannot fetch location", Toast.LENGTH_SHORT).show()
                 }
             }
         }

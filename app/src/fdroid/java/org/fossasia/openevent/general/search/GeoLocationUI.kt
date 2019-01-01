@@ -2,7 +2,7 @@ package org.fossasia.openevent.general.search
 
 import android.app.Activity
 import android.view.View
-import kotlinx.android.synthetic.main.activity_search_location.*
+import kotlinx.android.synthetic.main.activity_search_location.currentLocation
 
 class GeoLocationUI {
 
@@ -11,5 +11,6 @@ class GeoLocationUI {
     }
 
     fun search(activity: Activity, fromSearchFragment: Boolean,
-               searchLocationViewModel: SearchLocationViewModel, query: String) {}
+               searchLocationViewModel: SearchLocationViewModel, query: String) {
+    }
 }
