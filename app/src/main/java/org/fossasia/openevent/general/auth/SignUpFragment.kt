@@ -2,25 +2,18 @@ package org.fossasia.openevent.general.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
-import kotlinx.android.synthetic.main.fragment_signup.firstNameText
-import kotlinx.android.synthetic.main.fragment_signup.lastNameText
-import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
-import kotlinx.android.synthetic.main.fragment_signup.signUpButton
-import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
-import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.fragment_signup.view.*
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -68,21 +61,23 @@ class SignUpFragment : Fragment() {
         signUpViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.signupCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         signUpViewModel.signedUp
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, "Sign Up Success!", Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT).show()
                 signUpViewModel.login(signUp)
             })
 
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, "Logged in Automatically!", Toast.LENGTH_LONG).show()
-                redirectToMain()
+                Snackbar.make(rootView.signupCoordinatorLayout, "Logged in Automatically!", Snackbar.LENGTH_SHORT).show()
+                Handler().postDelayed({
+                    redirectToMain()
+                }, 1000)
             })
 
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
