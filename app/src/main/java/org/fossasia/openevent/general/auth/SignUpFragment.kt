@@ -12,8 +12,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_signup.*
-import kotlinx.android.synthetic.main.fragment_signup.view.*
+import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
+import kotlinx.android.synthetic.main.fragment_signup.firstNameText
+import kotlinx.android.synthetic.main.fragment_signup.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.signUpButton
+import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
+import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
+import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -94,21 +103,9 @@ class SignUpFragment : Fragment() {
                 }
             }
 
-            override fun beforeTextChanged(
-                p0: CharSequence?,
-                p1: Int,
-                p2: Int,
-                p3: Int
-            ) { /*Implement here*/
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
-            override fun onTextChanged(
-                p0: CharSequence?,
-                p1: Int,
-                p2: Int,
-                p3: Int
-            ) { /*Implement here*/
-            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
         })
 
         return rootView
