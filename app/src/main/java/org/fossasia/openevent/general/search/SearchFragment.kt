@@ -44,6 +44,7 @@ class SearchFragment : Fragment() {
 
         rootView.timeTextView.setOnClickListener {
             val intent = Intent(activity, SearchTimeActivity::class.java)
+            intent.putExtra("value",rootView.timeTextView.text.toString())
             startActivity(intent)
         }
 
