@@ -2,10 +2,8 @@ package org.fossasia.openevent.general.search
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_search_time.*
 import org.fossasia.openevent.general.MainActivity
@@ -115,13 +113,13 @@ class SearchTimeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCurrentChoice(value : String){
-        when(value){
+    private fun setCurrentChoice(value: String) {
+        when (value) {
             ANYTIME -> anytimeTextView.setCheckMarkDrawable(R.drawable.ic_checked)
             TODAY -> todayTextView.setCheckMarkDrawable(R.drawable.ic_checked)
             TOMORROW -> tomorrowTextView.setCheckMarkDrawable(R.drawable.ic_checked)
             THIS_WEEKEND -> thisWeekendTextView.setCheckMarkDrawable(R.drawable.ic_checked)
-            NEXT_MONTH-> nextMonthTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            NEXT_MONTH -> nextMonthTextView.setCheckMarkDrawable(R.drawable.ic_checked)
             else -> timeTextView.setCheckMarkDrawable(R.drawable.ic_checked)
         }
     }
