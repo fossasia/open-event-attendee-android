@@ -56,13 +56,6 @@ android {
         }
     }
 
-    variantFilter { variant ->
-        def names = variant.flavors*.name
-        if(variant.buildType.name == 'release' && names.contains("fdroid")) {
-            setIgnore(true)
-        }
-    }
-
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8

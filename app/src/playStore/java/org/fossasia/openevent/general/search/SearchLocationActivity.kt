@@ -28,7 +28,8 @@ class SearchLocationActivity : AppCompatActivity() {
         val bundle = intent.extras
         val fromSearchFragment = bundle?.getBoolean(FROM_SEARCH) ?: false
 
-        val autocompleteFragment = fragmentManager.findFragmentById(R.id.placeAutocompleteFragment) as PlaceAutocompleteFragment
+        val autocompleteFragment = fragmentManager.
+            findFragmentById(R.id.placeAutocompleteFragment) as PlaceAutocompleteFragment
 
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
