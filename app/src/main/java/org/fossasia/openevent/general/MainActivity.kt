@@ -92,9 +92,9 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
         val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)
         when (rootFragment) {
-            is EventDetailsFragment -> super.onBackPressed()
-            is TicketsFragment -> super.onBackPressed()
-            is AttendeeFragment -> super.onBackPressed()
+            is EventDetailsFragment,
+            is TicketsFragment,
+            is AttendeeFragment,
             is OrderDetailsFragment -> super.onBackPressed()
             else -> when (currentFragment) {
                 is SearchFragment,
