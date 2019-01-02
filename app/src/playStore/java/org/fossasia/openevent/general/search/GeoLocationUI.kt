@@ -69,12 +69,18 @@ class GeoLocationUI {
                     }
                 }
             }
-            LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(locationRequest, locationCallback, null)
+            LocationServices
+                .getFusedLocationProviderClient(activity)
+                .requestLocationUpdates(locationRequest, locationCallback, null)
         }
     }
 
-    fun search(activity: Activity, fromSearchFragment: Boolean,
-               searchLocationViewModel: SearchLocationViewModel, query: String) {
+    fun search(
+        activity: Activity,
+        fromSearchFragment: Boolean,
+        searchLocationViewModel: SearchLocationViewModel,
+        query: String
+    ) {
         searchLocationViewModel.saveSearch(query)
         val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (fromSearchFragment) {

@@ -3,18 +3,17 @@ package org.fossasia.openevent.general.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import android.os.Bundle
-import org.fossasia.openevent.general.R
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_search_location.search
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import kotlinx.android.synthetic.main.activity_search_location.locationProgressBar
+import kotlinx.android.synthetic.main.activity_search_location.search
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
 private const val TO_SEARCH: String = "ToSearchFragment"
@@ -68,8 +67,8 @@ class SearchLocationActivity : AppCompatActivity() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    geoLocationUI.configure(this, searchLocationViewModel) }
-                else {
+                    geoLocationUI.configure(this, searchLocationViewModel)
+                } else {
                     Toast.makeText(applicationContext, "Cannot fetch location", Toast.LENGTH_SHORT).show()
                 }
             }
