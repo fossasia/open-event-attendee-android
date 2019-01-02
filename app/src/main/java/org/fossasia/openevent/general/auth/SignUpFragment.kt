@@ -67,14 +67,18 @@ class SignUpFragment : Fragment() {
         signUpViewModel.signedUp
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT
+                ).show()
                 signUpViewModel.login(signUp)
             })
 
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.signupCoordinatorLayout, "Logged in Automatically!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    rootView.signupCoordinatorLayout, "Logged in Automatically!", Snackbar.LENGTH_SHORT
+                ).show()
                 Handler().postDelayed({
                     redirectToMain()
                 }, 1000)
@@ -90,8 +94,21 @@ class SignUpFragment : Fragment() {
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun beforeTextChanged(
+                p0: CharSequence?,
+                p1: Int,
+                p2: Int,
+                p3: Int
+            ) { /*Implement here*/
+            }
+
+            override fun onTextChanged(
+                p0: CharSequence?,
+                p1: Int,
+                p2: Int,
+                p3: Int
+            ) { /*Implement here*/
+            }
         })
 
         return rootView
