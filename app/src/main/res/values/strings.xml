@@ -155,9 +155,9 @@
     <!--attendee fragment-->
     <string name="attendee_details">Attendee Details</string>
     <string name="start_text">I accept the</string>
-    <string name="terms_text">terms of service</string>
+    <string name="terms_text">Terms of Service</string>
     <string name="middle_text">and have read the</string>
-    <string name="privacy_text">privacy policy</string>
+    <string name="privacy_text">Privacy Policy</string>
     <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
     <string name="stripe">Stripe</string>
