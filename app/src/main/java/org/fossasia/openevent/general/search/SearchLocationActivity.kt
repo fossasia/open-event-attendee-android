@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.location.places.Place
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
-import com.google.android.gms.location.places.ui.PlaceSelectionListener
+import kotlinx.android.synthetic.main.activity_search_location.*
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,29 +25,30 @@ class SearchLocationActivity : AppCompatActivity() {
         this.supportActionBar?.title = ""
         val bundle = intent.extras
         val fromSearchFragment = bundle?.getBoolean(FROM_SEARCH) ?: false
-        val autocompleteFragment = fragmentManager
-            .findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                // Save Searched Place String
-                searchLocationViewModel.saveSearch(place.name as String)
-                val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (BuildConfig.FLAVOR.equals("platstore")) {
+            val autocompleteFragment = placeAutocompletefFragment as PlaceAutocompleteFragment
+            autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+                override fun onPlaceSelected(place: Place) {
+                    // Save Searched Place String
+                    searchLocationViewModel.saveSearch(place.name as String)
+                    val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-                if (fromSearchFragment) {
-                    val searchBundle = Bundle()
-                    searchBundle.putBoolean(TO_SEARCH, true)
-                    startMainActivity.putExtras(searchBundle)
+                    if (fromSearchFragment) {
+                        val searchBundle = Bundle()
+                        searchBundle.putBoolean(TO_SEARCH, true)
+                        startMainActivity.putExtras(searchBundle)
+                    }
+
+                    startActivity(startMainActivity)
                 }
 
-                startActivity(startMainActivity)
-            }
+                override fun onError(status: Status) {
+                    Timber.d(status.statusMessage, "Failed getting location")
 
-            override fun onError(status: Status) {
-                Timber.d(status.statusMessage, "Failed getting location")
-
-            }
-        })
+                }
+            })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
