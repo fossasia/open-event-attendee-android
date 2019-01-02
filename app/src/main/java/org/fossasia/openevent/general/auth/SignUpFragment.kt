@@ -76,9 +76,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.signedUp
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                    rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar.make(rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT).show()
                 signUpViewModel.login(signUp)
             })
 
