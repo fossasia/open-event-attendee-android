@@ -38,5 +38,4 @@
             android:value="${STRIPE_API_TOKEN}"/>
         <activity android:name=".SearchResultsActivity"></activity>
     </application>
-
 </manifest>
