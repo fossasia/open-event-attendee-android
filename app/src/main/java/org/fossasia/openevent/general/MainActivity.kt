@@ -8,14 +8,17 @@ import kotlinx.android.synthetic.main.activity_main.frameContainer
 import kotlinx.android.synthetic.main.activity_main.navigation
 import org.fossasia.openevent.general.R.id.navigation_events
 import org.fossasia.openevent.general.R.id.navigation_search
+import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.auth.ProfileFragment
 import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventsFragment
 import org.fossasia.openevent.general.favorite.FavoriteFragment
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
+import org.fossasia.openevent.general.order.OrderDetailsFragment
 import org.fossasia.openevent.general.order.OrdersUnderUserFragment
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.SearchFragment
+import org.fossasia.openevent.general.ticket.TicketsFragment
 import org.fossasia.openevent.general.utils.Utils.checkAndLoadFragment
 import org.fossasia.openevent.general.utils.Utils.loadFragment
 
@@ -88,10 +91,12 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentFragment = this.supportFragmentManager.findFragmentById(R.id.frameContainer)
         val rootFragment = this.supportFragmentManager.findFragmentById(R.id.rootLayout)
-        if (rootFragment is EventDetailsFragment)
-            super.onBackPressed()
-        else
-            when (currentFragment) {
+        when (rootFragment) {
+            is EventDetailsFragment -> super.onBackPressed()
+            is TicketsFragment -> super.onBackPressed()
+            is AttendeeFragment -> super.onBackPressed()
+            is OrderDetailsFragment -> super.onBackPressed()
+            else -> when (currentFragment) {
                 is SearchFragment,
                 is FavoriteFragment,
                 is OrdersUnderUserFragment,
@@ -102,5 +107,6 @@ class MainActivity : AppCompatActivity() {
                 is EventsFragment -> finish()
                 else -> super.onBackPressed()
             }
+        }
     }
 }
