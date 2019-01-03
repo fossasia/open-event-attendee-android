@@ -118,7 +118,7 @@ class EditProfileFragment : Fragment() {
 
             Picasso.get()
                     .load(imageUri)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp))
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }
