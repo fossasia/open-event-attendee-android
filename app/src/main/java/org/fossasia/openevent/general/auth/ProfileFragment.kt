@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLayout
@@ -27,7 +28,6 @@ import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.settings.SettingsFragment
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -109,6 +109,13 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+<<<<<<< HEAD
+=======
+            R.id.edit_profile -> {
+                findNavController(rootView).navigate(R.id.editProfileFragment)
+                return true
+            }
+>>>>>>> fossasia/development
             R.id.orga_app -> {
                 startOrgaApp("com.eventyay.organizer")
                 return true
@@ -126,14 +133,9 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.settings -> {
-                val fragment = SettingsFragment()
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frameContainer, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                findNavController(rootView).navigate(R.id.settingsFragment, bundle)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

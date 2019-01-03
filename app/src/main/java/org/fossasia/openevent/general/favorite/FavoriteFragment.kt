@@ -56,7 +56,7 @@ class FavoriteFragment : Fragment() {
                 fragment.arguments = bundle
                 activity?.supportFragmentManager
                     ?.beginTransaction()
-                    ?.add(R.id.rootLayout, fragment)
+                    ?.replace(R.id.rootLayout, fragment)
                     ?.addToBackStack(null)
                     ?.commit()
             }

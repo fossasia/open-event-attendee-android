@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -48,6 +49,10 @@ class EventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
+
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity)
+            thisActivity.supportActionBar?.title = "Events"
 
         rootView.progressBar.isIndeterminate = true
 
