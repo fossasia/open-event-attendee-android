@@ -17,7 +17,6 @@ const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
 const val THIS_WEEKEND = "This Weekend"
 const val NEXT_MONTH = "In the next month"
-private const val SEARCHTIME: String = "time"
 
 class SearchTimeActivity : AppCompatActivity() {
     private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
@@ -28,7 +27,7 @@ class SearchTimeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search_time)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar?.title = ""
-        setCurrentChoice(intent.getStringExtra(SEARCHTIME))
+        setCurrentChoice(intent.getStringExtra(SEARCH_TIME))
 
         val calendar = Calendar.getInstance()
 
