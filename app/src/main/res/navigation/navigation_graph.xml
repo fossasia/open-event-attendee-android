@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_events">
+
+    <fragment
+        android:id="@+id/navigation_events"
+        android:name="org.fossasia.openevent.general.event.EventsFragment"
+        android:label="EventsFragment" />
+    <fragment
+        android:id="@+id/similarEventsFragment"
+        android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
+        android:label="SimilarEventsFragment" />
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="org.fossasia.openevent.general.search.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
+        android:label="FavoriteFragment" />
+    <fragment
+        android:id="@+id/navigation_tickets"
+        android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
+        android:label="OrdersUnderUserFragment" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="org.fossasia.openevent.general.auth.ProfileFragment"
+        android:label="ProfileFragment"/>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
+        android:label="EditProfileFragment">
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.fossasia.openevent.general.settings.SettingsFragment"
+        android:label="SettingsFragment">
+    </fragment>
+</navigation>
