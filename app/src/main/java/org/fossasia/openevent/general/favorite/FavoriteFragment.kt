@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,25 +12,35 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
-import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
-import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
+import kotlinx.android.synthetic.main.fragment_favorite.*
+import kotlinx.android.synthetic.main.fragment_favorite.view.*
+import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDetailsFragment
+import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.util.Calendar
+import java.util.Locale
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
+const val TODAY = "Today"
+const val TOMORROW = "Tomorrow"
+const val THIS_WEEKEND = "This Weekend"
+const val NEXT_MONTH = "In the next month"
 
 class FavoriteFragment : Fragment() {
+    private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val favoriteEventViewModel by viewModel<FavouriteEventsViewModel>()
     private lateinit var rootView: View
+    private val TO_SEARCH: String = "ToSearchFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,6 +81,45 @@ class FavoriteFragment : Fragment() {
                 showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
         }
+        val calendar = Calendar.getInstance()
+        setCurrentDate(calendar)
+        rootView.searchToday.setOnClickListener {
+            searchTimeViewModel.saveDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            calendar.add(Calendar.DATE, 1)
+            searchTimeViewModel.saveNextDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            searchTimeViewModel.saveDate(TODAY)
+            redirectToSearch()
+        }
+        rootView.searchTomorrow.setOnClickListener {
+            calendar.add(Calendar.DATE, 1)
+            searchTimeViewModel.saveNextDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            calendar.add(Calendar.DATE, 1)
+            searchTimeViewModel.saveNextToNextDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            searchTimeViewModel.saveDate(TOMORROW)
+            redirectToSearch()
+        }
+        rootView.searchWeekend.setOnClickListener {
+            val today = calendar.get(Calendar.DAY_OF_WEEK)
+            if (today != Calendar.SATURDAY) {
+                val offset = Calendar.SATURDAY - today
+                calendar.add(Calendar.DATE, offset)
+            }
+            searchTimeViewModel.saveWeekendDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            calendar.add(Calendar.DATE, 1)
+            searchTimeViewModel.saveNextToWeekendDate(EventUtils.getSimpleFormattedDate(calendar.time))
+            searchTimeViewModel.saveDate(THIS_WEEKEND)
+            redirectToSearch()
+        }
+        rootView.searchNextMonth.setOnClickListener {
+            val today = calendar.get(Calendar.DAY_OF_MONTH)
+            val offset = 30 - today
+            calendar.add(Calendar.DATE, offset)
+            searchTimeViewModel.saveNextMonth(EventUtils.getSimpleFormattedDate(calendar.time))
+            calendar.add(Calendar.MONTH, 1)
+            searchTimeViewModel.saveNextToNextMonth(EventUtils.getSimpleFormattedDate(calendar.time))
+            searchTimeViewModel.saveDate(NEXT_MONTH)
+            redirectToSearch()
+        }
 
         favoriteEventsRecyclerAdapter.setListener(recyclerViewClickListener)
         favoriteEventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
@@ -97,10 +147,27 @@ class FavoriteFragment : Fragment() {
             })
 
         favoriteEventViewModel.loadFavoriteEvents()
+
         return rootView
+    }
+
+    private fun redirectToSearch() {
+        val intent = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val bundle = Bundle()
+        bundle.putBoolean(TO_SEARCH, true)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun showEmptyMessage(itemCount: Int) {
         noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+    }
+
+    private fun setCurrentDate(calendar: Calendar) {
+        val dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+        val month = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+        val date = calendar.get(Calendar.DAY_OF_MONTH)
+        val complete_date = "Today - $dayLongName, $month $date"
+        rootView.currentDate.text = complete_date
     }
 }

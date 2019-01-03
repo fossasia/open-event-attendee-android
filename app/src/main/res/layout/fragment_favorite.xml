@@ -1,54 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:orientation="vertical">
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:orientation="vertical"
-               android:layout_gravity="center"
-               android:gravity="center_vertical"
-               android:textAlignment="center"
-               android:id="@+id/noLikedText"
-               android:layout_margin="5dp">
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="@string/nothing_planned_yet"
-                   android:textSize="15sp"
-                   android:layout_gravity="center_horizontal"
-                   android:textAlignment="center"/>
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="@string/find_something_to_do"
-                   android:textSize="25sp"
-                   android:textAlignment="center"/>
 
-           </LinearLayout>
-
-        <ProgressBar
-            android:layout_gravity="center"
-            android:id="@+id/favoriteProgressBar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ProgressBar>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favoriteEventsRecycler"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
-       </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/noLikedText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_margin="@dimen/layout_margin_large"
+                android:gravity="start"
+                android:orientation="vertical"
+                android:textAlignment="center">
+
+                <TextView
+                    android:id="@+id/currentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:layout_marginLeft="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/layout_margin_moderate"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/heading_text_size"
+                    tools:text="Today - Thu, Jan 3" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/padding_large"
+                    android:layout_marginLeft="@dimen/padding_large"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    android:text="@string/nothing_planned_yet"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_large"
+                    android:layout_marginLeft="@dimen/padding_large"
+                    android:layout_marginTop="@dimen/layout_margin_moderate"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:text="@string/find_something_to_do"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/text_size_expanded_title"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_large">
+
+                    <TextView
+                        android:id="@+id/searchToday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/padding_large"
+                        android:layout_marginRight="@dimen/padding_large"
+                        android:background="@drawable/likes_button"
+                        android:padding="@dimen/padding_medium"
+                        android:text="@string/today" />
+
+                    <TextView
+                        android:id="@+id/searchTomorrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/padding_large"
+                        android:layout_marginRight="@dimen/padding_large"
+                        android:layout_toEndOf="@+id/searchToday"
+                        android:layout_toRightOf="@+id/searchToday"
+                        android:background="@drawable/likes_button"
+                        android:padding="@dimen/padding_medium"
+                        android:text="@string/tomorrow" />
+
+                    <TextView
+                        android:id="@+id/searchWeekend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/padding_large"
+                        android:layout_marginRight="@dimen/padding_large"
+                        android:layout_toEndOf="@+id/searchTomorrow"
+                        android:layout_toRightOf="@+id/searchTomorrow"
+                        android:background="@drawable/likes_button"
+                        android:padding="@dimen/padding_medium"
+                        android:text="@string/weekend" />
+
+                    <TextView
+                        android:id="@+id/searchNextMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/searchWeekend"
+                        android:layout_marginTop="@dimen/padding_large"
+                        android:layout_marginEnd="@dimen/padding_large"
+                        android:layout_marginRight="@dimen/padding_large"
+                        android:background="@drawable/likes_button"
+                        android:padding="@dimen/padding_medium"
+                        android:text="@string/month" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/favoriteProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favoriteEventsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </LinearLayout>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
