@@ -75,7 +75,7 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.progress
                 .nonNull()
                 .observe(this, Observer {
-                    rootView.progressBar.isVisible = true
+                    rootView.progressBar.isVisible = it
                 })
 
             ordersUnderUserVM.message
