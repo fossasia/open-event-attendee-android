@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -32,9 +33,25 @@ class MainActivity : AppCompatActivity() {
             if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))
                 navController?.navigate(R.id.navigation_tickets)
         }
+
+        navController?.addOnDestinationChangedListener { controller, destination, arguments ->
+            handleNavigationVisibility(destination.id)
+        }
     }
 
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
+    }
+
+    private fun handleNavigationVisibility(id: Int) {
+        navigation.visibility =
+            when (id) {
+                R.id.navigation_events,
+                R.id.navigation_search,
+                R.id.navigation_profile,
+                R.id.navigation_tickets,
+                R.id.navigation_favorite -> View.VISIBLE
+                else -> View.GONE
+        }
     }
 }
