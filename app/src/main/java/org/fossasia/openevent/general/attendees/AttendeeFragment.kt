@@ -131,9 +131,9 @@ class AttendeeFragment : Fragment() {
         val privacyText = getString(R.string.privacy_text)
 
         paragraph.append(startText)
-        paragraph.append(termsText)
-        paragraph.append(middleText)
-        paragraph.append(privacyText)
+        paragraph.append(" $termsText")
+        paragraph.append(" $middleText")
+        paragraph.append(" $privacyText")
 
         val termsSpan = object : ClickableSpan() {
             override fun updateDrawState(ds: TextPaint?) {
@@ -161,9 +161,9 @@ class AttendeeFragment : Fragment() {
             }
         }
 
-        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length,
+        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length + 2,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length - 1,
+        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
 
         rootView.accept.text = paragraph

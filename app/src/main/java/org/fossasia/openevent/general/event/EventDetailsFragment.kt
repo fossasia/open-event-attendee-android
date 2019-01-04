@@ -69,6 +69,7 @@ class EventDetailsFragment : Fragment() {
     private var currency: String? = null
     private val LINE_COUNT: Int = 3
     private var menuActionBar: Menu? = null
+    private var title: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +97,7 @@ class EventDetailsFragment : Fragment() {
             .observe(this, Observer {
                 loadEvent(it)
                 eventShare = it
+                title = eventShare.name
 
                 rootView.buttonTickets.setOnClickListener {
                     loadTicketFragment()
@@ -124,10 +126,10 @@ class EventDetailsFragment : Fragment() {
                     if (scrollY > rootView.eventName.height + rootView.logo.height)
                         /*Toolbar title set to name of Event if scrolled more than
                         combined height of eventImage and eventName views*/
-                        thisActivity.supportActionBar?.title = eventShare.name
+                        thisActivity.supportActionBar?.title = title
                     else
                         // Toolbar title set to an empty string
-                        thisActivity.supportActionBar?.title = ""
+                        thisActivity.supportActionBar?.title = title
                 }
             }
         }
