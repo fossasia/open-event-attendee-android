@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -50,15 +50,9 @@ class FavoriteFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.replace(R.id.rootLayout, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle)
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {

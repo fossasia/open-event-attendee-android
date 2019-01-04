@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -41,9 +42,7 @@ import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
@@ -232,20 +231,6 @@ class EventDetailsFragment : Fragment() {
         rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
     }
 
-    override fun onDestroyView() {
-        val thisActivity = activity
-        when (thisActivity) {
-            is SearchResultsActivity -> thisActivity.supportActionBar
-                ?.title = resources.getString(R.string.search_results)
-            is MainActivity -> {
-                thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                thisActivity.supportActionBar?.title = resources.getString(R.string.events)
-            }
-        }
-        setHasOptionsMenu(false)
-        super.onDestroyView()
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -323,10 +308,7 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.rootLayout, ticketFragment)
-            ?.addToBackStack(null)
-            ?.commit()
+        findNavController(rootView).navigate(R.id.ticketsFragment, bundle)
     }
 
     private fun loadSocialLinksFragment() {
