@@ -51,7 +51,7 @@ class SignUpFragment : Fragment() {
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     rootView.signUpButton.performClick()
-                    Utils.hideSoftKeyboard(context,rootView)
+                    Utils.hideSoftKeyboard(context, rootView)
                     true
                 }
                 else -> false
