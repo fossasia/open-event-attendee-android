@@ -25,6 +25,7 @@ private const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
 const val LOCATION: String = "location"
 const val DATE: String = "date"
+const val SEARCH_TIME: String = "time"
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -44,6 +45,7 @@ class SearchFragment : Fragment() {
 
         rootView.timeTextView.setOnClickListener {
             val intent = Intent(activity, SearchTimeActivity::class.java)
+            intent.putExtra(SEARCH_TIME, rootView.timeTextView.text.toString())
             startActivity(intent)
         }
 
