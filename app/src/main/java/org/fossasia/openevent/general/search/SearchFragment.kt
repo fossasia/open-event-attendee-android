@@ -11,11 +11,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.MenuItemCompat
@@ -39,8 +39,11 @@ class SearchFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Search"
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Search"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
@@ -90,11 +93,11 @@ class SearchFragment : Fragment() {
         MenuItemCompat.setActionView(searchItem, searchView)
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                val intent = Intent(activity, SearchResultsActivity::class.java)
-                intent.putExtra(QUERY, query)
-                intent.putExtra(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
-                intent.putExtra(DATE, rootView.timeTextView.text.toString().nullToEmpty())
-                startActivity(intent)
+                val bundle = Bundle()
+                bundle.putString(QUERY, query)
+                bundle.putString(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
+                bundle.putString(DATE, rootView.timeTextView.text.toString().nullToEmpty())
+                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle)
                 return false
             }
 
