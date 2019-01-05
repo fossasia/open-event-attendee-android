@@ -16,6 +16,10 @@
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment" />
     <fragment
+        android:id="@+id/searchResultsFragment"
+        android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
+        android:label="SearchResultsFragment" />
+    <fragment
         android:id="@+id/navigation_favorite"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment" />

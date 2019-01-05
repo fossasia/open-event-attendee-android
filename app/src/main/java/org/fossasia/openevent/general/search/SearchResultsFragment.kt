@@ -1,61 +1,59 @@
-package org.fossasia.openevent.general
+package org.fossasia.openevent.general.search
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_search_results.errorTextView
-import kotlinx.android.synthetic.main.activity_search_results.eventsRecycler
-import kotlinx.android.synthetic.main.activity_search_results.noSearchResults
-import kotlinx.android.synthetic.main.activity_search_results.shimmerSearch
+import androidx.navigation.Navigation.findNavController
+import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
+import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
+import kotlinx.android.synthetic.main.fragment_search_results.view.errorTextView
+import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
-import org.fossasia.openevent.general.search.DATE
-import org.fossasia.openevent.general.search.LOCATION
-import org.fossasia.openevent.general.search.QUERY
-import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class SearchResultsActivity : AppCompatActivity() {
+class SearchResultsFragment : Fragment() {
+    private lateinit var rootView: View
     private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_results)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = resources.getString(R.string.search_results)
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = getString(R.string.search_results)
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+        setHasOptionsMenu(true)
 
-        eventsRecycler.layoutManager = LinearLayoutManager(this)
+        rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
 
-        eventsRecycler.adapter = eventsRecyclerAdapter
-        eventsRecycler.isNestedScrollingEnabled = false
-        performSearch(intent)
+        rootView.eventsRecycler.adapter = eventsRecyclerAdapter
+        rootView.eventsRecycler.isNestedScrollingEnabled = false
+        performSearch(arguments)
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.searchRootLayout, fragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle)
             }
         }
 
@@ -82,11 +80,11 @@ class SearchResultsActivity : AppCompatActivity() {
             .nonNull()
             .observe(this, Observer {
                 if (it) {
-                    shimmerSearch.startShimmer()
+                    rootView.shimmerSearch.startShimmer()
                 } else {
-                    shimmerSearch.stopShimmer()
+                    rootView.shimmerSearch.stopShimmer()
                 }
-                shimmerSearch.isVisible = it
+                rootView.shimmerSearch.isVisible = it
             })
 
         searchViewModel.showNoInternetError
@@ -98,18 +96,20 @@ class SearchResultsActivity : AppCompatActivity() {
         searchViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             })
 
-        errorTextView.setOnClickListener {
-            performSearch(intent)
+        rootView.errorTextView.setOnClickListener {
+            performSearch(arguments)
         }
+
+        return rootView
     }
 
-    private fun performSearch(intent: Intent?) {
-        val query = intent?.getStringExtra(QUERY)
-        val location = intent?.getStringExtra(LOCATION)
-        val date = intent?.getStringExtra(DATE)
+    private fun performSearch(bundle: Bundle?) {
+        val query = bundle?.getString(QUERY)
+        val location = bundle?.getString(LOCATION)
+        val date = bundle?.getString(DATE)
         searchViewModel.searchEvent = query
         if (searchViewModel.savedLocation != null && TextUtils.isEmpty(location) && date == "Anytime")
             searchViewModel.loadEvents(
@@ -120,21 +120,20 @@ class SearchResultsActivity : AppCompatActivity() {
     }
 
     private fun showNoSearchResults(events: List<Event>) {
-        noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
+        rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun showNoInternetError(show: Boolean) {
-        errorTextView.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.errorTextView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-                return true
+                activity?.onBackPressed()
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
-        return false
     }
 }
