@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,7 +20,11 @@ import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.*
+import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
+import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -49,8 +51,7 @@ class SignUpFragment : Fragment() {
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     rootView.signUpButton.performClick()
-                    val imm = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                    Utils.hideSoftKeyboard(context,rootView)
                     true
                 }
                 else -> false
