@@ -33,6 +33,11 @@ class SearchResultsFragment : Fragment() {
     private val eventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val searchViewModel by viewModel<SearchViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        performSearch(arguments)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
@@ -47,7 +52,6 @@ class SearchResultsFragment : Fragment() {
 
         rootView.eventsRecycler.adapter = eventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
-        performSearch(arguments)
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
