@@ -48,7 +48,7 @@ class SignUpFragment : Fragment() {
         val signUp = SignUp()
 
         rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
-            return@setOnEditorActionListener when (actionId) {
+            when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     rootView.signUpButton.performClick()
                     Utils.hideSoftKeyboard(context, rootView)
