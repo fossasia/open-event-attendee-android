@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,10 +20,11 @@ import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -44,6 +46,17 @@ class SignUpFragment : Fragment() {
 
         setHasOptionsMenu(true)
         val signUp = SignUp()
+
+        rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    rootView.signUpButton.performClick()
+                    Utils.hideSoftKeyboard(context, rootView)
+                    true
+                }
+                else -> false
+            }
+        }
 
         rootView.signUpButton.setOnClickListener {
             signUp.email = usernameSignUp.text.toString()
