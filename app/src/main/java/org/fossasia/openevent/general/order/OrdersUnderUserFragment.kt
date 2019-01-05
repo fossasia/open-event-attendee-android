@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
@@ -58,15 +59,10 @@ class OrdersUnderUserFragment : Fragment() {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    val fragment = OrderDetailsFragment()
                     val bundle = Bundle()
                     bundle.putLong(EVENT_ID, eventID)
                     bundle.putString(ORDERS, orderIdentifier)
-                    fragment.arguments = bundle
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.rootLayout, fragment)
-                        ?.addToBackStack(null)
-                        ?.commit()
+                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle)
                 }
             }
 
