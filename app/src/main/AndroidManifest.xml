@@ -24,9 +24,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AuthActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity
             android:name=".about.AboutEventActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"></activity>
@@ -36,6 +33,5 @@
         <meta-data
             android:name="com.stripe.android.API_KEY"
             android:value="${STRIPE_API_TOKEN}"/>
-        <activity android:name=".SearchResultsActivity"></activity>
     </application>
 </manifest>

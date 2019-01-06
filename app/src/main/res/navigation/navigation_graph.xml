@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_events">
+    app:startDestination="@id/eventsFragment">
 
     <fragment
-        android:id="@+id/navigation_events"
+        android:id="@+id/eventsFragment"
         android:name="org.fossasia.openevent.general.event.EventsFragment"
         android:label="EventsFragment" />
     <fragment
@@ -12,7 +12,7 @@
         android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
         android:label="SimilarEventsFragment" />
     <fragment
-        android:id="@+id/navigation_search"
+        android:id="@+id/searchFragment"
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment" />
     <fragment
@@ -20,11 +20,11 @@
         android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
         android:label="SearchResultsFragment" />
     <fragment
-        android:id="@+id/navigation_favorite"
+        android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment" />
     <fragment
-        android:id="@+id/navigation_tickets"
+        android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
         android:label="OrdersUnderUserFragment"/>
     <fragment
@@ -32,7 +32,7 @@
         android:name="org.fossasia.openevent.general.order.OrderDetailsFragment"
         android:label="OrderDetailsFragment"/>
     <fragment
-        android:id="@+id/navigation_profile"
+        android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
         android:label="ProfileFragment"/>
     <fragment
@@ -59,4 +59,12 @@
         android:id="@+id/orderCompletedFragment"
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="org.fossasia.openevent.general.auth.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="org.fossasia.openevent.general.auth.SignUpFragment"
+        android:label="SignUpFragment" />
 </navigation>
