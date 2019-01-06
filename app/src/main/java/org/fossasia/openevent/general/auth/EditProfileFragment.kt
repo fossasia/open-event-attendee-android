@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -58,8 +60,16 @@ class EditProfileFragment : Fragment() {
                 val userFirstName = it.firstName.nullToEmpty()
                 val userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
-                rootView.firstName.setText(userFirstName)
-                rootView.lastName.setText(userLastName)
+                if(!editProfileViewModel.firstName.value.isNullOrEmpty()){
+                    rootView.firstName.setText(editProfileViewModel.firstName.value)
+                } else {
+                    rootView.firstName.setText(userFirstName)
+                }
+                if(!editProfileViewModel.lastName.value.isNullOrEmpty()){
+                    rootView.lastName.setText(editProfileViewModel.lastName.value)
+                } else {
+                    rootView.lastName.setText(userLastName)
+                }
                 if (!imageUrl.isEmpty()) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp)
                     Picasso.get()
@@ -90,6 +100,26 @@ class EditProfileFragment : Fragment() {
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
                 rootView.lastName.text.toString())
         }
+
+        rootView.firstName.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editProfileViewModel.updateFirstName(s.toString())
+            }
+        })
+
+        rootView.lastName.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editProfileViewModel.updateLastName(s.toString())
+            }
+        })
 
         editProfileViewModel.message
             .nonNull()

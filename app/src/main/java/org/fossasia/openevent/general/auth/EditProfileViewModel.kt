@@ -23,6 +23,10 @@ class EditProfileViewModel(
     val user: LiveData<User> = mutableUser
     private val mutableMessage = MutableLiveData<String>()
     val message: LiveData<String> = mutableMessage
+    private val mutableFirstName = MutableLiveData<String>()
+    val firstName: LiveData<String> = mutableFirstName
+    private val mutableLastName = MutableLiveData<String>()
+    val lastName: LiveData<String> = mutableLastName
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -79,6 +83,14 @@ class EditProfileViewModel(
                 mutableMessage.value = "Error updating user!"
                 Timber.e(it, "Error updating user!")
             })
+    }
+
+    fun updateFirstName(firstName: String) {
+        mutableFirstName.value = firstName
+    }
+
+    fun updateLastName(lastName: String) {
+        mutableLastName.value = lastName
     }
 
     override fun onCleared() {
