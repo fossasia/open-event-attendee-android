@@ -16,7 +16,6 @@ import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
-private const val TO_SEARCH: String = "ToSearchFragment"
 const val LOCATION_PERMISSION_REQUEST = 1000
 
 class SearchLocationActivity : AppCompatActivity() {

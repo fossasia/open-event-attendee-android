@@ -23,8 +23,6 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
 
-private const val TO_SEARCH: String = "ToSearchFragment"
-
 class GeoLocationUI {
 
     @SuppressLint("MissingPermission")
