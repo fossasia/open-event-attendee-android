@@ -4,6 +4,7 @@
     android:id="@+id/signupCoordinatorLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/grey"
     android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView

@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -41,8 +40,7 @@ class ProfileFragment : Fragment() {
     private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
-        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        findNavController(rootView).navigate(R.id.loginFragment)
     }
 
     private fun redirectToMain() {
