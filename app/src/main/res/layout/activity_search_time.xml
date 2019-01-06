@@ -10,61 +10,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/what_time"
         android:textColor="@color/light_grey"
-        android:text="@string/what_time"/>
+        android:textSize="@dimen/text_size_extra_large"
+        android:textStyle="bold" />
 
-    <TextView
+
+    <CheckedTextView
         android:id="@+id/anytimeTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/anytime"
         android:textColor="@color/light_grey"
-        android:text="@string/anytime"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/todayTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/today"
         android:textColor="@color/light_grey"
-        android:text="@string/today"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/tomorrowTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/tomorrow"
         android:textColor="@color/light_grey"
-        android:text="@string/tomorrow"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/thisWeekendTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/weekend"
         android:textColor="@color/light_grey"
-        android:text="@string/weekend"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/nextMonthTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:textSize="@dimen/text_size_extra_large"
+        android:text="@string/month"
         android:textColor="@color/light_grey"
-        android:text="@string/month"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_extra_large"
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:text="@string/pick_date"
         android:textColor="@color/light_grey"
-        android:text="@string/pick_date"/>
+        android:textSize="@dimen/text_size_expanded_title" />
 
 </LinearLayout>

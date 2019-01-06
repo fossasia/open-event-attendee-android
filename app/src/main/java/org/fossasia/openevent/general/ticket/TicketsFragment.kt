@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
 import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
@@ -25,9 +26,7 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.AuthActivity
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.attendees.AttendeeFragment
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -145,16 +144,10 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
-        val fragment = AttendeeFragment()
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
         bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
-        fragment.arguments = bundle
-        activity?.supportFragmentManager
-            ?.beginTransaction()
-            ?.replace(R.id.rootLayout, fragment)
-            ?.addToBackStack(null)
-            ?.commit()
+        findNavController(rootView).navigate(R.id.attendeeFragment, bundle)
     }
 
     private fun redirectToLogin() {
@@ -181,12 +174,6 @@ class TicketsFragment : Fragment() {
         } else {
             ticketIdAndQty[pos] = Pair(id, quantity)
         }
-    }
-
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        super.onDestroyView()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
