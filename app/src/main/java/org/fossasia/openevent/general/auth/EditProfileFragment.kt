@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.epProgressBar
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
@@ -75,7 +75,7 @@ class EditProfileFragment : Fragment() {
         editProfileViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                rootView.epProgressBar.isVisible = it
+                rootView.progressBar.isVisible = it
             })
 
         rootView.profilePhoto.setOnClickListener {
