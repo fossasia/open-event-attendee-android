@@ -128,7 +128,7 @@ class EventDetailsFragment : Fragment() {
                         thisActivity.supportActionBar?.title = title
                     else
                         // Toolbar title set to an empty string
-                        thisActivity.supportActionBar?.title = title
+                        thisActivity.supportActionBar?.title = ""
                 }
             }
         }
