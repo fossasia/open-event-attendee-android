@@ -11,8 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
-
-private const val TO_SEARCH: String = "ToSearchFragment"
+import org.fossasia.openevent.general.search.TO_SEARCH
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
