@@ -60,12 +60,12 @@ class EditProfileFragment : Fragment() {
                 val userFirstName = it.firstName.nullToEmpty()
                 val userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
-                if(!editProfileViewModel.firstName.value.isNullOrEmpty()){
+                if (!editProfileViewModel.firstName.value.isNullOrEmpty()) {
                     rootView.firstName.setText(editProfileViewModel.firstName.value)
                 } else {
                     rootView.firstName.setText(userFirstName)
                 }
-                if(!editProfileViewModel.lastName.value.isNullOrEmpty()){
+                if (!editProfileViewModel.lastName.value.isNullOrEmpty()) {
                     rootView.lastName.setText(editProfileViewModel.lastName.value)
                 } else {
                     rootView.lastName.setText(userLastName)
@@ -101,7 +101,7 @@ class EditProfileFragment : Fragment() {
                 rootView.lastName.text.toString())
         }
 
-        rootView.firstName.addTextChangedListener(object :TextWatcher{
+        rootView.firstName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -111,7 +111,7 @@ class EditProfileFragment : Fragment() {
             }
         })
 
-        rootView.lastName.addTextChangedListener(object :TextWatcher{
+        rootView.lastName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
