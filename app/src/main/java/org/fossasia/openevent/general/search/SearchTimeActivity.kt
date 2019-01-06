@@ -27,6 +27,7 @@ class SearchTimeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search_time)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar?.title = ""
+        setCurrentChoice(intent.getStringExtra(SEARCH_TIME))
 
         val calendar = Calendar.getInstance()
 
@@ -87,11 +88,6 @@ class SearchTimeActivity : AppCompatActivity() {
             redirectToSearch()
         }
 
-        anytimeTextView.setOnClickListener {
-            searchTimeViewModel.saveDate(ANYTIME)
-            redirectToSearch()
-        }
-
         timeTextView.setOnClickListener {
             DatePickerDialog(this, date, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -114,6 +110,17 @@ class SearchTimeActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setCurrentChoice(value: String) {
+        when (value) {
+            ANYTIME -> anytimeTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            TODAY -> todayTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            TOMORROW -> tomorrowTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            THIS_WEEKEND -> thisWeekendTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            NEXT_MONTH -> nextMonthTextView.setCheckMarkDrawable(R.drawable.ic_checked)
+            else -> timeTextView.setCheckMarkDrawable(R.drawable.ic_checked)
         }
     }
 }

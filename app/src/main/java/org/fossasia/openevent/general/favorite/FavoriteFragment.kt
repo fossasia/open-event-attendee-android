@@ -41,8 +41,11 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Likes"
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Likes"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
             LinearLayoutManager.VERTICAL)
