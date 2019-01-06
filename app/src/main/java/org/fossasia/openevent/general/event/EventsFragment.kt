@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
@@ -51,8 +52,10 @@ class EventsFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
 
         val thisActivity = activity
-        if (thisActivity is AppCompatActivity)
+        if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Events"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         rootView.progressBar.isIndeterminate = true
 
@@ -63,14 +66,9 @@ class EventsFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.rootLayout, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle)
             }
         }
 
