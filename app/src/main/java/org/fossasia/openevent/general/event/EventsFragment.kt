@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SearchLocationActivity
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -121,8 +119,7 @@ class EventsFragment : Fragment() {
         }
 
         rootView.locationTextView.setOnClickListener {
-            val intent = Intent(activity, SearchLocationActivity::class.java)
-            startActivity(intent)
+            findNavController(rootView).navigate(R.id.searchLocationFragment)
         }
 
         showNoInternetScreen(isNetworkConnected())

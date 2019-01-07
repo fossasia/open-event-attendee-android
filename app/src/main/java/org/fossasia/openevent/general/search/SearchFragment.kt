@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.search
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -22,7 +21,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 
-private const val FROM_SEARCH: String = "FromSearchFragment"
+const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
 const val LOCATION: String = "location"
 const val DATE: String = "date"
@@ -62,11 +61,9 @@ class SearchFragment : Fragment() {
         }
 
         rootView.locationTextView.setOnClickListener {
-            val intent = Intent(activity, SearchLocationActivity::class.java)
             val bundle = Bundle()
             bundle.putBoolean(FROM_SEARCH, true)
-            intent.putExtras(bundle)
-            startActivity(intent)
+            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle)
         }
 
         return rootView

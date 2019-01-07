@@ -11,14 +11,16 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.activity_search_location.currentLocation
+import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -26,7 +28,7 @@ import java.util.Locale
 class GeoLocationUI {
 
     @SuppressLint("MissingPermission")
-    fun configure(activity: Activity, searchLocationViewModel: SearchLocationViewModel) {
+    fun configure(activity: Activity, view: View, searchLocationViewModel: SearchLocationViewModel) {
         val permission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -39,7 +41,7 @@ class GeoLocationUI {
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             activity.startActivity(intent)
         }
-        activity.currentLocation.setOnClickListener {
+        view.currentLocation.setOnClickListener {
             val locationRequest: LocationRequest = LocationRequest.create()
             locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
             val locationCallback = object : LocationCallback() {
@@ -56,7 +58,7 @@ class GeoLocationUI {
                                 val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
                                 for (address: Address in addresses) {
                                     if (address.locality != null) {
-                                        search(activity, SearchLocationActivity().fromSearchFragment,
+                                        search(activity, fromSearchFragment,
                                             searchLocationViewModel, address.locality)
                                     }
                                 }
@@ -87,5 +89,7 @@ class GeoLocationUI {
             startMainActivity.putExtras(searchBundle)
         }
         activity.startActivity(startMainActivity)
+        activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        activity.finish()
     }
 }
