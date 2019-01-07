@@ -16,6 +16,10 @@
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment" />
     <fragment
+        android:id="@+id/searchLocationFragment"
+        android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
+        android:label="SearchLocationFragment" />
+    <fragment
         android:id="@+id/searchTimeFragment"
         android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
         android:label="SearchTimeFragment" />
