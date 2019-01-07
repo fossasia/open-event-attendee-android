@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:text="Update"
+            android:text="@string/update"
             android:textColor="@android:color/white" />
 
         <ProgressBar
