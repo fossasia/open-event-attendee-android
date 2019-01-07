@@ -1,8 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -25,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketInfoTextView
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
@@ -36,7 +33,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 const val EVENT_ID: String = "EVENT_ID"
 const val CURRENCY: String = "CURRENCY"
 const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
-const val REDIRECTED_FROM_TICKETS = "REDIRECTED_FROM_TICKETS"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -46,7 +42,6 @@ class TicketsFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
-    private val AUTH_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,20 +146,7 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        val intent = Intent(activity, AuthActivity::class.java)
-        val bundle = Bundle()
-        bundle.putBoolean(REDIRECTED_FROM_TICKETS, true)
-        intent.putExtras(bundle)
-        startActivityForResult(intent, AUTH_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AUTH_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK)
-                redirectToAttendee()
-            else
-                Toast.makeText(context, "Sign in failed!", Toast.LENGTH_SHORT).show()
-        }
+        findNavController(rootView).navigate(R.id.loginFragment)
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {

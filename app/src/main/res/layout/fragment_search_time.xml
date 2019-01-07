@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/layout_margin_medium"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,5 +70,5 @@
         android:text="@string/pick_date"
         android:textColor="@color/light_grey"
         android:textSize="@dimen/text_size_expanded_title" />
-
 </LinearLayout>
+

@@ -19,6 +19,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.MenuItemCompat
+import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
@@ -47,9 +48,9 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            val intent = Intent(activity, SearchTimeActivity::class.java)
-            intent.putExtra(SEARCH_TIME, rootView.timeTextView.text.toString())
-            startActivity(intent)
+            val bundle = Bundle()
+            bundle.putString(SEARCH_TIME, rootView.timeTextView.text.toString())
+            Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle)
         }
 
         if (searchViewModel.savedDate != null) {
