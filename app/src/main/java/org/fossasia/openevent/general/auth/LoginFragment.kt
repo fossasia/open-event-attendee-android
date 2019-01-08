@@ -48,6 +48,7 @@ class LoginFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        showSnackbar()
 
         if (loginViewModel.isLoggedIn())
             redirectToMain()
@@ -145,5 +146,11 @@ class LoginFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showSnackbar() {
+        Snackbar.make(
+            rootView.loginCoordinatorLayout, getString(R.string.logged_in_automatically), Snackbar.LENGTH_SHORT
+        ).show()
     }
 }

@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.order
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,13 @@ class OrdersUnderUserFragment : Fragment() {
     private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
+
+    override fun onStart() {
+        super.onStart()
+        if (!ordersUnderUserVM.isLoggedIn()) {
+            redirectToLogin()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,13 +109,6 @@ class OrdersUnderUserFragment : Fragment() {
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
-        } else {
-            Snackbar.make(
-                rootView.ordersUnderUserCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT
-            ).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 500)
         }
 
         return rootView

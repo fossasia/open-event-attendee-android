@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.auth
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -103,12 +104,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                    rootView.signupCoordinatorLayout, "Logged in Automatically!", Snackbar.LENGTH_SHORT
-                ).show()
-                Handler().postDelayed({
                     redirectToMain()
-                }, 1000)
             })
 
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
@@ -130,7 +126,11 @@ class SignUpFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        findNavController(rootView).popBackStack()
+        val intent = Intent(activity, MainActivity::class.java)
+        intent.putExtra("snackbar_message", getString(R.string.logged_in_automatically))
+        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        activity?.finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

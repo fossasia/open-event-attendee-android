@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -47,6 +46,13 @@ class ProfileFragment : Fragment() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (!profileViewModel.isLoggedIn()) {
+            redirectToLogin()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,13 +61,6 @@ class ProfileFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
-
-        if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(rootView.profileCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 1000)
-        }
 
         profileViewModel.progress
             .nonNull()
