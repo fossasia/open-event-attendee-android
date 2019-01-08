@@ -62,6 +62,9 @@ android {
     packagingOptions {
         pickFirst 'kotlin/**'
     }
+    dataBinding{
+        enabled = true
+    }
 }
 
 spotless {

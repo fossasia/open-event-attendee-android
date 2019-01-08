@@ -7,8 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
@@ -27,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.databinding.FragmentEditProfileBinding
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -54,21 +54,24 @@ class EditProfileFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
+        DataBindingUtil.setContentView<FragmentEditProfileBinding>(
+            activity as Activity, R.layout.fragment_edit_profile
+        ).apply {
+            this.setLifecycleOwner(activity)
+            this.viewmodel = editProfileViewModel
+        }
+
         profileViewModel.user
             .nonNull()
             .observe(this, Observer {
                 val userFirstName = it.firstName.nullToEmpty()
                 val userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
-                if (!editProfileViewModel.firstName.value.isNullOrEmpty()) {
-                    rootView.firstName.setText(editProfileViewModel.firstName.value)
-                } else {
-                    rootView.firstName.setText(userFirstName)
+                if (editProfileViewModel.firstName.value.isNullOrEmpty()) {
+                    editProfileViewModel.firstName.value = userFirstName
                 }
-                if (!editProfileViewModel.lastName.value.isNullOrEmpty()) {
-                    rootView.lastName.setText(editProfileViewModel.lastName.value)
-                } else {
-                    rootView.lastName.setText(userLastName)
+                if (editProfileViewModel.lastName.value.isNullOrEmpty()) {
+                    editProfileViewModel.lastName.value = userLastName
                 }
                 if (!imageUrl.isEmpty()) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp)
@@ -87,6 +90,13 @@ class EditProfileFragment : Fragment() {
                 rootView.progressBar.isVisible = it
             })
 
+        editProfileViewModel.firstName.observe(this, Observer {
+            rootView.firstName.setText(editProfileViewModel.firstName.value)
+        })
+        editProfileViewModel.lastName.observe(this, Observer {
+            rootView.lastName.setText(editProfileViewModel.lastName.value)
+        })
+
         rootView.profilePhoto.setOnClickListener {
             if (permissionGranted) {
                 showFileChooser()
@@ -100,26 +110,6 @@ class EditProfileFragment : Fragment() {
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
                 rootView.lastName.text.toString())
         }
-
-        rootView.firstName.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editProfileViewModel.updateFirstName(s.toString())
-            }
-        })
-
-        rootView.lastName.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editProfileViewModel.updateLastName(s.toString())
-            }
-        })
 
         editProfileViewModel.message
             .nonNull()
