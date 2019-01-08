@@ -14,6 +14,8 @@ import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.TO_SEARCH
 
+const val SNACKBAR_MESSAGE: String = "snackbar_message"
+
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragmentId: Int = 0
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSnackbar() {
-        val textSnackbar = intent.getStringExtra("snackbar_message")
+        val textSnackbar = intent.getStringExtra(SNACKBAR_MESSAGE)
         if (textSnackbar != null)
             Snackbar.make(
                 mainCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
