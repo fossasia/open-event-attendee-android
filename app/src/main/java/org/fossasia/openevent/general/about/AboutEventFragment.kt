@@ -1,57 +1,65 @@
 package org.fossasia.openevent.general.about
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_about_event.aboutEventCollapsingLayout
-import kotlinx.android.synthetic.main.activity_about_event.aboutEventContent
-import kotlinx.android.synthetic.main.activity_about_event.aboutEventDetails
-import kotlinx.android.synthetic.main.activity_about_event.aboutEventToolbar
-import kotlinx.android.synthetic.main.activity_about_event.appBar
-import kotlinx.android.synthetic.main.activity_about_event.detailsHeader
-import kotlinx.android.synthetic.main.activity_about_event.eventName
-import kotlinx.android.synthetic.main.activity_about_event.progressBarAbout
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_about_event.view.appBar
+import kotlinx.android.synthetic.main.fragment_about_event.view.progressBarAbout
+import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventContent
+import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventDetails
+import kotlinx.android.synthetic.main.fragment_about_event.view.eventName
+import kotlinx.android.synthetic.main.fragment_about_event.view.detailsHeader
+import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventCollapsingLayout
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
-
+class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
+    private lateinit var rootView: View
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
     private var isHideToolbarView: Boolean = false
     private lateinit var eventExtra: Event
+    private var title: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about_event)
+        val bundle = this.arguments
+        if (bundle != null)
+            id = bundle.getLong(EVENT_ID)
+    }
 
-        setSupportActionBar(aboutEventToolbar)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        aboutEventCollapsingLayout.title = " "
-        appBar.addOnOffsetChangedListener(this)
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity)
+            thisActivity.supportActionBar?.title = ""
+        setHasOptionsMenu(true)
+
+        rootView.appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView, it, Snackbar.LENGTH_SHORT).show()
             })
-
-        id = intent.getLongExtra(EVENT_ID, -1)
 
         aboutEventViewModel.progressAboutEvent
             .nonNull()
             .observe(this, Observer {
-                progressBarAbout.isVisible = it
+                rootView.progressBarAbout.isVisible = it
             })
 
         aboutEventViewModel.loadEvent(id)
@@ -61,16 +69,18 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             .observe(this, Observer {
                 loadEvent(it)
             })
+
+        return rootView
     }
 
     private fun loadEvent(event: Event) {
         eventExtra = event
-        aboutEventContent.text = event.description
+        title = eventExtra.name
+        rootView.aboutEventContent.text = event.description
         val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
         val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
-        aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
-
-        eventName.text = event.name
+        rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
+        rootView.eventName.text = event.name
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
@@ -79,14 +89,14 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
         if (percentage == 1f && isHideToolbarView) {
             // Collapsed
-            detailsHeader.visibility = View.GONE
-            aboutEventCollapsingLayout.title = eventExtra.name
+            rootView.detailsHeader.visibility = View.GONE
+            rootView.aboutEventCollapsingLayout.title = title
             isHideToolbarView = !isHideToolbarView
         }
         if (percentage < 1f && !isHideToolbarView) {
             // Not Collapsed
-            detailsHeader.visibility = View.VISIBLE
-            aboutEventCollapsingLayout.title = " "
+            rootView.detailsHeader.visibility = View.VISIBLE
+            rootView.aboutEventCollapsingLayout.title = " "
             isHideToolbarView = !isHideToolbarView
         }
     }
@@ -94,7 +104,7 @@ class AboutEventActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                activity?.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
