@@ -56,6 +56,10 @@
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"/>
     <fragment
+        android:id="@+id/aboutEventFragment"
+        android:name="org.fossasia.openevent.general.about.AboutEventFragment"
+        android:label="AboutEventFragment"/>
+    <fragment
         android:id="@+id/ticketsFragment"
         android:name="org.fossasia.openevent.general.ticket.TicketsFragment"
         android:label="TicketsFragment"/>

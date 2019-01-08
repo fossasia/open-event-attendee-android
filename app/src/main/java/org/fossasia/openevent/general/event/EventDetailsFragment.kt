@@ -43,7 +43,6 @@ import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
@@ -160,9 +159,9 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            val aboutIntent = Intent(context, AboutEventActivity::class.java)
-            aboutIntent.putExtra(EVENT_ID, eventId)
-            startActivity(aboutIntent)
+            val bundle = Bundle()
+            bundle.putLong(EVENT_ID, eventId)
+            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle)
         }
 
         // Event Description Section
