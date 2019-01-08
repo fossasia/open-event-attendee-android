@@ -27,6 +27,8 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -40,7 +42,7 @@ class ProfileFragment : Fragment() {
     private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment)
+        findNavController(rootView).navigate(R.id.loginFragment, null, getAnimSlide())
     }
 
     private fun redirectToMain() {
@@ -97,7 +99,7 @@ class ProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.edit_profile -> {
-                findNavController(rootView).navigate(R.id.editProfileFragment)
+                findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
                 return true
             }
             R.id.orga_app -> {
@@ -119,7 +121,7 @@ class ProfileFragment : Fragment() {
             R.id.settings -> {
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
-                findNavController(rootView).navigate(R.id.settingsFragment, bundle)
+                findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
