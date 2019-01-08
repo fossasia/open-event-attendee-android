@@ -150,7 +150,7 @@ class LoginFragment : Fragment() {
 
     private fun showSnackbar() {
         Snackbar.make(
-            rootView.loginCoordinatorLayout, getString(R.string.logged_in_automatically), Snackbar.LENGTH_SHORT
+            rootView.loginCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_SHORT
         ).show()
     }
 }
