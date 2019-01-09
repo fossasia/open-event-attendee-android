@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -55,7 +56,7 @@ class FavoriteFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle)
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {

@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -142,11 +143,11 @@ class TicketsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
         bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
-        findNavController(rootView).navigate(R.id.attendeeFragment, bundle)
+        findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
     }
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment)
+        findNavController(rootView).navigate(R.id.loginFragment, null, getAnimSlide())
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
