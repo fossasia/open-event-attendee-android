@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -24,6 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
@@ -272,7 +273,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.attendeeCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
@@ -419,7 +420,9 @@ class AttendeeFragment : Fragment() {
 
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
-            Toast.makeText(context, "Invalid card data", Toast.LENGTH_LONG).show()
+            Snackbar.make(
+                rootView.attendeeCoordinatorLayout, "Invalid card data", Snackbar.LENGTH_SHORT
+            ).show()
         else
             Stripe(requireContext())
                 .createToken(card, API_KEY, object : TokenCallback {
@@ -430,7 +433,9 @@ class AttendeeFragment : Fragment() {
                     }
 
                     override fun onError(error: Exception) {
-                        Toast.makeText(context, error.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                        Snackbar.make(
+                            rootView.attendeeCoordinatorLayout, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 })
     }
