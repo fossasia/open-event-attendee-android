@@ -149,8 +149,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun showSnackbar() {
-        Snackbar.make(
-            rootView.loginCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_SHORT
-        ).show()
+        val textSnackbar = arguments?.getString("snackbar_message")
+        if (textSnackbar != null) {
+            Snackbar.make(
+                rootView.loginCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 }

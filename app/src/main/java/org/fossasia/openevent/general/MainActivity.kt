@@ -7,14 +7,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.mainCoordinatorLayout
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.TO_SEARCH
-
-const val SNACKBAR_MESSAGE: String = "snackbar_message"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -23,8 +20,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        showSnackbar()
 
         val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
         if (hostFragment is NavHostFragment)
@@ -60,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.orderUnderUserFragment,
                 R.id.favoriteFragment -> View.VISIBLE
                 else -> View.GONE
-        }
+            }
         navigationAuth.visibility =
             when (id) {
                 R.id.loginFragment,
@@ -78,13 +73,5 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onBackPressed()
         }
-    }
-
-    private fun showSnackbar() {
-        val textSnackbar = intent.getStringExtra(SNACKBAR_MESSAGE)
-        if (textSnackbar != null)
-            Snackbar.make(
-                mainCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
-            ).show()
     }
 }

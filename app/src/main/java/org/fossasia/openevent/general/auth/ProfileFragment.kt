@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -39,7 +40,9 @@ class ProfileFragment : Fragment() {
     private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment)
+        val args = getString(R.string.log_in_first)
+        val bundle = bundleOf("snackbar_message" to args)
+        findNavController(rootView).navigate(R.id.loginFragment, bundle)
     }
 
     private fun redirectToMain() {
