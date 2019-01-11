@@ -48,6 +48,7 @@ import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.CURRENCY
 import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -161,7 +162,7 @@ class EventDetailsFragment : Fragment() {
         val aboutEventOnClickListener = View.OnClickListener {
             val bundle = Bundle()
             bundle.putLong(EVENT_ID, eventId)
-            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle)
+            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
         }
 
         // Event Description Section
@@ -307,7 +308,7 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        findNavController(rootView).navigate(R.id.ticketsFragment, bundle)
+        findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
     }
 
     private fun loadSocialLinksFragment() {

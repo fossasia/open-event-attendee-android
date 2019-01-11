@@ -72,6 +72,7 @@ import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -462,7 +463,7 @@ class AttendeeFragment : Fragment() {
         // Initialise Order Completed Fragment
         val bundle = Bundle()
         bundle.putLong("EVENT_ID", id)
-        findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle)
+        findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

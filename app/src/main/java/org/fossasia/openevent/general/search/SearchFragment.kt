@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.MenuItemCompat
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 
 const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
@@ -49,7 +50,7 @@ class SearchFragment : Fragment() {
         rootView.timeTextView.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SEARCH_TIME, rootView.timeTextView.text.toString())
-            Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle)
+            Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
         }
 
         if (searchViewModel.savedDate != null) {
@@ -63,7 +64,7 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.setOnClickListener {
             val bundle = Bundle()
             bundle.putBoolean(FROM_SEARCH, true)
-            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle)
+            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
         }
 
         return rootView
@@ -95,7 +96,7 @@ class SearchFragment : Fragment() {
                 bundle.putString(QUERY, query)
                 bundle.putString(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
                 bundle.putString(DATE, rootView.timeTextView.text.toString().nullToEmpty())
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle)
+                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
                 return false
             }
 

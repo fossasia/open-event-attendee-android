@@ -13,6 +13,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavOptions
 import org.fossasia.openevent.general.R
 import timber.log.Timber
 
@@ -76,4 +77,22 @@ object Utils {
 
     fun requireDrawable(@NonNull context: Context, @DrawableRes resId: Int) = AppCompatResources
         .getDrawable(context, resId) ?: throw IllegalStateException("Drawable should not be null")
+
+    fun getAnimFade(): NavOptions {
+        val builder = NavOptions.Builder()
+        builder.setEnterAnim(R.anim.fade_in)
+        builder.setExitAnim(R.anim.fade_out)
+        builder.setPopEnterAnim(R.anim.slide_in_left)
+        builder.setPopExitAnim(R.anim.slide_out_right)
+        return builder.build()
+    }
+
+    fun getAnimSlide(): NavOptions {
+        val builder = NavOptions.Builder()
+        builder.setEnterAnim(R.anim.slide_in_right)
+        builder.setExitAnim(R.anim.slide_out_left)
+        builder.setPopEnterAnim(R.anim.slide_in_left)
+        builder.setPopExitAnim(R.anim.slide_out_right)
+        return builder.build()
+    }
 }
