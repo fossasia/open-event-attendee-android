@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_events"
+        android:id="@+id/eventsFragment"
         android:icon="@drawable/ic_baseline_event_24px"
         android:title="@string/events" />
 
     <item
-        android:id="@+id/navigation_search"
+        android:id="@+id/searchFragment"
         android:icon="@drawable/ic_search_grey_24dp"
         android:title="@string/search" />
 
     <item
-        android:id="@+id/navigation_favorite"
+        android:id="@+id/favoriteFragment"
         android:icon="@drawable/ic_baseline_favorite_border_24px"
         android:title="@string/likes" />
 
     <item
-        android:id="@+id/navigation_tickets"
+        android:id="@+id/orderUnderUserFragment"
         android:icon="@drawable/ic_baseline_ticket_24dp"
         android:title="@string/tickets" />
 
     <item
-        android:id="@+id/navigation_profile"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_account_circle_24px"
         android:title="@string/profile" />
     
