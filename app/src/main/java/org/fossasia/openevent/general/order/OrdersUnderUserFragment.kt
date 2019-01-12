@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.order
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -12,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
@@ -42,8 +41,12 @@ class OrdersUnderUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Tickets"
+
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Tickets"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         rootView.ordersRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ordersRecycler.adapter = ordersRecyclerAdapter
@@ -58,15 +61,10 @@ class OrdersUnderUserFragment : Fragment() {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    val fragment = OrderDetailsFragment()
                     val bundle = Bundle()
                     bundle.putLong(EVENT_ID, eventID)
                     bundle.putString(ORDERS, orderIdentifier)
-                    fragment.arguments = bundle
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.rootLayout, fragment)
-                        ?.addToBackStack(null)
-                        ?.commit()
+                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle)
                 }
             }
 
@@ -127,9 +125,6 @@ class OrdersUnderUserFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        val authIntent = Intent(activity, AuthActivity::class.java)
-        val redirectFromTickets = true
-        authIntent.putExtra(LAUNCH_TICKETS, redirectFromTickets)
-        startActivity(authIntent)
+        findNavController(rootView).navigate(R.id.loginFragment)
     }
 }

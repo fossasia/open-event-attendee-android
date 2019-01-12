@@ -12,20 +12,23 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.MenuItemCompat
+import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 
-private const val FROM_SEARCH: String = "FromSearchFragment"
+const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
 const val LOCATION: String = "location"
 const val DATE: String = "date"
+const val SEARCH_TIME: String = "time"
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -39,13 +42,17 @@ class SearchFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Search"
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Search"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            val intent = Intent(activity, SearchTimeActivity::class.java)
-            startActivity(intent)
+            val bundle = Bundle()
+            bundle.putString(SEARCH_TIME, rootView.timeTextView.text.toString())
+            Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
         }
 
         if (searchViewModel.savedDate != null) {
@@ -57,11 +64,9 @@ class SearchFragment : Fragment() {
         }
 
         rootView.locationTextView.setOnClickListener {
-            val intent = Intent(activity, SearchLocationActivity::class.java)
             val bundle = Bundle()
             bundle.putBoolean(FROM_SEARCH, true)
-            intent.putExtras(bundle)
-            startActivity(intent)
+            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
         }
 
         return rootView
@@ -94,11 +99,11 @@ class SearchFragment : Fragment() {
         }
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                val intent = Intent(activity, SearchResultsActivity::class.java)
-                intent.putExtra(QUERY, query)
-                intent.putExtra(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
-                intent.putExtra(DATE, rootView.timeTextView.text.toString().nullToEmpty())
-                startActivity(intent)
+                val bundle = Bundle()
+                bundle.putString(QUERY, query)
+                bundle.putString(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
+                bundle.putString(DATE, rootView.timeTextView.text.toString().nullToEmpty())
+                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
                 return false
             }
 

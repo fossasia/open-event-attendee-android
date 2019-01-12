@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/collapsing_toolbar_height"
             app:expandedTitleTextAppearance="@android:color/white"
-            app:statusBarScrim="@android:color/white"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@android:color/white">
 
             <ProgressBar
                 android:id="@+id/progressBarAbout"
@@ -37,20 +37,13 @@
                     android:background="@android:color/white" />
             </FrameLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/aboutEventToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@android:color/white"
-                app:layout_collapseMode="pin" />
-
             <LinearLayout
                 android:id="@+id/detailsHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginTop="@dimen/details_header_margin_top"
-                android:layout_gravity="center|start"
                 android:orientation="vertical">
 
                 <TextView
@@ -80,30 +73,30 @@
         android:id="@+id/nestedAboutScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
         android:background="@android:color/white"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/padding_medium"
+            app:cardBackgroundColor="@android:color/white">
+
+            <TextView
+                android:id="@+id/aboutEventContent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/white"
-                android:layout_marginEnd="@dimen/layout_margin_medium"
-                android:layout_marginLeft="@dimen/padding_medium"
-                android:layout_marginRight="@dimen/padding_medium"
-                android:layout_marginStart="@dimen/layout_margin_medium"
-                android:layout_marginTop="@dimen/layout_margin_medium">
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:padding="@dimen/padding_medium"
+                android:textColor="@color/black"
+                tools:text="Lorem ipsum ipsum ipsum " />
 
-                    <TextView
-                        android:id="@+id/aboutEventContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_margin_medium"
-                        android:textColor="@color/black"
-                        android:padding="@dimen/padding_medium"
-                        tools:text="Lorem ipsum ipsum ipsum " />
-
-            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

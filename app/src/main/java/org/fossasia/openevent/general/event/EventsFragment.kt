@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.event
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -14,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
@@ -23,7 +23,8 @@ import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SearchLocationActivity
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -51,8 +52,10 @@ class EventsFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
 
         val thisActivity = activity
-        if (thisActivity is AppCompatActivity)
+        if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Events"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         rootView.progressBar.isIndeterminate = true
 
@@ -63,14 +66,9 @@ class EventsFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.rootLayout, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
             }
         }
 
@@ -123,8 +121,7 @@ class EventsFragment : Fragment() {
         }
 
         rootView.locationTextView.setOnClickListener {
-            val intent = Intent(activity, SearchLocationActivity::class.java)
-            startActivity(intent)
+            findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
         showNoInternetScreen(isNetworkConnected())
