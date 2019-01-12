@@ -59,7 +59,7 @@ class ProfileFragment : Fragment() {
         setHasOptionsMenu(true)
 
         if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(rootView.profileCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(activity!!.window.decorView, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({
                 redirectToLogin()
             }, 1000)
