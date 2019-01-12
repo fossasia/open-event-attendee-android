@@ -41,10 +41,6 @@ class ProfileFragment : Fragment() {
     private var emailSettings: String? = null
     private val EMAIL: String = "EMAIL"
 
-    private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment, null, getAnimSlide())
-    }
-
     private fun redirectToMain() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
@@ -59,10 +55,7 @@ class ProfileFragment : Fragment() {
         setHasOptionsMenu(true)
 
         if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(activity!!.window.decorView, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 1000)
+            (activity as MainActivity).displaySnackBar("You need to log in first!",rootView)
         }
 
         profileViewModel.progress
