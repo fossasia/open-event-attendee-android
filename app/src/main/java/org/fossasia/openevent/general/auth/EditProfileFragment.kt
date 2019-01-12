@@ -53,14 +53,11 @@ class EditProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-
-        DataBindingUtil.setContentView<FragmentEditProfileBinding>(
-            activity as Activity, R.layout.fragment_edit_profile
-        ).apply {
+        DataBindingUtil.setContentView<FragmentEditProfileBinding>(activity as Activity,
+            R.layout.fragment_edit_profile).apply {
             this.setLifecycleOwner(activity)
             this.viewmodel = editProfileViewModel
         }
-
         profileViewModel.user
             .nonNull()
             .observe(this, Observer {
@@ -89,13 +86,6 @@ class EditProfileFragment : Fragment() {
             .observe(this, Observer {
                 rootView.progressBar.isVisible = it
             })
-
-        editProfileViewModel.firstName.observe(this, Observer {
-            rootView.firstName.setText(editProfileViewModel.firstName.value)
-        })
-        editProfileViewModel.lastName.observe(this, Observer {
-            rootView.lastName.setText(editProfileViewModel.lastName.value)
-        })
 
         rootView.profilePhoto.setOnClickListener {
             if (permissionGranted) {
@@ -137,10 +127,10 @@ class EditProfileFragment : Fragment() {
             }
 
             Picasso.get()
-                    .load(imageUri)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
-                    .transform(CircleTransform())
-                    .into(rootView.profilePhoto)
+                .load(imageUri)
+                .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
+                .transform(CircleTransform())
+                .into(rootView.profilePhoto)
         }
     }
 
