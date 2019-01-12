@@ -21,6 +21,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import java.lang.Exception
 
 const val FROM_SEARCH: String = "FromSearchFragment"
 const val QUERY: String = "query"
@@ -66,7 +67,6 @@ class SearchFragment : Fragment() {
             bundle.putBoolean(FROM_SEARCH, true)
             Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
         }
-
         return rootView
     }
 
@@ -75,7 +75,6 @@ class SearchFragment : Fragment() {
             R.id.search_item -> {
                 false
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -85,7 +84,9 @@ class SearchFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    var queryData = "Default"
     override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
@@ -108,12 +109,32 @@ class SearchFragment : Fragment() {
         rootView.fabSearch.setOnClickListener {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
-        super.onPrepareOptionsMenu(menu)
+        if(!queryData.equals("Default") && !queryData.isNullOrEmpty()){
+            searchItem.expandActionView()
+            searchView.setQuery(queryData, false)
+            searchView.setFocusable(true)
+            searchView.setIconified(false)
+            searchView.requestFocus();
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (this::searchView.isInitialized)
             searchView.setOnQueryTextListener(null)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("SearchViewText",searchView.query.toString())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        try {
+            queryData = savedInstanceState?.getString("SearchViewText")!!
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 }
