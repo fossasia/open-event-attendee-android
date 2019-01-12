@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <PreferenceCategory
         android:key="@string/key_about"
-        android:title="@string/about" >
+        android:title="@string/about"
+        android:layout="@layout/preference_category_about">
 
         <Preference
             android:key="@string/key_rating"
-            android:title="@string/rating_settings" />
+            android:title="@string/rating_settings"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="@string/key_suggestion"
-            android:title="@string/suggestion_settings" />
+            android:title="@string/suggestion_settings"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/profile" >
+        android:title="@string/profile"
+        android:layout="@layout/preference_category_profile">
 
         <Preference
             android:key="@string/key_profile"
-            android:title="@string/logged_in_account" />
+            android:title="@string/logged_in_account"
+            app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/app_name_capital" >
+        android:title="@string/app_name_capital"
+        android:layout="@layout/preference_category_version">
 
         <Preference
             android:key="@string/key_version"
-            android:title="@string/version_settings" />
+            android:title="@string/version_settings"
+            app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 </PreferenceScreen>
