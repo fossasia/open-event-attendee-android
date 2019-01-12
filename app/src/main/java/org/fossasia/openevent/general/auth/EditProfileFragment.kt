@@ -74,10 +74,10 @@ class EditProfileFragment : Fragment() {
                 if (!imageUrl.isEmpty()) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp)
                     Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(drawable)
-                        .transform(CircleTransform())
-                        .into(rootView.profilePhoto)
+                            .load(imageUrl)
+                            .placeholder(drawable)
+                            .transform(CircleTransform())
+                            .into(rootView.profilePhoto)
                 }
             })
         profileViewModel.fetchProfile()
