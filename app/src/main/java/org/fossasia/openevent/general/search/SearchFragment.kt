@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -86,6 +87,11 @@ class SearchFragment : Fragment() {
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
         MenuItemCompat.setActionView(searchItem, searchView)
+        if(!searchViewModel.queryText.value.isNullOrEmpty()){
+            searchItem.expandActionView()
+            searchView.setQuery(searchViewModel.queryText.value,false)
+            searchView.maxWidth = Resources.getSystem().displayMetrics.widthPixels
+        }
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val intent = Intent(activity, SearchResultsActivity::class.java)
@@ -97,6 +103,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                searchViewModel.queryText.value = newText
                 return false
             }
         }

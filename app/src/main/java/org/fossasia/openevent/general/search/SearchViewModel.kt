@@ -30,6 +30,7 @@ class SearchViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    val queryText = MutableLiveData<String>()
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
