@@ -87,9 +87,9 @@ class SearchFragment : Fragment() {
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
         MenuItemCompat.setActionView(searchItem, searchView)
-        if(!searchViewModel.queryText.value.isNullOrEmpty()){
+        if (!searchViewModel.queryText.value.isNullOrEmpty()) {
             searchItem.expandActionView()
-            searchView.setQuery(searchViewModel.queryText.value,false)
+            searchView.setQuery(searchViewModel.queryText.value, false)
             searchView.maxWidth = Resources.getSystem().displayMetrics.widthPixels
         }
         val queryListener = object : SearchView.OnQueryTextListener {
