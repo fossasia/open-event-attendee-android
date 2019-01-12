@@ -43,12 +43,12 @@ import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.CURRENCY
 import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -160,9 +160,9 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            val aboutIntent = Intent(context, AboutEventActivity::class.java)
-            aboutIntent.putExtra(EVENT_ID, eventId)
-            startActivity(aboutIntent)
+            val bundle = Bundle()
+            bundle.putLong(EVENT_ID, eventId)
+            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
         }
 
         // Event Description Section
@@ -308,7 +308,7 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        findNavController(rootView).navigate(R.id.ticketsFragment, bundle)
+        findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
     }
 
     private fun loadSocialLinksFragment() {
