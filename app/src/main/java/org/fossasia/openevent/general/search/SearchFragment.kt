@@ -18,7 +18,6 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.SearchResultsActivity
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.core.view.MenuItemCompat
 import org.fossasia.openevent.general.MainActivity
 
 private const val FROM_SEARCH: String = "FromSearchFragment"
