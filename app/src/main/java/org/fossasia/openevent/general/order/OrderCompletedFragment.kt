@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_order.view.add
 import kotlinx.android.synthetic.main.fragment_order.view.name
 import kotlinx.android.synthetic.main.fragment_order.view.share
@@ -23,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_order.view.view
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -127,14 +127,7 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun openEventDetails() {
-        val eventDetailsFragment = EventDetailsFragment()
-        val bundle = Bundle()
-        bundle.putLong("EVENT_ID", id)
-        eventDetailsFragment.arguments = bundle
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.rootLayout, eventDetailsFragment)
-                ?.addToBackStack(null)?.commit()
+        findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
     }
 
     private fun openTicketDetails() {
@@ -146,13 +139,6 @@ class OrderCompletedFragment : Fragment() {
         startActivity(intent)
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()
-    }
-
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        setHasOptionsMenu(false)
-        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
