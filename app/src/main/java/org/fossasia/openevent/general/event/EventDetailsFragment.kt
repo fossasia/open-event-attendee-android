@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -41,15 +42,13 @@ import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.SearchResultsActivity
-import org.fossasia.openevent.general.about.AboutEventActivity
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.CURRENCY
 import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -129,7 +128,7 @@ class EventDetailsFragment : Fragment() {
                         thisActivity.supportActionBar?.title = title
                     else
                         // Toolbar title set to an empty string
-                        thisActivity.supportActionBar?.title = title
+                        thisActivity.supportActionBar?.title = ""
                 }
             }
         }
@@ -161,9 +160,9 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            val aboutIntent = Intent(context, AboutEventActivity::class.java)
-            aboutIntent.putExtra(EVENT_ID, eventId)
-            startActivity(aboutIntent)
+            val bundle = Bundle()
+            bundle.putLong(EVENT_ID, eventId)
+            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
         }
 
         // Event Description Section
@@ -230,20 +229,6 @@ class EventDetailsFragment : Fragment() {
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
         rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
-    }
-
-    override fun onDestroyView() {
-        val thisActivity = activity
-        when (thisActivity) {
-            is SearchResultsActivity -> thisActivity.supportActionBar
-                ?.title = resources.getString(R.string.search_results)
-            is MainActivity -> {
-                thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                thisActivity.supportActionBar?.title = resources.getString(R.string.events)
-            }
-        }
-        setHasOptionsMenu(false)
-        super.onDestroyView()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -323,10 +308,7 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong("EVENT_ID", eventId)
         bundle.putString(CURRENCY, currency)
         ticketFragment.arguments = bundle
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.rootLayout, ticketFragment)
-            ?.addToBackStack(null)
-            ?.commit()
+        findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
     }
 
     private fun loadSocialLinksFragment() {

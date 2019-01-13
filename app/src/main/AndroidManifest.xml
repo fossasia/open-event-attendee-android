@@ -23,19 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AuthActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity
-            android:name=".about.AboutEventActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".search.SearchLocationActivity" />
-        <activity android:name=".search.SearchTimeActivity"></activity>
-
         <meta-data
             android:name="com.stripe.android.API_KEY"
             android:value="${STRIPE_API_TOKEN}"/>
-        <activity android:name=".SearchResultsActivity"></activity>
     </application>
 </manifest>

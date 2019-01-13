@@ -1,16 +1,19 @@
 package org.fossasia.openevent.general.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.firstNameText
@@ -19,11 +22,11 @@ import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
-import org.fossasia.openevent.general.MainActivity
+import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -40,10 +43,27 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
-        lateinit var confirmPassword: String
 
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Sign Up"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         setHasOptionsMenu(true)
+
+        lateinit var confirmPassword: String
         val signUp = SignUp()
+
+        rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    rootView.signUpButton.performClick()
+                    Utils.hideSoftKeyboard(context, rootView)
+                    true
+                }
+                else -> false
+            }
+        }
 
         rootView.signUpButton.setOnClickListener {
             signUp.email = usernameSignUp.text.toString()
@@ -110,9 +130,17 @@ class SignUpFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+        findNavController(rootView).popBackStack()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+                Snackbar.make(rootView, "Sign In canceled!", Snackbar.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
