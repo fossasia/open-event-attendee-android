@@ -10,12 +10,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order.view.add
 import kotlinx.android.synthetic.main.fragment_order.view.name
 import kotlinx.android.synthetic.main.fragment_order.view.share
@@ -68,7 +69,7 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.orderCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         rootView.add.setOnClickListener {
