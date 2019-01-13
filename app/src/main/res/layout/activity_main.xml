@@ -2,7 +2,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:id="@+id/rootLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -10,12 +9,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <fragment
             android:id="@+id/frameContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@android:color/white"
             android:layout_weight="1"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation_graph"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,6 +31,17 @@
             app:itemTextColor="@color/colorPrimaryDark"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/navigation" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigationAuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            app:itemBackground="@android:color/white"
+            android:foreground="?attr/selectableItemBackground"
+            app:itemTextColor="@color/colorPrimaryDark"
+            app:menu="@menu/navigation_auth" />
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -12,12 +12,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
@@ -94,7 +95,7 @@ class EditProfileFragment : Fragment() {
         editProfileViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
                 if (it == USER_UPDATED) {
                     activity?.onBackPressed()
                 }
@@ -165,12 +166,14 @@ class EditProfileFragment : Fragment() {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                Toast.makeText(context, "Permission to Access External Storage Granted !",
-                    Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Granted !",
+                    Snackbar.LENGTH_SHORT).show()
                 showFileChooser()
             } else {
-                Toast.makeText(context, "Permission to Access External Storage Denied :(",
-                    Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Denied :(",
+                    Snackbar.LENGTH_SHORT).show()
             }
         }
     }

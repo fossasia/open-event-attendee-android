@@ -1,58 +1,60 @@
 package org.fossasia.openevent.general.search
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import kotlinx.android.synthetic.main.activity_search_location.locationProgressBar
-import kotlinx.android.synthetic.main.activity_search_location.search
+import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
+import kotlinx.android.synthetic.main.fragment_search_location.view.search
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val FROM_SEARCH: String = "FromSearchFragment"
-private const val TO_SEARCH: String = "ToSearchFragment"
 const val LOCATION_PERMISSION_REQUEST = 1000
+var fromSearchFragment = false
 
-class SearchLocationActivity : AppCompatActivity() {
-
+class SearchLocationFragment : Fragment() {
+    private lateinit var rootView: View
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
-    val geoLocationUI = GeoLocationUI()
-    var fromSearchFragment = false
+    private val geoLocationUI = GeoLocationUI()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_location)
-        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        this.supportActionBar?.title = ""
-        val bundle = intent.extras
-        locationProgressBar.visibility = View.GONE
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        if (bundle != null) {
-            fromSearchFragment = bundle.getBoolean(FROM_SEARCH)
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = ""
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-        geoLocationUI.configure(this, searchLocationViewModel)
+        rootView.locationProgressBar.visibility = View.GONE
 
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        fromSearchFragment = arguments?.getBoolean(FROM_SEARCH) ?: false
+
+        if (thisActivity is Activity) geoLocationUI.configure(thisActivity, rootView, searchLocationViewModel)
+
+        rootView.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Do your search
                 searchLocationViewModel.saveSearch(query)
-                val startMainActivity = Intent(this@SearchLocationActivity, MainActivity::class.java)
+                val startMainActivity = Intent(context, MainActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
                 if (fromSearchFragment) {
                     val searchBundle = Bundle()
                     searchBundle.putBoolean(TO_SEARCH, true)
                     startMainActivity.putExtras(searchBundle)
                 }
-
                 startActivity(startMainActivity)
-
+                activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+                activity?.finish()
                 return false
             }
 
@@ -60,6 +62,8 @@ class SearchLocationActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        return rootView
     }
 
     @SuppressLint("MissingPermission")
@@ -67,10 +71,11 @@ class SearchLocationActivity : AppCompatActivity() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    geoLocationUI.configure(this, searchLocationViewModel)
-                } else {
-                    Toast.makeText(applicationContext, "Cannot fetch location", Toast.LENGTH_SHORT).show()
-                }
+                    val thisActivity = activity
+                    if (thisActivity is Activity)
+                        geoLocationUI.configure(thisActivity, rootView, searchLocationViewModel)
+                } else
+                    Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -78,7 +83,7 @@ class SearchLocationActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                activity?.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
