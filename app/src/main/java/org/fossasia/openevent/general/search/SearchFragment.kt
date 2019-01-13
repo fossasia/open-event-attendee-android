@@ -19,6 +19,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.MenuItemCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
@@ -91,11 +92,11 @@ class SearchFragment : Fragment() {
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
         MenuItemCompat.setActionView(searchItem, searchView)
-        if (!searchViewModel.queryText.value.isNullOrEmpty()) {
+        searchViewModel.queryText.observe(this, Observer {
             searchItem.expandActionView()
             searchView.setQuery(searchViewModel.queryText.value, false)
             searchView.maxWidth = Resources.getSystem().displayMetrics.widthPixels
-        }
+        })
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val bundle = Bundle()
