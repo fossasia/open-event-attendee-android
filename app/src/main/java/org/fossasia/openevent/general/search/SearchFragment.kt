@@ -85,7 +85,7 @@ class SearchFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
-        MenuItemCompat.setActionView(searchItem, searchView)
+        searchItem.actionView = searchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val intent = Intent(activity, SearchResultsActivity::class.java)
