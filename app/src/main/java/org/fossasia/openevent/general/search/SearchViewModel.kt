@@ -30,7 +30,8 @@ class SearchViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
-    val queryText = MutableLiveData<String>()
+    private val mutableQueryText = MutableLiveData<String>()
+    val queryText: LiveData<String> = mutableQueryText
     var searchEvent: String? = null
     val savedLocation by lazy { preference.getString(tokenKey) }
     val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
@@ -195,6 +196,10 @@ class SearchViewModel(
         mutableShowNoInternetError.value = !isConnected
         mutableShowShimmerResults.value = isConnected
         return isConnected
+    }
+
+    fun setQuery(query: String) {
+        mutableQueryText.value = query
     }
 
     override fun onCleared() {
