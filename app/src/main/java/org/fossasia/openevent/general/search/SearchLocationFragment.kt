@@ -70,9 +70,7 @@ class SearchLocationFragment : Fragment() {
 
     override fun onResume() {
         search.requestFocus()
-        context?.let {
-            Utils.showKeyboard(it)
-        }
+        Utils.showSoftKeyboard(context, rootView)
         super.onResume()
     }
 
