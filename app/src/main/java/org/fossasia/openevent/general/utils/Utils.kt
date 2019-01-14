@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.fossasia.openevent.general.R
 import timber.log.Timber
 
@@ -99,5 +101,19 @@ object Utils {
         builder.setPopEnterAnim(R.anim.slide_in_left)
         builder.setPopExitAnim(R.anim.slide_out_right)
         return builder.build()
+    }
+
+    fun navAnimVisible(navigation: BottomNavigationView?, context: Context) {
+        if (navigation?.visibility == View.GONE) {
+            navigation.visibility = View.VISIBLE
+            navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        }
+    }
+
+    fun navAnimGone(navigation: BottomNavigationView?, context: Context) {
+        if (navigation?.visibility == View.VISIBLE) {
+            navigation.visibility = View.GONE
+            navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+        }
     }
 }
