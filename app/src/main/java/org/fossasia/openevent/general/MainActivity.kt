@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
+import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.TO_SEARCH
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var currentFragmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             R.id.loginFragment,
             R.id.signUpFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(window.decorView, "Sign in canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mainFragmentCoordinatorLayout, "Sign in canceled!", Snackbar.LENGTH_SHORT).show()
             }
             else -> super.onBackPressed()
         }
