@@ -36,6 +36,7 @@
             app:itemBackground="@android:color/white"
             android:foreground="?attr/selectableItemBackground"
             app:itemTextColor="@color/colorPrimaryDark"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/navigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
