@@ -119,12 +119,8 @@ class OrderCompletedFragment : Fragment() {
         startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
-    private fun redirectToMain() {
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+    private fun redirectToEvents() {
+        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
     private fun openEventDetails() {
@@ -153,7 +149,7 @@ class OrderCompletedFragment : Fragment() {
                 true
             }
             R.id.tick -> {
-                redirectToMain()
+                redirectToEvents()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
