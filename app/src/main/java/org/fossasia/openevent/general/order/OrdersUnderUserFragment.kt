@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBa
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -64,7 +66,7 @@ class OrdersUnderUserFragment : Fragment() {
                     val bundle = Bundle()
                     bundle.putLong(EVENT_ID, eventID)
                     bundle.putString(ORDERS, orderIdentifier)
-                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle)
+                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
                 }
             }
 
@@ -125,6 +127,6 @@ class OrdersUnderUserFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment)
+        findNavController(rootView).navigate(R.id.loginFragment, null, getAnimSlide())
     }
 }

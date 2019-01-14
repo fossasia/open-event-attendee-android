@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -120,11 +121,11 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun redirectToEvents() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+        findNavController(rootView).navigate(R.id.eventsFragment, null, getAnimSlide())
     }
 
     private fun openEventDetails() {
-        findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
+        findNavController(rootView).navigate(R.id.eventDetailsFragment, null, getAnimSlide() )
     }
 
     private fun openTicketDetails() {
