@@ -49,6 +49,7 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.order.OrdersUnderUserVM
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
+import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
@@ -139,6 +140,7 @@ val viewModelModule = module {
     viewModel { OrdersUnderUserVM(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
     viewModel { EditProfileViewModel(get(), get()) }
+    viewModel { GeoLocationViewModel() }
 }
 
 val networkModule = module {
