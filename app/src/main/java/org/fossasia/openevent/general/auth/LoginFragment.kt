@@ -153,7 +153,7 @@ class LoginFragment : Fragment() {
         val textSnackbar = arguments?.getString("snackbar_message")
         if (textSnackbar != null) {
             Snackbar.make(
-                rootView.loginCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_SHORT
+                rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
             ).show()
         }
     }
