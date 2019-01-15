@@ -49,6 +49,8 @@ class LoginFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+        showSnackbar()
+
         if (loginViewModel.isLoggedIn())
             redirectToMain()
 
@@ -144,6 +146,15 @@ class LoginFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSnackbar() {
+        val textSnackbar = arguments?.getString("snackbar_message")
+        if (textSnackbar != null) {
+            Snackbar.make(
+                rootView.loginCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }

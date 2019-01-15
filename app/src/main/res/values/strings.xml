@@ -166,4 +166,7 @@
     <string name="stripe">Stripe</string>
     <string name="paypal">PayPal</string>
 
+    <!--snackbar messages-->
+    <string name="log_in_first">"You need to log in first!"</string>
+
 </resources>
