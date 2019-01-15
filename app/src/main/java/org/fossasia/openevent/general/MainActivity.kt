@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -9,13 +8,18 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
+import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
+import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.TO_SEARCH
+import org.fossasia.openevent.general.utils.Utils.navAnimGone
+import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragmentId: Int = 0
+    private val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -26,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
         setupBottomNavigationMenu(navController)
+
+        if (!preference.getBoolean(LOCATION_SAVED, false))
+            navController.navigate(R.id.welcomeFragment)
 
         val bundle = if (savedInstanceState == null) intent.extras else null
         if (bundle != null) {
@@ -48,21 +55,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNavigationVisibility(id: Int) {
-        navigation.visibility =
-            when (id) {
-                R.id.eventsFragment,
-                R.id.searchFragment,
-                R.id.profileFragment,
-                R.id.orderUnderUserFragment,
-                R.id.favoriteFragment -> View.VISIBLE
-                else -> View.GONE
-            }
-        navigationAuth.visibility =
-            when (id) {
-                R.id.loginFragment,
-                R.id.signUpFragment -> View.VISIBLE
-                else -> View.GONE
-            }
+        when (id) {
+            R.id.eventsFragment,
+            R.id.searchFragment,
+            R.id.profileFragment,
+            R.id.orderUnderUserFragment,
+            R.id.favoriteFragment -> navAnimVisible(navigation, this@MainActivity)
+            else -> navAnimGone(navigation, this@MainActivity)
+        }
+        when (id) {
+            R.id.loginFragment,
+            R.id.signUpFragment -> navAnimVisible(navigationAuth, this@MainActivity)
+            else -> navAnimGone(navigationAuth, this@MainActivity)
+        }
     }
 
     override fun onBackPressed() {
@@ -70,8 +75,9 @@ class MainActivity : AppCompatActivity() {
             R.id.loginFragment,
             R.id.signUpFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(window.decorView, "Sign in canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mainFragmentCoordinatorLayout, "Sign in canceled!", Snackbar.LENGTH_SHORT).show()
             }
+            R.id.welcomeFragment -> finish()
             else -> super.onBackPressed()
         }
     }
