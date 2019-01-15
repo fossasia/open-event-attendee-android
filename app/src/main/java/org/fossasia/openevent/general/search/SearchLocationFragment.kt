@@ -36,6 +36,7 @@ class SearchLocationFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.title = ""
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
