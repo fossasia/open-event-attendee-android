@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,6 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
+import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
+import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
 import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
@@ -83,7 +86,7 @@ class TicketsFragment : Fragment() {
         ticketsViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         ticketsViewModel.progressTickets
@@ -134,7 +137,7 @@ class TicketsFragment : Fragment() {
         if (ticketsViewModel.isLoggedIn())
             redirectToAttendee()
         else {
-            Toast.makeText(context, "You need to log in first!", Toast.LENGTH_LONG).show()
+            Snackbar.make(ticketsCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_LONG).show()
             redirectToLogin()
         }
     }
@@ -147,7 +150,9 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(R.id.loginFragment, null, getAnimSlide())
+        val args = getString(R.string.log_in_first)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {

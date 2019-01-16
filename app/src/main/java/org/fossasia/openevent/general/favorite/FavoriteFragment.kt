@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,7 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
+import kotlinx.android.synthetic.main.fragment_favorite.favouriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import org.fossasia.openevent.general.R
@@ -84,7 +85,7 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(favouriteCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         favoriteEventViewModel.progress

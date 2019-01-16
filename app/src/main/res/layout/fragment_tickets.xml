@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,119 +8,125 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="2dp"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/eventName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/heading_text_size"
-            android:textStyle="bold"
-            tools:text="FOSSASIA summit" />
-
-        <TextView
-            android:id="@+id/organizerName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:textSize="@dimen/text_size_large"
-            tools:text="by Mario" />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_margin_medium"
-            android:textSize="@dimen/text_size_large"
-            tools:text="May 24 - May 25" />
-
-        <ProgressBar
-            android:id="@+id/progressBarTicket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:elevation="@dimen/card_elevation"
-            android:visibility="gone" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ticketInfoTextView"
-            android:textAlignment="center"
-            android:visibility="gone"
-            android:text="No tickets available!"
-            android:padding="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:background="@drawable/filled_border"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large"/>
+        android:id="@+id/ticketsCoordinatorLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ticketTableHeader"
-            android:background="@drawable/filled_border"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:orientation="horizontal"
-            android:padding="@dimen/layout_margin_medium"
-            android:weightSum="4">
+            android:layout_marginTop="@dimen/layout_margin_extra_small"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/eventName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/ticket_name"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-                tools:text="Ticket Name" />
+                android:textSize="@dimen/heading_text_size"
+                android:textStyle="bold"
+                tools:text="FOSSASIA summit" />
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/organizerName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/price"
-                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:textSize="@dimen/text_size_large"
-                tools:text="Price" />
+                tools:text="by Mario" />
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/qty"
-                android:textColor="@color/black"
+                android:layout_margin="@dimen/layout_margin_medium"
                 android:textSize="@dimen/text_size_large"
-                tools:text="Qty" />
+                tools:text="May 24 - May 25" />
+
+            <ProgressBar
+                android:id="@+id/progressBarTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="@dimen/card_elevation"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ticketInfoTextView"
+                android:textAlignment="center"
+                android:visibility="gone"
+                android:text="No tickets available!"
+                android:padding="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="@drawable/filled_border"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ticketTableHeader"
+                android:background="@drawable/filled_border"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:orientation="horizontal"
+                android:padding="@dimen/layout_margin_medium"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/ticket_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="Ticket Name" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/price"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="Price" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/qty"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="Qty" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ticketsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/layout_margin_large"
+                android:padding="@dimen/padding_medium"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/register"
+                android:textColor="@android:color/white" />
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ticketsRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/layout_margin_large"
-            android:padding="@dimen/padding_medium"
-            android:backgroundTint="@color/colorAccent"
-            android:text="@string/register"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>
