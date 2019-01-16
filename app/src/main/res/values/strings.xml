@@ -167,14 +167,15 @@
     <string name="paypal">PayPal</string>
 
     <!--snackbar messages-->
-    <string name="logged_in_automatically">"Logged in Automatically!"</string>
-    <string name="log_in_first">"You need to log in first!"</string>
+    <string name="logged_in_automatically">Logged in Automatically!</string>
+    <string name="log_in_first">You need to log in first!</string>
+    <string name="sign_in_canceled">Sign In canceled!</string>
+    <string name="sign_up_success">Sign Up Success!</string>
+    <string name="cannot_fetch_location">Cannot fetch location!</string>
 
     <!--welcome fragment-->
-    <string name="start_text_1">Where</string>
-    <string name="start_text_2">do you</string>
-    <string name="start_text_3">go out?</string>
-    <string name="start_text_4">We\'ll show you what\'s good near you</string>
+    <string name="start_text_1">Where \ndo you \ngo out?</string>
+    <string name="start_text_2">We\'ll show you what\'s good near you</string>
     <string name="pick_a_city">Pick a city</string>
 
 </resources>
