@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             R.id.signUpFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
                 Snackbar.make(
-                    mainFragmentCoordinatorLayout, getString(R.string.sign_in_canceled), Snackbar.LENGTH_SHORT
+                    mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
                 ).show()
             }
             R.id.welcomeFragment -> finish()
