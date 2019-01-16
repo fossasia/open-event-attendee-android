@@ -50,6 +50,7 @@ class LoginFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        showSnackbar()
 
         showSnackbar()
 
