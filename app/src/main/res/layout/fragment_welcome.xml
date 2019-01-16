@@ -94,5 +94,4 @@
         android:text="@string/pick_a_city"
         android:textColor="@android:color/white"
         app:backgroundTint="@color/colorPrimary" />
-
 </RelativeLayout>

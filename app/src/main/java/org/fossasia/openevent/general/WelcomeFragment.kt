@@ -29,7 +29,6 @@ class WelcomeFragment : Fragment() {
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
         val thisActivity = activity
