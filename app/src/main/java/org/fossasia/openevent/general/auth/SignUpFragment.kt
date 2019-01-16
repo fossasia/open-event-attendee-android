@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -103,12 +102,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                    rootView.signupCoordinatorLayout, "Logged in Automatically!", Snackbar.LENGTH_SHORT
-                ).show()
-                Handler().postDelayed({
-                    redirectToMain()
-                }, 1000)
+                redirectToMain()
             })
 
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
@@ -131,6 +125,7 @@ class SignUpFragment : Fragment() {
 
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
+        Snackbar.make(rootView, getString(R.string.logged_in_automatically), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

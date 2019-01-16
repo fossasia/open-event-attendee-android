@@ -30,6 +30,8 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
+
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
@@ -48,6 +50,7 @@ class LoginFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        showSnackbar()
 
         if (loginViewModel.isLoggedIn())
             redirectToMain()
@@ -144,6 +147,15 @@ class LoginFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSnackbar() {
+        val textSnackbar = arguments?.getString(SNACKBAR_MESSAGE)
+        if (textSnackbar != null) {
+            Snackbar.make(
+                rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }

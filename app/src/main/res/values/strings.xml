@@ -166,6 +166,10 @@
     <string name="stripe">Stripe</string>
     <string name="paypal">PayPal</string>
 
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">"Logged in Automatically!"</string>
+    <string name="log_in_first">"You need to log in first!"</string>
+
     <!--welcome fragment-->
     <string name="start_text_1">Where</string>
     <string name="start_text_2">do you</string>
