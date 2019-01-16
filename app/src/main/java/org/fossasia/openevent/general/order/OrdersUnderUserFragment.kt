@@ -29,6 +29,7 @@ import timber.log.Timber
 
 const val ORDERS: String = "orders"
 const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
 
 class OrdersUnderUserFragment : Fragment() {
 
@@ -128,7 +129,7 @@ class OrdersUnderUserFragment : Fragment() {
 
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
-        val bundle = bundleOf("snackbar_message" to args)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
     }
 }

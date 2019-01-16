@@ -43,7 +43,7 @@ class ProfileFragment : Fragment() {
 
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
-        val bundle = bundleOf("snackbar_message" to args)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
     }
 
