@@ -109,7 +109,7 @@ class SearchLocationFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationViewModel.configure(activity)
                 } else {
-                    Snackbar.make(rootView, getString(R.string.cannot_fetch_location), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE
                 }
             }

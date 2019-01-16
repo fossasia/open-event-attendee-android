@@ -129,7 +129,7 @@ class LoginFragment : Fragment() {
 
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
-        Snackbar.make(rootView, getString(R.string.welcome_back), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onEmailEntered(enable: Boolean) {
@@ -141,7 +141,7 @@ class LoginFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, getString(R.string.sign_in_canceled), Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
