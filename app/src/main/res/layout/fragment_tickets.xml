@@ -15,9 +15,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="@dimen/layout_margin_extra_small"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/layout_margin_medium"
             android:orientation="vertical">
 
             <TextView
@@ -64,8 +64,8 @@
                 android:textAlignment="center"
                 android:visibility="gone"
                 android:text="No tickets available!"
-                android:padding="8dp"
-                android:layout_marginTop="8dp"
+                android:padding="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:layout_marginRight="@dimen/layout_margin_medium"
                 android:background="@drawable/filled_border"
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ticketTableHeader"
                 android:background="@drawable/filled_border"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:layout_marginRight="@dimen/layout_margin_medium"
                 android:orientation="horizontal"
