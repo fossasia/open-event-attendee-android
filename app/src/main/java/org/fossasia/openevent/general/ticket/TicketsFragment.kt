@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
+import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
@@ -36,7 +37,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 const val EVENT_ID: String = "EVENT_ID"
 const val CURRENCY: String = "CURRENCY"
 const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
-const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
