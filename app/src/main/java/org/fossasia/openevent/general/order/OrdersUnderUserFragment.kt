@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnde
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -29,7 +30,6 @@ import timber.log.Timber
 
 const val ORDERS: String = "orders"
 const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
-const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
 
 class OrdersUnderUserFragment : Fragment() {
 
