@@ -105,10 +105,6 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.edit_profile -> {
-                findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
-                return true
-            }
             R.id.orga_app -> {
                 startOrgaApp("com.eventyay.organizer")
                 return true
