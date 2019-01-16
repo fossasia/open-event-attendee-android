@@ -30,7 +30,7 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val SNACKBAR_MESSAGE: String = "snackbar_message"
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
 
 class LoginFragment : Fragment() {
 
