@@ -22,4 +22,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="WelcomeFragmentTextStyle" >
+        <item name="android:textSize">@dimen/text_size_very_large</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">@dimen/layout_margin_medium</item>
+        <item name="android:layout_marginLeft">@dimen/layout_margin_large</item>
+    </style>
 </resources>

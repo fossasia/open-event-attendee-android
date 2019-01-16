@@ -9,11 +9,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order.view.add
 import kotlinx.android.synthetic.main.fragment_order.view.name
 import kotlinx.android.synthetic.main.fragment_order.view.share
@@ -22,9 +25,9 @@ import kotlinx.android.synthetic.main.fragment_order.view.view
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -67,7 +70,7 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(rootView.orderCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         rootView.add.setOnClickListener {
@@ -81,6 +84,8 @@ class OrderCompletedFragment : Fragment() {
         rootView.share.setOnClickListener {
             shareEvent(eventShare)
         }
+
+        rootView.share.scaleType = ImageView.ScaleType.CENTER
 
         return rootView
     }
@@ -115,23 +120,12 @@ class OrderCompletedFragment : Fragment() {
         startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
-    private fun redirectToMain() {
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+    private fun redirectToEvents() {
+        findNavController(rootView).navigate(R.id.eventsFragment, null, getAnimSlide())
     }
 
     private fun openEventDetails() {
-        val eventDetailsFragment = EventDetailsFragment()
-        val bundle = Bundle()
-        bundle.putLong("EVENT_ID", id)
-        eventDetailsFragment.arguments = bundle
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.rootLayout, eventDetailsFragment)
-                ?.addToBackStack(null)?.commit()
+        findNavController(rootView).navigate(R.id.eventDetailsFragment, null, getAnimSlide() )
     }
 
     private fun openTicketDetails() {
@@ -145,13 +139,6 @@ class OrderCompletedFragment : Fragment() {
         activity?.finish()
     }
 
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        setHasOptionsMenu(false)
-        super.onDestroyView()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.order_completed, menu)
     }
@@ -163,7 +150,7 @@ class OrderCompletedFragment : Fragment() {
                 true
             }
             R.id.tick -> {
-                redirectToMain()
+                redirectToEvents()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

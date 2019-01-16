@@ -60,6 +60,7 @@
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>
     <string name="welcome_back">Welcome back!</string>
+    <string name="update">Update</string>
 
     <!--eventyay-->
     <string name="eventyay_logo">eventyay</string>
@@ -164,5 +165,16 @@
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
     <string name="stripe">Stripe</string>
     <string name="paypal">PayPal</string>
+
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">"Logged in Automatically!"</string>
+    <string name="log_in_first">"You need to log in first!"</string>
+
+    <!--welcome fragment-->
+    <string name="start_text_1">Where</string>
+    <string name="start_text_2">do you</string>
+    <string name="start_text_3">go out?</string>
+    <string name="start_text_4">We\'ll show you what\'s good near you</string>
+    <string name="pick_a_city">Pick a city</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
@@ -13,6 +14,8 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.fossasia.openevent.general.R
 import timber.log.Timber
 
@@ -39,6 +42,11 @@ object Utils {
             .setMessage(context?.resources?.getString(R.string.no_internet_message))
             .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             .show()
+    }
+
+    fun showSoftKeyboard(context: Context?, view: View) {
+        val manager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
+        if (manager is InputMethodManager) manager.showSoftInput(view, InputMethodManager.SHOW_FORCED)
     }
 
     fun hideSoftKeyboard(context: Context?, view: View) {
@@ -76,4 +84,36 @@ object Utils {
 
     fun requireDrawable(@NonNull context: Context, @DrawableRes resId: Int) = AppCompatResources
         .getDrawable(context, resId) ?: throw IllegalStateException("Drawable should not be null")
+
+    fun getAnimFade(): NavOptions {
+        val builder = NavOptions.Builder()
+        builder.setEnterAnim(R.anim.fade_in)
+        builder.setExitAnim(R.anim.fade_out)
+        builder.setPopEnterAnim(R.anim.slide_in_left)
+        builder.setPopExitAnim(R.anim.slide_out_right)
+        return builder.build()
+    }
+
+    fun getAnimSlide(): NavOptions {
+        val builder = NavOptions.Builder()
+        builder.setEnterAnim(R.anim.slide_in_right)
+        builder.setExitAnim(R.anim.slide_out_left)
+        builder.setPopEnterAnim(R.anim.slide_in_left)
+        builder.setPopExitAnim(R.anim.slide_out_right)
+        return builder.build()
+    }
+
+    fun navAnimVisible(navigation: BottomNavigationView?, context: Context) {
+        if (navigation?.visibility == View.GONE) {
+            navigation.visibility = View.VISIBLE
+            navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        }
+    }
+
+    fun navAnimGone(navigation: BottomNavigationView?, context: Context) {
+        if (navigation?.visibility == View.VISIBLE) {
+            navigation.visibility = View.GONE
+            navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+        }
+    }
 }

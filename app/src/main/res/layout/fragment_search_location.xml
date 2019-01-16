@@ -40,7 +40,7 @@
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginLeft="@dimen/layout_margin_large" />
-
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

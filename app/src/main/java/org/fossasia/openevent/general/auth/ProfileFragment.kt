@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,11 +24,12 @@ import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
 import kotlinx.android.synthetic.main.fragment_profile.view.editProfileButton
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -42,12 +43,20 @@ class ProfileFragment : Fragment() {
     private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
-        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        val args = getString(R.string.log_in_first)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
     }
 
     private fun redirectToMain() {
         startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!profileViewModel.isLoggedIn()) {
+            redirectToLogin()
+        }
     }
 
     override fun onCreateView(
@@ -58,13 +67,6 @@ class ProfileFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         setHasOptionsMenu(true)
-
-        if (!profileViewModel.isLoggedIn()) {
-            Snackbar.make(rootView.profileCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 1000)
-        }
 
         profileViewModel.progress
             .nonNull()
@@ -103,6 +105,10 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.edit_profile -> {
+                findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                return true
+            }
             R.id.orga_app -> {
                 startOrgaApp("com.eventyay.organizer")
                 return true
@@ -122,7 +128,7 @@ class ProfileFragment : Fragment() {
             R.id.settings -> {
                 val bundle = Bundle()
                 bundle.putString(EMAIL, emailSettings)
-                findNavController(rootView).navigate(R.id.settingsFragment, bundle)
+                findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
