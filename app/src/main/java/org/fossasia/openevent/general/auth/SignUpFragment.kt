@@ -95,7 +95,9 @@ class SignUpFragment : Fragment() {
         signUpViewModel.signedUp
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.signupCoordinatorLayout, "Sign Up Success!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    rootView.signupCoordinatorLayout, getString(R.string.sign_up_success), Snackbar.LENGTH_SHORT
+                ).show()
                 signUpViewModel.login(signUp)
             })
 
@@ -132,7 +134,7 @@ class SignUpFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, "Sign In canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootView, getString(R.string.sign_in_canceled), Snackbar.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
