@@ -36,6 +36,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 const val EVENT_ID: String = "EVENT_ID"
 const val CURRENCY: String = "CURRENCY"
 const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -150,7 +151,7 @@ class TicketsFragment : Fragment() {
 
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
-        val bundle = bundleOf("snackbar_message" to args)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
     }
 
