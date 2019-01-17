@@ -23,9 +23,9 @@ import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
-import kotlinx.android.synthetic.main.fragment_signup.view.signupCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -89,14 +89,14 @@ class SignUpFragment : Fragment() {
         signUpViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.signupCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(rootView.signupNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         signUpViewModel.signedUp
             .nonNull()
             .observe(this, Observer {
                 Snackbar.make(
-                    rootView.signupCoordinatorLayout, R.string.sign_up_success, Snackbar.LENGTH_SHORT
+                    rootView.signupNestedScrollView, R.string.sign_up_success, Snackbar.LENGTH_SHORT
                 ).show()
                 signUpViewModel.login(signUp)
             })
