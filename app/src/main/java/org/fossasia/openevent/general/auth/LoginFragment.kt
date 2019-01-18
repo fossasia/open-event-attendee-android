@@ -51,9 +51,7 @@ class LoginFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         showSnackbar()
-
-
-
+        
         if (loginViewModel.isLoggedIn())
             redirectToMain()
 
