@@ -79,12 +79,6 @@ class LoginFragment : Fragment() {
                 Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
-        loginViewModel.emailError
-            .nonNull()
-            .observe(this, Observer {
-                if (!it) rootView.email.error = getString(R.string.email_error) else rootView.email.error = null
-            })
-
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
@@ -139,6 +133,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun onEmailEntered(enable: Boolean) {
+        if (!enable) rootView.email.error = getString(R.string.email_error) else rootView.email.error = null
+        rootView.loginButton.isEnabled = enable
         rootView.forgotPassword.isVisible = enable
     }
 

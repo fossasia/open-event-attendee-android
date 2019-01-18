@@ -39,9 +39,7 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
         }
     }
-
     flavorDimensions "default"
-
     productFlavors {
         fdroid {
             dimension "default"
@@ -51,10 +49,9 @@ android {
             dimension "default"
         }
     }
-
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -62,6 +59,7 @@ android {
     packagingOptions {
         pickFirst 'kotlin/**'
     }
+    buildToolsVersion '28.0.3'
 }
 
 spotless {
@@ -83,15 +81,14 @@ dependencies {
     def roomVersion = '2.1.0-alpha03'
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
-    implementation "androidx.browser:browser:1.0.0"
+    implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
     implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycle_version}"
@@ -100,7 +97,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation "com.takisoft.fix:preference-v7:28.0.0.0"
+    implementation 'com.takisoft.fix:preference-v7:28.0.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -120,8 +117,7 @@ dependencies {
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
-
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8'
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -145,11 +141,12 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
+
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha11'
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha11'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.9"
+    testImplementation 'io.mockk:mockk:1.9'
     testImplementation 'org.threeten:threetenbp:1.3.8'
     testImplementation "org.koin:koin-test:$koin_version"
     testImplementation 'androidx.arch.core:core-testing:2.0.0'

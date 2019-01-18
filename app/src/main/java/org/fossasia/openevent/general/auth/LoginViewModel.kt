@@ -24,8 +24,6 @@ class LoginViewModel(
     val user: LiveData<User> = mutableUser
     private val mutableError = MutableLiveData<String>()
     val error: LiveData<String> = mutableError
-    private val mutableEmailError = MutableLiveData<Boolean>()
-    val emailError: LiveData<Boolean> = mutableEmailError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
@@ -58,9 +56,6 @@ class LoginViewModel(
     private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
-            return true
-        } else if (mutableIsCorrectEmail?.value == false) {
-            mutableEmailError.value = false
             return true
         }
         return false
