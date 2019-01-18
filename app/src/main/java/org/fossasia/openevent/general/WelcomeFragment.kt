@@ -41,7 +41,6 @@ class WelcomeFragment : Fragment() {
         geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
             rootView.currentLocation.visibility = View.GONE
         })
-
         geoLocationViewModel.configure(null)
 
         rootView.currentLocation.setOnClickListener {
@@ -49,7 +48,6 @@ class WelcomeFragment : Fragment() {
             geoLocationViewModel.configure(activity)
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
-
         geoLocationViewModel.location.observe(this, Observer { location ->
             searchLocationViewModel.saveSearch(location)
             redirectToMain()
