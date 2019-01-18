@@ -37,7 +37,8 @@ class LoginViewModel(
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
-        if (hasErrors(email, password)) return
+        if (hasErrors(email, password))
+            return
         compositeDisposable.add(authService.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
