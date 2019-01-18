@@ -81,7 +81,7 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val startMainActivity = Intent(activity, MainActivity::class.java)
         activity?.startActivity(startMainActivity)
         activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         activity?.finish()

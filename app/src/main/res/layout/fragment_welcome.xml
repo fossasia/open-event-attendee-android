@@ -18,23 +18,11 @@
             android:text="@string/start_text_1" />
 
         <TextView
-            style="@style/WelcomeFragmentTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_text_2" />
-
-        <TextView
-            style="@style/WelcomeFragmentTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_text_3" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/layout_margin_large"
             android:layout_marginTop="@dimen/layout_margin_large"
-            android:text="@string/start_text_4"
+            android:text="@string/start_text_2"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
