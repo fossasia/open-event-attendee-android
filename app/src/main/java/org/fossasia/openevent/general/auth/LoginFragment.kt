@@ -52,6 +52,11 @@ class LoginFragment : Fragment() {
         setHasOptionsMenu(true)
         showSnackbar()
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fixed bug in login fragment which shows snackbar twice.
         if (loginViewModel.isLoggedIn())
             redirectToMain()
 
