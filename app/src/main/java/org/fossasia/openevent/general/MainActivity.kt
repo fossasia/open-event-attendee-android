@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayou
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
+import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.search.TO_SEARCH
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             navController = hostFragment.navController
         setupBottomNavigationMenu(navController)
 
-        if (!preference.getBoolean(LOCATION_SAVED, false))
+        if (preference.getString(SAVED_LOCATION).isNullOrEmpty())
             navController.navigate(R.id.welcomeFragment)
 
         val bundle = if (savedInstanceState == null) intent.extras else null
@@ -75,7 +76,9 @@ class MainActivity : AppCompatActivity() {
             R.id.loginFragment,
             R.id.signUpFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(mainFragmentCoordinatorLayout, "Sign in canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
+                ).show()
             }
             R.id.welcomeFragment -> finish()
             else -> super.onBackPressed()

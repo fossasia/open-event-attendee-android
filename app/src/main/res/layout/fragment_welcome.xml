@@ -35,7 +35,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_medium" />
         </LinearLayout>
-
+      
         <ImageView
             android:layout_width="@dimen/avatar_medium"
             android:layout_height="@dimen/avatar_medium"
@@ -78,7 +78,7 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:visibility="gone"/>
         </LinearLayout>
-
+      
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/pickCityButton"
             android:layout_width="match_parent"
