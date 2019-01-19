@@ -59,6 +59,9 @@ class LoginViewModel(
             mutableIsCorrectEmail.value = !email.isNullOrEmpty()
             mutableError.value = "Email or Password cannot be empty!"
             return true
+        } else if (mutableIsCorrectEmail?.value == false) {
+            mutableError.value = "Please enter valid Email"
+            return true
         }
         else if(!mutableIsCorrectEmail.value!!) {
             mutableError.value = "Please enter valid Email"
