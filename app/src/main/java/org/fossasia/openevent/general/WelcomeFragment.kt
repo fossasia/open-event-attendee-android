@@ -10,8 +10,6 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_welcome.view.pickCityButton
 import org.fossasia.openevent.general.utils.Utils
 
-const val LOCATION_SAVED = "LOCATION_SAVED"
-
 class WelcomeFragment : Fragment() {
     private lateinit var rootView: View
 
