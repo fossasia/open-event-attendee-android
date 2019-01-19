@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -137,7 +138,7 @@ class TicketsFragment : Fragment() {
         if (ticketsViewModel.isLoggedIn())
             redirectToAttendee()
         else {
-            Snackbar.make(ticketsCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(ticketsCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_LONG).show()
             redirectToLogin()
         }
     }
@@ -152,7 +153,7 @@ class TicketsFragment : Fragment() {
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {

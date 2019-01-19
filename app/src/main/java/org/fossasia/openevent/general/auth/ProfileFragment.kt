@@ -22,13 +22,13 @@ import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLa
 import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
+import kotlinx.android.synthetic.main.fragment_profile.view.editProfileButton
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -44,7 +44,7 @@ class ProfileFragment : Fragment() {
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
     private fun redirectToMain() {
@@ -88,9 +88,13 @@ class ProfileFragment : Fragment() {
 
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
+
+                rootView.editProfileButton.setOnClickListener {
+                    findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                }
             })
 
         fetchProfile()
@@ -100,10 +104,6 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.edit_profile -> {
-                findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
-                return true
-            }
             R.id.orga_app -> {
                 startOrgaApp("com.eventyay.organizer")
                 return true
