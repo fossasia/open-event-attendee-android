@@ -53,8 +53,12 @@ class LoginFragment : Fragment() {
         showSnackbar()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
+
+>>>>>>> fixed bug in login fragment which shows snackbar twice.
+=======
 
 >>>>>>> fixed bug in login fragment which shows snackbar twice.
         if (loginViewModel.isLoggedIn())
