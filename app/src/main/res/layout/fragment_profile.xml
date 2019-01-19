@@ -43,6 +43,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
+            <ImageButton
+                android:id="@+id/editProfileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_create_black_24dp" />
         </LinearLayout>
 
         <TextView
