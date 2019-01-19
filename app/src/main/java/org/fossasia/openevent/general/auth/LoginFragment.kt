@@ -55,6 +55,7 @@ class LoginFragment : Fragment() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
@@ -64,6 +65,8 @@ class LoginFragment : Fragment() {
 >>>>>>> fixed bug in login fragment which shows snackbar twice.
 =======
 >>>>>>> fixed bug in login fragment which shows snackbar twice.
+=======
+>>>>>>> Added snackbar showing message when the email field is invalid on clicking login button
         if (loginViewModel.isLoggedIn())
             redirectToMain()
 
