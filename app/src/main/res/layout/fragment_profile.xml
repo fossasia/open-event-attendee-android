@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,13 +43,6 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
-            <ImageButton
-                android:id="@+id/editProfileButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_medium"
-                android:background="@null"
-                app:srcCompat="@drawable/ic_create_black_24dp" />
         </LinearLayout>
 
         <TextView
@@ -63,4 +57,16 @@
             android:textSize="@dimen/text_size_medium" />
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/layout_margin_large"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_create_white_24dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
