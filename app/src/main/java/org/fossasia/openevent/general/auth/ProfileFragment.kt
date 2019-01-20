@@ -29,7 +29,6 @@ import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -45,7 +44,7 @@ class ProfileFragment : Fragment() {
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
     private fun redirectToMain() {
