@@ -23,7 +23,6 @@ import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -130,6 +129,6 @@ class OrdersUnderUserFragment : Fragment() {
     private fun redirectToLogin() {
         val args = getString(R.string.log_in_first)
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimSlide())
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 }
