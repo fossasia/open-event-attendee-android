@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/where"
+        app:searchIcon="@null" />
+
+    <LinearLayout
+        android:id="@+id/currentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            app:srcCompat="@drawable/ic_current_location" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:text="@string/current_location"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_large" />
+
+        <ProgressBar
+            android:id="@+id/locationProgressBar"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

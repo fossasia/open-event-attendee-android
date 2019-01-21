@@ -1,27 +1,28 @@
 package org.fossasia.openevent.general.order
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
-import org.fossasia.openevent.general.AuthActivity
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -36,14 +37,25 @@ class OrdersUnderUserFragment : Fragment() {
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
+    override fun onStart() {
+        super.onStart()
+        if (!ordersUnderUserVM.isLoggedIn()) {
+            redirectToLogin()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Tickets"
+
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Tickets"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         rootView.ordersRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ordersRecycler.adapter = ordersRecyclerAdapter
@@ -58,15 +70,10 @@ class OrdersUnderUserFragment : Fragment() {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    val fragment = OrderDetailsFragment()
                     val bundle = Bundle()
                     bundle.putLong(EVENT_ID, eventID)
                     bundle.putString(ORDERS, orderIdentifier)
-                    fragment.arguments = bundle
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.rootLayout, fragment)
-                        ?.addToBackStack(null)
-                        ?.commit()
+                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
                 }
             }
 
@@ -75,7 +82,7 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.progress
                 .nonNull()
                 .observe(this, Observer {
-                    rootView.progressBar.isVisible = true
+                    rootView.progressBar.isVisible = it
                 })
 
             ordersUnderUserVM.message
@@ -105,13 +112,6 @@ class OrdersUnderUserFragment : Fragment() {
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
-        } else {
-            Snackbar.make(
-                rootView.ordersUnderUserCoordinatorLayout, "You need to log in first!", Snackbar.LENGTH_SHORT
-            ).show()
-            Handler().postDelayed({
-                redirectToLogin()
-            }, 500)
         }
 
         return rootView
@@ -127,9 +127,8 @@ class OrdersUnderUserFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        val authIntent = Intent(activity, AuthActivity::class.java)
-        val redirectFromTickets = true
-        authIntent.putExtra(LAUNCH_TICKETS, redirectFromTickets)
-        startActivity(authIntent)
+        val args = getString(R.string.log_in_first)
+        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
+        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 }

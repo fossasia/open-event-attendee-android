@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
+import kotlinx.android.synthetic.main.fragment_favorite.favouriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDetailsFragment
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -41,8 +43,11 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.title = "Likes"
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.title = "Likes"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
             LinearLayoutManager.VERTICAL)
@@ -50,15 +55,9 @@ class FavoriteFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
                 val bundle = Bundle()
                 bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.add(R.id.rootLayout, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
             }
         }
         val favouriteFabClickListener = object : FavoriteFabListener {
@@ -86,7 +85,7 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(favouriteCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         favoriteEventViewModel.progress
