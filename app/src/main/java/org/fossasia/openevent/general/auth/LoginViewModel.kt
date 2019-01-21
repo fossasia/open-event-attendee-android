@@ -63,6 +63,10 @@ class LoginViewModel(
             mutableError.value = "Please enter valid Email"
             return true
         }
+        else if(!mutableIsCorrectEmail.value!!) {
+            mutableError.value = "Please enter valid Email"
+            return true
+        }
         return false
     }
 
