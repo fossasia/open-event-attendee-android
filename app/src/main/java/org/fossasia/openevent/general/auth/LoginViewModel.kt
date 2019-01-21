@@ -55,7 +55,12 @@ class LoginViewModel(
 
     private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+            mutableIsCorrectEmail.value = !email.isNullOrEmpty()
             mutableError.value = "Email or Password cannot be empty!"
+            return true
+        }
+        else if(!mutableIsCorrectEmail.value!!) {
+            mutableError.value = "Please enter valid Email"
             return true
         }
         return false

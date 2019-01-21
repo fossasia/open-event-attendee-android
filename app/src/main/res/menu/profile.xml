@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
-            android:id="@+id/edit_profile"
-            android:title="@string/edit_profile" />
-        <item
             android:id="@+id/orga_app"
             android:title="@string/manage_events" />
         <item
