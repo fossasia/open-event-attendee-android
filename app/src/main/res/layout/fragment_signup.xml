@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/signupCoordinatorLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/grey"
+    android:id="@+id/signupNestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -121,7 +120,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/signUpButton"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_large"
                 android:layout_marginTop="@dimen/padding_large"

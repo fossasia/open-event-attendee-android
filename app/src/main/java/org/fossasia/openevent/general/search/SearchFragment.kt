@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.core.view.MenuItemCompat
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
@@ -89,7 +88,7 @@ class SearchFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
-        MenuItemCompat.setActionView(searchItem, searchView)
+        searchItem.actionView = searchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val bundle = Bundle()
