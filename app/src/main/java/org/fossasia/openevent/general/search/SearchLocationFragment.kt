@@ -34,6 +34,8 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
+        Utils.showSoftKeyboard(context, view)
+
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
