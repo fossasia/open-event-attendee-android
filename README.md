@@ -25,10 +25,12 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 
 ## Screenshots
 
-![final1](https://user-images.githubusercontent.com/41234408/48956163-70f43780-ef77-11e8-8337-70d0ce9eb91a.png) ![final5](https://user-images.githubusercontent.com/41234408/48956182-96814100-ef77-11e8-9312-5d2b3b4d88ce.png)  
-![final6](https://user-images.githubusercontent.com/41234408/48956189-a567f380-ef77-11e8-89b7-fd83319def1e.png) ![final4](https://user-images.githubusercontent.com/41234408/48956200-b7e22d00-ef77-11e8-960f-865bfe423db3.png)
-![final2](https://user-images.githubusercontent.com/41234408/48956208-c4668580-ef77-11e8-8a24-69f8b8031113.png) ![final3](https://user-images.githubusercontent.com/41234408/48956215-d0524780-ef77-11e8-8b92-eb9159a24b03.png)
-
+![final1](https://user-images.githubusercontent.com/31350501/51551421-70ebb780-1e94-11e9-8d85-fe414fe08917.png)
+![final2](https://user-images.githubusercontent.com/31350501/51551022-9d530400-1e93-11e9-96de-c3384f0b0782.png)
+![final3](https://user-images.githubusercontent.com/31350501/51551580-bad49d80-1e94-11e9-9fa2-c25bee6a31cf.png)
+![final4](https://user-images.githubusercontent.com/31350501/51551650-e0fa3d80-1e94-11e9-9d73-62ef237ab4bc.png)
+![final5](https://user-images.githubusercontent.com/31350501/51551753-26b70600-1e95-11e9-884c-4d47f49688fa.png)
+![final6](https://user-images.githubusercontent.com/31350501/51551753-26b70600-1e95-11e9-884c-4d47f49688fa.png)
 ## Development
 
 A native Android app using Kotlin for writing code.
