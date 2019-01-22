@@ -89,8 +89,8 @@ object Utils {
         val builder = NavOptions.Builder()
         builder.setEnterAnim(R.anim.fade_in)
         builder.setExitAnim(R.anim.fade_out)
-        builder.setPopEnterAnim(R.anim.slide_in_left)
-        builder.setPopExitAnim(R.anim.slide_out_right)
+        builder.setPopEnterAnim(R.anim.fade_in)
+        builder.setPopExitAnim(R.anim.fade_out)
         return builder.build()
     }
 
