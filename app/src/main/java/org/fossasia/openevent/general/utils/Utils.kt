@@ -44,9 +44,9 @@ object Utils {
             .show()
     }
 
-    fun showSoftKeyboard(context: Context?, view: View) {
+    fun showSoftKeyboard(context: Context?, view: View?) {
         val manager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-        if (manager is InputMethodManager) manager.showSoftInput(view, InputMethodManager.SHOW_FORCED)
+        if (manager is InputMethodManager) manager.showSoftInput(view, InputMethodManager.RESULT_UNCHANGED_SHOWN)
     }
 
     fun hideSoftKeyboard(context: Context?, view: View) {
@@ -89,8 +89,8 @@ object Utils {
         val builder = NavOptions.Builder()
         builder.setEnterAnim(R.anim.fade_in)
         builder.setExitAnim(R.anim.fade_out)
-        builder.setPopEnterAnim(R.anim.slide_in_left)
-        builder.setPopExitAnim(R.anim.slide_out_right)
+        builder.setPopEnterAnim(R.anim.fade_in)
+        builder.setPopExitAnim(R.anim.fade_out)
         return builder.build()
     }
 

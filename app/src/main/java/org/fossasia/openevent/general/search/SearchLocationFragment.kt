@@ -34,8 +34,11 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
+        Utils.showSoftKeyboard(context, view)
+
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.title = ""
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
@@ -108,7 +111,7 @@ class SearchLocationFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationViewModel.configure(activity)
                 } else {
-                    Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE
                 }
             }
