@@ -94,6 +94,12 @@ class LoginFragment : Fragment() {
                 Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
+        loginViewModel.emailError
+            .nonNull()
+            .observe(this, Observer {
+                if (!it) rootView.email.error = "Valid Email Required" else rootView.email.error = null
+            })
+
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
