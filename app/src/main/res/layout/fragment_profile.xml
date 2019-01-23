@@ -30,15 +30,7 @@
             app:srcCompat="@drawable/ic_account_circle_grey_24dp" />
 
         <LinearLayout
-<<<<<<< HEAD
-<<<<<<< HEAD
             android:layout_width="match_parent"
-=======
-            android:layout_width="fill_parent"
->>>>>>> Added snackbar showing message when the email field is wrong on clicking login bttn
-=======
-            android:layout_width="fill_parent"
->>>>>>> Added snackbar showing message when the email field is invalid on clicking login button
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
