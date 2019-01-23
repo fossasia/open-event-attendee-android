@@ -35,11 +35,6 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 <td><img src = "https://user-images.githubusercontent.com/31350501/51612103-c84a6000-1f46-11e9-8e63-3f8e8cec91af.png" height = "480" width="270"></td>
 <td><img src = "https://user-images.githubusercontent.com/31350501/51612107-caacba00-1f46-11e9-8a83-c0c33250dfb4.png" height = "480" width="270"></td>
         </tr>
-        <tr>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612213-fdef4900-1f46-11e9-8cb0-5c78f3358239.png" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612342-43137b00-1f47-11e9-9ed4-01de0c4b316f.jpeg" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612347-44dd3e80-1f47-11e9-84d0-ec74d63e31a3.jpeg" height = "480" width="270"></td>
-        </tr>
 </table>        
 
 ## Development
