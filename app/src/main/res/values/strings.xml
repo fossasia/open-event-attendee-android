@@ -61,6 +61,7 @@
     <string name="last_name_optional">Last Name (Optional)</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
+    <string name="email_error">Valid Email Required</string>
 
     <!--eventyay-->
     <string name="eventyay_logo">eventyay</string>
