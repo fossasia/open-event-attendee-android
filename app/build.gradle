@@ -146,7 +146,7 @@ dependencies {
 
     //Navigation
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha09'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha10'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9"
