@@ -82,7 +82,7 @@ class LoginFragment : Fragment() {
         loginViewModel.emailError
             .nonNull()
             .observe(this, Observer {
-                if (!it) rootView.email.error = "Valid Email Required" else rootView.email.error = null
+                if (!it) rootView.email.error = getString(R.string.email_error) else rootView.email.error = null
             })
 
         loginViewModel.loggedIn
