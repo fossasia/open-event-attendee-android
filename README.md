@@ -25,15 +25,15 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 
 ## Screenshots
 
-![final1](https://user-images.githubusercontent.com/31350501/51555153-fbd0b000-1e9c-11e9-944b-33ce74bd2386.jpg)
-![final2](https://user-images.githubusercontent.com/31350501/51556551-8070fd80-1ea0-11e9-9a3a-4bc4a953905d.jpg)
-![final3](https://user-images.githubusercontent.com/31350501/51554918-68977a80-1e9c-11e9-812d-9219a4b4603a.jpg)\
-![final4](https://user-images.githubusercontent.com/31350501/51554982-8f55b100-1e9c-11e9-9fd7-de5cbfd9b913.jpg)
-![final5](https://user-images.githubusercontent.com/31350501/51555380-831e2380-1e9d-11e9-94d9-ef0a36a7e947.jpg)
-![final6](https://user-images.githubusercontent.com/31350501/51555353-6eda2680-1e9d-11e9-8d1d-a95bc7f88006.jpg)\
-![final7](https://user-images.githubusercontent.com/31350501/51555311-58cc6600-1e9d-11e9-8797-1e532418582b.jpg)
-![final8](https://user-images.githubusercontent.com/31350501/51556621-b31af600-1ea0-11e9-8c47-3aba0fbd5b21.jpg)
-![final9](https://user-images.githubusercontent.com/31350501/51556658-d04fc480-1ea0-11e9-9264-288ae22d1cee.jpg)
+![final1](https://user-images.githubusercontent.com/31350501/51555153-fbd0b000-1e9c-11e9-944b-33ce74bd2386.jpg)&nbsp;&nbsp;
+![final2](https://user-images.githubusercontent.com/31350501/51556551-8070fd80-1ea0-11e9-9a3a-4bc4a953905d.jpg)&nbsp;&nbsp;
+![final3](https://user-images.githubusercontent.com/31350501/51554918-68977a80-1e9c-11e9-812d-9219a4b4603a.jpg)<br><br>
+![final4](https://user-images.githubusercontent.com/31350501/51554982-8f55b100-1e9c-11e9-9fd7-de5cbfd9b913.jpg)&nbsp;&nbsp;
+![final5](https://user-images.githubusercontent.com/31350501/51555380-831e2380-1e9d-11e9-94d9-ef0a36a7e947.jpg)&nbsp;&nbsp;
+![final6](https://user-images.githubusercontent.com/31350501/51555353-6eda2680-1e9d-11e9-8d1d-a95bc7f88006.jpg)<br><br>
+![final7](https://user-images.githubusercontent.com/31350501/51555311-58cc6600-1e9d-11e9-8797-1e532418582b.jpg)&nbsp;&nbsp;
+![final8](https://user-images.githubusercontent.com/31350501/51556621-b31af600-1ea0-11e9-8c47-3aba0fbd5b21.jpg)&nbsp;&nbsp;
+![final9](https://user-images.githubusercontent.com/31350501/51556658-d04fc480-1ea0-11e9-9264-288ae22d1cee.jpg)&nbsp;&nbsp;
 ## Development
 
 A native Android app using Kotlin for writing code.
