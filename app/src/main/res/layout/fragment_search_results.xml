@@ -5,7 +5,7 @@
     android:id="@+id/searchRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.fossasia.openevent.general.SearchResultsActivity">
+    tools:context="org.fossasia.openevent.general.search.SearchResultsFragment">
 
     <LinearLayout
         android:id="@+id/noSearchResults"
