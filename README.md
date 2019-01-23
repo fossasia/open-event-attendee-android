@@ -24,16 +24,24 @@ Please join our mailing list to discuss questions regarding the project: https:/
 Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
 
 ## Screenshots
+<table>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611260-db5c3080-1f44-11e9-80f6-47c0c0401a70.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612594-c9c85800-1f47-11e9-9a66-c32b4f7c7f34.jpeg" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611528-72c18380-1f45-11e9-97c6-563e7d573e1c.png" height = "480" width="270"></td>
+        </tr>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611714-f3807f80-1f45-11e9-8d43-bb21c7795a45.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612103-c84a6000-1f46-11e9-8e63-3f8e8cec91af.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612107-caacba00-1f46-11e9-8a83-c0c33250dfb4.png" height = "480" width="270"></td>
+        </tr>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612213-fdef4900-1f46-11e9-8cb0-5c78f3358239.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612342-43137b00-1f47-11e9-9ed4-01de0c4b316f.jpeg" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612347-44dd3e80-1f47-11e9-84d0-ec74d63e31a3.jpeg" height = "480" width="270"></td>
+        </tr>
+</table>        
 
-![final1](https://user-images.githubusercontent.com/31350501/51555153-fbd0b000-1e9c-11e9-944b-33ce74bd2386.jpg)&nbsp;&nbsp;
-![final2](https://user-images.githubusercontent.com/31350501/51556551-8070fd80-1ea0-11e9-9a3a-4bc4a953905d.jpg)&nbsp;&nbsp;
-![final3](https://user-images.githubusercontent.com/31350501/51554918-68977a80-1e9c-11e9-812d-9219a4b4603a.jpg)<br><br>
-![final4](https://user-images.githubusercontent.com/31350501/51554982-8f55b100-1e9c-11e9-9fd7-de5cbfd9b913.jpg)&nbsp;&nbsp;
-![final5](https://user-images.githubusercontent.com/31350501/51555380-831e2380-1e9d-11e9-94d9-ef0a36a7e947.jpg)&nbsp;&nbsp;
-![final6](https://user-images.githubusercontent.com/31350501/51555353-6eda2680-1e9d-11e9-8d1d-a95bc7f88006.jpg)<br><br>
-![final7](https://user-images.githubusercontent.com/31350501/51555311-58cc6600-1e9d-11e9-8797-1e532418582b.jpg)&nbsp;&nbsp;
-![final8](https://user-images.githubusercontent.com/31350501/51556621-b31af600-1ea0-11e9-8c47-3aba0fbd5b21.jpg)&nbsp;&nbsp;
-![final9](https://user-images.githubusercontent.com/31350501/51556658-d04fc480-1ea0-11e9-9264-288ae22d1cee.jpg)&nbsp;&nbsp;
 ## Development
 
 A native Android app using Kotlin for writing code.
