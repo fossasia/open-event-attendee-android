@@ -79,9 +79,6 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val startMainActivity = Intent(activity, MainActivity::class.java)
-        activity?.startActivity(startMainActivity)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+        Navigation.findNavController(rootView).navigate(R.id.eventsFragment, null, Utils.getAnimSlide())
     }
 }
