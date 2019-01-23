@@ -21,11 +21,11 @@
 
         <ImageView
             android:id="@+id/profilePhoto"
-            android:layout_width="@dimen/item_image_view_large"
-            android:layout_height="@dimen/item_image_view_large"
+            android:layout_width="@dimen/avatar_medium"
+            android:layout_height="@dimen/avatar_medium"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_large"
             android:contentDescription="Profile Photo"
-            android:padding="@dimen/padding_large"
             app:srcCompat="@drawable/ic_account_circle_grey_24dp" />
 
         <LinearLayout
