@@ -24,10 +24,18 @@ Please join our mailing list to discuss questions regarding the project: https:/
 Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
 
 ## Screenshots
-
-![final1](https://user-images.githubusercontent.com/41234408/48956163-70f43780-ef77-11e8-8337-70d0ce9eb91a.png) ![final5](https://user-images.githubusercontent.com/41234408/48956182-96814100-ef77-11e8-9312-5d2b3b4d88ce.png)  
-![final6](https://user-images.githubusercontent.com/41234408/48956189-a567f380-ef77-11e8-89b7-fd83319def1e.png) ![final4](https://user-images.githubusercontent.com/41234408/48956200-b7e22d00-ef77-11e8-960f-865bfe423db3.png)
-![final2](https://user-images.githubusercontent.com/41234408/48956208-c4668580-ef77-11e8-8a24-69f8b8031113.png) ![final3](https://user-images.githubusercontent.com/41234408/48956215-d0524780-ef77-11e8-8b92-eb9159a24b03.png)
+<table>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611260-db5c3080-1f44-11e9-80f6-47c0c0401a70.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612594-c9c85800-1f47-11e9-9a66-c32b4f7c7f34.jpeg" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611528-72c18380-1f45-11e9-97c6-563e7d573e1c.png" height = "480" width="270"></td>
+        </tr>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611714-f3807f80-1f45-11e9-8d43-bb21c7795a45.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612103-c84a6000-1f46-11e9-8e63-3f8e8cec91af.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612107-caacba00-1f46-11e9-8a83-c0c33250dfb4.png" height = "480" width="270"></td>
+        </tr>
+</table>        
 
 ## Development
 
