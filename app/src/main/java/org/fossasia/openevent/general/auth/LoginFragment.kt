@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_login.email
-import kotlinx.android.synthetic.main.fragment_login.loginButton
-import kotlinx.android.synthetic.main.fragment_login.password
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.email
 import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
@@ -133,7 +131,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun onEmailEntered(enable: Boolean) {
-        if (!enable) rootView.email.error = getString(R.string.email_error) else rootView.email.error = null
+        if (!enable) textInputLayoutEmail.error = getString(R.string.email_error) else textInputLayoutEmail.error = null
         rootView.loginButton.isEnabled = enable
         rootView.forgotPassword.isVisible = enable
     }
