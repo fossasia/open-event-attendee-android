@@ -36,6 +36,7 @@
                     android:text="@string/eventyay_logo"/>
                 <!-- Email Label -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
