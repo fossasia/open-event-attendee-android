@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView;
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
