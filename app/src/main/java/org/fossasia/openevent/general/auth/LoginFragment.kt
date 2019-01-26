@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -84,12 +85,19 @@ class LoginFragment : Fragment() {
             })
 
         rootView.email.addTextChangedListener(object : TextWatcher {
+            var timer: CountDownTimer? = null
             override fun afterTextChanged(s: Editable) {}
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkEmail(email.toString())
+                timer?.cancel()
+                timer = object : CountDownTimer(1000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {}
+                    override fun onFinish() {
+                        loginViewModel.checkEmail(email.toString())
+                    }
+                }.start()
             }
         })
 
