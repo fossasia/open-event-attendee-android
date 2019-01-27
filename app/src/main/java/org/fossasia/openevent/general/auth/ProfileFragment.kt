@@ -47,7 +47,7 @@ class ProfileFragment : Fragment() {
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
-    private fun redirectToEvents() {
+    private fun redirectToEventsFragment() {
         findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
@@ -168,16 +168,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDialog() {
-        val builder = AlertDialog.Builder(activity)
-        builder.setMessage(resources.getString(R.string.message))
+            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
             .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                 if (profileViewModel.isLoggedIn()) {
                     profileViewModel.logout()
-                    redirectToEvents()
+                    redirectToEventsFragment()
                 }
             }
             .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
+            .show()
     }
 }
