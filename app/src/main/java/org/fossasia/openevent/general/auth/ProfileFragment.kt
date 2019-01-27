@@ -47,8 +47,8 @@ class ProfileFragment : Fragment() {
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
-    private fun redirectToMain() {
-        startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    private fun redirectToEvents() {
+        findNavController(rootView).popBackStack(R.id.eventsFragment,false)
     }
 
     override fun onStart() {
@@ -117,7 +117,7 @@ class ProfileFragment : Fragment() {
             R.id.logout -> {
                 profileViewModel.logout()
                 activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                redirectToMain()
+                redirectToEvents()
                 return true
             }
             R.id.settings -> {
