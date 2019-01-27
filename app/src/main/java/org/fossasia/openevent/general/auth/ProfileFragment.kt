@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_profile.view.name
 import kotlinx.android.synthetic.main.fragment_profile.view.editProfileButton
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -47,8 +46,8 @@ class ProfileFragment : Fragment() {
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
-    private fun redirectToMain() {
-        startActivity(Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    private fun redirectToEventsFragment() {
+        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
     override fun onStart() {
@@ -117,7 +116,7 @@ class ProfileFragment : Fragment() {
             R.id.logout -> {
                 profileViewModel.logout()
                 activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                redirectToMain()
+                redirectToEventsFragment()
                 return true
             }
             R.id.settings -> {
