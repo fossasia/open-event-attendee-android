@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -114,9 +115,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.logout -> {
-                profileViewModel.logout()
-                activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                redirectToEventsFragment()
+                showDialog()
                 return true
             }
             R.id.settings -> {
@@ -166,5 +165,17 @@ class ProfileFragment : Fragment() {
         activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(true)
         super.onResume()
+    }
+
+    private fun showDialog() {
+            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+            .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                if (profileViewModel.isLoggedIn()) {
+                    profileViewModel.logout()
+                    redirectToEventsFragment()
+                }
+            }
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .show()
     }
 }
