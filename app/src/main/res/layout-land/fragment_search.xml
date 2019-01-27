@@ -85,7 +85,6 @@
                     android:layout_gravity="center_horizontal"
                     android:background="@color/grey" />
             </RelativeLayout>
-
         </LinearLayout>
     </LinearLayout>
 
