@@ -46,7 +46,7 @@ class ProfileFragment : Fragment() {
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
-    private fun redirectToEvents() {
+    private fun redirectToEventsFragment() {
         findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
@@ -116,7 +116,7 @@ class ProfileFragment : Fragment() {
             R.id.logout -> {
                 profileViewModel.logout()
                 activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                redirectToEvents()
+                redirectToEventsFragment()
                 return true
             }
             R.id.settings -> {
