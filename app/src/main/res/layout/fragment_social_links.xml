@@ -31,5 +31,4 @@
             android:layout_marginBottom="@dimen/details_header_margin_top"
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
-
 </FrameLayout>
