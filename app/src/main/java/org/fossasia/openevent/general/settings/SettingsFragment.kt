@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.settings
 
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -61,11 +59,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
             return true
         }
-        if (preference?.key == resources.getString(R.string.key_profile)) {
-            // Logout Dialog shown
-            showDialog()
-            return true
-        }
         return false
     }
 
@@ -92,20 +85,5 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         setHasOptionsMenu(false)
         super.onDestroyView()
-    }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(activity)
-        builder.setMessage(resources.getString(R.string.message))
-                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    if (settingsViewModel.isLoggedIn()) {
-                        settingsViewModel.logout()
-                        startActivity(Intent(context, MainActivity::class.java))
-                        activity?.finish()
-                    }
-                }
-                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
     }
 }
