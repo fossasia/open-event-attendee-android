@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
-    private var loginState : Boolean = false
+    private var loginState: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +100,7 @@ class LoginFragment : Fragment() {
             }
         })
 
-        rootView.password.addTextChangedListener(object : TextWatcher{
+        rootView.password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -172,7 +172,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun setLoginState(){
+    private fun setLoginState() {
         loginState = !(rootView.email.text.isEmpty() || rootView.password.text.isEmpty())
         if (loginState) {
             rootView.loginButton.isEnabled = true

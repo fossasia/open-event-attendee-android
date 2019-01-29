@@ -38,7 +38,7 @@ class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
     private lateinit var rootView: View
-    private var signUpState : Boolean = false
+    private var signUpState: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +53,7 @@ class SignUpFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-        setLoginState()
+        setSignUpState()
 
         lateinit var confirmPassword: String
         val signUp = SignUp()
@@ -124,23 +124,23 @@ class SignUpFragment : Fragment() {
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { setLoginState()}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { setSignUpState() }
         })
 
-        rootView.usernameSignUp.addTextChangedListener(object :TextWatcher{
+        rootView.usernameSignUp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { setLoginState() }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { setSignUpState() }
         })
 
-        rootView.confirmPasswords.addTextChangedListener(object :TextWatcher{
+        rootView.confirmPasswords.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { setLoginState() }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { setSignUpState() }
         })
 
         return rootView
@@ -162,8 +162,9 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun setLoginState(){
-        signUpState = !(rootView.usernameSignUp.text.isEmpty() || rootView.passwordSignUp.text.isEmpty() || rootView.confirmPasswords.text.isEmpty())
+    private fun setSignUpState() {
+        signUpState = !(rootView.usernameSignUp.text.isEmpty() || rootView.passwordSignUp.text.isEmpty() ||
+            rootView.confirmPasswords.text.isEmpty())
         if (signUpState) {
             rootView.signUpButton.isEnabled = true
             rootView.signUpButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
