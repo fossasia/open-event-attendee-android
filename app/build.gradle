@@ -80,7 +80,7 @@ repositories {
 dependencies {
     def lifecycle_version = "2.1.0-alpha01"
     def koin_version = "1.0.2"
-    def roomVersion = '2.1.0-alpha03'
+    def roomVersion = '2.1.0-alpha04'
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
 
@@ -139,7 +139,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:8.2.0'
+    implementation 'com.stripe:stripe-android:8.3.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
