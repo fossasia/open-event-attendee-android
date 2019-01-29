@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
 import kotlinx.android.synthetic.main.fragment_login.view.progressBar
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
+import kotlinx.android.synthetic.main.fragment_login.view.password
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -36,6 +38,7 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var rootView: View
+    private var loginState : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +54,7 @@ class LoginFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         showSnackbar()
+        setLoginState()
 
         if (loginViewModel.isLoggedIn())
             redirectToMain()
@@ -92,6 +96,17 @@ class LoginFragment : Fragment() {
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
                 loginViewModel.checkEmail(email.toString())
+                setLoginState()
+            }
+        })
+
+        rootView.password.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                setLoginState()
             }
         })
 
@@ -154,6 +169,18 @@ class LoginFragment : Fragment() {
             Snackbar.make(
                 rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun setLoginState(){
+        loginState = !(rootView.email.text.isEmpty() || rootView.password.text.isEmpty())
+        if (loginState) {
+            rootView.loginButton.isEnabled = true
+            rootView.loginButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            rootView.loginButton.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        } else {
+            rootView.loginButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
+            rootView.loginButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
         }
     }
 }

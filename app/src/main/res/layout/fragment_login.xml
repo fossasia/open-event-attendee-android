@@ -81,7 +81,7 @@
                     android:layout_marginBottom="@dimen/padding_large"
                     android:padding="@dimen/padding_medium"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:background="@color/colorPrimary"
                     android:text="@string/login" />
 
                 <TextView

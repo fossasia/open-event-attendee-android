@@ -124,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_large"
                 android:layout_marginTop="@dimen/padding_large"
-                android:backgroundTint="@color/colorPrimary"
+                android:enabled="false"
+                android:background="@color/colorPrimary"
                 android:padding="@dimen/padding_medium"
                 android:text="@string/sign_up"
                 android:textColor="@android:color/white" />
