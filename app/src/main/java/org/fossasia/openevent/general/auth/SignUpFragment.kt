@@ -165,6 +165,7 @@ class SignUpFragment : Fragment() {
     private fun setSignUpState() {
         signUpState = !(rootView.usernameSignUp.text.isEmpty() || rootView.passwordSignUp.text.isEmpty() ||
             rootView.confirmPasswords.text.isEmpty())
+        signUpState = rootView.passwordSignUp.text.toString() == rootView.confirmPasswords.text.toString()
         if (signUpState) {
             rootView.signUpButton.isEnabled = true
             rootView.signUpButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
