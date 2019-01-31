@@ -94,7 +94,7 @@ class SearchFragment : Fragment() {
         MenuItemCompat.setActionView(searchItem, searchView)
         searchViewModel.queryText.observe(this, Observer {
             searchItem.expandActionView()
-            searchView.setQuery(searchViewModel.queryText.value, false)
+            searchView.setQuery(it, false)
             searchView.maxWidth = Resources.getSystem().displayMetrics.widthPixels
         })
         val queryListener = object : SearchView.OnQueryTextListener {
