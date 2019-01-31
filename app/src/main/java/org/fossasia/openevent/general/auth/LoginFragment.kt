@@ -30,6 +30,8 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
+
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
@@ -48,6 +50,7 @@ class LoginFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        showSnackbar()
 
         if (loginViewModel.isLoggedIn())
             redirectToMain()
@@ -79,9 +82,6 @@ class LoginFragment : Fragment() {
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                    rootView.loginCoordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG
-                ).show()
                 loginViewModel.fetchProfile()
             })
 
@@ -129,6 +129,7 @@ class LoginFragment : Fragment() {
 
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
+        Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onEmailEntered(enable: Boolean) {
@@ -140,10 +141,19 @@ class LoginFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, "Sign In canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSnackbar() {
+        val textSnackbar = arguments?.getString(SNACKBAR_MESSAGE)
+        if (textSnackbar != null) {
+            Snackbar.make(
+                rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }
