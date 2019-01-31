@@ -24,14 +24,14 @@
             android:layout_width="@dimen/item_image_view_medium"
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_margin="@dimen/layout_margin_medium"
-            app:srcCompat="@drawable/ic_current_location" />
+            app:srcCompat="@drawable/ic_location_pin" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_margin="@dimen/layout_margin_medium"
             android:text="@string/current_location"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_large" />
 
         <ProgressBar
@@ -40,6 +40,7 @@
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginLeft="@dimen/layout_margin_large" />
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

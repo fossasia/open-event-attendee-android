@@ -4,6 +4,10 @@
     app:startDestination="@id/eventsFragment">
 
     <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="org.fossasia.openevent.general.WelcomeFragment"
+        android:label="WelcomeFragment" />
+    <fragment
         android:id="@+id/eventsFragment"
         android:name="org.fossasia.openevent.general.event.EventsFragment"
         android:label="EventsFragment" />

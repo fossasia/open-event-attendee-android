@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -119,16 +120,12 @@ class OrderCompletedFragment : Fragment() {
         startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
-    private fun redirectToMain() {
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+    private fun redirectToEventsFragment() {
+        findNavController(rootView).navigate(R.id.eventsFragment, null, getAnimSlide())
     }
 
     private fun openEventDetails() {
-        findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
+        findNavController(rootView).navigate(R.id.eventDetailsFragment, null, getAnimSlide() )
     }
 
     private fun openTicketDetails() {
@@ -153,7 +150,7 @@ class OrderCompletedFragment : Fragment() {
                 true
             }
             R.id.tick -> {
-                redirectToMain()
+                redirectToEventsFragment()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

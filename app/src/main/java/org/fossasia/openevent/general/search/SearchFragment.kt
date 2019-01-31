@@ -91,7 +91,7 @@ class SearchFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
-        MenuItemCompat.setActionView(searchItem, searchView)
+        searchItem.actionView = searchView
         searchViewModel.queryText.observe(this, Observer {
             searchItem.expandActionView()
             searchView.setQuery(it, false)
@@ -117,6 +117,11 @@ class SearchFragment : Fragment() {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.isSaveEnabled = false
     }
 
     override fun onDestroy() {

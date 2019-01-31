@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -25,14 +26,18 @@ import kotlinx.android.synthetic.main.fragment_login.view.progressBar
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
+
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
+    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -48,6 +53,9 @@ class LoginFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        showSnackbar()
+
+        smartAuthViewModel.buildCredential(activity, null)
 
         if (loginViewModel.isLoggedIn())
             redirectToMain()
@@ -57,12 +65,29 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
+        smartAuthViewModel.id
+            .nonNull()
+            .observe(this, Observer {
+                email.text = SpannableStringBuilder(it)
+            })
+
+        smartAuthViewModel.password
+            .nonNull()
+            .observe(this, Observer {
+                password.text = SpannableStringBuilder(it)
+            })
+
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                rootView.progressBar.isVisible = it
-                loginButton.isEnabled = !it
+                handleProgressBar(it)
             })
+
+        smartAuthViewModel.progress
+            .nonNull()
+            .observe(this, Observer {
+            handleProgressBar(it)
+        })
 
         loginViewModel.showNoInternetDialog
             .nonNull()
@@ -79,9 +104,6 @@ class LoginFragment : Fragment() {
         loginViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(
-                    rootView.loginCoordinatorLayout, getString(R.string.welcome_back), Snackbar.LENGTH_LONG
-                ).show()
                 loginViewModel.fetchProfile()
             })
 
@@ -121,14 +143,26 @@ class LoginFragment : Fragment() {
         loginViewModel.user
             .nonNull()
             .observe(this, Observer {
+                smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
                 redirectToMain()
             })
 
         return rootView
     }
 
+    override fun onStart() {
+        super.onStart()
+        smartAuthViewModel.requestCredentials(activity)
+    }
+
+    private fun handleProgressBar(show: Boolean) {
+        rootView.progressBar.isVisible = show
+        loginButton.isEnabled = !show
+    }
+
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
+        Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onEmailEntered(enable: Boolean) {
@@ -140,10 +174,19 @@ class LoginFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, "Sign In canceled!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSnackbar() {
+        val textSnackbar = arguments?.getString(SNACKBAR_MESSAGE)
+        if (textSnackbar != null) {
+            Snackbar.make(
+                rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }

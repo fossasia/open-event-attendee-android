@@ -16,7 +16,7 @@ import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
-import kotlinx.android.synthetic.main.fragment_events.eventsCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
@@ -54,6 +54,7 @@ class EventsFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.title = "Events"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
@@ -105,7 +106,7 @@ class EventsFragment : Fragment() {
         eventsViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(eventsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         eventsViewModel.progress

@@ -3,10 +3,11 @@ package org.fossasia.openevent.general.search
 import androidx.lifecycle.ViewModel
 import org.fossasia.openevent.general.data.Preference
 
+const val SAVED_LOCATION = "LOCATION"
+
 class SearchLocationViewModel(private val preference: Preference) : ViewModel() {
-    private val tokenKey = "LOCATION"
 
     fun saveSearch(query: String) {
-        preference.putString(tokenKey, query)
+        preference.putString(SAVED_LOCATION, query)
     }
 }
