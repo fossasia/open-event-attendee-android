@@ -13,11 +13,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_location.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
+import org.fossasia.openevent.general.FROM_WELCOME
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -30,6 +32,7 @@ class SearchLocationFragment : Fragment() {
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     private var fromSearchFragment: Boolean = false
+    private var fromWelcomeFragment: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
@@ -45,6 +48,7 @@ class SearchLocationFragment : Fragment() {
         setHasOptionsMenu(true)
 
         fromSearchFragment = arguments?.getBoolean(FROM_SEARCH) ?: false
+        fromWelcomeFragment = arguments?.getBoolean(FROM_WELCOME) ?: false
 
         geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
             rootView.currentLocation.visibility = View.GONE
@@ -95,14 +99,18 @@ class SearchLocationFragment : Fragment() {
 
     private fun redirectToMain() {
         val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        if (fromSearchFragment) {
+        if(fromWelcomeFragment){
+            Navigation.findNavController(rootView).navigate(R.id.eventsFragment, null, Utils.getAnimSlide())
+        }
+        else if (fromSearchFragment) {
             val searchBundle = Bundle()
             searchBundle.putBoolean(TO_SEARCH, true)
             startMainActivity.putExtras(searchBundle)
+        } else {
+            activity?.startActivity(startMainActivity)
+            activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+            activity?.finish()
         }
-        activity?.startActivity(startMainActivity)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
