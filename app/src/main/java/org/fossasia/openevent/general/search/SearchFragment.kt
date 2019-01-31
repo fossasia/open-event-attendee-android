@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.core.view.MenuItemCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
