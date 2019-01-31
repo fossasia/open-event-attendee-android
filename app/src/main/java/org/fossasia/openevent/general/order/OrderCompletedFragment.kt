@@ -120,7 +120,7 @@ class OrderCompletedFragment : Fragment() {
         startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
-    private fun redirectToEvents() {
+    private fun redirectToEventsFragment() {
         findNavController(rootView).navigate(R.id.eventsFragment, null, getAnimSlide())
     }
 
@@ -150,7 +150,7 @@ class OrderCompletedFragment : Fragment() {
                 true
             }
             R.id.tick -> {
-                redirectToEvents()
+                redirectToEventsFragment()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

@@ -54,6 +54,7 @@ class EventsFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.title = "Events"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }

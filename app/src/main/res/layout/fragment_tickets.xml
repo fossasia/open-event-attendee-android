@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
+    android:fillViewport="true"        
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/ticketsCoordinatorLayout">
+        android:id="@+id/ticketsCoordinatorLayout"
+        android:descendantFocusability="blocksDescendants">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,4 +131,4 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

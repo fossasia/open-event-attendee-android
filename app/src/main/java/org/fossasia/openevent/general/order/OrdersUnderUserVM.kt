@@ -33,8 +33,8 @@ class OrdersUnderUserVM(
         mutableEventAndOrderIdentifier
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    private val mutablenoTickets = MutableLiveData<Boolean>()
-    val noTickets: LiveData<Boolean> = mutablenoTickets
+    private val mutableNoTickets = MutableLiveData<Boolean>()
+    val noTickets: LiveData<Boolean> = mutableNoTickets
 
     fun getId() = authHolder.getId()
 
@@ -46,7 +46,7 @@ class OrdersUnderUserVM(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 mutableProgress.value = true
-                mutablenoTickets.value = false
+                mutableNoTickets.value = false
             }.subscribe({
                 order = it
                 mutableAttendeesNumber.value = it.map { it.attendees?.size } as ArrayList<Int>
@@ -56,9 +56,11 @@ class OrdersUnderUserVM(
                     eventsUnderUser(query)
                 else {
                     mutableProgress.value = false
-                    mutablenoTickets.value = true
+                    mutableNoTickets.value = true
                 }
             }, {
+                mutableProgress.value = false
+                mutableNoTickets.value = true
                 mutableMessage.value = "Failed  to list Orders under a user"
                 Timber.d(it, "Failed  to list Orders under a user ")
             })

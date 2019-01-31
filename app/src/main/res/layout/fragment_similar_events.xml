@@ -6,44 +6,51 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <View
-        android:id="@+id/similarEventsDivider"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/event_details_divider"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:layout_marginLeft="@dimen/layout_margin_large"
-        android:layout_marginRight="@dimen/layout_margin_large"
-        android:background="@color/grey" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/moreLikeThis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_large"
-        android:layout_marginRight="@dimen/layout_margin_large"
-        android:text="@string/more_like_this"
-        android:textColor="@color/black"
-        android:textSize="@dimen/event_details_headers" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_gravity="center"
-            android:id="@+id/progressBar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ProgressBar>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/similarEventsRecycler"
+        <View
+            android:id="@+id/similarEventsDivider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </FrameLayout>
+            android:layout_height="@dimen/event_details_divider"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:background="@color/grey" />
+
+        <TextView
+            android:id="@+id/moreLikeThis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:text="@string/more_like_this"
+            android:textColor="@color/black"
+            android:textSize="@dimen/event_details_headers" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:layout_gravity="center"
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </ProgressBar>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/similarEventsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+        </FrameLayout>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
