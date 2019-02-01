@@ -99,10 +99,9 @@ class SearchLocationFragment : Fragment() {
 
     private fun redirectToMain() {
         val startMainActivity = Intent(activity, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        if(fromWelcomeFragment){
+        if (fromWelcomeFragment) {
             Navigation.findNavController(rootView).navigate(R.id.eventsFragment, null, Utils.getAnimSlide())
-        }
-        else if (fromSearchFragment) {
+        } else if (fromSearchFragment) {
             val searchBundle = Bundle()
             searchBundle.putBoolean(TO_SEARCH, true)
             startMainActivity.putExtras(searchBundle)
