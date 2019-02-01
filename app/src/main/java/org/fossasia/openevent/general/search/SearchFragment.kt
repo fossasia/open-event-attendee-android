@@ -110,6 +110,11 @@ class SearchFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.isSaveEnabled = false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (this::searchView.isInitialized)
