@@ -55,8 +55,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    fun setFabBackground(isFavourite: Boolean) {
-        if (isFavourite) {
+    fun setFabBackground(isFavorite: Boolean) {
+        if (isFavorite) {
             itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24px)
         } else {
             itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24px)

@@ -66,5 +66,5 @@ interface RecyclerViewClickListener {
 }
 
 interface FavoriteFabListener {
-    fun onClick(event: Event, isFavourite: Boolean)
+    fun onClick(event: Event, isFavorite: Boolean)
 }
