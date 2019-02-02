@@ -38,7 +38,7 @@ import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
-import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
+import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
 import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.ConfirmOrder
 import org.fossasia.openevent.general.order.Order
@@ -53,6 +53,7 @@ import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
+import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -133,7 +134,7 @@ val viewModelModule = module {
     viewModel { TicketsViewModel(get(), get(), get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
-    viewModel { FavouriteEventsViewModel(get()) }
+    viewModel { FavoriteEventsViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
@@ -141,6 +142,7 @@ val viewModelModule = module {
     viewModel { OrderDetailsViewModel(get(), get()) }
     viewModel { EditProfileViewModel(get(), get()) }
     viewModel { GeoLocationViewModel() }
+    viewModel { SmartAuthViewModel() }
 }
 
 val networkModule = module {

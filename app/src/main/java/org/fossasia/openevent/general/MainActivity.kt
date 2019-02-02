@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -12,7 +13,10 @@ import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayou
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.order.LAUNCH_TICKETS
 import org.fossasia.openevent.general.order.TICKETS
+import org.fossasia.openevent.general.search.RC_CREDENTIALS_READ
+import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
 import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.search.TO_SEARCH
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
@@ -83,5 +87,12 @@ class MainActivity : AppCompatActivity() {
             R.id.welcomeFragment -> finish()
             else -> super.onBackPressed()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RC_CREDENTIALS_READ || requestCode == RC_CREDENTIALS_SAVE)
+            SmartAuthViewModel().onActivityResult(requestCode, resultCode, data, this)
+        else
+            super.onActivityResult(requestCode, resultCode, data)
     }
 }

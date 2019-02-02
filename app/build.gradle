@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0-alpha01"
+    def lifecycle_version = "2.1.0-alpha02"
     def koin_version = "1.0.2"
     def roomVersion = '2.1.0-alpha04'
     def ktx_version = "1.0.0"
@@ -89,8 +89,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -116,6 +116,9 @@ dependencies {
 
     // Location Play Service
     playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
+
+    //Smart Auth Play Service
+    playStoreImplementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
