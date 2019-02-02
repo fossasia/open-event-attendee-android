@@ -74,16 +74,16 @@ class EventsFragment : Fragment() {
             }
         }
 
-        val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavourite: Boolean) {
+        val favoriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(event: Event, isFavorite: Boolean) {
                 val id = eventsRecyclerAdapter.getPos(event.id)
-                eventsViewModel.setFavorite(event.id, !isFavourite)
+                eventsViewModel.setFavorite(event.id, !isFavorite)
                 event.favorite = !event.favorite
                 eventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
+        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
         eventsViewModel.events
             .nonNull()
             .observe(this, Observer {

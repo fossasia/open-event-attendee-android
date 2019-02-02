@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class FavouriteEventsViewModel(private val eventService: EventService) : ViewModel() {
+class FavoriteEventsViewModel(private val eventService: EventService) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -36,9 +36,9 @@ class FavouriteEventsViewModel(private val eventService: EventService) : ViewMod
         )
     }
 
-    fun setFavorite(eventId: Long, favourite: Boolean) {
+    fun setFavorite(eventId: Long, favorite: Boolean) {
         compositeDisposable.add(
-            eventService.setFavorite(eventId, favourite)
+            eventService.setFavorite(eventId, favorite)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

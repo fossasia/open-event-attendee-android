@@ -67,8 +67,8 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         )
     }
 
-    fun setFavorite(eventId: Long, favourite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favourite)
+    fun setFavorite(eventId: Long, favorite: Boolean) {
+        compositeDisposable.add(eventService.setFavorite(eventId, favorite)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

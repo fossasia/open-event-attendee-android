@@ -21,7 +21,7 @@
                 android:id="@+id/logo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/event_details_image"
-                android:background="@drawable/placeholder"
+                android:src="@drawable/placeholder"
                 android:scaleType="centerCrop" />
 
             <LinearLayout

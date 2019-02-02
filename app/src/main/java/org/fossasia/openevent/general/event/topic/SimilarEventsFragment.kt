@@ -71,10 +71,10 @@ class SimilarEventsFragment : Fragment() {
             }
         }
 
-        val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavourite: Boolean) {
+        val favoriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(event: Event, isFavorite: Boolean) {
                 val id = similarEventsRecyclerAdapter.getPos(event.id)
-                similarEventsViewModel.setFavorite(event.id, !isFavourite)
+                similarEventsViewModel.setFavorite(event.id, !isFavorite)
                 event.favorite = !event.favorite
                 similarEventsRecyclerAdapter.notifyItemChanged(id)
             }
@@ -102,7 +102,7 @@ class SimilarEventsFragment : Fragment() {
                 progressBar.isVisible = it
             })
 
-        similarEventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
+        similarEventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
         similarEventsViewModel.loadSimilarEvents(eventTopicId)
 
         return rootView
