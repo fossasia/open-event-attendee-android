@@ -137,6 +137,7 @@ class LoginFragment : Fragment() {
 
         rootView.forgotPassword.setOnClickListener {
             hideSoftKeyboard(context, rootView)
+            (activity as AppCompatActivity).supportActionBar?.hide()
             loginViewModel.sendResetPasswordEmail(email.text.toString())
         }
 
