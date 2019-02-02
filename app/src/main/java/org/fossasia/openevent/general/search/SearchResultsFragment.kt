@@ -63,15 +63,15 @@ class SearchResultsFragment : Fragment() {
             }
         }
 
-        val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavourite: Boolean) {
+        val favoriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(event: Event, isFavorite: Boolean) {
                 val id = eventsRecyclerAdapter.getPos(event.id)
-                searchViewModel.setFavorite(event.id, !isFavourite)
+                searchViewModel.setFavorite(event.id, !isFavorite)
                 event.favorite = !event.favorite
                 eventsRecyclerAdapter.notifyItemChanged(id)
             }
         }
-        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
+        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
         searchViewModel.events
             .nonNull()

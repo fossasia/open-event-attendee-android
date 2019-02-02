@@ -86,9 +86,9 @@ class EventService(
         return eventApi.eventsUnderUser(eventId)
     }
 
-    fun setFavorite(eventId: Long, favourite: Boolean): Completable {
+    fun setFavorite(eventId: Long, favorite: Boolean): Completable {
         return Completable.fromAction {
-            eventDao.setFavorite(eventId, favourite)
+            eventDao.setFavorite(eventId, favorite)
         }
     }
 
