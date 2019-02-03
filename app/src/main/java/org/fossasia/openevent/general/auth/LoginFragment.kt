@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
@@ -120,8 +121,19 @@ class LoginFragment : Fragment() {
         loginViewModel.requestTokenSuccess
             .nonNull()
             .observe(this, Observer {
-                rootView.sentEmailLayout.visibility = View.VISIBLE
-                rootView.loginLayout.visibility = View.GONE
+                if (it) {
+                    rootView.sentEmailLayout.visibility = View.VISIBLE
+                    rootView.loginLayout.visibility = View.GONE
+                    if (thisActivity is AppCompatActivity) {
+                        thisActivity.supportActionBar?.hide()
+                        Utils.navAnimGone(thisActivity.navigationAuth, requireContext())
+                    }
+                } else {
+                    if (thisActivity is AppCompatActivity) {
+                        thisActivity.supportActionBar?.show()
+                        Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
+                    }
+                }
             })
 
         loginViewModel.isCorrectEmail
@@ -132,6 +144,10 @@ class LoginFragment : Fragment() {
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
+            if (thisActivity is AppCompatActivity) {
+                thisActivity.supportActionBar?.show()
+                Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
+            }
             rootView.loginLayout.visibility = View.VISIBLE
         }
 
