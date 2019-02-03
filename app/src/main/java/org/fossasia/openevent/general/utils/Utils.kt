@@ -103,14 +103,14 @@ object Utils {
         return builder.build()
     }
 
-    fun navAnimVisible(navigation: BottomNavigationView?, context: Context) {
+    fun navAnimVisible(navigation: BottomNavigationView?, context: Context?) {
         if (navigation?.visibility == View.GONE) {
             navigation.visibility = View.VISIBLE
             navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         }
     }
 
-    fun navAnimGone(navigation: BottomNavigationView?, context: Context) {
+    fun navAnimGone(navigation: BottomNavigationView?, context: Context?) {
         if (navigation?.visibility == View.VISIBLE) {
             navigation.visibility = View.GONE
             navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)

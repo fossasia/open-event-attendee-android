@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
@@ -132,11 +133,17 @@ class LoginFragment : Fragment() {
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
+            if (thisActivity is AppCompatActivity)
+                thisActivity.supportActionBar?.show()
+            Utils.navAnimVisible(thisActivity?.navigationAuth, context)
             rootView.loginLayout.visibility = View.VISIBLE
         }
 
         rootView.forgotPassword.setOnClickListener {
             hideSoftKeyboard(context, rootView)
+            if (thisActivity is AppCompatActivity)
+                thisActivity.supportActionBar?.hide()
+            Utils.navAnimGone(thisActivity?.navigationAuth, context)
             loginViewModel.sendResetPasswordEmail(email.text.toString())
         }
 
