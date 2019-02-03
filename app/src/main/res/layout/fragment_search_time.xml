@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/layout_margin_medium"
+    android:layout_marginTop="@dimen/layout_margin_medium"
+    android:layout_marginLeft="@dimen/layout_margin_medium"
+    android:layout_marginRight="@dimen/layout_margin_medium"
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
 
@@ -16,59 +18,70 @@
         android:textSize="@dimen/text_size_extra_large"
         android:textStyle="bold" />
 
-
-    <CheckedTextView
-        android:id="@+id/anytimeTextView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/anytime"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <CheckedTextView
-        android:id="@+id/todayTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/today"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+            <CheckedTextView
+                android:id="@+id/anytimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/anytime"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
 
-    <CheckedTextView
-        android:id="@+id/tomorrowTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/tomorrow"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+            <CheckedTextView
+                android:id="@+id/todayTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/today"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
 
-    <CheckedTextView
-        android:id="@+id/thisWeekendTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/weekend"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+            <CheckedTextView
+                android:id="@+id/tomorrowTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/tomorrow"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
 
-    <CheckedTextView
-        android:id="@+id/nextMonthTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/month"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+            <CheckedTextView
+                android:id="@+id/thisWeekendTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/weekend"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
 
-    <CheckedTextView
-        android:id="@+id/timeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:text="@string/pick_date"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/text_size_expanded_title" />
+            <CheckedTextView
+                android:id="@+id/nextMonthTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/month"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/timeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:text="@string/pick_date"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_expanded_title" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
 
