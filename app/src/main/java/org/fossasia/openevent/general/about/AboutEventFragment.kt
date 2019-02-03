@@ -44,8 +44,10 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
         val thisActivity = activity
-        if (thisActivity is AppCompatActivity)
+        if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = ""
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         setHasOptionsMenu(true)
 
         rootView.appBar.addOnOffsetChangedListener(this)
