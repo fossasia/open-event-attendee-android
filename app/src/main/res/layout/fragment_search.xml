@@ -4,18 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <LinearLayout
             android:id="@+id/searchLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/layout_margin_medium"
             android:layout_marginRight="@dimen/layout_margin_medium"
-            android:layout_marginTop="@dimen/layout_margin_search_view"
+            android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -89,7 +84,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSearch"
