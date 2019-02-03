@@ -6,7 +6,6 @@
     android:layout_marginTop="@dimen/layout_margin_medium"
     android:layout_marginLeft="@dimen/layout_margin_medium"
     android:layout_marginRight="@dimen/layout_margin_medium"
-    android:layout_marginBottom="0dp"
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
 
