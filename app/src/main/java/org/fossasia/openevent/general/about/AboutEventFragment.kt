@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.about
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -9,15 +10,12 @@ import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_about_event.view.appBar
 import kotlinx.android.synthetic.main.fragment_about_event.view.progressBarAbout
 import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventContent
 import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventDetails
 import kotlinx.android.synthetic.main.fragment_about_event.view.eventName
-import kotlinx.android.synthetic.main.fragment_about_event.view.detailsHeader
-import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventCollapsingLayout
+import kotlinx.android.synthetic.main.fragment_about_event.view.scrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
@@ -25,7 +23,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
+class AboutEventFragment : Fragment() {
     private lateinit var rootView: View
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
     private var id: Long = -1
@@ -50,7 +48,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         }
         setHasOptionsMenu(true)
 
-        rootView.appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error
             .nonNull()
@@ -72,6 +69,20 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
                 loadEvent(it)
             })
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rootView.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                if (thisActivity is AppCompatActivity) {
+                    if (scrollY > rootView.eventName.height + resources.getDimensionPixelSize(R.dimen.details_header_margin_top))
+                    /*Toolbar title set to name of Event if scrolled more than
+                    event name height and detail header top margin combined */
+                        thisActivity.supportActionBar?.title = title
+                    else
+                    // Toolbar title set to an empty string
+                        thisActivity.supportActionBar?.title = ""
+                }
+            }
+        }
+
         return rootView
     }
 
@@ -85,23 +96,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         rootView.eventName.text = event.name
     }
 
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val maxScroll = appBarLayout.totalScrollRange
-        val percentage = Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
-
-        if (percentage == 1f && isHideToolbarView) {
-            // Collapsed
-            rootView.detailsHeader.visibility = View.GONE
-            rootView.aboutEventCollapsingLayout.title = title
-            isHideToolbarView = !isHideToolbarView
-        }
-        if (percentage < 1f && !isHideToolbarView) {
-            // Not Collapsed
-            rootView.detailsHeader.visibility = View.VISIBLE
-            rootView.aboutEventCollapsingLayout.title = " "
-            isHideToolbarView = !isHideToolbarView
-        }
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
