@@ -197,8 +197,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium">
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium">
 
                     <EditText
                         android:id="@+id/firstName"
@@ -211,8 +211,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium">
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium">
 
                     <EditText
                         android:id="@+id/lastName"
@@ -225,8 +225,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium">
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium">
 
                     <EditText
                         android:id="@+id/email"
@@ -240,8 +240,8 @@
                     android:id="@+id/countryArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
                     android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium"
                     android:visibility="gone">
 
                     <EditText
@@ -272,7 +272,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/attendeeRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_attendee" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/paymentSelector"
@@ -297,8 +299,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:layout_marginBottom="@dimen/padding_medium">
 
                         <EditText
                             android:id="@+id/cardNumber"
@@ -310,8 +312,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_medium"
                         android:layout_marginTop="@dimen/layout_margin_large"
+                        android:layout_marginBottom="@dimen/layout_margin_medium"
                         android:text="@string/card_type"
                         android:textSize="@dimen/text_size_large" />
 
@@ -342,8 +344,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_medium"
                         android:layout_marginTop="@dimen/layout_margin_large"
+                        android:layout_marginBottom="@dimen/layout_margin_medium"
                         android:text="@string/expiration_date"
                         android:textSize="@dimen/text_size_large" />
 
@@ -401,8 +403,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:layout_marginBottom="@dimen/padding_medium">
 
                         <EditText
                             android:id="@+id/cvc"
@@ -414,8 +416,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:layout_marginBottom="@dimen/padding_medium">
 
                         <EditText
                             android:id="@+id/postalCode"
