@@ -48,7 +48,6 @@ class AboutEventFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-
         aboutEventViewModel.error
             .nonNull()
             .observe(this, Observer {
@@ -72,7 +71,8 @@ class AboutEventFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 if (thisActivity is AppCompatActivity) {
-                    if (scrollY > rootView.eventName.height + resources.getDimensionPixelSize(R.dimen.details_header_margin_top))
+                    val topMargin = resources.getDimensionPixelSize(R.dimen.details_header_margin_top)
+                    if (scrollY > rootView.eventName.height + topMargin)
                     /*Toolbar title set to name of Event if scrolled more than
                     event name height and detail header top margin combined */
                         thisActivity.supportActionBar?.title = title
@@ -95,7 +95,6 @@ class AboutEventFragment : Fragment() {
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         rootView.eventName.text = event.name
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
