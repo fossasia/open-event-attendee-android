@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/mobile_navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
     app:startDestination="@id/eventsFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
         android:name="org.fossasia.openevent.general.WelcomeFragment"
-        android:label="WelcomeFragment" />
+        android:label="WelcomeFragment"
+        tools:layout="@layout/fragment_welcome" />
     <fragment
         android:id="@+id/eventsFragment"
         android:name="org.fossasia.openevent.general.event.EventsFragment"
-        android:label="EventsFragment" />
+        android:label="EventsFragment"
+        tools:layout="@layout/fragment_events" />
     <fragment
         android:id="@+id/similarEventsFragment"
         android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
-        android:label="SimilarEventsFragment" />
+        android:label="SimilarEventsFragment"
+        tools:layout="@layout/fragment_similar_events" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="org.fossasia.openevent.general.search.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/searchLocationFragment"
         android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
-        android:label="SearchLocationFragment" />
+        android:label="SearchLocationFragment"
+        tools:layout="@layout/fragment_search_location" />
     <fragment
         android:id="@+id/searchTimeFragment"
         android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
-        android:label="SearchTimeFragment" />
+        android:label="SearchTimeFragment"
+        tools:layout="@layout/fragment_search_time" />
     <fragment
         android:id="@+id/searchResultsFragment"
         android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
-        android:label="SearchResultsFragment" />
+        android:label="SearchResultsFragment"
+        tools:layout="@layout/fragment_search_results" />
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
-        android:label="FavoriteFragment" />
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
-        android:label="OrdersUnderUserFragment"/>
+        android:label="OrdersUnderUserFragment"
+        tools:layout="@layout/fragment_orders_under_user" />
     <fragment
         android:id="@+id/orderDetailsFragment"
         android:name="org.fossasia.openevent.general.order.OrderDetailsFragment"
-        android:label="OrderDetailsFragment"/>
+        android:label="OrderDetailsFragment"
+        tools:layout="@layout/fragment_order_details" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
-        android:label="ProfileFragment"/>
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
-        android:label="EditProfileFragment" />
+        android:label="EditProfileFragment"
+        tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.fossasia.openevent.general.settings.SettingsFragment"
@@ -58,29 +72,36 @@
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
-        android:label="EventDetailsFragment"/>
+        android:label="EventDetailsFragment"
+        tools:layout="@layout/fragment_event" />
     <fragment
         android:id="@+id/aboutEventFragment"
         android:name="org.fossasia.openevent.general.about.AboutEventFragment"
-        android:label="AboutEventFragment"/>
+        android:label="AboutEventFragment"
+        tools:layout="@layout/fragment_about_event" />
     <fragment
         android:id="@+id/ticketsFragment"
         android:name="org.fossasia.openevent.general.ticket.TicketsFragment"
-        android:label="TicketsFragment"/>
+        android:label="TicketsFragment"
+        tools:layout="@layout/fragment_tickets" />
     <fragment
         android:id="@+id/attendeeFragment"
         android:name="org.fossasia.openevent.general.attendees.AttendeeFragment"
-        android:label="AttendeeFragment"/>
+        android:label="AttendeeFragment"
+        tools:layout="@layout/fragment_attendee" />
     <fragment
         android:id="@+id/orderCompletedFragment"
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
-        android:label="OrderCompletedFragment"/>
+        android:label="OrderCompletedFragment"
+        tools:layout="@layout/fragment_order" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="org.fossasia.openevent.general.auth.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/signUpFragment"
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"
-        android:label="SignUpFragment" />
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_signup" />
 </navigation>
