@@ -85,8 +85,6 @@ class OrderCompletedFragment : Fragment() {
             shareEvent(eventShare)
         }
 
-        rootView.share.scaleType = ImageView.ScaleType.CENTER
-
         return rootView
     }
 
