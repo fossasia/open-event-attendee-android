@@ -156,7 +156,7 @@
                     android:layout_width="@dimen/fab_width"
                     android:layout_height="@dimen/fab_height"
                     android:layout_margin="@dimen/layout_margin_medium"
-                    app:backgroundTint="@android:color/white"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_share_grey_24dp" />
 
             </LinearLayout>
