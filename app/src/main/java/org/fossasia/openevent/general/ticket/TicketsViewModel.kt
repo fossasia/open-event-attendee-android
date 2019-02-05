@@ -42,9 +42,9 @@ class TicketsViewModel(
             .doOnSubscribe {
                 mutableProgressTickets.value = true
             }.subscribe({ ticketList ->
+                mutableProgressTickets.value = false
                 mutableTicketTableVisibility.value = ticketList.isNotEmpty()
                 tickets.value = ticketList
-                mutableProgressTickets.value = false
             }, {
                 mutableError.value = "Error fetching tickets"
                 Timber.e(it, "Error fetching tickets %d", id)
