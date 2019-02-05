@@ -113,6 +113,7 @@
                     android:textSize="@dimen/text_size_large"
                     tools:text="Qty" />
             </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ticketsRecycler"
                 android:layout_width="match_parent"
