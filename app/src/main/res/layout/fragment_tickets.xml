@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:fillViewport="true"        
+    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -117,7 +117,9 @@
                 android:id="@+id/ticketsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                tools:itemCount="6"
+                tools:listitem="@layout/item_ticket" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/register"
