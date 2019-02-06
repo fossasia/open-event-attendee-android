@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.search
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -26,7 +25,6 @@ import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -117,12 +115,7 @@ class SearchResultsFragment : Fragment() {
         val location = bundle?.getString(LOCATION)
         val date = bundle?.getString(DATE)
         searchViewModel.searchEvent = query
-        if (searchViewModel.savedLocation != null && TextUtils.isEmpty(location) && date == "Anytime")
-            searchViewModel.loadEvents(
-                searchViewModel.savedLocation.nullToEmpty(),
-                searchViewModel.savedDate.nullToEmpty())
-        else
-            searchViewModel.loadEvents(location.toString(), date.toString())
+        searchViewModel.loadEvents(location.toString(), date.toString())
     }
 
     private fun showNoSearchResults(events: List<Event>) {
