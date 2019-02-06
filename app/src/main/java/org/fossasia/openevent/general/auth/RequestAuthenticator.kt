@@ -1,18 +1,19 @@
 package org.fossasia.openevent.general.auth
 
-import okhttp3.Authenticator
-import okhttp3.Request
+import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.Route
 
-class RequestAuthenticator(private val authHolder: AuthHolder) : Authenticator {
+class RequestAuthenticator(private val authHolder: AuthHolder) : Interceptor {
 
-    override fun authenticate(route: Route?, response: Response): Request? {
-        val authorization: String? = authHolder.getAuthorization()
-        return if (response.request().header("Authorization") == null && authorization != null) {
-            response.request().newBuilder()
-                    .header("Authorization", authorization)
-                    .build()
-        } else null // Give up, we already tried authenticating
+    override fun intercept(chain: Interceptor.Chain): Response? {
+        val authorization = authHolder.getAuthorization()
+        val original = chain.request()
+        return if (authorization != null) {
+            val request = original.newBuilder()
+                .header("Authorization", authorization)
+                .build()
+            chain.proceed(request)
+        } else
+            chain.proceed(original)
     }
 }
