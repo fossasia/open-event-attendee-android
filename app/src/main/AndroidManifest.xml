@@ -16,6 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/SplashTheme">
             <intent-filter>
