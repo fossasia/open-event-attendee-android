@@ -5,17 +5,12 @@ import org.fossasia.openevent.general.data.Preference
 
 class SearchTimeViewModel(private val preference: Preference) : ViewModel() {
     companion object {
-        val tokenKeyDate = "DATE"
         val tokenKeyNextDate = "NEXT_DATE"
         val tokenKeyNextToNextDate = "NEXT_TO_NEXT_DATE"
         val tokenKeyWeekendDate = "WEEKEND"
         val tokenKeyWeekendNextDate = "WEEKEND_NEXT_DATE"
         val tokenKeyNextMonth = "NEXT_MONTH"
         val tokenKeyNextToNextMonth = "NEXT_TO_NEXT_MONTH"
-    }
-
-    fun saveDate(time: String) {
-        preference.putString(tokenKeyDate, time)
     }
 
     fun saveNextDate(time: String) {

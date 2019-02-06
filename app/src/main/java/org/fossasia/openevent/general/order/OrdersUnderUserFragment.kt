@@ -28,7 +28,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val ORDERS: String = "orders"
-const val LAUNCH_TICKETS: String = "LAUNCH_TICKETS"
 
 class OrdersUnderUserFragment : Fragment() {
 

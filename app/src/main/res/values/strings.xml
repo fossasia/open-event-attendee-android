@@ -3,6 +3,7 @@
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
+    <string name="saved_date">savedDate</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>

@@ -11,13 +11,10 @@ import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.order.LAUNCH_TICKETS
-import org.fossasia.openevent.general.order.TICKETS
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.search.SmartAuthViewModel
-import org.fossasia.openevent.general.search.TO_SEARCH
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 
@@ -38,15 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty())
             navController.navigate(R.id.welcomeFragment)
-
-        val bundle = if (savedInstanceState == null) intent.extras else null
-        if (bundle != null) {
-            if (bundle.getBoolean(TO_SEARCH))
-                navController.navigate(R.id.searchFragment)
-
-            if (bundle.getBoolean(TICKETS) || bundle.getBoolean(LAUNCH_TICKETS))
-                navController.navigate(R.id.orderUnderUserFragment)
-        }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentFragmentId = destination.id

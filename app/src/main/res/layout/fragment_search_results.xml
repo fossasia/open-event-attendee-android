@@ -78,7 +78,8 @@
                 android:id="@+id/eventsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_card_favorite_event" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

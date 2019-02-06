@@ -6,6 +6,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'androidx.navigation.safeargs'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 
@@ -126,7 +127,7 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
 
@@ -148,7 +149,7 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha11'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta01'
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha11'
 
     testImplementation 'junit:junit:4.12'

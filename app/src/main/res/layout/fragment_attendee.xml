@@ -272,7 +272,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/attendeeRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_attendee" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/paymentSelector"
