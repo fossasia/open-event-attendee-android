@@ -7,7 +7,7 @@
     tools:context="org.fossasia.openevent.general.WelcomeFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_margin_large"
@@ -21,18 +21,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/subheading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_margin_medium"
         android:text="@string/start_text_2"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_medium"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/heading"
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/globeIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/layout_margin_extra_large"
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/subheading"
         app:srcCompat="@drawable/ic_location_world" />
 
     <LinearLayout
@@ -60,12 +60,14 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/locationIcon"
             android:layout_width="@dimen/item_image_view_medium"
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_margin="@dimen/layout_margin_medium"
             app:srcCompat="@drawable/ic_location_pin" />
 
         <TextView
+            android:id="@+id/locationButtonText"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_margin="@dimen/layout_margin_medium"
@@ -100,6 +102,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="@+id/subheading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
