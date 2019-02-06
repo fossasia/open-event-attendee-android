@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.search
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -9,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.tomorrowTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.thisWeekendTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.nextMonthTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,7 +26,6 @@ const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
 const val THIS_WEEKEND = "This Weekend"
 const val NEXT_MONTH = "In the next month"
-const val TO_SEARCH = "ToSearchFragment"
 
 class SearchTimeFragment : Fragment() {
     private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
@@ -49,24 +48,19 @@ class SearchTimeFragment : Fragment() {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-            searchTimeViewModel.saveDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
-            redirectToSearch()
+            redirectToSearch(getSimpleFormattedDate(calendar.time))
         }
 
         rootView.anytimeTextView.setOnClickListener {
-            searchTimeViewModel.saveDate(ANYTIME)
-            redirectToSearch()
+            redirectToSearch(ANYTIME)
         }
 
         rootView.todayTextView.setOnClickListener {
-            searchTimeViewModel.saveDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(TODAY)
-            redirectToSearch()
+            redirectToSearch(TODAY)
         }
 
         rootView.tomorrowTextView.setOnClickListener {
@@ -74,8 +68,7 @@ class SearchTimeFragment : Fragment() {
             searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextToNextDate(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(TOMORROW)
-            redirectToSearch()
+            redirectToSearch(TOMORROW)
         }
 
         rootView.thisWeekendTextView.setOnClickListener {
@@ -87,8 +80,7 @@ class SearchTimeFragment : Fragment() {
             searchTimeViewModel.saveWeekendDate(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.DATE, 1)
             searchTimeViewModel.saveNextToWeekendDate(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(THIS_WEEKEND)
-            redirectToSearch()
+            redirectToSearch(THIS_WEEKEND)
         }
 
         rootView.nextMonthTextView.setOnClickListener {
@@ -98,12 +90,11 @@ class SearchTimeFragment : Fragment() {
             searchTimeViewModel.saveNextMonth(getSimpleFormattedDate(calendar.time))
             calendar.add(Calendar.MONTH, 1)
             searchTimeViewModel.saveNextToNextMonth(getSimpleFormattedDate(calendar.time))
-            searchTimeViewModel.saveDate(NEXT_MONTH)
-            redirectToSearch()
+            redirectToSearch(NEXT_MONTH)
         }
 
         rootView.timeTextView.setOnClickListener {
-            DatePickerDialog(context, date, calendar
+            DatePickerDialog(requireContext(), date, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
@@ -111,14 +102,10 @@ class SearchTimeFragment : Fragment() {
         return rootView
     }
 
-    private fun redirectToSearch() {
-        val intent = Intent(context, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val bundle = Bundle()
-        bundle.putBoolean(TO_SEARCH, true)
-        intent.putExtras(bundle)
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+    private fun redirectToSearch(time: String) {
+        val args = SearchFragmentArgs.Builder(time).build().toBundle()
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
+        Navigation.findNavController(rootView).navigate(R.id.searchFragment, args, navOptions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

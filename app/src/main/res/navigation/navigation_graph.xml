@@ -24,7 +24,11 @@
         android:id="@+id/searchFragment"
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <argument
+            android:name="@string/saved_date"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
         android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
