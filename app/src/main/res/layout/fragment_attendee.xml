@@ -452,6 +452,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="@dimen/card_elevation"
+                android:padding="@dimen/padding_large"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

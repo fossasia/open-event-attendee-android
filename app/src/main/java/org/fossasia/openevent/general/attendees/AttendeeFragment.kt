@@ -281,6 +281,7 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBarAttendee.isVisible = it
+                rootView.register.isVisible = !it
             })
 
         attendeeViewModel.event
