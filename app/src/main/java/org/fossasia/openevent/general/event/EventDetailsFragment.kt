@@ -70,7 +70,7 @@ class EventDetailsFragment : Fragment() {
     private val LINE_COUNT: Int = 3
     private var menuActionBar: Menu? = null
     private var title: String = ""
-    private var runonce: Boolean = true
+    private var runOnce: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,11 +108,11 @@ class EventDetailsFragment : Fragment() {
                     setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
                 }
 
-                if (runonce) {
+                if (runOnce) {
                     loadSocialLinksFragment()
                     loadSimilarEventsFragment()
                 }
-                runonce = false
+                runOnce = false
 
                 Timber.d("Fetched events of id %d", eventId)
             })
