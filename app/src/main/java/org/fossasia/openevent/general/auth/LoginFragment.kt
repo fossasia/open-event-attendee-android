@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_login.email
-import kotlinx.android.synthetic.main.fragment_login.loginButton
-import kotlinx.android.synthetic.main.fragment_login.password
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.email
 import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
@@ -157,7 +155,10 @@ class LoginFragment : Fragment() {
 
     private fun handleProgressBar(show: Boolean) {
         rootView.progressBar.isVisible = show
-        loginButton.isEnabled = !show
+        loginButton.isVisible = !show
+        email.isEnabled = !show
+        password.isEnabled = !show
+        forgotPassword.isVisible = !show
     }
 
     private fun redirectToEvents() {
@@ -166,7 +167,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun onEmailEntered(enable: Boolean) {
-        rootView.loginButton.isEnabled = enable
         rootView.forgotPassword.isVisible = enable
     }
 

@@ -77,7 +77,12 @@ class SignUpFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBarSignUp.isVisible = it
-                signUpButton.isEnabled = !it
+                signUpButton.isVisible = !it
+                usernameSignUp.isEnabled = !it
+                passwordSignUp.isEnabled = !it
+                confirmPasswords.isEnabled = !it
+                firstNameText.isEnabled = !it
+                lastNameText.isEnabled = !it
             })
 
         signUpViewModel.showNoInternetDialog
