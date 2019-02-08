@@ -4,6 +4,7 @@
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
     <string name="saved_date">savedDate</string>
+    <string name="location_hint">Enter a location</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
