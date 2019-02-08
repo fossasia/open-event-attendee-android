@@ -164,6 +164,7 @@ class AttendeeViewModel(
         if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
             mutableMessage.value = "Please fill in all the fields"
             mutableIsAttendeeCreated.value = false
+            mutableProgress.value = false
             return
         }
 
