@@ -73,6 +73,7 @@ class LoginViewModel(
             }.subscribe({
                 mutableRequestTokenSuccess.value = verifyMessage(it.message)
             }, {
+                mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
                 mutableError.value = "Email address not present in server. Please check your email"
             })
         )
