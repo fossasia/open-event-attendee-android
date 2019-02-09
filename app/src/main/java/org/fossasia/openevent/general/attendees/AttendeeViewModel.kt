@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -393,6 +394,14 @@ class AttendeeViewModel(
             }) {
                 Timber.e(it, "Failure Logging out!")
             })
+    }
+
+    fun checkEmail(attendees: ArrayList<Attendee>): Boolean {
+        (0 until attendees.size).forEach {
+            if (attendees.get(it).email.isNullOrEmpty()) return false
+            else if (!Patterns.EMAIL_ADDRESS.matcher(attendees.get(it).email).matches()) return false
+        }
+        return true
     }
 
     override fun onCleared() {

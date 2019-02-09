@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -369,7 +368,6 @@ class AttendeeFragment : Fragment() {
 
         rootView.register.setOnClickListener {
             val attendees = ArrayList<Attendee>()
-            var emailCheck: Boolean = true
             if (singleTicket) {
                 val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
                 val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
@@ -387,17 +385,7 @@ class AttendeeFragment : Fragment() {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
 
-            for (i in 0 until attendees.size) {
-                if (attendees.get(i).email.isNullOrEmpty()) {
-                    emailCheck = false
-                    break
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(attendees.get(i).email).matches()) {
-                    emailCheck = false
-                    break
-                }
-            }
-
-            if (emailCheck) {
+            if (attendeeViewModel.checkEmail(attendees)) {
                 val country = if (country.text.isEmpty()) country.text.toString() else null
                 attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
