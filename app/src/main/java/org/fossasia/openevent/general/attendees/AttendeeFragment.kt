@@ -390,7 +390,7 @@ class AttendeeFragment : Fragment() {
                 attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
                 attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                    if (isAttendeeCreated && selectedPaymentOption == 
+                    if (isAttendeeCreated && selectedPaymentOption ==
                         paymentOptions.indexOf(getString(R.string.stripe))) {
                         sendToken()
                     }
