@@ -77,7 +77,7 @@ class SearchLocationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Utils.showSoftKeyboard(context,search)
+        Utils.showSoftKeyboard(context, search)
     }
 
     private fun checkLocationPermission() {

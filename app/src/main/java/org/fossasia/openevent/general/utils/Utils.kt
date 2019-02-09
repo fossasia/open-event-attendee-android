@@ -47,7 +47,7 @@ object Utils {
     fun showSoftKeyboard(context: Context?, view: View) {
         view.requestFocus()
         val manager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-        if (manager is InputMethodManager) manager.toggleSoftInputFromWindow(view.windowToken,0,0)
+        if (manager is InputMethodManager) manager.toggleSoftInputFromWindow(view.windowToken, 0, 0)
     }
 
     fun hideSoftKeyboard(context: Context?, view: View) {
