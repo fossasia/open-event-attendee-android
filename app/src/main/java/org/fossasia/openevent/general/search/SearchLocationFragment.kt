@@ -110,7 +110,7 @@ class SearchLocationFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                Utils.hideSoftKeyboard(context,rootView)
+                Utils.hideSoftKeyboard(context, rootView)
                 activity?.onBackPressed()
                 true
             }
