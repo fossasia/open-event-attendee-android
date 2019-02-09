@@ -1,14 +1,12 @@
 package org.fossasia.openevent.general.search
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -16,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_search_location.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
@@ -33,10 +32,6 @@ class SearchLocationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
-
-        val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-            as InputMethodManager
-        inputManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
@@ -78,6 +73,11 @@ class SearchLocationFragment : Fragment() {
         })
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Utils.showSoftKeyboard(context,search)
     }
 
     private fun checkLocationPermission() {
