@@ -22,6 +22,7 @@ const val RC_CREDENTIALS_READ = 2
 const val RC_CREDENTIALS_SAVE = 3
 
 class SmartAuthViewModel : ViewModel() {
+    private var requestedCredentialsEarlier = false
     private lateinit var credentialsClient: CredentialsClient
     private lateinit var signInClient: GoogleSignInClient
     private lateinit var thisActivity: Activity
@@ -45,13 +46,15 @@ class SmartAuthViewModel : ViewModel() {
     }
 
     fun requestCredentials(activity: Activity?) {
-        if (activity == null) return
+        if (activity == null || requestedCredentialsEarlier) return
         val crBuilder = CredentialRequest.Builder()
             .setPasswordLoginSupported(true)
         crBuilder.setAccountTypes(IdentityProviders.GOOGLE)
         mutableProgress.value = true
         credentialsClient.request(crBuilder.build()).addOnCompleteListener(
             OnCompleteListener<CredentialRequestResponse> { task ->
+                requestedCredentialsEarlier = true
+
                 mutableProgress.value = false
                 if (task.isSuccessful) {
                     mutableId.value = task.result?.credential?.id
