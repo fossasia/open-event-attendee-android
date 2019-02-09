@@ -385,7 +385,7 @@ class AttendeeFragment : Fragment() {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
 
-            if (attendeeViewModel.checkEmail(attendees)) {
+            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                 val country = if (country.text.isEmpty()) country.text.toString() else null
                 attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 

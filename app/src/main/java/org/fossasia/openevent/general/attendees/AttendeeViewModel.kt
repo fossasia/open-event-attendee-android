@@ -396,7 +396,7 @@ class AttendeeViewModel(
             })
     }
 
-    fun checkEmail(attendees: ArrayList<Attendee>): Boolean {
+    fun areAttendeeEmailsValid(attendees: ArrayList<Attendee>): Boolean {
         /**Checks for  correct pattern in email*/
         attendees.forEach {
             if (it.email.isNullOrEmpty()) return false
