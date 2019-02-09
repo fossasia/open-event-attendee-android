@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
@@ -383,14 +384,18 @@ class AttendeeFragment : Fragment() {
             } else {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
-            val country = if (country.text.isEmpty()) country.text.toString() else null
-            attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
-            attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                if (isAttendeeCreated && selectedPaymentOption == paymentOptions.indexOf(getString(R.string.stripe))) {
-                    sendToken()
-                }
-            })
+            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                val country = if (country.text.isEmpty()) country.text.toString() else null
+                attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+
+                attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
+                    if (isAttendeeCreated && selectedPaymentOption ==
+                        paymentOptions.indexOf(getString(R.string.stripe))) {
+                        sendToken()
+                    }
+                })
+            } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
         }
 
         attendeeViewModel.ticketSoldOut
