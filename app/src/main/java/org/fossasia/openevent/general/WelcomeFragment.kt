@@ -78,6 +78,6 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        Navigation.findNavController(rootView).navigate(R.id.eventsFragment, null, Utils.getAnimSlide())
+        Navigation.findNavController(rootView).popBackStack()
     }
 }
