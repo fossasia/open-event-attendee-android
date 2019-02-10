@@ -29,6 +29,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val TICKETS: String = "OpenMyTickets"
@@ -106,7 +107,7 @@ class OrderCompletedFragment : Fragment() {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
         startActivity(intent)
