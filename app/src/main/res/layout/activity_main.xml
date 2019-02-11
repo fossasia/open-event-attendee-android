@@ -34,9 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
-            app:itemBackground="@android:color/white"
             android:foreground="?attr/selectableItemBackground"
-            app:itemTextColor="@color/colorPrimaryDark"
+            app:itemBackground="@android:color/white"
+            app:itemIconTint="@color/navigation_item"
+            app:itemTextColor="@color/navigation_item"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/navigation" />
 
@@ -46,9 +47,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@android:color/white"
-            app:itemBackground="@android:color/white"
             android:foreground="?attr/selectableItemBackground"
-            app:itemTextColor="@color/colorPrimaryDark"
+            app:itemBackground="@android:color/white"
+            app:itemIconTint="@color/navigation_item"
+            app:itemTextColor="@color/navigation_item"
             app:menu="@menu/navigation_auth" />
 
     </LinearLayout>
