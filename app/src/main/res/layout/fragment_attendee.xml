@@ -435,14 +435,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_margin_moderate" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/layout_margin_large"
-                    android:backgroundTint="@color/colorAccent"
-                    android:enabled="false"
                     android:padding="@dimen/padding_medium"
                     android:text="@string/register"
                     android:textColor="@android:color/white" />
@@ -454,7 +453,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="@dimen/card_elevation"
-                android:padding="@dimen/padding_large"
+                android:padding="@dimen/padding_small"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
