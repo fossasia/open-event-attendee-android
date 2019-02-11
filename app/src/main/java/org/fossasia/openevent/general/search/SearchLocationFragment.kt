@@ -33,8 +33,6 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        Utils.showSoftKeyboard(context, view)
-
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
@@ -76,9 +74,8 @@ class SearchLocationFragment : Fragment() {
     }
 
     override fun onResume() {
-        search.requestFocus()
-        Utils.showSoftKeyboard(context, rootView)
         super.onResume()
+        Utils.showSoftKeyboard(context, search)
     }
 
     private fun checkLocationPermission() {
@@ -111,6 +108,7 @@ class SearchLocationFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
+                Utils.hideSoftKeyboard(context, rootView)
                 activity?.onBackPressed()
                 true
             }
