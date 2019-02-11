@@ -1,8 +1,10 @@
 package org.fossasia.openevent.general
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,16 +42,27 @@ class WelcomeFragment : Fragment() {
         geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
             rootView.currentLocation.visibility = View.GONE
         })
-        geoLocationViewModel.configure(null)
 
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
-            geoLocationViewModel.configure(activity)
+            geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
         geoLocationViewModel.location.observe(this, Observer { location ->
             searchLocationViewModel.saveSearch(location)
             redirectToMain()
+        })
+
+        geoLocationViewModel.openLocationSettings.observe(this, Observer { open ->
+            if (open) {
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+        })
+
+        geoLocationViewModel.errorMessage.observe(this, Observer { message ->
+            rootView.locationProgressBar.visibility = View.VISIBLE
+            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
         })
 
         return rootView
@@ -59,7 +72,7 @@ class WelcomeFragment : Fragment() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    geoLocationViewModel.configure(activity)
+                    geoLocationViewModel.configure()
                 } else {
                     Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE

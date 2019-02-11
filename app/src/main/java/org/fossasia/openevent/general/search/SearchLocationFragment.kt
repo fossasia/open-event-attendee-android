@@ -49,11 +49,9 @@ class SearchLocationFragment : Fragment() {
             rootView.currentLocation.visibility = View.GONE
         })
 
-        geoLocationViewModel.configure(null)
-
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
-            geoLocationViewModel.configure(activity)
+            geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
@@ -101,7 +99,7 @@ class SearchLocationFragment : Fragment() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    geoLocationViewModel.configure(activity)
+                    geoLocationViewModel.configure()
                 } else {
                     Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE
