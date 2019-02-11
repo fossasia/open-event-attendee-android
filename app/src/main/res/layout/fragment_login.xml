@@ -83,14 +83,6 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:text="@string/login" />
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingTop="@dimen/padding_large"
-                    android:id="@+id/progressBar"
-                    android:visibility="gone" />
-
                 <TextView
                     android:id="@+id/forgotPassword"
                     android:layout_width="match_parent"

@@ -129,14 +129,6 @@
                 android:text="@string/sign_up"
                 android:textColor="@android:color/white" />
 
-            <ProgressBar
-                android:id="@+id/progressBarSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:visibility="gone" />
-
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

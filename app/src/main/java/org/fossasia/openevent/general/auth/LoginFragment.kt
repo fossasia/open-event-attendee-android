@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,14 +19,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
-import kotlinx.android.synthetic.main.fragment_login.loginButton
-import kotlinx.android.synthetic.main.fragment_login.forgotPassword
 import kotlinx.android.synthetic.main.fragment_login.view.email
 import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
 import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
-import kotlinx.android.synthetic.main.fragment_login.view.progressBar
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
@@ -57,6 +56,11 @@ class LoginFragment : Fragment() {
         setHasOptionsMenu(true)
         showSnackbar()
 
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_progress)
+
         smartAuthViewModel.buildCredential(activity, null)
 
         if (loginViewModel.isLoggedIn())
@@ -82,13 +86,13 @@ class LoginFragment : Fragment() {
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                handleProgressBar(it)
+                handleProgressBar(it, dialog)
             })
 
         smartAuthViewModel.progress
             .nonNull()
             .observe(this, Observer {
-            handleProgressBar(it)
+            handleProgressBar(it, dialog)
         })
 
         loginViewModel.showNoInternetDialog
@@ -172,12 +176,9 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.requestCredentials(activity)
     }
 
-    private fun handleProgressBar(show: Boolean) {
-        rootView.progressBar.isVisible = show
-        loginButton.isVisible = !show
-        email.isEnabled = !show
-        password.isEnabled = !show
-        forgotPassword.isVisible = !show
+    private fun handleProgressBar(show: Boolean, dialog: Dialog) {
+        if (show) dialog.show()
+        else if (dialog.isShowing) dialog.dismiss()
     }
 
     private fun redirectToEvents() {

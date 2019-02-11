@@ -1,15 +1,16 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
@@ -18,10 +19,8 @@ import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.firstNameText
 import kotlinx.android.synthetic.main.fragment_signup.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
-import kotlinx.android.synthetic.main.fragment_signup.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.progressBarSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
@@ -50,6 +49,11 @@ class SignUpFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_progress)
+
         lateinit var confirmPassword: String
         val signUp = SignUp()
 
@@ -76,13 +80,8 @@ class SignUpFragment : Fragment() {
         signUpViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                rootView.progressBarSignUp.isVisible = it
-                signUpButton.isVisible = !it
-                usernameSignUp.isEnabled = !it
-                passwordSignUp.isEnabled = !it
-                confirmPasswords.isEnabled = !it
-                firstNameText.isEnabled = !it
-                lastNameText.isEnabled = !it
+                if (it) dialog.show()
+                else if (dialog.isShowing) dialog.dismiss()
             })
 
         signUpViewModel.showNoInternetDialog
