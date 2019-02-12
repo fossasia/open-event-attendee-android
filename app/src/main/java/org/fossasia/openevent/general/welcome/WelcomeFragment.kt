@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general
+package org.fossasia.openevent.general.welcome
 
 import android.Manifest
 import android.content.Intent
@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_welcome.view.pickCityButton
 import kotlinx.android.synthetic.main.fragment_welcome.view.currentLocation
 import kotlinx.android.synthetic.main.fragment_welcome.view.locationProgressBar
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.utils.Utils
