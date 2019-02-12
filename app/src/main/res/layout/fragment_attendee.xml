@@ -306,6 +306,7 @@
 
                         <EditText
                             android:id="@+id/cardNumber"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/card_number" />
@@ -330,7 +331,7 @@
                         <TextView
                             android:id="@+id/selectCard"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/spinner_width"
                             android:layout_weight="0.8"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_large" />
@@ -410,6 +411,7 @@
 
                         <EditText
                             android:id="@+id/cvc"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/cvc" />
@@ -423,6 +425,7 @@
 
                         <EditText
                             android:id="@+id/postalCode"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/postal_code" />

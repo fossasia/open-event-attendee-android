@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -37,31 +38,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.accept
-import kotlinx.android.synthetic.main.fragment_attendee.view.amount
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.countryArea
-import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
-import kotlinx.android.synthetic.main.fragment_attendee.view.month
-import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
-import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
-import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
-import kotlinx.android.synthetic.main.fragment_attendee.view.qty
-import kotlinx.android.synthetic.main.fragment_attendee.view.register
-import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
-import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
-import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
-import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
-import kotlinx.android.synthetic.main.fragment_attendee.view.ticketsRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.time
-import kotlinx.android.synthetic.main.fragment_attendee.view.view
-import kotlinx.android.synthetic.main.fragment_attendee.view.year
-import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
+import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -78,6 +55,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
+import java.util.regex.Pattern
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
@@ -217,6 +195,54 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.initializeSpinner()
 
+        rootView.cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val visaPattern = Pattern.compile("^4[0-9]{0,15}$")
+                val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
+                    "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
+                val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
+                val selectCardText = rootView.selectCard
+
+                when {
+                    s?.length!! <3 -> {
+                        cardBrand = attendeeViewModel.cardType[0]
+                        selectCardText.text = cardBrand
+                        rootView.cardSelector.isVisible = true
+                        rootView.cardNumber.error = null
+                    }
+                    visaPattern.matcher(s.toString()).matches() -> {
+                        cardBrand = attendeeViewModel.cardType[1]
+                        selectCardText.text = cardBrand
+                        rootView.cardSelector.isVisible = false
+                        rootView.cardNumber.error = null
+                    }
+                    masterCardPattern.matcher(s.toString()).matches() -> {
+                        cardBrand = attendeeViewModel.cardType[2]
+                        selectCardText.text = cardBrand
+                        rootView.cardSelector.isVisible = false
+                        rootView.cardNumber.error = null
+                    }
+                    americanExpressPattern.matcher(s.toString()).matches() -> {
+                        cardBrand = attendeeViewModel.cardType[3]
+                        selectCardText.text = cardBrand
+                        rootView.cardSelector.isVisible = false
+                        rootView.cardNumber.error = null
+                    }
+                    else -> {
+                        cardBrand = attendeeViewModel.cardType[0]
+                        selectCardText.text = cardBrand
+                        rootView.cardSelector.isVisible = true
+                        rootView.cardNumber.error = "Invalid card number"
+                    }
+                }
+            }
+        })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             attendeeViewModel.month)
         rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -228,6 +254,9 @@ class AttendeeFragment : Fragment() {
                 expiryMonth = p2
                 rootView.monthText.text = attendeeViewModel.month[p2]
             }
+        }
+        rootView.monthText.setOnClickListener {
+            rootView.month.performClick()
         }
 
         rootView.year.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
@@ -243,6 +272,9 @@ class AttendeeFragment : Fragment() {
                     expiryYear = "2017" // invalid year, if the user hasn't selected the year
                 rootView.yearText.text = attendeeViewModel.year[p2]
             }
+        }
+        rootView.yearText.setOnClickListener {
+            rootView.year.performClick()
         }
 
         rootView.cardSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
