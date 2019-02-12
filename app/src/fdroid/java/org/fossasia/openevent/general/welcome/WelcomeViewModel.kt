@@ -1,13 +1,16 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.welcome
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.search.LocationService
 
-class GeoLocationViewModel(locationService: LocationService) : ViewModel() {
-    private val mutableLocation = MutableLiveData<String>()
-    val location: LiveData<String> = mutableLocation
+class WelcomeViewModel(locationService: LocationService, preference: Preference) : ViewModel() {
+
+    private val mutableRedirectToMain = MutableLiveData<Boolean>()
+    val redirectToMain: LiveData<Boolean> = mutableRedirectToMain
     private val mutableVisibility = MutableLiveData<Boolean>()
     val currentLocationVisibility: LiveData<Boolean> = mutableVisibility
     private val mutableOpenLocationSettings = MutableLiveData<Boolean>()
@@ -20,7 +23,6 @@ class GeoLocationViewModel(locationService: LocationService) : ViewModel() {
     }
 
     fun configure() {
-        mutableVisibility.value = false
-        return
+        // Since there are no location services for f-droid, this doesn't do anything.
     }
 }

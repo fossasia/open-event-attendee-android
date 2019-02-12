@@ -18,12 +18,12 @@
 
     <item
         android:id="@+id/orderUnderUserFragment"
-        android:icon="@drawable/ic_baseline_ticket_24dp"
+        android:icon="@drawable/ic_outline_ticket_24dp"
         android:title="@string/tickets" />
 
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_baseline_account_circle_24px"
+        android:icon="@drawable/ic_outline_account_circle_24dp"
         android:title="@string/profile" />
     
 </menu>

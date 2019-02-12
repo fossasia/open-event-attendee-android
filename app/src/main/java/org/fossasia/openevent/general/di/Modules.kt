@@ -54,6 +54,8 @@ import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.SmartAuthViewModel
+import org.fossasia.openevent.general.search.LocationService
+import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -64,7 +66,9 @@ import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.ticket.TicketsViewModel
+import org.fossasia.openevent.general.welcome.WelcomeViewModel
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -75,6 +79,7 @@ import java.util.concurrent.TimeUnit
 val commonModule = module {
     single { Preference() }
     single { Network() }
+    factory<LocationService> { LocationServiceImpl(androidContext()) }
 }
 
 val apiModule = module {
@@ -141,8 +146,9 @@ val viewModelModule = module {
     viewModel { OrdersUnderUserVM(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
     viewModel { EditProfileViewModel(get(), get()) }
-    viewModel { GeoLocationViewModel() }
+    viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
+    viewModel { WelcomeViewModel(get(), get()) }
 }
 
 val networkModule = module {
