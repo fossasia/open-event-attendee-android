@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent">
         <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
             android:layout_gravity="center"
             android:backgroundTint="@color/colorAccent"
             android:padding="@dimen/padding_large" />
@@ -14,9 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="@dimen/padding_large"
-            android:paddingRight="@dimen/padding_extra_large"
+            android:paddingRight="@dimen/padding_extreme_large"
             android:text="Loading..."
-            android:textSize="@dimen/text_size_expanded_title" />
+            android:textSize="@dimen/text_size_large" />
 
 </LinearLayout>

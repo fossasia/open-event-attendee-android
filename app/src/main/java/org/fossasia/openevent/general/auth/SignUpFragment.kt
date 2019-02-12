@@ -1,13 +1,11 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.ProgressDialog
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,17 +41,13 @@ class SignUpFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
 
+        val progressDialog = ProgressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Sign Up"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_progress)
 
         lateinit var confirmPassword: String
         val signUp = SignUp()
@@ -80,8 +75,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                if (it) dialog.show()
-                else if (dialog.isShowing) dialog.dismiss()
+                progressDialog.showOrDismiss(it)
             })
 
         signUpViewModel.showNoInternetDialog

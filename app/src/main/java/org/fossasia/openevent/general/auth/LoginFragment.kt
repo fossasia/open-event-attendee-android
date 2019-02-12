@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -28,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SmartAuthViewModel
+import org.fossasia.openevent.general.utils.ProgressDialog
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -48,6 +47,7 @@ class LoginFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
+        val progressDialog = ProgressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Login"
@@ -55,11 +55,6 @@ class LoginFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         showSnackbar()
-
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_progress)
 
         smartAuthViewModel.buildCredential(activity, null)
 
@@ -86,13 +81,13 @@ class LoginFragment : Fragment() {
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                handleProgressBar(it, dialog)
+            progressDialog.showOrDismiss(it)
             })
 
         smartAuthViewModel.progress
             .nonNull()
             .observe(this, Observer {
-            handleProgressBar(it, dialog)
+            progressDialog.showOrDismiss(it)
         })
 
         loginViewModel.showNoInternetDialog
@@ -174,11 +169,6 @@ class LoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         smartAuthViewModel.requestCredentials(activity)
-    }
-
-    private fun handleProgressBar(show: Boolean, dialog: Dialog) {
-        if (show) dialog.show()
-        else if (dialog.isShowing) dialog.dismiss()
     }
 
     private fun redirectToEvents() {
