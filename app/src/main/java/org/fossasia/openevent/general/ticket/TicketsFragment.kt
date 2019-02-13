@@ -103,7 +103,7 @@ class TicketsFragment : Fragment() {
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
-        
+
         ticketsViewModel.progressTickets
             .nonNull()
             .observe(this, Observer {
