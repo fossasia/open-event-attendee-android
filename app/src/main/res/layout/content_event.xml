@@ -332,8 +332,8 @@
                         android:id="@+id/frameContainerSocial"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/padding_small"
-                        android:paddingBottom="@dimen/padding_small" />
+                        android:paddingLeft="@dimen/padding_large"
+                        android:paddingTop="@dimen/padding_small" />
                 </LinearLayout>
 
                 <LinearLayout
