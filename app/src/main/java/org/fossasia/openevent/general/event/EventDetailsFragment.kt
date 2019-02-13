@@ -78,6 +78,26 @@ class EventDetailsFragment : Fragment() {
         if (bundle != null) {
             eventId = bundle.getLong(EVENT_ID, -1)
         }
+
+        eventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEvent(it)
+                eventShare = it
+                title = eventShare.name
+
+                if (eventShare.favorite) {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
+                }
+
+                if (runOnce) {
+                    loadSocialLinksFragment()
+                    loadSimilarEventsFragment()
+                }
+                runOnce = false
+
+                Timber.d("Fetched events of id %d", eventId)
+            })
     }
 
     override fun onCreateView(
@@ -93,29 +113,9 @@ class EventDetailsFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        eventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-                eventShare = it
-                title = eventShare.name
-
-                rootView.buttonTickets.setOnClickListener {
-                    loadTicketFragment()
-                }
-
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
-                }
-
-                if (runOnce) {
-                    loadSocialLinksFragment()
-                    loadSimilarEventsFragment()
-                }
-                runOnce = false
-
-                Timber.d("Fetched events of id %d", eventId)
-            })
+        rootView.buttonTickets.setOnClickListener {
+            loadTicketFragment()
+        }
 
         eventViewModel.error
             .nonNull()

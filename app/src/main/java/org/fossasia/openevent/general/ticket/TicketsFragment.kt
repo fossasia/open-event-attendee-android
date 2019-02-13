@@ -56,6 +56,32 @@ class TicketsFragment : Fragment() {
             currency = bundle.getString(CURRENCY, null)
         }
         ticketsRecyclerAdapter.setCurrency(currency)
+
+        val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
+            }
+        }
+        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
+
+        ticketsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
+                ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
     }
 
     override fun onCreateView(
@@ -69,12 +95,6 @@ class TicketsFragment : Fragment() {
         activity?.supportActionBar?.title = "Ticket Details"
         setHasOptionsMenu(true)
 
-        val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
-            }
-        }
-        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
 
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
@@ -84,11 +104,6 @@ class TicketsFragment : Fragment() {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
 
         ticketsViewModel.progressTickets
             .nonNull()
@@ -98,11 +113,13 @@ class TicketsFragment : Fragment() {
                 rootView.register.isGone = it
             })
 
-        ticketsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEventDetails(it)
-            })
+        rootView.register.setOnClickListener {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                checkForAuthentication()
+            } else {
+                handleNoTicketsSelected()
+            }
+        }
 
         ticketsViewModel.ticketTableVisibility
             .nonNull()
@@ -115,21 +132,6 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.loadEvent(id)
         ticketsViewModel.loadTickets(id)
-
-        ticketsViewModel.tickets
-            .nonNull()
-            .observe(this, Observer {
-                ticketsRecyclerAdapter.addAll(it)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
-            })
-
-        rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
-                checkForAuthentication()
-            } else {
-                handleNoTicketsSelected()
-            }
-        }
 
         return rootView
     }
