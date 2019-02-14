@@ -24,7 +24,7 @@
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_share_grey_24dp" />
+            app:srcCompat="@drawable/ic_share_grey" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/favoriteFab"
@@ -38,7 +38,7 @@
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_baseline_favorite_border_24px" />
+            app:srcCompat="@drawable/ic_baseline_favorite_border" />
 
         <LinearLayout
             android:layout_width="match_parent"
