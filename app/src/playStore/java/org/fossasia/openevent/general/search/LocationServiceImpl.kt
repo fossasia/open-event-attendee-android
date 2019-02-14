@@ -60,8 +60,9 @@ class LocationServiceImpl(private val context: Context) : LocationService {
             val latitude = location.latitude
             val longitude = location.longitude
             try {
+                val maxResults = 2
                 val geocoder = Geocoder(context, Locale.getDefault())
-                val addresses = geocoder.getFromLocation(latitude, longitude, 2)
+                val addresses = geocoder.getFromLocation(latitude, longitude, maxResults)
                 val address = addresses.first { address -> address.adminArea != null }
                 return address.adminArea
             } catch (exception: IOException) {
