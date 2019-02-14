@@ -29,19 +29,19 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
         return when (name.toLowerCase()) {
             "github url",
             "githuburl",
-            "github" -> R.drawable.ic_github_24dp
+            "github" -> R.drawable.ic_github
             "twitter url",
             "twitterurl",
-            "twitter" -> R.drawable.ic_twitter_24dp
+            "twitter" -> R.drawable.ic_twitter
             "facebook url",
             "facebookurl",
-            "facebook" -> R.drawable.ic_facebook_24dp
+            "facebook" -> R.drawable.ic_facebook
             "linkedin url",
             "linkedinurl",
-            "linkedin" -> R.drawable.ic_linkedin_24dp
+            "linkedin" -> R.drawable.ic_linkedin
             "youtube url",
             "youtubeurl",
-            "youtube" -> R.drawable.ic_youtube_24dp
+            "youtube" -> R.drawable.ic_youtube
             "googleplus",
             "googleplus url",
             "googleplusurl",
@@ -50,20 +50,20 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
             "google plus url",
             "google url",
             "googleurl",
-            "google" -> R.drawable.ic_google_plus_24dp
+            "google" -> R.drawable.ic_google_plus
             "wikipedia",
             "wikipedia url",
-            "wikipediaurl" -> R.drawable.ic_wikipedia_24dp
+            "wikipediaurl" -> R.drawable.ic_wikipedia
             "flickr",
             "flickr url",
-            "flickrurl" -> R.drawable.ic_flickr_24dp
+            "flickrurl" -> R.drawable.ic_flickr
             "blogger",
             "blogger url",
             "bloggerurl",
             "blog",
             "blog url",
-            "blogurl" -> R.drawable.ic_blogger_24dp
-            else -> R.drawable.ic_link_black_24dp
+            "blogurl" -> R.drawable.ic_blogger
+            else -> R.drawable.ic_link_black
         }
     }
 }
