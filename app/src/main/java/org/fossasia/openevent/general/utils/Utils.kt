@@ -30,7 +30,7 @@ object Utils {
         CustomTabsIntent.Builder()
                 .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
                 .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.ic_arrow_back_white_cct_24dp))
+                    R.drawable.ic_arrow_back_white_cct))
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
