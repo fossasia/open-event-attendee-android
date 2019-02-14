@@ -81,13 +81,13 @@ class LoginFragment : Fragment() {
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                handleProgressBar(it, progressDialog)
+                progressDialog.show(it)
             })
 
         smartAuthViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                handleProgressBar(it, progressDialog)
+                progressDialog.show(it)
             })
 
         loginViewModel.showNoInternetDialog
@@ -171,9 +171,9 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.requestCredentials(activity)
     }
 
-    private fun handleProgressBar(show: Boolean, dialog: Dialog) {
-        if (show && !dialog.isShowing) dialog.show()
-        else if (!show && dialog.isShowing) dialog.dismiss()
+    private fun Dialog.show(show: Boolean) {
+        if (show && !this.isShowing) this.show()
+        else if (!show && this.isShowing) this.dismiss()
     }
 
     private fun redirectToEvents() {

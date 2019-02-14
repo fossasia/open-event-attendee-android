@@ -47,6 +47,7 @@ object Utils {
     }
 
     fun progressDialog(context: Context?): Dialog {
+        /**Initializes progress dialog.*/
         val dialog = Dialog(context)
         dialog.setCancelable(false)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
