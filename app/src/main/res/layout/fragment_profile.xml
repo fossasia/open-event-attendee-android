@@ -27,7 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_extra_large"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_account_circle_grey_24dp"
+            app:srcCompat="@drawable/ic_account_circle_grey"
             android:layout_marginBottom="@dimen/padding_large"/>
 
         <LinearLayout
@@ -69,5 +69,5 @@
         android:focusable="true"
         app:backgroundTint="@color/colorAccent"
         app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/ic_create_white_24dp" />
+        app:srcCompat="@drawable/ic_create_white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
