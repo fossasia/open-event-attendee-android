@@ -28,6 +28,8 @@ class TicketsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
+    private val mutableTicketIdAndQty = MutableLiveData<ArrayList<Pair<Int, Int>>>()
+    val ticketIdAndQty = mutableTicketIdAndQty
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -68,12 +70,23 @@ class TicketsViewModel(
         )
     }
 
-    fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
-        return ticketIdAndQty.sumBy { it.second } == 0
+    fun totalTicketsEmpty(): Boolean {
+        return mutableTicketIdAndQty.value?.sumBy { it.second } != 0
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+    fun handleTicketSelect(id: Int, quantity: Int) {
+        if (mutableTicketIdAndQty.value == null) {
+            mutableTicketIdAndQty.value = ArrayList()
+        }
+        val pos = mutableTicketIdAndQty.value?.map { it.first }?.indexOf(id) ?: -1
+        if (pos == -1) {
+            mutableTicketIdAndQty.value?.add(Pair(id, quantity))
+        } else {
+            mutableTicketIdAndQty.value?.set(pos, Pair(id, quantity))
+        }
     }
 }
