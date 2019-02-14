@@ -11,15 +11,18 @@ import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?) {
+    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?, quantity: Int) {
         itemView.ticketName.text = ticket.name
-
+        itemView.order.text = quantity.toString()
         if (ticket.minOrder > 0 && ticket.maxOrder > 0) {
             val spinnerList = ArrayList<String>()
             spinnerList.add("0")
             for (i in ticket.minOrder..ticket.maxOrder) {
                 spinnerList.add(Integer.toString(i))
             }
+            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
+                spinnerList)
+            itemView.orderRange.setSelection(quantity)
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
                     itemView.order.text = spinnerList[pos]
@@ -29,8 +32,6 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
-                spinnerList)
         }
 
         itemView.order.setOnClickListener {
