@@ -62,7 +62,7 @@ class EditProfileFragment : Fragment() {
                 rootView.firstName.setText(userFirstName)
                 rootView.lastName.setText(userLastName)
                 if (!imageUrl.isEmpty()) {
-                    val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp)
+                    val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
                     Picasso.get()
                         .load(imageUrl)
                         .placeholder(drawable)
@@ -119,7 +119,7 @@ class EditProfileFragment : Fragment() {
 
             Picasso.get()
                     .load(imageUri)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
         }

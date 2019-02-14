@@ -10,10 +10,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
-import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
-import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
@@ -21,7 +19,6 @@ import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragmentId: Int = 0
-    private val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -32,9 +29,6 @@ class MainActivity : AppCompatActivity() {
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
         setupBottomNavigationMenu(navController)
-
-        if (preference.getString(SAVED_LOCATION).isNullOrEmpty())
-            navController.navigate(R.id.welcomeFragment)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentFragmentId = destination.id
