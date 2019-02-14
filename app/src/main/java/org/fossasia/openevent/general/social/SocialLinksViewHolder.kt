@@ -30,12 +30,12 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
 
     private fun getSocialLinkDrawableId(name: String): Int {
         return when (name) {
-            "Github Url" -> R.drawable.ic_github_24dp
-            "Twitter Url" -> R.drawable.ic_twitter_24dp
-            "Facebook Url" -> R.drawable.ic_facebook_24dp
-            "LinkedIn Url" -> R.drawable.ic_linkedin_24dp
-            "Youtube Url" -> R.drawable.ic_youtube_24dp
-            "Google Url" -> R.drawable.ic_google_plus_24dp
+            "Github Url" -> R.drawable.ic_github
+            "Twitter Url" -> R.drawable.ic_twitter
+            "Facebook Url" -> R.drawable.ic_facebook
+            "LinkedIn Url" -> R.drawable.ic_linkedin
+            "Youtube Url" -> R.drawable.ic_youtube
+            "Google Url" -> R.drawable.ic_google_plus
             else -> -1
         }
     }
