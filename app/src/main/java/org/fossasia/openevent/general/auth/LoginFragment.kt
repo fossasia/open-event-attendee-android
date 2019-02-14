@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -26,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SmartAuthViewModel
-import org.fossasia.openevent.general.utils.ProgressDialog
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-        val progressDialog = ProgressDialog(context)
+        val progressDialog = Utils.progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Login"
@@ -81,14 +81,14 @@ class LoginFragment : Fragment() {
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-            progressDialog.showOrDismiss(it)
+                handleProgressBar(it, progressDialog)
             })
 
         smartAuthViewModel.progress
             .nonNull()
             .observe(this, Observer {
-            progressDialog.showOrDismiss(it)
-        })
+                handleProgressBar(it, progressDialog)
+            })
 
         loginViewModel.showNoInternetDialog
             .nonNull()
@@ -169,6 +169,11 @@ class LoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         smartAuthViewModel.requestCredentials(activity)
+    }
+
+    private fun handleProgressBar(show: Boolean, dialog: Dialog) {
+        if (show && !dialog.isShowing) dialog.show()
+        else if (!show && dialog.isShowing) dialog.dismiss()
     }
 
     private fun redirectToEvents() {

@@ -1,10 +1,12 @@
 package org.fossasia.openevent.general.utils
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
+import android.view.Window
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
@@ -42,6 +44,14 @@ object Utils {
             .setMessage(context?.resources?.getString(R.string.no_internet_message))
             .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             .show()
+    }
+
+    fun progressDialog(context: Context?) : Dialog {
+        val dialog = Dialog(context)
+        dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_progress)
+        return dialog
     }
 
     fun showSoftKeyboard(context: Context?, view: View) {

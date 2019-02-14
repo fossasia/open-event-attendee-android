@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.ProgressDialog
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,7 +40,7 @@ class SignUpFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
 
-        val progressDialog = ProgressDialog(context)
+        val progressDialog = Utils.progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Sign Up"
@@ -75,7 +74,8 @@ class SignUpFragment : Fragment() {
         signUpViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                progressDialog.showOrDismiss(it)
+                if (it && !progressDialog.isShowing) progressDialog.show()
+                else if (!it && progressDialog.isShowing) progressDialog.dismiss()
             })
 
         signUpViewModel.showNoInternetDialog
