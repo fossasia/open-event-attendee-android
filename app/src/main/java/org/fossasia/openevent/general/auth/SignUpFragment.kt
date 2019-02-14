@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -74,8 +75,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                if (it && !progressDialog.isShowing) progressDialog.show()
-                else if (!it && progressDialog.isShowing) progressDialog.dismiss()
+                progressDialog.show(it)
             })
 
         signUpViewModel.showNoInternetDialog
@@ -126,6 +126,11 @@ class SignUpFragment : Fragment() {
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
         Snackbar.make(rootView, R.string.logged_in_automatically, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun Dialog.show(show: Boolean) {
+        if (show && !this.isShowing) this.show()
+        else if (!show && this.isShowing) this.dismiss()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
