@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
 
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp))
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
 

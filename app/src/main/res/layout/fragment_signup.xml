@@ -44,9 +44,9 @@
                     android:id="@+id/usernameSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_email_black_24dp"
+                    android:drawableLeft="@drawable/ic_email_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_email_black_24dp"
+                    android:drawableStart="@drawable/ic_email_black"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -64,9 +64,9 @@
                     android:id="@+id/passwordSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_black_24dp"
+                    android:drawableLeft="@drawable/ic_lock_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:drawableStart="@drawable/ic_lock_black"
                     android:hint="@string/password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -82,9 +82,9 @@
                     android:id="@+id/confirmPasswords"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_black_24dp"
+                    android:drawableLeft="@drawable/ic_lock_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:drawableStart="@drawable/ic_lock_black"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
