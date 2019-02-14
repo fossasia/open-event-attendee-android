@@ -26,44 +26,15 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
     }
 
     private fun getSocialLinkDrawableId(name: String): Int {
-        return when (name.toLowerCase()) {
-            "github url",
-            "githuburl",
-            "github" -> R.drawable.ic_github
-            "twitter url",
-            "twitterurl",
-            "twitter" -> R.drawable.ic_twitter
-            "facebook url",
-            "facebookurl",
-            "facebook" -> R.drawable.ic_facebook
-            "linkedin url",
-            "linkedinurl",
-            "linkedin" -> R.drawable.ic_linkedin
-            "youtube url",
-            "youtubeurl",
-            "youtube" -> R.drawable.ic_youtube
-            "googleplus",
-            "googleplus url",
-            "googleplusurl",
-            "google plus",
-            "google plusurl",
-            "google plus url",
-            "google url",
-            "googleurl",
-            "google" -> R.drawable.ic_google_plus
-            "wikipedia",
-            "wikipedia url",
-            "wikipediaurl" -> R.drawable.ic_wikipedia
-            "flickr",
-            "flickr url",
-            "flickrurl" -> R.drawable.ic_flickr
-            "blogger",
-            "blogger url",
-            "bloggerurl",
-            "blog",
-            "blog url",
-            "blogurl" -> R.drawable.ic_blogger
-            else -> R.drawable.ic_link_black
-        }
+        if (name.toLowerCase().contains("github")) return R.drawable.ic_github
+        else if (name.toLowerCase().contains("twitter")) return R.drawable.ic_twitter
+        else if (name.toLowerCase().contains("facebook")) return R.drawable.ic_facebook
+        else if (name.toLowerCase().contains("linkedin")) return R.drawable.ic_linkedin
+        else if (name.toLowerCase().contains("youtube")) return R.drawable.ic_youtube
+        else if (name.toLowerCase().contains("google")) return R.drawable.ic_google_plus
+        else if (name.toLowerCase().contains("wiki")) return R.drawable.ic_wikipedia
+        else if (name.toLowerCase().contains("flickr")) return R.drawable.ic_flickr
+        else if (name.toLowerCase().contains("blog")) return R.drawable.ic_blogger
+        else return R.drawable.ic_link_black
     }
 }
