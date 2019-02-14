@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_marginTop="@dimen/layout_margin_extra_large"
-            android:layout_marginBottom="@dimen/details_header_margin_top"
+            android:layout_marginBottom="@dimen/layout_margin_large"
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
 </FrameLayout>
