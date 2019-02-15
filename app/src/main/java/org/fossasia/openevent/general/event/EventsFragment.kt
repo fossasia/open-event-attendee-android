@@ -101,7 +101,7 @@ class EventsFragment : Fragment() {
                     rootView.shimmerEvents.stopShimmer()
                 }
                 rootView.shimmerEvents.isVisible = it
-                eventsRecyclerAdapter.removeAll(it)
+                rootView.eventsRecycler.isVisible = !it
             })
 
         eventsViewModel.error
