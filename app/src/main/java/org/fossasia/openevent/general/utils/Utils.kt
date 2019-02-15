@@ -55,6 +55,12 @@ object Utils {
         return dialog
     }
 
+    fun Dialog.show(show: Boolean) {
+        /**Extends dialog.show()*/
+        if (show && !this.isShowing) this.show()
+        else if (!show && this.isShowing) this.dismiss()
+    }
+
     fun showSoftKeyboard(context: Context?, view: View) {
         view.requestFocus()
         val manager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)

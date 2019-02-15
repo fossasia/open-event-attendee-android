@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -28,7 +27,9 @@ import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -47,7 +48,7 @@ class LoginFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
-        val progressDialog = Utils.progressDialog(context)
+        val progressDialog = progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Login"
@@ -169,11 +170,6 @@ class LoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         smartAuthViewModel.requestCredentials(activity)
-    }
-
-    private fun Dialog.show(show: Boolean) {
-        if (show && !this.isShowing) this.show()
-        else if (!show && this.isShowing) this.dismiss()
     }
 
     private fun redirectToEvents() {

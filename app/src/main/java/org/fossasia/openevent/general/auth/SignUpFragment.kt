@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -126,11 +126,6 @@ class SignUpFragment : Fragment() {
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
         Snackbar.make(rootView, R.string.logged_in_automatically, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun Dialog.show(show: Boolean) {
-        if (show && !this.isShowing) this.show()
-        else if (!show && this.isShowing) this.dismiss()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
