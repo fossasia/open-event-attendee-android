@@ -101,6 +101,7 @@ class EventsFragment : Fragment() {
                     rootView.shimmerEvents.stopShimmer()
                 }
                 rootView.shimmerEvents.isVisible = it
+                rootView.eventsRecycler.isVisible = !it
             })
 
         eventsViewModel.error
@@ -128,7 +129,7 @@ class EventsFragment : Fragment() {
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected()
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.retryLoadLocationEvents()
+                eventsViewModel.loadLocationEvents()
             }
             showNoInternetScreen(isNetworkConnected)
         }
@@ -139,7 +140,7 @@ class EventsFragment : Fragment() {
             if (!isNetworkConnected()) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
-                eventsViewModel.retryLoadLocationEvents()
+                eventsViewModel.loadLocationEvents()
             }
         }
 
