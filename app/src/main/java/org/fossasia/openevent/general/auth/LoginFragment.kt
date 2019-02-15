@@ -182,7 +182,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun onEmailEntered(enable: Boolean) {
-        rootView.loginButton.isEnabled = enable
         rootView.forgotPassword.isVisible = enable
     }
 
