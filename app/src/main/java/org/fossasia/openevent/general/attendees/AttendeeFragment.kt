@@ -38,7 +38,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
