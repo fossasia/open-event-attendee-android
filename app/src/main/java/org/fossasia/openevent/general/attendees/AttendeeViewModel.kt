@@ -183,7 +183,6 @@ class AttendeeViewModel(
                 if (attendees.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
                     mutableIsAttendeeCreated.value = true
-                    mutableMessage.value = "Attendees created successfully!"
                 }
                 Timber.d("Success! %s", attendees.toList().toString())
             }, {
@@ -262,7 +261,6 @@ class AttendeeViewModel(
                     mutableProgress.value = false
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
-                    mutableMessage.value = "Order created successfully!"
                     Timber.d("Success placing order!")
                     if (it.paymentMode == "free") {
                         confirmOrder = ConfirmOrder(it.id.toString(), "completed")
