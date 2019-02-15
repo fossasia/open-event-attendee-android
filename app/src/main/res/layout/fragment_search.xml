@@ -94,5 +94,5 @@
         android:clickable="true"
         app:backgroundTint="@color/colorAccent"
         app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/ic_baseline_arrow_forward_24px" />
+        app:srcCompat="@drawable/ic_baseline_arrow_forward" />
 </FrameLayout>

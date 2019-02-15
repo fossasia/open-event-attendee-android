@@ -73,7 +73,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/layout_margin_medium"
                             android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/ic_baseline_event__black_24px" />
+                            app:srcCompat="@drawable/ic_baseline_event_black" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/layout_margin_medium"
-                            app:srcCompat="@drawable/ic_location_on_black_24dp" />
+                            app:srcCompat="@drawable/ic_location_on_black" />
 
                         <TextView
                             android:id="@+id/eventLocationTextView"
@@ -132,7 +132,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/layout_margin_medium"
-                            app:srcCompat="@drawable/ic_baseline_refund_24dp" />
+                            app:srcCompat="@drawable/ic_baseline_refund" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -299,7 +299,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginBottom="@dimen/layout_margin_small"
                                 android:scaleType="centerCrop"
-                                app:srcCompat="@drawable/ic_account_circle_grey_24dp" />
+                                app:srcCompat="@drawable/ic_account_circle_grey" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -332,8 +332,8 @@
                         android:id="@+id/frameContainerSocial"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/padding_small"
-                        android:paddingBottom="@dimen/padding_small" />
+                        android:paddingLeft="@dimen/padding_large"
+                        android:paddingTop="@dimen/padding_small" />
                 </LinearLayout>
 
                 <LinearLayout
