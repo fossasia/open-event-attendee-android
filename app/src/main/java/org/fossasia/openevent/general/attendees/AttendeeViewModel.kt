@@ -262,12 +262,11 @@ class AttendeeViewModel(
                     mutableProgress.value = false
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
-                    mutableMessage.value = "Order created successfully!"
                     Timber.d("Success placing order!")
                     if (it.paymentMode == "free") {
                         confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    }
+                    } else mutableMessage.value = "Order created successfully!"
                 }, {
                     mutableMessage.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")
