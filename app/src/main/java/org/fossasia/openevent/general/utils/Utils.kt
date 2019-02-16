@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.utils
 
 import android.app.AlertDialog
-import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -46,16 +46,16 @@ object Utils {
             .show()
     }
 
-    fun progressDialog(context: Context?): Dialog {
+    fun progressDialog(context: Context?): ProgressDialog {
         /**Initializes progress dialog.*/
-        val dialog = Dialog(context)
+        val dialog = ProgressDialog(context)
         dialog.setCancelable(false)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_progress)
+        dialog.setMessage("Loading...")
         return dialog
     }
 
-    fun Dialog.show(show: Boolean) {
+    fun ProgressDialog.show(show: Boolean) {
         /**Extends dialog.show()*/
         if (show && !this.isShowing) this.show()
         else if (!show && this.isShowing) this.dismiss()
