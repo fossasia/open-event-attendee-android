@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.utils
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -42,6 +43,18 @@ object Utils {
             .setMessage(context?.resources?.getString(R.string.no_internet_message))
             .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             .show()
+    }
+
+    fun progressDialog(context: Context?): ProgressDialog {
+        val dialog = ProgressDialog(context)
+        dialog.setCancelable(false)
+        dialog.setMessage("Loading...")
+        return dialog
+    }
+
+    fun ProgressDialog.show(show: Boolean) {
+        if (show) this.show()
+        else this.dismiss()
     }
 
     fun showSoftKeyboard(context: Context?, view: View) {
