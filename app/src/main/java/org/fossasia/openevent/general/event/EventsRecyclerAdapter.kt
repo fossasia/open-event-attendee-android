@@ -34,8 +34,8 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         this.events.addAll(eventList)
     }
 
-    fun removeAll(boolean: Boolean) {
-        if (boolean) events.clear()
+    fun removeAll(clear: Boolean) {
+        if (clear) events.clear()
     }
 
     fun getPos(id: Long): Int {
