@@ -26,7 +26,6 @@
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
     <dimen name="padding_extra_large">32dp</dimen>
-    <dimen name="padding_extreme_large">128dp</dimen>
     <dimen name="padding_payment">12dp</dimen>
 
     <!-- card details -->
@@ -50,7 +49,6 @@
     <dimen name="app_bar_height">250dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="progress_bar_size">64dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>

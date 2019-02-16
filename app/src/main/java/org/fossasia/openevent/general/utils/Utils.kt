@@ -50,15 +50,14 @@ object Utils {
         /**Initializes progress dialog.*/
         val dialog = ProgressDialog(context)
         dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setMessage("Loading...")
         return dialog
     }
 
     fun ProgressDialog.show(show: Boolean) {
         /**Extends dialog.show()*/
-        if (show && !this.isShowing) this.show()
-        else if (!show && this.isShowing) this.dismiss()
+        if (show) this.show()
+        else this.dismiss()
     }
 
     fun showSoftKeyboard(context: Context?, view: View) {
