@@ -34,7 +34,6 @@ import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.Serializable
 
 const val EVENT_ID: String = "EVENT_ID"
 const val CURRENCY: String = "CURRENCY"
@@ -72,7 +71,7 @@ class TicketsFragment : Fragment() {
 
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(ticketId: Int, quantity: Int) {
-                ticketsViewModel.handleTicketSelect(ticketId, quantity)
+                handleTicketSelect(ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -123,15 +122,9 @@ class TicketsFragment : Fragment() {
                 ticketsRecyclerAdapter.addAll(it)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
             })
-        ticketsViewModel.ticketIdAndQty
-            .nonNull()
-            .observe(this, Observer {
-                ticketsRecyclerAdapter.addAllTicketIdAndQty(it)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
-            })
 
         rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketsViewModel.ticketIdAndQty.value!!)) {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
                 checkForAuthentication()
             } else {
                 handleNoTicketsSelected()
@@ -153,7 +146,7 @@ class TicketsFragment : Fragment() {
     private fun redirectToAttendee() {
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
-        bundle.putSerializable(TICKET_ID_AND_QTY, ticketsViewModel.ticketIdAndQty.value as Serializable)
+        bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
         findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
     }
 
@@ -161,6 +154,15 @@ class TicketsFragment : Fragment() {
         val args = getString(R.string.log_in_first)
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+    }
+
+    private fun handleTicketSelect(id: Int, quantity: Int) {
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
+        if (pos == -1) {
+            ticketIdAndQty.add(Pair(id, quantity))
+        } else {
+            ticketIdAndQty[pos] = Pair(id, quantity)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

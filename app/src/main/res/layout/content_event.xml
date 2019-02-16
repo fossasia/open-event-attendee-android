@@ -334,7 +334,6 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/padding_large"
                         android:paddingTop="@dimen/padding_small" />
-
                 </LinearLayout>
 
                 <LinearLayout

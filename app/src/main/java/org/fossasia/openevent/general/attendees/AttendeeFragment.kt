@@ -234,7 +234,7 @@ class AttendeeFragment : Fragment() {
                 val selectCardText = rootView.selectCard
 
                 when {
-                    s?.length!! <3 -> {
+                    s == null || s.length <3 -> {
                         cardBrand = attendeeViewModel.cardType[0]
                         selectCardText.text = cardBrand
                         rootView.cardSelector.isVisible = true
