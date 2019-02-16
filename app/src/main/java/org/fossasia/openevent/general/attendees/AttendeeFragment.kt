@@ -38,7 +38,31 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
-import kotlinx.android.synthetic.main.fragment_attendee.view.*
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
+import kotlinx.android.synthetic.main.fragment_attendee.view.accept
+import kotlinx.android.synthetic.main.fragment_attendee.view.amount
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
+import kotlinx.android.synthetic.main.fragment_attendee.view.countryArea
+import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
+import kotlinx.android.synthetic.main.fragment_attendee.view.month
+import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
+import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
+import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
+import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
+import kotlinx.android.synthetic.main.fragment_attendee.view.qty
+import kotlinx.android.synthetic.main.fragment_attendee.view.register
+import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
+import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
+import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
+import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
+import kotlinx.android.synthetic.main.fragment_attendee.view.ticketsRecycler
+import kotlinx.android.synthetic.main.fragment_attendee.view.time
+import kotlinx.android.synthetic.main.fragment_attendee.view.view
+import kotlinx.android.synthetic.main.fragment_attendee.view.year
+import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -307,7 +331,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.attendeeCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
@@ -459,7 +483,7 @@ class AttendeeFragment : Fragment() {
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
             Snackbar.make(
-                rootView.attendeeCoordinatorLayout, "Invalid card data", Snackbar.LENGTH_SHORT
+                rootView, "Invalid card data", Snackbar.LENGTH_SHORT
             ).show()
         else
             Stripe(requireContext())
@@ -472,7 +496,7 @@ class AttendeeFragment : Fragment() {
 
                     override fun onError(error: Exception) {
                         Snackbar.make(
-                            rootView.attendeeCoordinatorLayout, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
+                            rootView, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
                         ).show()
                     }
                 })

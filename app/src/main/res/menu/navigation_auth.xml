@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/loginFragment"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:icon="@drawable/ic_exit_to_app_black"
         android:title="@string/login" />
 
     <item
         android:id="@+id/signUpFragment"
-        android:icon="@drawable/ic_person_add_blue_24dp"
+        android:icon="@drawable/ic_person_add"
         android:title="@string/sign_up" />
 
 </menu>

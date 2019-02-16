@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="@dimen/details_margin_small"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
                     android:text="@string/eventyay_logo"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_very_large" />
@@ -44,9 +44,9 @@
                     android:id="@+id/usernameSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_email_black_24dp"
+                    android:drawableLeft="@drawable/ic_email_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_email_black_24dp"
+                    android:drawableStart="@drawable/ic_email_black"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -64,9 +64,9 @@
                     android:id="@+id/passwordSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_black_24dp"
+                    android:drawableLeft="@drawable/ic_lock_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:drawableStart="@drawable/ic_lock_black"
                     android:hint="@string/password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -82,9 +82,9 @@
                     android:id="@+id/confirmPasswords"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_black_24dp"
+                    android:drawableLeft="@drawable/ic_lock_black"
                     android:drawablePadding="@dimen/layout_margin_moderate"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:drawableStart="@drawable/ic_lock_black"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -128,13 +128,6 @@
                 android:padding="@dimen/padding_medium"
                 android:text="@string/sign_up"
                 android:textColor="@android:color/white" />
-
-            <ProgressBar
-                android:id="@+id/progressBarSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

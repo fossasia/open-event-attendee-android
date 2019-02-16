@@ -3,27 +3,27 @@
 
     <item
         android:id="@+id/eventsFragment"
-        android:icon="@drawable/ic_baseline_event_24px"
+        android:icon="@drawable/ic_baseline_event"
         android:title="@string/events" />
 
     <item
         android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_search_grey_24dp"
+        android:icon="@drawable/ic_search_grey"
         android:title="@string/search" />
 
     <item
         android:id="@+id/favoriteFragment"
-        android:icon="@drawable/ic_baseline_favorite_border_24px"
+        android:icon="@drawable/ic_baseline_favorite_border"
         android:title="@string/likes" />
 
     <item
         android:id="@+id/orderUnderUserFragment"
-        android:icon="@drawable/ic_baseline_ticket_24dp"
+        android:icon="@drawable/ic_outline_ticket"
         android:title="@string/tickets" />
 
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_baseline_account_circle_24px"
+        android:icon="@drawable/ic_outline_account_circle"
         android:title="@string/profile" />
     
 </menu>

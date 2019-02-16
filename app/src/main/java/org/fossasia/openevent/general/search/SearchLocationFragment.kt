@@ -33,8 +33,6 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        Utils.showSoftKeyboard(context, view)
-
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
@@ -49,11 +47,9 @@ class SearchLocationFragment : Fragment() {
             rootView.currentLocation.visibility = View.GONE
         })
 
-        geoLocationViewModel.configure(null)
-
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
-            geoLocationViewModel.configure(activity)
+            geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
@@ -78,9 +74,8 @@ class SearchLocationFragment : Fragment() {
     }
 
     override fun onResume() {
-        search.requestFocus()
-        Utils.showSoftKeyboard(context, rootView)
         super.onResume()
+        Utils.showSoftKeyboard(context, search)
     }
 
     private fun checkLocationPermission() {
@@ -101,7 +96,7 @@ class SearchLocationFragment : Fragment() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    geoLocationViewModel.configure(activity)
+                    geoLocationViewModel.configure()
                 } else {
                     Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE
@@ -113,6 +108,7 @@ class SearchLocationFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
+                Utils.hideSoftKeyboard(context, rootView)
                 activity?.onBackPressed()
                 true
             }

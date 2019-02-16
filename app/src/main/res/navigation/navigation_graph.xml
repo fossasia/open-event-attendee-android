@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="org.fossasia.openevent.general.WelcomeFragment"
+        android:name="org.fossasia.openevent.general.welcome.WelcomeFragment"
         android:label="WelcomeFragment"
         tools:layout="@layout/fragment_welcome" />
     <fragment

@@ -1,16 +1,21 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.welcome
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.location.LocationPermissionException
 import org.fossasia.openevent.general.location.NoLocationSourceException
+import org.fossasia.openevent.general.search.LocationService
 
-class GeoLocationViewModel(private val locationService: LocationService) : ViewModel() {
-    private val mutableLocation = MutableLiveData<String>()
-    val location: LiveData<String> = mutableLocation
+const val SAVED_LOCATION = "LOCATION"
+
+class WelcomeViewModel(private val locationService: LocationService, private val preference: Preference) : ViewModel() {
+
+    private val mutableRedirectToMain = MutableLiveData<Boolean>()
+    val redirectToMain: LiveData<Boolean> = mutableRedirectToMain
     private val mutableVisibility = MutableLiveData<Boolean>()
     val currentLocationVisibility: LiveData<Boolean> = mutableVisibility
     private val mutableOpenLocationSettings = MutableLiveData<Boolean>()
@@ -24,7 +29,8 @@ class GeoLocationViewModel(private val locationService: LocationService) : ViewM
         compositeDisposable.add(locationService.getAdministrativeArea()
             .subscribe(
                 { adminArea ->
-                    mutableLocation.value = adminArea
+                    preference.putString(SAVED_LOCATION, adminArea)
+                    mutableRedirectToMain.value = true
                 },
                 { error ->
                     when (error) {
