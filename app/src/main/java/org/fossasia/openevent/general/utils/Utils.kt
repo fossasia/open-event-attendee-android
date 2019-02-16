@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
-import android.view.Window
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
