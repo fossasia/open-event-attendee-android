@@ -76,9 +76,8 @@
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:layout_marginTop="@dimen/padding_large"
-                    android:layout_marginBottom="@dimen/padding_large"
+                    android:layout_marginBottom="@dimen/padding_medium"
                     android:padding="@dimen/padding_medium"
                     android:textColor="@android:color/white"
                     android:backgroundTint="@color/colorPrimary"
@@ -91,17 +90,11 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
-                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_large"
                     android:padding="@dimen/padding_medium"
                     android:text="@string/forgot_password" />
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/progressBar"
-                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
