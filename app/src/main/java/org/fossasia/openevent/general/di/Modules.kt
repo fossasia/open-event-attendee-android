@@ -66,7 +66,6 @@ import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.ticket.TicketsViewModel
-import org.fossasia.openevent.general.welcome.WelcomeViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
@@ -148,7 +147,6 @@ val viewModelModule = module {
     viewModel { EditProfileViewModel(get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
-    viewModel { WelcomeViewModel(get(), get()) }
 }
 
 val networkModule = module {
