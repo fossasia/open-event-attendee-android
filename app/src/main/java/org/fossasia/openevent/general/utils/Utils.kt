@@ -46,7 +46,6 @@ object Utils {
     }
 
     fun progressDialog(context: Context?): ProgressDialog {
-        /**Initializes progress dialog.*/
         val dialog = ProgressDialog(context)
         dialog.setCancelable(false)
         dialog.setMessage("Loading...")
