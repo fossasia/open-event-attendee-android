@@ -16,20 +16,20 @@ import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
-import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.view.email
 import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
 import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
-import kotlinx.android.synthetic.main.fragment_login.view.progressBar
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +48,7 @@ class LoginFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
+        val progressDialog = progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Login"
@@ -81,14 +82,14 @@ class LoginFragment : Fragment() {
         loginViewModel.progress
             .nonNull()
             .observe(this, Observer {
-                handleProgressBar(it)
+                progressDialog.show(it)
             })
 
         smartAuthViewModel.progress
             .nonNull()
             .observe(this, Observer {
-            handleProgressBar(it)
-        })
+                progressDialog.show(it)
+            })
 
         loginViewModel.showNoInternetDialog
             .nonNull()
@@ -171,18 +172,12 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.requestCredentials(activity)
     }
 
-    private fun handleProgressBar(show: Boolean) {
-        rootView.progressBar.isVisible = show
-        loginButton.isEnabled = !show
-    }
-
     private fun redirectToEvents() {
         findNavController(rootView).popBackStack(R.id.eventsFragment, false)
         Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onEmailEntered(enable: Boolean) {
-        rootView.loginButton.isEnabled = enable
         rootView.forgotPassword.isVisible = enable
     }
 
