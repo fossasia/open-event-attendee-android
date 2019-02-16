@@ -151,7 +151,8 @@ class ProfileFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"));
+            val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName"));
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent);
         }
