@@ -38,7 +38,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
@@ -275,7 +274,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.attendeeCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
@@ -428,7 +427,7 @@ class AttendeeFragment : Fragment() {
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
             Snackbar.make(
-                rootView.attendeeCoordinatorLayout, "Invalid card data", Snackbar.LENGTH_SHORT
+                rootView, "Invalid card data", Snackbar.LENGTH_SHORT
             ).show()
         else
             Stripe(requireContext())
@@ -441,7 +440,7 @@ class AttendeeFragment : Fragment() {
 
                     override fun onError(error: Exception) {
                         Snackbar.make(
-                            rootView.attendeeCoordinatorLayout, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
+                            rootView, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
                         ).show()
                     }
                 })
