@@ -108,8 +108,10 @@ class EventsFragment : Fragment() {
                     rootView.shimmerEvents.stopShimmer()
                 }
                 rootView.shimmerEvents.isVisible = it
-                eventsRecyclerAdapter.removeAll(it)
-                eventsRecyclerAdapter.notifyDataSetChanged()
+                if (it) {
+                    eventsRecyclerAdapter.removeAll()
+                    eventsRecyclerAdapter.notifyDataSetChanged()
+                }
             })
 
         eventsViewModel.error
