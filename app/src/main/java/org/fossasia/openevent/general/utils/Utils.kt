@@ -54,7 +54,6 @@ object Utils {
     }
 
     fun ProgressDialog.show(show: Boolean) {
-        /**Extends dialog.show()*/
         if (show) this.show()
         else this.dismiss()
     }
