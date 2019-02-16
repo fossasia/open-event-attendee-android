@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="@dimen/details_margin_small"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
                     android:text="@string/eventyay_logo"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_very_large" />
@@ -128,13 +128,6 @@
                 android:padding="@dimen/padding_medium"
                 android:text="@string/sign_up"
                 android:textColor="@android:color/white" />
-
-            <ProgressBar
-                android:id="@+id/progressBarSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
