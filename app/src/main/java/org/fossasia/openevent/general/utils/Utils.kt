@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.utils
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
@@ -48,6 +49,18 @@ object Utils {
     fun isNetworkConnected(context: Context?): Boolean {
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         return connectivityManager?.activeNetworkInfo != null
+    }
+
+    fun progressDialog(context: Context?): ProgressDialog {
+        val dialog = ProgressDialog(context)
+        dialog.setCancelable(false)
+        dialog.setMessage("Loading...")
+        return dialog
+    }
+
+    fun ProgressDialog.show(show: Boolean) {
+        if (show) this.show()
+        else this.dismiss()
     }
 
     fun showSoftKeyboard(context: Context?, view: View) {
