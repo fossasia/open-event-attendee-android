@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.utils
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -42,6 +43,11 @@ object Utils {
             .setMessage(context?.resources?.getString(R.string.no_internet_message))
             .setPositiveButton(context?.resources?.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             .show()
+    }
+
+    fun isNetworkConnected(context: Context?): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        return connectivityManager?.activeNetworkInfo != null
     }
 
     fun showSoftKeyboard(context: Context?, view: View) {

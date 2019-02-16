@@ -74,6 +74,7 @@ import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -363,39 +364,40 @@ class AttendeeFragment : Fragment() {
                         rootView.moreAttendeeInformation.visibility = View.VISIBLE
                     }
                 attendeeRecyclerAdapter.notifyDataSetChanged()
-                rootView.register.isEnabled = true
             })
 
         rootView.register.setOnClickListener {
-            val attendees = ArrayList<Attendee>()
-            if (singleTicket) {
-                val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
-                val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                val attendee = Attendee(id = attendeeViewModel.getId(),
-                    firstname = firstName.text.toString(),
-                    lastname = lastName.text.toString(),
-                    city = getAttendeeField("city"),
-                    address = getAttendeeField("address"),
-                    state = getAttendeeField("state"),
-                    email = email.text.toString(),
-                    ticket = TicketId(ticket),
-                    event = eventId)
-                attendees.add(attendee)
-            } else {
-                attendees.addAll(attendeeRecyclerAdapter.attendeeList)
-            }
+            if (isNetworkConnected(context)) {
+                val attendees = ArrayList<Attendee>()
+                if (singleTicket) {
+                    val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
+                    val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
+                    val attendee = Attendee(id = attendeeViewModel.getId(),
+                        firstname = firstName.text.toString(),
+                        lastname = lastName.text.toString(),
+                        city = getAttendeeField("city"),
+                        address = getAttendeeField("address"),
+                        state = getAttendeeField("state"),
+                        email = email.text.toString(),
+                        ticket = TicketId(ticket),
+                        event = eventId)
+                    attendees.add(attendee)
+                } else {
+                    attendees.addAll(attendeeRecyclerAdapter.attendeeList)
+                }
 
-            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
-                val country = if (country.text.isEmpty()) country.text.toString() else null
-                attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+                if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                    val country = if (country.text.isEmpty()) country.text.toString() else null
+                    attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
-                attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                    if (isAttendeeCreated && selectedPaymentOption ==
-                        paymentOptions.indexOf(getString(R.string.stripe))) {
-                        sendToken()
-                    }
-                })
-            } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
+                    attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
+                        if (isAttendeeCreated && selectedPaymentOption ==
+                            paymentOptions.indexOf(getString(R.string.stripe))) {
+                            sendToken()
+                        }
+                    })
+                } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
+            } else Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
         }
 
         attendeeViewModel.ticketSoldOut
@@ -405,6 +407,14 @@ class AttendeeFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkConnected(context)) {
+            rootView.progressBarAttendee.isVisible = false
+            Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun showTicketSoldOutDialog(show: Boolean) {
