@@ -61,6 +61,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.time
 import kotlinx.android.synthetic.main.fragment_attendee.view.view
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
+import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -368,6 +369,11 @@ class AttendeeFragment : Fragment() {
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
                 Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            if (!rootView.acceptCheckbox.isChecked) {
+                Snackbar.make(rootView.attendeeScrollView,
+                    "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             val attendees = ArrayList<Attendee>()
