@@ -133,16 +133,23 @@ object Utils {
         }
     }
 
-    fun creditCardVerify(s: String): Int {
+    enum class cardType {
+        VISA,
+        MASTER_CARD,
+        AMERICAN_EXPRESS,
+        NONE,
+    }
+
+    fun getCardType(s: String): cardType {
         val visaPattern = Pattern.compile("^4[0-9]{0,15}$")
         val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
             "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
         val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
         return when {
-            americanExpressPattern.matcher(s).matches() -> 1
-            masterCardPattern.matcher(s).matches() -> 2
-            visaPattern.matcher(s).matches() -> 3
-            else -> -1
+            americanExpressPattern.matcher(s).matches() -> cardType.AMERICAN_EXPRESS
+            masterCardPattern.matcher(s).matches() -> cardType.MASTER_CARD
+            visaPattern.matcher(s).matches() -> cardType.VISA
+            else -> cardType.NONE
         }
     }
 }

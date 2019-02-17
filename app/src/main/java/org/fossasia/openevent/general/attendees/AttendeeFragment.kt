@@ -233,17 +233,25 @@ class AttendeeFragment : Fragment() {
                     rootView.cardNumber.error = null
                     return
                 }
-                val card = Utils.creditCardVerify(s.toString())
-                if (card == -1) {
+                val card = Utils.getCardType(s.toString())
+                if (card == Utils.cardType.NONE) {
                     rootView.cardSelector.setSelection(0, true)
                     rootView.cardSelector.isVisible = true
                     rootView.cardNumber.error = "Invalid card number"
                     return
                 }
 
-                rootView.cardSelector.setSelection(card, true)
-                rootView.cardSelector.isVisible = false
-                rootView.cardNumber.error = null
+                val pos: Int = card.let {
+                    when (it) {
+                        Utils.cardType.AMERICAN_EXPRESS -> 1
+                        Utils.cardType.MASTER_CARD -> 2
+                        Utils.cardType.VISA -> 3
+                        else -> 0
+                    }
+                }
+                    rootView.cardSelector.setSelection(pos, true)
+                    rootView.cardSelector.isVisible = false
+                    rootView.cardNumber.error = null
             }
         })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
