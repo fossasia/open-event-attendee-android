@@ -19,6 +19,7 @@ import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.fossasia.openevent.general.R
 import timber.log.Timber
+import java.util.regex.Pattern
 
 object Utils {
 
@@ -129,6 +130,26 @@ object Utils {
         if (navigation?.visibility == View.VISIBLE) {
             navigation.visibility = View.GONE
             navigation.animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+        }
+    }
+
+    enum class cardType {
+        VISA,
+        MASTER_CARD,
+        AMERICAN_EXPRESS,
+        NONE,
+    }
+
+    fun getCardType(s: String): cardType {
+        val visaPattern = Pattern.compile("^4[0-9]{0,15}$")
+        val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
+            "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
+        val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
+        return when {
+            americanExpressPattern.matcher(s).matches() -> cardType.AMERICAN_EXPRESS
+            masterCardPattern.matcher(s).matches() -> cardType.MASTER_CARD
+            visaPattern.matcher(s).matches() -> cardType.VISA
+            else -> cardType.NONE
         }
     }
 }
