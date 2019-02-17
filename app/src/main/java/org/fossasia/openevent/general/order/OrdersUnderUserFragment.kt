@@ -81,7 +81,9 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.progress
                 .nonNull()
                 .observe(this, Observer {
-                    rootView.progressBar.isVisible = it
+                    if (ordersRecyclerAdapter.attendeesNumber.size==0 && it) {
+                        rootView.progressBar.isVisible = it
+                    } else rootView.progressBar.isVisible = false
                 })
 
             ordersUnderUserVM.message
