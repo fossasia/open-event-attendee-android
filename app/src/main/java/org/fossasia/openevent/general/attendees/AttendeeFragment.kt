@@ -79,7 +79,6 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
-import java.util.regex.Pattern
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
@@ -115,7 +114,7 @@ class AttendeeFragment : Fragment() {
         }
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
-                ?.metaData?.getString(STRIPE_KEY).toString()
+            ?.metaData?.getString(STRIPE_KEY).toString()
     }
 
     override fun onCreateView(
@@ -227,44 +226,23 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val visaPattern = Pattern.compile("^4[0-9]{0,15}$")
-                val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
-                    "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
-                val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
-                val selectCardText = rootView.selectCard
-
-                when {
-                    s == null || s.length <3 -> {
-                        cardBrand = attendeeViewModel.cardType[0]
-                        selectCardText.text = cardBrand
-                        rootView.cardSelector.isVisible = true
-                        rootView.cardNumber.error = null
-                    }
-                    visaPattern.matcher(s.toString()).matches() -> {
-                        cardBrand = attendeeViewModel.cardType[1]
-                        selectCardText.text = cardBrand
-                        rootView.cardSelector.isVisible = false
-                        rootView.cardNumber.error = null
-                    }
-                    masterCardPattern.matcher(s.toString()).matches() -> {
-                        cardBrand = attendeeViewModel.cardType[2]
-                        selectCardText.text = cardBrand
-                        rootView.cardSelector.isVisible = false
-                        rootView.cardNumber.error = null
-                    }
-                    americanExpressPattern.matcher(s.toString()).matches() -> {
-                        cardBrand = attendeeViewModel.cardType[3]
-                        selectCardText.text = cardBrand
-                        rootView.cardSelector.isVisible = false
-                        rootView.cardNumber.error = null
-                    }
-                    else -> {
-                        cardBrand = attendeeViewModel.cardType[0]
-                        selectCardText.text = cardBrand
-                        rootView.cardSelector.isVisible = true
-                        rootView.cardNumber.error = "Invalid card number"
-                    }
+                if (s == null || s.length < 3) {
+                    rootView.cardSelector.setSelection(0, true)
+                    rootView.cardSelector.isVisible = true
+                    rootView.cardNumber.error = null
+                    return
                 }
+                val card = Utils.creditCardVerify(s.toString())
+                if (card == -1) {
+                    rootView.cardSelector.setSelection(0, true)
+                    rootView.cardSelector.isVisible = true
+                    rootView.cardNumber.error = "Invalid card number"
+                    return
+                }
+
+                rootView.cardSelector.setSelection(card, true)
+                rootView.cardSelector.isVisible = false
+                rootView.cardNumber.error = null
             }
         })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
@@ -467,7 +445,7 @@ class AttendeeFragment : Fragment() {
         if (show) {
             val builder = AlertDialog.Builder(context)
             builder.setMessage(getString(R.string.tickets_sold_out))
-                    .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             builder.show()
         }
     }
@@ -513,10 +491,10 @@ class AttendeeFragment : Fragment() {
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.amount.text = "Total: $paymentCurrency$amount"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                .append(" - ")
-                .append(EventUtils.getFormattedDate(endsAt))
-                .append(" • ")
-                .append(EventUtils.getFormattedTime(startsAt))
+            .append(" - ")
+            .append(EventUtils.getFormattedDate(endsAt))
+            .append(" • ")
+            .append(EventUtils.getFormattedTime(startsAt))
     }
 
     private fun openOrderCompletedFragment() {
