@@ -429,11 +429,21 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/accept"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_moderate" />
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/acceptCheckbox"/>
+                    <TextView
+                        android:id="@+id/accept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Colored"
