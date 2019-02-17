@@ -45,7 +45,7 @@ class OrdersUnderUserVM(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                mutableProgress.value = true
+                if (mutableAttendeesNumber.value == null) mutableProgress.value = true
                 mutableNoTickets.value = false
             }.subscribe({
                 order = it
