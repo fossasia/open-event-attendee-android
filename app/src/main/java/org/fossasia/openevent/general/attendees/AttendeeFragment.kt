@@ -63,6 +63,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.view
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
+import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -401,6 +402,12 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.register.setOnClickListener {
+
+            if (!rootView.acceptCheckbox.isChecked) {
+                Snackbar.make(rootView.attendeeScrollView,
+                    "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             val attendees = ArrayList<Attendee>()
             if (singleTicket) {
                 val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
