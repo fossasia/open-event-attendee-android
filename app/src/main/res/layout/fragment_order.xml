@@ -27,7 +27,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/layout_margin_extra_large"
                 android:text="@string/order_completed"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:layout_marginBottom="@dimen/layout_margin_small"/>
 
             <TextView
                 android:id="@+id/name"
