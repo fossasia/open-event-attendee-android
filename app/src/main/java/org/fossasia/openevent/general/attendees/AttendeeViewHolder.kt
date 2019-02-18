@@ -15,7 +15,11 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var editTextList = ArrayList<EditText>()
     lateinit var textWatcher: TextWatcher
 
-    fun bind(attendeeRecyclerAdapter: AttendeeRecyclerAdapter, position: Int) {
+    fun bind(
+        attendeeRecyclerAdapter: AttendeeRecyclerAdapter,
+        changeListener: AttendeeChangedListener?,
+        position: Int
+    ) {
 
         setText(itemView.attendeeItemCountry, attendeeRecyclerAdapter.attendeeList[position].country)
         setText(itemView.attendeeItemLastName, attendeeRecyclerAdapter.attendeeList[position].lastname)
@@ -26,7 +30,6 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         textWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 val id = attendeeRecyclerAdapter.attendeeList[position].id
-                attendeeRecyclerAdapter.attendeeList.removeAt(position)
                 val attendee = Attendee(id, firstname = itemView.attendeeItemFirstName.text.toString(),
                         lastname = itemView.attendeeItemLastName.text.toString(),
                         email = itemView.attendeeItemEmail.text.toString(),
@@ -36,7 +39,7 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         country = itemView.attendeeItemCountry.text.toString(),
                         ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id.toLong()),
                         event = attendeeRecyclerAdapter.eventId)
-                attendeeRecyclerAdapter.attendeeList.add(position, attendee)
+                changeListener?.onChanged(position, attendee)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

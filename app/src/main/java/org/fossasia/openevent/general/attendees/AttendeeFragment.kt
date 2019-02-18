@@ -127,6 +127,13 @@ class AttendeeFragment : Fragment() {
         activity?.supportActionBar?.title = getString(R.string.attendee_details)
         setHasOptionsMenu(true)
 
+        val attendeeChangedListener = object : AttendeeChangedListener {
+            override fun onChanged(pos: Int, attendee: Attendee) {
+                attendeeViewModel.updateAttendees(pos, attendee)
+            }
+        }
+        attendeeRecyclerAdapter.setChangedListener(attendeeChangedListener)
+
         val paragraph = SpannableStringBuilder()
         val startText = getString(R.string.start_text)
         val termsText = getString(R.string.terms_text)
@@ -303,13 +310,8 @@ class AttendeeFragment : Fragment() {
                 ticketsRecyclerAdapter.addAll(tickets)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
                 if (!singleTicket)
-                    tickets.forEach { ticket ->
-                        val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id)
-                        val iterations = pos?.let { ticketIdAndQty?.get(it)?.second } ?: 0
-                        for (i in 0 until iterations)
-                            attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), ticket)
+                        attendeeRecyclerAdapter.addAll(attendeeViewModel.attendees, tickets)
                         attendeeRecyclerAdapter.notifyDataSetChanged()
-                    }
             })
 
         attendeeViewModel.totalQty
@@ -373,8 +375,8 @@ class AttendeeFragment : Fragment() {
                     "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            val attendees = ArrayList<Attendee>()
             if (singleTicket) {
+                val attendees = ArrayList<Attendee>()
                 val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
                 val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
                 val attendee = Attendee(id = attendeeViewModel.getId(),
@@ -387,13 +389,12 @@ class AttendeeFragment : Fragment() {
                     ticket = TicketId(ticket),
                     event = eventId)
                 attendees.add(attendee)
-            } else {
-                attendees.addAll(attendeeRecyclerAdapter.attendeeList)
-            }
-
-            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                 val country = if (country.text.isEmpty()) country.text.toString() else null
-                attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+                attendeeViewModel.createAttendees( country, paymentOptions[selectedPaymentOption], attendees)
+            } else {
+                val country = if (country.text.isEmpty()) country.text.toString() else null
+                attendeeViewModel.createAttendees(country, paymentOptions[selectedPaymentOption])
+            }
 
                 attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
                     if (isAttendeeCreated && selectedPaymentOption ==
@@ -401,7 +402,6 @@ class AttendeeFragment : Fragment() {
                         sendToken()
                     }
                 })
-            } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
         }
 
         attendeeViewModel.ticketSoldOut
