@@ -1,8 +1,6 @@
 package org.fossasia.openevent.general.event
 
-import android.content.Context
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -134,10 +133,10 @@ class EventsFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
-        showNoInternetScreen(isNetworkConnected())
+        showNoInternetScreen(isNetworkConnected(context))
 
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected()
+            val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.loadLocationEvents()
             }
@@ -146,8 +145,8 @@ class EventsFragment : Fragment() {
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
-            showNoInternetScreen(isNetworkConnected())
-            if (!isNetworkConnected()) {
+            showNoInternetScreen(isNetworkConnected(context))
+            if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
                 eventsViewModel.loadLocationEvents()
@@ -160,12 +159,6 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
-    }
-
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        return connectivityManager?.activeNetworkInfo != null
     }
 
     override fun onStop() {
