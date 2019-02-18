@@ -25,14 +25,14 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="@string/nothing_planned_yet"
-                   android:textSize="15sp"
+                   android:textSize="@dimen/text_size_expanded_title"
                    android:layout_gravity="center_horizontal"
                    android:textAlignment="center"/>
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="@string/find_something_to_do"
-                   android:textSize="25sp"
+                   android:textSize="@dimen/text_size_extra_large"
                    android:textAlignment="center"/>
 
            </LinearLayout>
