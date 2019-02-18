@@ -34,6 +34,21 @@ class SocialLinksFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
         }
+
+        socialLinksViewModel.socialLinks
+            .nonNull()
+            .observe(this, Observer {
+                socialLinksRecyclerAdapter.addAll(it)
+                handleVisibility(it)
+                socialLinksRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
+            })
+
+        socialLinksViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
     }
 
     override fun onCreateView(
@@ -51,21 +66,6 @@ class SocialLinksFragment : Fragment() {
 
         rootView.socialLinksRecycler.adapter = socialLinksRecyclerAdapter
         rootView.socialLinksRecycler.isNestedScrollingEnabled = false
-
-        socialLinksViewModel.socialLinks
-            .nonNull()
-            .observe(this, Observer {
-                socialLinksRecyclerAdapter.addAll(it)
-                handleVisibility(it)
-                socialLinksRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
-            })
-
-        socialLinksViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
 
         socialLinksViewModel.progress
             .nonNull()

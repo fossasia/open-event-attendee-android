@@ -45,6 +45,21 @@ class OrderDetailsFragment : Fragment() {
             }
         }
         ordersRecyclerAdapter.setOrderIdentifier(orderId)
+
+        orderDetailsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.setEvent(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+            })
+
+        orderDetailsViewModel.attendees
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.addAll(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
+            })
     }
 
     override fun onCreateView(
@@ -75,25 +90,11 @@ class OrderDetailsFragment : Fragment() {
         }
 
         ordersRecyclerAdapter.setListener(eventDetailsListener)
-        orderDetailsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                ordersRecyclerAdapter.setEvent(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-            })
 
         orderDetailsViewModel.progress
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBar.isVisible = it
-            })
-
-        orderDetailsViewModel.attendees
-            .nonNull()
-            .observe(this, Observer {
-                ordersRecyclerAdapter.addAll(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
             })
 
         orderDetailsViewModel.message

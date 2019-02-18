@@ -46,6 +46,29 @@ class EventsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventsRecyclerAdapter.setEventLayout(EVENTS)
+        val favoriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(event: Event, isFavorite: Boolean) {
+                val id = eventsRecyclerAdapter.getPos(event.id)
+                eventsViewModel.setFavorite(event.id, !isFavorite)
+                event.favorite = !event.favorite
+                eventsRecyclerAdapter.notifyItemChanged(id)
+            }
+        }
+        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
+
+        eventsViewModel.events
+            .nonNull()
+            .observe(this, Observer {
+                eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+            })
+
+        eventsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+            })
     }
 
     override fun onCreateView(
@@ -80,24 +103,7 @@ class EventsFragment : Fragment() {
                 findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
             }
         }
-
-        val favoriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavorite: Boolean) {
-                val id = eventsRecyclerAdapter.getPos(event.id)
-                eventsViewModel.setFavorite(event.id, !isFavorite)
-                event.favorite = !event.favorite
-                eventsRecyclerAdapter.notifyItemChanged(id)
-            }
-        }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
-        eventsViewModel.events
-            .nonNull()
-            .observe(this, Observer {
-                eventsRecyclerAdapter.addAll(it)
-                eventsRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-            })
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -112,12 +118,6 @@ class EventsFragment : Fragment() {
                     eventsRecyclerAdapter.removeAll()
                     eventsRecyclerAdapter.notifyDataSetChanged()
                 }
-            })
-
-        eventsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         eventsViewModel.progress
