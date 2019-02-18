@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                     mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
                 ).show()
             }
+            R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
             R.id.welcomeFragment -> finish()
             else -> super.onBackPressed()
         }
