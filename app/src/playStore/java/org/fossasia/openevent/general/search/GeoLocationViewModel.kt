@@ -1,69 +1,51 @@
 package org.fossasia.openevent.general.search
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
-import android.location.LocationManager
-import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import timber.log.Timber
-import java.io.IOException
-import java.util.Locale
+import io.reactivex.disposables.CompositeDisposable
+import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.location.LocationPermissionException
+import org.fossasia.openevent.general.location.NoLocationSourceException
 
-class GeoLocationViewModel : ViewModel() {
+class GeoLocationViewModel(private val locationService: LocationService) : ViewModel() {
     private val mutableLocation = MutableLiveData<String>()
     val location: LiveData<String> = mutableLocation
     private val mutableVisibility = MutableLiveData<Boolean>()
     val currentLocationVisibility: LiveData<Boolean> = mutableVisibility
+    private val mutableOpenLocationSettings = MutableLiveData<Boolean>()
+    val openLocationSettings: LiveData<Boolean> = mutableOpenLocationSettings
+    private val mutableErrorMessage = SingleLiveEvent<String>()
+    val errorMessage: LiveData<String> = mutableErrorMessage
 
-    @SuppressLint("MissingPermission")
-    fun configure(activity: Activity?) {
-        if (activity == null) return
-        val service = activity.getSystemService(Context.LOCATION_SERVICE)
-        var enabled = false
-        if (service is LocationManager) enabled = service.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        if (!enabled) {
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            activity.startActivity(intent)
-            return
-        }
-        val locationRequest: LocationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_LOW_POWER
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                if (locationResult == null) {
-                    return
-                }
-                for (location in locationResult.locations) {
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        try {
-                            val geocoder = Geocoder(activity, Locale.getDefault())
-                            val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 2)
-                            for (address: Address in addresses) {
-                                if (address.adminArea != null) {
-                                    mutableLocation.value = address.adminArea
-                                }
-                            }
-                        } catch (exception: IOException) {
-                            Timber.e(exception, "Error Fetching Location")
+    private val compositeDisposable = CompositeDisposable()
+
+    fun configure() {
+        compositeDisposable.add(locationService.getAdministrativeArea()
+            .subscribe(
+                { adminArea ->
+                    mutableLocation.value = adminArea
+                },
+                { error ->
+                    when (error) {
+                        is NoLocationSourceException -> {
+                            mutableErrorMessage.value = "No location sources are enabled"
+                            mutableOpenLocationSettings.value = true
+                        }
+                        is LocationPermissionException -> {
+                            mutableErrorMessage.value = "Please give the location permission"
+                        }
+                        else -> {
+                            mutableErrorMessage.value = "Something went wrong"
+                            mutableVisibility.value = false
                         }
                     }
                 }
-            }
-        }
-        LocationServices
-            .getFusedLocationProviderClient(activity)
-            .requestLocationUpdates(locationRequest, locationCallback, null)
+            ))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

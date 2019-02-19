@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="@dimen/item_image_view"
             android:layout_height="@dimen/item_image_view"
-            app:srcCompat="@drawable/ic_search_grey_24dp" />
+            app:srcCompat="@drawable/ic_search_grey" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +78,8 @@
                 android:id="@+id/eventsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_card_favorite_event" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

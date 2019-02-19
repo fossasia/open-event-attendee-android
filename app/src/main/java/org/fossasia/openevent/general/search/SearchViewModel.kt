@@ -20,7 +20,6 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val tokenKey = "LOCATION"
 
     private val mutableShowShimmerResults = MutableLiveData<Boolean>()
     val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
@@ -31,8 +30,7 @@ class SearchViewModel(
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
     var searchEvent: String? = null
-    val savedLocation by lazy { preference.getString(tokenKey) }
-    val savedDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyDate) }
+    var savedLocation: String? = null
     private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
     private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
     private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
@@ -40,9 +38,13 @@ class SearchViewModel(
     private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
     private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
 
+    fun loadSavedLocation() {
+        savedLocation = preference.getString(SAVED_LOCATION)
+    }
+
     fun loadEvents(location: String, time: String) {
         if (!isConnected()) return
-        preference.putString(tokenKey, location)
+        preference.putString(SAVED_LOCATION, location)
         val query: String = when {
             TextUtils.isEmpty(location) -> """[{
                 |   'name':'name',
@@ -72,7 +74,7 @@ class SearchViewModel(
                 |   }, {
                 |       'name':'starts-at',
                 |       'op':'ge',
-                |       'val':'$savedDate%'
+                |       'val':'$time%'
                 |   }, {
                 |       'name':'starts-at',
                 |       'op':'lt',
@@ -148,7 +150,7 @@ class SearchViewModel(
                 |   }, {
                 |       'name':'starts-at',
                 |       'op':'ge',
-                |       'val':'$savedDate%'
+                |       'val':'$time%'
                 |   }, {
                 |       'name':'starts-at',
                 |       'op':'lt',
@@ -171,8 +173,6 @@ class SearchViewModel(
                 mutableError.value = "Error fetching events"
             })
         )
-
-        preference.remove(SearchTimeViewModel.tokenKeyDate)
         preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 

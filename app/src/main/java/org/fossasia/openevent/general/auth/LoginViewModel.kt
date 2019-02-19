@@ -57,6 +57,9 @@ class LoginViewModel(
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
             return true
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mutableError.value = "Invalid email address!"
+            return true
         }
         return false
     }
@@ -73,6 +76,7 @@ class LoginViewModel(
             }.subscribe({
                 mutableRequestTokenSuccess.value = verifyMessage(it.message)
             }, {
+                mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
                 mutableError.value = "Email address not present in server. Please check your email"
             })
         )

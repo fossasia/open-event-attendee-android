@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
-import okhttp3.Authenticator
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.BuildConfig
@@ -54,6 +54,8 @@ import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.SmartAuthViewModel
+import org.fossasia.openevent.general.search.LocationService
+import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -65,6 +67,7 @@ import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -75,6 +78,7 @@ import java.util.concurrent.TimeUnit
 val commonModule = module {
     single { Preference() }
     single { Network() }
+    factory<LocationService> { LocationServiceImpl(androidContext()) }
 }
 
 val apiModule = module {
@@ -141,7 +145,7 @@ val viewModelModule = module {
     viewModel { OrdersUnderUserVM(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
     viewModel { EditProfileViewModel(get(), get()) }
-    viewModel { GeoLocationViewModel() }
+    viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
 }
 
@@ -153,7 +157,7 @@ val networkModule = module {
         objectMapper
     }
 
-    single { RequestAuthenticator(get()) as Authenticator }
+    single { RequestAuthenticator(get()) as Interceptor }
 
     single {
         val connectTimeout = 15 // 15s
@@ -165,7 +169,7 @@ val networkModule = module {
                 .addInterceptor(
                         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
                 )
-                .authenticator(get())
+                .addInterceptor(get())
                 .build()
     }
 

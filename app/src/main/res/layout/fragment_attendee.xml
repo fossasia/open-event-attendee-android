@@ -1,6 +1,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/attendeeScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -8,7 +9,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/attendeeCoordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_extra_large">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -272,7 +274,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/attendeeRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_attendee" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/paymentSelector"
@@ -425,11 +429,21 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/accept"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_moderate" />
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/acceptCheckbox"/>
+                    <TextView
+                        android:id="@+id/accept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/register"
@@ -438,7 +452,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/layout_margin_large"
                     android:backgroundTint="@color/colorAccent"
-                    android:enabled="false"
                     android:padding="@dimen/padding_medium"
                     android:text="@string/register"
                     android:textColor="@android:color/white" />

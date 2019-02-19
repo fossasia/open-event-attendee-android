@@ -39,6 +39,12 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         val bundle = this.arguments
         if (bundle != null)
             id = bundle.getLong(EVENT_ID)
+
+        aboutEventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEvent(it)
+            })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,12 +72,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
             })
 
         aboutEventViewModel.loadEvent(id)
-
-        aboutEventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-            })
 
         return rootView
     }

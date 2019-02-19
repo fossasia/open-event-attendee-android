@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fossasia.openevent.general.welcome.WelcomeFragment">
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_margin_large"
+        android:layout_marginLeft="@dimen/layout_margin_large"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:text="@string/start_text_1"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_very_large"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:text="@string/start_text_2"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        app:layout_constraintStart_toStartOf="@+id/heading"
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
+
+    <ImageView
+        android:id="@+id/globeIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/layout_margin_extra_large"
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/currentLocation"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subheading"
+        app:srcCompat="@drawable/ic_location_world" />
+
+    <LinearLayout
+        android:id="@+id/currentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/layout_margin_extra_small"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_small"
+        app:layout_constraintBottom_toTopOf="@+id/pickCityButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/locationIcon"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            app:srcCompat="@drawable/ic_location_pin" />
+
+        <TextView
+            android:id="@+id/locationButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:gravity="center"
+            android:text="@string/current_location"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_large" />
+
+        <ProgressBar
+            android:id="@+id/locationProgressBar"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pickCityButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_margin_large"
+        android:layout_marginLeft="@dimen/layout_margin_large"
+        android:layout_marginEnd="@dimen/layout_margin_large"
+        android:layout_marginRight="@dimen/layout_margin_large"
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/pick_a_city"
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/subheading" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

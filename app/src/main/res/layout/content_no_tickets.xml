@@ -25,7 +25,7 @@
             android:layout_height="@dimen/item_image_view"
             android:layout_centerInParent="true"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_baseline_ticket_24dp"
+            app:srcCompat="@drawable/ic_baseline_ticket"
             app:tint="@color/colorPrimary"/>
 
     </RelativeLayout>

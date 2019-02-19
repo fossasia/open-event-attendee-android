@@ -1,8 +1,10 @@
 package org.fossasia.openevent.general.utils
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -30,7 +32,7 @@ object Utils {
         CustomTabsIntent.Builder()
                 .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
                 .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.ic_arrow_back_white_cct_24dp))
+                    R.drawable.ic_arrow_back_white_cct))
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build()
@@ -44,9 +46,28 @@ object Utils {
             .show()
     }
 
-    fun showSoftKeyboard(context: Context?, view: View?) {
+    fun isNetworkConnected(context: Context?): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        return connectivityManager?.activeNetworkInfo != null
+    }
+
+    fun progressDialog(context: Context?): ProgressDialog {
+        val dialog = ProgressDialog(context)
+        dialog.setCancelable(false)
+        dialog.setMessage("Loading...")
+        return dialog
+    }
+
+    fun ProgressDialog.show(show: Boolean) {
+        if (show) this.show()
+        else this.dismiss()
+    }
+
+    fun showSoftKeyboard(context: Context?, view: View) {
+        view.requestFocus()
         val manager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-        if (manager is InputMethodManager) manager.showSoftInput(view, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+        if (manager is InputMethodManager) manager.toggleSoftInputFromWindow(view.windowToken,
+            InputMethodManager.RESULT_UNCHANGED_SHOWN, InputMethodManager.RESULT_UNCHANGED_HIDDEN)
     }
 
     fun hideSoftKeyboard(context: Context?, view: View) {

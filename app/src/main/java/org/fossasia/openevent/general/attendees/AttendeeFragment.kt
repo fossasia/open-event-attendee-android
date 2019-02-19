@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
@@ -61,6 +61,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.time
 import kotlinx.android.synthetic.main.fragment_attendee.view.view
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
+import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -73,6 +74,7 @@ import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -274,7 +276,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.attendeeCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
@@ -362,10 +364,18 @@ class AttendeeFragment : Fragment() {
                         rootView.moreAttendeeInformation.visibility = View.VISIBLE
                     }
                 attendeeRecyclerAdapter.notifyDataSetChanged()
-                rootView.register.isEnabled = true
             })
 
         rootView.register.setOnClickListener {
+            if (!isNetworkConnected(context)) {
+                Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            if (!rootView.acceptCheckbox.isChecked) {
+                Snackbar.make(rootView.attendeeScrollView,
+                    "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             val attendees = ArrayList<Attendee>()
             if (singleTicket) {
                 val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
@@ -383,14 +393,18 @@ class AttendeeFragment : Fragment() {
             } else {
                 attendees.addAll(attendeeRecyclerAdapter.attendeeList)
             }
-            val country = if (country.text.isEmpty()) country.text.toString() else null
-            attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
-            attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                if (isAttendeeCreated && selectedPaymentOption == paymentOptions.indexOf(getString(R.string.stripe))) {
-                    sendToken()
-                }
-            })
+            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                val country = if (country.text.isEmpty()) country.text.toString() else null
+                attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+
+                attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
+                    if (isAttendeeCreated && selectedPaymentOption ==
+                        paymentOptions.indexOf(getString(R.string.stripe))) {
+                        sendToken()
+                    }
+                })
+            } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
         }
 
         attendeeViewModel.ticketSoldOut
@@ -400,6 +414,14 @@ class AttendeeFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkConnected(context)) {
+            rootView.progressBarAttendee.isVisible = false
+            Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun showTicketSoldOutDialog(show: Boolean) {
@@ -422,7 +444,7 @@ class AttendeeFragment : Fragment() {
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
             Snackbar.make(
-                rootView.attendeeCoordinatorLayout, "Invalid card data", Snackbar.LENGTH_SHORT
+                rootView, "Invalid card data", Snackbar.LENGTH_SHORT
             ).show()
         else
             Stripe(requireContext())
@@ -435,7 +457,7 @@ class AttendeeFragment : Fragment() {
 
                     override fun onError(error: Exception) {
                         Snackbar.make(
-                            rootView.attendeeCoordinatorLayout, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
+                            rootView, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
                         ).show()
                     }
                 })

@@ -52,13 +52,13 @@ class SearchFragment : Fragment() {
             Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
         }
 
-        if (searchViewModel.savedDate != null) {
-            rootView.timeTextView.text = searchViewModel.savedDate
+        val time = arguments?.let {
+            SearchFragmentArgs.fromBundle(it).stringSavedDate
         }
+        rootView.timeTextView.text = time ?: "Anytime"
 
-        if (searchViewModel.savedLocation != null) {
-            rootView.locationTextView.text = searchViewModel.savedLocation
-        }
+        searchViewModel.loadSavedLocation()
+        rootView.locationTextView.text = searchViewModel.savedLocation
 
         rootView.locationTextView.setOnClickListener {
             val bundle = Bundle()

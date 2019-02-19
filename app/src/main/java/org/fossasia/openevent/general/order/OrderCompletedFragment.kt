@@ -9,11 +9,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
@@ -22,17 +22,13 @@ import kotlinx.android.synthetic.main.fragment_order.view.name
 import kotlinx.android.synthetic.main.fragment_order.view.share
 import kotlinx.android.synthetic.main.fragment_order.view.time
 import kotlinx.android.synthetic.main.fragment_order.view.view
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-const val TICKETS: String = "OpenMyTickets"
 
 class OrderCompletedFragment : Fragment() {
 
@@ -86,8 +82,6 @@ class OrderCompletedFragment : Fragment() {
             shareEvent(eventShare)
         }
 
-        rootView.share.scaleType = ImageView.ScaleType.CENTER
-
         return rootView
     }
 
@@ -122,22 +116,16 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun redirectToEventsFragment() {
-        findNavController(rootView).navigate(R.id.eventsFragment, null, getAnimSlide())
+        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
     private fun openEventDetails() {
-        findNavController(rootView).navigate(R.id.eventDetailsFragment, null, getAnimSlide() )
+        findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
     }
 
     private fun openTicketDetails() {
-        val searchBundle = Bundle()
-        searchBundle.putBoolean(TICKETS, true)
-        activity?.supportFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val intent = Intent(activity, MainActivity::class.java)
-        intent.putExtras(searchBundle)
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        activity?.finish()
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
+        Navigation.findNavController(rootView).navigate(R.id.orderUnderUserFragment, null, navOptions)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

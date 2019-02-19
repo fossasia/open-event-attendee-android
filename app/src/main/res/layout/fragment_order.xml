@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/layout_margin_medium"
                     android:layout_weight="0.1"
-                    app:srcCompat="@drawable/ic_baseline_calendar_24dp" />
+                    app:srcCompat="@drawable/ic_baseline_calendar" />
 
                 <TextView
                     android:id="@+id/time"
@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    app:srcCompat="@drawable/ic_baseline_ticket_24dp" />
+                    app:srcCompat="@drawable/ic_baseline_ticket" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -151,15 +151,13 @@
                     android:text="@string/invite"
                     android:textColor="@color/black" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <ImageButton
                     android:id="@+id/share"
                     android:layout_width="@dimen/fab_width"
                     android:layout_height="@dimen/fab_height"
                     android:layout_margin="@dimen/layout_margin_medium"
-                    android:background="@android:color/white"
-                    android:scaleType="center"
-                    app:backgroundTint="@android:color/white"
-                    app:srcCompat="@drawable/ic_share_grey_24dp" />
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_share_grey" />
 
             </LinearLayout>
 

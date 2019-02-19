@@ -15,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
 import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -46,6 +45,21 @@ class OrderDetailsFragment : Fragment() {
             }
         }
         ordersRecyclerAdapter.setOrderIdentifier(orderId)
+
+        orderDetailsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.setEvent(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+            })
+
+        orderDetailsViewModel.attendees
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.addAll(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
+            })
     }
 
     override fun onCreateView(
@@ -76,25 +90,11 @@ class OrderDetailsFragment : Fragment() {
         }
 
         ordersRecyclerAdapter.setListener(eventDetailsListener)
-        orderDetailsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                ordersRecyclerAdapter.setEvent(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-            })
 
         orderDetailsViewModel.progress
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBar.isVisible = it
-            })
-
-        orderDetailsViewModel.attendees
-            .nonNull()
-            .observe(this, Observer {
-                ordersRecyclerAdapter.addAll(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
             })
 
         orderDetailsViewModel.message
@@ -117,13 +117,5 @@ class OrderDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Tickets"
-        setHasOptionsMenu(false)
-        super.onDestroyView()
     }
 }
