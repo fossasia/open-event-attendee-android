@@ -76,6 +76,7 @@ import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -406,11 +407,13 @@ class AttendeeFragment : Fragment() {
                         rootView.moreAttendeeInformation.visibility = View.VISIBLE
                     }
                 attendeeRecyclerAdapter.notifyDataSetChanged()
-                rootView.register.isEnabled = true
             })
 
         rootView.register.setOnClickListener {
-
+            if (!isNetworkConnected(context)) {
+                Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             if (!rootView.acceptCheckbox.isChecked) {
                 Snackbar.make(rootView.attendeeScrollView,
                     "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
@@ -454,6 +457,14 @@ class AttendeeFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkConnected(context)) {
+            rootView.progressBarAttendee.isVisible = false
+            Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun showTicketSoldOutDialog(show: Boolean) {

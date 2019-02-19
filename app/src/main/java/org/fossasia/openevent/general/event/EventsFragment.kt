@@ -1,8 +1,6 @@
 package org.fossasia.openevent.general.event
 
-import android.content.Context
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -46,6 +45,29 @@ class EventsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventsRecyclerAdapter.setEventLayout(EVENTS)
+        val favoriteFabClickListener = object : FavoriteFabListener {
+            override fun onClick(event: Event, isFavorite: Boolean) {
+                val id = eventsRecyclerAdapter.getPos(event.id)
+                eventsViewModel.setFavorite(event.id, !isFavorite)
+                event.favorite = !event.favorite
+                eventsRecyclerAdapter.notifyItemChanged(id)
+            }
+        }
+        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
+
+        eventsViewModel.events
+            .nonNull()
+            .observe(this, Observer {
+                eventsRecyclerAdapter.addAll(it)
+                eventsRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+            })
+
+        eventsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+            })
     }
 
     override fun onCreateView(
@@ -80,24 +102,7 @@ class EventsFragment : Fragment() {
                 findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
             }
         }
-
-        val favoriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavorite: Boolean) {
-                val id = eventsRecyclerAdapter.getPos(event.id)
-                eventsViewModel.setFavorite(event.id, !isFavorite)
-                event.favorite = !event.favorite
-                eventsRecyclerAdapter.notifyItemChanged(id)
-            }
-        }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
-        eventsViewModel.events
-            .nonNull()
-            .observe(this, Observer {
-                eventsRecyclerAdapter.addAll(it)
-                eventsRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-            })
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -108,12 +113,6 @@ class EventsFragment : Fragment() {
                     rootView.shimmerEvents.stopShimmer()
                 }
                 rootView.shimmerEvents.isVisible = it
-            })
-
-        eventsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         eventsViewModel.progress
@@ -130,10 +129,10 @@ class EventsFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
-        showNoInternetScreen(isNetworkConnected())
+        showNoInternetScreen(isNetworkConnected(context))
 
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected()
+            val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.retryLoadLocationEvents()
             }
@@ -142,8 +141,8 @@ class EventsFragment : Fragment() {
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
-            showNoInternetScreen(isNetworkConnected())
-            if (!isNetworkConnected()) {
+            showNoInternetScreen(isNetworkConnected(context))
+            if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
                 eventsViewModel.retryLoadLocationEvents()
@@ -156,12 +155,6 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
-    }
-
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        return connectivityManager?.activeNetworkInfo != null
     }
 
     override fun onStop() {
