@@ -68,6 +68,7 @@ class AttendeeViewModel(
     val year = ArrayList<String>()
     val attendees = ArrayList<Attendee>()
     val cardType = ArrayList<String>()
+    var isAllDetailsFilled = true
 
     private var createAttendeeIterations = 0
     var country: String? = null
@@ -162,13 +163,6 @@ class AttendeeViewModel(
     }
 
     private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
-        if (attendee.email.isNullOrEmpty() || attendee.firstname.isNullOrEmpty() || attendee.lastname.isNullOrEmpty()) {
-            mutableMessage.value = "Please fill in all the fields"
-            mutableIsAttendeeCreated.value = false
-            mutableProgress.value = false
-            return
-        }
-
         compositeDisposable.add(attendeeService.postAttendee(attendee)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -203,9 +197,21 @@ class AttendeeViewModel(
         this.country = country
         this.paymentOption = paymentOption
         this.attendees.clear()
+        isAllDetailsFilled = true
         createAttendeeIterations = 0
         attendees.forEach {
-            createAttendee(it, attendees.size)
+            if (it.email.isNullOrEmpty() || it.firstname.isNullOrEmpty() || it.lastname.isNullOrEmpty()) {
+                if (isAllDetailsFilled)
+                    mutableMessage.value = "Please fill in all the fields"
+                mutableIsAttendeeCreated.value = false
+                isAllDetailsFilled = false
+                return
+            }
+        }
+        if (isAllDetailsFilled) {
+            attendees.forEach {
+                createAttendee(it, attendees.size)
+            }
         }
     }
 
@@ -262,12 +268,11 @@ class AttendeeViewModel(
                     mutableProgress.value = false
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
-                    mutableMessage.value = "Order created successfully!"
                     Timber.d("Success placing order!")
                     if (it.paymentMode == "free") {
                         confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    }
+                    } else mutableMessage.value = "Order created successfully!"
                 }, {
                     mutableMessage.value = "Unable to create Order!"
                     Timber.d(it, "Failed creating Order")

@@ -78,6 +78,26 @@ class EventDetailsFragment : Fragment() {
         if (bundle != null) {
             eventId = bundle.getLong(EVENT_ID, -1)
         }
+
+        eventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEvent(it)
+                eventShare = it
+                title = eventShare.name
+
+                if (eventShare.favorite) {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
+                }
+
+                if (runOnce) {
+                    loadSocialLinksFragment()
+                    loadSimilarEventsFragment()
+                }
+                runOnce = false
+
+                Timber.d("Fetched events of id %d", eventId)
+            })
     }
 
     override fun onCreateView(
@@ -93,29 +113,9 @@ class EventDetailsFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        eventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-                eventShare = it
-                title = eventShare.name
-
-                rootView.buttonTickets.setOnClickListener {
-                    loadTicketFragment()
-                }
-
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
-                }
-
-                if (runOnce) {
-                    loadSocialLinksFragment()
-                    loadSimilarEventsFragment()
-                }
-                runOnce = false
-
-                Timber.d("Fetched events of id %d", eventId)
-            })
+        rootView.buttonTickets.setOnClickListener {
+            loadTicketFragment()
+        }
 
         eventViewModel.error
             .nonNull()
@@ -159,7 +159,7 @@ class EventDetailsFragment : Fragment() {
 
             Picasso.get()
                     .load(event.logoUrl)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black_24dp))
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
         }
@@ -207,7 +207,7 @@ class EventDetailsFragment : Fragment() {
 
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
-                    .placeholder(R.drawable.ic_map_black_24dp)
+                    .placeholder(R.drawable.ic_map_black)
                     .into(rootView.imageMap)
         }
 
@@ -256,9 +256,9 @@ class EventDetailsFragment : Fragment() {
             R.id.favorite_event -> {
                 eventViewModel.setFavorite(eventId, !(eventShare.favorite))
                 if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white_24px)
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white)
                 } else {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white_24px)
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
                 }
                 return true
             }

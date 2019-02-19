@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:contentDescription="Profile Photo"
-            app:srcCompat="@drawable/ic_account_circle_grey_24dp" />
+            app:srcCompat="@drawable/ic_account_circle_grey" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
 
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey_24dp))
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
 
@@ -146,9 +146,16 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showInMarket(packageName: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
     }
 
     private fun fetchProfile() {

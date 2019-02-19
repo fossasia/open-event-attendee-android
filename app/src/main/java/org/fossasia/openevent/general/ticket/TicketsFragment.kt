@@ -55,6 +55,25 @@ class TicketsFragment : Fragment() {
             currency = bundle.getString(CURRENCY, null)
         }
         ticketsRecyclerAdapter.setCurrency(currency)
+
+        ticketsViewModel.error
+            .nonNull()
+            .observe(this, Observer {
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
+                ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
     }
 
     override fun onCreateView(
@@ -74,6 +93,7 @@ class TicketsFragment : Fragment() {
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
+
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
 
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
@@ -83,24 +103,12 @@ class TicketsFragment : Fragment() {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
-
         ticketsViewModel.progressTickets
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBarTicket.isVisible = it
                 rootView.ticketTableHeader.isGone = it
                 rootView.register.isGone = it
-            })
-
-        ticketsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEventDetails(it)
             })
 
         ticketsViewModel.ticketTableVisibility

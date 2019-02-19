@@ -33,7 +33,7 @@
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:text="@string/start_text_2"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_large" />
         </LinearLayout>
       
         <ImageView
