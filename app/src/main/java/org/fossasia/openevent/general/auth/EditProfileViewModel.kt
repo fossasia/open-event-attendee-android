@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
 
 const val USER_UPDATED = "User updated successfully!"
@@ -21,7 +22,7 @@ class EditProfileViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableMessage = MutableLiveData<String>()
+    private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
 
     fun isLoggedIn() = authService.isLoggedIn()
