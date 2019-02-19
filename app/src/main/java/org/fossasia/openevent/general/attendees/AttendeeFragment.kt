@@ -250,9 +250,11 @@ class AttendeeFragment : Fragment() {
                         else -> 0
                     }
                 }
+
                     rootView.cardSelector.setSelection(pos, true)
                     rootView.cardSelector.isVisible = false
                     rootView.cardNumber.error = null
+
             }
         })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
