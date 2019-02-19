@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
@@ -22,7 +23,7 @@ class TicketsViewModel(
     private val mutableProgressTickets = MutableLiveData<Boolean>()
     val progressTickets: LiveData<Boolean> = mutableProgressTickets
     val tickets = MutableLiveData<List<Ticket>>()
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
