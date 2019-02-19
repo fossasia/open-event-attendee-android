@@ -15,12 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
-import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
-import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.progressBar
-import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -120,6 +115,12 @@ class EventsFragment : Fragment() {
             .observe(this, Observer {
                 rootView.swiperefresh.isRefreshing = it
             })
+
+        eventsViewModel.showNoEventLayout
+            .nonNull()
+            .observe(this, Observer {
+            rootView.noEventLL.isVisible = it
+        })
 
         eventsViewModel.loadLocation()
         rootView.locationTextView.text = eventsViewModel.savedLocation

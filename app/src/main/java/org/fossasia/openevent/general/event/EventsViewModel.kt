@@ -23,6 +23,8 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     val error: LiveData<String> = mutableError
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
+    private val mutableShowNoEventLayout = MutableLiveData<Boolean>()
+    val showNoEventLayout: LiveData<Boolean> = mutableShowNoEventLayout
 
     var savedLocation: String? = null
 
@@ -32,7 +34,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
 
     fun loadLocationEvents() {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
-
+        mutableShowNoEventLayout.value = false
         compositeDisposable.add(eventService.getEventsByLocation(query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,6 +42,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 mutableProgress.value = false
                 mutableShowShimmerEvents.value = false
             }.subscribe({
+                mutableShowNoEventLayout.value = it.isEmpty()
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
@@ -54,6 +57,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     }
 
     fun loadEvents() {
+        mutableShowNoEventLayout.value = false
         compositeDisposable.add(eventService.getEvents()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -62,6 +66,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
             }).doFinally({
                 mutableProgress.value = false
             }).subscribe({
+                mutableShowNoEventLayout.value = it.isEmpty()
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
