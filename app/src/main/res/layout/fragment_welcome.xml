@@ -55,8 +55,8 @@
             android:paddingBottom="@dimen/padding_small">
 
             <ImageView
-                android:layout_width="@dimen/item_image_view_large"
-                android:layout_height="@dimen/item_image_view_large"
+                android:layout_width="@dimen/item_image_view_medium"
+                android:layout_height="@dimen/item_image_view_medium"
                 android:layout_margin="@dimen/layout_margin_medium"
                 app:srcCompat="@drawable/ic_location_pin"/>
 
