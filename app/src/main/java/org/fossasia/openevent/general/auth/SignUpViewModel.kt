@@ -20,7 +20,7 @@ class SignUpViewModel(
 
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableSignedUp = MutableLiveData<User>()
     val signedUp: LiveData<User> = mutableSignedUp

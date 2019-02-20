@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
 
 class SocialLinksViewModel(private val socialLinksService: SocialLinksService) : ViewModel() {
@@ -16,7 +17,7 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
 
     fun loadSocialLinks(id: Long) {
