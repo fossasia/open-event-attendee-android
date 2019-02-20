@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.User
+import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
 
 class EventDetailsViewModel(private val eventService: EventService) : ViewModel() {
@@ -18,7 +19,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
