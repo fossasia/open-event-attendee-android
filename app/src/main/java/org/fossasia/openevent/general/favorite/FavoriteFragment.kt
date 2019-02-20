@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
+import kotlinx.android.synthetic.main.fragment_favorite.view.findSomethingToDo
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
@@ -47,6 +49,17 @@ class FavoriteFragment : Fragment() {
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Likes"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
+
+        rootView.findSomethingToDo.setOnClickListener {
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(R.id.eventsFragment, false)
+                .setEnterAnim(R.anim.slide_in_right)
+                .setExitAnim(R.anim.slide_out_left)
+                .setPopEnterAnim(R.anim.slide_in_left)
+                .setPopExitAnim(R.anim.slide_out_right)
+                .build()
+            findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
         }
 
         val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
