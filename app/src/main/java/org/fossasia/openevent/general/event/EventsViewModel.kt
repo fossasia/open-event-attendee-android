@@ -37,6 +37,9 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getEventsByLocation(query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmerEvents.value = true
+            }
             .doFinally {
                 mutableProgress.value = false
                 mutableShowShimmerEvents.value = false
@@ -47,11 +50,6 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 mutableError.value = "Error fetching events"
             })
         )
-    }
-
-    fun retryLoadLocationEvents() {
-        mutableShowShimmerEvents.value = true
-        loadLocationEvents()
     }
 
     fun loadEvents() {
