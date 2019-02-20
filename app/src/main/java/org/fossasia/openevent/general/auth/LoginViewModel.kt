@@ -22,7 +22,7 @@ class LoginViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
@@ -56,6 +56,9 @@ class LoginViewModel(
     private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
+            return true
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mutableError.value = "Invalid email address!"
             return true
         }
         return false

@@ -6,6 +6,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
 import org.fossasia.openevent.general.di.databaseModule
+import org.fossasia.openevent.general.di.flavorSpecificModule
 import org.fossasia.openevent.general.di.networkModule
 import org.fossasia.openevent.general.di.viewModelModule
 import org.koin.android.ext.android.startKoin
@@ -22,7 +23,9 @@ class OpenEventGeneral : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        startKoin(this, listOf(commonModule, apiModule, viewModelModule, networkModule, databaseModule))
+        startKoin(this, listOf(
+            commonModule, apiModule, viewModelModule, networkModule, databaseModule, flavorSpecificModule
+        ))
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(applicationContext)
     }
