@@ -175,12 +175,13 @@ class EventDetailsFragment : Fragment() {
         // Event Description Section
         if (!event.description.isNullOrEmpty()) {
             setTextField(rootView.eventDescription, event.description)
-
-            if (rootView.eventDescription.lineCount > LINE_COUNT) {
-                rootView.seeMore.visibility = View.VISIBLE
-                // start about fragment
-                rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
-                rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+            rootView.eventDescription.post {
+                if (rootView.eventDescription.lineCount > LINE_COUNT) {
+                    rootView.seeMore.visibility = View.VISIBLE
+                    // start about fragment
+                    rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+                    rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+                }
             }
         } else {
             aboutEventContainer.visibility = View.GONE
