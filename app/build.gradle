@@ -150,7 +150,7 @@ dependencies {
 
     //Navigation
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-beta02'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-rc01'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.1"
