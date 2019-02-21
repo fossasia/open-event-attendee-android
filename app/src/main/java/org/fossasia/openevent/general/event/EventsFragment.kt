@@ -12,15 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.content_no_events.view.*
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
-import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
-import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.progressBar
-import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -109,8 +105,10 @@ class EventsFragment : Fragment() {
             .observe(this, Observer {
                 if (it) {
                     rootView.shimmerEvents.startShimmer()
+                    rootView.eventsEmptyView.visibility = View.GONE
                 } else {
                     rootView.shimmerEvents.stopShimmer()
+                    setEventEmptyText(eventsRecyclerAdapter.itemCount)
                 }
                 rootView.shimmerEvents.isVisible = it
                 if (it) {
@@ -146,6 +144,7 @@ class EventsFragment : Fragment() {
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
             showNoInternetScreen(isNetworkConnected(context))
+            rootView.eventsEmptyView.visibility = View.GONE
             if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
@@ -159,6 +158,11 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.eventsEmptyView.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun setEventEmptyText(numOfEvents: Int) {
+        rootView.eventsEmptyView.visibility = if (numOfEvents > 0) View.GONE else View.VISIBLE
     }
 
     override fun onStop() {

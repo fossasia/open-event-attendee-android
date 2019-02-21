@@ -80,8 +80,6 @@
                             <include layout="@layout/placeholder_item_card_events" />
 
                         </LinearLayout>
-
-
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
                     <FrameLayout
@@ -103,8 +101,8 @@
                             android:scrollbars="vertical" />
                     </FrameLayout>
                 </LinearLayout>
-
                 <include layout="@layout/content_no_internet" />
+                <include layout="@layout/content_no_events"/>
             </LinearLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.core.widget.NestedScrollView>
