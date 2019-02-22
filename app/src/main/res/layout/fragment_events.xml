@@ -103,7 +103,6 @@
                             android:scrollbars="vertical" />
                     </FrameLayout>
                 </LinearLayout>
-
                 <include layout="@layout/content_no_internet" />
             </LinearLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
