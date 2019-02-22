@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -48,6 +49,10 @@ class EditProfileFragment : Fragment() {
     private val READ_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     private val REQUEST_CODE = 1
 
+    private lateinit var userFirstName: String
+    private lateinit var userLastName: String
+    private var avatarUpdated: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,8 +63,8 @@ class EditProfileFragment : Fragment() {
         profileViewModel.user
             .nonNull()
             .observe(this, Observer {
-                val userFirstName = it.firstName.nullToEmpty()
-                val userLastName = it.lastName.nullToEmpty()
+                userFirstName = it.firstName.nullToEmpty()
+                userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
                 rootView.firstName.setText(userFirstName)
                 rootView.lastName.setText(userLastName)
@@ -121,10 +126,11 @@ class EditProfileFragment : Fragment() {
             }
 
             Picasso.get()
-                    .load(imageUri)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
-                    .transform(CircleTransform())
-                    .into(rootView.profilePhoto)
+                .load(imageUri)
+                .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
+                .transform(CircleTransform())
+                .into(rootView.profilePhoto)
+            avatarUpdated = true
         }
     }
 
@@ -146,7 +152,22 @@ class EditProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                activity?.onBackPressed()
+                if (!avatarUpdated && rootView.lastName.text.toString() == userLastName &&
+                    rootView.firstName.text.toString() == userFirstName) {
+                    activity?.onBackPressed()
+                } else {
+                    hideSoftKeyboard(context, rootView)
+                    val dialog = AlertDialog.Builder(context)
+                    dialog.setMessage("Your changes have not been saved")
+                    dialog.setNegativeButton("Discard") { _, _ ->
+                        activity?.onBackPressed()
+                    }
+                    dialog.setPositiveButton("Save") { _, _ ->
+                        editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
+                            rootView.lastName.text.toString())
+                    }
+                    dialog.create().show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
