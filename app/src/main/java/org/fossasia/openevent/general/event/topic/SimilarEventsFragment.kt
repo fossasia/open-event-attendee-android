@@ -84,7 +84,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.similarEvents
             .nonNull()
             .observe(this, Observer {
-                similarEventsRecyclerAdapter.addAll(it)
+                similarEventsRecyclerAdapter.addAll(it.take(5))
                 handleVisibility(it)
                 similarEventsRecyclerAdapter.notifyDataSetChanged()
                 Timber.d("Fetched similar events of size %s", similarEventsRecyclerAdapter.itemCount)
