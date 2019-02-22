@@ -289,8 +289,10 @@ class EventDetailsFragment : Fragment() {
         intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
         intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+            EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
     }
 
