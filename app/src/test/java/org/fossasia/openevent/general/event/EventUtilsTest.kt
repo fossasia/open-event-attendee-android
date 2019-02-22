@@ -46,8 +46,8 @@ class EventUtilsTest {
             Event(id, name, identifier, startsAt, endsAt, timeZone,
                     description = description, externalEventUrl = link)
 
-    private fun getEventDateTime(dateTime: String, timeZone: String): ZonedDateTime
-        = EventUtils.getEventDateTime(dateTime, timeZone)
+    private fun getEventDateTime(dateTime: String, timeZone: String): ZonedDateTime =
+        EventUtils.getEventDateTime(dateTime, timeZone)
 
     private fun setupStringMock() {
         every { resource.getString(R.string.event_name) }.returns("Event Name : ")
