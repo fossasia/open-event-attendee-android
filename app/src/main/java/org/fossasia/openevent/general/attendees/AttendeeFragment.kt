@@ -470,8 +470,8 @@ class AttendeeFragment : Fragment() {
 
     private fun loadEventDetails(event: Event) {
         val dateString = StringBuilder()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         val currency = Currency.getInstance(event.paymentCurrency)
         paymentCurrency = currency.symbol
         ticketsRecyclerAdapter.setCurrency(paymentCurrency)

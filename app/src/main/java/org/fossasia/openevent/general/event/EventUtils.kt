@@ -29,8 +29,8 @@ object EventUtils {
 
         val message = StringBuilder()
 
-        val startsAt = getLocalizedDateTime(event.startsAt)
-        val endsAt = getLocalizedDateTime(event.endsAt)
+        val startsAt = getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = getEventDateTime(event.endsAt, event.timezone)
 
         message.append(resource.getString(R.string.event_name)).append(event.name).append("\n\n")
         if (!description.isEmpty()) message.append(resource.getString(R.string.event_description))
@@ -51,12 +51,12 @@ object EventUtils {
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getLocalizedDateTime(dateString: String): ZonedDateTime = ZonedDateTime.parse(dateString)
-            .toOffsetDateTime()
-            .atZoneSameInstant(ZoneId.systemDefault())
+    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime = ZonedDateTime.parse(dateString)
+        .toOffsetDateTime()
+        .atZoneSameInstant(ZoneId.of(timeZone))
 
-    fun getTimeInMilliSeconds(dateString: String): Long {
-        return getLocalizedDateTime(dateString).toInstant().toEpochMilli()
+    fun getTimeInMilliSeconds(dateString: String, timeZone: String): Long {
+        return getEventDateTime(dateString, timeZone).toInstant().toEpochMilli()
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {

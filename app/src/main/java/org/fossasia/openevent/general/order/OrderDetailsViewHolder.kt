@@ -31,7 +31,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?
     ) {
         if (event != null) {
-            val formattedDateTime = EventUtils.getLocalizedDateTime(event.startsAt)
+            val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
             val formattedDate = EventUtils.getFormattedDateShort(formattedDateTime)
             val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
             val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
@@ -56,10 +56,12 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 intent.type = "vnd.android.cursor.item/event"
                 intent.putExtra(CalendarContract.Events.TITLE, event.name)
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
+                intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
                 intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
                 intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+                    CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
                 itemView.context.startActivity(intent)
             }
 
