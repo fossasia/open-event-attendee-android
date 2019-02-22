@@ -28,10 +28,12 @@ class LoginViewModel(
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
     val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
-    private val mutableIsCorrectEmail = MutableLiveData<Boolean>()
+    private val mutableIsCorrectEmail = MutableLiveData<Boolean>(false)
     val isCorrectEmail: LiveData<Boolean> = mutableIsCorrectEmail
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
+    var areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -115,6 +117,10 @@ class LoginViewModel(
     fun checkEmail(email: String) {
         mutableIsCorrectEmail.value = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun checkFields(password: String) {
+        mutableAreFieldsCorrect.value = mutableIsCorrectEmail.value!! && password.isNotEmpty()
     }
 
     private fun isConnected(): Boolean {

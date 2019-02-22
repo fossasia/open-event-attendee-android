@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -100,11 +101,17 @@ class SignUpViewModel(
         compositeDisposable.clear()
     }
 
-    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
+    fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
             return true
         }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mutableError.value = "Invalid email address!"
+            return true
+        }
+
         if (password != confirmPassword) {
             mutableError.value = "Passwords do not match!"
             return true
