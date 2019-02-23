@@ -81,6 +81,4 @@
     <!--spinner specifics-->
     <dimen name="spinner_width">30dp</dimen>
 
-    <!--events specifics-->
-    <dimen name="empty_view_height">450dp</dimen>
 </resources>

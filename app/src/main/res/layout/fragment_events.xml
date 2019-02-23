@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:id="@+id/eventsNestedScrollView"
         android:orientation="vertical"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -89,10 +90,11 @@
                         android:layout_height="match_parent">
                         <TextView
                             android:id="@+id/noEventsMessage"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/empty_view_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="@string/no_events_message"
-                            android:gravity="center" />
+                            android:layout_gravity="center"
+                            android:gravity="center"/>
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="wrap_content"
