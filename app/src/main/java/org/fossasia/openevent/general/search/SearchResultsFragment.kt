@@ -39,9 +39,6 @@ class SearchResultsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (this::rootView.isInitialized) {
-            return rootView
-        }
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
         val thisActivity = activity
