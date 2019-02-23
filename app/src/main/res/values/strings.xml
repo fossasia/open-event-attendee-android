@@ -127,6 +127,13 @@
     <string name="date">Date</string>
     <string name="order_identifier">Order Identifier</string>
     <string name="event_summary">Event Summary</string>
+    <string name="organizer_preview">Mario</string>
+    <string name="event_summary_preview">Very nice</string>
+    <string name="order_identifier_preview">3456789</string>
+    <string name="location_preview">Singapore</string>
+    <string name="date_preview">Thu,June 14</string>
+    <string name="event_preview">FOSSASIA summit</string>
+    <string name="name_preview">Nikit Bhandari</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
