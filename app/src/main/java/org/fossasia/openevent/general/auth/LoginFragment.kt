@@ -118,7 +118,7 @@ class LoginFragment : Fragment() {
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
                 loginViewModel.checkEmail(email.toString())
-                loginViewModel.checkFields(password.text.toString())
+                loginButton.isEnabled = !loginViewModel.hasErrors(email.toString(), password.text.toString())
             }
         })
 
@@ -128,8 +128,7 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(password: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkEmail(email.text.toString())
-                loginViewModel.checkFields(password.toString())
+                loginButton.isEnabled = !loginViewModel.hasErrors(email.text.toString(), password.toString())
             }
         })
 
@@ -155,12 +154,6 @@ class LoginFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 onEmailEntered(it)
-            })
-
-        loginViewModel.areFieldsCorrect
-            .nonNull()
-            .observe(this, Observer {
-                loginButton.isEnabled = it
             })
 
         rootView.tick.setOnClickListener {
