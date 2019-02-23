@@ -101,7 +101,7 @@ class SignUpViewModel(
         compositeDisposable.clear()
     }
 
-    fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
+    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
             return true
@@ -123,6 +123,14 @@ class SignUpViewModel(
         }
 
         return false
+    }
+
+    fun checkFields(email: String, password: String, confirmPassword: String): Boolean {
+        return email.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.isNotEmpty() &&
+            password.length > 5 &&
+            confirmPassword == password
     }
 
     private fun isConnected(): Boolean {

@@ -53,7 +53,7 @@ class LoginViewModel(
         )
     }
 
-    fun hasErrors(email: String?, password: String?): Boolean {
+    private fun hasErrors(email: String?, password: String?): Boolean {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             mutableError.value = "Email or Password cannot be empty!"
             return true
@@ -115,6 +115,12 @@ class LoginViewModel(
     fun checkEmail(email: String) {
         mutableIsCorrectEmail.value = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun checkFields(email: String, password: String): Boolean {
+        return email.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.isNotEmpty()
     }
 
     private fun isConnected(): Boolean {

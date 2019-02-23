@@ -118,7 +118,7 @@ class LoginFragment : Fragment() {
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
                 loginViewModel.checkEmail(email.toString())
-                loginButton.isEnabled = !loginViewModel.hasErrors(email.toString(), password.text.toString())
+                loginButton.isEnabled = loginViewModel.checkFields(email.toString(), password.text.toString())
             }
         })
 
@@ -128,7 +128,7 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(password: CharSequence, start: Int, before: Int, count: Int) {
-                loginButton.isEnabled = !loginViewModel.hasErrors(email.text.toString(), password.toString())
+                loginButton.isEnabled = loginViewModel.checkFields(email.text.toString(), password.toString())
             }
         })
 

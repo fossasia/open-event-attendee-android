@@ -115,7 +115,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = !signUpViewModel.hasErrors(
+                signUpButton.isEnabled = signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
@@ -133,7 +133,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = !signUpViewModel.hasErrors(
+                signUpButton.isEnabled = signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
@@ -157,7 +157,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = !signUpViewModel.hasErrors(
+                signUpButton.isEnabled = signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
