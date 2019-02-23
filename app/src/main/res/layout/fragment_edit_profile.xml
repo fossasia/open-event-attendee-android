@@ -28,13 +28,14 @@
                 app:srcCompat="@drawable/ic_account_circle_grey" />
 
             <ImageView
+                android:id="@+id/updateProfilePhotoCover"
                 android:layout_width="@dimen/avatar_medium"
                 android:layout_height="@dimen/avatar_small"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/profilePhoto"
                 android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_edit_profile_24dp"/>
+                app:srcCompat="@drawable/ic_edit_profile"/>
 
             <TextView
                 android:layout_width="@dimen/avatar_medium"
