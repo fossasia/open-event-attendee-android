@@ -19,11 +19,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginTop="@dimen/layout_margin_extra_large"
                 android:lineSpacingExtra="@dimen/layout_margin_large"
                 android:text="@string/start_text_1"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_very_large"
+                android:textSize="@dimen/text_size_extra_large"
                 android:textStyle="bold" />
 
             <TextView
