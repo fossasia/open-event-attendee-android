@@ -29,4 +29,20 @@
             android:key="@string/key_version"
             android:title="@string/version_settings" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Legal" >
+
+        <Preference
+            android:key="privacy"
+            android:title="Privacy" />
+
+        <Preference
+            android:key="terms_of_service"
+            android:title="Terms of Service" />
+
+        <Preference
+            android:key="cookie_policy"
+            android:title="Cookie Policy" />
+    </PreferenceCategory>
 </PreferenceScreen>
