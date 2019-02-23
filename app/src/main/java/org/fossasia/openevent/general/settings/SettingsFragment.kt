@@ -62,15 +62,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
             return true
         }
-        if (preference?.key == "privacy") {
+        if (preference?.key == getString(R.string.key_privacy)) {
             context?.let { Utils.openUrl(it, PRIVACY_LINK) }
             return true
         }
-        if (preference?.key == "terms_of_service") {
+        if (preference?.key == getString(R.string.key_terms_of_service)) {
             context?.let { Utils.openUrl(it, TERMS_OF_SERVICE_LINK) }
             return true
         }
-        if (preference?.key == "cookie_policy") {
+        if (preference?.key == getString(R.string.key_cookie_policy)) {
             context?.let { Utils.openUrl(it, COOKIE_POLICY_LINK) }
             return true
         }

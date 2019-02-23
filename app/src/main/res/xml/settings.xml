@@ -31,18 +31,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Legal" >
+        android:title="@string/legal" >
 
         <Preference
-            android:key="privacy"
-            android:title="Privacy" />
+            android:key="@string/key_privacy"
+            android:title="@string/privacy" />
 
         <Preference
-            android:key="terms_of_service"
-            android:title="Terms of Service" />
+            android:key="@string/key_terms_of_service"
+            android:title="@string/title_terms_of_service" />
 
         <Preference
-            android:key="cookie_policy"
-            android:title="Cookie Policy" />
+            android:key="@string/key_cookie_policy"
+            android:title="@string/cookie_policy" />
     </PreferenceCategory>
 </PreferenceScreen>
