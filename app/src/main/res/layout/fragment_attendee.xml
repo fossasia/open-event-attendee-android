@@ -445,7 +445,8 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -463,6 +464,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="@dimen/card_elevation"
+                android:padding="@dimen/padding_small"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
