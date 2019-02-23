@@ -90,10 +90,9 @@
                         <TextView
                             android:id="@+id/noEventsMessage"
                             android:layout_width="match_parent"
-                            android:layout_height="450dp"
+                            android:layout_height="@dimen/empty_view_height"
                             android:text="@string/no_events_message"
-                            android:gravity="center"
-                            />
+                            android:gravity="center" />
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="wrap_content"

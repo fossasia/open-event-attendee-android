@@ -15,7 +15,13 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
-import kotlinx.android.synthetic.main.fragment_events.view.*
+import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
+import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
+import kotlinx.android.synthetic.main.fragment_events.view.progressBar
+import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
+import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
+import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
