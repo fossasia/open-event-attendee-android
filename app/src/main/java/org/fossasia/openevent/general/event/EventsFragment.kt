@@ -76,9 +76,6 @@ class EventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (this::rootView.isInitialized) {
-            return rootView
-        }
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
 
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
