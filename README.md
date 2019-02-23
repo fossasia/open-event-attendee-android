@@ -86,7 +86,7 @@ We have the following branches
 	 - _versionCode_ : **Integer** : To be monotonically incremented with each merge. Failure to do so will lead to 				publishing error, and thus is a crucial step before any merge
 	 - _versionName_ : **String** : User visible version of the app. To be changed following [semantic versioning](http://semver.org/)
  * **apk** This branch contains two apk's, that are automatically generated on the merged pull request a) debug apk and b) release apk.
-    - Please download and test the app that is using the code from the dev and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
+    - Please download and test the app that is using the code from the development and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
 ### Code practices
 
 Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
