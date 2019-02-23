@@ -15,12 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
-import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
-import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.progressBar
-import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -116,6 +111,7 @@ class EventsFragment : Fragment() {
                 if (it) {
                     eventsRecyclerAdapter.removeAll()
                     eventsRecyclerAdapter.notifyDataSetChanged()
+                    showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 }
             })
 
@@ -159,6 +155,10 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    private fun showEmptyMessage(itemCount: Int) {
+        rootView.noEventsMessage.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onStop() {
