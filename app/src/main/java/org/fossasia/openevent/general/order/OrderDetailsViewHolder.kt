@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.utils.stripHtml
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -39,7 +40,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             itemView.eventName.text = event.name
             itemView.location.text = event.locationName
             itemView.date.text = "$formattedDate\n$formattedTime $timezone"
-            itemView.eventSummary.text = event.description
+            itemView.eventSummary.text = event.description?.stripHtml()
             itemView.organizer.text = event.organizerName
 
             itemView.map.setOnClickListener {
@@ -55,7 +56,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 val intent = Intent(Intent.ACTION_INSERT)
                 intent.type = "vnd.android.cursor.item/event"
                 intent.putExtra(CalendarContract.Events.TITLE, event.name)
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
                 intent.putExtra(
                     CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
                 intent.putExtra(

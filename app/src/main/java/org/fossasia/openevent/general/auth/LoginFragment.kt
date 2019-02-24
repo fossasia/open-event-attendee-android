@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.buildCredential(activity, null)
 
         if (loginViewModel.isLoggedIn())
-            redirectToEvents()
+            popBackStack()
 
         rootView.loginButton.setOnClickListener {
             loginViewModel.login(email.text.toString(), password.text.toString())
@@ -174,7 +174,7 @@ class LoginFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
-                redirectToEvents()
+                popBackStack()
             })
 
         return rootView
@@ -185,8 +185,8 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.requestCredentials(activity)
     }
 
-    private fun redirectToEvents() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+    private fun popBackStack() {
+        findNavController(rootView).popBackStack()
         Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 
