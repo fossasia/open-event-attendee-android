@@ -47,13 +47,10 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     fun loadMap(event: Event): String {
         // location handling
-        val mapUrlInitial = "https://maps.googleapis.com/maps/api/staticmap?center="
-        val mapUrlProperties = "&zoom=12&size=1200x390&markers=color:red%7C"
-        val mapUrlMapType = "&markers=size:mid&maptype=roadmap"
-
-        val latLong: String = "" + event.latitude + "," + event.longitude
-
-        return mapUrlInitial + latLong + mapUrlProperties + latLong + mapUrlMapType
+        val MAPBOX_STATIC_MAP_KEY = "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
+        val BASE_URL = "https://api.mapbox.com/v4/mapbox.emerald/pin-l-marker+673ab7"
+        val LOCATION = "(" + event.longitude + "," + event.latitude + ")/"+ event.longitude + "," + event.latitude
+        return BASE_URL + LOCATION + ",15/900x500.png?access_token=" + MAPBOX_STATIC_MAP_KEY
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
