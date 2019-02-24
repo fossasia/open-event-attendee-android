@@ -9,6 +9,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,13 +55,19 @@ object EventUtils {
         "?q=<${event.latitude}>,<${event.longitude}>"
 
     fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
-        return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
-            .getBoolean("useEventTimeZone", false)) {
+        try {
+            return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
+                .getBoolean("useEventTimeZone", false)) {
 
-            true -> ZonedDateTime.parse(dateString)
-                .toOffsetDateTime()
-                .atZoneSameInstant(ZoneId.of(timeZone))
-            false -> ZonedDateTime.parse(dateString)
+                true -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.of(timeZone))
+                false -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.systemDefault())
+            }
+        } catch(e: Exception) {
+            return ZonedDateTime.parse(dateString)
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
         }
