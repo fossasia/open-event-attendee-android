@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -32,6 +33,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
+    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -102,6 +104,9 @@ class SignUpFragment : Fragment() {
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
+                smartAuthViewModel.saveCredential(
+                    activity, usernameSignUp.text.toString(),
+                    passwordSignUp.text.toString())
                 redirectToMain()
             })
 
