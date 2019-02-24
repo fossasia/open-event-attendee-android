@@ -50,7 +50,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         preferenceScreen.findPreference(resources.getString(R.string.key_version))
             .title = "Version " + BuildConfig.VERSION_NAME
 
-        preferenceScreen.findPreference("timeZoneSwitch")
+        preferenceScreen.findPreference(resources.getString(R.string.key_timeZone_switch))
             .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
@@ -69,9 +69,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_timeZone_switch)) {
             val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
-            when (timeZonePreference.getBoolean("useEventTimeZone", false)) {
-                true -> timeZonePreference.edit().putBoolean("useEventTimeZone", false).apply()
-                false -> timeZonePreference.edit().putBoolean("useEventTimeZone", true).apply()
+            val timeZonePreferenceKey = "useEventTimeZone"
+            when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
+                true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
+                false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
             }
         }
         if (preference?.key == getString(R.string.key_privacy)) {
