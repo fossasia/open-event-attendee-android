@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.event
 
+import androidx.preference.PreferenceManager
+import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -51,9 +53,16 @@ object EventUtils {
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime = ZonedDateTime.parse(dateString)
-        .toOffsetDateTime()
-        .atZoneSameInstant(ZoneId.of(timeZone))
+    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
+        return  when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext).getBoolean("useEventTimeZone", false)) {
+            true -> ZonedDateTime.parse(dateString)
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.of(timeZone))
+            false -> ZonedDateTime.parse(dateString)
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+        }
+    }
 
     fun getTimeInMilliSeconds(dateString: String, timeZone: String): Long {
         return getEventDateTime(dateString, timeZone).toInstant().toEpochMilli()

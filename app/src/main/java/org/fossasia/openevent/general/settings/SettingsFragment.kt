@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
@@ -30,6 +31,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
+        val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -44,6 +46,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         // Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version))
             .title = "Version " + BuildConfig.VERSION_NAME
+
+        preferenceScreen.findPreference("timeZoneSwitch")
+            .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -58,6 +63,13 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 Utils.openUrl(it, FORM_LINK)
             }
             return true
+        }
+        if (preference?.key == "timeZoneSwitch") {
+            val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
+            when (timeZonePreference.getBoolean("useEventTimeZone", false)) {
+                true -> timeZonePreference.edit().putBoolean("useEventTimeZone", false).apply()
+                false -> timeZonePreference.edit().putBoolean("useEventTimeZone", true).apply()
+            }
         }
         return false
     }
