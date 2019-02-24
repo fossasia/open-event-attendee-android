@@ -67,7 +67,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
             return true
         }
-        if (preference?.key == "timeZoneSwitch") {
+        if (preference?.key == resources.getString(R.string.key_timeZone_switch)) {
             val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
             when (timeZonePreference.getBoolean("useEventTimeZone", false)) {
                 true -> timeZonePreference.edit().putBoolean("useEventTimeZone", false).apply()
