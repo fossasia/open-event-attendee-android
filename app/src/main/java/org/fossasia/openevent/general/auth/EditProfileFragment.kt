@@ -19,8 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_edit_profile.updateProfilePhotoCover
-import kotlinx.android.synthetic.main.fragment_edit_profile.updateProfilePhotoText
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
@@ -120,8 +118,6 @@ class EditProfileFragment : Fragment() {
                 val imageStream = activity?.contentResolver?.openInputStream(imageUri)
                 val selectedImage = BitmapFactory.decodeStream(imageStream)
                 encodedImage = encodeImage(selectedImage)
-                updateProfilePhotoText.isVisible = false
-                updateProfilePhotoCover.isVisible = false
             } catch (e: FileNotFoundException) {
                 Timber.d(e, "File Not Found Exception")
             }
