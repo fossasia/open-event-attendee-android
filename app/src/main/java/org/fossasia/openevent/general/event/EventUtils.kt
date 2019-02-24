@@ -66,7 +66,7 @@ object EventUtils {
                     .toOffsetDateTime()
                     .atZoneSameInstant(ZoneId.systemDefault())
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             return ZonedDateTime.parse(dateString)
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
