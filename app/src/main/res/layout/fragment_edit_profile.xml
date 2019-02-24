@@ -36,7 +36,7 @@
                     android:layout_margin="@dimen/layout_margin_medium"
                     app:layout_constraintRight_toRightOf="@id/profilePhoto"
                     app:layout_constraintBottom_toBottomOf="@id/profilePhoto"
-                    app:srcCompat="@drawable/ic_camera_alt_white" />
+                    app:srcCompat="@drawable/ic_edit_white"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
