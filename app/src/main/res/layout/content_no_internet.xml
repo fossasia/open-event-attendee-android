@@ -40,14 +40,15 @@
                 android:textSize="@dimen/text_size_medium"
                 tools:text="No Internet" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/retry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:text="@string/retry"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:textSize="@dimen/text_size_large"
                 tools:text="RETRY" />
         </LinearLayout>
