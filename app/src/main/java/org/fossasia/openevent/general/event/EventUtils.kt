@@ -54,9 +54,9 @@ object EventUtils {
         "?q=<${event.latitude}>,<${event.longitude}>"
 
     fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
-        return  when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
+        return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
             .getBoolean("useEventTimeZone", false)) {
-            
+
             true -> ZonedDateTime.parse(dateString)
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.of(timeZone))
