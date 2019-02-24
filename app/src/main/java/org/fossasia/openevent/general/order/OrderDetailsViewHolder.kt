@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.utils.stripHtml
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -39,7 +40,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             itemView.eventName.text = event.name
             itemView.location.text = event.locationName
             itemView.date.text = "$formattedDate\n$formattedTime $timezone"
-            itemView.eventSummary.text = event.description
+            itemView.eventSummary.text = event.description?.stripHtml()
             itemView.organizer.text = event.organizerName
 
             itemView.map.setOnClickListener {

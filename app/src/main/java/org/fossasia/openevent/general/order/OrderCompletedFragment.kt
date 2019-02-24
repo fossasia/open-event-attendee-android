@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderCompletedFragment : Fragment() {
