@@ -23,6 +23,7 @@ import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
@@ -78,7 +79,7 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     private fun loadEvent(event: Event) {
         eventExtra = event
         title = eventExtra.name
-        rootView.aboutEventContent.text = event.description
+        rootView.aboutEventContent.text = event.description?.stripHtml()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
