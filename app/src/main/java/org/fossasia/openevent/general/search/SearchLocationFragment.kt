@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_location.search
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.locationProg
 import kotlinx.android.synthetic.main.fragment_search_location.view.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.NEW_SEARCH
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -88,8 +90,19 @@ class SearchLocationFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val fragmentId = if (fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
-        Navigation.findNavController(rootView).popBackStack(fragmentId, false)
+        if (fromSearchFragment) {
+            Navigation.findNavController(rootView).popBackStack(R.id.searchFragment,false)
+        } else {
+            val bundle = Bundle()
+            bundle.putBoolean(NEW_SEARCH,true)
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_left)
+                .setExitAnim(R.anim.slide_out_right)
+                .setPopEnterAnim(R.anim.slide_in_left)
+                .setPopExitAnim(R.anim.slide_out_right)
+                .setPopUpTo(R.id.eventsFragment,true).build()
+            Navigation.findNavController(rootView).navigate(R.id.eventsFragment,bundle,navOptions)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

@@ -35,6 +35,7 @@ import timber.log.Timber
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
+const val NEW_SEARCH = "new_search"
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -82,62 +83,62 @@ class EventsFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        if (this::rootView.isInitialized) {
-            return rootView
-        }
+        val newSearch: Boolean = arguments?.getBoolean(NEW_SEARCH,false) ?: false
+        arguments?.clear()
+        if (!this::rootView.isInitialized || newSearch) {
+            rootView = inflater.inflate(R.layout.fragment_events, container, false)
 
-        rootView = inflater.inflate(R.layout.fragment_events, container, false)
-
-        if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
-            findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
-        }
-
-        rootView.progressBar.isIndeterminate = true
-
-        rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
-
-        rootView.eventsRecycler.adapter = eventsRecyclerAdapter
-        rootView.eventsRecycler.isNestedScrollingEnabled = false
-
-        val recyclerViewClickListener = object : RecyclerViewClickListener {
-            override fun onClick(eventID: Long) {
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+            if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
+                findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
             }
+
+            rootView.progressBar.isIndeterminate = true
+
+            rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
+
+            rootView.eventsRecycler.adapter = eventsRecyclerAdapter
+            rootView.eventsRecycler.isNestedScrollingEnabled = false
+
+            val recyclerViewClickListener = object : RecyclerViewClickListener {
+                override fun onClick(eventID: Long) {
+                    val bundle = Bundle()
+                    bundle.putLong(EVENT_ID, eventID)
+                    findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                }
+            }
+            eventsRecyclerAdapter.setListener(recyclerViewClickListener)
+
+            eventsViewModel.showShimmerEvents
+                .nonNull()
+                .observe(this, Observer {
+                    if (it) {
+                        rootView.shimmerEvents.startShimmer()
+                    } else {
+                        rootView.shimmerEvents.stopShimmer()
+                    }
+                    rootView.shimmerEvents.isVisible = it
+                    if (it) {
+                        eventsRecyclerAdapter.removeAll()
+                        eventsRecyclerAdapter.notifyDataSetChanged()
+                    }
+                })
+
+            eventsViewModel.progress
+                .nonNull()
+                .observe(this, Observer {
+                    rootView.swiperefresh.isRefreshing = it
+                })
+
+            eventsViewModel.loadLocation()
+            rootView.locationTextView.text = eventsViewModel.savedLocation
+            eventsViewModel.loadLocationEvents()
+
+            showNoInternetScreen(isNetworkConnected(context))
         }
-        eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-
-        eventsViewModel.showShimmerEvents
-            .nonNull()
-            .observe(this, Observer {
-                if (it) {
-                    rootView.shimmerEvents.startShimmer()
-                } else {
-                    rootView.shimmerEvents.stopShimmer()
-                }
-                rootView.shimmerEvents.isVisible = it
-                if (it) {
-                    eventsRecyclerAdapter.removeAll()
-                    eventsRecyclerAdapter.notifyDataSetChanged()
-                }
-            })
-
-        eventsViewModel.progress
-            .nonNull()
-            .observe(this, Observer {
-                rootView.swiperefresh.isRefreshing = it
-            })
-
-        eventsViewModel.loadLocation()
-        rootView.locationTextView.text = eventsViewModel.savedLocation
-        eventsViewModel.loadLocationEvents()
 
         rootView.locationTextView.setOnClickListener {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
-
-        showNoInternetScreen(isNetworkConnected(context))
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected(context)
