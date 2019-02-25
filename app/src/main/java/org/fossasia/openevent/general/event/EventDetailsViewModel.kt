@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
@@ -47,11 +48,9 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     fun loadMap(event: Event): String {
         // location handling
-        val MAPBOX_STATIC_MAP_KEY =
-            "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
         val BASE_URL = "https://api.mapbox.com/v4/mapbox.emerald/pin-l-marker+673ab7"
         val LOCATION = "(" + event.longitude + "," + event.latitude + ")/" + event.longitude + "," + event.latitude
-        return BASE_URL + LOCATION + ",15/900x500.png?access_token=" + MAPBOX_STATIC_MAP_KEY
+        return BASE_URL + LOCATION + ",15/900x500.png?access_token=" + MAPBOX_KEY
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
