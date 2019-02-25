@@ -39,7 +39,6 @@ class LoginViewModel(
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
-        if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -53,17 +52,6 @@ class LoginViewModel(
                 mutableError.value = "Unable to Login. Please check your credentials"
             })
         )
-    }
-
-    private fun hasErrors(email: String?, password: String?): Boolean {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            mutableError.value = "Email or Password cannot be empty!"
-            return true
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mutableError.value = "Invalid email address!"
-            return true
-        }
-        return false
     }
 
     fun sendResetPasswordEmail(email: String) {

@@ -40,7 +40,6 @@ class SignUpViewModel(
         email = signUp.email
         password = signUp.password
 
-        if (hasErrors(email, password, confirmPassword)) return
         compositeDisposable.add(authService.signUp(signUp)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -101,30 +100,6 @@ class SignUpViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
-    }
-
-    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            mutableError.value = "Email or Password cannot be empty!"
-            return true
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mutableError.value = "Invalid email address!"
-            return true
-        }
-
-        if (password != confirmPassword) {
-            mutableError.value = "Passwords do not match!"
-            return true
-        }
-
-        if (password.length < 6) {
-            mutableError.value = "Password should be atleast 6 characters!"
-            return true
-        }
-
-        return false
     }
 
     fun checkFields(email: String, password: String, confirmPassword: String) {
