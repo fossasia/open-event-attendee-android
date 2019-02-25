@@ -29,5 +29,8 @@
     <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorButtonNormal">@color/grey</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">@dimen/padding_medium</item>
+        <item name="android:enabled">false</item>
     </style>
 </resources>
