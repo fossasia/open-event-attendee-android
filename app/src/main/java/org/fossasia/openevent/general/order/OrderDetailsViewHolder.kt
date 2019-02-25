@@ -56,7 +56,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 val intent = Intent(Intent.ACTION_INSERT)
                 intent.type = "vnd.android.cursor.item/event"
                 intent.putExtra(CalendarContract.Events.TITLE, event.name)
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
                 intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
                 intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
                 intent.putExtra(
