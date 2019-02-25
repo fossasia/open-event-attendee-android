@@ -21,6 +21,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val EMAIL: String = "EMAIL"
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
         "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
+    private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
+    private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
+    private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -59,6 +62,19 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
             return true
         }
+        if (preference?.key == getString(R.string.key_privacy)) {
+            context?.let { Utils.openUrl(it, PRIVACY_LINK) }
+            return true
+        }
+        if (preference?.key == getString(R.string.key_terms_of_service)) {
+            context?.let { Utils.openUrl(it, TERMS_OF_SERVICE_LINK) }
+            return true
+        }
+        if (preference?.key == getString(R.string.key_cookie_policy)) {
+            context?.let { Utils.openUrl(it, COOKIE_POLICY_LINK) }
+            return true
+        }
+
         return false
     }
 
