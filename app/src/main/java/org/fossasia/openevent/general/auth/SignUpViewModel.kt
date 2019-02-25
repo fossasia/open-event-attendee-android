@@ -29,6 +29,8 @@ class SignUpViewModel(
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
+    val areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     var email: String? = null
     var password: String? = null
@@ -125,8 +127,8 @@ class SignUpViewModel(
         return false
     }
 
-    fun checkFields(email: String, password: String, confirmPassword: String): Boolean {
-        return email.isNotEmpty() &&
+    fun checkFields(email: String, password: String, confirmPassword: String) {
+        mutableAreFieldsCorrect.value = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
             password.isNotEmpty() &&
             password.length > 5 &&

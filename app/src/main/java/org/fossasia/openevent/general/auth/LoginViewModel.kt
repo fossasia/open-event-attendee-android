@@ -32,6 +32,8 @@ class LoginViewModel(
     val isCorrectEmail: LiveData<Boolean> = mutableIsCorrectEmail
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
+    val areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -117,8 +119,8 @@ class LoginViewModel(
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun checkFields(email: String, password: String): Boolean {
-        return email.isNotEmpty() &&
+    fun checkFields(email: String, password: String) {
+        mutableAreFieldsCorrect.value = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
             password.isNotEmpty()
     }

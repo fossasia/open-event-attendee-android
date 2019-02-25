@@ -109,13 +109,19 @@ class SignUpFragment : Fragment() {
                 redirectToMain()
             })
 
+        signUpViewModel.areFieldsCorrect
+            .nonNull()
+            .observe(this, Observer {
+                signUpButton.isEnabled = it
+            })
+
         rootView.usernameSignUp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) { /*Implement here*/ }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = signUpViewModel.checkFields(
+                signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
@@ -133,7 +139,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = signUpViewModel.checkFields(
+                signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
@@ -157,7 +163,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpButton.isEnabled = signUpViewModel.checkFields(
+                signUpViewModel.checkFields(
                     usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
             }
         })
