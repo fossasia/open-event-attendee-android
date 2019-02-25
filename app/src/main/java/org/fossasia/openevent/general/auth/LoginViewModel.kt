@@ -115,9 +115,10 @@ class LoginViewModel(
     }
 
     fun checkFields(email: String, password: String) {
-        mutableIsCorrectEmail.value = email.isNotEmpty() &&
+        val isEmailCorrect = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        mutableAreFieldsCorrect.value = mutableIsCorrectEmail.value!! &&
+        mutableIsCorrectEmail.value = isEmailCorrect
+        mutableAreFieldsCorrect.value = isEmailCorrect &&
             password.isNotEmpty()
     }
 
