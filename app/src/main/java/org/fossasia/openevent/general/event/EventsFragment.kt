@@ -92,8 +92,6 @@ class EventsFragment : Fragment() {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
 
-
-
         rootView.progressBar.isIndeterminate = true
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
