@@ -75,18 +75,24 @@ class EventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_events, container, false)
-
-        if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
-            findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
-        }
-
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.title = "Events"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
+
+        if (this::rootView.isInitialized) {
+            return rootView
+        }
+
+        rootView = inflater.inflate(R.layout.fragment_events, container, false)
+
+        if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
+            findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
+        }
+
+
 
         rootView.progressBar.isIndeterminate = true
 
