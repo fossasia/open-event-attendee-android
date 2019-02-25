@@ -83,7 +83,7 @@ class EventsFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        val newSearch: Boolean = arguments?.getBoolean(NEW_SEARCH, false) ?: false
+        val newSearch: Boolean = arguments?.getBoolean(NEW_SEARCH,false) ?: false
         arguments?.clear()
         if (!this::rootView.isInitialized || newSearch) {
             rootView = inflater.inflate(R.layout.fragment_events, container, false)

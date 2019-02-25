@@ -37,14 +37,18 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_search, container, false)
-
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = "Search"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
         setHasOptionsMenu(true)
+
+        if (this::rootView.isInitialized) {
+            return rootView
+        }
+
+        rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
         rootView.timeTextView.setOnClickListener {
             val bundle = Bundle()
