@@ -9,7 +9,6 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -66,7 +65,7 @@ object EventUtils {
                     .toOffsetDateTime()
                     .atZoneSameInstant(ZoneId.systemDefault())
             }
-        } catch (e: Exception) {
+        } catch (e: NullPointerException) {
             return ZonedDateTime.parse(dateString)
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
