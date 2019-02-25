@@ -114,14 +114,10 @@ class LoginViewModel(
         compositeDisposable.clear()
     }
 
-    fun checkEmail(email: String) {
+    fun checkFields(email: String, password: String) {
         mutableIsCorrectEmail.value = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    fun checkFields(email: String, password: String) {
-        mutableAreFieldsCorrect.value = email.isNotEmpty() &&
-            Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+        mutableAreFieldsCorrect.value = mutableIsCorrectEmail.value!! &&
             password.isNotEmpty()
     }
 

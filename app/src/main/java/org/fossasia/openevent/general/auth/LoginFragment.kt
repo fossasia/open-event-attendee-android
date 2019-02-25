@@ -117,7 +117,6 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkEmail(email.toString())
                 loginViewModel.checkFields(email.toString(), password.text.toString())
             }
         })
