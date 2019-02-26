@@ -38,7 +38,6 @@ import java.io.FileNotFoundException
 
 class EditProfileFragment : Fragment() {
 
-    private val profileViewModel by viewModel<ProfileViewModel>()
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
     private lateinit var rootView: View
     private var permissionGranted = false
@@ -58,25 +57,19 @@ class EditProfileFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-        profileViewModel.user
-            .nonNull()
-            .observe(this, Observer {
-                userFirstName = it.firstName.nullToEmpty()
-                userLastName = it.lastName.nullToEmpty()
-                val imageUrl = it.avatarUrl.nullToEmpty()
-                rootView.firstName.setText(userFirstName)
-                rootView.lastName.setText(userLastName)
-                if (!imageUrl.isEmpty()) {
-                    val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
-                    Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(drawable)
-                        .transform(CircleTransform())
-                        .into(rootView.profilePhoto)
-                }
-            })
-        profileViewModel.fetchProfile()
-
+        userFirstName = arguments?.getString(USER_FIRSTNAME_KEY).nullToEmpty()
+        userLastName = arguments?.getString(USER_LASTNAME_KEY).nullToEmpty()
+        val avatarUrl = arguments?.getString(USER_AVATAR_KEY).nullToEmpty()
+        rootView.firstName.setText(userFirstName)
+        rootView.lastName.setText(userLastName)
+        if (!avatarUrl.isEmpty()) {
+            val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
+            Picasso.get()
+                .load(avatarUrl)
+                .placeholder(drawable)
+                .transform(CircleTransform())
+                .into(rootView.profilePhoto)
+        }
         editProfileViewModel.progress
             .nonNull()
             .observe(this, Observer {

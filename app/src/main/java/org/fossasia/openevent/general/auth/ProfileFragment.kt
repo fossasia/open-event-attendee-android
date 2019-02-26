@@ -34,6 +34,10 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val USER_FIRSTNAME_KEY = "userFirstname"
+const val USER_LASTNAME_KEY = "userLastname"
+const val USER_AVATAR_KEY = "userAvatar"
+
 class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
 
@@ -93,7 +97,11 @@ class ProfileFragment : Fragment() {
                         .into(rootView.avatar)
 
                 rootView.editProfileButton.setOnClickListener {
-                    findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                    val bundle = Bundle()
+                    bundle.putString(USER_FIRSTNAME_KEY, profileViewModel.user.value?.firstName.nullToEmpty())
+                    bundle.putString(USER_LASTNAME_KEY, profileViewModel.user.value?.lastName.nullToEmpty())
+                    bundle.putString(USER_AVATAR_KEY, profileViewModel.user.value?.avatarUrl.nullToEmpty())
+                    findNavController(rootView).navigate(R.id.editProfileFragment, bundle, getAnimFade())
                 }
             })
 
