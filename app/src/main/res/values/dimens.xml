@@ -33,6 +33,7 @@
     <dimen name="card_corner_radius">3dp</dimen>
     <dimen name="image_corner_radius">6dp</dimen>
     <dimen name="avatar_medium">120dp</dimen>
+    <dimen name="avatar_large">152dp</dimen>
     <dimen name="details_margin_small">4dp</dimen>
     <dimen name="details_text_size">13sp</dimen>
 
