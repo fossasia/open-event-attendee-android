@@ -338,7 +338,8 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong(EVENT_ID, eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
         similarEventsFragment.arguments = bundle
-        childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
 
     private fun startMap(event: Event) {
