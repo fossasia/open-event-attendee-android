@@ -9,7 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
-def MAPBOX_KEY = '"'+System.getenv('MAPBOX_KEY')+'"' ?: '"pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"'
+def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
 
 android {
     compileSdkVersion 28
@@ -36,11 +36,11 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
-            buildConfigField "String", "MAPBOX_KEY", MAPBOX_KEY
+            buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
-            buildConfigField "String", "MAPBOX_KEY", MAPBOX_KEY
+            buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
     }
 
