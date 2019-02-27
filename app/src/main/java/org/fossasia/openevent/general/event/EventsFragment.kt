@@ -61,6 +61,7 @@ class EventsFragment : Fragment() {
             .observe(this, Observer {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
+                showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
             })
 
@@ -117,7 +118,6 @@ class EventsFragment : Fragment() {
                 if (it) {
                     eventsRecyclerAdapter.removeAll()
                     eventsRecyclerAdapter.notifyDataSetChanged()
-                    showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 }
             })
 
