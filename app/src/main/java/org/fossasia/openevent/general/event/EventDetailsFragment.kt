@@ -177,11 +177,13 @@ class EventDetailsFragment : Fragment() {
         if (!event.description.isNullOrEmpty()) {
             setTextField(rootView.eventDescription, event.description?.stripHtml())
 
-            if (rootView.eventDescription.lineCount > LINE_COUNT) {
-                rootView.seeMore.visibility = View.VISIBLE
-                // start about fragment
-                rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
-                rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+            rootView.eventDescription.post {
+                if (rootView.eventDescription.lineCount > LINE_COUNT) {
+                    rootView.seeMore.visibility = View.VISIBLE
+                    // start about fragment
+                    rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+                    rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+                }
             }
         } else {
             aboutEventContainer.visibility = View.GONE
@@ -336,7 +338,8 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong(EVENT_ID, eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
         similarEventsFragment.arguments = bundle
-        childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
 
     private fun startMap(event: Event) {

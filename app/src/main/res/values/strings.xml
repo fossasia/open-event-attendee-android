@@ -22,6 +22,7 @@
     <string name="more_like_this">More like this</string>
     <string name="favorite_event">Favorite Event</string>
     <string name="refund_Policy">Refund Policy</string>
+    <string name="no_events_message">Sorry, there are no events available</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
