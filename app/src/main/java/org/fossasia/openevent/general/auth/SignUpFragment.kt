@@ -19,9 +19,13 @@ import kotlinx.android.synthetic.main.fragment_signup.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
+import kotlinx.android.synthetic.main.fragment_signup.signUpButton
+import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutConfirmPassword
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
+import kotlinx.android.synthetic.main.fragment_signup.view.usernameSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -105,6 +109,41 @@ class SignUpFragment : Fragment() {
                 redirectToMain()
             })
 
+        signUpViewModel.areFieldsCorrect
+            .nonNull()
+            .observe(this, Observer {
+                signUpButton.isEnabled = it
+            })
+
+        rootView.usernameSignUp.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) { /*Implement here*/ }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                signUpViewModel.checkFields(
+                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
+            }
+        })
+
+        rootView.confirmPasswords.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                if (confirmPasswords.text.toString().equals(passwordSignUp.text.toString())) {
+                    textInputLayoutConfirmPassword.error = null
+                    textInputLayoutConfirmPassword.isErrorEnabled = false
+                } else {
+                    textInputLayoutConfirmPassword.error = "Your password and confirmation password do not match!"
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                signUpViewModel.checkFields(
+                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
+            }
+        })
+
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (passwordSignUp.text.toString().length >= 6 || passwordSignUp.text.toString().isEmpty()) {
@@ -113,11 +152,20 @@ class SignUpFragment : Fragment() {
                 } else {
                     textInputLayoutPassword.error = "Password too short!"
                 }
+                if (confirmPasswords.text.toString().equals(passwordSignUp.text.toString())) {
+                    textInputLayoutConfirmPassword.error = null
+                    textInputLayoutConfirmPassword.isErrorEnabled = false
+                } else {
+                    textInputLayoutConfirmPassword.error = "Your password and confirmation password do not match!"
+                }
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                signUpViewModel.checkFields(
+                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
+            }
         })
 
         return rootView

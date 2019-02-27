@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -60,6 +61,7 @@ class EventsFragment : Fragment() {
             .observe(this, Observer {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
+                showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
             })
 
@@ -159,6 +161,10 @@ class EventsFragment : Fragment() {
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    }
+
+    private fun showEmptyMessage(itemCount: Int) {
+        rootView.noEventsMessage.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onStop() {

@@ -266,7 +266,7 @@
                 android:id="@+id/imageMap"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
-                android:layout_marginBottom="@dimen/details_header_margin_top"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
                 android:src="@drawable/placeholder"
                 android:visibility="gone" />
         </LinearLayout>
