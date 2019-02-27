@@ -103,7 +103,7 @@
                         android:layout_height="125dp"
                         android:layout_weight="1.1"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/placeholder" />
+                        app:srcCompat="@drawable/event_default" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
