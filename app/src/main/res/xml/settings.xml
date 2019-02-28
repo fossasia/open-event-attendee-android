@@ -22,7 +22,7 @@
             android:title="@string/logged_in_account" />
 
         <SwitchPreference
-            android:key="@string/key_timeZone_switch"
+            android:key="@string/key_timezone_switch"
             android:title="@string/timeZone_title"
             android:summary="@string/timeZone_summary" />
     </PreferenceCategory>
