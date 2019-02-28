@@ -21,7 +21,8 @@
                 android:layout_margin="@dimen/layout_margin_large"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation">
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/name"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Name" />
+                        tools:text="@string/name" />
 
                     <TextView
                         android:id="@+id/name"
@@ -52,14 +53,14 @@
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_expanded_title_large"
-                        tools:text="Nikit Bhandari" />
+                        tools:text="@string/name_preview" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/event"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Event" />
+                        tools:text="@string/event" />
 
                     <TextView
                         android:id="@+id/eventName"
@@ -68,7 +69,7 @@
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="FOSSASIA summit" />
+                        tools:text="@string/event_preview" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -91,7 +92,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/date"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="Date" />
+                                tools:text="@string/date" />
 
                             <TextView
                                 android:id="@+id/date"
@@ -99,7 +100,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="Thu,June 14" />
+                                tools:text="@string/date_preview" />
 
                             <TextView
                                 android:id="@+id/calendar"
@@ -108,7 +109,7 @@
                                 android:text="@string/add_to_calendar"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="Add to calendar" />
+                                tools:text="@string/add_to_calendar" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -123,7 +124,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/location"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="Location" />
+                                tools:text="@string/location" />
 
                             <TextView
                                 android:id="@+id/location"
@@ -131,7 +132,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="Singapore" />
+                                tools:text="@string/location_preview" />
 
                             <TextView
                                 android:id="@+id/map"
@@ -140,7 +141,7 @@
                                 android:text="@string/see_maps"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="@dimen/text_size_large"
-                                tools:text="See maps" />
+                                tools:text="@string/see_maps" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -149,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/order_identifier"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Order Identifier" />
+                        tools:text="@string/order_identifier" />
 
                     <TextView
                         android:id="@+id/orderIdentifier"
@@ -158,14 +159,14 @@
                         android:layout_marginBottom="@dimen/layout_margin_large"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="3456789" />
+                        tools:text="@string/order_identifier_preview" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/event_summary"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Event Summary" />
+                        tools:text="@string/event_summary" />
 
                     <TextView
                         android:id="@+id/eventSummary"
@@ -175,7 +176,7 @@
                         android:lines="2"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Very nice" />
+                        tools:text="@string/event_summary_preview" />
 
                     <TextView
                         android:id="@+id/eventDetails"
@@ -185,14 +186,14 @@
                         android:text="@string/event_details"
                         android:textColor="@color/colorAccent"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Event details" />
+                        tools:text="@string/event_details" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/organizer"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Organiser" />
+                        tools:text="@string/organizer" />
 
                     <TextView
                         android:id="@+id/organizer"
@@ -200,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Mario" />
+                        tools:text="@string/organizer_preview" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

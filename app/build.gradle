@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
+def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
 
 android {
     compileSdkVersion 28
@@ -35,9 +36,11 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
+            buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
+            buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
     }
 
@@ -136,7 +139,7 @@ dependencies {
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
     // Picasso
@@ -149,8 +152,8 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-beta02'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc01'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-rc02'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.1"

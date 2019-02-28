@@ -22,22 +22,23 @@ class LoginViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableError = MutableLiveData<String>()
+    private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
     val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
-    private val mutableIsCorrectEmail = MutableLiveData<Boolean>()
+    private val mutableIsCorrectEmail = MutableLiveData<Boolean>(false)
     val isCorrectEmail: LiveData<Boolean> = mutableIsCorrectEmail
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
+    val areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
-        if (hasErrors(email, password)) return
         compositeDisposable.add(authService.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -51,17 +52,6 @@ class LoginViewModel(
                 mutableError.value = "Unable to Login. Please check your credentials"
             })
         )
-    }
-
-    private fun hasErrors(email: String?, password: String?): Boolean {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            mutableError.value = "Email or Password cannot be empty!"
-            return true
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mutableError.value = "Invalid email address!"
-            return true
-        }
-        return false
     }
 
     fun sendResetPasswordEmail(email: String) {
@@ -112,9 +102,12 @@ class LoginViewModel(
         compositeDisposable.clear()
     }
 
-    fun checkEmail(email: String) {
-        mutableIsCorrectEmail.value = email.isNotEmpty() &&
+    fun checkFields(email: String, password: String) {
+        val isEmailCorrect = email.isNotEmpty() &&
             Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        mutableIsCorrectEmail.value = isEmailCorrect
+        mutableAreFieldsCorrect.value = isEmailCorrect &&
+            password.isNotEmpty()
     }
 
     private fun isConnected(): Boolean {

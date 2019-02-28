@@ -1,118 +1,116 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/allEventsCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:layout_margin="@dimen/layout_margin_medium"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    android:foreground="?android:attr/selectableItemBackground">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/allEventsCard"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin_medium"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="@dimen/card_elevation">
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/eventImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/placeholder" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
             android:id="@+id/shareFab"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/fab_margin_top"
-            android:layout_marginRight="80dp"
-            android:scaleType="center"
-            app:elevation="@dimen/fab_elevation"
-            app:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_share_grey"
-            android:background="@android:color/white" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="@dimen/fab_width"
             android:layout_height="@dimen/fab_height"
-            android:id="@+id/favoriteFab"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/fab_margin_top"
-            android:layout_marginRight="@dimen/fab_margin_right"
+            android:layout_marginEnd="80dp"
+            android:layout_marginRight="80dp"
+            android:background="@android:color/white"
             android:scaleType="center"
-            app:elevation="@dimen/fab_elevation"
             app:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_baseline_favorite_border"
-            android:background="@android:color/white" />
+            app:elevation="@dimen/fab_elevation"
+            app:layout_constraintBottom_toBottomOf="@+id/eventImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventImage"
+            app:srcCompat="@drawable/ic_share_grey" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/favoriteFab"
+            android:layout_width="@dimen/fab_width"
+            android:layout_height="@dimen/fab_height"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:background="@android:color/white"
+            android:scaleType="center"
+            app:backgroundTint="@android:color/white"
+            app:elevation="@dimen/fab_elevation"
+            app:layout_constraintBottom_toBottomOf="@+id/eventImage"
+            app:layout_constraintEnd_toEndOf="@+id/eventImage"
+            app:layout_constraintTop_toBottomOf="@+id/eventImage"
+            app:srcCompat="@drawable/ic_baseline_favorite_border" />
+
+        <TextView
+            android:id="@+id/month"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
+            android:layout_marginStart="@dimen/layout_margin_small"
+            android:layout_marginLeft="@dimen/layout_margin_small"
+            android:layout_marginTop="@dimen/layout_margin_extra_small"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintStart_toStartOf="@+id/eventImage"
+            app:layout_constraintTop_toTopOf="@+id/eventName"
+            tools:text="Jan" />
 
-            <ImageView
-                android:id="@+id/eventImage"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/placeholder" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/month"
+            app:layout_constraintStart_toStartOf="@+id/month"
+            app:layout_constraintTop_toBottomOf="@+id/month"
+            tools:text="15" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/layout_margin_medium"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/eventName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/month"
+            app:layout_constraintTop_toBottomOf="@+id/shareFab"
+            tools:text="Open Source Meetup" />
 
-                <LinearLayout
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/padding_medium">
+        <TextView
+            android:id="@+id/locationName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_small"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/eventName"
+            app:layout_constraintTop_toBottomOf="@+id/eventName"
+            tools:text="Jaipur, Rajasthan, India" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginTop="3dp"
-                        android:textSize="@dimen/text_size_medium"
-                        tools:text="JAN" />
-
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="@dimen/layout_margin_medium"
-                        android:textSize="@dimen/text_size_medium"
-                        tools:text="15" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/padding_large"
-                    android:paddingTop="@dimen/padding_medium">
-
-                    <TextView
-                        android:id="@+id/eventName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_small"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        tools:text="Event Name" />
-
-                    <TextView
-                        android:id="@+id/locationName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textSize="@dimen/text_size_small"
-                        tools:text="Location Name" />
-
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

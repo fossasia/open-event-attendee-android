@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
+import kotlinx.android.synthetic.main.fragment_login.loginButton
+import kotlinx.android.synthetic.main.fragment_login.view.password
 import kotlinx.android.synthetic.main.fragment_login.view.email
 import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
@@ -60,7 +62,7 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.buildCredential(activity, null)
 
         if (loginViewModel.isLoggedIn())
-            redirectToEvents()
+            popBackStack()
 
         rootView.loginButton.setOnClickListener {
             loginViewModel.login(email.text.toString(), password.text.toString())
@@ -115,7 +117,17 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkEmail(email.toString())
+                loginViewModel.checkFields(email.toString(), password.text.toString())
+            }
+        })
+
+        rootView.password.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(password: CharSequence, start: Int, before: Int, count: Int) {
+                loginViewModel.checkFields(email.text.toString(), password.toString())
             }
         })
 
@@ -143,6 +155,12 @@ class LoginFragment : Fragment() {
                 onEmailEntered(it)
             })
 
+        loginViewModel.areFieldsCorrect
+            .nonNull()
+            .observe(this, Observer {
+                loginButton.isEnabled = it
+            })
+
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
             if (thisActivity is AppCompatActivity) {
@@ -161,7 +179,7 @@ class LoginFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
-                redirectToEvents()
+                popBackStack()
             })
 
         return rootView
@@ -172,8 +190,8 @@ class LoginFragment : Fragment() {
         smartAuthViewModel.requestCredentials(activity)
     }
 
-    private fun redirectToEvents() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+    private fun popBackStack() {
+        findNavController(rootView).popBackStack()
         Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
     }
 

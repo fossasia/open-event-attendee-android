@@ -328,6 +328,7 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 rootView.progressBarAttendee.isVisible = it
+                rootView.register.isEnabled = !it
             })
 
         attendeeViewModel.event
@@ -392,8 +393,13 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.signOut.setOnClickListener {
-            attendeeViewModel.logout()
-            activity?.onBackPressed()
+            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                    attendeeViewModel.logout()
+                    activity?.onBackPressed()
+                }
+                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+                .show()
         }
 
         attendeeViewModel.getCustomFormsForAttendees(eventId.id)
