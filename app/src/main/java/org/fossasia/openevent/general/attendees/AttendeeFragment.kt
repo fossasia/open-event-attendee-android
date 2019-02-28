@@ -229,16 +229,12 @@ class AttendeeFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s == null || s.length < 3) {
-                    rootView.cardSelector.setSelection(0, true)
-                    rootView.cardSelector.isVisible = true
-                    rootView.cardNumber.error = null
+                    setCardSelectorAndError(0, visibility = true, error = false)
                     return
                 }
                 val card = Utils.getCardType(s.toString())
                 if (card == Utils.cardType.NONE) {
-                    rootView.cardSelector.setSelection(0, true)
-                    rootView.cardSelector.isVisible = true
-                    rootView.cardNumber.error = "Invalid card number"
+                    setCardSelectorAndError(0, visibility = true, error = true)
                     return
                 }
 
@@ -250,11 +246,16 @@ class AttendeeFragment : Fragment() {
                         else -> 0
                     }
                 }
-
-                    rootView.cardSelector.setSelection(pos, true)
-                    rootView.cardSelector.isVisible = false
-                    rootView.cardNumber.error = null
-
+                    setCardSelectorAndError(pos, visibility = false, error = false)
+            }
+            fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
+                rootView.cardSelector.setSelection(pos, true)
+                rootView.cardSelector.isVisible = visibility
+                if (error) {
+                    rootView.cardNumber.error = "Invalid card number"
+                    return
+                }
+                rootView.cardNumber.error = null
             }
         })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
