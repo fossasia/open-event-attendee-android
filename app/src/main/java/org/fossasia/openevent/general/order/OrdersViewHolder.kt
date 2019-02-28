@@ -35,13 +35,11 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.date.text = formattedDateTime.dayOfMonth.toString()
         itemView.month.text = formattedDateTime.month.name.slice(0 until 3)
 
-        event.originalImageUrl.let {
-            if (it != null) {
-                Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(itemView.eventImage)
-            }
+        event.originalImageUrl?.let {
+            Picasso.get()
+                .load(it)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(itemView.eventImage)
         }
     }
 }
