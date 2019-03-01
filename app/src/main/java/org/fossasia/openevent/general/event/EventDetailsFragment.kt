@@ -228,10 +228,11 @@ class EventDetailsFragment : Fragment() {
         }
 
         // Set Cover Image
-        event.originalImageUrl?.let {
+        event.originalImageUrl.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.background_empty_image)
+                    .error(R.drawable.background_empty_image)
                     .into(rootView.logo)
         }
 

@@ -30,10 +30,11 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         setFabBackground(event.favorite)
-        event.originalImageUrl?.let {
+        event.originalImageUrl.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.background_empty_image)
+                    .error(R.drawable.background_empty_image)
                     .into(itemView.eventImage)
         }
 
