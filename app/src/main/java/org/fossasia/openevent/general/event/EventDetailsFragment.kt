@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScrol
 import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
+import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
@@ -69,6 +70,7 @@ class EventDetailsFragment : Fragment() {
     private lateinit var eventShare: Event
     private var currency: String? = null
     private val LINE_COUNT: Int = 3
+    private val LINE_COUNT_ORGANIZER: Int = 2
     private var menuActionBar: Menu? = null
     private var title: String = ""
     private var runOnce: Boolean = true
@@ -153,7 +155,7 @@ class EventDetailsFragment : Fragment() {
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
             rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
-            setTextField(rootView.eventOrganiserDescription, event.organizerDescription?.stripHtml())
+            setTextField(rootView.eventOrganiserDescription, event.organizerDescription?.stripHtml()?.trim())
             rootView.organizerName.text = event.organizerName.nullToEmpty()
             rootView.eventOrganiserName.visibility = View.VISIBLE
             organizerContainer.visibility = View.VISIBLE
@@ -163,6 +165,26 @@ class EventDetailsFragment : Fragment() {
                     .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
+
+            val organizerDescriptionListener = View.OnClickListener {
+                if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
+                    rootView.seeMoreOrganizer.text = getString(R.string.see_less)
+                    rootView.eventOrganiserDescription.minLines = 0
+                    rootView.eventOrganiserDescription.maxLines = Int.MAX_VALUE
+                } else {
+                    rootView.seeMoreOrganizer.text = getString(R.string.see_more)
+                    rootView.eventOrganiserDescription.setLines(3)
+                }
+            }
+
+            rootView.eventOrganiserDescription.post {
+                if (rootView.eventOrganiserDescription.lineCount > LINE_COUNT_ORGANIZER) {
+                    rootView.seeMoreOrganizer.visibility = View.VISIBLE
+                    // Set up toggle organizer description
+                    rootView.seeMoreOrganizer.setOnClickListener(organizerDescriptionListener)
+                    rootView.eventOrganiserDescription.setOnClickListener(organizerDescriptionListener)
+                }
+            }
         }
 
         currency = Currency.getInstance(event.paymentCurrency).symbol
