@@ -230,9 +230,9 @@ class EventDetailsFragment : Fragment() {
         // Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
-                .load(it)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(rootView.logo)
+                    .load(it)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(rootView.logo)
         }
 
         // Add event to Calendar
