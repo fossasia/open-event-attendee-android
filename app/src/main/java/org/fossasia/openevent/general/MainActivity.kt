@@ -16,8 +16,6 @@ import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
-import com.facebook.stetho.okhttp3.StethoInterceptor
-import okhttp3.OkHttpClient
 
 
 
@@ -31,11 +29,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Stetho.initializeWithDefaults(this)
-        OkHttpClient.Builder()
-            .addNetworkInterceptor(StethoInterceptor())
-            .build()
-
-
         val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
