@@ -21,6 +21,12 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.utils.stripHtml
+import android.os.Bundle
+import androidx.navigation.Navigation
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils
+
+private const val QR_BITMAP: String = "QR_BITMAP"
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -75,6 +81,12 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         val bitmap = qrCode.generateQrBitmap(orderIdentifier, 200, 200)
         if (bitmap != null) {
             itemView.qrCodeView.setImageBitmap(bitmap)
+
+            itemView.qrCodeView.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putParcelable(QR_BITMAP, bitmap)
+                Navigation.findNavController(itemView).navigate(R.id.qrCodeFragment, bundle, Utils.getAnimFade())
+            }
         } else {
             itemView.qrCodeView.visibility = View.GONE
         }

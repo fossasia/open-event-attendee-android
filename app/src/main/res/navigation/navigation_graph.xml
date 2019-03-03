@@ -60,6 +60,11 @@
         android:label="OrderDetailsFragment"
         tools:layout="@layout/fragment_order_details" />
     <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="org.fossasia.openevent.general.order.QRCodeFragment"
+        android:label="QRCodeFragment"
+        tools:layout="@layout/fragment_qrcode" />
+    <fragment
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
         android:label="ProfileFragment"
