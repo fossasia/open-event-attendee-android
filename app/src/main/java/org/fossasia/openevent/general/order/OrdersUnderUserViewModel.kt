@@ -12,7 +12,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class OrdersUnderUserVM(
+class OrdersUnderUserViewModel(
     private val orderService: OrderService,
     private val eventService: EventService,
     private val authHolder: AuthHolder
