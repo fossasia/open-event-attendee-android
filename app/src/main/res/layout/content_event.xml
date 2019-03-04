@@ -266,7 +266,7 @@
                 android:id="@+id/imageMap"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
-                android:layout_marginBottom="@dimen/details_header_margin_top"
+                android:layout_marginBottom="@dimen/divider_margin_bottom"
                 android:src="@drawable/placeholder"
                 android:visibility="gone" />
         </LinearLayout>
@@ -346,6 +346,16 @@
                         android:lines="3"
                         android:textColor="@color/light_grey"
                         tools:text="Description" />
+
+                    <TextView
+                        android:id="@+id/seeMoreOrganizer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/see_more"
+                        android:textColor="@color/dark_grey"
+                        android:lines="3"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 

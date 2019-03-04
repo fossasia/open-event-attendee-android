@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScrol
 import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
+import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
@@ -53,6 +54,7 @@ import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
+import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
@@ -68,6 +70,7 @@ class EventDetailsFragment : Fragment() {
     private lateinit var eventShare: Event
     private var currency: String? = null
     private val LINE_COUNT: Int = 3
+    private val LINE_COUNT_ORGANIZER: Int = 2
     private var menuActionBar: Menu? = null
     private var title: String = ""
     private var runOnce: Boolean = true
@@ -152,7 +155,7 @@ class EventDetailsFragment : Fragment() {
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
             rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
-            setTextField(rootView.eventOrganiserDescription, event.organizerDescription)
+            setTextField(rootView.eventOrganiserDescription, event.organizerDescription?.stripHtml()?.trim())
             rootView.organizerName.text = event.organizerName.nullToEmpty()
             rootView.eventOrganiserName.visibility = View.VISIBLE
             organizerContainer.visibility = View.VISIBLE
@@ -162,6 +165,26 @@ class EventDetailsFragment : Fragment() {
                     .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
+
+            val organizerDescriptionListener = View.OnClickListener {
+                if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
+                    rootView.seeMoreOrganizer.text = getString(R.string.see_less)
+                    rootView.eventOrganiserDescription.minLines = 0
+                    rootView.eventOrganiserDescription.maxLines = Int.MAX_VALUE
+                } else {
+                    rootView.seeMoreOrganizer.text = getString(R.string.see_more)
+                    rootView.eventOrganiserDescription.setLines(3)
+                }
+            }
+
+            rootView.eventOrganiserDescription.post {
+                if (rootView.eventOrganiserDescription.lineCount > LINE_COUNT_ORGANIZER) {
+                    rootView.seeMoreOrganizer.visibility = View.VISIBLE
+                    // Set up toggle organizer description
+                    rootView.seeMoreOrganizer.setOnClickListener(organizerDescriptionListener)
+                    rootView.eventOrganiserDescription.setOnClickListener(organizerDescriptionListener)
+                }
+            }
         }
 
         currency = Currency.getInstance(event.paymentCurrency).symbol
@@ -174,13 +197,15 @@ class EventDetailsFragment : Fragment() {
 
         // Event Description Section
         if (!event.description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, event.description)
+            setTextField(rootView.eventDescription, event.description?.stripHtml())
 
-            if (rootView.eventDescription.lineCount > LINE_COUNT) {
-                rootView.seeMore.visibility = View.VISIBLE
-                // start about fragment
-                rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
-                rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+            rootView.eventDescription.post {
+                if (rootView.eventDescription.lineCount > LINE_COUNT) {
+                    rootView.seeMore.visibility = View.VISIBLE
+                    // start about fragment
+                    rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
+                    rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
+                }
             }
         } else {
             aboutEventContainer.visibility = View.GONE
@@ -286,7 +311,7 @@ class EventDetailsFragment : Fragment() {
         val intent = Intent(Intent.ACTION_INSERT)
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
         startActivity(intent)
@@ -335,7 +360,8 @@ class EventDetailsFragment : Fragment() {
         bundle.putLong(EVENT_ID, eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
         similarEventsFragment.arguments = bundle
-        childFragmentManager.beginTransaction().add(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
 
     private fun startMap(event: Event) {

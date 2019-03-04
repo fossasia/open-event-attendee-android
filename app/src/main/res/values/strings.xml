@@ -11,6 +11,7 @@
     <string name="report_event">Report Event</string>
     <string name="about">About</string>
     <string name="see_more">See more</string>
+    <string name="see_less">See less</string>
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
@@ -22,6 +23,7 @@
     <string name="more_like_this">More like this</string>
     <string name="favorite_event">Favorite Event</string>
     <string name="refund_Policy">Refund Policy</string>
+    <string name="no_events_message">Sorry, there are no events available</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
@@ -126,6 +128,13 @@
     <string name="date">Date</string>
     <string name="order_identifier">Order Identifier</string>
     <string name="event_summary">Event Summary</string>
+    <string name="organizer_preview">Mario</string>
+    <string name="event_summary_preview">Very nice</string>
+    <string name="order_identifier_preview">3456789</string>
+    <string name="location_preview">Singapore</string>
+    <string name="date_preview">Thu,June 14</string>
+    <string name="event_preview">FOSSASIA summit</string>
+    <string name="name_preview">Nikit Bhandari</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
@@ -145,6 +154,13 @@
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
+    <string name="privacy">Privacy</string>
+    <string name="key_privacy">privacy</string>
+    <string name="cookie_policy">Cookie Policy</string>
+    <string name="key_cookie_policy">cookie_policy</string>
+    <string name="title_terms_of_service">Terms of Service</string>
+    <string name="key_terms_of_service">terms_of_service</string>
+    <string name="legal">Legal</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>

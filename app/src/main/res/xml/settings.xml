@@ -37,4 +37,24 @@
             android:key="@string/key_version"
             android:title="@string/version_settings" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/legal" >
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:key="@string/key_privacy"
+            android:title="@string/privacy" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:key="@string/key_terms_of_service"
+            android:title="@string/title_terms_of_service" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:key="@string/key_cookie_policy"
+            android:title="@string/cookie_policy" />
+    </PreferenceCategory>
 </PreferenceScreen>
