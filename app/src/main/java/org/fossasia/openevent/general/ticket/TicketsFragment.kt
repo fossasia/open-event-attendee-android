@@ -46,7 +46,7 @@ class TicketsFragment : Fragment() {
     private var currency: String? = null
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,6 +148,7 @@ class TicketsFragment : Fragment() {
 
     private fun redirectToAttendee() {
         // make list of tickedIdAndQty since further it is used as list
+        val ticketIdAndQty = ArrayList<Pair<Int, Int>>()
         ticketsViewModel.ticketIdAndQty.forEach { (key, value) ->
             ticketIdAndQty.add(Pair(key, value))  }
 

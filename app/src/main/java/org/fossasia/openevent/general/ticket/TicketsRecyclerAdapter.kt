@@ -41,6 +41,9 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
         return tickets.size
     }
 
+    /**
+     * set the selected tickets
+     */
     fun setSelectedTickets(ticketIdAndQty: HashMap<Int, Int>) {
         this.ticketIdAndQty=ticketIdAndQty
     }

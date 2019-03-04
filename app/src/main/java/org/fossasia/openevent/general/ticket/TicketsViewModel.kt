@@ -83,7 +83,9 @@ class TicketsViewModel(
 
     }
 
-
+    /**
+     * check any ticket selected
+     */
     fun totalTicketsEmpty(): Boolean {
         return ticketIdAndQty.size == 0
     }
