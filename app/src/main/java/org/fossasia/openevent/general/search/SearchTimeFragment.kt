@@ -36,7 +36,7 @@ class SearchTimeFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = ""
+            thisActivity.supportActionBar?.title = "Choose Time"
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
