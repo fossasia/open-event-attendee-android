@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.facebook.stetho.Stetho
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var currentFragmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Stetho.initializeWithDefaults(this)
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
