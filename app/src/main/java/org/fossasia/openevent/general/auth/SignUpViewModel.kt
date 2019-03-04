@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,8 @@ class SignUpViewModel(
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
+    val areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     var email: String? = null
     var password: String? = null
@@ -37,7 +40,6 @@ class SignUpViewModel(
         email = signUp.email
         password = signUp.password
 
-        if (hasErrors(email, password, confirmPassword)) return
         compositeDisposable.add(authService.signUp(signUp)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -100,22 +102,12 @@ class SignUpViewModel(
         compositeDisposable.clear()
     }
 
-    private fun hasErrors(email: String?, password: String?, confirmPassword: String): Boolean {
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            mutableError.value = "Email or Password cannot be empty!"
-            return true
-        }
-        if (password != confirmPassword) {
-            mutableError.value = "Passwords do not match!"
-            return true
-        }
-
-        if (password.length < 6) {
-            mutableError.value = "Password should be atleast 6 characters!"
-            return true
-        }
-
-        return false
+    fun checkFields(email: String, password: String, confirmPassword: String) {
+        mutableAreFieldsCorrect.value = email.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.isNotEmpty() &&
+            password.length > 5 &&
+            confirmPassword == password
     }
 
     private fun isConnected(): Boolean {
