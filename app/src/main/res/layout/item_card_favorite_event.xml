@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareFab"
