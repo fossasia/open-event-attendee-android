@@ -33,8 +33,11 @@ class QRCodeFragment : Fragment() {
         activity!!.window.attributes = layoutParams
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(org.fossasia.openevent.general.R.layout.fragment_qrcode, container, false)
 
         rootView.qrCodeView.setImageBitmap(bitmap)
