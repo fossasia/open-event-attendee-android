@@ -59,7 +59,7 @@ class TicketsFragment : Fragment() {
 
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.handleTicketSelect(ticketId, quantity)
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -80,6 +80,7 @@ class TicketsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.setSelectedTickets(ticketsViewModel.ticketIdAndQty)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
             })
     }
@@ -113,7 +114,7 @@ class TicketsFragment : Fragment() {
             })
 
         rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+            if (!ticketsViewModel.totalTicketsEmpty()) {
                 checkForAuthentication()
             } else {
                 handleNoTicketsSelected()
@@ -144,7 +145,12 @@ class TicketsFragment : Fragment() {
         }
     }
 
+
     private fun redirectToAttendee() {
+        // make list of tickedIdAndQty since further it is used as list
+        ticketsViewModel.ticketIdAndQty.forEach { (key, value) ->
+            ticketIdAndQty.add(Pair(key, value))  }
+
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
         bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
@@ -157,14 +163,7 @@ class TicketsFragment : Fragment() {
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
 
-    private fun handleTicketSelect(id: Int, quantity: Int) {
-        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
-        if (pos == -1) {
-            ticketIdAndQty.add(Pair(id, quantity))
-        } else {
-            ticketIdAndQty[pos] = Pair(id, quantity)
-        }
-    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

@@ -30,6 +30,8 @@ class TicketsViewModel(
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
 
+    var ticketIdAndQty = HashMap<Int , Int>()
+
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun loadTickets(id: Long) {
@@ -69,8 +71,21 @@ class TicketsViewModel(
         )
     }
 
-    fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
-        return ticketIdAndQty.sumBy { it.second } == 0
+    /**
+     * add the quantity for selected event id
+     * if quantity  is 0, remove the id key from the map
+     */
+     fun handleTicketSelect(id: Int, quantity: Int) {
+         if ( quantity>0 )
+             ticketIdAndQty[id] = quantity
+         else
+             ticketIdAndQty.remove(id)
+
+    }
+
+
+    fun totalTicketsEmpty(): Boolean {
+        return ticketIdAndQty.size == 0
     }
 
     override fun onCleared() {

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?) {
+    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?, qty: Int?) {
         itemView.ticketName.text = ticket.name
 
         if (ticket.minOrder > 0 && ticket.maxOrder > 0) {
@@ -29,8 +29,15 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
-                spinnerList)
+
+            val adapter=ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
+            spinnerList)
+
+            itemView.orderRange.adapter= adapter
+            if (qty != null) {
+                itemView.orderRange.setSelection(adapter.getPosition(qty.toString()))
+            }
+
         }
 
         itemView.order.setOnClickListener {
