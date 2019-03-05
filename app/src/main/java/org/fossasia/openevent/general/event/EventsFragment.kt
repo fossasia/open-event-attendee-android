@@ -61,6 +61,7 @@ class EventsFragment : Fragment() {
             .observe(this, Observer {
                 eventsRecyclerAdapter.addAll(it)
                 eventsRecyclerAdapter.notifyDataSetChanged()
+                showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
             })
 
@@ -98,9 +99,13 @@ class EventsFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                    }
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -117,7 +122,6 @@ class EventsFragment : Fragment() {
                 if (it) {
                     eventsRecyclerAdapter.removeAll()
                     eventsRecyclerAdapter.notifyDataSetChanged()
-                    showEmptyMessage(eventsRecyclerAdapter.itemCount)
                 }
             })
 

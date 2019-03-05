@@ -1,209 +1,198 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="@dimen/card_elevation">
-
-    <androidx.core.widget.NestedScrollView
+    android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_large"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/padding_extra_small"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_large"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_extra_small">
+            android:padding="@dimen/layout_margin_medium">
 
-            <androidx.cardview.widget.CardView
+            <ImageView
+                android:id="@+id/qrCodeView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/layout_margin_medium"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/name" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title_large"
+                tools:text="@string/name_preview" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/event" />
+
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/event_preview" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/layout_margin_large"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation">
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/layout_margin_large"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/layout_margin_medium"
+                    android:paddingRight="@dimen/layout_margin_medium"
+                    android:paddingTop="@dimen/layout_margin_medium">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date"
+                        android:textSize="@dimen/text_size_large"
+                        tools:text="@string/date" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_large"
+                        tools:text="@string/date_preview" />
+
+                    <TextView
+                        android:id="@+id/calendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_to_calendar"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/text_size_large"
+                        tools:text="@string/add_to_calendar" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:padding="@dimen/layout_margin_medium">
 
-                    <ImageView
-                        android:id="@+id/qrCodeView"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/layout_margin_medium"
-                        android:scaleType="centerCrop" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/name"
+                        android:text="@string/location"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="@string/name" />
+                        tools:text="@string/location" />
 
                     <TextView
-                        android:id="@+id/name"
+                        android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_expanded_title_large"
-                        tools:text="@string/name_preview" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event" />
-
-                    <TextView
-                        android:id="@+id/eventName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_preview" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/layout_margin_medium"
-                            android:paddingRight="@dimen/layout_margin_medium"
-                            android:paddingTop="@dimen/layout_margin_medium">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/date"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/date" />
-
-                            <TextView
-                                android:id="@+id/date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/date_preview" />
-
-                            <TextView
-                                android:id="@+id/calendar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/add_to_calendar"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/add_to_calendar" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:padding="@dimen/layout_margin_medium">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/location"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/location" />
-
-                            <TextView
-                                android:id="@+id/location"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/location_preview" />
-
-                            <TextView
-                                android:id="@+id/map"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/see_maps"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/see_maps" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        tools:text="@string/location_preview" />
 
                     <TextView
+                        android:id="@+id/map"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/order_identifier"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/order_identifier" />
-
-                    <TextView
-                        android:id="@+id/orderIdentifier"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/order_identifier_preview" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event_summary"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_summary" />
-
-                    <TextView
-                        android:id="@+id/eventSummary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="2"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_summary_preview" />
-
-                    <TextView
-                        android:id="@+id/eventDetails"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:text="@string/event_details"
+                        android:text="@string/see_maps"
                         android:textColor="@color/colorAccent"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_details" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/organizer"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/organizer" />
-
-                    <TextView
-                        android:id="@+id/organizer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/organizer_preview" />
-
+                        tools:text="@string/see_maps" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_identifier"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/order_identifier" />
+
+            <TextView
+                android:id="@+id/orderIdentifier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/order_identifier_preview" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_summary"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/event_summary" />
+
+            <TextView
+                android:id="@+id/eventSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="2"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/event_summary_preview" />
+
+            <TextView
+                android:id="@+id/eventDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:text="@string/event_details"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/event_details" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/organizer"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/organizer" />
+
+            <TextView
+                android:id="@+id/organizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                tools:text="@string/organizer_preview" />
+
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.core.widget.NestedScrollView>

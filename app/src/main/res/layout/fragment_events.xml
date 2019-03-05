@@ -13,10 +13,6 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -93,7 +89,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/no_events_message"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="wrap_content"
@@ -112,6 +109,5 @@
 
                 <include layout="@layout/content_no_internet" />
             </LinearLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

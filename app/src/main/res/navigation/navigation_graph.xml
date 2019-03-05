@@ -82,7 +82,14 @@
         android:id="@+id/eventDetailsFragment"
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
-        tools:layout="@layout/fragment_event" />
+        tools:layout="@layout/fragment_event">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+
+    </fragment>
     <fragment
         android:id="@+id/aboutEventFragment"
         android:name="org.fossasia.openevent.general.about.AboutEventFragment"
@@ -92,7 +99,19 @@
         android:id="@+id/ticketsFragment"
         android:name="org.fossasia.openevent.general.ticket.TicketsFragment"
         android:label="TicketsFragment"
-        tools:layout="@layout/fragment_tickets" />
+        tools:layout="@layout/fragment_tickets">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+
+        <argument
+            android:name="currency"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
     <fragment
         android:id="@+id/attendeeFragment"
         android:name="org.fossasia.openevent.general.attendees.AttendeeFragment"
