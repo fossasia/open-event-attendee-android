@@ -162,7 +162,7 @@ class EventDetailsFragment : Fragment() {
                     .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
                     .into(rootView.logoIcon)
-          
+
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
                     rootView.seeMoreOrganizer.text = getString(R.string.see_less)
@@ -185,7 +185,7 @@ class EventDetailsFragment : Fragment() {
         } else {
             rootView.organizerContainer.visibility = View.GONE
         }
-      
+
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
