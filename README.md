@@ -53,6 +53,7 @@ A native Android app using Kotlin for writing code.
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - OkHttp [Docs](http://square.github.io/okhttp/)
 - Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
+- Jackson [Docs](https://github.com/FasterXML/jackson)
 
 ### Project Conventions
 
