@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoo
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
 import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ticket.EVENT_ID
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel

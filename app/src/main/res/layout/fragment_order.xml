@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/orderCoordinatorLayout">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
@@ -59,6 +57,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin_small"
                     android:layout_marginRight="@dimen/layout_margin_medium"
                     android:layout_weight="0.1"
                     app:srcCompat="@drawable/ic_baseline_calendar" />
@@ -95,6 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_medium"
@@ -138,6 +138,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="1">
@@ -148,6 +150,7 @@
                     android:layout_marginLeft="@dimen/layout_margin_large"
                     android:paddingLeft="@dimen/layout_margin_medium"
                     android:layout_weight="0.95"
+                    android:textSize="13sp"
                     android:text="@string/invite"
                     android:textColor="@color/black" />
 
@@ -155,10 +158,8 @@
                     android:id="@+id/share"
                     android:layout_width="@dimen/fab_width"
                     android:layout_height="@dimen/fab_height"
-                    android:layout_margin="@dimen/layout_margin_medium"
                     android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_share_grey" />
-
             </LinearLayout>
 
             <View

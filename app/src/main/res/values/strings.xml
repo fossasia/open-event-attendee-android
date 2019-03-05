@@ -11,6 +11,7 @@
     <string name="report_event">Report Event</string>
     <string name="about">About</string>
     <string name="see_more">See more</string>
+    <string name="see_less">See less</string>
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
@@ -76,6 +77,7 @@
     <string name="event_link">Event Link :&#160;</string>
     <string name="event_description">Event Description :&#160;</string>
     <string name="event_name">Event Name :&#160;</string>
+    <string name="event_location">Event Location :&#160;</string>
     <string name="share">Share</string>
 
     <!--add to calendar-->
