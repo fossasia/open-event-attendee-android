@@ -32,7 +32,7 @@ const val ORDERS: String = "orders"
 class OrdersUnderUserFragment : Fragment() {
 
     private lateinit var rootView: View
-    private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
+    private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
