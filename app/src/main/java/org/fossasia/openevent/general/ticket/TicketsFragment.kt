@@ -47,7 +47,6 @@ class TicketsFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
@@ -145,12 +144,11 @@ class TicketsFragment : Fragment() {
         }
     }
 
-
     private fun redirectToAttendee() {
         // make list of tickedIdAndQty since further it is used as list
         val ticketIdAndQty = ArrayList<Pair<Int, Int>>()
         ticketsViewModel.ticketIdAndQty.forEach { (key, value) ->
-            ticketIdAndQty.add(Pair(key, value))  }
+            ticketIdAndQty.add(Pair(key, value)) }
 
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, id)
@@ -163,8 +161,6 @@ class TicketsFragment : Fragment() {
         val bundle = bundleOf(SNACKBAR_MESSAGE to args)
         findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

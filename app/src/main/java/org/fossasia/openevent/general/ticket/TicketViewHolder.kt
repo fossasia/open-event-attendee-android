@@ -30,14 +30,13 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 }
             }
 
-            val adapter=ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
-            spinnerList)
+            val adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
+                spinnerList)
 
-            itemView.orderRange.adapter= adapter
+            itemView.orderRange.adapter = adapter
             if (qty != null) {
                 itemView.orderRange.setSelection(adapter.getPosition(qty.toString()))
             }
-
         }
 
         itemView.order.setOnClickListener {

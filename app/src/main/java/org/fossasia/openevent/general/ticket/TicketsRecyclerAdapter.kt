@@ -10,8 +10,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     private val tickets = ArrayList<Ticket>()
     private var eventCurrency: String? = null
     private var selectedListener: TicketSelectedListener? = null
-    var ticketIdAndQty = HashMap<Int , Int>()
-
+    var ticketIdAndQty = HashMap<Int, Int>()
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
@@ -45,7 +44,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
      * set the selected tickets
      */
     fun setSelectedTickets(ticketIdAndQty: HashMap<Int, Int>) {
-        this.ticketIdAndQty=ticketIdAndQty
+        this.ticketIdAndQty = ticketIdAndQty
     }
 }
 
