@@ -99,9 +99,13 @@ class EventsFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                    }
             }
         }
         eventsRecyclerAdapter.setListener(recyclerViewClickListener)

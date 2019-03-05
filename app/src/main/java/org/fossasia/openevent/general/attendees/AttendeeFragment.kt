@@ -64,11 +64,11 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
-import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
@@ -490,7 +490,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.paymentCompleted.value = false
         // Initialise Order Completed Fragment
         val bundle = Bundle()
-        bundle.putLong("EVENT_ID", id)
+        bundle.putLong(EVENT_ID, id)
         findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
     }
 

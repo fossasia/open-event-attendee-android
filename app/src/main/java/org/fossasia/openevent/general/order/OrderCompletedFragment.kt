@@ -23,9 +23,9 @@ import kotlinx.android.synthetic.main.fragment_order.view.share
 import kotlinx.android.synthetic.main.fragment_order.view.time
 import kotlinx.android.synthetic.main.fragment_order.view.view
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
