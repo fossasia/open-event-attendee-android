@@ -25,12 +25,12 @@ class QRCodeFragment : Fragment() {
         }
 
         currentBrightnessValue = android.provider.Settings.System.getInt(
-            context!!.contentResolver,
+            context?.contentResolver,
             android.provider.Settings.System.SCREEN_BRIGHTNESS)
 
-        val layoutParams = activity!!.window.attributes
+        val layoutParams = activity?.window?.attributes
         layoutParams.screenBrightness = 1f
-        activity!!.window.attributes = layoutParams
+        activity?.window?.attributes = layoutParams
     }
 
     override fun onCreateView(
@@ -48,8 +48,8 @@ class QRCodeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        val layoutParams = activity!!.window.attributes
+        val layoutParams = activity?.window?.attributes
         layoutParams.screenBrightness = currentBrightnessValue / 100f
-        activity!!.window.attributes = layoutParams
+        activity?.window?.attributes = layoutParams
     }
 }
