@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinat
 import kotlinx.android.synthetic.main.fragment_social_links.view.progressBarSocial
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -25,7 +26,6 @@ class SocialLinksFragment : Fragment() {
     private val socialLinksViewModel by viewModel<SocialLinksViewModel>()
     private lateinit var rootView: View
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
