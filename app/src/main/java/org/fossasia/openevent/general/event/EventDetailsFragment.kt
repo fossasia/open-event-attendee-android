@@ -18,6 +18,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
@@ -48,8 +49,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
-import org.fossasia.openevent.general.ticket.CURRENCY
-import org.fossasia.openevent.general.ticket.TicketsFragment
+import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -59,13 +59,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 
-const val EVENT_ID = "EVENT_ID"
+const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
+    private val safeArgs: EventDetailsFragmentArgs by navArgs()
+
     private lateinit var rootView: View
-    private var eventId: Long = -1
     private var eventTopicId: Long? = null
     private lateinit var eventShare: Event
     private var currency: String? = null
@@ -77,11 +78,6 @@ class EventDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            eventId = bundle.getLong(EVENT_ID, -1)
-        }
-
         eventViewModel.event
             .nonNull()
             .observe(this, Observer {
@@ -99,7 +95,7 @@ class EventDetailsFragment : Fragment() {
                 }
                 runOnce = false
 
-                Timber.d("Fetched events of id %d", eventId)
+                Timber.d("Fetched events of id %d", safeArgs.eventId)
             })
     }
 
@@ -126,7 +122,7 @@ class EventDetailsFragment : Fragment() {
                 Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
-        eventViewModel.loadEvent(eventId)
+        eventViewModel.loadEvent(safeArgs.eventId)
 
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -191,7 +187,7 @@ class EventDetailsFragment : Fragment() {
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             val bundle = Bundle()
-            bundle.putLong(EVENT_ID, eventId)
+            bundle.putLong(EVENT_ID, safeArgs.eventId)
             findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
         }
 
@@ -279,7 +275,7 @@ class EventDetailsFragment : Fragment() {
                 return true
             }
             R.id.favorite_event -> {
-                eventViewModel.setFavorite(eventId, !(eventShare.favorite))
+                eventViewModel.setFavorite(safeArgs.eventId, !(eventShare.favorite))
                 if (eventShare.favorite) {
                     setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white)
                 } else {
@@ -334,20 +330,21 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadTicketFragment() {
-        // Initialise Ticket Fragment
-        val ticketFragment = TicketsFragment()
-        val bundle = Bundle()
-        bundle.putLong("EVENT_ID", eventId)
-        bundle.putString(CURRENCY, currency)
-        ticketFragment.arguments = bundle
-        findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
+        TicketsFragmentArgs.Builder()
+            .setEventId(safeArgs.eventId)
+            .setCurrency(currency)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
+            }
     }
 
     private fun loadSocialLinksFragment() {
         // Initialise SocialLinks Fragment
         val socialLinksFragemnt = SocialLinksFragment()
         val bundle = Bundle()
-        bundle.putLong("EVENT_ID", eventId)
+        bundle.putLong(EVENT_ID, safeArgs.eventId)
         socialLinksFragemnt.arguments = bundle
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
@@ -357,7 +354,7 @@ class EventDetailsFragment : Fragment() {
         // Initialise SimilarEvents Fragment
         val similarEventsFragment = SimilarEventsFragment()
         val bundle = Bundle()
-        bundle.putLong(EVENT_ID, eventId)
+        bundle.putLong(EVENT_ID, safeArgs.eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
         similarEventsFragment.arguments = bundle
         childFragmentManager.beginTransaction()

@@ -25,7 +25,7 @@ class AuthHolder(private val preference: Preference) {
     }
 
     fun isLoggedIn(): Boolean {
-        if (token == null || JWTUtils.isExpired(token.toString())) {
+        if (token == null || JWTUtils.isExpired(token)) {
             token = null
             return false
         }
@@ -34,6 +34,6 @@ class AuthHolder(private val preference: Preference) {
     }
 
     fun getId(): Long {
-        return if (!isLoggedIn()) -1 else JWTUtils.getIdentity(token.toString())
+        return if (!isLoggedIn()) -1 else JWTUtils.getIdentity(token)
     }
 }
