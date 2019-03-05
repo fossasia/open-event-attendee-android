@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.tomorrowTextView
@@ -29,6 +30,7 @@ const val NEXT_MONTH = "In the next month"
 
 class SearchTimeFragment : Fragment() {
     private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
+    private val safeArgs: SearchTimeFragmentArgs by navArgs()
     private lateinit var rootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,7 +42,7 @@ class SearchTimeFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-        setCurrentChoice(arguments?.getString(SEARCH_TIME))
+        setCurrentChoice(safeArgs.time)
 
         val calendar = Calendar.getInstance()
 

@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_location.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
@@ -28,7 +29,7 @@ class SearchLocationFragment : Fragment() {
     private lateinit var rootView: View
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
-    private var fromSearchFragment: Boolean = false
+    private val safeArgs: SearchLocationFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
@@ -40,8 +41,6 @@ class SearchLocationFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-
-        fromSearchFragment = arguments?.getBoolean(FROM_SEARCH) ?: false
 
         geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
             rootView.currentLocation.visibility = View.GONE
@@ -88,7 +87,7 @@ class SearchLocationFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val fragmentId = if (fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
+        val fragmentId = if (safeArgs.fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
         Navigation.findNavController(rootView).popBackStack(fragmentId, false)
     }
 
