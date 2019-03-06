@@ -46,6 +46,7 @@ import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.about.AboutEventFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
@@ -60,7 +61,7 @@ import timber.log.Timber
 import java.util.Currency
 
 const val EVENT_ID = "eventId"
-const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
+const val EVENT_TOPIC_ID = "eventTopicId"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -186,9 +187,13 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, safeArgs.eventId)
-            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
+            AboutEventFragmentArgs.Builder()
+                .setEventId(safeArgs.eventId)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
+                }
         }
 
         // Event Description Section

@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
@@ -28,7 +26,8 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.attendees.AttendeeFragmentArgs
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -36,9 +35,6 @@ import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-const val CURRENCY: String = "currency"
-const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -140,21 +136,32 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
+
         // make list of tickedIdAndQty since further it is used as list
         val ticketIdAndQty = ArrayList<Pair<Int, Int>>()
         ticketsViewModel.ticketIdAndQty.forEach { (key, value) ->
             ticketIdAndQty.add(Pair(key, value)) }
 
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, safeArgs.eventId)
-        bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
-        findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
+        val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
+        AttendeeFragmentArgs.Builder()
+            .setTicketIdAndQty(wrappedTicketAndQty)
+            .setEventId(safeArgs.eventId)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
+            }
+
     }
 
     private fun redirectToLogin() {
-        val args = getString(R.string.log_in_first)
-        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
