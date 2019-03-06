@@ -41,10 +41,11 @@ class EventUtilsTest {
         endsAt: String = "2008-09-19T19:25:00+05:00",
         timeZone: String = "Asia/Kolkata",
         description: String? = null,
+        locationName: String? = "Test Location",
         link: String? = null
     ) =
-            Event(id, name, identifier, startsAt, endsAt, timeZone,
-                    description = description, externalEventUrl = link)
+        Event(id, name, identifier, startsAt, endsAt, timeZone,
+            locationName = locationName, description = description, externalEventUrl = link)
 
     private fun getEventDateTime(dateTime: String, timeZone: String): ZonedDateTime =
         EventUtils.getEventDateTime(dateTime, timeZone)
@@ -56,6 +57,7 @@ class EventUtilsTest {
         every { resource.getString(R.string.start_time) }.returns("Start Time : ")
         every { resource.getString(R.string.ends_on) }.returns("Ends On : ")
         every { resource.getString(R.string.end_time) }.returns("End Time : ")
+        every { resource.getString(R.string.event_location) }.returns("Event Location : ")
         every { resource.getString(R.string.event_link) }.returns("Event Link : ")
     }
 
@@ -68,6 +70,7 @@ class EventUtilsTest {
 
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
+            Event Location : Test Location
             Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
@@ -83,6 +86,7 @@ class EventUtilsTest {
 
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
+            Event Location : Test Location
             Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
@@ -96,6 +100,7 @@ class EventUtilsTest {
 
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
+            Event Location : Test Location
             Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
@@ -111,6 +116,7 @@ class EventUtilsTest {
 
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
+            Event Location : Test Location
             Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }

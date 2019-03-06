@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:key="@string/key_about"
         android:title="@string/about" >
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_rating"
             android:title="@string/rating_settings" />
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_suggestion"
             android:title="@string/suggestion_settings" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/profile" >
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_profile"
             android:title="@string/logged_in_account" />
 
@@ -28,25 +34,31 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/app_name_capital" >
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_version"
             android:title="@string/version_settings" />
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/legal" >
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_privacy"
             android:title="@string/privacy" />
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_terms_of_service"
             android:title="@string/title_terms_of_service" />
 
         <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_cookie_policy"
             android:title="@string/cookie_policy" />
     </PreferenceCategory>

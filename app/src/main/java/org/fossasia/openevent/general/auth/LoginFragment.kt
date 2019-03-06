@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
@@ -35,13 +36,12 @@ import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val SNACKBAR_MESSAGE: String = "SNACKBAR_MESSAGE"
-
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
     private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
+    private val safeArgs: LoginFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -211,11 +211,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun showSnackbar() {
-        val textSnackbar = arguments?.getString(SNACKBAR_MESSAGE)
-        if (textSnackbar != null) {
-            Snackbar.make(
-                rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT
-            ).show()
+        safeArgs.snackbarMessage?.let { textSnackbar ->
+            Snackbar.make(rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT).show()
         }
     }
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order.view.add
@@ -25,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_order.view.view
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.ticket.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,16 +34,8 @@ class OrderCompletedFragment : Fragment() {
 
     private lateinit var rootView: View
     private lateinit var eventShare: Event
-    private var id: Long = -1
+    private val safeArgs: OrderCompletedFragmentArgs by navArgs()
     private val orderCompletedViewModel by viewModel<OrderCompletedViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +48,7 @@ class OrderCompletedFragment : Fragment() {
         activity?.supportActionBar?.title = ""
         setHasOptionsMenu(true)
 
-        orderCompletedViewModel.loadEvent(id)
+        orderCompletedViewModel.loadEvent(safeArgs.eventId)
         orderCompletedViewModel.event
             .nonNull()
             .observe(this, Observer {
