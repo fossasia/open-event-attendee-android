@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
@@ -66,12 +67,11 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
-import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
-import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
+import org.fossasia.openevent.general.order.OrderCompletedFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
@@ -91,6 +91,7 @@ class AttendeeFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private val safeArgs: AttendeeFragmentArgs by navArgs()
 
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
@@ -99,7 +100,6 @@ class AttendeeFragment : Fragment() {
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
-    private var id: Long = -1
     private lateinit var API_KEY: String
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
@@ -108,12 +108,8 @@ class AttendeeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-            eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
-        }
+        eventId = EventId(safeArgs.eventId)
+        ticketIdAndQty = safeArgs.ticketIdAndQty?.value
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
             ?.metaData?.getString(STRIPE_KEY).toString()
@@ -382,7 +378,7 @@ class AttendeeFragment : Fragment() {
             })
 
         attendeeViewModel.loadUser()
-        attendeeViewModel.loadEvent(id)
+        attendeeViewModel.loadEvent(safeArgs.eventId)
 
         attendeeViewModel.attendee
             .nonNull()
@@ -534,10 +530,13 @@ class AttendeeFragment : Fragment() {
 
     private fun openOrderCompletedFragment() {
         attendeeViewModel.paymentCompleted.value = false
-        // Initialise Order Completed Fragment
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, id)
-        findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
+        OrderCompletedFragmentArgs.Builder()
+            .setEventId(safeArgs.eventId)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
