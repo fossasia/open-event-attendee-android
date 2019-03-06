@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
@@ -17,14 +18,13 @@ import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
-    private var email: String? = null
-    private val EMAIL: String = "EMAIL"
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
         "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
     private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
     private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
         preferenceChange(evt)
@@ -40,9 +40,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setHasOptionsMenu(true)
 
         // Set Email
-        email = arguments?.getString(EMAIL)
         preferenceScreen.findPreference(resources.getString(R.string.key_profile))
-            .summary = email
+            .summary = safeArgs.email
 
         // Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version))
