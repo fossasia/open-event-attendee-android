@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.search
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,6 +22,8 @@ import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 
+const val CURRENTY_QUERY_KEY = "currentQueryKey"
+
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchFragmentArgs? by lazy {
@@ -31,6 +34,7 @@ class SearchFragment : Fragment() {
     }
     private lateinit var rootView: View
     private lateinit var searchView: SearchView
+    private var currentQuery: CharSequence = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +49,7 @@ class SearchFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
         setHasOptionsMenu(true)
+        if (savedInstanceState != null) currentQuery = savedInstanceState.getCharSequence(CURRENTY_QUERY_KEY) ?: ""
 
         rootView.timeTextView.setOnClickListener {
             SearchTimeFragmentArgs.Builder()
@@ -118,6 +123,15 @@ class SearchFragment : Fragment() {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
         super.onPrepareOptionsMenu(menu)
+
+        if (currentQuery.isNotBlank()) {
+            Handler().post {
+                searchView.clearFocus()
+                searchView.isIconified = false
+                searchItem.expandActionView()
+                searchView.setQuery(currentQuery, false)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -129,5 +143,10 @@ class SearchFragment : Fragment() {
         super.onDestroy()
         if (this::searchView.isInitialized)
             searchView.setOnQueryTextListener(null)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(CURRENTY_QUERY_KEY, searchView.query)
     }
 }
