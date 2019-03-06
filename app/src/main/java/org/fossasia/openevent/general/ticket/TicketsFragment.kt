@@ -142,7 +142,6 @@ class TicketsFragment : Fragment() {
             ticketIdAndQty.add(Pair(key, value)) }
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
-
         AttendeeFragmentArgs.Builder()
             .setTicketIdAndQty(wrappedTicketAndQty)
             .setEventId(safeArgs.eventId)
