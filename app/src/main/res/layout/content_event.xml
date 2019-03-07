@@ -50,7 +50,8 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/eventName"
             app:layout_constraintTop_toBottomOf="@+id/eventName"
-            tools:text="by FOSSASIA" />
+            tools:text="by FOSSASIA"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/eventTimingLinearLayout"
