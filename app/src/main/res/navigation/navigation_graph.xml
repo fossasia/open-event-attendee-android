@@ -19,7 +19,18 @@
         android:id="@+id/similarEventsFragment"
         android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
         android:label="SimilarEventsFragment"
-        tools:layout="@layout/fragment_similar_events" />
+        tools:layout="@layout/fragment_similar_events">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+
+        <argument
+            android:name="eventTopicId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="org.fossasia.openevent.general.search.SearchFragment"
@@ -27,23 +38,53 @@
         tools:layout="@layout/fragment_search" >
         <argument
             android:name="@string/saved_date"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
         android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
         android:label="SearchLocationFragment"
-        tools:layout="@layout/fragment_search_location" />
+        tools:layout="@layout/fragment_search_location">
+
+        <argument
+            android:name="FromSearchFragment"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
     <fragment
         android:id="@+id/searchTimeFragment"
         android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
         android:label="SearchTimeFragment"
-        tools:layout="@layout/fragment_search_time" />
+        tools:layout="@layout/fragment_search_time">
+
+        <argument
+            android:name="time"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
     <fragment
         android:id="@+id/searchResultsFragment"
         android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
         android:label="SearchResultsFragment"
-        tools:layout="@layout/fragment_search_results" />
+        tools:layout="@layout/fragment_search_results">
+
+        <argument
+            android:name="query"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="location"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="''"/>
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
@@ -58,7 +99,18 @@
         android:id="@+id/orderDetailsFragment"
         android:name="org.fossasia.openevent.general.order.OrderDetailsFragment"
         android:label="OrderDetailsFragment"
-        tools:layout="@layout/fragment_order_details" />
+        tools:layout="@layout/fragment_order_details">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+
+        <argument
+            android:name="orders"
+            app:argType="string"
+            android:defaultValue="-1"/>
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
@@ -72,7 +124,13 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.fossasia.openevent.general.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment">
+
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true"/>
+    </fragment>
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
@@ -89,7 +147,13 @@
         android:id="@+id/aboutEventFragment"
         android:name="org.fossasia.openevent.general.about.AboutEventFragment"
         android:label="AboutEventFragment"
-        tools:layout="@layout/fragment_about_event" />
+        tools:layout="@layout/fragment_about_event">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
     <fragment
         android:id="@+id/ticketsFragment"
         android:name="org.fossasia.openevent.general.ticket.TicketsFragment"
@@ -111,17 +175,42 @@
         android:id="@+id/attendeeFragment"
         android:name="org.fossasia.openevent.general.attendees.AttendeeFragment"
         android:label="AttendeeFragment"
-        tools:layout="@layout/fragment_attendee" />
+        tools:layout="@layout/fragment_attendee">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+
+        <argument
+            android:name="ticketIdAndQty"
+            app:argType="org.fossasia.openevent.general.ticket.TicketIdAndQtyWrapper"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
     <fragment
         android:id="@+id/orderCompletedFragment"
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"
-        tools:layout="@layout/fragment_order" />
+        tools:layout="@layout/fragment_order">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="org.fossasia.openevent.general.auth.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+
+        <argument
+            android:name="snackbarMessage"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"

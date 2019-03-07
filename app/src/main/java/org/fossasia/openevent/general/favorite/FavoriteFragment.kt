@@ -19,8 +19,8 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecyc
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import kotlinx.android.synthetic.main.fragment_favorite.view.findSomethingToDo
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -68,9 +68,13 @@ class FavoriteFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                    }
             }
         }
         val favoriteFabClickListener = object : FavoriteFabListener {
