@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
@@ -33,6 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
+        val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -46,6 +48,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         // Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version))
             .title = "Version " + BuildConfig.VERSION_NAME
+
+        preferenceScreen.findPreference(resources.getString(R.string.key_timezone_switch))
+            .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -60,6 +65,14 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 Utils.openUrl(it, FORM_LINK)
             }
             return true
+        }
+        if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
+            val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
+            val timeZonePreferenceKey = "useEventTimeZone"
+            when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
+                true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
+                false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
+            }
         }
         if (preference?.key == getString(R.string.key_privacy)) {
             context?.let { Utils.openUrl(it, PRIVACY_LINK) }

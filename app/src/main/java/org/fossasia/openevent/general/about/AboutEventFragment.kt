@@ -77,8 +77,8 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         eventExtra = event
         title = eventExtra.name
         rootView.aboutEventContent.text = event.description?.stripHtml()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         rootView.eventName.text = event.name
     }

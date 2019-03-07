@@ -144,8 +144,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadEvent(event: Event) {
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
 
         rootView.eventName.text = event.name
 
@@ -313,8 +313,12 @@ class EventDetailsFragment : Fragment() {
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
         intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
+        intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+            EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
     }
 
