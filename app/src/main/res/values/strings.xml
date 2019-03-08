@@ -200,4 +200,9 @@
     <string name="start_text_2">We\'ll show you what\'s good near you</string>
     <string name="pick_a_city">Pick a city</string>
 
+    <!--sign up fragment-->
+    <string name="invalid_email_message">Your email address is invalid!</string>
+    <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
+    <string name="invalid_password_message">Password too short!</string>
+
 </resources>
