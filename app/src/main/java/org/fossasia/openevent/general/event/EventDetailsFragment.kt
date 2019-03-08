@@ -46,6 +46,7 @@ import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.about.AboutEventFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
@@ -60,7 +61,7 @@ import timber.log.Timber
 import java.util.Currency
 
 const val EVENT_ID = "eventId"
-const val EVENT_TOPIC_ID = "EVENT_TOPIC_ID"
+const val EVENT_TOPIC_ID = "eventTopicId"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -143,8 +144,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadEvent(event: Event) {
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
 
         rootView.eventName.text = event.name
 
@@ -186,9 +187,13 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency).symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            val bundle = Bundle()
-            bundle.putLong(EVENT_ID, safeArgs.eventId)
-            findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
+            AboutEventFragmentArgs.Builder()
+                .setEventId(safeArgs.eventId)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
+                }
         }
 
         // Event Description Section
@@ -308,8 +313,12 @@ class EventDetailsFragment : Fragment() {
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
         intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
+        intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+            EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
     }
 

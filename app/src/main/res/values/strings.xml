@@ -155,6 +155,9 @@
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
+    <string name="key_timezone_switch">timeZoneSwitch</string>
+    <string name="timeZone_title">Use event\'s timezone</string>
+    <string name="timeZone_summary">Your timezone is used when disabled.</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>

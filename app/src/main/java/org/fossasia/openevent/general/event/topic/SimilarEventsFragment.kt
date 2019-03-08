@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
 import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
@@ -18,9 +19,8 @@ import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsRecyc
 import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsCoordinatorLayout
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
-import org.fossasia.openevent.general.event.EVENT_TOPIC_ID
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.EventsRecyclerAdapter
 import org.fossasia.openevent.general.event.FavoriteFabListener
 import org.fossasia.openevent.general.event.RecyclerViewClickListener
@@ -33,20 +33,14 @@ import timber.log.Timber
 class SimilarEventsFragment : Fragment() {
     private val similarEventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val similarEventsViewModel by viewModel<SimilarEventsViewModel>()
+    private val safeArgs: SimilarEventsFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private var eventTopicId: Long = -1
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         similarEventsRecyclerAdapter.setEventLayout(SIMILAR_EVENTS)
-        val bundle = this.arguments
-        var eventId: Long = -1
-        if (bundle != null) {
-            eventId = bundle.getLong(EVENT_ID, -1)
-            eventTopicId = bundle.getLong(EVENT_TOPIC_ID, -1)
-        }
-        similarEventsViewModel.eventId = eventId
+        similarEventsViewModel.eventId = safeArgs.eventId
     }
 
     override fun onCreateView(
@@ -65,9 +59,13 @@ class SimilarEventsFragment : Fragment() {
 
         val recyclerViewClickListener = object : RecyclerViewClickListener {
             override fun onClick(eventID: Long) {
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimSlide())
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(safeArgs.eventId)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimSlide())
+                    }
             }
         }
 
@@ -103,7 +101,7 @@ class SimilarEventsFragment : Fragment() {
             })
 
         similarEventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
-        similarEventsViewModel.loadSimilarEvents(eventTopicId)
+        similarEventsViewModel.loadSimilarEvents(safeArgs.eventTopicId)
 
         return rootView
     }
