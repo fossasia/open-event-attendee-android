@@ -80,7 +80,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_large"
                     android:layout_marginBottom="@dimen/padding_medium"
-                    android:text="@string/login" />
+                    android:text="@string/login"
+                    android:backgroundTint="@color/colorAccent"
+                    android:foregroundTint="@color/colorAccent"
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:id="@+id/forgotPassword"

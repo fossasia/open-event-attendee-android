@@ -119,7 +119,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/sign_up" />
+            android:text="@string/sign_up"
+            android:backgroundTint="@color/colorAccent"
+            android:foregroundTint="@color/colorAccent"
+            android:textColor="@color/white"
+            android:elevation="4dp"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
