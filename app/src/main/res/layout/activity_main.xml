@@ -13,7 +13,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/mainFragmentCoordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/layout_margin_none"
             android:layout_weight="1">
 
             <fragment
