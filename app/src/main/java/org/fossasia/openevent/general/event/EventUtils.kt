@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.event
 
+import androidx.preference.PreferenceManager
+import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -29,8 +31,8 @@ object EventUtils {
 
         val message = StringBuilder()
 
-        val startsAt = getLocalizedDateTime(event.startsAt)
-        val endsAt = getLocalizedDateTime(event.endsAt)
+        val startsAt = getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = getEventDateTime(event.endsAt, event.timezone)
 
         message.append(resource.getString(R.string.event_name)).append(event.name).append("\n\n")
         if (!description.isEmpty()) message.append(resource.getString(R.string.event_description))
@@ -40,7 +42,9 @@ object EventUtils {
                 .append(startsAt.format(timeFormat)).append("\n")
         message.append(resource.getString(R.string.ends_on))
                 .append(endsAt.format(dateFormat)).append(" ")
-                .append(endsAt.format(timeFormat))
+                .append(endsAt.format(timeFormat)).append("\n")
+        message.append(resource.getString(R.string.event_location))
+                .append(event.locationName)
         if (!eventUrl.isEmpty()) message.append("\n")
                 .append(resource.getString(R.string.event_link))
                 .append(eventUrl)
@@ -51,12 +55,27 @@ object EventUtils {
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getLocalizedDateTime(dateString: String): ZonedDateTime = ZonedDateTime.parse(dateString)
-            .toOffsetDateTime()
-            .atZoneSameInstant(ZoneId.systemDefault())
+    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
+        try {
+            return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
+                .getBoolean("useEventTimeZone", false)) {
 
-    fun getTimeInMilliSeconds(dateString: String): Long {
-        return getLocalizedDateTime(dateString).toInstant().toEpochMilli()
+                true -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.of(timeZone))
+                false -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.systemDefault())
+            }
+        } catch (e: NullPointerException) {
+            return ZonedDateTime.parse(dateString)
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+        }
+    }
+
+    fun getTimeInMilliSeconds(dateString: String, timeZone: String): Long {
+        return getEventDateTime(dateString, timeZone).toInstant().toEpochMilli()
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {

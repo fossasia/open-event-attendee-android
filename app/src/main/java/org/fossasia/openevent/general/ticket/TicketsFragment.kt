@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
@@ -27,6 +26,8 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.AttendeeFragmentArgs
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -35,26 +36,16 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val EVENT_ID: String = "EVENT_ID"
-const val CURRENCY: String = "CURRENCY"
-const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
-
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
-    private var id: Long = -1
-    private var currency: String? = null
+    private val safeArgs: TicketsFragmentArgs by navArgs()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-            currency = bundle.getString(CURRENCY, null)
-        }
-        ticketsRecyclerAdapter.setCurrency(currency)
+        ticketsRecyclerAdapter.setCurrency(safeArgs.currency)
 
         ticketsViewModel.error
             .nonNull()
@@ -120,8 +111,8 @@ class TicketsFragment : Fragment() {
                 rootView.ticketInfoTextView.isGone = ticketTableVisible
             })
 
-        ticketsViewModel.loadEvent(id)
-        ticketsViewModel.loadTickets(id)
+        ticketsViewModel.loadEvent(safeArgs.eventId)
+        ticketsViewModel.loadTickets(safeArgs.eventId)
 
         ticketsViewModel.tickets
             .nonNull()
@@ -157,16 +148,27 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, id)
-        bundle.putSerializable(TICKET_ID_AND_QTY, ticketsViewModel.ticketIdAndQty.value)
-        findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
+      
+        val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
+
+        AttendeeFragmentArgs.Builder()
+            .setTicketIdAndQty(wrappedTicketAndQty)
+            .setEventId(safeArgs.eventId)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
+            }
     }
 
     private fun redirectToLogin() {
-        val args = getString(R.string.log_in_first)
-        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -182,8 +184,8 @@ class TicketsFragment : Fragment() {
     private fun loadEventDetails(event: Event) {
         rootView.eventName.text = event.name
         rootView.organizerName.text = "by ${event.organizerName.nullToEmpty()}"
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 

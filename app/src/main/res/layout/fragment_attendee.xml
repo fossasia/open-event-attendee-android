@@ -90,7 +90,7 @@
                     android:weightSum="5">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/item"
@@ -99,7 +99,7 @@
                         tools:text="Item" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/price"
@@ -108,7 +108,7 @@
                         tools:text="Price" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/qty"
@@ -117,7 +117,7 @@
                         tools:text="Qty" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/subtotal"
@@ -306,6 +306,7 @@
 
                         <EditText
                             android:id="@+id/cardNumber"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/card_number" />
@@ -330,7 +331,7 @@
                         <TextView
                             android:id="@+id/selectCard"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/spinner_width"
                             android:layout_weight="0.8"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_large" />
@@ -410,6 +411,7 @@
 
                         <EditText
                             android:id="@+id/cvc"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/cvc" />
@@ -423,6 +425,7 @@
 
                         <EditText
                             android:id="@+id/postalCode"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/postal_code" />
@@ -445,7 +448,8 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -463,6 +467,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="@dimen/card_elevation"
+                android:padding="@dimen/padding_small"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

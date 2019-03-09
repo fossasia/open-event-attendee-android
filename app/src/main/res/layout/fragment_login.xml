@@ -72,15 +72,14 @@
                         android:drawableStart="@drawable/ic_lock_black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
+                    android:theme="@style/AccentButton"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_large"
                     android:layout_marginBottom="@dimen/padding_medium"
-                    android:padding="@dimen/padding_medium"
-                    android:textColor="@android:color/white"
-                    android:backgroundTint="@color/colorPrimary"
                     android:text="@string/login" />
 
                 <TextView
@@ -108,7 +107,7 @@
 
                 <ImageView
                     android:layout_width="@dimen/item_image_view_medium"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.2"
                     android:layout_gravity="end"
                     android:layout_marginRight="@dimen/layout_margin_medium"
@@ -117,21 +116,21 @@
 
                 <View
                     android:layout_width="@dimen/fab_width"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:visibility="invisible"
                     android:layout_weight="0.2"
                     app:srcCompat="@drawable/ic_check_black"/>
 
                 <ImageView
                     android:layout_width="@dimen/logo_icon_width"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.2"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_mail_outline_black"/>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.1"
                     android:textAlignment="center"
                     android:gravity="bottom"
@@ -141,7 +140,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.5"
                     android:textAlignment="center"
                     android:text="@string/email_sent_message"/>

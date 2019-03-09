@@ -20,21 +20,23 @@
                android:gravity="center_vertical"
                android:textAlignment="center"
                android:id="@+id/noLikedText"
-               android:layout_margin="5dp">
+               android:layout_margin="@dimen/layout_margin_small">
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="@string/nothing_planned_yet"
-                   android:textSize="15sp"
+                   android:textSize="@dimen/text_size_large"
                    android:layout_gravity="center_horizontal"
                    android:textAlignment="center"/>
                <TextView
-                   android:layout_width="match_parent"
+                   android:id="@+id/findSomethingToDo"
+                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
+                   android:layout_gravity="center_horizontal"
+                   android:layout_marginTop="@dimen/layout_margin_large"
                    android:text="@string/find_something_to_do"
-                   android:textSize="25sp"
-                   android:textAlignment="center"/>
-
+                   android:textColor="@color/colorPrimary"
+                   android:textSize="@dimen/text_size_large" />
            </LinearLayout>
 
         <ProgressBar

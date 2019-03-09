@@ -37,7 +37,7 @@
                     tools:text="@string/anytime" />
 
                 <View
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="@dimen/event_name_divider_height"
                     android:layout_alignEnd="@id/timeTextView"
                     android:layout_alignLeft="@+id/timeTextView"
@@ -72,7 +72,7 @@
                     tools:text="@string/where" />
 
                 <View
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="@dimen/event_name_divider_height"
                     android:layout_alignEnd="@id/locationTextView"
                     android:layout_alignLeft="@+id/locationTextView"

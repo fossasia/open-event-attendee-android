@@ -19,6 +19,7 @@
     <dimen name="layout_margin_extra_large">32dp</dimen>
     <dimen name="layout_margin_extreme_large">56dp</dimen>
     <dimen name="layout_margin_search_view">100dp</dimen>
+    <dimen name="layout_margin_none">0dp</dimen>
 
     <!-- padding specifics -->
     <dimen name="padding_extra_small">2dp</dimen>
@@ -33,8 +34,10 @@
     <dimen name="card_corner_radius">3dp</dimen>
     <dimen name="image_corner_radius">6dp</dimen>
     <dimen name="avatar_medium">120dp</dimen>
+    <dimen name="avatar_large">152dp</dimen>
     <dimen name="details_margin_small">4dp</dimen>
     <dimen name="details_text_size">13sp</dimen>
+    <dimen name="card_width_45dp">45dp</dimen>
 
     <!--event fab specifics-->
     <dimen name="fab_width">40dp</dimen>
@@ -42,6 +45,7 @@
     <dimen name="fab_margin_top">120dp</dimen>
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="fab_elevation">3dp</dimen>
+    <dimen name="fab_margin_80dp">80dp</dimen>
 
     <!--view specifics -->
     <dimen name="view_height">1dp</dimen>
@@ -49,6 +53,7 @@
     <dimen name="app_bar_height">250dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="view_height_25dp">25dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>
@@ -56,6 +61,7 @@
     <dimen name="item_image_view">50dp</dimen>
     <dimen name="item_image_view_large">130dp</dimen>
     <dimen name="item_image_view_extra_large">250dp</dimen>
+    <dimen name="item_image_view_160dp">160dp</dimen>
 
     <!--event details-->
     <dimen name="event_details_image">200dp</dimen>
@@ -80,5 +86,6 @@
 
     <!--spinner specifics-->
     <dimen name="spinner_width">30dp</dimen>
+    <dimen name="spinner_height">30dp</dimen>
 
 </resources>

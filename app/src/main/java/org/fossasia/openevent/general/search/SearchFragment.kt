@@ -21,14 +21,14 @@ import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 
-const val FROM_SEARCH: String = "FromSearchFragment"
-const val QUERY: String = "query"
-const val LOCATION: String = "location"
-const val DATE: String = "date"
-const val SEARCH_TIME: String = "time"
-
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
+    private val safeArgs: SearchFragmentArgs? by lazy {
+        // When search fragment is opened using BottomNav, then fragment arguments are null
+        // navArgs delegate throws an IllegalStateException when arguments are null, so we construct SearchFragmentArgs
+        // from the arguments bundle
+        arguments?.let { SearchFragmentArgs.fromBundle(it) }
+    }
     private lateinit var rootView: View
     private lateinit var searchView: SearchView
 
@@ -47,23 +47,29 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString(SEARCH_TIME, rootView.timeTextView.text.toString())
-            Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
+            SearchTimeFragmentArgs.Builder()
+                .setTime(rootView.timeTextView.text.toString())
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
+                }
         }
 
-        val time = arguments?.let {
-            SearchFragmentArgs.fromBundle(it).stringSavedDate
-        }
+        val time = safeArgs?.stringSavedDate
         rootView.timeTextView.text = time ?: "Anytime"
 
         searchViewModel.loadSavedLocation()
         rootView.locationTextView.text = searchViewModel.savedLocation
 
         rootView.locationTextView.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putBoolean(FROM_SEARCH, true)
-            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
+            SearchLocationFragmentArgs.Builder()
+                .setFromSearchFragment(true)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
+                }
         }
 
         return rootView
@@ -91,11 +97,15 @@ class SearchFragment : Fragment() {
         searchItem.actionView = searchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                val bundle = Bundle()
-                bundle.putString(QUERY, query)
-                bundle.putString(LOCATION, rootView.locationTextView.text.toString().nullToEmpty())
-                bundle.putString(DATE, rootView.timeTextView.text.toString().nullToEmpty())
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
+                SearchResultsFragmentArgs.Builder()
+                    .setQuery(query)
+                    .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
+                    .setDate(rootView.timeTextView.text.toString().nullToEmpty())
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
+                    }
                 return false
             }
 

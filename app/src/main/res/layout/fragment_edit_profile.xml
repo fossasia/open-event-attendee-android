@@ -12,14 +12,32 @@
         android:orientation="vertical"
         android:padding="@dimen/padding_large">
 
-        <ImageView
-            android:id="@+id/profilePhoto"
-            android:layout_width="@dimen/avatar_medium"
-            android:layout_height="@dimen/avatar_medium"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/layout_margin_large"
-            android:contentDescription="Profile Photo"
-            app:srcCompat="@drawable/ic_account_circle_grey" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/profilePhoto"
+                android:layout_width="@dimen/avatar_large"
+                android:layout_height="@dimen/avatar_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/padding_large"
+                android:contentDescription="Profile Photo"
+                app:srcCompat="@drawable/ic_account_circle_grey" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/profilePhotoFab"
+                    android:layout_width="@dimen/fab_width"
+                    android:layout_height="@dimen/fab_height"
+                    app:fabCustomSize="@dimen/fab_height"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:layout_margin="@dimen/layout_margin_medium"
+                    app:layout_constraintRight_toRightOf="@id/profilePhoto"
+                    app:layout_constraintBottom_toBottomOf="@id/profilePhoto"
+                    app:srcCompat="@drawable/ic_edit"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +49,7 @@
             android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_margin_none"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -44,7 +62,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_margin_none"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -63,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            app:backgroundTint="@color/colorPrimary"
             android:text="@string/update"
             android:textColor="@android:color/white" />
 

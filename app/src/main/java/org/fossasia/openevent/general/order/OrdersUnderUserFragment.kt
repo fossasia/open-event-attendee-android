@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,20 +18,17 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnde
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.auth.SNACKBAR_MESSAGE
-import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-const val ORDERS: String = "orders"
-
 class OrdersUnderUserFragment : Fragment() {
 
     private lateinit var rootView: View
-    private val ordersUnderUserVM by viewModel<OrdersUnderUserVM>()
+    private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -69,10 +65,14 @@ class OrdersUnderUserFragment : Fragment() {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    val bundle = Bundle()
-                    bundle.putLong(EVENT_ID, eventID)
-                    bundle.putString(ORDERS, orderIdentifier)
-                    findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
+                    OrderDetailsFragmentArgs.Builder()
+                        .setEventId(eventID)
+                        .setOrders(orderIdentifier)
+                        .build()
+                        .toBundle()
+                        .also { bundle ->
+                            findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
+                        }
                 }
             }
 
@@ -126,8 +126,12 @@ class OrdersUnderUserFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        val args = getString(R.string.log_in_first)
-        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 }
