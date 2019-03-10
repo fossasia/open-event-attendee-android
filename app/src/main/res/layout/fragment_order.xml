@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.85"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_medium"
                     tools:text="15 Sep 2008 04:23 PM" />
 
                 <TextView
@@ -112,7 +112,7 @@
                     android:layout_weight="0.87"
                     android:text="@string/tickets"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_medium"
                     tools:text="Tickets" />
 
                 <TextView
@@ -145,12 +145,12 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin_large"
                     android:paddingLeft="@dimen/layout_margin_medium"
                     android:layout_weight="0.95"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_medium"
                     android:text="@string/invite"
                     android:textColor="@color/black" />
 

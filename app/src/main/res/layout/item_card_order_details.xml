@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/qrCodeView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/event_details_image"
+                android:layout_height="@dimen/event_details_image"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_medium"
                 android:scaleType="centerCrop" />
@@ -69,7 +69,7 @@
                 android:weightSum="2">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
@@ -103,7 +103,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"

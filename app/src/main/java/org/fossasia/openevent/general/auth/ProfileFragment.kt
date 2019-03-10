@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.editProfileButton
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.settings.SettingsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
@@ -39,12 +39,15 @@ class ProfileFragment : Fragment() {
 
     private lateinit var rootView: View
     private var emailSettings: String? = null
-    private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        val args = getString(R.string.log_in_first)
-        val bundle = bundleOf(SNACKBAR_MESSAGE to args)
-        findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 
     private fun redirectToEventsFragment() {
@@ -119,9 +122,14 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.settings -> {
-                val bundle = Bundle()
-                bundle.putString(EMAIL, emailSettings)
-                findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
+                // Only one nullable argument is passed to settings fragment so generated args class for it expects
+                // the argument to be passed in the Builder constructor only
+                SettingsFragmentArgs.Builder(emailSettings)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
+                    }
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
