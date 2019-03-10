@@ -49,7 +49,7 @@ A native Android app using Kotlin for writing code.
 - Timber [Docs](http://jakewharton.github.io/timber/)
 - RxAndroid [Docs](https://github.com/ReactiveX/RxAndroid)
 - Stripe [Docs](https://github.com/stripe/stripe-android)
-- InsertKoinIO [Docs](https://github.com/InsertKoinIO/koin)
+- InsertKoinIO [Docs](https://insert-koin.io)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - OkHttp [Docs](http://square.github.io/okhttp/)
 - Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
