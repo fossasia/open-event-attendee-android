@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eventyay Attendee</string>
+    <string name="app_name" translatable="false">Eventyay Attendee</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
@@ -54,7 +54,7 @@
     <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
-    <string name="email_id">example@gmail.com</string>
+    <string name="email_id" translatable="false">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
     <string name="edit_profile">Edit Profile</string>
@@ -67,7 +67,7 @@
     <string name="update">Update</string>
 
     <!--eventyay-->
-    <string name="eventyay_logo">eventyay</string>
+    <string name="eventyay_logo" translatable="false">eventyay</string>
 
     <!--share details-->
     <string name="starts_on">Starts On :&#160;</string>
@@ -131,16 +131,16 @@
     <string name="event_summary">Event Summary</string>
     <string name="organizer_preview">Mario</string>
     <string name="event_summary_preview">Very nice</string>
-    <string name="order_identifier_preview">3456789</string>
-    <string name="location_preview">Singapore</string>
+    <string name="order_identifier_preview" translatable="false">3456789</string>
+    <string name="location_preview" translatable="false">Singapore</string>
     <string name="date_preview">Thu,June 14</string>
-    <string name="event_preview">FOSSASIA summit</string>
-    <string name="name_preview">Nikit Bhandari</string>
+    <string name="event_preview" translatable="false">FOSSASIA summit</string>
+    <string name="name_preview" translatable="false">Nikit Bhandari</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
     <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
-    <string name="supportEmailId">support@eventyay.com</string>
+    <string name="supportEmailId" translatable="false">support@eventyay.com</string>
 
     <!--settings xml-->
     <string name="version_settings">Version</string>
@@ -148,22 +148,22 @@
     <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
-    <string name="app_name_capital">Open Event Android</string>
+    <string name="app_name_capital" translatable="false">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
-    <string name="key_acknowledgements">key_acknowledgements</string>
+    <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
     <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
-    <string name="key_timezone_switch">timeZoneSwitch</string>
+    <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
     <string name="timeZone_title">Use event\'s timezone</string>
     <string name="timeZone_summary">Your timezone is used when disabled.</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>
-    <string name="key_cookie_policy">cookie_policy</string>
+    <string name="key_cookie_policy" translatable="false">cookie_policy</string>
     <string name="title_terms_of_service">Terms of Service</string>
-    <string name="key_terms_of_service">terms_of_service</string>
+    <string name="key_terms_of_service" translatable="false">terms_of_service</string>
     <string name="legal">Legal</string>
 
     <!--settings profile dialog-->
@@ -186,7 +186,7 @@
     <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
     <string name="stripe">Stripe</string>
-    <string name="paypal">PayPal</string>
+    <string name="paypal" translatable="false">PayPal</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
