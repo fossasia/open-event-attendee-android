@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.Preference">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -13,11 +13,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Preference" parent="@style/PreferenceFixTheme.Light.DarkActionBar">
-        <item name="preferenceCategory_marginBottom">0dp</item>
-        <item name="android:dividerHeight">1dp</item>
-    </style>
-
     <style name="AppTheme.AboutEvent" parent="ThemeOverlay.AppCompat.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -27,7 +22,7 @@
     </style>
 
     <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorButtonNormal">@color/grey</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:padding">@dimen/padding_medium</item>

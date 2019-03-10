@@ -77,6 +77,7 @@
     <string name="event_link">Event Link :&#160;</string>
     <string name="event_description">Event Description :&#160;</string>
     <string name="event_name">Event Name :&#160;</string>
+    <string name="event_location">Event Location :&#160;</string>
     <string name="share">Share</string>
 
     <!--add to calendar-->
@@ -154,6 +155,9 @@
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
+    <string name="key_timezone_switch">timeZoneSwitch</string>
+    <string name="timeZone_title">Use event\'s timezone</string>
+    <string name="timeZone_summary">Your timezone is used when disabled.</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>
@@ -195,5 +199,10 @@
     <string name="start_text_1">Where \ndo you \ngo out?</string>
     <string name="start_text_2">We\'ll show you what\'s good near you</string>
     <string name="pick_a_city">Pick a city</string>
+
+    <!--sign up fragment-->
+    <string name="invalid_email_message">Your email address is invalid!</string>
+    <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
+    <string name="invalid_password_message">Password too short!</string>
 
 </resources>

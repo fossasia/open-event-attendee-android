@@ -104,7 +104,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation "com.takisoft.fix:preference-v7:28.0.0.0"
+    implementation 'androidx.preference:preference:1.1.0-alpha01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -126,7 +126,7 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.2'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
@@ -146,14 +146,14 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:8.4.0'
+    implementation 'com.stripe:stripe-android:8.5.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-rc02'
+    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-rc02'
+    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-rc02'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.1"

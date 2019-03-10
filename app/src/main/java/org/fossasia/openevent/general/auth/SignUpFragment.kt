@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
 import kotlinx.android.synthetic.main.fragment_signup.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutConfirmPassword
+import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutEmail
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
@@ -28,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.view.usernameSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -36,6 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
+    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -48,7 +52,7 @@ class SignUpFragment : Fragment() {
         val progressDialog = Utils.progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Sign Up"
+            thisActivity.supportActionBar?.title = getString(R.string.sign_up)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
@@ -106,6 +110,9 @@ class SignUpFragment : Fragment() {
         signUpViewModel.loggedIn
             .nonNull()
             .observe(this, Observer {
+                smartAuthViewModel.saveCredential(
+                    activity, usernameSignUp.text.toString(),
+                    passwordSignUp.text.toString())
                 redirectToMain()
             })
 
@@ -116,7 +123,14 @@ class SignUpFragment : Fragment() {
             })
 
         rootView.usernameSignUp.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) { /*Implement here*/ }
+            override fun afterTextChanged(p0: Editable?) {
+                if (Patterns.EMAIL_ADDRESS.matcher(usernameSignUp.text.toString()).matches()) {
+                    textInputLayoutEmail.error = null
+                    textInputLayoutEmail.isErrorEnabled = false
+                } else {
+                    textInputLayoutEmail.error = getString(R.string.invalid_email_message)
+                }
+            }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
@@ -132,7 +146,7 @@ class SignUpFragment : Fragment() {
                     textInputLayoutConfirmPassword.error = null
                     textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutConfirmPassword.error = "Your password and confirmation password do not match!"
+                    textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
                 }
             }
 
@@ -150,13 +164,13 @@ class SignUpFragment : Fragment() {
                     textInputLayoutPassword.error = null
                     textInputLayoutPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutPassword.error = "Password too short!"
+                    textInputLayoutPassword.error = getString(R.string.invalid_password_message)
                 }
                 if (confirmPasswords.text.toString().equals(passwordSignUp.text.toString())) {
                     textInputLayoutConfirmPassword.error = null
                     textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutConfirmPassword.error = "Your password and confirmation password do not match!"
+                    textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
                 }
             }
 

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_about_event.view.appBar
@@ -19,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_about_event.view.eventName
 import kotlinx.android.synthetic.main.fragment_about_event.view.detailsHeader
 import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventCollapsingLayout
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -29,16 +29,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     private lateinit var rootView: View
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
-    private var id: Long = -1
     private var isHideToolbarView: Boolean = false
     private lateinit var eventExtra: Event
     private var title: String = ""
+    private val safeArgs: AboutEventFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null)
-            id = bundle.getLong(EVENT_ID)
 
         aboutEventViewModel.event
             .nonNull()
@@ -71,7 +68,7 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
                 rootView.progressBarAbout.isVisible = it
             })
 
-        aboutEventViewModel.loadEvent(id)
+        aboutEventViewModel.loadEvent(safeArgs.eventId)
 
         return rootView
     }
@@ -80,8 +77,8 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         eventExtra = event
         title = eventExtra.name
         rootView.aboutEventContent.text = event.description?.stripHtml()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         rootView.eventName.text = event.name
     }

@@ -16,7 +16,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         orderIdentifier: String?,
         attendeesNumber: Int
     ) {
-        val formattedDateTime = EventUtils.getLocalizedDateTime(event.startsAt)
+        val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
 

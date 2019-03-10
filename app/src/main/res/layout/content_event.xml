@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="@dimen/layout_margin_none"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,11 +50,12 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/eventName"
             app:layout_constraintTop_toBottomOf="@+id/eventName"
-            tools:text="by FOSSASIA" />
+            tools:text="by FOSSASIA"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/eventTimingLinearLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/layout_margin_none"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:orientation="horizontal"
@@ -308,25 +309,19 @@
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2">
-
-                    <ImageView
-                        android:id="@+id/logoIcon"
-                        android:layout_width="@dimen/logo_icon_width"
-                        android:layout_height="@dimen/logo_icon_height"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/layout_margin_small"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_account_circle_grey" />
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/logoIcon"
+                    android:layout_width="@dimen/logo_icon_width"
+                    android:layout_height="@dimen/logo_icon_height"
+                    android:layout_marginRight="@dimen/layout_margin_large"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/layout_margin_small"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/ic_account_circle_grey" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView

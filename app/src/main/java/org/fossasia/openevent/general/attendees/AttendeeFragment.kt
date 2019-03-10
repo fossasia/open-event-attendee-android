@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
@@ -61,6 +63,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.time
 import kotlinx.android.synthetic.main.fragment_attendee.view.view
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -68,8 +71,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
-import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.ticket.TICKET_ID_AND_QTY
+import org.fossasia.openevent.general.order.OrderCompletedFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
@@ -89,6 +91,7 @@ class AttendeeFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private val safeArgs: AttendeeFragmentArgs by navArgs()
 
     private lateinit var eventId: EventId
     private var ticketIdAndQty: List<Pair<Int, Int>>? = null
@@ -97,7 +100,6 @@ class AttendeeFragment : Fragment() {
     private var expiryMonth: Int = -1
     private lateinit var expiryYear: String
     private lateinit var cardBrand: String
-    private var id: Long = -1
     private lateinit var API_KEY: String
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
@@ -106,15 +108,11 @@ class AttendeeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-            eventId = EventId(id)
-            ticketIdAndQty = bundle.getSerializable(TICKET_ID_AND_QTY) as List<Pair<Int, Int>>
-        }
+        eventId = EventId(safeArgs.eventId)
+        ticketIdAndQty = safeArgs.ticketIdAndQty?.value
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
         API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
-                ?.metaData?.getString(STRIPE_KEY).toString()
+            ?.metaData?.getString(STRIPE_KEY).toString()
     }
 
     override fun onCreateView(
@@ -218,6 +216,44 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.initializeSpinner()
 
+        rootView.cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s == null || s.length < 3) {
+                    setCardSelectorAndError(0, visibility = true, error = false)
+                    return
+                }
+                val card = Utils.getCardType(s.toString())
+                if (card == Utils.cardType.NONE) {
+                    setCardSelectorAndError(0, visibility = true, error = true)
+                    return
+                }
+
+                val pos: Int = card.let {
+                    when (it) {
+                        Utils.cardType.AMERICAN_EXPRESS -> 1
+                        Utils.cardType.MASTER_CARD -> 2
+                        Utils.cardType.VISA -> 3
+                        else -> 0
+                    }
+                }
+                    setCardSelectorAndError(pos, visibility = false, error = false)
+            }
+            fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
+                rootView.cardSelector.setSelection(pos, true)
+                rootView.cardSelector.isVisible = visibility
+                if (error) {
+                    rootView.cardNumber.error = "Invalid card number"
+                    return
+                }
+                rootView.cardNumber.error = null
+            }
+        })
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             attendeeViewModel.month)
         rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -229,6 +265,9 @@ class AttendeeFragment : Fragment() {
                 expiryMonth = p2
                 rootView.monthText.text = attendeeViewModel.month[p2]
             }
+        }
+        rootView.monthText.setOnClickListener {
+            rootView.month.performClick()
         }
 
         rootView.year.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
@@ -244,6 +283,9 @@ class AttendeeFragment : Fragment() {
                     expiryYear = "2017" // invalid year, if the user hasn't selected the year
                 rootView.yearText.text = attendeeViewModel.year[p2]
             }
+        }
+        rootView.yearText.setOnClickListener {
+            rootView.year.performClick()
         }
 
         rootView.cardSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
@@ -336,7 +378,7 @@ class AttendeeFragment : Fragment() {
             })
 
         attendeeViewModel.loadUser()
-        attendeeViewModel.loadEvent(id)
+        attendeeViewModel.loadEvent(safeArgs.eventId)
 
         attendeeViewModel.attendee
             .nonNull()
@@ -434,7 +476,7 @@ class AttendeeFragment : Fragment() {
         if (show) {
             val builder = AlertDialog.Builder(context)
             builder.setMessage(getString(R.string.tickets_sold_out))
-                    .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             builder.show()
         }
     }
@@ -471,8 +513,8 @@ class AttendeeFragment : Fragment() {
 
     private fun loadEventDetails(event: Event) {
         val dateString = StringBuilder()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         val currency = Currency.getInstance(event.paymentCurrency)
         paymentCurrency = currency.symbol
         ticketsRecyclerAdapter.setCurrency(paymentCurrency)
@@ -480,18 +522,21 @@ class AttendeeFragment : Fragment() {
         rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
         rootView.amount.text = "Total: $paymentCurrency$amount"
         rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-                .append(" - ")
-                .append(EventUtils.getFormattedDate(endsAt))
-                .append(" • ")
-                .append(EventUtils.getFormattedTime(startsAt))
+            .append(" - ")
+            .append(EventUtils.getFormattedDate(endsAt))
+            .append(" • ")
+            .append(EventUtils.getFormattedTime(startsAt))
     }
 
     private fun openOrderCompletedFragment() {
         attendeeViewModel.paymentCompleted.value = false
-        // Initialise Order Completed Fragment
-        val bundle = Bundle()
-        bundle.putLong("EVENT_ID", id)
-        findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
+        OrderCompletedFragmentArgs.Builder()
+            .setEventId(safeArgs.eventId)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

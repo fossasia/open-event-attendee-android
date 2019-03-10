@@ -1,95 +1,90 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.fossasia.openevent.general.welcome.WelcomeFragment">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/textLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/textLinearLayout"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_medium"
-                android:lineSpacingExtra="@dimen/layout_margin_large"
-                android:text="@string/start_text_1"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_very_large"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:text="@string/start_text_2"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large" />
-        </LinearLayout>
-      
-        <ImageView
-            android:layout_width="@dimen/avatar_medium"
-            android:layout_height="@dimen/avatar_medium"
-            android:layout_above="@+id/pickCityButton"
-            android:layout_below="@id/textLinearLayout"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/ic_location_world"
-            app:tint="@color/colorPrimary" />
-
-        <LinearLayout
-            android:id="@+id/currentLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@id/pickCityButton"
-            android:paddingBottom="@dimen/padding_small">
-
-            <ImageView
-                android:layout_width="@dimen/item_image_view_medium"
-                android:layout_height="@dimen/item_image_view_medium"
-                android:layout_margin="@dimen/layout_margin_medium"
-                app:srcCompat="@drawable/ic_location_pin"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/item_image_view_medium"
-                android:layout_margin="@dimen/layout_margin_medium"
-                android:text="@string/current_location"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_large"
-                android:gravity="center"/>
-
-            <ProgressBar
-                android:id="@+id/locationProgressBar"
-                android:layout_width="@dimen/item_image_view_medium"
-                android:layout_height="@dimen/item_image_view_medium"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/layout_margin_large"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:visibility="gone"/>
-        </LinearLayout>
-      
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/pickCityButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/layout_margin_large"
-            android:layout_marginRight="@dimen/layout_margin_large"
-            android:layout_marginBottom="@dimen/layout_margin_large"
-            android:padding="@dimen/padding_medium"
-            android:text="@string/pick_a_city"
-            android:textColor="@android:color/white"
-            app:backgroundTint="@color/colorPrimary" />
-    </RelativeLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:lineSpacingExtra="@dimen/layout_margin_large"
+            android:text="@string/start_text_1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_very_large"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:text="@string/start_text_2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/avatar_medium"
+        android:layout_height="@dimen/avatar_medium"
+        android:layout_above="@+id/pickCityButton"
+        android:layout_below="@id/textLinearLayout"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ic_location_world"
+        app:tint="@color/colorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/currentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/pickCityButton"
+        android:paddingBottom="@dimen/padding_small">
+
+        <ImageView
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            app:srcCompat="@drawable/ic_location_pin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:text="@string/current_location"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_large"
+            android:gravity="center"/>
+
+        <ProgressBar
+            android:id="@+id/locationProgressBar"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pickCityButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/layout_margin_large"
+        android:layout_marginRight="@dimen/layout_margin_large"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/pick_a_city"
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/colorPrimary" />
+</RelativeLayout>
