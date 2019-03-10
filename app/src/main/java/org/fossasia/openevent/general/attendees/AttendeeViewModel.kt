@@ -109,6 +109,9 @@ class AttendeeViewModel(
         cardType.add("Pay by American Express")
         cardType.add("Pay by MasterCard")
         cardType.add("Pay by Visa")
+        cardType.add("Pay by Discover")
+        cardType.add("Pay by Diners Club")
+        cardType.add("Pay by UnionPay")
     }
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
