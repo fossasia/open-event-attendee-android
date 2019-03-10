@@ -31,6 +31,10 @@ class FavoriteEventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
         this.events.addAll(eventList)
     }
 
+    fun remove(position: Int) {
+        events.removeAt(position)
+    }
+
     fun getPos(id: Long): Int {
         return events.map { it.id }.indexOf(id)
     }
