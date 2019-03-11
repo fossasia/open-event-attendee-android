@@ -64,8 +64,12 @@ class EditProfileFragment : Fragment() {
                 userFirstName = it.firstName.nullToEmpty()
                 userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
-                rootView.firstName.setText(userFirstName)
-                rootView.lastName.setText(userLastName)
+                if (rootView.firstName.text.isBlank()) {
+                    rootView.firstName.setText(userFirstName)
+                }
+                if (rootView.lastName.text.isBlank()) {
+                    rootView.lastName.setText(userLastName)
+                }
                 if (!imageUrl.isEmpty()) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
                     Picasso.get()
