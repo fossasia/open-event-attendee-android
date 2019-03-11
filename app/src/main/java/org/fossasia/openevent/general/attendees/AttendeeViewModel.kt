@@ -200,7 +200,7 @@ class AttendeeViewModel(
         isAllDetailsFilled = true
         createAttendeeIterations = 0
         attendees.forEach {
-            if (it.email.isNullOrEmpty() || it.firstname.isNullOrEmpty() || it.lastname.isNullOrEmpty()) {
+            if (it.email.isNullOrBlank() || it.firstname.isNullOrBlank() || it.lastname.isNullOrBlank()) {
                 if (isAllDetailsFilled)
                     mutableMessage.value = "Please fill in all the fields"
                 mutableIsAttendeeCreated.value = false
