@@ -39,32 +39,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.postalCode
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
-import kotlinx.android.synthetic.main.fragment_attendee.view.accept
-import kotlinx.android.synthetic.main.fragment_attendee.view.amount
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.countryArea
-import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
-import kotlinx.android.synthetic.main.fragment_attendee.view.month
-import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
-import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
-import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
-import kotlinx.android.synthetic.main.fragment_attendee.view.qty
-import kotlinx.android.synthetic.main.fragment_attendee.view.register
-import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
-import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
-import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
-import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
-import kotlinx.android.synthetic.main.fragment_attendee.view.ticketsRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.time
-import kotlinx.android.synthetic.main.fragment_attendee.view.view
-import kotlinx.android.synthetic.main.fragment_attendee.view.year
-import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
-import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
-import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
+import kotlinx.android.synthetic.main.fragment_attendee.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -105,6 +80,7 @@ class AttendeeFragment : Fragment() {
     private var identifierList = ArrayList<String>()
     private var editTextList = ArrayList<EditText>()
     private var amount: Float = 0.0f
+    private var isStripeSelected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -207,10 +183,13 @@ class AttendeeFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 selectedPaymentOption = position
-                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
+                if (position == paymentOptions.indexOf(getString(R.string.stripe))) {
                     rootView.stripePayment.visibility = View.VISIBLE
-                else
+                    isStripeSelected = true
+                } else {
                     rootView.stripePayment.visibility = View.GONE
+                    isStripeSelected = false
+                }
             }
         }
 
@@ -242,8 +221,9 @@ class AttendeeFragment : Fragment() {
                         else -> 0
                     }
                 }
-                    setCardSelectorAndError(pos, visibility = false, error = false)
+                setCardSelectorAndError(pos, visibility = false, error = false)
             }
+
             fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
                 rootView.cardSelector.setSelection(pos, true)
                 rootView.cardSelector.isVisible = visibility
@@ -422,6 +402,11 @@ class AttendeeFragment : Fragment() {
             if (!rootView.acceptCheckbox.isChecked) {
                 Snackbar.make(rootView.attendeeScrollView,
                     "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            //If CVC is not present, snackbar message is displayed
+            if (rootView.cvc.text.isNullOrEmpty() && isStripeSelected == true) {
+                Snackbar.make(rootView.attendeeScrollView, "Enter CVC", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             val attendees = ArrayList<Attendee>()
