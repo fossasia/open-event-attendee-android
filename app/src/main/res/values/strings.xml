@@ -165,6 +165,7 @@
     <string name="title_terms_of_service">Terms of Service</string>
     <string name="key_terms_of_service">terms_of_service</string>
     <string name="legal">Legal</string>
+    <string name="visit_website">Visit Website</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>

@@ -8,6 +8,11 @@
 
         <Preference
             app:iconSpaceReserved="false"
+            android:key="@string/visit_website"
+            android:title="@string/visit_website" />
+
+        <Preference
+            app:iconSpaceReserved="false"
             android:key="@string/key_rating"
             android:title="@string/rating_settings" />
 
