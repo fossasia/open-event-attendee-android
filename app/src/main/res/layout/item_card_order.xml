@@ -84,7 +84,6 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginBottom="@dimen/layout_margin_large"
                 tools:text="See 5 tickets" />
 
         </LinearLayout>
