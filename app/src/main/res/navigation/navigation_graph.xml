@@ -208,8 +208,8 @@
         <argument
             android:name="snackbarMessage"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="false"
+            android:defaultValue="not-set"/>
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

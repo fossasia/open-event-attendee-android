@@ -211,8 +211,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun showSnackbar() {
-        safeArgs.snackbarMessage?.let { textSnackbar ->
-            Snackbar.make(rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT).show()
+        val snackMessage = safeArgs.snackbarMessage
+        if (snackMessage != "not-set") {
+            Snackbar.make(rootView.loginCoordinatorLayout, snackMessage, Snackbar.LENGTH_SHORT).show()
         }
     }
 }
