@@ -34,6 +34,7 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
+    private var favoriteListFetched: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,10 +80,10 @@ class FavoriteFragment : Fragment() {
         }
         val favoriteFabClickListener = object : FavoriteFabListener {
             override fun onClick(event: Event, isFavorite: Boolean) {
-                val id = favoriteEventsRecyclerAdapter.getPos(event.id)
-                favoriteEventViewModel.setFavorite(event.id, !isFavorite)
-                event.favorite = !event.favorite
-                favoriteEventsRecyclerAdapter.notifyItemChanged(id)
+                val pos = favoriteEventsRecyclerAdapter.getPos(event.id)
+                favoriteEventsRecyclerAdapter.remove(pos)
+                favoriteEventsRecyclerAdapter.notifyItemRemoved(pos)
+                favoriteEventViewModel.setFavorite(event.id, false)
                 showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
             }
         }
@@ -92,11 +93,14 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.events
             .nonNull()
             .observe(this, Observer {
-                favoriteEventsRecyclerAdapter.addAll(it)
-                favoriteEventsRecyclerAdapter.notifyDataSetChanged()
-                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
+                if (!favoriteListFetched) {
+                    favoriteListFetched = true
+                    favoriteEventsRecyclerAdapter.addAll(it)
+                    favoriteEventsRecyclerAdapter.notifyDataSetChanged()
+                    showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
 
-                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+                    Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+                }
             })
 
         favoriteEventViewModel.error
