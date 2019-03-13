@@ -34,7 +34,7 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private var favoriteListFetched: Boolean = false
+    private var favoriteListFetched = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
