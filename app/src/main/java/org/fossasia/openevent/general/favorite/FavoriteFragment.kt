@@ -133,9 +133,15 @@ class FavoriteFragment : Fragment() {
 
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                favoriteEventViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
+                favoriteEventViewModel.setFavorite(event.id, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+
+                Snackbar.make(favoriteCoordinatorLayout,
+                    getString(R.string.removed_from_liked, event.name), Snackbar.LENGTH_SHORT)
+                    .setAction(getString(R.string.undo)) {
+                        favoriteEventViewModel.setFavorite(event.id, true)
+                        favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                    }.show()
             }
         }
 
