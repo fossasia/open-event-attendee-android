@@ -144,14 +144,6 @@ class AttendeeViewModel(
         )
     }
 
-    fun updateTicketDetailsVisibility() {
-        if (ticketDetailsVisibility.value == null) {
-            ticketDetailsVisibility.value = false
-        } else {
-            ticketDetailsVisibility.value = !ticketDetailsVisibility.value!!
-        }
-    }
-
     fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {
         val ticketIds = ArrayList<Int>()
         ticketIdAndQty?.forEach {

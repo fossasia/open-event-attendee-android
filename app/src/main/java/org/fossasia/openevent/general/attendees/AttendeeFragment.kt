@@ -306,7 +306,12 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.view.setOnClickListener {
-            attendeeViewModel.updateTicketDetailsVisibility()
+            val currentVisibility: Boolean? = attendeeViewModel.ticketDetailsVisibility.value
+            if (currentVisibility == null) {
+                attendeeViewModel.ticketDetailsVisibility.value = false
+            } else {
+                attendeeViewModel.ticketDetailsVisibility.value = !currentVisibility
+            }
         }
 
         attendeeViewModel.ticketDetailsVisibility
