@@ -57,6 +57,7 @@ class AttendeeViewModel(
     private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
     val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
     val paymentCompleted = MutableLiveData<Boolean>()
+    val ticketDetailsVisibility = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
     val tickets: LiveData<MutableList<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -141,6 +142,14 @@ class AttendeeViewModel(
                 Timber.e(it, "Error Loading tickets!")
             })
         )
+    }
+
+    fun updateTicketDetailsVisibility() {
+        if (ticketDetailsVisibility.value == null) {
+            ticketDetailsVisibility.value = false
+        } else {
+            ticketDetailsVisibility.value = !ticketDetailsVisibility.value!!
+        }
     }
 
     fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {

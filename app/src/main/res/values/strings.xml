@@ -102,6 +102,7 @@
     <string name="item">Item</string>
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
+    <string name="hide">(hide)</string>
     <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>

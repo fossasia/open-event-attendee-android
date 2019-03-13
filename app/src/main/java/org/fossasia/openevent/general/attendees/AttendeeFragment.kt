@@ -306,14 +306,15 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.view.setOnClickListener {
-            if (rootView.view.text == "(view)") {
-                rootView.ticketDetails.visibility = View.VISIBLE
-                rootView.view.text = "(hide)"
-            } else {
-                rootView.ticketDetails.visibility = View.GONE
-                rootView.view.text = "(view)"
-            }
+            attendeeViewModel.updateTicketDetailsVisibility()
         }
+
+        attendeeViewModel.ticketDetailsVisibility
+            .nonNull()
+            .observe(this, Observer {
+                rootView.view.text = if (it) getString(R.string.hide) else getString(R.string.view)
+                rootView.ticketDetails.visibility = if (it) View.VISIBLE else View.GONE
+            })
 
         attendeeViewModel.message
             .nonNull()
