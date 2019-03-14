@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -86,6 +87,9 @@ class EditProfileFragment : Fragment() {
             .observe(this, Observer {
                 rootView.progressBar.isVisible = it
             })
+
+        permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
         rootView.profilePhoto.setOnClickListener {
             if (permissionGranted) {
