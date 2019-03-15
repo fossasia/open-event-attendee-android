@@ -82,7 +82,7 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0-alpha02"
+    def lifecycle_version = "2.1.0-alpha03"
     def koin_version = "1.0.2"
     def roomVersion = '2.1.0-alpha05'
     def ktx_version = "1.0.0"
