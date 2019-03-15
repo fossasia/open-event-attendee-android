@@ -239,6 +239,9 @@ class AttendeeFragment : Fragment() {
                         Utils.cardType.AMERICAN_EXPRESS -> 1
                         Utils.cardType.MASTER_CARD -> 2
                         Utils.cardType.VISA -> 3
+                        Utils.cardType.DISCOVER -> 4
+                        Utils.cardType.DINERS_CLUB -> 5
+                        Utils.cardType.UNIONPAY -> 6
                         else -> 0
                     }
                 }

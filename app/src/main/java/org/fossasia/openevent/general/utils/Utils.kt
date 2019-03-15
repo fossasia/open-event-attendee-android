@@ -144,6 +144,9 @@ object Utils {
         MASTER_CARD,
         AMERICAN_EXPRESS,
         NONE,
+        DISCOVER,
+        DINERS_CLUB,
+        UNIONPAY
     }
 
     fun getCardType(s: String): cardType {
@@ -151,10 +154,16 @@ object Utils {
         val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
             "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
         val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
+        val discoverPattern = Pattern.compile("^6[01][0-9]{0,15}$")
+        val dinersClubPattern = Pattern.compile("^3[0-9]{0,15}$")
+        val unionPayPattern = Pattern.compile("^6[20][0-9]{0,15}$")
         return when {
             americanExpressPattern.matcher(s).matches() -> cardType.AMERICAN_EXPRESS
             masterCardPattern.matcher(s).matches() -> cardType.MASTER_CARD
             visaPattern.matcher(s).matches() -> cardType.VISA
+            discoverPattern.matcher(s).matches() -> cardType.DISCOVER
+            dinersClubPattern.matcher(s).matches() -> cardType.DINERS_CLUB
+            unionPayPattern.matcher(s).matches() -> cardType.UNIONPAY
             else -> cardType.NONE
         }
     }
