@@ -101,7 +101,7 @@ class OrdersUnderUserFragment : Fragment() {
             ordersUnderUserVM.attendeesNumber
                 .nonNull()
                 .observe(this, Observer {
-                    ordersRecyclerAdapter.setAttendeeNumber(it as ArrayList<Int?>)
+                    ordersRecyclerAdapter.setAttendeeNumber(it)
                 })
 
             ordersUnderUserVM.eventAndOrderIdentifier
