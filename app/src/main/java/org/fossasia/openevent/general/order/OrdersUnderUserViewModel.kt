@@ -40,7 +40,6 @@ class OrdersUnderUserViewModel(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    @Suppress("UNCHECKED_CAST")
     fun ordersUnderUser() {
         compositeDisposable.add(orderService.orderUser(getId())
             .subscribeOn(Schedulers.io())

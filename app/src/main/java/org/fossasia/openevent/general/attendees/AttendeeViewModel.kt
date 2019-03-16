@@ -246,7 +246,7 @@ class AttendeeViewModel(
     }
 
     private fun createOrder() {
-        val attendeeList = attendees.map { AttendeeId(it.id) }.toList()
+        val attendeeList = attendees.map { AttendeeId(it.id) } as ArrayList<AttendeeId>
         var amount = totalAmount.value
         var paymentMode = paymentOption.toLowerCase()
         if (amount == null || amount <= 0) {
