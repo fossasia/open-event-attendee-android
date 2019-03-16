@@ -57,6 +57,7 @@ class AttendeeViewModel(
     private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
     val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
     val paymentCompleted = MutableLiveData<Boolean>()
+    val ticketDetailsVisibility = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
     val tickets: LiveData<MutableList<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()

@@ -309,14 +309,20 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.view.setOnClickListener {
-            if (rootView.view.text == "(view)") {
-                rootView.ticketDetails.visibility = View.VISIBLE
-                rootView.view.text = "(hide)"
+            val currentVisibility: Boolean? = attendeeViewModel.ticketDetailsVisibility.value
+            if (currentVisibility == null) {
+                attendeeViewModel.ticketDetailsVisibility.value = false
             } else {
-                rootView.ticketDetails.visibility = View.GONE
-                rootView.view.text = "(view)"
+                attendeeViewModel.ticketDetailsVisibility.value = !currentVisibility
             }
         }
+
+        attendeeViewModel.ticketDetailsVisibility
+            .nonNull()
+            .observe(this, Observer {
+                rootView.view.text = if (it) getString(R.string.hide) else getString(R.string.view)
+                rootView.ticketDetails.visibility = if (it) View.VISIBLE else View.GONE
+            })
 
         attendeeViewModel.message
             .nonNull()
