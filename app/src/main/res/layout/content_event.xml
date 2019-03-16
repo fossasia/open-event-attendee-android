@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="@dimen/layout_margin_none"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,11 +50,12 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/eventName"
             app:layout_constraintTop_toBottomOf="@+id/eventName"
-            tools:text="by FOSSASIA" />
+            tools:text="by FOSSASIA"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/eventTimingLinearLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/layout_margin_none"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:orientation="horizontal"

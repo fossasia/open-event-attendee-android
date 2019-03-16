@@ -90,7 +90,7 @@
                     android:weightSum="5">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/item"
@@ -99,7 +99,7 @@
                         tools:text="Item" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/price"
@@ -108,7 +108,7 @@
                         tools:text="Price" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/qty"
@@ -117,7 +117,7 @@
                         tools:text="Qty" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/layout_margin_none"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/subtotal"
