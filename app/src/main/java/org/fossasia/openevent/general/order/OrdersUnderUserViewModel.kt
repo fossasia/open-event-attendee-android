@@ -20,8 +20,8 @@ class OrdersUnderUserViewModel(
 
     private val compositeDisposable = CompositeDisposable()
     private lateinit var order: List<Order>
-    private val mutableAttendeesNumber = MutableLiveData<List<Int?>>()
-    val attendeesNumber: LiveData<List<Int?>> = mutableAttendeesNumber
+    private val mutableAttendeesNumber = MutableLiveData<List<Int>>()
+    val attendeesNumber: LiveData<List<Int>> = mutableAttendeesNumber
     private var eventIdMap = mutableMapOf<Long, Event>()
     private val eventIdAndTimes = mutableMapOf<Long, Int>()
     private var eventId: Long = -1
@@ -49,7 +49,7 @@ class OrdersUnderUserViewModel(
                 mutableNoTickets.value = false
             }.subscribe({
                 order = it
-                mutableAttendeesNumber.value = it.map { it.attendees?.size }
+                mutableAttendeesNumber.value = it.map { it.attendees.size }
                 val query = buildQuery(it)
 
                 if (idList.size != 0)
