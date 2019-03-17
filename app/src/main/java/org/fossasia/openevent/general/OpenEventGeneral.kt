@@ -2,6 +2,7 @@ package org.fossasia.openevent.general
 
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.frogermcs.androiddevmetrics.AndroidDevMetrics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
@@ -28,5 +29,8 @@ class OpenEventGeneral : MultiDexApplication() {
         ))
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(applicationContext)
+        if (BuildConfig.DEBUG) {
+            AndroidDevMetrics.initWith(this)
+        }
     }
 }

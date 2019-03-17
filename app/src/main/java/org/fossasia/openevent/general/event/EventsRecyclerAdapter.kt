@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.item_card_events.view.shareFab
 import kotlinx.android.synthetic.main.item_card_events.view.favoriteFab
 import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
+import org.jetbrains.anko.AnkoContext
 import java.util.ArrayList
 
 class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -47,11 +48,10 @@ class EventsRecyclerAdapter : RecyclerView.Adapter<EventViewHolder>() {
             LayoutInflater.from(parent.context).inflate(R.layout.item_card_similar_events, parent,
                 false)
         } else {
-            LayoutInflater.from(parent.context).inflate(R.layout.item_card_events, parent,
-                false)
+            ItemCardEventsUi().createView(AnkoContext.create(parent.context, parent))
         }
-        eventView.shareFab.scaleType = ImageView.ScaleType.CENTER
-        eventView.favoriteFab.scaleType = ImageView.ScaleType.CENTER
+//        eventView.shareFab.scaleType = ImageView.ScaleType.CENTER
+//        eventView.favoriteFab.scaleType = ImageView.ScaleType.CENTER
         return EventViewHolder(eventView)
     }
 

@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.frogermcs.androiddevmetrics'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
@@ -75,6 +76,16 @@ spotless {
         target '**/*.kt'
     }
 }
+ext {
+    ankoLibs = [
+            // layouts
+            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
+            // coroutines
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
+            'design',
+            // 'percent',
+    ]
+}
 
 repositories {
     google()
@@ -87,6 +98,7 @@ dependencies {
     def roomVersion = '2.1.0-alpha05'
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
+    def ankoVersion = "0.10.6"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -150,6 +162,11 @@ dependencies {
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+
+    // Anko
+    ankoLibs.each { name ->
+        implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
+    }
 
     //Navigation
     implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
