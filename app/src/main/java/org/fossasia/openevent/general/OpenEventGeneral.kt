@@ -2,6 +2,7 @@ package org.fossasia.openevent.general
 
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
@@ -28,5 +29,13 @@ class OpenEventGeneral : MultiDexApplication() {
         ))
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(applicationContext)
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                    .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                    .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                    .build())
+        }
     }
 }
