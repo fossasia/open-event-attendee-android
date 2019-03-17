@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.di
 
 import androidx.room.Room
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -164,13 +165,14 @@ val networkModule = module {
         val readTimeout = 15 // 15s
 
         OkHttpClient().newBuilder()
-                .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
-                .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-                .addInterceptor(
-                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                )
-                .addInterceptor(get())
-                .build()
+            .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
+            .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
+            .addInterceptor(get())
+            .addNetworkInterceptor(stethoInterceptor())
+            .build()
     }
 
     single {
@@ -178,16 +180,20 @@ val networkModule = module {
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
-                .client(get())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
-                    SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
-                    EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
-                    AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-                    CustomForm::class.java))
-                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-                .baseUrl(baseUrl)
-                .build()
+            .client(get())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
+                SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+                EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+                AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+                CustomForm::class.java))
+            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+            .baseUrl(baseUrl)
+            .build()
+    }
+
+    single {
+
     }
 }
 
@@ -195,9 +201,9 @@ val databaseModule = module {
 
     single {
         Room.databaseBuilder(androidApplication(),
-                OpenEventDatabase::class.java, "open_event_database")
-                .fallbackToDestructiveMigration()
-                .build()
+            OpenEventDatabase::class.java, "open_event_database")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     factory {
@@ -234,4 +240,8 @@ val databaseModule = module {
         val database: OpenEventDatabase = get()
         database.orderDao()
     }
+}
+
+fun stethoInterceptor(): StethoInterceptor {
+    return StethoInterceptor()
 }
