@@ -191,10 +191,6 @@ val networkModule = module {
             .baseUrl(baseUrl)
             .build()
     }
-
-    single {
-
-    }
 }
 
 val databaseModule = module {
