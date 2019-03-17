@@ -36,6 +36,8 @@ import timber.log.Timber
 const val EVENTS: String = "events"
 const val SIMILAR_EVENTS: String = "similarEvents"
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
+const val RELOADING_EVENTS: Int = 0
+const val INITIAL_FETCHING_EVENTS: Int = 1
 
 class EventsFragment : Fragment() {
     private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
@@ -133,7 +135,7 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.loadLocation()
         rootView.locationTextView.text = eventsViewModel.savedLocation
-        eventsViewModel.loadLocationEvents()
+        eventsViewModel.loadLocationEvents(INITIAL_FETCHING_EVENTS)
 
         rootView.locationTextView.setOnClickListener {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
@@ -144,7 +146,7 @@ class EventsFragment : Fragment() {
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
             }
             showNoInternetScreen(isNetworkConnected)
         }
@@ -155,7 +157,7 @@ class EventsFragment : Fragment() {
             if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
             }
         }
 

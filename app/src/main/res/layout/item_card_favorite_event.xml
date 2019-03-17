@@ -16,8 +16,8 @@
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
         android:layout_marginRight="@dimen/fab_width"
-        app:elevation="0dp"
-        app:borderWidth="0dp"
+        app:elevation="@dimen/layout_margin_none"
+        app:borderWidth="@dimen/layout_margin_none"
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
@@ -27,8 +27,8 @@
         android:id="@+id/favoriteFab"
         android:layout_width="@dimen/fab_width"
         android:layout_height="@dimen/fab_height"
-        app:elevation="0dp"
-        app:borderWidth="0dp"
+        app:elevation="@dimen/layout_margin_none"
+        app:borderWidth="@dimen/layout_margin_none"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
         android:layout_marginRight="@dimen/layout_margin_small"
@@ -46,8 +46,8 @@
         android:layout_marginTop="@dimen/layout_margin_medium">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/layout_margin_search_view"
+            android:layout_height="@dimen/layout_margin_search_view"
             app:cardCornerRadius="@dimen/image_corner_radius"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
             android:layout_marginLeft="@dimen/layout_margin_large"

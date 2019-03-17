@@ -49,7 +49,7 @@
             android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_margin_none"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -62,7 +62,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_margin_none"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
