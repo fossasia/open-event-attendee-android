@@ -27,8 +27,15 @@ class EventsViewModel(private val eventService: EventService, private val prefer
 
     var savedLocation: String? = null
 
-    fun loadLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION)
+    /**
+     * Returns true if the location has changed from before
+     */
+    fun loadLocation(): Boolean {
+        val newLocation = preference.getString(SAVED_LOCATION)
+
+        if (newLocation == savedLocation) return false
+        savedLocation = newLocation
+        return true
     }
 
     fun loadLocationEvents(loadingTag: Int) {

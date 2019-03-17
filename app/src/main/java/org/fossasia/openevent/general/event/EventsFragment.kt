@@ -133,9 +133,12 @@ class EventsFragment : Fragment() {
                 rootView.swiperefresh.isRefreshing = it
             })
 
-        eventsViewModel.loadLocation()
+        if (eventsViewModel.loadLocation()) {
+            eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
+        } else {
+            eventsViewModel.loadLocationEvents(INITIAL_FETCHING_EVENTS)
+        }
         rootView.locationTextView.text = eventsViewModel.savedLocation
-        eventsViewModel.loadLocationEvents(INITIAL_FETCHING_EVENTS)
 
         rootView.locationTextView.setOnClickListener {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
