@@ -194,6 +194,8 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
+    <string name="confirmation_dialog">Are you sure to confirm the order?</string>
+    <string name="order_not_completed">Order not completed!</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">Where \ndo you \ngo out?</string>

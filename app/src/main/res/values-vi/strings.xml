@@ -152,4 +152,7 @@
     <string name="invalid_confirm_password_message">Mật khẩu xác nhận lần hai không trùng với lần đầu!</string>
     <string name="timeZone_title">Sử dụng múi giờ của sự kiện.</string>
     <string name="timeZone_summary">Múi giờ của bạn sẽ được sử dụng khi khóa lại.</string>
+    <string name="hide">(giấu)</string>
+    <string name="confirmation_dialog">Bạn có chắc chắn để khẳng định trình tự?</string>
+    <string name="order_not_completed">Để không hoàn thành!</string>
 </resources>
