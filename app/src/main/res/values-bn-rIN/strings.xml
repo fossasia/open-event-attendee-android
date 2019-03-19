@@ -146,6 +146,7 @@
     <string name="legal">আইনগত</string>
     <string name="visit_website">ওয়েব সাইটএ যান</string>
 
+
     <!--settings profile dialog-->
     <string name="message">আপনি কি লগ আউট করতে চান?</string>
     <string name="cancel">না</string>
