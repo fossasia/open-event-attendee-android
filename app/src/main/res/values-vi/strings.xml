@@ -153,4 +153,10 @@
     <string name="timeZone_title">Sử dụng múi giờ của sự kiện.</string>
     <string name="timeZone_summary">Múi giờ của bạn sẽ được sử dụng khi khóa lại.</string>
     <string name="hide">(giấu)</string>
+    <string name="country">Quốc gia</string>
+    <!--Text to Speech-->
+    <string name="speech_prompt">Nói gì đó đi</string>
+    <string name="not_supported">Không được hỗ trợ</string>
+    <string name="use_voice_search">Sử dụng Tìm kiếm bằng giọng nói</string>
+    <string name="no_audio_permission">Không có quyền âm thanh</string>
 </resources>
