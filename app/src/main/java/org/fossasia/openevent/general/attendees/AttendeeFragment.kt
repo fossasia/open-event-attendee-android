@@ -1,8 +1,10 @@
 package org.fossasia.openevent.general.attendees
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -32,7 +34,6 @@ import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
 import kotlinx.android.synthetic.main.fragment_attendee.cardNumber
-import kotlinx.android.synthetic.main.fragment_attendee.country
 import kotlinx.android.synthetic.main.fragment_attendee.cvc
 import kotlinx.android.synthetic.main.fragment_attendee.email
 import kotlinx.android.synthetic.main.fragment_attendee.firstName
@@ -45,7 +46,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.countryArea
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
 import kotlinx.android.synthetic.main.fragment_attendee.view.month
 import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
@@ -65,6 +65,8 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
+import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
+import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -215,6 +217,14 @@ class AttendeeFragment : Fragment() {
         }
 
         attendeeViewModel.initializeSpinner()
+
+        ArrayAdapter.createFromResource(
+            requireContext(), R.array.country_arrays,
+            android.R.layout.simple_spinner_dropdown_item
+        ).also { adapter ->
+            rootView.countryPicker.adapter = adapter
+            autoSetCurrentCountry()
+        }
 
         rootView.cardNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -375,7 +385,7 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 if (singleTicket) {
-                    rootView.countryArea.visibility = if (it) View.VISIBLE else View.GONE
+                    rootView.countryPickerContainer.visibility = if (it) View.VISIBLE else View.GONE
                 }
             })
 
@@ -452,7 +462,7 @@ class AttendeeFragment : Fragment() {
             }
 
             if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
-                val country = if (country.text.isEmpty()) country.text.toString() else null
+                val country = rootView.countryPicker.selectedItem.toString()
                 attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
                 attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
@@ -492,7 +502,7 @@ class AttendeeFragment : Fragment() {
 
     private fun sendToken() {
         val card = Card(cardNumber.text.toString(), expiryMonth, expiryYear.toInt(), cvc.text.toString())
-        card.addressCountry = country.text.toString()
+        card.addressCountry = rootView.countryPicker.selectedItem.toString()
         card.addressZip = postalCode.text.toString()
 
         if (card.brand != null && card.brand != "Unknown")
@@ -577,5 +587,13 @@ class AttendeeFragment : Fragment() {
     private fun getAttendeeField(identifier: String): String {
         val index = identifierList.indexOf(identifier)
         return if (index == -1) "" else index.let { editTextList[it] }.text.toString()
+    }
+
+    private fun autoSetCurrentCountry() {
+        val telephonyManager: TelephonyManager = activity?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val currentCountryCode = telephonyManager.networkCountryIso
+        val countryCodes = resources.getStringArray(R.array.country_code_arrays)
+        val countryIndex = countryCodes.indexOf(currentCountryCode.toUpperCase())
+        if (countryIndex != -1) rootView.countryPicker.setSelection(countryIndex)
     }
 }
