@@ -87,6 +87,7 @@ dependencies {
     def roomVersion = '2.1.0-alpha04'
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
+    def nav_version = "2.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -152,8 +153,9 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-rc02'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-rc02'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use
+    // navigation-fragment-ktx
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.2"
