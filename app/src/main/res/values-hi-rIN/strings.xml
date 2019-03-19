@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="events">घटना</string>
+    <string name="profile">प्रोफ़ाइल</string>
+    <string name="likes">पसंद</string>
+    <string name="saved_date">तारीख सहेजें</string>
+    <string name="location_hint">स्थान दर्ज करें</string>
+
+    <!--event details-->
+    <string name="event_card_date">आयोजन दिनांक :</string>
+    <string name="report_event">रिपोर्ट घटना</string>
+    <string name="about">के बारे में</string>
+    <string name="see_more">और देखें</string>
+    <string name="see_less">कम देखें</string>
+    <string name="event_host_details">ईवेंट होस्ट विवरण</string>
+    <string name="organizer">व्यवस्था करनेवाला</string>
+    <string name="location">स्थान</string>
+    <string name="whats_good">क्या अच्छा है</string>
+    <string name="where">कहा?</string>
+    <string name="no_internet_message">हमें सर्वर से जुड़ने में कठिनाई हो रही है। अपना कनेक्शन जांचें या बाद में पुन: प्रयास करें</string>
+    <string name="tickets_sold_out">क्षमा करें, इस ईवेंट के सभी टिकट बिक चुके हैं!</string>
+    <string name="retry">पुन: प्रयास</string>
+    <string name="more_like_this">ऐसा और भी</string>
+    <string name="favorite_event">पसंदीदा घटना</string>
+    <string name="refund_Policy">धन वापसी नीति</string>
+    <string name="no_events_message">क्षमा करें, कोई ईवेंट उपलब्ध नहीं हैं</string>
+
+    <!--Search event details-->
+    <string name="search">खोज</string>
+    <string name="search_results">खोज परिणाम</string>
+    <string name="search_hint">खोज</string>
+    <string name="go_out">में बाहर जाना चाहता हूँ</string>
+    <string name="anywhere">कहीं भी</string>
+    <string name="anytime">किसी भी समय</string>
+    <string name="today">आज</string>
+    <string name="tomorrow">कल</string>
+    <string name="weekend">इस सप्ताहांत</string>
+    <string name="month">अगले महीने में</string>
+    <string name="what_time">कौनसा टाइम चलेगा?</string>
+    <string name="pick_date">तारीख चुनें</string>
+    <string name="at">पर</string>
+    <string name="no_search_results">हमें कोई परिणाम नहीं मिल रहा है। एक और खोज का प्रयास करें</string>
+    <string name="event_details">घटना की जानकारी</string>
+    <string name="see_maps">नक्शे देखें</string>
+    <string name="error_message">एक त्रुटि हुई। पुन: प्रयास करने के लिए यहां टैप करें।</string>
+    <string name="in">में</string>
+
+    <!--profile details-->
+    <string name="user_name">उपयोगकर्ता नाम</string>
+    <string name="logout">लोग आउट</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="login">लॉगिन</string>
+    <string name="forgot_password">मैं अपना पासवर्ड भूल गया</string>
+    <string name="email_sent_message">हम आपको अपना पासवर्ड रीसेट करने के लिए लिंक के साथ एक ईमेल भेजते हैं </string>
+    <string name="email_sent_alert">अपने ईमेल की जाँच करें!</string>
+    <string name="sign_up">सिग्न उप</string>
+    <string name="password">पासवर्ड</string>
+    <string name="manage_events">घटनाओं का प्रबंधन</string>
+    <string name="edit_profile">प्रोफाइल एडिट करें</string>
+    <string name="ticket_issues">टिकट की समस्या</string>
+    <string name="confirm_password">पासवर्ड की पुष्टि कीजिये</string>
+    <string name="first_name_optional">पहला नाम</string>
+    <string name="last_name_optional">अंतिम नाम</string>
+    <string name="welcome_back">वापसी पर स्वागत है!</string>
+    <string name="update">अपडेट</string>
+
+    <!--share details-->
+    <string name="starts_on">सुरु होगा :&#160;</string>
+    <string name="ends_on">ख़तम होगा :&#160;</string>
+    <string name="start_time">समय शुरू :&#160;</string>
+    <string name="end_time">समय ख़तम :&#160;</string>
+    <string name="event_link">घटना लिंक :&#160;</string>
+    <string name="event_description">घटना विवरण :&#160;</string>
+    <string name="event_name">घटना नाम :&#160;</string>
+    <string name="event_location">घटना स्थान :&#160;</string>
+    <string name="share">शेयर</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">कैलेंडर में जोड़ें</string>
+
+    <!--ticket details-->
+    <string name="tickets">टिकट</string>
+    <string name="sales_dates">बिक्री दिनांक</string>
+    <string name="order_range">आदेश सीमा</string>
+    <string name="tickets_available">टिकट उपलब्ध है</string>
+    <string name="register">रजिस्टर</string>
+    <string name="ticket_name">टिकट नाम</string>
+    <string name="price">मूल्य</string>
+    <string name="qty">मात्रा</string>
+
+    <!--ticket details-->
+    <string name="your_info">आपकी जानकारी</string>
+    <string name="other_information">अन्य सूचना</string>
+    <string name="first_name">पहला नाम</string>
+    <string name="last_name">अंतिम नाम</string>
+    <string name="email">ईमेल</string>
+    <string name="item">चीज़</string>
+    <string name="subtotal">उप-योग</string>
+    <string name="view">(राय)</string>
+    <string name="no_tickets_message">अमान्य मात्रा। कृपया 1 और अधिक की मात्रा दर्ज करें</string>
+    <string name="whoops">वूप्स!</string>
+    <string name="ok">ओके</string>
+    <string name="view_ticket">राय</string>
+    <string name="no_ticket_message">अपने टिकट नहीं देख रहे हैं? उन्हें खोजने के तरीके के बारे में और जानें।</string>
+    <string name="find_my_tickets">मेरे टिकट ढूंढो</string>
+
+    <!--payment details-->
+    <string name="card_number">कार्ड नंबर</string>
+    <string name="card_type">कार्ड प्रकार</string>
+    <string name="expiration_date">समाप्ति तिथि</string>
+    <string name="not_you">तुम नहीं?</string>
+    <string name="sign_out">सिग्न आउट</string>
+    <string name="all_fees">सभी शुल्क मूल्य में शामिल हैं</string>
+
+    <!--order details-->
+    <string name="order_completed">आर्डर पूरा हुआ</string>
+    <string name="add">+ जोड़ें</string>
+    <string name="invite">आमंत्रित</string>
+    <string name="name">नाम</string>
+    <string name="event">घटना</string>
+    <string name="date">दिनांक</string>
+    <string name="order_identifier">आदेश पहचानकर्ता</string>
+    <string name="event_summary">घटना का सारांश</string>
+    <string name="event_summary_preview">बहुत अच्छा</string>
+
+    <!--suggestion mail details-->
+    <string name="emailInfo">अपने प्रस्तावित बग को सूचीबद्ध करें</string>
+    <string name="emailSubject">ओपन इवेंट जनरल ऐप के लिए सुधार सुझाव</string>
+
+    <!--settings xml-->
+    <string name="version_settings">संस्करण</string>
+    <string name="key_version">संस्करण</string>
+    <string name="key_about">अबाउट</string>
+    <string name="key_rating">रेटिंग </string>
+    <string name="rating_settings">रेट उस </string>
+    <string name="suggestion_settings">सुझाव में सुधार</string>
+    <string name="acknowledgements_settings">स्वीकृतियाँ</string>
+    <string name="key_suggestion">सुझाव</string>
+    <string name="key_profile">प्रोफ़ाइल</string>
+    <string name="logged_in_account">अकाउंट</string>
+    <string name="timeZone_title">ईवेंट के समय-क्षेत्र का उपयोग करें</string>
+    <string name="timeZone_summary">अक्षम होने पर आपके समयक्षेत्र का उपयोग किया जाता है</string>
+    <string name="privacy">एकांत</string>
+    <string name="key_privacy">एकांत</string>
+    <string name="title_terms_of_service">सेवा की शर्तें</string>
+    <string name="legal">कानूनी</string>
+
+    <!--settings profile dialog-->
+    <string name="message">क्या आप लॉग आउट करना चाहते हैं?</string>
+    <string name="cancel">कैंसिल</string>
+    <string name="no_tickets">कोई टिकट नहीं</string>
+
+    <!--liked events tab -->
+    <string name="nothing_planned_yet">कुछ भी नहीं लगाया ..अभी तक?</string>
+    <string name="find_something_to_do">करने के लिए कुछ खोजें!!</string>
+    <string name="current_location">मेरे वर्तमान स्थान का उपयोग करें</string>
+    <string name="error__fetching_location">बिना अनुमति के स्थान प्राप्त नहीं कर सकता</string>
+
+    <!--attendee fragment-->
+    <string name="attendee_details">उपस्थित विवरण</string>
+    <string name="start_text">मैं स्वीकारता हूँ</string>
+    <string name="terms_text">सेवा की शर्तें</string>
+    <string name="middle_text">और पढ़ा है</string>
+    <string name="privacy_text">गोपनीयता नीति</string>
+
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">स्वचालित रूप से लॉग इन !</string>
+    <string name="log_in_first">आपको पहले लॉग इन करने की जरूरत है!</string>
+    <string name="sign_in_canceled">साइन इन रद्द!</string>
+    <string name="sign_up_success">साइन अप सफलता!</string>
+    <string name="cannot_fetch_location">स्थान प्राप्त नहीं कर सकता!</string>
+
+    <!--welcome fragment-->
+    <string name="start_text_1">तुम बाहर कहां जाते हो?</string>
+    <string name="start_text_2">हम आपको दिखाएंगे कि आपके पास क्या अच्छा है</string>
+    <string name="pick_a_city">एक शहर चुनें</string>
+
+    <!--sign up fragment-->
+    <string name="invalid_email_message">आपका ईमेल पता अमान्य है!</string>
+    <string name="invalid_confirm_password_message">आपका पासवर्ड और पुष्टिकरण पासवर्ड मेल नहीं खाते हैं!</string>
+    <string name="invalid_password_message">पासवर्ड बहुत छोटा है!</string>
+
+</resources>
+
