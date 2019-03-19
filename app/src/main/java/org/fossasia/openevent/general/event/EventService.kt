@@ -58,7 +58,8 @@ class EventService(
     }
 
     fun getEventsByLocation(locationName: String): Single<List<Event>> {
-        return eventApi.searchEvents("name", locationName).flatMap { apiList ->
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
+        return eventApi.searchEvents("name", query).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()
             eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
             eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
@@ -82,8 +83,9 @@ class EventService(
         return eventApi.getEventFromApi(id)
     }
 
-    fun getEventsUnderUser(eventId: String): Single<List<Event>> {
-        return eventApi.eventsUnderUser(eventId)
+    fun getEventsUnderUser(eventIds: List<Long>): Single<List<Event>> {
+        val query = buildQuery(eventIds)
+        return eventApi.eventsUnderUser(query)
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean): Completable {
@@ -107,5 +109,34 @@ class EventService(
                             eventsFlowable
                         }
         }
+    }
+
+    private fun buildQuery(eventIds: List<Long>): String {
+        var subQuery = ""
+
+        var eventId = -1L
+        val idList = ArrayList<Long>()
+        val eventIdAndTimes = mutableMapOf<Long, Int>()
+        eventIds.forEach { it1 ->
+            val times = eventIdAndTimes[it1]
+            if (eventIdAndTimes.containsKey(it1) && times != null) {
+                eventIdAndTimes[it1] = times + 1
+            } else {
+                eventIdAndTimes[it1] = 1
+            }
+            idList.add(it1)
+            eventId = it1
+            subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
+        }
+
+        val formattedSubQuery = if (subQuery != "")
+            subQuery.substring(1) // remove "," from the beginning
+        else
+            "" // if there are no orders
+
+        return if (idList.size == 1)
+            "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
+        else
+            "[{\"or\":[$formattedSubQuery]}]"
     }
 }

@@ -24,8 +24,6 @@ class OrdersUnderUserViewModel(
     val attendeesNumber: LiveData<ArrayList<Int>> = mutableAttendeesNumber
     private var eventIdMap = mutableMapOf<Long, Event>()
     private val eventIdAndTimes = mutableMapOf<Long, Int>()
-    private var eventId: Long = -1
-    private val idList = ArrayList<Long>()
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
     private val mutableEventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
@@ -50,11 +48,11 @@ class OrdersUnderUserViewModel(
             }.subscribe({
                 order = it
                 mutableAttendeesNumber.value = it.map { it.attendees?.size } as ArrayList<Int>
-                val query = buildQuery(it)
 
-                if (idList.size != 0)
-                    eventsUnderUser(query)
-                else {
+                val eventIds = it.filter { order -> order.event != null }.map { order -> order.event!!.id }
+                if (eventIds.isNotEmpty()) {
+                    eventsUnderUser(eventIds)
+                } else {
                     mutableProgress.value = false
                     mutableNoTickets.value = true
                 }
@@ -67,7 +65,7 @@ class OrdersUnderUserViewModel(
         )
     }
 
-    private fun eventsUnderUser(eventIds: String) {
+    private fun eventsUnderUser(eventIds: List<Long>) {
         compositeDisposable.add(eventService.getEventsUnderUser(eventIds)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -96,35 +94,6 @@ class OrdersUnderUserViewModel(
                 Timber.d(it, "Failed  to list events under a user ")
             })
         )
-    }
-
-    private fun buildQuery(orderList: List<Order>): String {
-        var subQuery = ""
-
-        eventIdAndTimes.clear()
-        orderList.forEach {
-            it.event?.id?.let { it1 ->
-                val times = eventIdAndTimes[it1]
-                if (eventIdAndTimes.containsKey(it1) && times != null) {
-                    eventIdAndTimes[it1] = times + 1
-                } else {
-                    eventIdAndTimes[it1] = 1
-                }
-                idList.add(it1)
-                eventId = it1
-                subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
-            }
-        }
-
-        val formattedSubQuery = if (subQuery != "")
-            subQuery.substring(1) // remove "," from the beginning
-        else
-            "" // if there are no orders
-
-        return if (idList.size == 1)
-            "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
-        else
-            "[{\"or\":[$formattedSubQuery]}]"
     }
 
     override fun onCleared() {
