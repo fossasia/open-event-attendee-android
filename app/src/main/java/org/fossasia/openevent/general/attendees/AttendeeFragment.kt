@@ -590,7 +590,8 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun autoSetCurrentCountry() {
-        val telephonyManager: TelephonyManager = activity?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val telephonyManager: TelephonyManager = activity?.getSystemService(Context.TELEPHONY_SERVICE)
+            as TelephonyManager
         val currentCountryCode = telephonyManager.networkCountryIso
         val countryCodes = resources.getStringArray(R.array.country_code_arrays)
         val countryIndex = countryCodes.indexOf(currentCountryCode.toUpperCase())
