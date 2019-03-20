@@ -153,4 +153,5 @@
     <string name="timeZone_title">Sử dụng múi giờ của sự kiện.</string>
     <string name="timeZone_summary">Múi giờ của bạn sẽ được sử dụng khi khóa lại.</string>
     <string name="hide">(giấu)</string>
+    <string name="country">Quốc Gia</string>
 </resources>

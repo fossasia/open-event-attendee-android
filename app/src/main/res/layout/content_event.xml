@@ -55,14 +55,18 @@
 
         <LinearLayout
             android:id="@+id/eventTimingLinearLayout"
-            android:layout_width="@dimen/layout_margin_none"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/eventOrganiserName"
-            app:layout_constraintTop_toBottomOf="@+id/eventOrganiserName">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventName">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -93,7 +97,6 @@
                     tools:text="Wed June 5" />
 
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -101,9 +104,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/eventTimingLinearLayout"
             app:layout_constraintTop_toBottomOf="@+id/eventTimingLinearLayout">
 
@@ -265,6 +270,7 @@
 
             <ImageView
                 android:id="@+id/imageMap"
+                android:background="?selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
                 android:layout_marginBottom="@dimen/divider_margin_bottom"
