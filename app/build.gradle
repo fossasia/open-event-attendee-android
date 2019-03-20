@@ -66,6 +66,9 @@ android {
     packagingOptions {
         pickFirst 'kotlin/**'
     }
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }
 
 spotless {
@@ -73,12 +76,6 @@ spotless {
         ktlint().userData(['android': 'true', 'color': 'true',
                            'max_line_length': '120', 'reporter': 'checkstyle'])
         target '**/*.kt'
-    }
-}
-
-android {
-    lintOptions {
-        disable 'MissingTranslation'
     }
 }
 
