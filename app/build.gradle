@@ -66,6 +66,9 @@ android {
     packagingOptions {
         pickFirst 'kotlin/**'
     }
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }
 
 spotless {
