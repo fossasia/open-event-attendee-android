@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.content_event.view.eventLocationTextView
 import kotlinx.android.synthetic.main.content_event.view.eventName
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserDescription
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
+import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.logo
@@ -229,7 +230,7 @@ class EventDetailsFragment : Fragment() {
         if (!locationNameIsEmpty) {
             rootView.locationUnderMap.text = event.locationName
             rootView.imageMap.setOnClickListener(mapClickListener)
-            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
+            rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
@@ -260,8 +261,7 @@ class EventDetailsFragment : Fragment() {
 
         // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
-        rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
-        rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
+        rootView.eventTimingLinearLayout.setOnClickListener(dateClickListener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
