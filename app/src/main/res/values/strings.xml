@@ -188,6 +188,7 @@
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
     <string name="stripe" translatable="false">Stripe</string>
     <string name="paypal" translatable="false">PayPal</string>
+    <string name="country">Country</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>

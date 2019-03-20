@@ -16,7 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
 import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
-import kotlinx.android.synthetic.main.fragment_search_results.view.errorTextView
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
@@ -109,7 +110,7 @@ class SearchResultsFragment : Fragment() {
                 Snackbar.make(rootView.searchRootLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
-        rootView.errorTextView.setOnClickListener {
+        rootView.retry.setOnClickListener {
             performSearch(safeArgs)
         }
 
@@ -129,7 +130,7 @@ class SearchResultsFragment : Fragment() {
     }
 
     private fun showNoInternetError(show: Boolean) {
-        rootView.errorTextView.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
