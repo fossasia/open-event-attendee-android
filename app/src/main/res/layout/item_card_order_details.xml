@@ -179,6 +179,7 @@
                 tools:text="@string/event_details" />
 
             <TextView
+                android:id="@+id/organizerLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
