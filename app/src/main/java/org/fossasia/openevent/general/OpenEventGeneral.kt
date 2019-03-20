@@ -31,11 +31,7 @@ class OpenEventGeneral : MultiDexApplication() {
         AndroidThreeTen.init(applicationContext)
 
         if (BuildConfig.DEBUG) {
-            Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                    .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                    .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                    .build())
+            Stetho.initializeWithDefaults(this)
         }
     }
 }

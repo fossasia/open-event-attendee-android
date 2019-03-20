@@ -171,7 +171,7 @@ val networkModule = module {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             )
             .addInterceptor(get())
-            .addNetworkInterceptor(stethoInterceptor())
+            .addNetworkInterceptor(StethoInterceptor())
             .build()
     }
 
@@ -236,8 +236,4 @@ val databaseModule = module {
         val database: OpenEventDatabase = get()
         database.orderDao()
     }
-}
-
-fun stethoInterceptor(): StethoInterceptor {
-    return StethoInterceptor()
 }
