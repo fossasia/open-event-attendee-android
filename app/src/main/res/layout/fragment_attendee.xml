@@ -238,21 +238,6 @@
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/countryArea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:id="@+id/country"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Country" />
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <LinearLayout
                     android:id="@+id/attendeeInformation"
                     android:layout_width="match_parent"
@@ -277,6 +262,24 @@
                     android:layout_height="wrap_content"
                     tools:itemCount="3"
                     tools:listitem="@layout/item_attendee" />
+
+                <LinearLayout
+                    android:id="@+id/countryPickerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/layout_margin_small">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/country"/>
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/countryPicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog"/>
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/paymentSelector"
