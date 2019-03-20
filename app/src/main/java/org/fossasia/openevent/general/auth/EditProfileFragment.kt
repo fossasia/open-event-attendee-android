@@ -62,7 +62,7 @@ class EditProfileFragment : Fragment() {
 
         profileViewModel.user
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 userFirstName = it.firstName.nullToEmpty()
                 userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
@@ -95,7 +95,7 @@ class EditProfileFragment : Fragment() {
 
         editProfileViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
@@ -118,7 +118,7 @@ class EditProfileFragment : Fragment() {
 
         editProfileViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
                 if (it == USER_UPDATED) {
                     activity?.onBackPressed()
