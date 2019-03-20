@@ -76,6 +76,12 @@ spotless {
     }
 }
 
+android {
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+}
+
 repositories {
     google()
     mavenCentral()
