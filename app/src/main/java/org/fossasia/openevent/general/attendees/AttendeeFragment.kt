@@ -193,7 +193,7 @@ class AttendeeFragment : Fragment() {
         paymentOptions.add(getString(R.string.stripe))
         attendeeViewModel.paymentSelectorVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.paymentSelector.visibility = View.VISIBLE
                 } else {
@@ -314,7 +314,7 @@ class AttendeeFragment : Fragment() {
         }
         attendeeViewModel.qtyList
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 ticketsRecyclerAdapter.setQty(it)
             })
 
@@ -329,40 +329,40 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.ticketDetailsVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.view.text = if (it) getString(R.string.hide) else getString(R.string.view)
                 rootView.ticketDetails.visibility = if (it) View.VISIBLE else View.GONE
             })
 
         attendeeViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAttendee.isVisible = it
                 rootView.register.isEnabled = !it
             })
 
         attendeeViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
             })
 
         attendeeViewModel.totalAmount
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 amount = it
             })
 
         attendeeRecyclerAdapter.eventId = eventId
         attendeeViewModel.tickets
             .nonNull()
-            .observe(this, Observer { tickets ->
+            .observe(viewLifecycleOwner, Observer { tickets ->
                 ticketsRecyclerAdapter.addAll(tickets)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
                 if (!singleTicket)
@@ -377,13 +377,13 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.totalQty
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.qty.text = " — $it items"
             })
 
         attendeeViewModel.countryVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (singleTicket) {
                     rootView.countryPickerContainer.visibility = if (it) View.VISIBLE else View.GONE
                 }
@@ -391,7 +391,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.paymentCompleted
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it)
                     openOrderCompletedFragment()
             })
@@ -401,7 +401,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.attendee
             .nonNull()
-            .observe(this, Observer { user ->
+            .observe(viewLifecycleOwner, Observer { user ->
                 helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
                 firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
                 lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
@@ -422,7 +422,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.forms
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (singleTicket)
                     fillInformationSection(it)
                 attendeeRecyclerAdapter.setCustomForm(it)
@@ -465,7 +465,7 @@ class AttendeeFragment : Fragment() {
                 val country = rootView.countryPicker.selectedItem.toString()
                 attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
 
-                attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
+                attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
                     if (isAttendeeCreated && selectedPaymentOption ==
                         paymentOptions.indexOf(getString(R.string.stripe))) {
                         sendToken()
@@ -476,7 +476,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.ticketSoldOut
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 showTicketSoldOutDialog(it)
             })
 
