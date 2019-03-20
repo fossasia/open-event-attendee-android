@@ -87,13 +87,13 @@ class OrderDetailsFragment : Fragment() {
 
         orderDetailsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
         orderDetailsViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.orderDetailCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
