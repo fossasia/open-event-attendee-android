@@ -24,7 +24,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     val error: LiveData<String> = mutableError
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
-    private var lastSearch = String()
+    private var lastSearch = ""
 
     var savedLocation: String? = null
 
