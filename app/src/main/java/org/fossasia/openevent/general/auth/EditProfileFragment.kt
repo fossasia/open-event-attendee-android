@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -70,7 +72,7 @@ class EditProfileFragment : Fragment() {
                 if (rootView.lastName.text.isBlank()) {
                     rootView.lastName.setText(userLastName)
                 }
-                if (!imageUrl.isEmpty()) {
+                if (!imageUrl.isEmpty() && !avatarUpdated) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
                     Picasso.get()
                         .load(imageUrl)
@@ -79,6 +81,16 @@ class EditProfileFragment : Fragment() {
                         .into(rootView.profilePhoto)
                 }
             })
+        profileViewModel.avatarPicked.observe(this, Observer {
+            if (it != null) {
+                Picasso.get()
+                    .load(Uri.parse(it))
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
+                    .transform(CircleTransform())
+                    .into(rootView.profilePhoto)
+                this.avatarUpdated = true
+            }
+        })
         profileViewModel.fetchProfile()
 
         editProfileViewModel.progress
@@ -86,6 +98,9 @@ class EditProfileFragment : Fragment() {
             .observe(this, Observer {
                 rootView.progressBar.isVisible = it
             })
+
+        permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
         rootView.profilePhoto.setOnClickListener {
             if (permissionGranted) {
@@ -132,6 +147,7 @@ class EditProfileFragment : Fragment() {
                 .transform(CircleTransform())
                 .into(rootView.profilePhoto)
             avatarUpdated = true
+            profileViewModel.avatarPicked.value = imageUri.toString()
         }
     }
 

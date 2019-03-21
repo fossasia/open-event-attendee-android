@@ -203,6 +203,7 @@
                     android:layout_margin="@dimen/layout_margin_medium"
                     android:scaleType="centerCrop" />
                 <TextView
+                    android:id="@+id/organizerLabel"
                     android:paddingTop="@dimen/padding_medium"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"

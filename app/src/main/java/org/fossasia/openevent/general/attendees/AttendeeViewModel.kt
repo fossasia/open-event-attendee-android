@@ -57,6 +57,7 @@ class AttendeeViewModel(
     private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
     val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
     val paymentCompleted = MutableLiveData<Boolean>()
+    val ticketDetailsVisibility = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
     val tickets: LiveData<MutableList<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -109,6 +110,9 @@ class AttendeeViewModel(
         cardType.add("Pay by American Express")
         cardType.add("Pay by MasterCard")
         cardType.add("Pay by Visa")
+        cardType.add("Pay by Discover")
+        cardType.add("Pay by Diners Club")
+        cardType.add("Pay by UnionPay")
     }
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
