@@ -34,11 +34,15 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventApi
 import org.fossasia.openevent.general.event.EventDetailsViewModel
 import org.fossasia.openevent.general.event.EventId
+import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.common.EventsDiffCallback
+import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
+import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
 import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.ConfirmOrder
@@ -235,5 +239,26 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.orderDao()
+    }
+}
+
+val fragmentsModule = module {
+
+    factory { EventsDiffCallback() }
+
+    scope(Scopes.EVENTS_FRAGMENT.toString()) {
+        EventsListAdapter(EventLayoutType.EVENTS, get())
+    }
+
+    scope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()) {
+        EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
+    }
+
+    scope(Scopes.FAVORITE_FRAGMENT.toString()) {
+        FavoriteEventsRecyclerAdapter(get())
+    }
+
+    scope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()) {
+        FavoriteEventsRecyclerAdapter(get())
     }
 }

@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,22 +20,34 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecyc
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import kotlinx.android.synthetic.main.fragment_favorite.view.findSomethingToDo
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.event.FavoriteFabListener
-import org.fossasia.openevent.general.event.RecyclerViewClickListener
+import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.ext.android.bindScope
+import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 
 class FavoriteFragment : Fragment() {
-    private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private var favoriteListFetched = false
+    private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
+        scope = getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString())
+    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        bindScope(getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString()))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,40 +80,12 @@ class FavoriteFragment : Fragment() {
             LinearLayoutManager.VERTICAL)
         rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
 
-        val recyclerViewClickListener = object : RecyclerViewClickListener {
-            override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                    }
-            }
-        }
-        val favoriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavorite: Boolean) {
-                val pos = favoriteEventsRecyclerAdapter.getPos(event.id)
-                favoriteEventsRecyclerAdapter.remove(pos)
-                favoriteEventsRecyclerAdapter.notifyItemRemoved(pos)
-                favoriteEventViewModel.setFavorite(event.id, false)
-                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
-            }
-        }
-
-        favoriteEventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        favoriteEventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
         favoriteEventViewModel.events
             .nonNull()
-            .observe(this, Observer {
-                if (!favoriteListFetched) {
-                    favoriteListFetched = true
-                    favoriteEventsRecyclerAdapter.addAll(it)
-                    favoriteEventsRecyclerAdapter.notifyDataSetChanged()
-                    showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
-
-                    Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
-                }
+            .observe(this, Observer { list ->
+                favoriteEventsRecyclerAdapter.submitList(list)
+                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
+                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
             })
 
         favoriteEventViewModel.error
@@ -118,6 +103,47 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.loadFavoriteEvents()
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
+                .setEventId(eventID)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                }
+            }
+        }
+
+        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
+            override fun onClick(event: Event) {
+                Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
+                }.also { intent ->
+                    startActivity(Intent.createChooser(intent, "Share Event Details"))
+                }
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                favoriteEventViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        favoriteEventsRecyclerAdapter.apply {
+            onEventClick = eventClickListener
+            onShareFabClick = shareFabClickListener
+            onFavFabClick = favFabClickListener
+        }
     }
 
     private fun showEmptyMessage(itemCount: Int) {
