@@ -24,6 +24,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     val error: LiveData<String> = mutableError
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
+    private var lastSearch = ""
 
     var savedLocation: String? = null
 
@@ -34,7 +35,8 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     fun loadLocationEvents(loadingTag: Int) {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
 
-        if (loadingTag == RELOADING_EVENTS || (loadingTag == INITIAL_FETCHING_EVENTS && mutableEvents.value == null)) {
+        if (loadingTag == RELOADING_EVENTS || (loadingTag == INITIAL_FETCHING_EVENTS &&
+                lastSearch != savedLocation)) {
             compositeDisposable.add(eventService.getEventsByLocation(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -44,6 +46,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 .doFinally {
                     mutableProgress.value = false
                     mutableShowShimmerEvents.value = false
+                    lastSearch = savedLocation ?: ""
                 }.subscribe({
                     mutableEvents.value = it
                 }, {
