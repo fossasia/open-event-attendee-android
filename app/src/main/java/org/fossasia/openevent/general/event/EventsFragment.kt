@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,48 +24,53 @@ import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.ext.android.bindScope
+import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-// String constants for event types
-const val EVENTS: String = "events"
-const val SIMILAR_EVENTS: String = "similarEvents"
+/**
+ * Enum class for different layout types in the adapter.
+ * This class can expand as number of layout types grow.
+ */
+enum class EventLayoutType {
+    EVENTS, SIMILAR_EVENTS
+}
+
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 const val RELOADING_EVENTS: Int = 0
 const val INITIAL_FETCHING_EVENTS: Int = 1
 
 class EventsFragment : Fragment() {
-    private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
+    private val eventsListAdapter: EventsListAdapter by inject(
+        scope = getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString())
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        eventsRecyclerAdapter.setEventLayout(EVENTS)
-        val favoriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavorite: Boolean) {
-                val id = eventsRecyclerAdapter.getPos(event.id)
-                eventsViewModel.setFavorite(event.id, !isFavorite)
-                event.favorite = !event.favorite
-                eventsRecyclerAdapter.notifyItemChanged(id)
-            }
-        }
-        eventsRecyclerAdapter.setFavorite(favoriteFabClickListener)
+
+        bindScope(getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString()))
 
         eventsViewModel.events
             .nonNull()
-            .observe(this, Observer {
-                eventsRecyclerAdapter.addAll(it)
-                eventsRecyclerAdapter.notifyDataSetChanged()
-                showEmptyMessage(eventsRecyclerAdapter.itemCount)
-                Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
+            .observe(this, Observer { list ->
+                eventsListAdapter.submitList(list)
+                showEmptyMessage(list.size)
+                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
 
         eventsViewModel.error
@@ -96,35 +102,19 @@ class EventsFragment : Fragment() {
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
 
-        rootView.eventsRecycler.adapter = eventsRecyclerAdapter
+        rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
-
-        val recyclerViewClickListener = object : RecyclerViewClickListener {
-            override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                    }
-            }
-        }
-        eventsRecyclerAdapter.setListener(recyclerViewClickListener)
 
         eventsViewModel.showShimmerEvents
             .nonNull()
-            .observe(this, Observer {
-                if (it) {
+            .observe(this, Observer { shouldShowShimmer ->
+                if (shouldShowShimmer) {
                     rootView.shimmerEvents.startShimmer()
+                    eventsListAdapter.clear()
                 } else {
                     rootView.shimmerEvents.stopShimmer()
                 }
-                rootView.shimmerEvents.isVisible = it
-                if (it) {
-                    eventsRecyclerAdapter.removeAll()
-                    eventsRecyclerAdapter.notifyDataSetChanged()
-                }
+                rootView.shimmerEvents.isVisible = shouldShowShimmer
             })
 
         eventsViewModel.progress
@@ -162,6 +152,47 @@ class EventsFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
+                .setEventId(eventID)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                }
+            }
+        }
+
+        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
+            override fun onClick(event: Event) {
+                Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
+                }.also { intent ->
+                    startActivity(Intent.createChooser(intent, "Share Event Details"))
+                }
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                eventsViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                eventsListAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        eventsListAdapter.apply {
+            onEventClick = eventClickListener
+            onShareFabClick = shareFabClickListener
+            onFavFabClick = favFabClickListener
+        }
     }
 
     private fun showNoInternetScreen(show: Boolean) {
