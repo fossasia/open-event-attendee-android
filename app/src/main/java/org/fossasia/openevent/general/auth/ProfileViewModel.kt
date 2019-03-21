@@ -19,7 +19,7 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
     val user: LiveData<User> = mutableUser
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
-    var avatarPicked = MutableLiveData<String>()
+    val avatarPicked = MutableLiveData<String>()
 
     fun isLoggedIn() = authService.isLoggedIn()
 
