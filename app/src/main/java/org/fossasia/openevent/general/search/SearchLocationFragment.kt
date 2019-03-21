@@ -24,6 +24,7 @@ import org.fossasia.openevent.general.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
+const val AUTOCOMPLETE_FRAG_TAG = "AutoComplete_Frag"
 
 class SearchLocationFragment : Fragment() {
     private lateinit var rootView: View
@@ -31,19 +32,10 @@ class SearchLocationFragment : Fragment() {
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     private val safeArgs: SearchLocationFragmentArgs by navArgs()
 
-    private val AUTOCOMPLETE_FRAG_TAG = "AutoComplete_Frag"
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.hide()
-        }
+        setActionBarVisibility(false)
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
@@ -68,8 +60,7 @@ class SearchLocationFragment : Fragment() {
 
     private fun checkLocationPermission() {
         val permission =
-            ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION)
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
@@ -79,6 +70,16 @@ class SearchLocationFragment : Fragment() {
     private fun redirectToMain() {
         val fragmentId = if (safeArgs.fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
         Navigation.findNavController(rootView).popBackStack(fragmentId, false)
+    }
+
+    private fun setActionBarVisibility(status: Boolean) {
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            if (!status)
+                thisActivity.supportActionBar?.hide()
+            else
+                thisActivity.supportActionBar?.show()
+        }
     }
 
     private fun setupPlaceAutoCompleteFrag(savedInstanceState: Bundle?) {
@@ -112,11 +113,7 @@ class SearchLocationFragment : Fragment() {
         })
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -127,5 +124,10 @@ class SearchLocationFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        setActionBarVisibility(true)
     }
 }
