@@ -117,15 +117,15 @@ class EventService(
         var eventId = -1L
         val idList = ArrayList<Long>()
         val eventIdAndTimes = mutableMapOf<Long, Int>()
-        eventIds.forEach { it1 ->
-            val times = eventIdAndTimes[it1]
-            if (eventIdAndTimes.containsKey(it1) && times != null) {
-                eventIdAndTimes[it1] = times + 1
+        eventIds.forEach { id ->
+            val times = eventIdAndTimes[id]
+            if (eventIdAndTimes.containsKey(id) && times != null) {
+                eventIdAndTimes[id] = times + 1
             } else {
-                eventIdAndTimes[it1] = 1
+                eventIdAndTimes[id] = 1
             }
-            idList.add(it1)
-            eventId = it1
+            idList.add(id)
+            eventId = id
             subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
         }
 

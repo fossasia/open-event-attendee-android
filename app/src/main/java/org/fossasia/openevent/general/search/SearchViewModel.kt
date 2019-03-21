@@ -44,6 +44,11 @@ class SearchViewModel(
     }
 
     fun loadEvents(location: String, time: String) {
+        if (mutableEvents.value != null) {
+            mutableShowShimmerResults.value = false
+            mutableShowNoInternetError.value = false
+            return
+        }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
         val query: String = when {

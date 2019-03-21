@@ -179,4 +179,5 @@
     <string name="invalid_email_message">অকার্যকর ইমেইল এড্রেস!</string>
     <string name="invalid_confirm_password_message">আপনার পাসওয়ার্ড ও কন্ফার্ম পাসওয়ার্ড মিলছে না !</string>
     <string name="invalid_password_message">খুব ছোট পাসওয়ার্ড!</string>
+    <string name="country">needs translation</string>
 </resources>

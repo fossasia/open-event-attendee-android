@@ -36,7 +36,7 @@
             android:textSize="@dimen/text_size_medium"
             tools:text="No Internet" />
 
-        <TextView
+        <Button
             android:id="@+id/retry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_marginTop="@dimen/layout_margin_large"
             android:text="@string/retry"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_size_large"
+            style="@style/Widget.AppCompat.Button.Borderless"
             tools:text="RETRY" />
     </LinearLayout>
 
