@@ -18,6 +18,7 @@
     <string name="whats_good">কি ভালো এটাই</string>
     <string name="where">কোথায়?</string>
     <string name="no_internet_message">যোগাযোগ করতে অসুবিধা হচ্ছে. পরে চেষ্টা করুন.</string>
+    <string name="error_fetching_events">আমরা ইভেন্ট আনতে অসুবিধা হচ্ছে। পরে আবার চেষ্টা করুন</string>
     <string name="tickets_sold_out">দুঃখিত, সব টিকেট শেষ হয়ে গেছে !</string>
     <string name="retry">আবার চেষ্টা করুন</string>
     <string name="more_like_this">আরো এটার মতো </string>

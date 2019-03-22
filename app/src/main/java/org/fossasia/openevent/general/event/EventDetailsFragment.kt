@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -43,8 +42,10 @@ import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
-import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
+import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
+import kotlinx.android.synthetic.main.fragment_event.view.container
+import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
@@ -98,6 +99,8 @@ class EventDetailsFragment : Fragment() {
                 runOnce = false
 
                 Timber.d("Fetched events of id %d", safeArgs.eventId)
+                showEventErrorScreen(false)
+                setHasOptionsMenu(true)
             })
     }
 
@@ -121,10 +124,14 @@ class EventDetailsFragment : Fragment() {
         eventViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                showEventErrorScreen(true)
+                setHasOptionsMenu(false)
             })
 
         eventViewModel.loadEvent(safeArgs.eventId)
+        rootView.retry.setOnClickListener {
+            eventViewModel.loadEvent(safeArgs.eventId)
+        }
 
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -382,5 +389,10 @@ class EventDetailsFragment : Fragment() {
 
     private fun setFavoriteIcon(id: Int) {
         menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
+    }
+
+    private fun showEventErrorScreen(show: Boolean) {
+        rootView.container.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.eventErrorCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 }
