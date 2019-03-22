@@ -117,7 +117,6 @@ class EventsFragment : Fragment() {
                 rootView.swiperefresh.isRefreshing = it
             })
 
-
         eventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {

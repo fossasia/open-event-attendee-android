@@ -72,7 +72,7 @@ class SocialLinksFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
-        
+
         socialLinksViewModel.loadSocialLinks(id)
 
         return rootView
