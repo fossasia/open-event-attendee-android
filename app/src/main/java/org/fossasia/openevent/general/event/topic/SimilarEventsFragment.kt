@@ -59,7 +59,7 @@ class SimilarEventsFragment : Fragment() {
 
         similarEventsViewModel.similarEvents
             .nonNull()
-            .observe(this, Observer { eventsList ->
+            .observe(viewLifecycleOwner, Observer { eventsList ->
                 similarEventsListAdapter.submitList(eventsList)
                 handleVisibility(eventsList)
                 Timber.d("Fetched similar events of size %s", similarEventsListAdapter.itemCount)
@@ -67,13 +67,13 @@ class SimilarEventsFragment : Fragment() {
 
         similarEventsViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.similarEventsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         similarEventsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 progressBar.isVisible = it
             })
 

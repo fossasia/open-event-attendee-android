@@ -120,7 +120,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 

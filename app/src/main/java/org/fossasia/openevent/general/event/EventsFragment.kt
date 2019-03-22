@@ -72,12 +72,6 @@ class EventsFragment : Fragment() {
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
-
-        eventsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
-            })
     }
 
     override fun onCreateView(
@@ -107,7 +101,7 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.showShimmerEvents
             .nonNull()
-            .observe(this, Observer { shouldShowShimmer ->
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
                 if (shouldShowShimmer) {
                     rootView.shimmerEvents.startShimmer()
                     eventsListAdapter.clear()
@@ -119,8 +113,14 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.swiperefresh.isRefreshing = it
+            })
+
+        eventsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         eventsViewModel.loadLocation()

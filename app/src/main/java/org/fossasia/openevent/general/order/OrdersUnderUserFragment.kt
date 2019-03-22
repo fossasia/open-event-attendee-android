@@ -80,13 +80,13 @@ class OrdersUnderUserFragment : Fragment() {
 
             ordersUnderUserVM.progress
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     rootView.progressBar.isVisible = it
                 })
 
             ordersUnderUserVM.message
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     Snackbar.make(
                         rootView.ordersUnderUserCoordinatorLayout, it, Snackbar.LENGTH_LONG
                     ).show()
@@ -94,19 +94,19 @@ class OrdersUnderUserFragment : Fragment() {
 
             ordersUnderUserVM.noTickets
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     showNoTicketsScreen(it)
                 })
 
             ordersUnderUserVM.attendeesNumber
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     ordersRecyclerAdapter.setAttendeeNumber(it)
                 })
 
             ordersUnderUserVM.eventAndOrderIdentifier
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     ordersRecyclerAdapter.addAllPairs(it)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
