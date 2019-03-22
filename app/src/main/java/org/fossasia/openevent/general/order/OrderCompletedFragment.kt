@@ -51,14 +51,14 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.loadEvent(safeArgs.eventId)
         orderCompletedViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
                 eventShare = it
             })
 
         orderCompletedViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.orderCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 

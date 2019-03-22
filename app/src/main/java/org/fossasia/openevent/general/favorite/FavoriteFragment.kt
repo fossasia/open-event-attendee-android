@@ -82,7 +82,7 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.events
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list)
                 showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
                 Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
@@ -90,13 +90,13 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(favoriteCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         favoriteEventViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.favoriteProgressBar.isIndeterminate = it
                 rootView.favoriteProgressBar.isVisible = it
             })
