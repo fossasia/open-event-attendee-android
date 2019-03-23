@@ -203,6 +203,8 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
+    <string name="confirmation_dialog">Are you sure to confirm the order?</string>
+    <string name="order_not_completed">Order not completed!</string>
     <string name="removed_from_liked">Removed %1$s from liked events</string>
     <string name="undo">Undo</string>
 
