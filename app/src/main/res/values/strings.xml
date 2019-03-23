@@ -51,7 +51,7 @@
     <string name="settings">Settings</string>
     <string name="login">Login</string>
     <string name="forgot_password">I forgot my password</string>
-    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_message">We just sent you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email_id" translatable="false">example@gmail.com</string>
@@ -108,7 +108,7 @@
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
     <string name="hide">(hide)</string>
-    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 or more</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
@@ -171,6 +171,8 @@
     <string name="title_terms_of_service">Terms of Service</string>
     <string name="key_terms_of_service" translatable="false">terms_of_service</string>
     <string name="legal">Legal</string>
+    <string name="visit_website">Visit Website</string>
+    <string name="key_visit_website">Visit_Website</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
@@ -201,6 +203,8 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
+    <string name="removed_from_liked">Removed %1$s from liked events</string>
+    <string name="undo">Undo</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">Where \ndo you \ngo out?</string>

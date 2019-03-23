@@ -23,7 +23,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/placeholder" />
+            android:src="@drawable/header" />
 
         <TextView
             android:id="@+id/eventName"
@@ -274,7 +274,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
                 android:layout_marginBottom="@dimen/divider_margin_bottom"
-                android:src="@drawable/placeholder"
+                android:src="@drawable/header"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -384,7 +384,7 @@
                 android:id="@+id/frameContainerSimilarEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_extra_large"></FrameLayout>
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

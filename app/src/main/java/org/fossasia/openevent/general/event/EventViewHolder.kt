@@ -61,7 +61,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         event.originalImageUrl?.let { url ->
             Picasso.get()
                 .load(url)
-                .placeholder(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.header)
                 .into(containerView.eventImage)
         }
 
