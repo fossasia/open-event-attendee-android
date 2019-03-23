@@ -31,8 +31,8 @@ class OrdersUnderUserViewModel(
     private val mutableEventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
     val eventAndOrderIdentifier: LiveData<List<Pair<Event, String>>> =
         mutableEventAndOrderIdentifier
-    private val mutableProgress = MutableLiveData<Boolean>()
-    val progress: LiveData<Boolean> = mutableProgress
+    private val mutableshowShimmerResults = MutableLiveData<Boolean>()
+    val showShimmerResults: LiveData<Boolean> = mutableshowShimmerResults
     private val mutableNoTickets = MutableLiveData<Boolean>()
     val noTickets: LiveData<Boolean> = mutableNoTickets
 
@@ -45,7 +45,7 @@ class OrdersUnderUserViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                mutableProgress.value = mutableAttendeesNumber.value == null
+                mutableshowShimmerResults.value = mutableAttendeesNumber.value == null
                 mutableNoTickets.value = false
             }.subscribe({
                 order = it
@@ -55,11 +55,11 @@ class OrdersUnderUserViewModel(
                 if (idList.size != 0)
                     eventsUnderUser(query)
                 else {
-                    mutableProgress.value = false
+                    mutableshowShimmerResults.value = false
                     mutableNoTickets.value = true
                 }
             }, {
-                mutableProgress.value = false
+                mutableshowShimmerResults.value = false
                 mutableNoTickets.value = true
                 mutableMessage.value = "Failed  to list Orders under a user"
                 Timber.d(it, "Failed  to list Orders under a user ")
@@ -72,7 +72,7 @@ class OrdersUnderUserViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally {
-                mutableProgress.value = false
+                mutableshowShimmerResults.value = false
             }.subscribe({
                 val events = ArrayList<Event>()
                 it.map {
