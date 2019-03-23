@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import org.fossasia.openevent.general.CircleTransform
+import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
@@ -121,7 +122,8 @@ class EditProfileFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
                 if (it == USER_UPDATED) {
-                    activity?.onBackPressed()
+                    val thisActivity = activity
+                    if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
                 }
             })
 
@@ -169,22 +171,7 @@ class EditProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                if (!avatarUpdated && rootView.lastName.text.toString() == userLastName &&
-                    rootView.firstName.text.toString() == userFirstName) {
-                    activity?.onBackPressed()
-                } else {
-                    hideSoftKeyboard(context, rootView)
-                    val dialog = AlertDialog.Builder(context)
-                    dialog.setMessage("Your changes have not been saved")
-                    dialog.setNegativeButton("Discard") { _, _ ->
-                        activity?.onBackPressed()
-                    }
-                    dialog.setPositiveButton("Save") { _, _ ->
-                        editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
-                            rootView.lastName.text.toString())
-                    }
-                    dialog.create().show()
-                }
+                handleBackPress()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -216,6 +203,29 @@ class EditProfileFragment : Fragment() {
                     rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Denied :(",
                     Snackbar.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    /**
+     * Handles back press when up button or back button is pressed
+     */
+    fun handleBackPress() {
+        val thisActivity = activity
+        if (!avatarUpdated && rootView.lastName.text.toString() == userLastName &&
+            rootView.firstName.text.toString() == userFirstName) {
+            if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
+        } else {
+            hideSoftKeyboard(context, rootView)
+            val dialog = AlertDialog.Builder(context)
+            dialog.setMessage(getString(R.string.changes_not_saved))
+            dialog.setNegativeButton(getString(R.string.discard)) { _, _ ->
+                if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
+            }
+            dialog.setPositiveButton(getString(R.string.save)) { _, _ ->
+                editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
+                    rootView.lastName.text.toString())
+            }
+            dialog.create().show()
         }
     }
 

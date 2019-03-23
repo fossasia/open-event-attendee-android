@@ -66,6 +66,11 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
 
+    <!--edit profile dialog-->
+    <string name="changes_not_saved" translatable="false">Your changes have not been saved</string>
+    <string name="discard" translatable="false">Discard</string>
+    <string name="save" translatable="false">Save</string>
+
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
 
