@@ -84,8 +84,8 @@ class FavoriteFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list)
-                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
-                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+                showEmptyMessage(list.size)
+                Timber.d("Fetched events of size %s", list.size)
             })
 
         favoriteEventViewModel.error
