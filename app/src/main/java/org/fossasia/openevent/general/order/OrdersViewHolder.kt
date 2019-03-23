@@ -38,7 +38,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.header)
                     .into(itemView.eventImage)
         }
     }
