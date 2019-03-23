@@ -47,5 +47,5 @@ data class Order(
     @Relationship("event")
     var event: EventId? = null,
     @Relationship("attendees")
-    var attendees: List<AttendeeId>? = null
+    var attendees: List<AttendeeId> = emptyList()
 )

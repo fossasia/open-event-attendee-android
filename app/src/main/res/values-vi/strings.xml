@@ -155,4 +155,7 @@
     <string name="hide">(giấu)</string>
     <string name="confirmation_dialog">Bạn có chắc chắn để khẳng định trình tự?</string>
     <string name="order_not_completed">Để không hoàn thành!</string>
+    <string name="country">Quốc Gia</string>
+    <string name="visit_website">truy cập trang web</string>
+    <string name="key_visit_website">truy cập trang web</string>
 </resources>

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.progressBar
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
@@ -78,15 +78,15 @@ class OrdersUnderUserFragment : Fragment() {
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
 
-            ordersUnderUserVM.progress
+            ordersUnderUserVM.showShimmerResults
                 .nonNull()
                 .observe(this, Observer {
-                    rootView.progressBar.isVisible = it
+                    rootView.shimmerSearch.isVisible = it
                 })
 
             ordersUnderUserVM.message
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     Snackbar.make(
                         rootView.ordersUnderUserCoordinatorLayout, it, Snackbar.LENGTH_LONG
                     ).show()
@@ -94,19 +94,19 @@ class OrdersUnderUserFragment : Fragment() {
 
             ordersUnderUserVM.noTickets
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     showNoTicketsScreen(it)
                 })
 
             ordersUnderUserVM.attendeesNumber
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     ordersRecyclerAdapter.setAttendeeNumber(it)
                 })
 
             ordersUnderUserVM.eventAndOrderIdentifier
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     ordersRecyclerAdapter.addAllPairs(it)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
