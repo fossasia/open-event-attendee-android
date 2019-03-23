@@ -82,21 +82,21 @@ class FavoriteFragment : Fragment() {
 
         favoriteEventViewModel.events
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list)
-                showEmptyMessage(favoriteEventsRecyclerAdapter.itemCount)
-                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+                showEmptyMessage(list.size)
+                Timber.d("Fetched events of size %s", list.size)
             })
 
         favoriteEventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(favoriteCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         favoriteEventViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.favoriteProgressBar.isIndeterminate = it
                 rootView.favoriteProgressBar.isVisible = it
             })
@@ -133,9 +133,15 @@ class FavoriteFragment : Fragment() {
 
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                favoriteEventViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
+                favoriteEventViewModel.setFavorite(event.id, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+
+                Snackbar.make(favoriteCoordinatorLayout,
+                    getString(R.string.removed_from_liked, event.name), Snackbar.LENGTH_SHORT)
+                    .setAction(getString(R.string.undo)) {
+                        favoriteEventViewModel.setFavorite(event.id, true)
+                        favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                    }.show()
             }
         }
 

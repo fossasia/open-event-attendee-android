@@ -34,16 +34,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     private var title: String = ""
     private val safeArgs: AboutEventFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        aboutEventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-            })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
@@ -54,17 +44,23 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         }
         setHasOptionsMenu(true)
 
+        aboutEventViewModel.event
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                loadEvent(it)
+            })
+
         rootView.appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView, it, Snackbar.LENGTH_SHORT).show()
             })
 
         aboutEventViewModel.progressAboutEvent
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAbout.isVisible = it
             })
 

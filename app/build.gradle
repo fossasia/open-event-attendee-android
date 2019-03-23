@@ -90,9 +90,10 @@ repositories {
 dependencies {
     def lifecycle_version = "2.1.0-alpha03"
     def koin_version = "1.0.2"
-    def roomVersion = "2.1.0-alpha04"
+    def roomVersion = "2.1.0-alpha06"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
+    def nav_version = "2.1.0-alpha01"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -158,8 +159,8 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version" // For Kotlin use navigation-ui-ktx
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
@@ -171,7 +172,7 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.2"
     testImplementation 'org.threeten:threetenbp:1.3.8'
     testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+    testImplementation 'androidx.arch.core:core-testing:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }

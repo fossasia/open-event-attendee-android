@@ -154,4 +154,6 @@
     <string name="timeZone_summary">Múi giờ của bạn sẽ được sử dụng khi khóa lại.</string>
     <string name="hide">(giấu)</string>
     <string name="country">Quốc Gia</string>
+    <string name="visit_website">truy cập trang web</string>
+    <string name="key_visit_website">truy cập trang web</string>
 </resources>

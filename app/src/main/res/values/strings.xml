@@ -51,7 +51,7 @@
     <string name="settings">Settings</string>
     <string name="login">Login</string>
     <string name="forgot_password">I forgot my password</string>
-    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_message">We just sent you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email_id" translatable="false">example@gmail.com</string>
@@ -102,8 +102,8 @@
     <string name="item">Item</string>
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
-    <string name="hide" translatable="false">(hide)</string>
-    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="hide">(hide)</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 or more</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
@@ -114,9 +114,9 @@
     <string name="card_number">Card Number</string>
     <string name="card_type">Card Type</string>
     <string name="expiration_date">Expiration Date</string>
-    <string name="cvc" translatable="false">CVC</string>
-    <string name="postal_code" translatable="false">Postal Code</string>
-    <string name="payment_info" translatable="false">Payment Info</string>
+    <string name="cvc">CVC</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="payment_info">Payment Info</string>
     <string name="not_you">Not you? </string>
     <string name="sign_out">Sign out</string>
     <string name="all_fees">All fees included in price</string>
@@ -130,11 +130,11 @@
     <string name="date">Date</string>
     <string name="order_identifier">Order Identifier</string>
     <string name="event_summary">Event Summary</string>
-    <string name="organizer_preview" translatable="false">Mario</string>
+    <string name="organizer_preview">Mario</string>
     <string name="event_summary_preview">Very nice</string>
     <string name="order_identifier_preview" translatable="false">3456789</string>
     <string name="location_preview" translatable="false">Singapore</string>
-    <string name="date_preview" translatable="false">Thu,June 14</string>
+    <string name="date_preview">Thu,June 14</string>
     <string name="event_preview" translatable="false">FOSSASIA summit</string>
     <string name="name_preview" translatable="false">Nikit Bhandari</string>
 
@@ -161,11 +161,13 @@
     <string name="timeZone_summary">Your timezone is used when disabled.</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
-    <string name="cookie_policy" translatable="false">Cookie Policy</string>
+    <string name="cookie_policy">Cookie Policy</string>
     <string name="key_cookie_policy" translatable="false">cookie_policy</string>
     <string name="title_terms_of_service">Terms of Service</string>
     <string name="key_terms_of_service" translatable="false">terms_of_service</string>
     <string name="legal">Legal</string>
+    <string name="visit_website">Visit Website</string>
+    <string name="key_visit_website">Visit_Website</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
@@ -186,7 +188,7 @@
     <string name="privacy_text">privacy policy</string>
     <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
-    <string name="stripe" translatable="false">Stripe</string>
+    <string name="stripe">Stripe</string>
     <string name="paypal" translatable="false">PayPal</string>
     <string name="country">Country</string>
 
@@ -196,6 +198,8 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
+    <string name="removed_from_liked">Removed %1$s from liked events</string>
+    <string name="undo">Undo</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">Where \ndo you \ngo out?</string>
