@@ -120,7 +120,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
@@ -255,7 +255,7 @@ class EventDetailsFragment : Fragment() {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.header)
                     .into(rootView.logo)
         }
 
@@ -381,6 +381,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int) {
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
     }
 }

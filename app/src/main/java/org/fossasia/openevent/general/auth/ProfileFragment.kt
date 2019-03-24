@@ -72,19 +72,19 @@ class ProfileFragment : Fragment() {
 
         profileViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
         profileViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.profileCoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
             })
 
         profileViewModel.user
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
@@ -112,9 +112,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.ticket_issues -> {
-                context?.let {
-                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
-                }
+                Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
                 return true
             }
             R.id.logout -> {

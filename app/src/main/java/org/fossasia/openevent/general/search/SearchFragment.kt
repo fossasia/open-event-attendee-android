@@ -41,7 +41,7 @@ class SearchFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Search"
+            thisActivity.supportActionBar?.title = getString(R.string.search)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
         setHasOptionsMenu(true)
@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
         }
 
         val time = safeArgs?.stringSavedDate
-        rootView.timeTextView.text = time ?: "Anytime"
+        rootView.timeTextView.text = time ?: getString(R.string.anytime)
 
         searchViewModel.loadSavedLocation()
         rootView.locationTextView.text = searchViewModel.savedLocation

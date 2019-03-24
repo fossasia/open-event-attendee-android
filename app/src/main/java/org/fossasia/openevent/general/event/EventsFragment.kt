@@ -72,12 +72,6 @@ class EventsFragment : Fragment() {
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
-
-        eventsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
-            })
     }
 
     override fun onCreateView(
@@ -107,7 +101,7 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.showShimmerEvents
             .nonNull()
-            .observe(this, Observer { shouldShowShimmer ->
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
                 if (shouldShowShimmer) {
                     rootView.shimmerEvents.startShimmer()
                     eventsListAdapter.clear()
@@ -119,8 +113,14 @@ class EventsFragment : Fragment() {
 
         eventsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.swiperefresh.isRefreshing = it
+            })
+
+        eventsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         eventsViewModel.loadLocation()
@@ -131,19 +131,19 @@ class EventsFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
-        showNoInternetScreen(isNetworkConnected(context))
+        showNoInternetScreen(!isNetworkConnected(context) && eventsViewModel.events.value.isNullOrEmpty())
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
             }
-            showNoInternetScreen(isNetworkConnected)
+            showNoInternetScreen(!isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
-            showNoInternetScreen(isNetworkConnected(context))
+            showNoInternetScreen(!isNetworkConnected(context))
             if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
@@ -196,8 +196,8 @@ class EventsFragment : Fragment() {
     }
 
     private fun showNoInternetScreen(show: Boolean) {
-        rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
-        rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showEmptyMessage(itemCount: Int) {

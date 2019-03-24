@@ -146,9 +146,7 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onClick(widget: View) {
-                context?.let {
-                    Utils.openUrl(it, getString(R.string.terms_of_service))
-                }
+                Utils.openUrl(requireContext(), getString(R.string.terms_of_service))
             }
         }
 
@@ -159,9 +157,7 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onClick(widget: View) {
-                context?.let {
-                    Utils.openUrl(it, getString(R.string.privacy_policy))
-                }
+                Utils.openUrl(requireContext(), getString(R.string.privacy_policy))
             }
         }
 
@@ -193,7 +189,7 @@ class AttendeeFragment : Fragment() {
         paymentOptions.add(getString(R.string.stripe))
         attendeeViewModel.paymentSelectorVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.paymentSelector.visibility = View.VISIBLE
                 } else {
@@ -255,8 +251,9 @@ class AttendeeFragment : Fragment() {
                         else -> 0
                     }
                 }
-                    setCardSelectorAndError(pos, visibility = false, error = false)
+                setCardSelectorAndError(pos, visibility = false, error = false)
             }
+
             fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
                 rootView.cardSelector.setSelection(pos, true)
                 rootView.cardSelector.isVisible = visibility
@@ -314,7 +311,7 @@ class AttendeeFragment : Fragment() {
         }
         attendeeViewModel.qtyList
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 ticketsRecyclerAdapter.setQty(it)
             })
 
@@ -329,40 +326,40 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.ticketDetailsVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.view.text = if (it) getString(R.string.hide) else getString(R.string.view)
                 rootView.ticketDetails.visibility = if (it) View.VISIBLE else View.GONE
             })
 
         attendeeViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
             })
 
         attendeeViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAttendee.isVisible = it
                 rootView.register.isEnabled = !it
             })
 
         attendeeViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
             })
 
         attendeeViewModel.totalAmount
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 amount = it
             })
 
         attendeeRecyclerAdapter.eventId = eventId
         attendeeViewModel.tickets
             .nonNull()
-            .observe(this, Observer { tickets ->
+            .observe(viewLifecycleOwner, Observer { tickets ->
                 ticketsRecyclerAdapter.addAll(tickets)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
                 if (!singleTicket)
@@ -377,13 +374,13 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.totalQty
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.qty.text = " — $it items"
             })
 
         attendeeViewModel.countryVisibility
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (singleTicket) {
                     rootView.countryPickerContainer.visibility = if (it) View.VISIBLE else View.GONE
                 }
@@ -391,7 +388,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.paymentCompleted
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it)
                     openOrderCompletedFragment()
             })
@@ -401,7 +398,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.attendee
             .nonNull()
-            .observe(this, Observer { user ->
+            .observe(viewLifecycleOwner, Observer { user ->
                 helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
                 firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
                 lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
@@ -422,7 +419,7 @@ class AttendeeFragment : Fragment() {
 
         attendeeViewModel.forms
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (singleTicket)
                     fillInformationSection(it)
                 attendeeRecyclerAdapter.setCustomForm(it)
@@ -443,43 +440,53 @@ class AttendeeFragment : Fragment() {
                     "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            val attendees = ArrayList<Attendee>()
-            if (singleTicket) {
-                val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
-                val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                val attendee = Attendee(id = attendeeViewModel.getId(),
-                    firstname = firstName.text.toString(),
-                    lastname = lastName.text.toString(),
-                    city = getAttendeeField("city"),
-                    address = getAttendeeField("address"),
-                    state = getAttendeeField("state"),
-                    email = email.text.toString(),
-                    ticket = TicketId(ticket),
-                    event = eventId)
-                attendees.add(attendee)
-            } else {
-                attendees.addAll(attendeeRecyclerAdapter.attendeeList)
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(R.string.confirmation_dialog)
+
+            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                val attendees = ArrayList<Attendee>()
+                if (singleTicket) {
+                    val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
+                    val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
+                    val attendee = Attendee(id = attendeeViewModel.getId(),
+                        firstname = firstName.text.toString(),
+                        lastname = lastName.text.toString(),
+                        city = getAttendeeField("city"),
+                        address = getAttendeeField("address"),
+                        state = getAttendeeField("state"),
+                        email = email.text.toString(),
+                        ticket = TicketId(ticket),
+                        event = eventId)
+                    attendees.add(attendee)
+                } else {
+                    attendees.addAll(attendeeRecyclerAdapter.attendeeList)
+                }
+
+                if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                    val country = rootView.countryPicker.selectedItem.toString()
+                    attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+
+                    attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
+                        if (isAttendeeCreated && selectedPaymentOption ==
+                            paymentOptions.indexOf(getString(R.string.stripe))) {
+                            sendToken()
+                        }
+                    })
+                } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
             }
 
-            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
-                val country = rootView.countryPicker.selectedItem.toString()
-                attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
+            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+                Snackbar.make(rootView, R.string.order_not_completed, Snackbar.LENGTH_SHORT).show()
+            }
+            builder.show()
 
-                attendeeViewModel.isAttendeeCreated.observe(this, Observer { isAttendeeCreated ->
-                    if (isAttendeeCreated && selectedPaymentOption ==
-                        paymentOptions.indexOf(getString(R.string.stripe))) {
-                        sendToken()
-                    }
+            attendeeViewModel.ticketSoldOut
+                .nonNull()
+                .observe(this, Observer {
+                    showTicketSoldOutDialog(it)
                 })
-            } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
         }
-
-        attendeeViewModel.ticketSoldOut
-            .nonNull()
-            .observe(this, Observer {
-                showTicketSoldOutDialog(it)
-            })
-
         return rootView
     }
 

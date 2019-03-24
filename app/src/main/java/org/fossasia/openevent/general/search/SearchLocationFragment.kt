@@ -38,8 +38,8 @@ class SearchLocationFragment : Fragment() {
         setActionBarVisibility(false)
         setHasOptionsMenu(true)
 
-        geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
-            rootView.currentLocationLinearLayout.visibility = View.GONE
+        geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
+            rootView.currentLocation.visibility = View.GONE
         })
 
         rootView.currentLocationLinearLayout.setOnClickListener {
@@ -48,7 +48,7 @@ class SearchLocationFragment : Fragment() {
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
-        geoLocationViewModel.location.observe(this, Observer { location ->
+        geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
             searchLocationViewModel.saveSearch(location)
             redirectToMain()
         })

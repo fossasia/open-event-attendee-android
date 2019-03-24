@@ -144,6 +144,8 @@
     <string name="key_privacy">গোপনীয়তা</string>
     <string name="title_terms_of_service">সেবা পাবার শর্ত</string>
     <string name="legal">আইনগত</string>
+    <string name="visit_website">ওয়েবসাইটএ যান</string>
+    <string name="key_visit_website">ওয়েবসাইটএ যান</string>
 
     <!--settings profile dialog-->
     <string name="message">আপনি কি লগ আউট করতে চান?</string>
@@ -169,6 +171,8 @@
     <string name="sign_in_canceled">সিগণ ইন ক্যানসেল!</string>
     <string name="sign_up_success">সিগণ উপ সাফল্য!</string>
     <string name="cannot_fetch_location">অবস্থান আনা যাচ্ছে না!</string>
+    <string name="confirmation_dialog">আপনি কি অর্ডার কন্ফার্ম করতে চান?</string>
+    <string name="order_not_completed">অর্ডার কমপ্লিট হয়নি!</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">আপনি কোথায় যেতে চান?</string>
@@ -179,5 +183,5 @@
     <string name="invalid_email_message">অকার্যকর ইমেইল এড্রেস!</string>
     <string name="invalid_confirm_password_message">আপনার পাসওয়ার্ড ও কন্ফার্ম পাসওয়ার্ড মিলছে না !</string>
     <string name="invalid_password_message">খুব ছোট পাসওয়ার্ড!</string>
-    <string name="country">needs translation</string>
+    <string name="country">দেশ</string>
 </resources>

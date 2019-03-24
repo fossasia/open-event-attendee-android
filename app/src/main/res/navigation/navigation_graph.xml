@@ -39,6 +39,7 @@
         <argument
             android:name="@string/saved_date"
             app:argType="string"
+            android:defaultValue="@null"
             app:nullable="true"/>
     </fragment>
     <fragment
