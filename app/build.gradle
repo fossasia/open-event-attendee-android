@@ -94,6 +94,7 @@ dependencies {
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
     def nav_version = "2.1.0-alpha01"
+    def anko_version = "0.10.6"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -161,6 +162,9 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version" // For Kotlin use navigation-ui-ktx
+
+    //Anko
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
