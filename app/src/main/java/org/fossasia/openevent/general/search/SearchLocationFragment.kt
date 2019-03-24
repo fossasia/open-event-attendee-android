@@ -4,26 +4,27 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_search_location.search
+import com.mapbox.api.geocoding.v5.models.CarmenFeature
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
+import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocationLinearLayout
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
-import kotlinx.android.synthetic.main.fragment_search_location.view.search
-import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
+const val AUTOCOMPLETE_FRAG_TAG = "AutoComplete_Frag"
 
 class SearchLocationFragment : Fragment() {
     private lateinit var rootView: View
@@ -34,19 +35,14 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.title = ""
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setActionBarVisibility(false)
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
-            rootView.currentLocation.visibility = View.GONE
+            rootView.currentLocationLinearLayout.visibility = View.GONE
         })
 
-        rootView.currentLocation.setOnClickListener {
+        rootView.currentLocationLinearLayout.setOnClickListener {
             checkLocationPermission()
             geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
@@ -57,24 +53,9 @@ class SearchLocationFragment : Fragment() {
             redirectToMain()
         })
 
-        rootView.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                searchLocationViewModel.saveSearch(query)
-                redirectToMain()
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
-            }
-        })
+        setupPlaceAutoCompleteFrag(savedInstanceState)
 
         return rootView
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Utils.showSoftKeyboard(context, search)
     }
 
     private fun checkLocationPermission() {
@@ -91,6 +72,47 @@ class SearchLocationFragment : Fragment() {
         Navigation.findNavController(rootView).popBackStack(fragmentId, false)
     }
 
+    private fun setActionBarVisibility(status: Boolean) {
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            if (!status)
+                thisActivity.supportActionBar?.hide()
+            else
+                thisActivity.supportActionBar?.show()
+        }
+    }
+
+    private fun setupPlaceAutoCompleteFrag(savedInstanceState: Bundle?) {
+
+        val autocompleteFragment: PlaceAutocompleteFragment?
+        if (savedInstanceState == null) {
+            val placeOptions = PlaceOptions.builder().build(PlaceOptions.MODE_CARDS)
+            autocompleteFragment = PlaceAutocompleteFragment.newInstance(
+                BuildConfig.MAPBOX_KEY, placeOptions)
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.add(R.id.autocomplete_frag_container, autocompleteFragment,
+                AUTOCOMPLETE_FRAG_TAG)
+            transaction?.commit()
+        } else {
+            autocompleteFragment = fragmentManager?.findFragmentByTag(
+                AUTOCOMPLETE_FRAG_TAG) as? PlaceAutocompleteFragment
+        }
+
+        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(carmenFeature: CarmenFeature) {
+                val location = carmenFeature.placeName()?.split(",")?.first()
+                location?.let {
+                    searchLocationViewModel.saveSearch(it)
+                    redirectToMain()
+                }
+            }
+
+            override fun onCancel() {
+                activity?.onBackPressed()
+            }
+        })
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
@@ -104,14 +126,8 @@ class SearchLocationFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                Utils.hideSoftKeyboard(context, rootView)
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        setActionBarVisibility(true)
     }
 }
