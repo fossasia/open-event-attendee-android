@@ -5,31 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/voiceLL"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin_extra_small"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:inputType="textCapWords"
-            app:iconifiedByDefault="false"
-            app:queryHint="@string/location_hint"
-            app:searchIcon="@null" />
-
-        <ImageButton
-            android:id="@+id/voice_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/layout_margin_extra_small"
-            android:background="@null"
-            app:srcCompat="@drawable/ic_mic_blue_24dp" />
-    </LinearLayout>
+        android:inputType="textCapWords"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/location_hint"
+        app:searchIcon="@null" />
 
     <LinearLayout
         android:id="@+id/currentLocation"
