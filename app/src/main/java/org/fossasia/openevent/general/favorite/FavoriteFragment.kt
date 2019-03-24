@@ -10,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -75,10 +74,6 @@ class FavoriteFragment : Fragment() {
                 .build()
             findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
         }
-
-        val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
-            LinearLayoutManager.VERTICAL)
-        rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
 
         favoriteEventViewModel.events
             .nonNull()
