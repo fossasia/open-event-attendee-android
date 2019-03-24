@@ -90,10 +90,10 @@ class ProfileFragment : Fragment() {
                 emailSettings = it.email
 
                 Picasso.get()
-                        .load(it.avatarUrl)
-                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
-                        .transform(CircleTransform())
-                        .into(rootView.avatar)
+                    .load(it.avatarUrl)
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
+                    .transform(CircleTransform())
+                    .into(rootView.avatar)
 
                 rootView.editProfileButton.setOnClickListener {
                     findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
@@ -112,9 +112,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.ticket_issues -> {
-                context?.let {
-                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
-                }
+                Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
                 return true
             }
             R.id.logout -> {
@@ -145,7 +143,7 @@ class ProfileFragment : Fragment() {
         val manager = activity?.packageManager
         try {
             val intent = manager?.getLaunchIntentForPackage(packageName)
-                    ?: throw ActivityNotFoundException()
+                ?: throw ActivityNotFoundException()
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
@@ -183,7 +181,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDialog() {
-            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+        AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
             .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                 if (profileViewModel.isLoggedIn()) {
                     profileViewModel.logout()
