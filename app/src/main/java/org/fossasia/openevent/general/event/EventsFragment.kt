@@ -131,19 +131,19 @@ class EventsFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
-        showNoInternetScreen(isNetworkConnected(context))
+        showNoInternetScreen(!isNetworkConnected(context) && eventsViewModel.events.value.isNullOrEmpty())
 
         rootView.retry.setOnClickListener {
             val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
                 eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
             }
-            showNoInternetScreen(isNetworkConnected)
+            showNoInternetScreen(!isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
-            showNoInternetScreen(isNetworkConnected(context))
+            showNoInternetScreen(!isNetworkConnected(context))
             if (!isNetworkConnected(context)) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
@@ -196,8 +196,8 @@ class EventsFragment : Fragment() {
     }
 
     private fun showNoInternetScreen(show: Boolean) {
-        rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
-        rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showEmptyMessage(itemCount: Int) {
