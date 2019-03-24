@@ -119,9 +119,7 @@ class OrdersUnderUserFragment : Fragment() {
     private fun showNoTicketsScreen(show: Boolean) {
         noTicketsScreen.visibility = if (show) View.VISIBLE else View.GONE
         findMyTickets.setOnClickListener {
-            context?.let {
-                Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
-            }
+            Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
         }
     }
 
