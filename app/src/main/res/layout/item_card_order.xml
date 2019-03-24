@@ -94,6 +94,6 @@
             android:layout_height="@dimen/avatar_medium"
             android:layout_weight="1.1"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder" />
+            android:src="@drawable/header" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

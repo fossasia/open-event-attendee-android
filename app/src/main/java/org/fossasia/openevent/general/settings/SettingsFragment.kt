@@ -24,6 +24,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
     private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
+    private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
@@ -54,6 +55,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        if (preference?.key == resources.getString(R.string.key_visit_website)) {
+            // Goes to website
+            Utils.openUrl(requireContext(), WEBSITE_LINK)
+            return true
+        }
         if (preference?.key == resources.getString(R.string.key_rating)) {
             // Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
@@ -61,9 +67,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             // Links to suggestion form
-            context?.let {
-                Utils.openUrl(it, FORM_LINK)
-            }
+            Utils.openUrl(requireContext(), FORM_LINK)
             return true
         }
         if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
@@ -75,15 +79,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
         }
         if (preference?.key == getString(R.string.key_privacy)) {
-            context?.let { Utils.openUrl(it, PRIVACY_LINK) }
+            Utils.openUrl(requireContext(), PRIVACY_LINK)
             return true
         }
         if (preference?.key == getString(R.string.key_terms_of_service)) {
-            context?.let { Utils.openUrl(it, TERMS_OF_SERVICE_LINK) }
+            Utils.openUrl(requireContext(), TERMS_OF_SERVICE_LINK)
             return true
         }
         if (preference?.key == getString(R.string.key_cookie_policy)) {
-            context?.let { Utils.openUrl(it, COOKIE_POLICY_LINK) }
+            Utils.openUrl(requireContext(), COOKIE_POLICY_LINK)
             return true
         }
 

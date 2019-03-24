@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.content_event.view.eventLocationTextView
 import kotlinx.android.synthetic.main.content_event.view.eventName
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserDescription
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
+import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.logo
@@ -119,7 +120,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
@@ -229,7 +230,7 @@ class EventDetailsFragment : Fragment() {
         if (!locationNameIsEmpty) {
             rootView.locationUnderMap.text = event.locationName
             rootView.imageMap.setOnClickListener(mapClickListener)
-            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
+            rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
@@ -254,14 +255,13 @@ class EventDetailsFragment : Fragment() {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.header)
                     .into(rootView.logo)
         }
 
         // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
-        rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
-        rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
+        rootView.eventTimingLinearLayout.setOnClickListener(dateClickListener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -381,6 +381,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int) {
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
     }
 }

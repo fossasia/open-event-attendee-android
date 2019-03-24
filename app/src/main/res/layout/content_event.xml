@@ -23,7 +23,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/placeholder" />
+            android:src="@drawable/header" />
 
         <TextView
             android:id="@+id/eventName"
@@ -55,13 +55,17 @@
 
         <LinearLayout
             android:id="@+id/eventTimingLinearLayout"
-            android:layout_width="@dimen/layout_margin_none"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginStart="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/eventOrganiserName"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventOrganiserName">
 
             <ImageView
@@ -93,7 +97,6 @@
                     tools:text="Wed June 5" />
 
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -101,9 +104,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/eventTimingLinearLayout"
             app:layout_constraintTop_toBottomOf="@+id/eventTimingLinearLayout">
 
@@ -265,10 +270,11 @@
 
             <ImageView
                 android:id="@+id/imageMap"
+                android:background="?selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
                 android:layout_marginBottom="@dimen/divider_margin_bottom"
-                android:src="@drawable/placeholder"
+                android:src="@drawable/header"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -378,7 +384,7 @@
                 android:id="@+id/frameContainerSimilarEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_extra_large"></FrameLayout>
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

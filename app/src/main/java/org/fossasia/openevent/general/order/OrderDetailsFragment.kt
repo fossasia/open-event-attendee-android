@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
@@ -70,6 +71,7 @@ class OrderDetailsFragment : Fragment() {
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
+        LinearSnapHelper().attachToRecyclerView(rootView.orderDetailsRecycler)
 
         val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
             override fun onClick(eventID: Long) {
@@ -87,13 +89,13 @@ class OrderDetailsFragment : Fragment() {
 
         orderDetailsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
         orderDetailsViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.orderDetailCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 

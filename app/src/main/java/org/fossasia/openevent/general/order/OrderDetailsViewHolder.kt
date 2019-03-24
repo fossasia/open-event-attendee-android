@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.name
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderIdentifier
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
+import kotlinx.android.synthetic.main.item_card_order_details.view.organizerLabel
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
@@ -41,8 +42,12 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             itemView.location.text = event.locationName
             itemView.date.text = "$formattedDate\n$formattedTime $timezone"
             itemView.eventSummary.text = event.description?.stripHtml()
-            itemView.organizer.text = event.organizerName
 
+            if (event.organizerName.isNullOrEmpty()) {
+                itemView.organizerLabel.visibility = View.GONE
+            } else {
+                itemView.organizer.text = event.organizerName
+            }
             itemView.map.setOnClickListener {
                 val mapUrl = loadMapUrl(event)
                 val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))

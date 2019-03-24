@@ -50,7 +50,7 @@ class SearchLocationFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
+        geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
             rootView.currentLocation.visibility = View.GONE
         })
 
@@ -65,7 +65,7 @@ class SearchLocationFragment : Fragment() {
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
-        geoLocationViewModel.location.observe(this, Observer { location ->
+        geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
             searchLocationViewModel.saveSearch(location)
             redirectToMain()
         })
