@@ -112,9 +112,7 @@ class ProfileFragment : Fragment() {
                 return true
             }
             R.id.ticket_issues -> {
-                context?.let {
-                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
-                }
+                Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
                 return true
             }
             R.id.logout -> {

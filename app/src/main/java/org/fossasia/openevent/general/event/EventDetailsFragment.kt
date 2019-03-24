@@ -381,6 +381,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int) {
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
     }
 }
