@@ -76,10 +76,6 @@ class FavoriteFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
         }
 
-        val dividerItemDecoration = DividerItemDecoration(rootView.favoriteEventsRecycler.context,
-            LinearLayoutManager.VERTICAL)
-        rootView.favoriteEventsRecycler.addItemDecoration(dividerItemDecoration)
-
         favoriteEventViewModel.events
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->

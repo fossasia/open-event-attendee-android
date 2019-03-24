@@ -7,7 +7,11 @@
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="@dimen/card_corner_radius"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="@android:color/white">
+    android:elevation="@dimen/card_elevation"
+    android:layout_marginTop="@dimen/layout_margin_medium"
+    android:layout_marginBottom="@dimen/layout_margin_small"
+    android:layout_marginLeft="@dimen/layout_margin_large"
+    android:layout_marginRight="@dimen/layout_margin_large">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/shareFab"
