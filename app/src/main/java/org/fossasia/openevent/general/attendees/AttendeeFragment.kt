@@ -146,7 +146,9 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.terms_of_service))
+                context?.let {
+                    Utils.openUrl(it, getString(R.string.terms_of_service))
+                }
             }
         }
 
@@ -157,7 +159,9 @@ class AttendeeFragment : Fragment() {
             }
 
             override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.privacy_policy))
+                context?.let {
+                    Utils.openUrl(it, getString(R.string.privacy_policy))
+                }
             }
         }
 

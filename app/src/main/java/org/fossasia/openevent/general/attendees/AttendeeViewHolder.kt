@@ -28,14 +28,14 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 val id = attendeeRecyclerAdapter.attendeeList[position].id
                 attendeeRecyclerAdapter.attendeeList.removeAt(position)
                 val attendee = Attendee(id, firstname = itemView.attendeeItemFirstName.text.toString(),
-                    lastname = itemView.attendeeItemLastName.text.toString(),
-                    email = itemView.attendeeItemEmail.text.toString(),
-                    city = getAttendeeField("city"),
-                    address = getAttendeeField("address"),
-                    state = getAttendeeField("state"),
-                    country = itemView.attendeeItemCountry.text.toString(),
-                    ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id.toLong()),
-                    event = attendeeRecyclerAdapter.eventId)
+                        lastname = itemView.attendeeItemLastName.text.toString(),
+                        email = itemView.attendeeItemEmail.text.toString(),
+                        city = getAttendeeField("city"),
+                        address = getAttendeeField("address"),
+                        state = getAttendeeField("state"),
+                        country = itemView.attendeeItemCountry.text.toString(),
+                        ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id.toLong()),
+                        event = attendeeRecyclerAdapter.eventId)
                 attendeeRecyclerAdapter.attendeeList.add(position, attendee)
             }
 

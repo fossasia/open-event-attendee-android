@@ -67,7 +67,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             // Links to suggestion form
-            Utils.openUrl(requireContext(), FORM_LINK)
+            context?.let {
+                Utils.openUrl(it, FORM_LINK)
+            }
             return true
         }
         if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
@@ -79,15 +81,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             }
         }
         if (preference?.key == getString(R.string.key_privacy)) {
-            Utils.openUrl(requireContext(), PRIVACY_LINK)
+            context?.let { Utils.openUrl(it, PRIVACY_LINK) }
             return true
         }
         if (preference?.key == getString(R.string.key_terms_of_service)) {
-            Utils.openUrl(requireContext(), TERMS_OF_SERVICE_LINK)
+            context?.let { Utils.openUrl(it, TERMS_OF_SERVICE_LINK) }
             return true
         }
         if (preference?.key == getString(R.string.key_cookie_policy)) {
-            Utils.openUrl(requireContext(), COOKIE_POLICY_LINK)
+            context?.let { Utils.openUrl(it, COOKIE_POLICY_LINK) }
             return true
         }
 

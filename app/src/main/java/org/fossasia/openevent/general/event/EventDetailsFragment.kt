@@ -131,11 +131,11 @@ class EventDetailsFragment : Fragment() {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 if (thisActivity is AppCompatActivity) {
                     if (scrollY > rootView.eventName.height + rootView.logo.height)
-                    /*Toolbar title set to name of Event if scrolled more than
-                    combined height of eventImage and eventName views*/
+                        /*Toolbar title set to name of Event if scrolled more than
+                        combined height of eventImage and eventName views*/
                         thisActivity.supportActionBar?.title = title
                     else
-                    // Toolbar title set to an empty string
+                        // Toolbar title set to an empty string
                         thisActivity.supportActionBar?.title = ""
                 }
             }
@@ -159,10 +159,10 @@ class EventDetailsFragment : Fragment() {
             organizerContainer.visibility = View.VISIBLE
 
             Picasso.get()
-                .load(event.logoUrl)
-                .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
-                .transform(CircleTransform())
-                .into(rootView.logoIcon)
+                    .load(event.logoUrl)
+                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
+                    .transform(CircleTransform())
+                    .into(rootView.logoIcon)
 
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
@@ -233,9 +233,9 @@ class EventDetailsFragment : Fragment() {
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
-                .load(eventViewModel.loadMap(event))
-                .placeholder(R.drawable.ic_map_black)
-                .into(rootView.imageMap)
+                    .load(eventViewModel.loadMap(event))
+                    .placeholder(R.drawable.ic_map_black)
+                    .into(rootView.imageMap)
         }
 
         // Date and Time section
@@ -254,9 +254,9 @@ class EventDetailsFragment : Fragment() {
         // Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
-                .load(it)
-                .placeholder(R.drawable.header)
-                .into(rootView.logo)
+                    .load(it)
+                    .placeholder(R.drawable.header)
+                    .into(rootView.logo)
         }
 
         // Add event to Calendar
@@ -381,6 +381,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int) {
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
     }
 }
