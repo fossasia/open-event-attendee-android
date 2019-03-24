@@ -21,9 +21,9 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_location.search
 import kotlinx.android.synthetic.main.fragment_search_location.view.voice_button
-import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.search
+import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -57,10 +57,6 @@ class SearchLocationFragment : Fragment() {
         rootView.voice_button.setOnClickListener {
             Utils.hideSoftKeyboard(rootView.context, rootView)
             checkAudioPermission()
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED)
-            //Runs only if Audio permission is granted
-                speechInput()
         }
 
         rootView.currentLocation.setOnClickListener {
