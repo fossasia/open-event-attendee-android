@@ -105,6 +105,9 @@ class SearchLocationFragment : Fragment() {
         if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.RECORD_AUDIO), AUDIO_PERMISSION_REQUEST)
+        } else {
+            //Audio Permission Already Granted
+            speechInput()
         }
     }
 
