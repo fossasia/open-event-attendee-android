@@ -41,6 +41,7 @@
     <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
     <string name="event_details">Event details</string>
+    <string name="download_ticket">Download Ticket</string>
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
@@ -217,5 +218,11 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+
+    <!--Text to Speech-->
+    <string name="speech_prompt">Say something</string>
+    <string name="not_supported">Not supported</string>
+    <string name="use_voice_search">Use Voice Search</string>
+    <string name="no_audio_permission">No Audio Permission</string>
 
 </resources>
