@@ -39,7 +39,7 @@ class SearchLocationFragment : Fragment() {
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
-            rootView.currentLocation.visibility = View.GONE
+            rootView.currentLocationLinearLayout.visibility = View.GONE
         })
 
         rootView.currentLocationLinearLayout.setOnClickListener {
