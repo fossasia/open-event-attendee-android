@@ -105,7 +105,7 @@ class SearchTimeFragment : Fragment() {
     }
 
     private fun redirectToSearch(time: String) {
-        val args = SearchFragmentArgs.Builder(time).build().toBundle()
+        val args = SearchFragmentArgs.Builder().setStringSavedDate(time).build().toBundle()
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
         Navigation.findNavController(rootView).navigate(R.id.searchFragment, args, navOptions)
     }
