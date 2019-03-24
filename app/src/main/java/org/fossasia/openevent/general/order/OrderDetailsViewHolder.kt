@@ -17,11 +17,13 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.orderIdentifi
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizerLabel
+import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.utils.stripHtml
+import org.jetbrains.anko.browse
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -54,6 +56,12 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 val packageManager = itemView.context?.packageManager
                 if (packageManager != null && mapIntent.resolveActivity(packageManager) != null) {
                     itemView.context.startActivity(mapIntent)
+                }
+            }
+            if (!attendee.pdfUrl.isNullOrBlank()) {
+                itemView.downloadButton.isEnabled = true
+                itemView.downloadButton.setOnClickListener {
+                    itemView.context.browse(attendee.pdfUrl)
                 }
             }
 

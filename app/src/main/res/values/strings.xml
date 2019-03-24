@@ -41,6 +41,7 @@
     <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
     <string name="event_details">Event details</string>
+    <string name="download_ticket">Download Ticket</string>
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
