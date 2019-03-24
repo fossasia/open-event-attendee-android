@@ -20,6 +20,7 @@
     <dimen name="layout_margin_extreme_large">56dp</dimen>
     <dimen name="layout_margin_search_view">100dp</dimen>
     <dimen name="layout_margin_none">0dp</dimen>
+    <dimen name="voice_48dp">48dp</dimen>
 
     <!-- padding specifics -->
     <dimen name="padding_extra_small">2dp</dimen>

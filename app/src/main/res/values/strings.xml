@@ -219,4 +219,10 @@
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
 
+    <!--Text to Speech-->
+    <string name="speech_prompt">Say something</string>
+    <string name="not_supported">Not supported</string>
+    <string name="use_voice_search">Use Voice Search</string>
+    <string name="no_audio_permission">No Audio Permission</string>
+
 </resources>
