@@ -26,13 +26,14 @@
 
         <!-- Email Label -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:id="@+id/textInputLayoutEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_medium">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,6 +46,7 @@
 
         <!-- Password Label -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +54,7 @@
             android:layout_marginTop="@dimen/padding_medium"
             app:passwordToggleEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,6 +66,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:id="@+id/textInputLayoutConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +74,7 @@
             android:layout_marginTop="@dimen/padding_medium"
             app:passwordToggleEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/confirmPasswords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,12 +86,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_medium">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/firstNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,12 +101,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_medium">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

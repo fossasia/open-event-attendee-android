@@ -1,11 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,15 +16,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AboutEvent" parent="ThemeOverlay.AppCompat.ActionBar"/>
+    <style name="AppTheme.AboutEvent" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-    <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
+    <style name="AccentButton" parent="ThemeOverlay.MaterialComponents.Dark">
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColor">@android:color/white</item>

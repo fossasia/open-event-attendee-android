@@ -17,12 +17,13 @@
         android:textSize="@dimen/heading_text_size" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,12 +32,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,12 +47,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,13 +62,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:id="@+id/countryArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
