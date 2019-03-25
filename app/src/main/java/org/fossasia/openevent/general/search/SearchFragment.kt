@@ -1,6 +1,9 @@
 package org.fossasia.openevent.general.search
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -94,9 +97,41 @@ class SearchFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE)
+        if (searchManager is SearchManager)
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+        searchView.maxWidth = Int.MAX_VALUE
         searchItem.actionView = searchView
+
+        val oldQueryListener = object : SearchView.OnSuggestionListener {
+            override fun onSuggestionClick(position: Int): Boolean {
+                val cursor = searchView.suggestionsAdapter.cursor
+                cursor.moveToPosition(position)
+                val query = cursor.getString(2)
+                searchView.setQuery(query, false)
+                SearchResultsFragmentArgs.Builder()
+                    .setQuery(query)
+                    .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
+                    .setDate(rootView.timeTextView.text.toString().nullToEmpty())
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
+                    }
+                return true
+            }
+
+            override fun onSuggestionSelect(position: Int): Boolean {
+                return true
+            }
+        }
+        searchView.setOnSuggestionListener(oldQueryListener)
+
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                val suggestion = SearchRecentSuggestions(context,
+                    OldQuerySuggestionProvider.AUTHORITY, OldQuerySuggestionProvider.MODE)
+                suggestion.saveRecentQuery(query, null)
                 SearchResultsFragmentArgs.Builder()
                     .setQuery(query)
                     .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
