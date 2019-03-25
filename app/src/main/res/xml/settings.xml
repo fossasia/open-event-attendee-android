@@ -35,7 +35,8 @@
         <SwitchPreference
             android:key="@string/key_timezone_switch"
             android:summary="@string/timeZone_summary"
-            android:title="@string/timeZone_title" />
+            android:title="@string/timeZone_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
