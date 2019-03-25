@@ -176,7 +176,7 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.9.2"
+    testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'org.threeten:threetenbp:1.3.8'
     testImplementation "org.koin:koin-test:$koin_version"
     testImplementation 'androidx.arch.core:core-testing:2.0.1'
