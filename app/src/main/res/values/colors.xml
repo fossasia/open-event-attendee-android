@@ -13,4 +13,7 @@
     <color name="lighter_grey">#757575</color>
     <color name="shimmer_background">#dddddd</color>
 
+    <color name="colorPrimaryVariant">#311B92</color>
+    <color name="colorSecondary">#03A9F4</color>
+    <color name="colorSecondaryVariant">#01579B</color>
 </resources>
