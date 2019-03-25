@@ -17,27 +17,49 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
 
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
-    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
+    private val mutableSimilarLocationEvents = MutableLiveData<List<Event>>()
+    val similarLocationEvents: LiveData<List<Event>> = mutableSimilarLocationEvents
+    private val mutableSimilarIdEvents = MutableLiveData<List<Event>>()
+    val similarIdEvents: LiveData<List<Event>> = mutableSimilarIdEvents
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
 
     var eventId: Long = -1
 
-    fun loadSimilarEvents(id: Long) {
+    fun loadIdEvents(id: Long) {
         if (id == -1L) {
             return
         }
         compositeDisposable.add(eventService.getSimilarEvents(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe({
+            .doOnSubscribe {
                 mutableProgress.value = true
-            }).subscribe({
+            }.subscribe({
                 mutableProgress.value = false
-                mutableSimilarEvents.value = it.filter { it.id != eventId }
+                mutableSimilarIdEvents.value = it.filter { it.id != eventId }
             }, {
                 Timber.e(it, "Error fetching similar events")
+                mutableError.value = "Error fetching similar events"
+            })
+        )
+    }
+
+    fun loadLocationEvents(location: String) {
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"}]"
+
+        compositeDisposable.add(eventService.getEventsByLocation(query)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }
+            .doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableSimilarLocationEvents.value = it.filter { it.id != eventId }
+            }, {
+                Timber.e(it, "Error fetching simialr events")
                 mutableError.value = "Error fetching similar events"
             })
         )

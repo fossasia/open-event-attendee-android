@@ -43,6 +43,9 @@ class SimilarEventsFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var similarEventsListAdapter: EventsListAdapter
+    private var similarIdEvents: MutableList<Event> = mutableListOf<Event>()
+    private var similarLocationEvents: MutableList<Event> = mutableListOf<Event>()
+    private var similarEvents: MutableList<Event> = mutableListOf<Event>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +60,22 @@ class SimilarEventsFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_similar_events, container, false)
 
-        similarEventsViewModel.similarEvents
+        similarEventsViewModel.similarLocationEvents
             .nonNull()
-            .observe(viewLifecycleOwner, Observer { eventsList ->
-                similarEventsListAdapter.submitList(eventsList)
-                handleVisibility(eventsList)
-                Timber.d("Fetched similar events of size %s", similarEventsListAdapter.itemCount)
+            .observe(viewLifecycleOwner, Observer {
+                similarLocationEvents.clear()
+                similarLocationEvents = it.toMutableList()
+                Timber.d("Fetched similar location events of size %s", it.size)
+                setUpAdapter()
+            })
+
+        similarEventsViewModel.similarIdEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                similarIdEvents.clear()
+                similarIdEvents = it.toMutableList()
+                Timber.d("Fetched similar id events of size %s", it.size)
+                setUpAdapter()
             })
 
         similarEventsViewModel.error
@@ -77,7 +90,8 @@ class SimilarEventsFragment : Fragment() {
                 progressBar.isVisible = it
             })
 
-        similarEventsViewModel.loadSimilarEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadIdEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadLocationEvents(safeArgs.eventLocation.toString())
 
         return rootView
     }
@@ -138,5 +152,32 @@ class SimilarEventsFragment : Fragment() {
         similarEventsDivider.isGone = similarEvents.isEmpty()
         moreLikeThis.isGone = similarEvents.isEmpty()
         similarEventsRecycler.isGone = similarEvents.isEmpty()
+    }
+
+    private fun setUpAdapter() {
+        similarEvents.clear()
+        var id: Long
+        var add: Boolean
+        if (similarIdEvents.size != 0 && similarLocationEvents.size != 0) {
+            similarIdEvents.forEach {
+                id = it.id
+                add = true
+                similarLocationEvents.forEach {
+                    if (id == it.id) add = false
+                }
+                if (add) similarEvents.add(it)
+            }
+            similarEvents.addAll(similarLocationEvents)
+        } else if (similarIdEvents.size == 0) {
+            similarEvents.addAll(similarLocationEvents)
+        } else if (similarLocationEvents.size == 0) {
+            similarEvents.addAll(similarIdEvents)
+        }
+
+        handleVisibility(similarEvents)
+        Timber.d("Fetched Similar events of size %s", similarEvents.size)
+        similarEvents.shuffle()
+        similarEventsListAdapter.submitList(similarEvents)
+        similarEventsListAdapter.notifyDataSetChanged()
     }
 }

@@ -63,6 +63,7 @@ import java.util.Currency
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
+const val EVENT_LOCATION = "eventLocation"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -70,6 +71,7 @@ class EventDetailsFragment : Fragment() {
 
     private lateinit var rootView: View
     private var eventTopicId: Long? = null
+    private var eventLocation: String? = null
     private lateinit var eventShare: Event
     private var currency: String? = null
     private val LINE_COUNT: Int = 3
@@ -246,9 +248,13 @@ class EventDetailsFragment : Fragment() {
         rootView.refundPolicy.text = event.refundPolicy
 
         // Similar Events Section
-        if (event.eventTopic != null) {
+        if (event.eventTopic != null || !event.locationName.isNullOrBlank() ||
+            !event.searchableLocationName.isNullOrBlank()) {
             similarEventsContainer.visibility = View.VISIBLE
             eventTopicId = event.eventTopic?.id
+            eventLocation =
+                if (event.searchableLocationName.isNullOrBlank()) event.locationName
+                else event.searchableLocationName
         }
 
         // Set Cover Image
@@ -365,6 +371,7 @@ class EventDetailsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, safeArgs.eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
+        eventLocation?.let { bundle.putString(EVENT_LOCATION, it) }
         similarEventsFragment.arguments = bundle
         childFragmentManager.beginTransaction()
             .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
