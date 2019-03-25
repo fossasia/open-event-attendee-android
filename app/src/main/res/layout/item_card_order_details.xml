@@ -194,6 +194,17 @@
                 android:textSize="@dimen/text_size_large"
                 tools:text="@string/organizer_preview" />
 
+            <Button
+                android:id="@+id/downloadButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:layout_marginTop="@dimen/padding_large"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:text="@string/download_ticket"
+                android:theme="@style/AccentButton" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.core.widget.NestedScrollView>
