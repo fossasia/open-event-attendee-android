@@ -94,6 +94,7 @@ dependencies {
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
     def nav_version = "2.1.0-alpha01"
+    def anko_version = "0.10.6"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -162,11 +163,17 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version" // For Kotlin use navigation-ui-ktx
 
+    //Anko
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
+
+    //Mapbox SDK plugins
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.2"

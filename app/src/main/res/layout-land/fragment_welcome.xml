@@ -64,6 +64,7 @@
             android:layout_width="@dimen/item_image_view_medium"
             android:layout_height="@dimen/item_image_view_medium"
             android:layout_margin="@dimen/layout_margin_medium"
+            android:tint="@color/colorPrimary"
             app:srcCompat="@drawable/ic_location_pin" />
 
         <TextView

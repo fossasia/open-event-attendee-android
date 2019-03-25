@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search"
+    <FrameLayout
+        android:id="@+id/autocomplete_frag_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textCapWords"
-        app:iconifiedByDefault="false"
-        app:queryHint="@string/location_hint"
-        app:searchIcon="@null" />
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/layout_margin_medium"
+        android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginEnd="@dimen/layout_margin_medium"
+        android:layout_marginRight="@dimen/layout_margin_medium"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        app:layout_constraintBottom_toTopOf="@+id/currentLocationLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/currentLocation"
-        android:layout_width="match_parent"
+        android:id="@+id/currentLocationLinearLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/locationButtonIcon"
-            android:layout_width="@dimen/item_image_view_medium"
-            android:layout_height="@dimen/item_image_view_medium"
-            android:layout_margin="@dimen/layout_margin_medium"
-            app:srcCompat="@drawable/ic_location_pin" />
+        android:layout_marginStart="@dimen/layout_margin_medium"
+        android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:layout_marginEnd="@dimen/layout_margin_medium"
+        android:layout_marginRight="@dimen/layout_margin_medium"
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:background="@drawable/round_background"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/locationButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_margin_medium"
+            android:drawableStart="@drawable/ic_location_pin"
+            android:drawableLeft="@drawable/ic_location_pin"
+            android:drawablePadding="@dimen/padding_small"
             android:text="@string/current_location"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_large" />
 
         <ProgressBar
@@ -46,4 +58,4 @@
             android:layout_marginLeft="@dimen/layout_margin_large"
             android:visibility="gone" />
     </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
