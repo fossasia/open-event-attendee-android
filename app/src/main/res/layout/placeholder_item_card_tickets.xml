@@ -10,25 +10,37 @@
     app:cardCornerRadius="@dimen/card_elevation"
     app:cardElevation="@dimen/layout_margin_none">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/avatar_medium"
         android:orientation="horizontal">
 
         <View
+            android:id="@+id/view3"
             android:layout_width="@dimen/card_width_45dp"
             android:layout_height="@dimen/card_width_45dp"
+            android:layout_marginStart="@dimen/layout_margin_medium"
             android:layout_marginLeft="@dimen/layout_margin_medium"
             android:layout_marginTop="@dimen/layout_margin_medium"
-            android:background="@color/shimmer_background" />
+            android:background="@color/shimmer_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="@dimen/item_image_view_160dp"
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/layout_margin_small"
-            android:layout_marginRight="@dimen/layout_margin_small"
+            android:layout_marginStart="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
             android:orientation="vertical"
-            android:padding="@dimen/padding_medium">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view2"
+            app:layout_constraintStart_toEndOf="@+id/view3"
+            app:layout_constraintTop_toTopOf="parent">
 
             <View
                 android:layout_width="match_parent"
@@ -56,11 +68,19 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view2"
             android:layout_width="@dimen/item_image_view_large"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/layout_margin_small"
-            android:background="@color/shimmer_background" />
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:background="@color/shimmer_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
