@@ -67,10 +67,10 @@ class EditProfileFragment : Fragment() {
                 userFirstName = it.firstName.nullToEmpty()
                 userLastName = it.lastName.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
-                if (rootView.firstName.text.isBlank()) {
+                if (rootView.firstName.text.isNullOrBlank()) {
                     rootView.firstName.setText(userFirstName)
                 }
-                if (rootView.lastName.text.isBlank()) {
+                if (rootView.lastName.text.isNullOrBlank()) {
                     rootView.lastName.setText(userLastName)
                 }
                 if (!imageUrl.isEmpty() && !avatarUpdated) {
