@@ -26,42 +26,47 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/layout_margin_medium"
-            android:layout_marginStart="@dimen/layout_margin_medium"
-            android:layout_marginEnd="@dimen/layout_margin_medium"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <View
+            android:id="@+id/view1"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:layout_marginTop="@dimen/details_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
             app:layout_constraintLeft_toRightOf="@+id/viewLeft"
             app:layout_constraintRight_toLeftOf="@+id/viewRight"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_margin_none"
-                android:layout_marginBottom="@dimen/layout_margin_small"
-                android:layout_weight="1"
-                android:background="@color/shimmer_background"
-                android:ellipsize="end" />
+        <View
+            android:id="@+id/view2"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/details_margin_small"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@+id/view3"
+            app:layout_constraintLeft_toRightOf="@+id/viewLeft"
+            app:layout_constraintRight_toLeftOf="@+id/viewRight"
+            app:layout_constraintTop_toBottomOf="@+id/view1" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_margin_none"
-                android:layout_marginBottom="@dimen/layout_margin_small"
-                android:layout_weight="1"
-                android:background="@color/shimmer_background"
-                android:ellipsize="end" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/layout_margin_none"
-                android:layout_weight="1"
-                android:background="@color/shimmer_background"
-                android:ellipsize="end" />
-
-        </LinearLayout>
+        <View
+            android:id="@+id/view3"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/details_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/viewLeft"
+            app:layout_constraintRight_toLeftOf="@+id/viewRight" />
 
         <View
             android:id="@+id/viewRight"
