@@ -3,6 +3,7 @@
     <!-- text size -->
     <dimen name="heading_text_size">20sp</dimen>
     <dimen name="text_size_expanded_title">22sp</dimen>
+    <dimen name="text_size_expanded_title_medium">25sp</dimen>
     <dimen name="text_size_expanded_title_large">27sp</dimen>
     <dimen name="text_size_extra_large">32sp</dimen>
     <dimen name="text_size_large">16sp</dimen>

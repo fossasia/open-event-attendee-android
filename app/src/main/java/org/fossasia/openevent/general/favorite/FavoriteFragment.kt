@@ -17,7 +17,11 @@ import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
-import kotlinx.android.synthetic.main.fragment_favorite.view.findSomethingToDo
+import kotlinx.android.synthetic.main.fragment_favorite.view.find_text
+import kotlinx.android.synthetic.main.fragment_favorite.view.today_button
+import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrow_button
+import kotlinx.android.synthetic.main.fragment_favorite.view.weekend_button
+import kotlinx.android.synthetic.main.fragment_favorite.view.month_button
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -26,6 +30,10 @@ import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.common.ShareFabClickListener
+import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
+import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
@@ -42,6 +50,7 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
         scope = getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString())
     )
+    val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +73,7 @@ class FavoriteFragment : Fragment() {
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        rootView.findSomethingToDo.setOnClickListener {
+        rootView.find_text.setOnClickListener {
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(R.id.eventsFragment, false)
                 .setEnterAnim(R.anim.slide_in_right)
@@ -73,6 +82,19 @@ class FavoriteFragment : Fragment() {
                 .setPopExitAnim(R.anim.slide_out_right)
                 .build()
             findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+        }
+
+        rootView.today_button.setOnClickListener {
+            openSearchResult(rootView.today_button.text.toString())
+        }
+        rootView.tomorrow_button.setOnClickListener {
+            openSearchResult(rootView.tomorrow_button.text.toString())
+        }
+        rootView.weekend_button.setOnClickListener {
+            openSearchResult(rootView.weekend_button.text.toString())
+        }
+        rootView.month_button.setOnClickListener {
+            openSearchResult(rootView.month_button.text.toString())
         }
 
         favoriteEventViewModel.events
@@ -149,5 +171,17 @@ class FavoriteFragment : Fragment() {
 
     private fun showEmptyMessage(itemCount: Int) {
         noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+    }
+
+    private fun openSearchResult(time: String) {
+        SearchResultsFragmentArgs.Builder()
+            .setQuery("")
+            .setLocation(preference.getString(SAVED_LOCATION).toString())
+            .setDate(time)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, Utils.getAnimSlide())
+            }
     }
 }

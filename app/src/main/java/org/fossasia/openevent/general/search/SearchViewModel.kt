@@ -175,6 +175,7 @@ class SearchViewModel(
             }.subscribe({
                 mutableEvents.value = it
             }, {
+                mutableEvents.value = emptyList()
                 Timber.e(it, "Error fetching events")
                 mutableError.value = "Error fetching events"
             })
