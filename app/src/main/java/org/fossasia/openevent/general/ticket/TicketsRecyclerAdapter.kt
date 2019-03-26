@@ -10,6 +10,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     private val tickets = ArrayList<Ticket>()
     private var eventCurrency: String? = null
     private var selectedListener: TicketSelectedListener? = null
+    private lateinit var ticketAndQuantity: List<Pair<Int, Int>>
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
@@ -32,11 +33,16 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
     override fun onBindViewHolder(holder: TicketViewHolder, position: Int) {
         val event = tickets[position]
-        holder.bind(event, selectedListener, eventCurrency)
+        holder.bind(event, selectedListener, eventCurrency,
+            if ((this::ticketAndQuantity.isInitialized)) ticketAndQuantity.get(position).second else 0)
     }
 
     override fun getItemCount(): Int {
         return tickets.size
+    }
+
+    fun setTicketAndQty(ticketAndQty: List<Pair<Int, Int>>) {
+        ticketAndQuantity = ticketAndQty
     }
 }
 
