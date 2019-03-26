@@ -50,7 +50,6 @@ class FavoriteFragment : Fragment() {
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
         scope = getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString())
     )
-    val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,7 +175,7 @@ class FavoriteFragment : Fragment() {
     private fun openSearchResult(time: String) {
         SearchResultsFragmentArgs.Builder()
             .setQuery("")
-            .setLocation(preference.getString(SAVED_LOCATION).toString())
+            .setLocation(Preference().getString(SAVED_LOCATION).toString())
             .setDate(time)
             .build()
             .toBundle()
