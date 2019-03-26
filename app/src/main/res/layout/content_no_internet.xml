@@ -43,8 +43,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:text="@string/retry"
-            android:textColor="@color/white"
-            style="@style/Widget.MaterialComponents.Button"
+            android:textColor="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             tools:text="RETRY" />
     </LinearLayout>
 
