@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -406,7 +406,7 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.signOut.setOnClickListener {
-            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+            AlertDialog.Builder(requireContext()).setMessage(resources.getString(R.string.message))
                 .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                     attendeeViewModel.logout()
                     activity?.onBackPressed()
@@ -500,7 +500,7 @@ class AttendeeFragment : Fragment() {
 
     private fun showTicketSoldOutDialog(show: Boolean) {
         if (show) {
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(requireContext())
             builder.setMessage(getString(R.string.tickets_sold_out))
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
             builder.show()

@@ -2,7 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -216,7 +216,7 @@ class EditProfileFragment : Fragment() {
             if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
         } else {
             hideSoftKeyboard(context, rootView)
-            val dialog = AlertDialog.Builder(context)
+            val dialog = AlertDialog.Builder(requireContext())
             dialog.setMessage(getString(R.string.changes_not_saved))
             dialog.setNegativeButton(getString(R.string.discard)) { _, _ ->
                 if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
