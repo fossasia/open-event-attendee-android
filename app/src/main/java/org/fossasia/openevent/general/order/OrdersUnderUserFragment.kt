@@ -17,7 +17,9 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersNestedScrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
@@ -25,7 +27,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class OrdersUnderUserFragment : Fragment() {
+class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
@@ -132,4 +134,6 @@ class OrdersUnderUserFragment : Fragment() {
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
             }
     }
+
+    override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)
 }
