@@ -29,7 +29,7 @@
         <View
             android:id="@+id/ticket_title"
             android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="@dimen/view_height_30dp"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
             android:layout_marginLeft="@dimen/layout_margin_medium"
             android:layout_marginRight="@dimen/layout_margin_medium"
             android:layout_marginBottom="@dimen/layout_margin_small"
@@ -43,7 +43,7 @@
         <View
             android:id="@+id/ticket_details"
             android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="@dimen/view_height_30dp"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
             android:layout_marginLeft="@dimen/layout_margin_medium"
             android:layout_marginTop="@dimen/details_margin_small"
             android:layout_marginRight="@dimen/layout_margin_medium"
@@ -58,7 +58,7 @@
         <View
             android:id="@+id/see_ticket"
             android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="@dimen/view_height_30dp"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
             android:layout_marginLeft="@dimen/layout_margin_medium"
             android:layout_marginRight="@dimen/layout_margin_medium"
             android:layout_marginBottom="@dimen/details_margin_small"
