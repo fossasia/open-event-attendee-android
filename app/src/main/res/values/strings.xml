@@ -221,4 +221,7 @@
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
 
+    <!--social link fragment-->
+    <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
+
 </resources>

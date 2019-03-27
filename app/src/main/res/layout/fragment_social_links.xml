@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:id="@+id/socialLinksCoordinatorLayout">
 
@@ -10,7 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/layout_margin_large"
             android:textColor="@color/dark_grey"
             android:text="@string/event_host_details" />
@@ -31,4 +31,29 @@
             android:layout_marginBottom="@dimen/layout_margin_large"
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/socialNoInternet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_extra_large"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/social_link_check_internet_message"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/socialLinkReload"
+            android:layout_width="@dimen/reload_button_width"
+            android:layout_height="@dimen/reload_button_height"
+            android:padding="@dimen/padding_medium"
+            app:srcCompat="@drawable/ic_autorenew"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+    </LinearLayout>
+
 </FrameLayout>

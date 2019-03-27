@@ -89,4 +89,7 @@
     <dimen name="spinner_width">30dp</dimen>
     <dimen name="spinner_height">30dp</dimen>
 
+    <!--social link fragment-->
+    <dimen name="reload_button_width">40dp</dimen>
+    <dimen name="reload_button_height">40dp</dimen>
 </resources>
