@@ -67,8 +67,11 @@ class SearchFragment : Fragment() {
             time == getString(R.string.tomorrow) || time == getString(R.string.weekend) ||
             time == getString(R.string.month)) rootView.timeTextView.text = time ?: getString(R.string.anytime)
         else {
-            val zonedDate = LocalDate.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay(ZoneId.systemDefault()).plusDays(-1)
-            if (zonedDate.year == Calendar.getInstance().get(Calendar.YEAR)) rootView.timeTextView.text = getFormattedDateWithoutYear(zonedDate)
+            val zonedDate =
+                LocalDate.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .atStartOfDay(ZoneId.systemDefault()).plusDays(-1)
+            if (zonedDate.year == Calendar.getInstance().get(Calendar.YEAR))
+                rootView.timeTextView.text = getFormattedDateWithoutYear(zonedDate)
             else rootView.timeTextView.text = getFormattedDate(zonedDate)
         }
 
