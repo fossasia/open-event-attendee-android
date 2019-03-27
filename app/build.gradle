@@ -12,11 +12,11 @@ def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion versions.compileSdk
     defaultConfig {
         applicationId "com.eventyay.attendee"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 3
         versionName "0.0.3a"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -88,98 +88,91 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0-alpha03"
-    def koin_version = "1.0.2"
-    def roomVersion = "2.1.0-alpha06"
-    def ktx_version = "1.0.0"
-    def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha01"
-    def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation "androidx.browser:browser:1.0.0"
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
-    implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
-    implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycle_version}"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams:${lifecycle_version}"
-    implementation "androidx.room:room-runtime:${roomVersion}"
-    implementation "androidx.room:room-rxjava2:${roomVersion}"
-    kapt "androidx.room:room-compiler:${roomVersion}"
-    testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation libraries.multidex
+    implementation libraries.appcompat
+    implementation libraries.constraintLayout
+    implementation libraries.cardView
+    implementation libraries.recyclerView
+    implementation libraries.material
+    implementation libraries.browser
+    implementation libraries.exifinterface
+    implementation libraries.lifecycle_extensions
+    implementation libraries.lifecycle_common
+    implementation libraries.lifecycle_reactive
+    implementation libraries.room_runtime
+    implementation libraries.room_rxjava2
+    kapt libraries.room_compiler
+    testImplementation libraries.room_testing
+    implementation libraries.preference
+    implementation libraries.kotlin_stdlib
 
     // KTX
-    implementation "androidx.core:core-ktx:$ktx_version"
-    implementation "androidx.fragment:fragment-ktx:$ktx_version"
-    implementation "androidx.collection:collection-ktx:$ktx_version"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$ktx2_version"
+    implementation libraries.core_ktx
+    implementation libraries.fragment_ktx
+    implementation libraries.fragment_ktx
+    implementation libraries.lifecycle_reactive_ktx
 
     // Koin
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation libraries.koin_android
+    implementation libraries.koin_androidx_scope
+    implementation libraries.koin_androidx_viewmodel
 
     // Location Play Service
-    playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
+    playStoreImplementation libraries.playServicesLocation
 
     //Smart Auth Play Service
-    playStoreImplementation 'com.google.android.gms:play-services-auth:16.0.1'
+    playStoreImplementation libraries.playServicesAuth
 
     // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+    implementation libraries.timber
+    implementation libraries.threetenabp
 
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-    implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
+    implementation libraries.jackson_module_kt
+    implementation libraries.jsonapi_converter
+    implementation libraries.logging_interceptor
+    implementation libraries.retrofit2
+    implementation libraries.converter_jackson
 
     // Cards Shimmer Animation
-    implementation 'com.facebook.shimmer:shimmer:0.4.0'
+    implementation libraries.facebook_shimmer
 
     // RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation libraries.rxandroid
+    implementation libraries.rxjava
+    implementation libraries.rxjava2_adapter
 
     // Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation libraries.picasso
 
     // Stripe
-    implementation 'com.stripe:stripe-android:8.5.0'
+    implementation libraries.stripe
 
     // QR Code
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation libraries.qrCode
 
     //Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version" // For Kotlin use navigation-ui-ktx
+    implementation libraries.nav_fragment_ktx         // For Kotlin use navigation-fragment-ktx
+    implementation libraries.nav_ui_ktx // For Kotlin use navigation-ui-ktx
 
     //Anko
-    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation libraries.anko_commons
 
     // Stetho
-    debugImplementation 'com.facebook.stetho:stetho:1.5.1'
-    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
-    releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
-    testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
+    debugImplementation libraries.stetho
+    debugImplementation libraries.stetho_okhttp3
+    releaseImplementation libraries.stetho_noop
+    testImplementation libraries.stetho_noop
 
     //Mapbox SDK plugins
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
+    implementation libraries.mapboxSdk
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.9.3"
-    testImplementation 'org.threeten:threetenbp:1.3.8'
-    testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    testImplementation libraries.junit
+    testImplementation libraries.mockk
+    testImplementation libraries.threetenbp
+    testImplementation libraries.koin_test
+    testImplementation libraries.arch_core_test
+    androidTestImplementation libraries.runner_test
+    androidTestImplementation libraries.espresso
 }

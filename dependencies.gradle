@@ -1,0 +1,162 @@
+ext {
+    versions = [
+            //For Project configuration
+            java                : JavaVersion.VERSION_1_8,
+            minSdk              : 16,
+            compileSdk          : 28,
+            targetSdk           : 28,
+            buildTools          : '28.0.3',
+
+            // For app
+            kotlin              : '1.3.21',
+
+            koin                : '1.0.2',
+
+            ktx                 : '1.0.0',
+            ktx2                : '2.0.0',
+
+            anko                : '0.10.8',
+
+            multiDex            : '2.0.1',
+
+            appCompat           : '1.1.0-alpha03',
+
+            recyclerView        : '1.1.0-alpha03',
+
+            constraintLayout    : '2.0.0-alpha3',
+
+            cardView            : '1.0.0',
+
+            material            : '1.1.0-alpha05',
+
+            browser             : '1.0.0',
+
+            exifinterface       : '1.0.0',
+
+            preference          : '1.1.0-alpha01',
+
+            //Architecture Components
+            lifecycle           : '2.1.0-alpha03',
+            navigation          : '2.1.0-alpha01',
+            room                : '2.1.0-alpha06',
+
+            //Playservices
+            playServicesAuth    : '16.0.1',
+            playServicesLocation: '16.0.0',
+
+            timber              : '4.7.1',
+            threetenabp         : '1.2.0',
+            threetenbp          : '1.3.8',
+
+            jackson_module_kt   : '2.9.8',
+            jsonapi_converter   : '0.9',
+
+            okhttp3             : '3.14.0',
+            retrofit2           : '2.5.0',
+
+            facebook_shimmer    : '0.4.0',
+
+            //RX
+            rxjava              : '2.2.8',
+            rxandroid           : '2.1.1',
+            rxjava2_adapter     : '2.4.0',
+
+            picasso             : '2.71828',
+
+            stripe              : '8.5.0',
+
+            qrCode              : '3.6.0',
+
+            stetho              : '1.5.1',
+            stetho_noop         : '1.2.1',
+
+            mapboxSdk           : '0.7.0',
+
+            junit               : '4.12',
+
+            mockk               : '1.9.3',
+
+            arch_core_test      : '2.0.1',
+
+            runner_test         : '1.1.1',
+
+            espesso             : '3.1.1'
+    ]
+    libraries = [
+            kotlin_stdlib          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+            multidex               : "androidx.multidex:multidex:${versions.multiDex}",
+            appcompat              : "androidx.appcompat:appcompat:${versions.appCompat}",
+            recyclerView           : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
+            material               : "com.google.android.material:material:${versions.material}",
+            browser                : "androidx.browser:browser:${versions.browser}",
+            exifinterface          : "androidx.exifinterface:exifinterface:${versions.exifinterface}",
+            cardView               : "androidx.cardview:cardview:${versions.cardView}",
+            constraintLayout       : "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
+
+            lifecycle_extensions   : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
+            lifecycle_common       : "androidx.lifecycle:lifecycle-common-java8:${versions.lifecycle}",
+            lifecycle_reactive     : "androidx.lifecycle:lifecycle-reactivestreams:${versions.lifecycle}",
+
+            room_runtime           : "androidx.room:room-runtime:${versions.room}",
+            room_rxjava2           : "androidx.room:room-rxjava2:${versions.room}",
+            room_compiler          : "androidx.room:room-compiler:${versions.room}",
+            room_testing           : "androidx.room:room-testing:${versions.room}",
+
+            preference             : "androidx.preference:preference:${versions.preference}",
+
+            core_ktx               : "androidx.core:core-ktx:${versions.ktx}",
+            fragment_ktx           : "androidx.fragment:fragment-ktx:${versions.ktx}",
+            collection_ktx         : "androidx.collection:collection-ktx:${versions.ktx}",
+            lifecycle_reactive_ktx : "androidx.lifecycle:lifecycle-reactivestreams-ktx:${versions.ktx2}",
+
+            koin_android           : "org.koin:koin-android:${versions.koin}",
+            koin_androidx_scope    : "org.koin:koin-androidx-scope:${versions.koin}",
+            koin_androidx_viewmodel: "org.koin:koin-androidx-viewmodel:${versions.koin}",
+            koin_test              : "org.koin:koin-test:${versions.koin}",
+
+            playServicesLocation   : "com.google.android.gms:play-services-location:${versions.playServicesLocation}",
+            playServicesAuth       : "com.google.android.gms:play-services-auth:${versions.playServicesAuth}",
+
+            timber                 : "com.jakewharton.timber:timber:${versions.timber}",
+
+            threetenabp            : "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}",
+            threetenbp             : "org.threeten:threetenbp:${versions.threetenbp}",
+
+            jackson_module_kt      : "com.fasterxml.jackson.module:jackson-module-kotlin:${versions.jackson_module_kt}",
+            jsonapi_converter      : "com.github.jasminb:jsonapi-converter:${versions.jsonapi_converter}",
+
+            logging_interceptor    : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp3}",
+
+            retrofit2              : "com.squareup.retrofit2:retrofit:${versions.retrofit2}",
+            converter_jackson      : "com.squareup.retrofit2:converter-jackson:${versions.retrofit2}",
+
+            facebook_shimmer       : "com.facebook.shimmer:shimmer:${versions.facebook_shimmer}",
+
+            rxandroid              : "io.reactivex.rxjava2:rxandroid:${versions.rxandroid}",
+            rxjava                 : "io.reactivex.rxjava2:rxjava:${versions.rxjava}",
+            rxjava2_adapter        : "com.squareup.retrofit2:adapter-rxjava2:${versions.rxjava2_adapter}",
+
+            picasso                : "com.squareup.picasso:picasso:${versions.picasso}",
+
+            stripe                 : "com.stripe:stripe-android:${versions.stripe}",
+
+            qrCode                 : "com.journeyapps:zxing-android-embedded:${versions.qrCode}",
+
+            nav_fragment_ktx       : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+            nav_ui_ktx             : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+
+            anko_commons           : "org.jetbrains.anko:anko-commons:${versions.anko}",
+
+            stetho                 : "com.facebook.stetho:stetho:${versions.stetho}",
+            stetho_okhttp3         : "com.facebook.stetho:stetho-okhttp3:${versions.stetho}",
+            stetho_noop            : "com.github.iamareebjamal:stetho-noop:${versions.stetho_noop}",
+
+            mapboxSdk              : "com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:${versions.mapboxSdk}",
+
+            junit                  : "junit:junit:${versions.junit}",
+            mockk                  : "io.mockk:mockk:${versions.mockk}",
+            arch_core_test         : "androidx.arch.core:core-testing:${versions.arch_core_test}",
+            runner_test            : "androidx.test:runner:${versions.runner_test}",
+            espresso               : "androidx.test.espresso:espresso-core:${versions.espesso}"
+    ]
+}
