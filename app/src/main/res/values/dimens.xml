@@ -55,6 +55,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="view_height_25dp">25dp</dimen>
+    <dimen name="placeholder_tickets_view_height">30dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>
