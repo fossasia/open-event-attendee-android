@@ -12,12 +12,12 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.utils.Utils.getNextDate
-import org.fossasia.openevent.general.utils.Utils.getNextMonth
-import org.fossasia.openevent.general.utils.Utils.getNextToNextDate
-import org.fossasia.openevent.general.utils.Utils.getNextToNextMonth
-import org.fossasia.openevent.general.utils.Utils.getNextToWeekendDate
-import org.fossasia.openevent.general.utils.Utils.getWeekendDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToWeekendDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getWeekendDate
 import timber.log.Timber
 
 class SearchViewModel(
@@ -42,7 +42,7 @@ class SearchViewModel(
     private val savedNextToNextDate = getNextToNextDate()
     private val savedWeekendDate = getWeekendDate()
     private val savedWeekendNextDate = getNextToWeekendDate()
-    private val savedNextMonth  = getNextMonth()
+    private val savedNextMonth = getNextMonth()
     private val savedNextToNextMonth = getNextToNextMonth()
 
     fun loadSavedLocation() {
@@ -181,7 +181,6 @@ class SearchViewModel(
             }.subscribe({
                 mutableEvents.value = it
             }, {
-                mutableEvents.value = emptyList()
                 Timber.e(it, "Error fetching events")
                 mutableError.value = "Error fetching events"
             })
