@@ -19,7 +19,13 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
+import org.fossasia.openevent.general.event.EventUtils.getFormattedDateWithoutYear
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.threeten.bp.LocalDate
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.Calendar
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -57,7 +63,14 @@ class SearchFragment : Fragment() {
         }
 
         val time = safeArgs?.stringSavedDate
-        rootView.timeTextView.text = time ?: getString(R.string.anytime)
+        if (time.isNullOrBlank() || time == getString(R.string.today) ||
+            time == getString(R.string.tomorrow) || time == getString(R.string.weekend) ||
+            time == getString(R.string.month)) rootView.timeTextView.text = time ?: getString(R.string.anytime)
+        else {
+            val zonedDate = LocalDate.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay(ZoneId.systemDefault()).plusDays(-1)
+            if (zonedDate.year == Calendar.getInstance().get(Calendar.YEAR)) rootView.timeTextView.text = getFormattedDateWithoutYear(zonedDate)
+            else rootView.timeTextView.text = getFormattedDate(zonedDate)
+        }
 
         searchViewModel.loadSavedLocation()
         rootView.locationTextView.text = searchViewModel.savedLocation
@@ -100,7 +113,7 @@ class SearchFragment : Fragment() {
                 SearchResultsFragmentArgs.Builder()
                     .setQuery(query)
                     .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
-                    .setDate(rootView.timeTextView.text.toString().nullToEmpty())
+                    .setDate((safeArgs?.stringSavedDate ?: getString(R.string.anytime)).nullToEmpty())
                     .build()
                     .toBundle()
                     .also { bundle ->
