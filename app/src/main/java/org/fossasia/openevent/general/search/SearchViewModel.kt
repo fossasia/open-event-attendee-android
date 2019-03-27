@@ -12,6 +12,12 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.utils.Utils.getNextDate
+import org.fossasia.openevent.general.utils.Utils.getNextMonth
+import org.fossasia.openevent.general.utils.Utils.getNextToNextDate
+import org.fossasia.openevent.general.utils.Utils.getNextToNextMonth
+import org.fossasia.openevent.general.utils.Utils.getNextToWeekendDate
+import org.fossasia.openevent.general.utils.Utils.getWeekendDate
 import timber.log.Timber
 
 class SearchViewModel(
@@ -32,12 +38,12 @@ class SearchViewModel(
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
     var searchEvent: String? = null
     var savedLocation: String? = null
-    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
-    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
-    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
-    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
-    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
-    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
+    private val savedNextDate = getNextDate()
+    private val savedNextToNextDate = getNextToNextDate()
+    private val savedWeekendDate = getWeekendDate()
+    private val savedWeekendNextDate = getNextToWeekendDate()
+    private val savedNextMonth  = getNextMonth()
+    private val savedNextToNextMonth = getNextToNextMonth()
 
     fun loadSavedLocation() {
         savedLocation = preference.getString(SAVED_LOCATION)
@@ -180,7 +186,6 @@ class SearchViewModel(
                 mutableError.value = "Error fetching events"
             })
         )
-        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
