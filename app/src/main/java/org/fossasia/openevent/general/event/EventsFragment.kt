@@ -23,7 +23,9 @@ import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
+import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.common.ShareFabClickListener
@@ -52,7 +54,7 @@ const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 const val RELOADING_EVENTS: Int = 0
 const val INITIAL_FETCHING_EVENTS: Int = 1
 
-class EventsFragment : Fragment() {
+class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
@@ -208,4 +210,6 @@ class EventsFragment : Fragment() {
         rootView.swiperefresh?.setOnRefreshListener(null)
         super.onStop()
     }
+
+    override fun scrollToTop() = rootView.eventsNestedScrollView.smoothScrollTo(0, 0)
 }
