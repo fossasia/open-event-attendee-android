@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -187,7 +187,7 @@ class TicketsFragment : Fragment() {
     }
 
     private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(resources.getString(R.string.no_tickets_message))
                 .setTitle(resources.getString(R.string.whoops))
                 .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }

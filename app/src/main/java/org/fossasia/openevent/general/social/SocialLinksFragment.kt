@@ -15,8 +15,11 @@ import kotlinx.android.synthetic.main.fragment_social_links.socialLinksRecycler
 import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_social_links.view.progressBarSocial
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinkReload
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialNoInternet
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -52,6 +55,10 @@ class SocialLinksFragment : Fragment() {
         rootView.socialLinksRecycler.adapter = socialLinksRecyclerAdapter
         rootView.socialLinksRecycler.isNestedScrollingEnabled = false
 
+        rootView.socialLinkReload.setOnClickListener {
+            loadSocialLink()
+        }
+
         socialLinksViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -73,7 +80,7 @@ class SocialLinksFragment : Fragment() {
                 Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
-        socialLinksViewModel.loadSocialLinks(id)
+        loadSocialLink()
 
         return rootView
     }
@@ -81,5 +88,14 @@ class SocialLinksFragment : Fragment() {
     private fun handleVisibility(socialLinks: List<SocialLink>) {
         eventHostDetails.isGone = socialLinks.isEmpty()
         socialLinksRecycler.isGone = socialLinks.isEmpty()
+    }
+
+    private fun loadSocialLink() {
+        if (isNetworkConnected(context)) {
+            socialLinksViewModel.loadSocialLinks(id)
+            rootView.socialNoInternet.visibility = View.GONE
+        } else {
+            rootView.socialNoInternet.visibility = View.VISIBLE
+        }
     }
 }
