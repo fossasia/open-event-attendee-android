@@ -15,15 +15,15 @@
         android:layout_height="match_parent"
         app:layout_dodgeInsetEdges="bottom">
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonTickets"
             android:textAlignment="center"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_tickets_text_height"
+            android:layout_height="wrap_content"
             android:elevation="@dimen/card_tickets_elevation"
             android:gravity="center"
             android:layout_gravity="bottom"
-            android:background="@drawable/round_button"
+            app:cornerRadius="@dimen/divider_margin_bottom"
             app:backgroundTint="@color/colorAccent"
             android:textStyle="bold"
             android:textSize="@dimen/text_size_large"
