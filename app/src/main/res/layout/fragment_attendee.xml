@@ -197,12 +197,13 @@
                     android:textSize="@dimen/heading_text_size" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
                     android:layout_marginTop="@dimen/padding_medium">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -211,12 +212,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
                     android:layout_marginTop="@dimen/padding_medium">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lastName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -225,32 +227,18 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
                     android:layout_marginTop="@dimen/padding_medium">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/countryArea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:id="@+id/country"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Country" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -278,6 +266,24 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/item_attendee" />
 
+                <LinearLayout
+                    android:id="@+id/countryPickerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/layout_margin_small">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/country"/>
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/countryPicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog"/>
+                </LinearLayout>
+
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/paymentSelector"
                     android:layout_width="match_parent"
@@ -299,12 +305,13 @@
                         android:textSize="@dimen/heading_text_size" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/cardNumber"
                             android:inputType="number"
                             android:layout_width="match_parent"
@@ -404,12 +411,13 @@
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/cvc"
                             android:inputType="number"
                             android:layout_width="match_parent"
@@ -418,12 +426,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/postalCode"
                             android:inputType="number"
                             android:layout_width="match_parent"
@@ -439,11 +448,11 @@
                     <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
                         android:id="@+id/acceptCheckbox"/>
                     <TextView
                         android:id="@+id/accept"
+                        android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

@@ -12,6 +12,12 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToWeekendDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getWeekendDate
 import timber.log.Timber
 
 class SearchViewModel(
@@ -32,18 +38,23 @@ class SearchViewModel(
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
     var searchEvent: String? = null
     var savedLocation: String? = null
-    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
-    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
-    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
-    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
-    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
-    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
+    private val savedNextDate = getNextDate()
+    private val savedNextToNextDate = getNextToNextDate()
+    private val savedWeekendDate = getWeekendDate()
+    private val savedWeekendNextDate = getNextToWeekendDate()
+    private val savedNextMonth = getNextMonth()
+    private val savedNextToNextMonth = getNextToNextMonth()
 
     fun loadSavedLocation() {
         savedLocation = preference.getString(SAVED_LOCATION)
     }
 
     fun loadEvents(location: String, time: String) {
+        if (mutableEvents.value != null) {
+            mutableShowShimmerResults.value = false
+            mutableShowNoInternetError.value = false
+            return
+        }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
         val query: String = when {
@@ -174,7 +185,6 @@ class SearchViewModel(
                 mutableError.value = "Error fetching events"
             })
         )
-        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {

@@ -82,25 +82,25 @@ class SignUpFragment : Fragment() {
 
         signUpViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
             })
 
         signUpViewModel.showNoInternetDialog
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Utils.showNoInternetDialog(context)
             })
 
         signUpViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.signupNestedScrollView, it, Snackbar.LENGTH_LONG).show()
             })
 
         signUpViewModel.signedUp
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(
                     rootView.signupNestedScrollView, R.string.sign_up_success, Snackbar.LENGTH_SHORT
                 ).show()
@@ -109,7 +109,7 @@ class SignUpFragment : Fragment() {
 
         signUpViewModel.loggedIn
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 smartAuthViewModel.saveCredential(
                     activity, usernameSignUp.text.toString(),
                     passwordSignUp.text.toString())
@@ -118,7 +118,7 @@ class SignUpFragment : Fragment() {
 
         signUpViewModel.areFieldsCorrect
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 signUpButton.isEnabled = it
             })
 

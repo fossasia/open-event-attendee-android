@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -55,12 +55,6 @@ class TicketsFragment : Fragment() {
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
 
-        ticketsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
-
         ticketsViewModel.event
             .nonNull()
             .observe(this, Observer {
@@ -97,7 +91,7 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.progressTickets
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarTicket.isVisible = it
                 rootView.ticketTableHeader.isGone = it
                 rootView.register.isGone = it
@@ -113,11 +107,17 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.ticketTableVisibility
             .nonNull()
-            .observe(this, Observer { ticketTableVisible ->
+            .observe(viewLifecycleOwner, Observer { ticketTableVisible ->
                 rootView.ticketTableHeader.isVisible = ticketTableVisible
                 rootView.register.isVisible = ticketTableVisible
                 rootView.ticketsRecycler.isVisible = ticketTableVisible
                 rootView.ticketInfoTextView.isGone = ticketTableVisible
+            })
+
+        ticketsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         ticketsViewModel.loadEvent(safeArgs.eventId)
@@ -187,7 +187,7 @@ class TicketsFragment : Fragment() {
     }
 
     private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(resources.getString(R.string.no_tickets_message))
                 .setTitle(resources.getString(R.string.whoops))
                 .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/eventErrorCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin_medium"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_extra_large"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/noInternetImageView"
+            android:layout_width="@dimen/item_image_view_large"
+            android:layout_height="@dimen/item_image_view_large"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_no_internet" />
+
+        <TextView
+            android:id="@+id/noInternetTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:text="@string/error_fetching_events"
+            android:textSize="@dimen/text_size_medium"
+            />
+
+        <TextView
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:text="@string/retry"
+            android:textColor="@color/colorPrimary"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            tools:text="RETRY" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

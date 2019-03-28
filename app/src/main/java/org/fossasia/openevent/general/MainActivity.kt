@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
+import org.fossasia.openevent.general.auth.EditProfileFragment
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
 import org.fossasia.openevent.general.search.SmartAuthViewModel
@@ -39,6 +40,14 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
         setupWithNavController(navigationAuth, navController)
+
+        navigation.setOnNavigationItemReselectedListener {
+            val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+            if (hostFragment is NavHostFragment) {
+                val currentFragment = hostFragment.childFragmentManager.fragments.first()
+                if (currentFragment is ScrollToTop) currentFragment.scrollToTop()
+            }
+        }
     }
 
     private fun handleNavigationVisibility(id: Int) {
@@ -68,8 +77,21 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
             R.id.welcomeFragment -> finish()
+            R.id.editProfileFragment -> {
+
+                // Calls the handleBackPress method in EditProfileFragment
+                val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer) as? NavHostFragment
+                (hostFragment?.childFragmentManager?.fragments?.get(0) as? EditProfileFragment)?.handleBackPress()
+            }
             else -> super.onBackPressed()
         }
+    }
+
+    /**
+     * Called by EditProfileFragment to go to previous fragment
+     */
+    fun onSuperBackPressed() {
+        super.onBackPressed()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -78,4 +100,8 @@ class MainActivity : AppCompatActivity() {
         else
             super.onActivityResult(requestCode, resultCode, data)
     }
+}
+
+interface ScrollToTop {
+    fun scrollToTop()
 }

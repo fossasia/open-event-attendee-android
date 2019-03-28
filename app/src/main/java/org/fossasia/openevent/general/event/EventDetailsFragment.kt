@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -33,6 +32,7 @@ import kotlinx.android.synthetic.main.content_event.view.eventLocationTextView
 import kotlinx.android.synthetic.main.content_event.view.eventName
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserDescription
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
+import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.logo
@@ -42,9 +42,11 @@ import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
-import kotlinx.android.synthetic.main.fragment_event.view.eventCoordinatorLayout
 import kotlinx.android.synthetic.main.content_event.view.organizerContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
+import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
+import kotlinx.android.synthetic.main.fragment_event.view.container
+import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
@@ -98,6 +100,8 @@ class EventDetailsFragment : Fragment() {
                 runOnce = false
 
                 Timber.d("Fetched events of id %d", safeArgs.eventId)
+                showEventErrorScreen(false)
+                setHasOptionsMenu(true)
             })
     }
 
@@ -120,11 +124,14 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.error
             .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(rootView.eventCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            .observe(viewLifecycleOwner, Observer {
+                showEventErrorScreen(true)
             })
 
         eventViewModel.loadEvent(safeArgs.eventId)
+        rootView.retry.setOnClickListener {
+            eventViewModel.loadEvent(safeArgs.eventId)
+        }
 
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -232,7 +239,7 @@ class EventDetailsFragment : Fragment() {
         if (!locationNameIsEmpty) {
             rootView.locationUnderMap.text = event.locationName
             rootView.imageMap.setOnClickListener(mapClickListener)
-            rootView.eventLocationTextView.setOnClickListener(mapClickListener)
+            rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
@@ -257,14 +264,13 @@ class EventDetailsFragment : Fragment() {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.header)
                     .into(rootView.logo)
         }
 
         // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
-        rootView.eventDateDetailsFirst.setOnClickListener(dateClickListener)
-        rootView.eventDateDetailsSecond.setOnClickListener(dateClickListener)
+        rootView.eventTimingLinearLayout.setOnClickListener(dateClickListener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -384,6 +390,15 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setFavoriteIcon(id: Int) {
-        menuActionBar?.findItem(R.id.favorite_event)?.icon = context?.let { ContextCompat.getDrawable(it, id) }
+        menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
+    }
+
+    private fun showEventErrorScreen(show: Boolean) {
+        rootView.container.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.eventErrorCard.visibility = if (show) View.VISIBLE else View.GONE
+        val menuItemSize = menuActionBar?.size() ?: 0
+        for (i in 0..(menuItemSize - 1)) {
+            menuActionBar?.getItem(i)?.isVisible = !show
+        }
     }
 }
