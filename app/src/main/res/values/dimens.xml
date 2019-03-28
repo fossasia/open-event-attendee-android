@@ -3,6 +3,7 @@
     <!-- text size -->
     <dimen name="heading_text_size">20sp</dimen>
     <dimen name="text_size_expanded_title">22sp</dimen>
+    <dimen name="text_size_expanded_title_medium">25sp</dimen>
     <dimen name="text_size_expanded_title_large">27sp</dimen>
     <dimen name="text_size_extra_large">32sp</dimen>
     <dimen name="text_size_large">16sp</dimen>
@@ -54,6 +55,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="view_height_25dp">25dp</dimen>
+    <dimen name="placeholder_tickets_view_height">30dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>
@@ -88,4 +90,7 @@
     <dimen name="spinner_width">30dp</dimen>
     <dimen name="spinner_height">30dp</dimen>
 
+    <!--social link fragment-->
+    <dimen name="reload_button_width">40dp</dimen>
+    <dimen name="reload_button_height">40dp</dimen>
 </resources>

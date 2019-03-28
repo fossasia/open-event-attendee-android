@@ -184,6 +184,7 @@
     <!--liked events tab -->
     <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
     <string name="find_something_to_do">Find something to do!!</string>
+    <string name="remember_like">Remember to shortlist the events you like so you don\'t miss out!</string>
     <string name="current_location">Use my current location</string>
     <string name="error__fetching_location">Cannot fetch location without permission</string>
 
@@ -219,5 +220,8 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+
+    <!--social link fragment-->
+    <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
 
 </resources>
