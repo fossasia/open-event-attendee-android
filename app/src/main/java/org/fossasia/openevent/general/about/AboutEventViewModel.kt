@@ -30,11 +30,11 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
         compositeDisposable.add(eventService.getEvent(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe({
+            .doOnSubscribe {
                 mutableProgressAboutEvent.value = true
-            }).doFinally({
+            }.doFinally {
                 mutableProgressAboutEvent.value = false
-            }).subscribe({ eventList ->
+            }.subscribe({ eventList ->
                 mutableEvent.value = eventList
             }, {
                 mutableError.value = "Error fetching event"

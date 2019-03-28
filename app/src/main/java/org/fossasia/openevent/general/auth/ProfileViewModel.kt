@@ -38,9 +38,9 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
         compositeDisposable.add(authService.getProfile()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe({
+            .doOnSubscribe {
                 mutableProgress.value = true
-            }).doFinally {
+            }.doFinally {
                 mutableProgress.value = false
             }.subscribe({ user ->
                 Timber.d("Response Success")
