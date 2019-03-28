@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -126,6 +127,14 @@ class EditProfileFragment : Fragment() {
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
                 }
             })
+
+        rootView.profilePhotoFab.setOnClickListener {
+            if (permissionGranted) {
+                showFileChooser()
+            } else {
+                requestPermissions(READ_STORAGE, REQUEST_CODE)
+            }
+        }
 
         return rootView
     }
