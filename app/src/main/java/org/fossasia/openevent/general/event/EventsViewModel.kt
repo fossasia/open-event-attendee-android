@@ -61,11 +61,11 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         compositeDisposable.add(eventService.getEvents()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe({
+            .doOnSubscribe {
                 mutableProgress.value = true
-            }).doFinally({
+            }.doFinally {
                 mutableProgress.value = false
-            }).subscribe({
+            }.subscribe({
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
