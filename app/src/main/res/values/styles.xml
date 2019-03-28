@@ -26,7 +26,7 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-    <style name="AccentButton" parent="ThemeOverlay.MaterialComponents.Dark">
+    <style name="AccentButton" parent="AppTheme.MaterialButton">
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColor">@android:color/white</item>
