@@ -104,14 +104,6 @@ class EditProfileFragment : Fragment() {
         permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
-        rootView.profilePhoto.setOnClickListener {
-            if (permissionGranted) {
-                showFileChooser()
-            } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
-            }
-        }
-
         rootView.buttonUpdate.setOnClickListener {
             hideSoftKeyboard(context, rootView)
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
