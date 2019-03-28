@@ -125,7 +125,6 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 showEventErrorScreen(true)
-                setHasOptionsMenu(false)
             })
 
         eventViewModel.loadEvent(safeArgs.eventId)
@@ -394,5 +393,9 @@ class EventDetailsFragment : Fragment() {
     private fun showEventErrorScreen(show: Boolean) {
         rootView.container.visibility = if (!show) View.VISIBLE else View.GONE
         rootView.eventErrorCard.visibility = if (show) View.VISIBLE else View.GONE
+        val menuItemSize = menuActionBar?.size() ?: 0
+        for (i in 0..(menuItemSize - 1)) {
+            menuActionBar?.getItem(i)?.isVisible = !show
+        }
     }
 }
