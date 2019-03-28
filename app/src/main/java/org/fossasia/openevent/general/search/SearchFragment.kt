@@ -25,6 +25,7 @@ import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
 
 class SearchFragment : Fragment() {
@@ -63,16 +64,18 @@ class SearchFragment : Fragment() {
         }
 
         val time = safeArgs?.stringSavedDate
-        if (time.isNullOrBlank() || time == getString(R.string.today) ||
-            time == getString(R.string.tomorrow) || time == getString(R.string.weekend) ||
-            time == getString(R.string.month)) rootView.timeTextView.text = time ?: getString(R.string.anytime)
+        if (time.isNullOrBlank()) rootView.timeTextView.text = getString(R.string.anytime)
         else {
-            val zonedDate =
-                LocalDate.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                    .atStartOfDay(ZoneId.systemDefault()).plusDays(-1)
-            if (zonedDate.year == Calendar.getInstance().get(Calendar.YEAR))
-                rootView.timeTextView.text = getFormattedDateWithoutYear(zonedDate)
-            else rootView.timeTextView.text = getFormattedDate(zonedDate)
+            try {
+                val zonedDate =
+                    LocalDate.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .atStartOfDay(ZoneId.systemDefault()).plusDays(-1)
+                if (zonedDate.year == Calendar.getInstance().get(Calendar.YEAR))
+                    rootView.timeTextView.text = getFormattedDateWithoutYear(zonedDate)
+                else rootView.timeTextView.text = getFormattedDate(zonedDate)
+            } catch (e: DateTimeParseException) {
+                rootView.timeTextView.text = time
+            }
         }
 
         searchViewModel.loadSavedLocation()
