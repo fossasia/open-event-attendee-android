@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
@@ -62,9 +65,15 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false)
+        postponeEnterTransition()
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
+        rootView.favoriteEventsRecycler.viewTreeObserver
+            .addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
@@ -125,13 +134,21 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
-                .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+            override fun onClick(eventID: Long, sharedImage: ImageView) {
+                val extras =
+                    FragmentNavigatorExtras(
+                        sharedImage to eventID.toString()
+                    )
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        Navigation.findNavController(view).navigate(R.id.eventDetailsFragment,
+                            bundle,
+                            getAnimFade(),
+                            extras)
+                    }
             }
         }
 
