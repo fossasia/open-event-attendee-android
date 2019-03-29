@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -181,7 +181,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDialog() {
-            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+            AlertDialog.Builder(requireContext()).setMessage(resources.getString(R.string.message))
             .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                 if (profileViewModel.isLoggedIn()) {
                     profileViewModel.logout()

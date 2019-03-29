@@ -2,7 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -103,14 +104,6 @@ class EditProfileFragment : Fragment() {
         permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
-        rootView.profilePhoto.setOnClickListener {
-            if (permissionGranted) {
-                showFileChooser()
-            } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
-            }
-        }
-
         rootView.buttonUpdate.setOnClickListener {
             hideSoftKeyboard(context, rootView)
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
@@ -126,6 +119,14 @@ class EditProfileFragment : Fragment() {
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
                 }
             })
+
+        rootView.profilePhotoFab.setOnClickListener {
+            if (permissionGranted) {
+                showFileChooser()
+            } else {
+                requestPermissions(READ_STORAGE, REQUEST_CODE)
+            }
+        }
 
         return rootView
     }
@@ -216,7 +217,7 @@ class EditProfileFragment : Fragment() {
             if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
         } else {
             hideSoftKeyboard(context, rootView)
-            val dialog = AlertDialog.Builder(context)
+            val dialog = AlertDialog.Builder(requireContext())
             dialog.setMessage(getString(R.string.changes_not_saved))
             dialog.setNegativeButton(getString(R.string.discard)) { _, _ ->
                 if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()

@@ -448,26 +448,27 @@
                     <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
                         android:id="@+id/acceptCheckbox"/>
                     <TextView
                         android:id="@+id/accept"
+                        android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <Button
-                    style="@style/Widget.AppCompat.Button.Colored"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/register"
+                    style="@style/AppTheme.MaterialButton.RoundedCorners"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="@dimen/layout_margin_large"
-                    android:backgroundTint="@color/colorAccent"
-                    android:padding="@dimen/padding_medium"
-                    android:text="@string/register"
-                    android:textColor="@android:color/white" />
+                    android:layout_marginStart="@dimen/details_margin_small"
+                    android:layout_marginEnd="@dimen/details_margin_small"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
+                    android:enabled="false"
+                    android:text="@string/register"/>
             </LinearLayout>
 
             <ProgressBar

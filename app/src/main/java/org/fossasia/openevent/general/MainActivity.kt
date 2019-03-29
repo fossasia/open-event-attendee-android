@@ -40,6 +40,14 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
         setupWithNavController(navigationAuth, navController)
+
+        navigation.setOnNavigationItemReselectedListener {
+            val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+            if (hostFragment is NavHostFragment) {
+                val currentFragment = hostFragment.childFragmentManager.fragments.first()
+                if (currentFragment is ScrollToTop) currentFragment.scrollToTop()
+            }
+        }
     }
 
     private fun handleNavigationVisibility(id: Int) {
@@ -92,4 +100,8 @@ class MainActivity : AppCompatActivity() {
         else
             super.onActivityResult(requestCode, resultCode, data)
     }
+}
+
+interface ScrollToTop {
+    fun scrollToTop()
 }

@@ -6,9 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -30,5 +32,15 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:padding">@dimen/padding_medium</item>
         <item name="android:enabled">false</item>
+    </style>
+
+    <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSecondary</item>
+    </style>
+    <style name="AppTheme.MaterialButton.RoundedCorners" parent="AppTheme.MaterialButton">
+        <item name="cornerRadius">@dimen/round_corners_button_radius</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
     </style>
 </resources>
