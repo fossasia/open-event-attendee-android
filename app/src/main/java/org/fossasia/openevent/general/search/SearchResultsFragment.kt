@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -53,7 +55,7 @@ class SearchResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
-
+        postponeEnterTransition()
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = getString(R.string.search_results)
@@ -65,6 +67,11 @@ class SearchResultsFragment : Fragment() {
 
         rootView.eventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+        rootView.eventsRecycler.viewTreeObserver
+            .addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
 
         searchViewModel.events
             .nonNull()
@@ -107,13 +114,21 @@ class SearchResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
-                .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+            override fun onClick(eventID: Long, sharedImage: ImageView) {
+                val extras =
+                    FragmentNavigatorExtras(
+                        sharedImage to eventID.toString()
+                    )
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        Navigation.findNavController(view).navigate(R.id.eventDetailsFragment,
+                            bundle,
+                            getAnimFade(),
+                            extras)
+                    }
             }
         }
 
