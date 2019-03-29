@@ -74,7 +74,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_medium"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_baseline_event_black" />
+                app:srcCompat="@drawable/ic_baseline_event_grey" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -284,6 +284,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
