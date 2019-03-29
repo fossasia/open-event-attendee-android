@@ -121,10 +121,10 @@ class SignUpFragment : Fragment() {
 
         rootView.signUpButton.setOnClickListener {
 
-            if(!rootView.signUpCheckbox.isChecked){
-                Snackbar.make(rootView,R.string.accept_terms_and_conditions,Snackbar.LENGTH_SHORT).show()
+            if (!rootView.signUpCheckbox.isChecked) {
+                Snackbar.make(rootView, R.string.accept_terms_and_conditions, Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }else {
+            } else {
                 signUp.email = usernameSignUp.text.toString()
                 signUp.password = passwordSignUp.text.toString()
                 signUp.firstName = firstNameText.text.toString()
