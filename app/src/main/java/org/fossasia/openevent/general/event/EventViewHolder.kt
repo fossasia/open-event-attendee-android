@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
@@ -64,9 +65,10 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
                 .placeholder(R.drawable.header)
                 .into(containerView.eventImage)
         }
+        ViewCompat.setTransitionName(containerView.eventImage, event.id.toString())
 
         containerView.setOnClickListener {
-            eventClickListener?.onClick(event.id)
+            eventClickListener?.onClick(event.id, containerView.eventImage)
                 ?: Timber.e("Event Click listener on ${this::class.java.canonicalName} is null")
         }
 

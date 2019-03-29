@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
@@ -82,7 +84,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
-
+        postponeEnterTransition()
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
@@ -100,6 +102,11 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+        rootView.eventsRecycler.viewTreeObserver
+            .addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -160,13 +167,21 @@ class EventsFragment : Fragment(), ScrollToTop {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
-                .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+            override fun onClick(eventID: Long, sharedImage: ImageView) {
+                val extras =
+                    FragmentNavigatorExtras(
+                        sharedImage to eventID.toString()
+                    )
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(view).navigate(R.id.eventDetailsFragment,
+                            bundle,
+                            getAnimFade(),
+                            extras)
+                    }
             }
         }
 
