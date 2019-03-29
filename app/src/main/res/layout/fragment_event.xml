@@ -17,19 +17,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonTickets"
-            android:textAlignment="center"
+            style="@style/AppTheme.MaterialButton.RoundedCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/card_tickets_elevation"
-            android:gravity="center"
             android:layout_gravity="bottom"
-            app:cornerRadius="@dimen/divider_margin_bottom"
-            app:backgroundTint="@color/colorAccent"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_large"
             android:layout_margin="@dimen/layout_margin_large"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
             android:text="@string/tickets"/>
 
         <include layout="@layout/content_event"
