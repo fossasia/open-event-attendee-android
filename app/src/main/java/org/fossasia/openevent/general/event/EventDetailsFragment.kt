@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
+import kotlinx.android.synthetic.main.content_event.view.organizerContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -189,6 +190,8 @@ class EventDetailsFragment : Fragment() {
                     rootView.eventOrganiserDescription.setOnClickListener(organizerDescriptionListener)
                 }
             }
+        } else {
+            rootView.organizerContainer.visibility = View.GONE
         }
 
         currency = Currency.getInstance(event.paymentCurrency).symbol
