@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -60,8 +58,6 @@ class SimilarEventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_similar_events, container, false)
-
-        postponeEnterTransition()
         similarEventsViewModel.similarLocationEvents
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -104,20 +100,14 @@ class SimilarEventsFragment : Fragment() {
         similarEventsListAdapter = get(scope = getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long, sharedImage: ImageView) {
-                val extras =
-                    FragmentNavigatorExtras(
-                        sharedImage to eventID.toString()
-                    )
+            override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs.Builder()
                     .setEventId(eventID)
                     .build()
                     .toBundle()
                     .also { bundle ->
-                        findNavController(view).navigate(R.id.eventDetailsFragment,
-                            bundle,
-                            getAnimSlide(),
-                            extras)
+                        findNavController(view).navigate(R.id.eventDetailsFragment, bundle,
+                            getAnimSlide())
                     }
             }
         }
@@ -154,12 +144,6 @@ class SimilarEventsFragment : Fragment() {
 
         view.similarEventsRecycler.adapter = similarEventsListAdapter
         view.similarEventsRecycler.isNestedScrollingEnabled = false
-        postponeEnterTransition()
-        view.similarEventsRecycler.viewTreeObserver
-            .addOnPreDrawListener {
-                startPostponedEnterTransition()
-                true
-            }
     }
 
     private fun handleVisibility(similarEvents: List<Event>) {
