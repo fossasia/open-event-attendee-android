@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersNest
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
+import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -109,7 +110,10 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             ordersUnderUserVM.eventAndOrderIdentifier
                 .nonNull()
                 .observe(viewLifecycleOwner, Observer {
-                    ordersRecyclerAdapter.addAllPairs(it)
+                    val list = it.sortedByDescending {
+                        EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
+                    }
+                    ordersRecyclerAdapter.addAllPairs(list)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
