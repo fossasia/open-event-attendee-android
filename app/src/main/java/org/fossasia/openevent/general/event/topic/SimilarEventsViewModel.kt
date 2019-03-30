@@ -26,7 +26,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
 
     var eventId: Long = -1
 
-    fun loadIdEvents(id: Long) {
+    fun loadSimilarIdEvents(id: Long) {
         if (id == -1L) {
             return
         }
@@ -45,7 +45,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
         )
     }
 
-    fun loadLocationEvents(location: String) {
+    fun loadSimilarLocationEvents(location: String) {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"}]"
 
         compositeDisposable.add(eventService.getEventsByLocation(query)

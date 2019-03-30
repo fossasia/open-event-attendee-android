@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -45,9 +44,9 @@ class SimilarEventsFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var similarEventsListAdapter: EventsListAdapter
-    private var similarIdEvents: MutableList<Event> = mutableListOf<Event>()
-    private var similarLocationEvents: MutableList<Event> = mutableListOf<Event>()
-    private var similarEvents: MutableList<Event> = mutableListOf<Event>()
+    private var similarIdEvents: MutableList<Event> = mutableListOf()
+    private var similarLocationEvents: MutableList<Event> = mutableListOf()
+    private var similarEvents: MutableList<Event> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,8 +92,8 @@ class SimilarEventsFragment : Fragment() {
                 progressBar.isVisible = it
             })
 
-        similarEventsViewModel.loadIdEvents(safeArgs.eventTopicId)
-        similarEventsViewModel.loadLocationEvents(safeArgs.eventLocation.toString())
+        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
 
         return rootView
     }
@@ -164,29 +163,25 @@ class SimilarEventsFragment : Fragment() {
     }
 
     private fun handleVisibility(similarEvents: List<Event>) {
-        similarEventsDivider.isGone = similarEvents.isEmpty()
-        moreLikeThis.isGone = similarEvents.isEmpty()
-        similarEventsRecycler.isGone = similarEvents.isEmpty()
+        similarEventsDivider.isVisible = !similarEvents.isEmpty()
+        moreLikeThis.isVisible = !similarEvents.isEmpty()
+        similarEventsRecycler.isVisible = !similarEvents.isEmpty()
     }
 
     private fun setUpAdapter() {
         similarEvents.clear()
         var id: Long
-        var add: Boolean
-        if (similarIdEvents.size != 0 && similarLocationEvents.size != 0) {
-            similarIdEvents.forEach {
-                id = it.id
-                add = true
-                similarLocationEvents.forEach {
-                    if (id == it.id) add = false
+
+        when {
+            similarIdEvents.size != 0 && similarLocationEvents.size != 0 -> {
+                similarIdEvents.forEach {
+                    id = it.id
+                    if (similarLocationEvents.find { id == it.id } == null) similarEvents.add(it)
                 }
-                if (add) similarEvents.add(it)
+                similarEvents.addAll(similarLocationEvents)
             }
-            similarEvents.addAll(similarLocationEvents)
-        } else if (similarIdEvents.size == 0) {
-            similarEvents.addAll(similarLocationEvents)
-        } else if (similarLocationEvents.size == 0) {
-            similarEvents.addAll(similarIdEvents)
+            similarIdEvents.size == 0 -> similarEvents.addAll(similarLocationEvents)
+            similarLocationEvents.size == 0 -> similarEvents.addAll(similarIdEvents)
         }
 
         handleVisibility(similarEvents)
