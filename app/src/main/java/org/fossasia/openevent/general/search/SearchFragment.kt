@@ -42,6 +42,7 @@ class SearchFragment : Fragment() {
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = getString(R.string.search)
+            thisActivity.supportActionBar?.show()
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
         setHasOptionsMenu(true)
