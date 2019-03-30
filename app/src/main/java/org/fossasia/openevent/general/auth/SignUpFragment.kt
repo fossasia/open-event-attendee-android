@@ -111,7 +111,9 @@ class SignUpFragment : Fragment() {
         rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    rootView.signUpButton.performClick()
+                    if (validateRequiredFieldsEmpty()) {
+                        rootView.signUpButton.performClick()
+                    }
                     Utils.hideSoftKeyboard(context, rootView)
                     true
                 }
@@ -196,7 +198,15 @@ class SignUpFragment : Fragment() {
 
         rootView.confirmPasswords.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                if (confirmPasswords.text.toString().equals(passwordSignUp.text.toString())) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                 */
+                if (!textInputLayoutConfirmPassword.isEndIconVisible) {
+                    textInputLayoutConfirmPassword.isEndIconVisible = true
+                }
+
+                if (confirmPasswords.text.toString() == passwordSignUp.text.toString()) {
                     textInputLayoutConfirmPassword.error = null
                     textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
@@ -214,13 +224,21 @@ class SignUpFragment : Fragment() {
 
         rootView.passwordSignUp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                */
+                if (!textInputLayoutPassword.isEndIconVisible) {
+                    textInputLayoutPassword.isEndIconVisible = true
+                }
+
                 if (passwordSignUp.text.toString().length >= 6 || passwordSignUp.text.toString().isEmpty()) {
                     textInputLayoutPassword.error = null
                     textInputLayoutPassword.isErrorEnabled = false
                 } else {
                     textInputLayoutPassword.error = getString(R.string.invalid_password_message)
                 }
-                if (confirmPasswords.text.toString().equals(passwordSignUp.text.toString())) {
+                if (confirmPasswords.text.toString() == passwordSignUp.text.toString()) {
                     textInputLayoutConfirmPassword.error = null
                     textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
@@ -242,6 +260,29 @@ class SignUpFragment : Fragment() {
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
         Snackbar.make(rootView, R.string.logged_in_automatically, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun validateRequiredFieldsEmpty(): Boolean {
+
+        var status = true
+
+        if (usernameSignUp.text.isNullOrEmpty()) {
+            usernameSignUp.error = getString(R.string.empty_email_message)
+            status = false
+        }
+        if (passwordSignUp.text.isNullOrEmpty()) {
+            passwordSignUp.error = getString(R.string.empty_password_message)
+            // make PasswordToggle invisible
+            textInputLayoutPassword.isEndIconVisible = false
+            status = false
+        }
+        if (confirmPasswords.text.isNullOrEmpty()) {
+            confirmPasswords.error = getString(R.string.empty_confirm_password_message)
+            // make PasswordToggle invisible
+            textInputLayoutConfirmPassword.isEndIconVisible = false
+            status = false
+        }
+        return status
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

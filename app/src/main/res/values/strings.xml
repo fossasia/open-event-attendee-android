@@ -221,6 +221,9 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+    <string name="empty_email_message">Email address cannot be empty</string>
+    <string name="empty_password_message">Password cannot be empty</string>
+    <string name="empty_confirm_password_message">Please confirm your password</string>
     <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
 
     <!--social link fragment-->
