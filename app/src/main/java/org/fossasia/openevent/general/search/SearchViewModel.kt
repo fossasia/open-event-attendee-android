@@ -112,7 +112,7 @@ class SearchViewModel(
                 |       'val':'$savedNextToNextDate%'
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "This Weekend" -> """[{
+            time == "This weekend" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
