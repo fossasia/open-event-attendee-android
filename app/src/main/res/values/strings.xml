@@ -221,6 +221,7 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+    <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
 
     <!--social link fragment-->
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>

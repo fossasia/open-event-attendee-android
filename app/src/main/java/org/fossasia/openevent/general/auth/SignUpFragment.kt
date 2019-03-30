@@ -29,12 +29,19 @@ import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.view.usernameSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 
 class SignUpFragment : Fragment() {
 
@@ -57,6 +64,47 @@ class SignUpFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+        val paragraph = SpannableStringBuilder()
+        val startText = getString(R.string.start_text)
+        val termsText = getString(R.string.terms_text)
+        val middleText = getString(R.string.middle_text)
+        val privacyText = getString(R.string.privacy_text)
+
+        paragraph.append(startText)
+        paragraph.append(" $termsText")
+        paragraph.append(" $middleText")
+        paragraph.append(" $privacyText")
+
+        val termsSpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                Utils.openUrl(requireContext(), getString(R.string.terms_of_service))
+            }
+        }
+
+        val privacyPolicySpan = object : ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View) {
+                Utils.openUrl(requireContext(), getString(R.string.privacy_policy))
+            }
+        }
+
+        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length + 2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
+
+        rootView.signUpText.text = paragraph
+        rootView.signUpText.movementMethod = LinkMovementMethod.getInstance()
+
         lateinit var confirmPassword: String
         val signUp = SignUp()
 
@@ -72,12 +120,18 @@ class SignUpFragment : Fragment() {
         }
 
         rootView.signUpButton.setOnClickListener {
-            signUp.email = usernameSignUp.text.toString()
-            signUp.password = passwordSignUp.text.toString()
-            signUp.firstName = firstNameText.text.toString()
-            signUp.lastName = lastNameText.text.toString()
-            confirmPassword = confirmPasswords.text.toString()
-            signUpViewModel.signUp(signUp, confirmPassword)
+
+            if (!rootView.signUpCheckbox.isChecked) {
+                Snackbar.make(rootView, R.string.accept_terms_and_conditions, Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                signUp.email = usernameSignUp.text.toString()
+                signUp.password = passwordSignUp.text.toString()
+                signUp.firstName = firstNameText.text.toString()
+                signUp.lastName = lastNameText.text.toString()
+                confirmPassword = confirmPasswords.text.toString()
+                signUpViewModel.signUp(signUp, confirmPassword)
+            }
         }
 
         signUpViewModel.progress
