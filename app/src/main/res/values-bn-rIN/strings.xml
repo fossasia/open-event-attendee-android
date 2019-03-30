@@ -185,4 +185,5 @@
     <string name="invalid_confirm_password_message">আপনার পাসওয়ার্ড ও কন্ফার্ম পাসওয়ার্ড মিলছে না !</string>
     <string name="invalid_password_message">খুব ছোট পাসওয়ার্ড!</string>
     <string name="country">দেশ</string>
+    <string name="accept_terms_and_conditions">শর্তাবলী গ্রহণ করুন!</string>
 </resources>

@@ -116,6 +116,24 @@
                 android:imeOptions="actionDone"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signUpCheckbox"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/signUpText"/>
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:theme="@style/AccentButton"
             style="@style/Widget.MaterialComponents.Button"
