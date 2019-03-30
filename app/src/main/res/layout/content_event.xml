@@ -284,7 +284,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:orientation="vertical"
-            android:descendantFocusability="blocksDescendants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
