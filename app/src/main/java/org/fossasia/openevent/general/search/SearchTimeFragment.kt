@@ -19,17 +19,15 @@ import kotlinx.android.synthetic.main.fragment_search_time.view.nextMonthTextVie
 import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
 
 const val ANYTIME = "Anytime"
 const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
-const val THIS_WEEKEND = "This Weekend"
+const val THIS_WEEKEND = "This weekend"
 const val NEXT_MONTH = "In the next month"
 
 class SearchTimeFragment : Fragment() {
-    private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
     private val safeArgs: SearchTimeFragmentArgs by navArgs()
     private lateinit var rootView: View
 
@@ -51,7 +49,6 @@ class SearchTimeFragment : Fragment() {
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             redirectToSearch(getSimpleFormattedDate(calendar.time))
         }
 
@@ -60,38 +57,18 @@ class SearchTimeFragment : Fragment() {
         }
 
         rootView.todayTextView.setOnClickListener {
-            calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
             redirectToSearch(TODAY)
         }
 
         rootView.tomorrowTextView.setOnClickListener {
-            calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextDate(getSimpleFormattedDate(calendar.time))
-            calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextToNextDate(getSimpleFormattedDate(calendar.time))
             redirectToSearch(TOMORROW)
         }
 
         rootView.thisWeekendTextView.setOnClickListener {
-            val today = calendar.get(Calendar.DAY_OF_WEEK)
-            if (today != Calendar.SATURDAY) {
-                val offset = Calendar.SATURDAY - today
-                calendar.add(Calendar.DATE, offset)
-            }
-            searchTimeViewModel.saveWeekendDate(getSimpleFormattedDate(calendar.time))
-            calendar.add(Calendar.DATE, 1)
-            searchTimeViewModel.saveNextToWeekendDate(getSimpleFormattedDate(calendar.time))
             redirectToSearch(THIS_WEEKEND)
         }
 
         rootView.nextMonthTextView.setOnClickListener {
-            val today = calendar.get(Calendar.DAY_OF_MONTH)
-            val offset = 30 - today
-            calendar.add(Calendar.DATE, offset)
-            searchTimeViewModel.saveNextMonth(getSimpleFormattedDate(calendar.time))
-            calendar.add(Calendar.MONTH, 1)
-            searchTimeViewModel.saveNextToNextMonth(getSimpleFormattedDate(calendar.time))
             redirectToSearch(NEXT_MONTH)
         }
 

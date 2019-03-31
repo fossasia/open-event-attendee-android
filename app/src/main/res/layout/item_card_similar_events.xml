@@ -26,7 +26,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/header" />
+            android:src="@drawable/header" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareFab"
@@ -38,6 +38,7 @@
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
+            app:tint="@color/colorAccent"
             app:elevation="@dimen/fab_elevation"
             app:layout_constraintBottom_toBottomOf="@+id/eventImage"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +55,7 @@
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
+            app:tint="@color/colorAccent"
             app:elevation="@dimen/fab_elevation"
             app:layout_constraintBottom_toBottomOf="@+id/eventImage"
             app:layout_constraintEnd_toEndOf="@+id/eventImage"

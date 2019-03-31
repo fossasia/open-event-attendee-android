@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
+import kotlinx.android.synthetic.main.content_event.view.organizerContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -64,6 +65,7 @@ import java.util.Currency
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
+const val EVENT_LOCATION = "eventLocation"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -71,6 +73,7 @@ class EventDetailsFragment : Fragment() {
 
     private lateinit var rootView: View
     private var eventTopicId: Long? = null
+    private var eventLocation: String? = null
     private lateinit var eventShare: Event
     private var currency: String? = null
     private val LINE_COUNT: Int = 3
@@ -125,7 +128,6 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 showEventErrorScreen(true)
-                setHasOptionsMenu(false)
             })
 
         eventViewModel.loadEvent(safeArgs.eventId)
@@ -162,8 +164,8 @@ class EventDetailsFragment : Fragment() {
             rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
             setTextField(rootView.eventOrganiserDescription, event.organizerDescription?.stripHtml()?.trim())
             rootView.organizerName.text = event.organizerName.nullToEmpty()
-            rootView.eventOrganiserName.visibility = View.VISIBLE
-            organizerContainer.visibility = View.VISIBLE
+            rootView.eventOrganiserName.isVisible = true
+            organizerContainer.isVisible = true
 
             Picasso.get()
                     .load(event.logoUrl)
@@ -184,12 +186,14 @@ class EventDetailsFragment : Fragment() {
 
             rootView.eventOrganiserDescription.post {
                 if (rootView.eventOrganiserDescription.lineCount > LINE_COUNT_ORGANIZER) {
-                    rootView.seeMoreOrganizer.visibility = View.VISIBLE
+                    rootView.seeMoreOrganizer.isVisible = true
                     // Set up toggle organizer description
                     rootView.seeMoreOrganizer.setOnClickListener(organizerDescriptionListener)
                     rootView.eventOrganiserDescription.setOnClickListener(organizerDescriptionListener)
                 }
             }
+        } else {
+            rootView.organizerContainer.isVisible = false
         }
 
         currency = Currency.getInstance(event.paymentCurrency).symbol
@@ -210,19 +214,19 @@ class EventDetailsFragment : Fragment() {
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
-                    rootView.seeMore.visibility = View.VISIBLE
+                    rootView.seeMore.isVisible = true
                     // start about fragment
                     rootView.eventDescription.setOnClickListener(aboutEventOnClickListener)
                     rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
                 }
             }
         } else {
-            aboutEventContainer.visibility = View.GONE
+            aboutEventContainer.isVisible = false
         }
 
         // Map Section
         if (!event.locationName.isNullOrEmpty()) {
-            locationContainer.visibility = View.VISIBLE
+            locationContainer.isVisible = true
             rootView.eventLocationTextView.text = event.locationName
         }
 
@@ -230,10 +234,10 @@ class EventDetailsFragment : Fragment() {
         val mapClickListener = View.OnClickListener { startMap(event) }
 
         val locationNameIsEmpty = event.locationName.isNullOrEmpty()
-        locationContainer.isGone = locationNameIsEmpty
-        rootView.eventLocationLinearLayout.isGone = locationNameIsEmpty
-        rootView.locationUnderMap.isGone = locationNameIsEmpty
-        rootView.imageMap.isGone = locationNameIsEmpty
+        locationContainer.isVisible = !locationNameIsEmpty
+        rootView.eventLocationLinearLayout.isVisible = !locationNameIsEmpty
+        rootView.locationUnderMap.isVisible = !locationNameIsEmpty
+        rootView.imageMap.isVisible = !locationNameIsEmpty
         if (!locationNameIsEmpty) {
             rootView.locationUnderMap.text = event.locationName
             rootView.imageMap.setOnClickListener(mapClickListener)
@@ -253,9 +257,13 @@ class EventDetailsFragment : Fragment() {
         rootView.refundPolicy.text = event.refundPolicy
 
         // Similar Events Section
-        if (event.eventTopic != null) {
-            similarEventsContainer.visibility = View.VISIBLE
+        if (event.eventTopic != null || !event.locationName.isNullOrBlank() ||
+            !event.searchableLocationName.isNullOrBlank()) {
+            similarEventsContainer.isVisible = true
             eventTopicId = event.eventTopic?.id
+            eventLocation =
+                if (event.searchableLocationName.isNullOrBlank()) event.locationName
+                else event.searchableLocationName
         }
 
         // Set Cover Image
@@ -308,10 +316,9 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun setTextField(textView: TextView, value: String?) {
-        if (value.isNullOrEmpty()) {
-            textView.visibility = View.GONE
-        } else {
-            textView.text = value
+        when (value.isNullOrBlank()) {
+            true -> textView.isVisible = false
+            false -> textView.text = value
         }
     }
 
@@ -372,6 +379,7 @@ class EventDetailsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, safeArgs.eventId)
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
+        eventLocation?.let { bundle.putString(EVENT_LOCATION, it) }
         similarEventsFragment.arguments = bundle
         childFragmentManager.beginTransaction()
             .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
@@ -392,7 +400,11 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun showEventErrorScreen(show: Boolean) {
-        rootView.container.visibility = if (!show) View.VISIBLE else View.GONE
-        rootView.eventErrorCard.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.container.isVisible = !show
+        rootView.eventErrorCard.isVisible = show
+        val menuItemSize = menuActionBar?.size() ?: 0
+        for (i in 0..(menuItemSize - 1)) {
+            menuActionBar?.getItem(i)?.isVisible = !show
+        }
     }
 }

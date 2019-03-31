@@ -23,6 +23,7 @@
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
+        app:tint="@color/colorAccent"
         app:srcCompat="@drawable/ic_share_grey" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,6 +38,7 @@
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
+        app:tint="@color/colorAccent"
         app:srcCompat="@drawable/ic_baseline_favorite_border" />
 
     <LinearLayout
@@ -47,21 +49,17 @@
         android:layout_marginBottom="@dimen/layout_margin_medium"
         android:layout_marginTop="@dimen/layout_margin_medium">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/eventImage"
             android:layout_width="@dimen/layout_margin_search_view"
             android:layout_height="@dimen/layout_margin_search_view"
-            app:cardCornerRadius="@dimen/image_corner_radius"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"
+            android:background="@drawable/round_image"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
             android:layout_marginLeft="@dimen/layout_margin_large"
-            android:layout_marginTop="@dimen/layout_margin_moderate">
-            <ImageView
-                android:id="@+id/eventImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/header" />
-        </androidx.cardview.widget.CardView>
+            android:layout_marginTop="@dimen/layout_margin_moderate"/>
 
         <LinearLayout
             android:layout_width="match_parent"

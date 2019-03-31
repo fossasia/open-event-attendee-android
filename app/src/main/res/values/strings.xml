@@ -116,6 +116,7 @@
     <string name="view_ticket">View</string>
     <string name="no_ticket_message">Not seeing your tickets? Learn more about how to find them.</string>
     <string name="find_my_tickets">Find my tickets</string>
+    <string name="no_tickets_available">No tickets available!</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
@@ -184,6 +185,7 @@
     <!--liked events tab -->
     <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
     <string name="find_something_to_do">Find something to do!!</string>
+    <string name="remember_like">Remember to shortlist the events you like so you don\'t miss out!</string>
     <string name="current_location">Use my current location</string>
     <string name="error__fetching_location">Cannot fetch location without permission</string>
 
@@ -219,5 +221,12 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+    <string name="empty_email_message">Email address cannot be empty</string>
+    <string name="empty_password_message">Password cannot be empty</string>
+    <string name="empty_confirm_password_message">Please confirm your password</string>
+    <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
+
+    <!--social link fragment-->
+    <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
 
 </resources>

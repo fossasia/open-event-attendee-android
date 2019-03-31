@@ -30,6 +30,12 @@
             android:name="eventTopicId"
             app:argType="long"
             android:defaultValue="-1L"/>
+
+        <argument
+            android:name="eventLocation"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

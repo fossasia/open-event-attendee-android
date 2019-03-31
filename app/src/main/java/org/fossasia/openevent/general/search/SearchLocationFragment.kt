@@ -35,7 +35,10 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        setActionBarVisibility(false)
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.hide()
+        }
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
@@ -70,16 +73,6 @@ class SearchLocationFragment : Fragment() {
     private fun redirectToMain() {
         val fragmentId = if (safeArgs.fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
         Navigation.findNavController(rootView).popBackStack(fragmentId, false)
-    }
-
-    private fun setActionBarVisibility(status: Boolean) {
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            if (!status)
-                thisActivity.supportActionBar?.hide()
-            else
-                thisActivity.supportActionBar?.show()
-        }
     }
 
     private fun setupPlaceAutoCompleteFrag(savedInstanceState: Bundle?) {
@@ -124,10 +117,5 @@ class SearchLocationFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        setActionBarVisibility(true)
     }
 }
