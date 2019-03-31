@@ -27,6 +27,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.common.ShareFabClickListener
+import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.get
@@ -97,7 +98,7 @@ class SimilarEventsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        similarEventsListAdapter = get(scope = getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
+        similarEventsListAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
@@ -170,7 +171,6 @@ class SimilarEventsFragment : Fragment() {
 
         handleVisibility(similarEvents)
         Timber.d("Fetched Similar events of size %s", similarEvents.size)
-        similarEvents.shuffle()
         similarEventsListAdapter.submitList(similarEvents)
         similarEventsListAdapter.notifyDataSetChanged()
     }
