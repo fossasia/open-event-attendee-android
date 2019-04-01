@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
@@ -96,7 +96,8 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         rootView.progressBar.isIndeterminate = true
 
-        rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.eventsRecycler.layoutManager =
+            GridLayoutManager(activity, resources.getInteger(R.integer.events_column_count))
 
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
