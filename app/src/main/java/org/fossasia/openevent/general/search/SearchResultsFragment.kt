@@ -54,7 +54,7 @@ class SearchResultsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        setToolbar(activity, getString(R.string.search_results), true)
+        setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)

@@ -37,7 +37,7 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
-        setToolbar(activity, "", true)
+        setToolbar(activity, "")
         setHasOptionsMenu(true)
 
         aboutEventViewModel.event

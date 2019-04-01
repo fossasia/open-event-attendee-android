@@ -59,7 +59,7 @@ class OrderDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_order_details, container, false)
-        setToolbar(activity, "", true)
+        setToolbar(activity, "")
         setHasOptionsMenu(true)
 
         rootView.orderDetailsRecycler.layoutManager = LinearLayoutManager(activity)

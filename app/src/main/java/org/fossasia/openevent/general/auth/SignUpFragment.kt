@@ -56,7 +56,7 @@ class SignUpFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
 
         val progressDialog = Utils.progressDialog(context)
-        Utils.setToolbar(activity, getString(R.string.sign_up), true)
+        Utils.setToolbar(activity, getString(R.string.sign_up))
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()

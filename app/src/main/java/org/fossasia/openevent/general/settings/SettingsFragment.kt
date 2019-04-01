@@ -38,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        setToolbar(activity, "Settings", true)
+        setToolbar(activity, "Settings")
         setHasOptionsMenu(true)
 
         // Set Email

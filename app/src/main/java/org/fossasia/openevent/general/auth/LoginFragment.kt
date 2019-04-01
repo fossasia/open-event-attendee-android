@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val progressDialog = progressDialog(context)
-        setToolbar(activity, getString(R.string.login), true)
+        setToolbar(activity, getString(R.string.login))
         setHasOptionsMenu(true)
         showSnackbar()
 
@@ -133,10 +133,10 @@ class LoginFragment : Fragment() {
                 if (it) {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
-                    setToolbar(activity, getString(R.string.login), true, false)
+                    setToolbar(activity, getString(R.string.login),show =  false)
                     Utils.navAnimGone(activity?.navigationAuth, requireContext())
                 } else {
-                    setToolbar(activity, getString(R.string.login), true)
+                    setToolbar(activity, getString(R.string.login))
                     Utils.navAnimVisible(activity?.navigationAuth, requireContext())
                 }
             })
@@ -155,7 +155,7 @@ class LoginFragment : Fragment() {
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
-            setToolbar(activity, getString(R.string.login), true)
+            setToolbar(activity, getString(R.string.login))
             Utils.navAnimVisible(activity?.navigationAuth, requireContext())
             rootView.loginLayout.visibility = View.VISIBLE
         }

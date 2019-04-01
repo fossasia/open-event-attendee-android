@@ -181,7 +181,7 @@ class EditProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        setToolbar(activity, "Edit Profile", true)
+        setToolbar(activity, "Edit Profile")
         setHasOptionsMenu(true)
         super.onResume()
     }

@@ -113,7 +113,7 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
-        setToolbar(activity, "", true)
+        setToolbar(activity, "")
         setHasOptionsMenu(true)
 
         rootView.buttonTickets.setOnClickListener {
@@ -137,10 +137,10 @@ class EventDetailsFragment : Fragment() {
                 if (scrollY > rootView.eventName.height + rootView.logo.height)
                     /*Toolbar title set to name of Event if scrolled more than
                     combined height of eventImage and eventName views*/
-                    setToolbar(activity, title, true)
+                    setToolbar(activity, title)
                 else
                     // Toolbar title set to an empty string
-                    setToolbar(activity, "", true)
+                    setToolbar(activity, "")
             }
         }
 

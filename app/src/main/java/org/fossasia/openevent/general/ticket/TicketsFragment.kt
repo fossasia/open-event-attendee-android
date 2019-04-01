@@ -75,7 +75,7 @@ class TicketsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
-        setToolbar(activity, "Ticket Details", true)
+        setToolbar(activity, "Ticket Details")
         setHasOptionsMenu(true)
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)

@@ -123,7 +123,7 @@ class AttendeeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_attendee, container, false)
-        setToolbar(activity, getString(R.string.attendee_details), true)
+        setToolbar(activity, getString(R.string.attendee_details))
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()
