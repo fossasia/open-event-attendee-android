@@ -171,6 +171,7 @@ class SimilarEventsFragment : Fragment() {
 
         handleVisibility(similarEvents)
         Timber.d("Fetched Similar events of size %s", similarEvents.size)
+        if (similarEventsListAdapter.currentList.size != similarEvents.size) similarEvents.shuffle()
         similarEventsListAdapter.submitList(similarEvents)
         similarEventsListAdapter.notifyDataSetChanged()
     }
