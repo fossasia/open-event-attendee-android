@@ -43,6 +43,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         event: Event,
         dateFormat: String
     ) {
+        containerView.eventImage.setImageResource(R.drawable.header)
         containerView.eventName.text = event.name
         containerView.locationName.text = event.locationName
 
