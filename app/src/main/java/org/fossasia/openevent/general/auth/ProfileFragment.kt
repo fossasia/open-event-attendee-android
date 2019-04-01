@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLayout
@@ -47,12 +48,15 @@ class ProfileFragment : Fragment() {
             .build()
             .toBundle()
             .also { bundle ->
+                val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+                navigation?.selectedItemId = R.id.profile
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
             }
     }
 
     private fun redirectToEventsFragment() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+        val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+        navigation?.selectedItemId = R.id.events
     }
 
     override fun onStart() {

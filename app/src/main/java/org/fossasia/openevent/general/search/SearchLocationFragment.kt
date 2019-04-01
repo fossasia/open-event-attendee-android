@@ -82,12 +82,12 @@ class SearchLocationFragment : Fragment() {
             val placeOptions = PlaceOptions.builder().build(PlaceOptions.MODE_CARDS)
             autocompleteFragment = PlaceAutocompleteFragment.newInstance(
                 BuildConfig.MAPBOX_KEY, placeOptions)
-            val transaction = fragmentManager?.beginTransaction()
+            val transaction = childFragmentManager?.beginTransaction()
             transaction?.add(R.id.autocomplete_frag_container, autocompleteFragment,
                 AUTOCOMPLETE_FRAG_TAG)
             transaction?.commit()
         } else {
-            autocompleteFragment = fragmentManager?.findFragmentByTag(
+            autocompleteFragment = childFragmentManager?.findFragmentByTag(
                 AUTOCOMPLETE_FRAG_TAG) as? PlaceAutocompleteFragment
         }
 

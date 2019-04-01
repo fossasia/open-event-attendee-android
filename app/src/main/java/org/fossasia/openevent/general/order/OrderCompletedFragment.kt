@@ -12,10 +12,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order.view.add
@@ -112,7 +112,10 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun redirectToEventsFragment() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+        val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+        val currentNavController = Navigation.findNavController(rootView)
+        currentNavController.popBackStack(currentNavController.graph.startDestination, false)
+        navigation?.selectedItemId = R.id.events
     }
 
     private fun openEventDetails() {
@@ -120,8 +123,9 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun openTicketDetails() {
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.orderUnderUserFragment, null, navOptions)
+        redirectToEventsFragment()
+        val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+        navigation?.selectedItemId = R.id.tickets
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

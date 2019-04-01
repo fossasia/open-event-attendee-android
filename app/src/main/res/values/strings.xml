@@ -3,6 +3,7 @@
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
+    <string name="favorite">Favorite</string>
     <string name="saved_date">savedDate</string>
     <string name="location_hint">Enter a location</string>
 
@@ -91,6 +92,7 @@
     <string name="add_to_calendar">Add to Calendar</string>
 
     <!--ticket details-->
+    <string name="ticket_details">Ticket Details</string>
     <string name="tickets">Tickets</string>
     <string name="sales_dates">Sales Dates</string>
     <string name="order_range">Order Range</string>

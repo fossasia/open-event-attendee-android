@@ -3,9 +3,13 @@ package org.fossasia.openevent.general
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
@@ -16,9 +20,10 @@ import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
 import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
+import org.fossasia.openevent.general.utils.extensions.setupWithNavController
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navController: NavController
+    private var navController: LiveData<NavController>? = null
     private var currentFragmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,21 +31,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
-        if (hostFragment is NavHostFragment)
-            navController = hostFragment.navController
-        setupBottomNavigationMenu(navController)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            currentFragmentId = destination.id
-            handleNavigationVisibility(currentFragmentId)
+        if (savedInstanceState == null) {
+            setupBottomNavigationMenu()
         }
     }
 
-    private fun setupBottomNavigationMenu(navController: NavController) {
-        setupWithNavController(navigation, navController)
-        setupWithNavController(navigationAuth, navController)
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        setupBottomNavigationMenu()
+    }
 
+    private fun setupBottomNavigationMenu() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
+        val navGraphIds = listOf(R.navigation.events, R.navigation.search,
+            R.navigation.likes, R.navigation.tickets, R.navigation.profile)
+        val controller: LiveData<NavController> = bottomNavigationView.setupWithNavController(
+            navGraphIds = navGraphIds,
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.frameContainer,
+            intent = intent
+        )
+        controller.observe(this, Observer { navController ->
+            setupActionBarWithNavController(navController)
+            navController.addOnDestinationChangedListener { _, des, _ ->
+                currentFragmentId = des.id
+                handleNavigationVisibility(currentFragmentId)
+            }
+            setupWithNavController(navigationAuth, navController)
+        })
+
+        navController = controller
         navigation.setOnNavigationItemReselectedListener {
             val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
             if (hostFragment is NavHostFragment) {
@@ -70,12 +90,18 @@ class MainActivity : AppCompatActivity() {
         when (currentFragmentId) {
             R.id.loginFragment,
             R.id.signUpFragment -> {
-                navController.popBackStack(R.id.eventsFragment, false)
+                findViewById<BottomNavigationView>(R.id.navigation).selectedItemId = R.id.events
                 Snackbar.make(
                     mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
                 ).show()
             }
-            R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
+            R.id.orderCompletedFragment -> {
+                navController?.value?.popBackStack(R.id.eventDetailsFragment, false)
+                val navigation = findViewById<BottomNavigationView>(R.id.navigation)
+                val currentNavController = navController?.value
+                currentNavController?.popBackStack(currentNavController.graph.startDestination, false)
+                navigation?.selectedItemId = R.id.events
+            }
             R.id.welcomeFragment -> finish()
             R.id.editProfileFragment -> {
 

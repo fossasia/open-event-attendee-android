@@ -30,6 +30,8 @@ import java.util.Calendar
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
+    private var menuActionBar: Menu? = null
+    private lateinit var queryListener: SearchView.OnQueryTextListener
     private val safeArgs: SearchFragmentArgs? by lazy {
         // When search fragment is opened using BottomNav, then fragment arguments are null
         // navArgs delegate throws an IllegalStateException when arguments are null, so we construct SearchFragmentArgs
@@ -92,7 +94,35 @@ class SearchFragment : Fragment() {
                 }
         }
 
+        queryListener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                SearchResultsFragmentArgs.Builder()
+                    .setQuery(query)
+                    .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
+                    .setDate((safeArgs?.stringSavedDate ?: getString(R.string.anytime)).nullToEmpty())
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
+                    }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        }
+
+        rootView.fabSearch.setOnClickListener {
+            queryListener.onQueryTextSubmit(searchView.query.toString())
+        }
+
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        menuActionBar?.findItem(R.id.search_item)?.isVisible = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -111,32 +141,12 @@ class SearchFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
+        menuActionBar = menu
         val searchItem = menu.findItem(R.id.search_item)
         val thisActivity = activity
         if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
         searchItem.actionView = searchView
-        val queryListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                SearchResultsFragmentArgs.Builder()
-                    .setQuery(query)
-                    .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
-                    .setDate((safeArgs?.stringSavedDate ?: getString(R.string.anytime)).nullToEmpty())
-                    .build()
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
-                    }
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
-            }
-        }
         searchView.setOnQueryTextListener(queryListener)
-        rootView.fabSearch.setOnClickListener {
-            queryListener.onQueryTextSubmit(searchView.query.toString())
-        }
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -145,9 +155,8 @@ class SearchFragment : Fragment() {
         searchView.isSaveEnabled = false
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (this::searchView.isInitialized)
-            searchView.setOnQueryTextListener(null)
+    override fun onPause() {
+        super.onPause()
+        menuActionBar?.findItem(R.id.search_item)?.isVisible = false
     }
 }

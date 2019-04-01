@@ -42,6 +42,7 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SignUpFragment : Fragment() {
 
@@ -288,7 +289,8 @@ class SignUpFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+                val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+                navigation?.selectedItemId = R.id.events
                 Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
                 true
             }

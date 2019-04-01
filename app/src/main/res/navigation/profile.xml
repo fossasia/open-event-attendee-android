@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile"
+    app:startDestination="@+id/profileFragment">
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="org.fossasia.openevent.general.auth.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
+        android:label="@string/edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.fossasia.openevent.general.settings.SettingsFragment"
+        android:label="@string/settings">
+
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="org.fossasia.openevent.general.auth.SignUpFragment"
+        android:label="@string/sign_up"
+        tools:layout="@layout/fragment_signup" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="org.fossasia.openevent.general.auth.LoginFragment"
+        android:label="@string/login"
+        tools:layout="@layout/fragment_login">
+
+        <argument
+            android:name="snackbarMessage"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+</navigation>

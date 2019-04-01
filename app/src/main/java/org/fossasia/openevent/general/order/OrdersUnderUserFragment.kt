@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
@@ -131,6 +132,8 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             .build()
             .toBundle()
             .also { bundle ->
+                val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+                navigation?.selectedItemId = R.id.tickets
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
             }
     }

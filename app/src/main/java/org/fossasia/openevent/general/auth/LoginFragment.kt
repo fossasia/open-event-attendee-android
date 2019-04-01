@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
@@ -60,9 +61,6 @@ class LoginFragment : Fragment() {
         showSnackbar()
 
         smartAuthViewModel.buildCredential(activity, null)
-
-        if (loginViewModel.isLoggedIn())
-            popBackStack()
 
         rootView.loginButton.setOnClickListener {
             loginViewModel.login(email.text.toString(), password.text.toString())
@@ -185,6 +183,12 @@ class LoginFragment : Fragment() {
         return rootView
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (loginViewModel.isLoggedIn())
+            popBackStack()
+    }
+
     override fun onStart() {
         super.onStart()
         smartAuthViewModel.requestCredentials(activity)
@@ -202,7 +206,8 @@ class LoginFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+                val navigation: BottomNavigationView? = activity?.findViewById(R.id.navigation)
+                navigation?.selectedItemId = R.id.events
                 Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
                 true
             }
