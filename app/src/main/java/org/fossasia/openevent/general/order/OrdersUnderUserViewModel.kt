@@ -94,8 +94,10 @@ class OrdersUnderUserViewModel(
                 }
                 finalList = eventAndIdentifier
                 when (showExpired) {
-                    false -> finalList = finalList.filter { EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
-                    true -> finalList = finalList.filter { EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
+                    false -> finalList = finalList.filter {
+                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
+                    true -> finalList = finalList.filter {
+                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
                 }
                 if (finalList.isEmpty()) mutableNoTickets.value = true
                 mutableEventAndOrderIdentifier.value = finalList
