@@ -17,6 +17,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
@@ -37,9 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Settings"
+        setToolbar(activity, "Settings", true)
         setHasOptionsMenu(true)
 
         // Set Email

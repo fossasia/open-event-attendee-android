@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,6 +34,7 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class LoginFragment : Fragment() {
 
@@ -51,11 +51,7 @@ class LoginFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val progressDialog = progressDialog(context)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Login"
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity, "Login", true)
         setHasOptionsMenu(true)
         showSnackbar()
 
@@ -137,15 +133,11 @@ class LoginFragment : Fragment() {
                 if (it) {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
-                    if (thisActivity is AppCompatActivity) {
-                        thisActivity.supportActionBar?.hide()
-                        Utils.navAnimGone(thisActivity.navigationAuth, requireContext())
-                    }
+                    setToolbar(activity, "Login", true, false)
+                    Utils.navAnimGone(activity?.navigationAuth, requireContext())
                 } else {
-                    if (thisActivity is AppCompatActivity) {
-                        thisActivity.supportActionBar?.show()
-                        Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
-                    }
+                    setToolbar(activity, "Login", true)
+                    Utils.navAnimVisible(activity?.navigationAuth, requireContext())
                 }
             })
 
@@ -163,10 +155,8 @@ class LoginFragment : Fragment() {
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
-            if (thisActivity is AppCompatActivity) {
-                thisActivity.supportActionBar?.show()
-                Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
-            }
+            setToolbar(activity, "Login", true)
+            Utils.navAnimVisible(activity?.navigationAuth, requireContext())
             rootView.loginLayout.visibility = View.VISIBLE
         }
 

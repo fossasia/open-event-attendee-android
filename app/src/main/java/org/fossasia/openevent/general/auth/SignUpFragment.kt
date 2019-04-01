@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
@@ -57,11 +56,7 @@ class SignUpFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
 
         val progressDialog = Utils.progressDialog(context)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = getString(R.string.sign_up)
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        Utils.setToolbar(activity, getString(R.string.sign_up), true)
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()

@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -25,6 +24,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     private lateinit var rootView: View
@@ -37,11 +37,7 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = ""
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity, "", true)
         setHasOptionsMenu(true)
 
         aboutEventViewModel.event

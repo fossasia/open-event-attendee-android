@@ -11,10 +11,12 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -75,6 +77,14 @@ object Utils {
         val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
             as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
+    }
+
+    fun setToolbar(activity: FragmentActivity?, title: String, hasUpEnabled: Boolean, show: Boolean = true) {
+        val thisActivity = activity as? AppCompatActivity
+        thisActivity?.supportActionBar?.title = title
+        thisActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+        if (show) thisActivity?.supportActionBar?.show()
+        else thisActivity?.supportActionBar?.hide()
     }
 
     fun checkAndLoadFragment(

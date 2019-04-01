@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -62,6 +61,7 @@ import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
@@ -113,11 +113,7 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = ""
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity, "", true)
         setHasOptionsMenu(true)
 
         rootView.buttonTickets.setOnClickListener {
@@ -138,15 +134,13 @@ class EventDetailsFragment : Fragment() {
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                if (thisActivity is AppCompatActivity) {
-                    if (scrollY > rootView.eventName.height + rootView.logo.height)
-                        /*Toolbar title set to name of Event if scrolled more than
-                        combined height of eventImage and eventName views*/
-                        thisActivity.supportActionBar?.title = title
-                    else
-                        // Toolbar title set to an empty string
-                        thisActivity.supportActionBar?.title = ""
-                }
+                if (scrollY > rootView.eventName.height + rootView.logo.height)
+                    /*Toolbar title set to name of Event if scrolled more than
+                    combined height of eventImage and eventName views*/
+                    setToolbar(activity, title, true)
+                else
+                    // Toolbar title set to an empty string
+                    setToolbar(activity, "", true)
             }
         }
 

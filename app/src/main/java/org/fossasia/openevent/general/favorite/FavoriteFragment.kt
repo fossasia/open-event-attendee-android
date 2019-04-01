@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,6 +40,7 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 
@@ -65,12 +65,7 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
-
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Likes"
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        }
+        setToolbar(activity, "Likes", false)
 
         rootView.find_text.setOnClickListener {
             val navOptions = NavOptions.Builder()
