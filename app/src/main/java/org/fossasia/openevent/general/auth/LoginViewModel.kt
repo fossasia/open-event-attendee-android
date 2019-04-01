@@ -49,7 +49,7 @@ class LoginViewModel(
             }.subscribe({
                 mutableLoggedIn.value = true
             }, {
-                mutableError.value = "Unable to Login. Please check your credentials"
+                mutableError.value = "The password you typed in is not correct. Please try again!"
             })
         )
     }
