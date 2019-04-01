@@ -16,12 +16,12 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event: Event,
         clickListener: OrdersRecyclerAdapter.OrderClickListener?,
         orderIdentifier: String?,
-        attendeesNumber: Int
+        attendeesNumber: Int,
+        showExpired: Boolean
     ) {
         val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
-        val formattedEndDateTime = EventUtils.getTimeInMilliSeconds(event.endsAt, null)
 
         itemView.eventName.text = event.name
         itemView.time.text = "Starts at $formattedTime $timezone"
@@ -44,7 +44,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .placeholder(R.drawable.header)
                     .into(itemView.eventImage)
         }
-        if (System.currentTimeMillis() > formattedEndDateTime) {
+        if (!showExpired) {
             itemView.alpha = 0.5F
             val matrix = ColorMatrix()
             matrix.setSaturation(0F)

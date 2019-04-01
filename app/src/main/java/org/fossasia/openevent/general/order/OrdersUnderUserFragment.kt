@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnde
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersNestedScrollView
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.expireFilter
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
@@ -34,6 +35,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var showExpired = false
 
     override fun onStart() {
         super.onStart()
@@ -64,7 +66,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
         if (ordersUnderUserVM.isLoggedIn()) {
-            ordersUnderUserVM.ordersUnderUser()
+            ordersUnderUserVM.ordersUnderUser(false)
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
@@ -77,6 +79,23 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                             findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
                         }
                 }
+            }
+
+            rootView.expireFilter.setOnClickListener {
+                showExpired = !showExpired
+                when (showExpired) {
+                    true -> {
+                        rootView.expireFilter.setText("Past >")
+                        ordersRecyclerAdapter.addAllPairs(emptyList(), false)
+                        ordersUnderUserVM.ordersUnderUser(true)
+                    }
+                    false -> {
+                        rootView.expireFilter.setText("Upcoming >")
+                        ordersRecyclerAdapter.addAllPairs(emptyList(), false)
+                        ordersUnderUserVM.ordersUnderUser(false)
+                    }
+                }
+                ordersRecyclerAdapter.notifyDataSetChanged()
             }
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -113,7 +132,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     val list = it.sortedByDescending {
                         EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
                     }
-                    ordersRecyclerAdapter.addAllPairs(list)
+                    ordersRecyclerAdapter.addAllPairs(list, showExpired)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
@@ -123,7 +142,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     }
 
     private fun showNoTicketsScreen(show: Boolean) {
-        noTicketsScreen.visibility = if (show) View.VISIBLE else View.GONE
+        noTicketsScreen.isVisible = show
         findMyTickets.setOnClickListener {
             Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
         }
