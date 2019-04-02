@@ -101,7 +101,13 @@
         android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
         android:label="OrdersUnderUserFragment"
-        tools:layout="@layout/fragment_orders_under_user" />
+        tools:layout="@layout/fragment_orders_under_user">
+
+        <argument
+            android:name="showExpired"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
         android:name="org.fossasia.openevent.general.order.OrderDetailsFragment"

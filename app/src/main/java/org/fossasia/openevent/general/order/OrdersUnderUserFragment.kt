@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.order
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
@@ -25,6 +27,7 @@ import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -35,7 +38,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var showExpired = false
+    private val safeArgs: OrdersUnderUserFragmentArgs by navArgs()
 
     override fun onStart() {
         super.onStart()
@@ -53,8 +56,17 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Tickets"
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            when (safeArgs.showExpired) {
+                true -> {
+                    thisActivity.supportActionBar?.title = "Past Tickets"
+                    thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setHasOptionsMenu(true)
+                }
+                false -> {
+                    thisActivity.supportActionBar?.title = "Tickets"
+                    thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                }
+            }
         }
 
         rootView.ordersRecycler.layoutManager = LinearLayoutManager(activity)
@@ -66,7 +78,9 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
         if (ordersUnderUserVM.isLoggedIn()) {
-            ordersUnderUserVM.ordersUnderUser(false)
+            ordersRecyclerAdapter.addAllPairs(emptyList(), safeArgs.showExpired)
+            ordersUnderUserVM.ordersUnderUser(safeArgs.showExpired)
+            if (safeArgs.showExpired) rootView.expireFilter.isVisible = false
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
@@ -82,20 +96,13 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             }
 
             rootView.expireFilter.setOnClickListener {
-                showExpired = !showExpired
-                when (showExpired) {
-                    true -> {
-                        rootView.expireFilter.setText("Past >")
-                        ordersRecyclerAdapter.addAllPairs(emptyList(), false)
-                        ordersUnderUserVM.ordersUnderUser(true)
+                OrdersUnderUserFragmentArgs.Builder()
+                    .setShowExpired(true)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.orderUnderUserFragment, bundle, getAnimSlide())
                     }
-                    false -> {
-                        rootView.expireFilter.setText("Upcoming >")
-                        ordersRecyclerAdapter.addAllPairs(emptyList(), false)
-                        ordersUnderUserVM.ordersUnderUser(false)
-                    }
-                }
-                ordersRecyclerAdapter.notifyDataSetChanged()
             }
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -132,7 +139,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     val list = it.sortedByDescending {
                         EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
                     }
-                    ordersRecyclerAdapter.addAllPairs(list, showExpired)
+                    ordersRecyclerAdapter.addAllPairs(list, safeArgs.showExpired)
                     ordersRecyclerAdapter.notifyDataSetChanged()
                     Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
                 })
@@ -159,4 +166,14 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     }
 
     override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                activity?.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

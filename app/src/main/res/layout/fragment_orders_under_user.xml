@@ -12,9 +12,12 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:gravity="right"
         android:background="@drawable/filled_border"
-        android:padding="@dimen/padding_medium"
-        android:text="Upcoming >"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingBottom="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_large"
+        android:text="Past >"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
