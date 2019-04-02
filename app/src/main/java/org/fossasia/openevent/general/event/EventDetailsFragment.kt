@@ -19,8 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -63,7 +61,6 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.lang.Exception
 import java.util.Currency
 
 const val EVENT_ID = "eventId"
@@ -87,9 +84,27 @@ class EventDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        eventViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEvent(it)
+                eventShare = it
+                title = eventShare.name
+
+                if (eventShare.favorite) {
+                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
+                }
+
+                if (runOnce) {
+                    loadSocialLinksFragment()
+                    loadSimilarEventsFragment()
+                }
+                runOnce = false
+
+                Timber.d("Fetched events of id %d", safeArgs.eventId)
+                showEventErrorScreen(false)
+                setHasOptionsMenu(true)
+            })
     }
 
     override fun onCreateView(
@@ -136,52 +151,6 @@ class EventDetailsFragment : Fragment() {
         }
 
         return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        eventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-                eventShare = it
-                title = eventShare.name
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    rootView.logo.transitionName = safeArgs.eventId.toString()
-                // Set Cover Image
-                it.originalImageUrl?.let {
-                    Picasso.get()
-                        .load(it)
-                        .placeholder(R.drawable.header)
-                        .into(rootView.logo, object : Callback {
-                            override fun onSuccess() {
-                                startPostponedEnterTransition()
-                            }
-
-                            override fun onError(e: Exception?) {
-                                startPostponedEnterTransition()
-                            }
-                        })
-                } ?: run {
-                    startPostponedEnterTransition()
-                }
-
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
-                }
-
-                if (runOnce) {
-                    loadSocialLinksFragment()
-                    loadSimilarEventsFragment()
-                }
-                runOnce = false
-
-                Timber.d("Fetched events of id %d", safeArgs.eventId)
-                showEventErrorScreen(false)
-                setHasOptionsMenu(true)
-            })
     }
 
     private fun loadEvent(event: Event) {
@@ -241,7 +210,7 @@ class EventDetailsFragment : Fragment() {
 
         // Event Description Section
         if (!event.description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, event.description.stripHtml())
+            setTextField(rootView.eventDescription, event.description?.stripHtml())
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
@@ -275,9 +244,9 @@ class EventDetailsFragment : Fragment() {
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
-                .load(eventViewModel.loadMap(event))
-                .placeholder(R.drawable.ic_map_black)
-                .into(rootView.imageMap)
+                    .load(eventViewModel.loadMap(event))
+                    .placeholder(R.drawable.ic_map_black)
+                    .into(rootView.imageMap)
         }
 
         // Date and Time section

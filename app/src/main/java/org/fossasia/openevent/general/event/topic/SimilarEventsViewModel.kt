@@ -59,7 +59,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
             }.subscribe({
                 mutableSimilarLocationEvents.value = it.filter { it.id != eventId }
             }, {
-                Timber.e(it, "Error fetching simialr events")
+                Timber.e(it, "Error fetching similar events")
                 mutableError.value = "Error fetching similar events"
             })
         )

@@ -24,7 +24,7 @@ import java.util.Calendar
 const val ANYTIME = "Anytime"
 const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
-const val THIS_WEEKEND = "This Weekend"
+const val THIS_WEEKEND = "This weekend"
 const val NEXT_MONTH = "In the next month"
 
 class SearchTimeFragment : Fragment() {
