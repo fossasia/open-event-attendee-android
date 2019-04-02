@@ -37,6 +37,7 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.common.EventsDiffCallback
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
@@ -127,27 +128,28 @@ val apiModule = module {
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
+    factory { Resource() }
 }
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get()) }
-    viewModel { EventsViewModel(get(), get()) }
-    viewModel { ProfileViewModel(get()) }
-    viewModel { SignUpViewModel(get(), get()) }
-    viewModel { EventDetailsViewModel(get()) }
-    viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { SignUpViewModel(get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
-    viewModel { TicketsViewModel(get(), get(), get()) }
-    viewModel { AboutEventViewModel(get()) }
-    viewModel { SocialLinksViewModel(get()) }
-    viewModel { FavoriteEventsViewModel(get()) }
+    viewModel { TicketsViewModel(get(), get(), get(), get()) }
+    viewModel { AboutEventViewModel(get(), get()) }
+    viewModel { SocialLinksViewModel(get(), get()) }
+    viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { SimilarEventsViewModel(get()) }
-    viewModel { OrderCompletedViewModel(get()) }
-    viewModel { OrdersUnderUserViewModel(get(), get(), get()) }
-    viewModel { OrderDetailsViewModel(get(), get()) }
-    viewModel { EditProfileViewModel(get(), get()) }
+    viewModel { SimilarEventsViewModel(get(), get()) }
+    viewModel { OrderCompletedViewModel(get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
+    viewModel { OrderDetailsViewModel(get(), get(), get()) }
+    viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
 }

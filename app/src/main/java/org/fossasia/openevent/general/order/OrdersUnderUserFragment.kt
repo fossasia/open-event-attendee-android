@@ -50,7 +50,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Tickets"
+            thisActivity.supportActionBar?.title = getString(R.string.tickets)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 

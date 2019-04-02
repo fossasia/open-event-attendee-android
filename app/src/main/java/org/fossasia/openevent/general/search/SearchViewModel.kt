@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
@@ -23,7 +25,8 @@ import timber.log.Timber
 class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val network: Network
+    private val network: Network,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -182,7 +185,7 @@ class SearchViewModel(
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
         )
     }
@@ -195,7 +198,7 @@ class SearchViewModel(
                 Timber.d("Successfully added %d to favorites", eventId)
             }, {
                 Timber.e(it, "Error adding %d to favorites", eventId)
-                mutableError.value = "Error adding to favorites"
+                mutableError.value = resource.getString(R.string.error_adding_favorite_message)
             })
         )
     }

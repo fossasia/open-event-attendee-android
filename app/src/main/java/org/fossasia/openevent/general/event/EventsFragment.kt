@@ -90,7 +90,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.title = "Events"
+            thisActivity.supportActionBar?.title = getString(R.string.events)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 

@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
-class ProfileViewModel(private val authService: AuthService) : ViewModel() {
+class ProfileViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -47,7 +49,7 @@ class ProfileViewModel(private val authService: AuthService) : ViewModel() {
                 this.mutableUser.value = user
             }) {
                 Timber.e(it, "Failure")
-                mutableError.value = "Failure"
+                mutableError.value = resource.getString(R.string.failure)
             })
     }
 
