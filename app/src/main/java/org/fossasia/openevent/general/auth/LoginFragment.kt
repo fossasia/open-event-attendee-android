@@ -133,7 +133,7 @@ class LoginFragment : Fragment() {
                 if (it) {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
-                    setToolbar(activity, getString(R.string.login),show =  false)
+                    setToolbar(activity, getString(R.string.login), show = false)
                     Utils.navAnimGone(activity?.navigationAuth, requireContext())
                 } else {
                     setToolbar(activity, getString(R.string.login))
