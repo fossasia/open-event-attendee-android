@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        resConfigs "en"
         manifestPlaceholders = [
                 STRIPE_API_TOKEN: STRIPE_API_TOKEN
         ]
@@ -33,6 +34,7 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
@@ -71,6 +73,9 @@ android {
     }
     androidExtensions {
         experimental = true
+    }
+    aaptOptions {
+        cruncherEnabled = false
     }
 }
 

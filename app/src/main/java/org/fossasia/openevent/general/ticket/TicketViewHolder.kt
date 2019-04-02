@@ -43,7 +43,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (ticket.price != null) {
-            itemView.price.text = "${eventCurrency}${ticket.price}"
+            itemView.price.text = "$eventCurrency${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {
