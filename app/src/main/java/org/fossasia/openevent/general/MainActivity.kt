@@ -1,113 +1,107 @@
 package org.fossasia.openevent.general
 
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import kotlinx.android.synthetic.main.activity_main.*
-import org.fossasia.openevent.general.R.id.navigation_search
-import org.fossasia.openevent.general.attendees.AttendeeFragment
-import org.fossasia.openevent.general.auth.LAUNCH_ATTENDEE
-import org.fossasia.openevent.general.auth.ProfileFragment
-import org.fossasia.openevent.general.event.EventsFragment
-import org.fossasia.openevent.general.favorite.FavoriteFragment
-import org.fossasia.openevent.general.order.OrdersUnderUserFragment
-import org.fossasia.openevent.general.order.TICKETS
-import org.fossasia.openevent.general.search.SearchFragment
-
-private const val TO_SEARCH: String = "ToSearchFragment"
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.navigation
+import kotlinx.android.synthetic.main.activity_main.navigationAuth
+import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
+import org.fossasia.openevent.general.auth.EditProfileFragment
+import org.fossasia.openevent.general.search.RC_CREDENTIALS_READ
+import org.fossasia.openevent.general.search.RC_CREDENTIALS_SAVE
+import org.fossasia.openevent.general.search.SmartAuthViewModel
+import org.fossasia.openevent.general.utils.Utils.navAnimGone
+import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 
 class MainActivity : AppCompatActivity() {
-
-    private val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val fragment: Fragment
-        when (item.itemId) {
-            R.id.navigation_events -> {
-                supportActionBar?.title = "Events"
-                fragment = EventsFragment()
-                loadFragment(fragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_search -> {
-                supportActionBar?.title = "Search"
-                fragment = SearchFragment()
-                loadFragment(fragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_profile -> {
-                supportActionBar?.title = "Profile"
-                fragment = ProfileFragment()
-                loadFragment(fragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_favorite -> {
-                supportActionBar?.title = "Likes"
-                fragment = FavoriteFragment()
-                loadFragment(fragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_tickets -> {
-                supportActionBar?.title = "Tickets"
-                fragment = OrdersUnderUserFragment()
-                loadFragment(fragment)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+    private lateinit var navController: NavController
+    private var currentFragmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigation.setOnNavigationItemSelectedListener(listener)
+        val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+        if (hostFragment is NavHostFragment)
+            navController = hostFragment.navController
+        setupBottomNavigationMenu(navController)
 
-        supportActionBar?.title = "Events"
-
-        val bundle = intent.extras
-        var openEventsFragment = true
-
-        if (bundle != null && bundle.getBoolean(TO_SEARCH)) {
-            loadFragment(SearchFragment())
-            supportActionBar?.title = "Search"
-            navigation.selectedItemId = navigation_search
-            openEventsFragment = false
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentFragmentId = destination.id
+            handleNavigationVisibility(currentFragmentId)
         }
+    }
 
-        if (bundle != null && bundle.getBoolean(LAUNCH_ATTENDEE)) {
-            val fragment = AttendeeFragment()
-            fragment.arguments = bundle
-            loadFragment(fragment)
-            openEventsFragment = false
+    private fun setupBottomNavigationMenu(navController: NavController) {
+        setupWithNavController(navigation, navController)
+        setupWithNavController(navigationAuth, navController)
+
+        navigation.setOnNavigationItemReselectedListener {
+            val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+            if (hostFragment is NavHostFragment) {
+                val currentFragment = hostFragment.childFragmentManager.fragments.first()
+                if (currentFragment is ScrollToTop) currentFragment.scrollToTop()
+            }
         }
+    }
 
-        if (bundle != null && bundle.getBoolean(TICKETS)) {
-            loadFragment(OrdersUnderUserFragment())
-            supportActionBar?.title = "Tickets"
-            navigation.selectedItemId = R.id.navigation_tickets
-            openEventsFragment = false
+    private fun handleNavigationVisibility(id: Int) {
+        when (id) {
+            R.id.eventsFragment,
+            R.id.searchFragment,
+            R.id.profileFragment,
+            R.id.orderUnderUserFragment,
+            R.id.favoriteFragment -> navAnimVisible(navigation, this@MainActivity)
+            else -> navAnimGone(navigation, this@MainActivity)
         }
-
-        if (savedInstanceState == null && openEventsFragment)
-            loadFragment(EventsFragment())
+        when (id) {
+            R.id.loginFragment,
+            R.id.signUpFragment -> navAnimVisible(navigationAuth, this@MainActivity)
+            else -> navAnimGone(navigationAuth, this@MainActivity)
+        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.profile, menu)
-        return true
+    override fun onBackPressed() {
+        when (currentFragmentId) {
+            R.id.loginFragment,
+            R.id.signUpFragment -> {
+                navController.popBackStack(R.id.eventsFragment, false)
+                Snackbar.make(
+                    mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
+            R.id.welcomeFragment -> finish()
+            R.id.editProfileFragment -> {
+
+                // Calls the handleBackPress method in EditProfileFragment
+                val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer) as? NavHostFragment
+                (hostFragment?.childFragmentManager?.fragments?.get(0) as? EditProfileFragment)?.handleBackPress()
+            }
+            else -> super.onBackPressed()
+        }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.setGroupVisible(R.id.profile_menu, false)
-        menu?.setGroupVisible(R.id.search_menu, false)
-        return super.onPrepareOptionsMenu(menu)
+    /**
+     * Called by EditProfileFragment to go to previous fragment
+     */
+    fun onSuperBackPressed() {
+        super.onBackPressed()
     }
 
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.frameContainer, fragment)
-                .commit()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RC_CREDENTIALS_READ || requestCode == RC_CREDENTIALS_SAVE)
+            SmartAuthViewModel().onActivityResult(requestCode, resultCode, data, this)
+        else
+            super.onActivityResult(requestCode, resultCode, data)
     }
+}
+
+interface ScrollToTop {
+    fun scrollToTop()
 }

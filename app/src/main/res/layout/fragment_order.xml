@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,162 +8,167 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/layout_margin_extra_large"
-            android:text="@string/order_completed"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            tools:text="FOSSASIA summit" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/event_details_divider"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:layout_marginTop="@dimen/layout_margin_extra_large"
-            android:background="@color/grey" />
+        android:layout_height="wrap_content"
+        android:id="@+id/orderCoordinatorLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_medium"
-            android:weightSum="1">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/layout_margin_medium"
-                android:layout_weight="0.1"
-                app:srcCompat="@drawable/ic_baseline_calendar_24dp" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.85"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                tools:text="15 Sep 2008 04:23 PM" />
-
-            <TextView
-                android:id="@+id/add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:text="@string/add"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/event_details_divider"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:background="@color/grey" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_medium"
-            android:weightSum="1">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                app:srcCompat="@drawable/ic_baseline_ticket_24dp" />
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.87"
-                android:text="@string/tickets"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                tools:text="Tickets" />
-
-            <TextView
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:text="@string/view_ticket"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                tools:text="View" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/event_details_divider"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:background="@color/grey" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:paddingLeft="@dimen/layout_margin_medium"
-                android:layout_weight="0.95"
-                android:text="@string/invite"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/layout_margin_extra_large"
+                android:text="@string/order_completed"
                 android:textColor="@color/black" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/share"
-                android:layout_width="@dimen/fab_width"
-                android:layout_height="@dimen/fab_height"
-                android:layout_margin="@dimen/layout_margin_medium"
-                android:background="@android:color/white"
-                android:scaleType="center"
-                app:backgroundTint="@android:color/white"
-                app:srcCompat="@drawable/ic_share_grey_24dp" />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:text="FOSSASIA summit" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginTop="@dimen/layout_margin_extra_large"
+                android:background="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_medium"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin_small"
+                    android:layout_marginRight="@dimen/layout_margin_medium"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/ic_baseline_calendar" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.85"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="15 Sep 2008 04:23 PM" />
+
+                <TextView
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:text="@string/add"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_medium"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/ic_baseline_ticket" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:text="@string/tickets"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="Tickets" />
+
+                <TextView
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:text="@string/view_ticket"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    tools:text="View" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="@dimen/layout_margin_none"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:paddingLeft="@dimen/layout_margin_medium"
+                    android:layout_weight="0.95"
+                    android:textSize="@dimen/text_size_medium"
+                    android:text="@string/invite"
+                    android:textColor="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/share"
+                    android:layout_width="@dimen/fab_width"
+                    android:layout_height="@dimen/fab_height"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_share_grey" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/event_details_divider_margin"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="@color/grey" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/event_details_divider"
-            android:layout_marginBottom="@dimen/event_details_divider_margin"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:background="@color/grey" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.core.widget.NestedScrollView>

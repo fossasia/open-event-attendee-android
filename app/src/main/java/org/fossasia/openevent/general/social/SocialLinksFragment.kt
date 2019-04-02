@@ -1,20 +1,27 @@
 package org.fossasia.openevent.general.social
 
-import android.arch.lifecycle.Observer
-import android.icu.util.ValueIterator
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import kotlinx.android.synthetic.main.content_event.*
-import kotlinx.android.synthetic.main.fragment_social_links.*
-import kotlinx.android.synthetic.main.fragment_social_links.view.*
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_social_links.eventHostDetails
+import kotlinx.android.synthetic.main.fragment_social_links.socialLinksRecycler
+import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_social_links.view.progressBarSocial
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinkReload
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialNoInternet
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class SocialLinksFragment : Fragment() {
@@ -22,7 +29,6 @@ class SocialLinksFragment : Fragment() {
     private val socialLinksViewModel by viewModel<SocialLinksViewModel>()
     private lateinit var rootView: View
     private var id: Long = -1
-    private val EVENT_ID: String = "EVENT_ID"
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +39,11 @@ class SocialLinksFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_social_links, container, false)
 
         rootView.progressBarSocial.isIndeterminate = true
@@ -46,32 +55,47 @@ class SocialLinksFragment : Fragment() {
         rootView.socialLinksRecycler.adapter = socialLinksRecyclerAdapter
         rootView.socialLinksRecycler.isNestedScrollingEnabled = false
 
-        socialLinksViewModel.socialLinks.observe(this, Observer {
-            it?.let {
+        rootView.socialLinkReload.setOnClickListener {
+            loadSocialLink()
+        }
+
+        socialLinksViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.progressBarSocial.isVisible = it
+            })
+
+        socialLinksViewModel.socialLinks
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
                 socialLinksRecyclerAdapter.addAll(it)
                 handleVisibility(it)
-            }
-            socialLinksRecyclerAdapter.notifyDataSetChanged()
-            Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
-        })
+                socialLinksRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
+            })
 
-        socialLinksViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        socialLinksViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
 
-        socialLinksViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBarSocial, it) }
-        })
-
-        socialLinksViewModel.loadSocialLinks(id)
+        loadSocialLink()
 
         return rootView
     }
 
-    fun handleVisibility(socialLinks: List<SocialLink>){
-        if (!socialLinks.isEmpty()) {
-            eventHostDetails.visibility = View.VISIBLE
-            socialLinksRecycler.visibility = View.VISIBLE
+    private fun handleVisibility(socialLinks: List<SocialLink>) {
+        eventHostDetails.isGone = socialLinks.isEmpty()
+        socialLinksRecycler.isGone = socialLinks.isEmpty()
+    }
+
+    private fun loadSocialLink() {
+        if (isNetworkConnected(context)) {
+            socialLinksViewModel.loadSocialLinks(id)
+            rootView.socialNoInternet.visibility = View.GONE
+        } else {
+            rootView.socialNoInternet.visibility = View.VISIBLE
         }
     }
 }

@@ -1,42 +1,63 @@
 package org.fossasia.openevent.general.order
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.view.*
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_order_details.view.*
-import org.fossasia.openevent.general.MainActivity
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearSnapHelper
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
+import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EventDetailsFragment
-import org.fossasia.openevent.general.ticket.EVENT_ID
-import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class OrderDetailsFragment : Fragment() {
 
     private lateinit var rootView: View
-    private var id: Long = -1
-    private lateinit var orderId: String
     private val orderDetailsViewModel by viewModel<OrderDetailsViewModel>()
     private val ordersRecyclerAdapter: OrderDetailsRecyclerAdapter = OrderDetailsRecyclerAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private val safeArgs: OrderDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-            orderId = bundle.getString(ORDERS)
-        }
-        ordersRecyclerAdapter.setOrderIdentifier(orderId)
+
+        ordersRecyclerAdapter.setOrderIdentifier(safeArgs.orders)
+
+        orderDetailsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.setEvent(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+            })
+
+        orderDetailsViewModel.attendees
+            .nonNull()
+            .observe(this, Observer {
+                ordersRecyclerAdapter.addAll(it)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
+            })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_order_details, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -50,43 +71,36 @@ class OrderDetailsFragment : Fragment() {
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
+        LinearSnapHelper().attachToRecyclerView(rootView.orderDetailsRecycler)
 
         val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
             override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                    }
             }
         }
 
         ordersRecyclerAdapter.setListener(eventDetailsListener)
-        orderDetailsViewModel.event.observe(this, Observer {
-            it?.let {
-                ordersRecyclerAdapter.setEvent(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-            }
-        })
 
-        orderDetailsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-        })
+        orderDetailsViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        orderDetailsViewModel.attendees.observe(this, Observer {
-            it?.let {
-                ordersRecyclerAdapter.addAll(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
-            }
-            Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
-        })
+        orderDetailsViewModel.message
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(rootView.orderDetailCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
 
-        orderDetailsViewModel.message.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        orderDetailsViewModel.loadEvent(id)
-        orderDetailsViewModel.loadAttendeeDetails(orderId)
+        orderDetailsViewModel.loadEvent(safeArgs.eventId)
+        orderDetailsViewModel.loadAttendeeDetails(safeArgs.orders)
 
         return rootView
     }
@@ -99,13 +113,5 @@ class OrderDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Tickets"
-        setHasOptionsMenu(false)
-        super.onDestroyView()
     }
 }

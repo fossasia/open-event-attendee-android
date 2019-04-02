@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/eventCoordinatorLayout"
     android:background="@android:color/white"
     android:layout_height="match_parent">
-
+    <include
+        android:id="@+id/eventErrorCard"
+        layout="@layout/content_fetching_event_error"
+        android:visibility="gone" />
     <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_dodgeInsetEdges="bottom">
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonTickets"
+            style="@style/AppTheme.MaterialButton.RoundedCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonTickets"
             android:layout_gravity="bottom"
-            app:cardElevation="@dimen/card_tickets_elevation"
-            app:cardBackgroundColor="@color/colorAccent"
-            app:cardCornerRadius="@dimen/card_tickets_radius"
-            android:layout_margin="@dimen/layout_margin_large">
-
-            <TextView
-                android:layout_gravity="bottom"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_tickets_text_height"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_large"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:text="@string/tickets"/>
-        </android.support.v7.widget.CardView>
+            android:layout_margin="@dimen/layout_margin_large"
+            android:text="@string/tickets"/>
 
         <include layout="@layout/content_event"
             android:layout_width="match_parent"
@@ -45,4 +37,4 @@
             android:layout_height="@dimen/event_details_divider"/>
 
     </FrameLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

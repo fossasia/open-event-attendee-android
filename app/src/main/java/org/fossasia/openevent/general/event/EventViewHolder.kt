@@ -1,21 +1,54 @@
 package org.fossasia.openevent.general.event
 
-import android.content.Intent
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_card_events.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_card_events.view.date
+import kotlinx.android.synthetic.main.item_card_events.view.eventImage
+import kotlinx.android.synthetic.main.item_card_events.view.eventName
+import kotlinx.android.synthetic.main.item_card_events.view.favoriteFab
+import kotlinx.android.synthetic.main.item_card_events.view.locationName
+import kotlinx.android.synthetic.main.item_card_events.view.month
+import kotlinx.android.synthetic.main.item_card_events.view.shareFab
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.favorite.FAVORITE_EVENT_DATE_FORMAT
+import timber.log.Timber
 
-class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+/**
+ * The [RecyclerView.ViewHolder] class for Event items list in [EventsFragment]
+ * It implements the LayoutContainer interface from Kotlin Android Extensions to cache view lookup calls.
+ *
+ * @param containerView The root view of this ViewHolder
+ * @property eventClickListener The callback to be invoked when an event is clicked
+ * @property favFabClickListener The callback to be invoked when the favorite FAB is clicked
+ * @property shareFabClickListener The callback to be invoked when the share FAB is clicked
+ */
+class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(event: Event, clickListener: RecyclerViewClickListener?, favoriteListener: FavoriteFabListener?, dateFormat: String) {
-        itemView.eventName.text = event.name
-        itemView.locationName.text = event.locationName
+    var eventClickListener: EventClickListener? = null
+    var favFabClickListener: FavoriteFabClickListener? = null
+    var shareFabClickListener: ShareFabClickListener? = null
 
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+    /**
+     * The function to bind the given data on the items in this recycler view.
+     *
+     * @param event The [Event] object whose details are to be bound
+     * @param dateFormat The format in which to display the date on the events card
+     */
+    fun bind(
+        event: Event,
+        dateFormat: String
+    ) {
+        containerView.eventImage.setImageResource(R.drawable.header)
+        containerView.eventName.text = event.name
+        containerView.locationName.text = event.locationName
+
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
 
         if (dateFormat == FAVORITE_EVENT_DATE_FORMAT) {
             itemView.date.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
@@ -25,36 +58,35 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         setFabBackground(event.favorite)
-        event.originalImageUrl?.let {
+
+        event.originalImageUrl?.let { url ->
             Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(itemView.eventImage)
+                .load(url)
+                .placeholder(R.drawable.header)
+                .into(containerView.eventImage)
         }
 
-        itemView.setOnClickListener {
-            clickListener?.onClick(event.id)
+        containerView.setOnClickListener {
+            eventClickListener?.onClick(event.id)
+                ?: Timber.e("Event Click listener on ${this::class.java.canonicalName} is null")
         }
 
-        itemView.shareFab.setOnClickListener {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-
-            sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-            sendIntent.type = "text/plain"
-            itemView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
+        containerView.shareFab.setOnClickListener {
+            shareFabClickListener?.onClick(event)
+                ?: Timber.e("Share Fab Click listener on ${this::class.java.canonicalName} is null")
         }
 
-        itemView.favoriteFab.setOnClickListener {
-            favoriteListener?.onClick(event, event.favorite)
+        containerView.favoriteFab.setOnClickListener {
+            favFabClickListener?.onClick(event, adapterPosition)
+                ?: Timber.e("Favorite Fab Click listener on ${this::class.java.canonicalName} is null")
         }
     }
 
-    fun setFabBackground(isFavourite: Boolean) {
-        if (isFavourite) {
-            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24px)
+    private fun setFabBackground(isFavorite: Boolean) {
+        if (isFavorite) {
+            containerView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite)
         } else {
-            itemView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24px)
+            containerView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border)
         }
     }
 }

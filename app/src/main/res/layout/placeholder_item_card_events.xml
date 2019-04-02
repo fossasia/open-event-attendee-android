@@ -1,0 +1,63 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin_medium"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/layout_margin_none"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_large"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_image_view_160dp"
+            android:scaleType="centerCrop"
+            android:background="@color/shimmer_background"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="@dimen/card_width_45dp"
+                android:layout_height="@dimen/item_image_view"
+                android:background="@color/shimmer_background"
+                android:layout_marginEnd="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/padding_medium">
+            </View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_medium">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height_25dp"
+                    android:layout_marginBottom="@dimen/layout_margin_small"
+                    android:background="@color/shimmer_background"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height_25dp"
+                    android:background="@color/shimmer_background"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

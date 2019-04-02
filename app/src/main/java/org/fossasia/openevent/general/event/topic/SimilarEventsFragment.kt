@@ -1,99 +1,178 @@
 package org.fossasia.openevent.general.event.topic
 
-import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_similar_events.*
-import kotlinx.android.synthetic.main.fragment_similar_events.view.*
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
+import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
+import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivider
+import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsRecycler
+import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsRecycler
+import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsCoordinatorLayout
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.*
-import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.di.Scopes
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
+import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.event.EventsListAdapter
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.ShareFabClickListener
+import org.fossasia.openevent.general.event.EventLayoutType
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.ext.android.bindScope
+import org.koin.androidx.scope.ext.android.getOrCreateScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class SimilarEventsFragment : Fragment() {
-    private val similarEventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
+
     private val similarEventsViewModel by viewModel<SimilarEventsViewModel>()
+    private val safeArgs: SimilarEventsFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private var eventTopicId: Long = -1
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var similarEventsListAdapter: EventsListAdapter
+    private var similarIdEvents: MutableList<Event> = mutableListOf()
+    private var similarLocationEvents: MutableList<Event> = mutableListOf()
+    private var similarEvents: MutableList<Event> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        similarEventsRecyclerAdapter.setEventLayout(SIMILAR_EVENTS)
-        val bundle = this.arguments
-        var eventId: Long = -1
-        if (bundle != null) {
-            eventId = bundle.getLong(EVENT_ID, -1)
-            eventTopicId = bundle.getLong(EVENT_TOPIC_ID, -1)
-        }
-        similarEventsViewModel.eventId = eventId
+        bindScope(getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
+        similarEventsViewModel.eventId = safeArgs.eventId
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_similar_events, container, false)
+        similarEventsViewModel.similarLocationEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                similarLocationEvents.clear()
+                similarLocationEvents = it.toMutableList()
+                Timber.d("Fetched similar location events of size %s", it.size)
+                setUpAdapter()
+            })
 
-        linearLayoutManager = LinearLayoutManager(activity)
-        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        rootView.similarEventsRecycler.layoutManager = linearLayoutManager
+        similarEventsViewModel.similarIdEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                similarIdEvents.clear()
+                similarIdEvents = it.toMutableList()
+                Timber.d("Fetched similar id events of size %s", it.size)
+                setUpAdapter()
+            })
 
-        rootView.similarEventsRecycler.adapter = similarEventsRecyclerAdapter
-        rootView.similarEventsRecycler.isNestedScrollingEnabled = false
+        similarEventsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(rootView.similarEventsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
 
-        val recyclerViewClickListener = object : RecyclerViewClickListener {
-            override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
-            }
-        }
+        similarEventsViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressBar.isVisible = it
+            })
 
-        val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavourite: Boolean) {
-                val id = similarEventsRecyclerAdapter.getPos(event.id)
-                similarEventsViewModel.setFavorite(event.id, !isFavourite)
-                event.favorite = !event.favorite
-                similarEventsRecyclerAdapter.notifyItemChanged(id)
-            }
-        }
-
-        similarEventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        similarEventsViewModel.similarEvents.observe(this, Observer {
-            it?.let {
-                similarEventsRecyclerAdapter.addAll(it)
-                handleVisibility(it)
-                similarEventsRecyclerAdapter.notifyDataSetChanged()
-            }
-            Timber.d("Fetched similar events of size %s", similarEventsRecyclerAdapter.itemCount)
-        })
-
-        similarEventsViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        similarEventsViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(progressBar, it) }
-        })
-
-        similarEventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
-        similarEventsViewModel.loadSimilarEvents(eventTopicId)
+        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
 
         return rootView
     }
 
-    fun handleVisibility(similarEvents: List<Event>) {
-        if (!similarEvents.isEmpty()) {
-            similarEventsDivider.visibility = View.VISIBLE
-            moreLikeThis.visibility = View.VISIBLE
-            similarEventsRecycler.visibility = View.VISIBLE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        similarEventsListAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
+
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long) {
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(view).navigate(R.id.eventDetailsFragment, bundle,
+                            getAnimSlide())
+                    }
+            }
         }
+
+        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
+            override fun onClick(event: Event) {
+                Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
+                }.also { intent ->
+                    startActivity(Intent.createChooser(intent, "Share Event Details"))
+                }
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                similarEventsViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                similarEventsListAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        similarEventsListAdapter.apply {
+            onEventClick = eventClickListener
+            onShareFabClick = shareFabClickListener
+            onFavFabClick = favFabClickListener
+        }
+
+        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        view.similarEventsRecycler.layoutManager = linearLayoutManager
+
+        view.similarEventsRecycler.adapter = similarEventsListAdapter
+        view.similarEventsRecycler.isNestedScrollingEnabled = false
+    }
+
+    private fun handleVisibility(similarEvents: List<Event>) {
+        similarEventsDivider.isVisible = !similarEvents.isEmpty()
+        moreLikeThis.isVisible = !similarEvents.isEmpty()
+        similarEventsRecycler.isVisible = !similarEvents.isEmpty()
+    }
+
+    private fun setUpAdapter() {
+        similarEvents.clear()
+        var id: Long
+
+        when {
+            similarIdEvents.size != 0 && similarLocationEvents.size != 0 -> {
+                similarIdEvents.forEach {
+                    id = it.id
+                    if (similarLocationEvents.find { id == it.id } == null) similarEvents.add(it)
+                }
+                similarEvents.addAll(similarLocationEvents)
+            }
+            similarIdEvents.size == 0 -> similarEvents.addAll(similarLocationEvents)
+            similarLocationEvents.size == 0 -> similarEvents.addAll(similarIdEvents)
+        }
+
+        handleVisibility(similarEvents)
+        Timber.d("Fetched Similar events of size %s", similarEvents.size)
+        if (similarEventsListAdapter.currentList.size != similarEvents.size) similarEvents.shuffle()
+        similarEventsListAdapter.submitList(similarEvents)
+        similarEventsListAdapter.notifyDataSetChanged()
     }
 }

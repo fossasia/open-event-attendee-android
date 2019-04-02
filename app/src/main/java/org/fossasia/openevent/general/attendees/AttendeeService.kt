@@ -6,7 +6,11 @@ import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
 
-class AttendeeService(private val attendeeApi: AttendeeApi, private val attendeeDao: AttendeeDao, private val userDao: UserDao) {
+class AttendeeService(
+    private val attendeeApi: AttendeeApi,
+    private val attendeeDao: AttendeeDao,
+    private val userDao: UserDao
+) {
     fun postAttendee(attendee: Attendee): Single<Attendee> {
         return attendeeApi.postAttendee(attendee)
                 .map {

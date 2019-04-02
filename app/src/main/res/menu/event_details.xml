@@ -11,13 +11,13 @@
     </group>
     <item
         android:id="@+id/event_share"
-        android:icon="@drawable/ic_share_white_24dp"
+        android:icon="@drawable/ic_share_white"
         android:title="@string/share"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/favorite_event"
-        android:icon="@drawable/ic_baseline_favorite_border_white_24px"
+        android:icon="@drawable/ic_baseline_favorite_border_white"
         android:title="@string/favorite_event"
         app:showAsAction="always"/>
 </menu>

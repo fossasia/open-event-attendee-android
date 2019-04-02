@@ -1,16 +1,16 @@
 package org.fossasia.openevent.general.ticket
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 
 class TicketIdConverter {
 
     @TypeConverter
-    fun fromTicketId(ticketId: TicketId): Long{
+    fun fromTicketId(ticketId: TicketId): Long {
         return ticketId.id
     }
 
     @TypeConverter
-    fun toTicketId(id: Long): TicketId{
+    fun toTicketId(id: Long): TicketId {
         return TicketId(id)
     }
 }

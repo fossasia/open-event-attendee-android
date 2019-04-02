@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin_large"
+    android:background="@android:color/white"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/card_elevation"
+    app:cardElevation="@dimen/layout_margin_none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/avatar_medium"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/date"
+            android:layout_width="@dimen/card_width_45dp"
+            android:layout_height="@dimen/card_width_45dp"
+            android:layout_marginStart="@dimen/layout_margin_medium"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:background="@color/shimmer_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/ticket_title"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:layout_marginTop="@dimen/details_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
+            app:layout_constraintLeft_toRightOf="@+id/date"
+            app:layout_constraintRight_toLeftOf="@+id/ticket_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/ticket_details"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginTop="@dimen/details_margin_small"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@+id/see_ticket"
+            app:layout_constraintLeft_toRightOf="@+id/date"
+            app:layout_constraintRight_toLeftOf="@+id/ticket_image"
+            app:layout_constraintTop_toBottomOf="@+id/ticket_title" />
+
+        <View
+            android:id="@+id/see_ticket"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="@dimen/placeholder_tickets_view_height"
+            android:layout_marginLeft="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/details_margin_small"
+            android:background="@color/shimmer_background"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/date"
+            app:layout_constraintRight_toLeftOf="@+id/ticket_image" />
+
+        <View
+            android:id="@+id/ticket_image"
+            android:layout_width="@dimen/item_image_view_large"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/layout_margin_small"
+            android:background="@color/shimmer_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

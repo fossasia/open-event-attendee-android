@@ -16,61 +16,65 @@
         android:textColor="@color/black"
         android:textSize="@dimen/heading_text_size" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
             android:inputType="text" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
             android:inputType="text" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:id="@+id/countryArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginTop="@dimen/padding_medium">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Country" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/attendeeInformation"

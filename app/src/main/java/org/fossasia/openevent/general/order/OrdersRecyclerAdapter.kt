@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.order
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 
@@ -10,7 +10,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
     private val eventAndOrderIdentifier = ArrayList<Pair<Event, String>>()
     private var clickListener: OrderClickListener? = null
-    var attendeesNumber =  ArrayList<Int>()
+    var attendeesNumber = listOf<Int>()
 
     fun setListener(listener: OrderClickListener) {
         clickListener = listener
@@ -28,14 +28,19 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        holder.bind(eventAndOrderIdentifier[position].first, clickListener, eventAndOrderIdentifier[position].second, attendeesNumber[position])
+        attendeesNumber[position]?.let {
+            holder.bind(eventAndOrderIdentifier[position].first,
+                clickListener,
+                eventAndOrderIdentifier[position].second,
+                it)
+        }
     }
 
     override fun getItemCount(): Int {
         return eventAndOrderIdentifier.size
     }
 
-    fun setAttendeeNumber(number: ArrayList<Int>) {
+    fun setAttendeeNumber(number: List<Int>) {
         attendeesNumber = number
     }
 

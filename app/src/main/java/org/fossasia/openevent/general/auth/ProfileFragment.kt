@@ -1,130 +1,132 @@
 package org.fossasia.openevent.general.auth
 
-import android.arch.lifecycle.Observer
+import androidx.appcompat.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
-import android.view.*
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_profile.view.*
-import org.fossasia.openevent.general.AuthActivity
+import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_profile.view.avatar
+import kotlinx.android.synthetic.main.fragment_profile.view.email
+import kotlinx.android.synthetic.main.fragment_profile.view.name
+import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
+import kotlinx.android.synthetic.main.fragment_profile.view.editProfileRL
+import kotlinx.android.synthetic.main.fragment_profile.view.logoutLL
+import kotlinx.android.synthetic.main.fragment_profile.view.manageEventsLL
+import kotlinx.android.synthetic.main.fragment_profile.view.settingsLL
+import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssuesLL
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.settings.SettingsFragment
+import org.fossasia.openevent.general.settings.SettingsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
-    private val profileFragmentViewModel by viewModel<ProfileFragmentViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
 
     private lateinit var rootView: View
     private var emailSettings: String? = null
-    private val EMAIL: String = "EMAIL"
 
     private fun redirectToLogin() {
-        startActivity(Intent(activity, AuthActivity::class.java))
-        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 
-    private fun redirectToMain() {
-        startActivity(Intent(activity, MainActivity::class.java))
+    private fun redirectToEventsFragment() {
+        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (!profileFragmentViewModel.isLoggedIn()) {
-            Toast.makeText(context, "You need to Login!", Toast.LENGTH_LONG).show()
+    override fun onStart() {
+        super.onStart()
+        if (!profileViewModel.isLoggedIn()) {
             redirectToLogin()
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        setHasOptionsMenu(true)
+        profileViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.progressBar.isVisible = it
+            })
 
-        profileFragmentViewModel.progress.observe(this, Observer {
-            it?.let { Utils.showProgressBar(rootView.progressBar, it) }
-        })
+        profileViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(rootView.profileCoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
+            })
 
-        profileFragmentViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        profileFragmentViewModel.user.observe(this, Observer {
-            it?.let {
+        profileViewModel.user
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
 
-
                 Picasso.get()
                         .load(it.avatarUrl)
-                        .placeholder(AppCompatResources.getDrawable(context!!, R.drawable.ic_person_black_24dp)!!)   //TODO: Make null safe
+                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
                         .transform(CircleTransform())
                         .into(rootView.avatar)
-            }
-        })
+
+                rootView.editProfileRL.setOnClickListener {
+                    findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                }
+            })
 
         fetchProfile()
 
-        return rootView
-    }
+        rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
-            R.id.edit_profile -> {
-                val fragment = EditProfileFragment()
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
-                return true
-            }
-            R.id.orga_app -> {
-                startOrgaApp("org.fossasia.eventyay")
-                return true
-            }
-            R.id.ticket_issues -> {
-                context?.let {
-                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
+        rootView.settingsLL.setOnClickListener {
+
+            SettingsFragmentArgs.Builder(emailSettings)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
                 }
-                return true
-            }
-            R.id.logout -> {
-                profileFragmentViewModel.logout()
-                redirectToMain()
-                return true
-            }
-            R.id.settings -> {
-                val fragment = SettingsFragment()
-                val bundle = Bundle()
-                bundle.putString(EMAIL, emailSettings)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.frameContainer, fragment)?.addToBackStack(null)?.commit()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
         }
-    }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        menu?.setGroupVisible(R.id.profile_menu, true)
-        super.onPrepareOptionsMenu(menu)
+        rootView.ticketIssuesLL.setOnClickListener {
+            Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+        }
+
+        rootView.logoutLL.setOnClickListener { showLogoutDialog() }
+
+        return rootView
     }
 
     private fun startOrgaApp(packageName: String) {
         val manager = activity?.packageManager
         try {
             val intent = manager?.getLaunchIntentForPackage(packageName)
-                    ?: throw  ActivityNotFoundException()
+                    ?: throw ActivityNotFoundException()
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
@@ -133,25 +135,42 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showInMarket(packageName: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
     }
 
     private fun fetchProfile() {
-        if (!profileFragmentViewModel.isLoggedIn())
+        if (!profileViewModel.isLoggedIn())
             return
 
         rootView.progressBar.isIndeterminate = true
-        profileFragmentViewModel.fetchProfile()
-
+        profileViewModel.fetchProfile()
     }
 
     override fun onResume() {
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Profile"
-        setHasOptionsMenu(true)
+        activity?.supportActionBar?.title = getString(R.string.profile)
         super.onResume()
+    }
+
+    private fun showLogoutDialog() {
+            AlertDialog.Builder(requireContext()).setMessage(resources.getString(R.string.message))
+            .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                if (profileViewModel.isLoggedIn()) {
+                    profileViewModel.logout()
+                    redirectToEventsFragment()
+                }
+            }
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .show()
     }
 }

@@ -8,8 +8,8 @@ import com.github.jasminb.jsonapi.annotations.Type
 @Type("order")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class ConfirmOrder(
-        @Id
-        val id: String,
-        val status: String? = null,
-        val orderNotes: String? = null
+    @Id
+    val id: String,
+    val status: String? = null,
+    val orderNotes: String? = null
 )

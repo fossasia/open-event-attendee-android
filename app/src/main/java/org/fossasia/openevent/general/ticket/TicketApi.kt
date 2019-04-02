@@ -8,5 +8,4 @@ interface TicketApi {
 
     @GET("events/{id}/tickets?include=event&fields[event]=id&page[size]=0")
     fun getTickets(@Path("id") id: Long): Flowable<List<Ticket>>
-
 }

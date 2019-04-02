@@ -1,8 +1,8 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:id="@+id/rootLayout"
+    android:id="@+id/mainCoordinatorLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -10,24 +10,46 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/frameContainer"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/mainFragmentCoordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@android:color/white"
-            android:layout_weight="1"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="@dimen/layout_margin_none"
+            android:layout_weight="1">
 
-        <android.support.design.widget.BottomNavigationView
+            <fragment
+                android:id="@+id/frameContainer"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/navigation_graph"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
-            app:itemBackground="@android:color/white"
             android:foreground="?attr/selectableItemBackground"
-            app:itemTextColor="@color/colorPrimaryDark"
+            app:itemIconTint="@color/navigation_item"
+            app:itemTextColor="@color/navigation_item"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/navigation" />
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigationAuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            android:foreground="?attr/selectableItemBackground"
+            app:itemIconTint="@color/navigation_item"
+            app:itemTextColor="@color/navigation_item"
+            app:menu="@menu/navigation_auth" />
+
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

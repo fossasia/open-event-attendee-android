@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.event
 
+import androidx.preference.PreferenceManager
+import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -7,6 +9,9 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object EventUtils {
 
@@ -17,7 +22,7 @@ object EventUtils {
 
     private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    private val frontendUrl: String = "https://open-event-frontend-dev.herokuapp.com/e/"
+    private const val frontendUrl = "https://open-event-frontend-dev.herokuapp.com/e/"
 
     fun getSharableInfo(event: Event, resource: Resource = sharedResource): String {
         val description = event.description.nullToEmpty()
@@ -26,8 +31,8 @@ object EventUtils {
 
         val message = StringBuilder()
 
-        val startsAt = getLocalizedDateTime(event.startsAt)
-        val endsAt = getLocalizedDateTime(event.endsAt)
+        val startsAt = getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = getEventDateTime(event.endsAt, event.timezone)
 
         message.append(resource.getString(R.string.event_name)).append(event.name).append("\n\n")
         if (!description.isEmpty()) message.append(resource.getString(R.string.event_description))
@@ -37,7 +42,9 @@ object EventUtils {
                 .append(startsAt.format(timeFormat)).append("\n")
         message.append(resource.getString(R.string.ends_on))
                 .append(endsAt.format(dateFormat)).append(" ")
-                .append(endsAt.format(timeFormat))
+                .append(endsAt.format(timeFormat)).append("\n")
+        message.append(resource.getString(R.string.event_location))
+                .append(event.locationName)
         if (!eventUrl.isEmpty()) message.append("\n")
                 .append(resource.getString(R.string.event_link))
                 .append(eventUrl)
@@ -45,16 +52,44 @@ object EventUtils {
         return message.toString()
     }
 
-    fun getLocalizedDateTime(dateString: String): ZonedDateTime = ZonedDateTime.parse(dateString)
-            .toOffsetDateTime()
-            .atZoneSameInstant(ZoneId.systemDefault())
+    fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
+        "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getTimeInMilliSeconds(dateString: String): Long {
-        return getLocalizedDateTime(dateString).toInstant().toEpochMilli()
+    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
+        try {
+            return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
+                .getBoolean("useEventTimeZone", false)) {
+
+                true -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.of(timeZone))
+                false -> ZonedDateTime.parse(dateString)
+                    .toOffsetDateTime()
+                    .atZoneSameInstant(ZoneId.systemDefault())
+            }
+        } catch (e: NullPointerException) {
+            return ZonedDateTime.parse(dateString)
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+        }
+    }
+
+    fun getTimeInMilliSeconds(dateString: String, timeZone: String): Long {
+        return getEventDateTime(dateString, timeZone).toInstant().toEpochMilli()
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        try {
+            return dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            return ""
+        }
+    }
+
+    fun getSimpleFormattedDate(date: Date): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         try {
             return dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
@@ -134,14 +169,16 @@ object EventUtils {
     fun getFormattedDateTimeRangeDetailed(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         val startingDate = getFormattedDate(startsAt)
         val endingDate = getFormattedDate(endsAt)
-        try {
+        return try {
             if (startingDate != endingDate)
-                return "$startingDate at ${getFormattedTime(startsAt)} - $endingDate at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+                "$startingDate at ${getFormattedTime(startsAt)} - $endingDate" +
+                    " at ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
             else
-                return "$startingDate from ${getFormattedTime(startsAt)} to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
+                "$startingDate from ${getFormattedTime(startsAt)}" +
+                    " to ${getFormattedTime(endsAt)} (${getFormattedTimeZone(endsAt)})"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 

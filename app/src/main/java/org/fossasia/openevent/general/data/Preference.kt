@@ -49,5 +49,4 @@ class Preference {
     fun remove(key: String) {
         editor.remove(key).apply()
     }
-
 }

@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.order
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_card_order.view.*
@@ -10,8 +10,13 @@ import org.fossasia.openevent.general.event.EventUtils
 
 class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(event: Event, clickListener: OrdersRecyclerAdapter.OrderClickListener?, orderIdentifier: String?, attendeesNumber: Int) {
-        val formattedDateTime = EventUtils.getLocalizedDateTime(event.startsAt)
+    fun bind(
+        event: Event,
+        clickListener: OrdersRecyclerAdapter.OrderClickListener?,
+        orderIdentifier: String?,
+        attendeesNumber: Int
+    ) {
+        val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
 
@@ -22,9 +27,9 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (attendeesNumber == 1) {
-            itemView.ticketsNumber.text = "See ${attendeesNumber} Ticket"
+            itemView.ticketsNumber.text = "See $attendeesNumber Ticket"
         } else {
-            itemView.ticketsNumber.text = "See ${attendeesNumber} Tickets"
+            itemView.ticketsNumber.text = "See $attendeesNumber Tickets"
         }
 
         itemView.date.text = formattedDateTime.dayOfMonth.toString()
@@ -33,7 +38,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event.originalImageUrl?.let {
             Picasso.get()
                     .load(it)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.header)
                     .into(itemView.eventImage)
         }
     }

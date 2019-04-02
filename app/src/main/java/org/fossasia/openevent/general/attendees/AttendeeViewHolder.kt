@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.attendees
 
-import android.support.design.widget.TextInputLayout
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -22,7 +22,7 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         setText(itemView.attendeeItemEmail, attendeeRecyclerAdapter.attendeeList[position].email)
         setText(itemView.attendeeItemFirstName, attendeeRecyclerAdapter.attendeeList[position].firstname)
         itemView.attendeeItemTicketName.text = "Ticket Name - ${attendeeRecyclerAdapter.ticketList[position].name}"
-        
+
         textWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 val id = attendeeRecyclerAdapter.attendeeList[position].id

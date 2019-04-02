@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.social
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
@@ -30,5 +30,4 @@ class SocialLinksRecyclerAdapter : RecyclerView.Adapter<SocialLinksViewHolder>()
     override fun getItemCount(): Int {
         return socialLinks.size
     }
-
 }

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:layout_marginTop="@dimen/layout_margin_large"
+    android:layout_marginLeft="@dimen/layout_margin_large"
+    android:layout_marginRight="@dimen/layout_margin_large"
+    android:orientation="vertical"
+    tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:text="@string/what_time"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_extra_large"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckedTextView
+                android:id="@+id/anytimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/anytime"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/todayTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/today"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/tomorrowTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/tomorrow"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/thisWeekendTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/weekend"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/nextMonthTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/month"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckedTextView
+                android:id="@+id/timeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_margin_large"
+                android:paddingBottom="@dimen/layout_margin_large"
+                android:gravity="center_vertical"
+                android:text="@string/pick_date"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

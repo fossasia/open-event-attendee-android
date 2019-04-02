@@ -1,132 +1,170 @@
 package org.fossasia.openevent.general.ticket
 
-import android.app.AlertDialog
-import android.arch.lifecycle.Observer
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_tickets.view.*
-import org.fossasia.openevent.general.MainActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
+import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
+import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
+import kotlinx.android.synthetic.main.fragment_tickets.view.register
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketInfoTextView
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
+import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.attendees.AttendeeFragment
+import org.fossasia.openevent.general.attendees.AttendeeFragmentArgs
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
-
-const val EVENT_ID: String = "EVENT_ID"
-const val CURRENCY: String = "CURRENCY"
-const val TICKET_ID_AND_QTY: String = "TICKET_ID_AND_QTY"
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
-    private var id: Long = -1
-    private var currency: String? = null
+    private val safeArgs: TicketsFragmentArgs by navArgs()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            id = bundle.getLong(EVENT_ID, -1)
-            currency = bundle.getString(CURRENCY, null)
+        ticketsRecyclerAdapter.setCurrency(safeArgs.currency)
+
+        val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
+            }
         }
-        ticketsRecyclerAdapter.setCurrency(currency)
+        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
+
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
+                ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Ticket Details"
         setHasOptionsMenu(true)
 
-        val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
-            }
-        }
-        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
 
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
 
         linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        ticketsViewModel.progressTickets.observe(this, Observer {
-            it?.let {
-                Utils.showProgressBar(rootView.progressBarTicket, it)
-                rootView.ticketTableHeader.visibility = if (it) View.GONE else View.VISIBLE
-                rootView.register.visibility = if (it) View.GONE else View.VISIBLE
-            }
-        })
-
-        ticketsViewModel.event.observe(this, Observer {
-            it?.let { loadEventDetails(it) }
-        })
-
-        ticketsViewModel.ticketTableVisibility.observe(this, Observer {
-            it?.let {
-                if (it) {
-                    rootView.ticketTableHeader.visibility = View.VISIBLE
-                    rootView.ticketsRecycler.visibility = View.VISIBLE
-                    rootView.register.visibility = View.VISIBLE
-                    rootView.ticketInfoTextView.visibility = View.GONE
-                } else {
-                    rootView.ticketTableHeader.visibility = View.GONE
-                    rootView.register.visibility = View.GONE
-                    rootView.ticketsRecycler.visibility = View.GONE
-                    rootView.ticketInfoTextView.visibility = View.VISIBLE
-                }
-            }
-        })
-
-        ticketsViewModel.loadEvent(id)
-        ticketsViewModel.loadTickets(id)
-
-        ticketsViewModel.tickets.observe(this, Observer {
-            it?.let {
-                ticketsRecyclerAdapter.addAll(it)
-            }
-            ticketsRecyclerAdapter.notifyDataSetChanged()
-        })
+        ticketsViewModel.progressTickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.progressBarTicket.isVisible = it
+                rootView.ticketTableHeader.isGone = it
+                rootView.register.isGone = it
+            })
 
         rootView.register.setOnClickListener {
             if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
-                val fragment = AttendeeFragment()
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, id)
-                bundle.putSerializable(TICKET_ID_AND_QTY, ticketIdAndQty)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.rootLayout, fragment)
-                        ?.addToBackStack(null)
-                        ?.commit()
+                checkForAuthentication()
             } else {
                 handleNoTicketsSelected()
             }
         }
 
+        ticketsViewModel.ticketTableVisibility
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { ticketTableVisible ->
+                rootView.ticketTableHeader.isVisible = ticketTableVisible
+                rootView.register.isVisible = ticketTableVisible
+                rootView.ticketsRecycler.isVisible = ticketTableVisible
+                rootView.ticketInfoTextView.isGone = ticketTableVisible
+            })
+
+        ticketsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        ticketsViewModel.loadEvent(safeArgs.eventId)
+        ticketsViewModel.loadTickets(safeArgs.eventId)
+        val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+        if (retainedTicketIdAndQty != null) {
+            for (idAndQty in retainedTicketIdAndQty) {
+                handleTicketSelect(idAndQty.first, idAndQty.second)
+            }
+            ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
+            ticketsRecyclerAdapter.notifyDataSetChanged()
+        }
         return rootView
+    }
+
+    private fun checkForAuthentication() {
+        if (ticketsViewModel.isLoggedIn())
+            redirectToAttendee()
+        else {
+            Snackbar.make(ticketsCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_LONG).show()
+            redirectToLogin()
+        }
+    }
+
+    private fun redirectToAttendee() {
+
+        val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
+
+        AttendeeFragmentArgs.Builder()
+            .setTicketIdAndQty(wrappedTicketAndQty)
+            .setEventId(safeArgs.eventId)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
+            }
+    }
+
+    private fun redirectToLogin() {
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
+            }
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
@@ -136,12 +174,6 @@ class TicketsFragment : Fragment() {
         } else {
             ticketIdAndQty[pos] = Pair(id, quantity)
         }
-    }
-
-    override fun onDestroyView() {
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        super.onDestroyView()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -157,18 +189,17 @@ class TicketsFragment : Fragment() {
     private fun loadEventDetails(event: Event) {
         rootView.eventName.text = event.name
         rootView.organizerName.text = "by ${event.organizerName.nullToEmpty()}"
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 
     private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(resources.getString(R.string.no_tickets_message))
                 .setTitle(resources.getString(R.string.whoops))
                 .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
     }
-
 }

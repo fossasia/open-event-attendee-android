@@ -1,132 +1,216 @@
 package org.fossasia.openevent.general.event
 
-import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import kotlinx.android.synthetic.main.content_no_internet.view.*
-import kotlinx.android.synthetic.main.fragment_events.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.Navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
+import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
+import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
+import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
+import kotlinx.android.synthetic.main.fragment_events.view.progressBar
+import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
+import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SearchLocationActivity
-import org.fossasia.openevent.general.utils.Utils
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.ShareFabClickListener
+import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.di.Scopes
+import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
+import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.ext.android.bindScope
+import org.koin.androidx.scope.ext.android.getOrCreateScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-//String constants for event types
-const val EVENTS: String = "events"
-const val SIMILAR_EVENTS: String = "similarEvents"
-const val EVENT_DATE_FORMAT: String = "eventDateFormat"
+/**
+ * Enum class for different layout types in the adapter.
+ * This class can expand as number of layout types grow.
+ */
+enum class EventLayoutType {
+    EVENTS, SIMILAR_EVENTS
+}
 
-class EventsFragment : Fragment() {
-    private val eventsRecyclerAdapter: EventsRecyclerAdapter = EventsRecyclerAdapter()
+const val EVENT_DATE_FORMAT: String = "eventDateFormat"
+const val RELOADING_EVENTS: Int = 0
+const val INITIAL_FETCHING_EVENTS: Int = 1
+
+class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
+    private val preference = Preference()
+    private val eventsListAdapter: EventsListAdapter by inject(
+        scope = getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString())
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        eventsRecyclerAdapter.setEventLayout(EVENTS)
+
+        bindScope(getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString()))
+
+        eventsViewModel.events
+            .nonNull()
+            .observe(this, Observer { list ->
+                eventsListAdapter.submitList(list)
+                showEmptyMessage(list.size)
+                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
+            })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
+
+        if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
+            findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
+        }
+
+        val thisActivity = activity
+        if (thisActivity is AppCompatActivity) {
+            thisActivity.supportActionBar?.show()
+            thisActivity.supportActionBar?.title = "Events"
+            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         rootView.progressBar.isIndeterminate = true
 
-        rootView.eventsRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.eventsRecycler.layoutManager =
+            GridLayoutManager(activity, resources.getInteger(R.integer.events_column_count))
 
-        rootView.eventsRecycler.adapter = eventsRecyclerAdapter
+        rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        val recyclerViewClickListener = object : RecyclerViewClickListener {
-            override fun onClick(eventID: Long) {
-                val fragment = EventDetailsFragment()
-                val bundle = Bundle()
-                bundle.putLong(EVENT_ID, eventID)
-                fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.rootLayout, fragment)?.addToBackStack(null)?.commit()
-            }
-        }
+        eventsViewModel.showShimmerEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
+                if (shouldShowShimmer) {
+                    rootView.shimmerEvents.startShimmer()
+                    eventsListAdapter.clear()
+                } else {
+                    rootView.shimmerEvents.stopShimmer()
+                }
+                rootView.shimmerEvents.isVisible = shouldShowShimmer
+            })
 
-        val favouriteFabClickListener = object : FavoriteFabListener {
-            override fun onClick(event: Event, isFavourite: Boolean) {
-                val id = eventsRecyclerAdapter.getPos(event.id)
-                eventsViewModel.setFavorite(event.id, !isFavourite)
-                event.favorite = !event.favorite
-                eventsRecyclerAdapter.notifyItemChanged(id)
-            }
-        }
-        eventsRecyclerAdapter.setListener(recyclerViewClickListener)
-        eventsRecyclerAdapter.setFavorite(favouriteFabClickListener)
-        eventsViewModel.events.observe(this, Observer {
-            it?.let {
-                eventsRecyclerAdapter.addAll(it)
-                eventsRecyclerAdapter.notifyDataSetChanged()
-            }
-            Timber.d("Fetched events of size %s", eventsRecyclerAdapter.itemCount)
-        })
-
-        eventsViewModel.error.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        eventsViewModel.progress.observe(this, Observer {
-            it?.let {
+        eventsViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
                 rootView.swiperefresh.isRefreshing = it
-            }
-        })
+            })
 
-        if (eventsViewModel.savedLocation != null) {
-            rootView.locationTextView.text = eventsViewModel.savedLocation
-            eventsViewModel.loadLocationEvents()
-        } else {
-            rootView.locationTextView.text = "where?"
-        }
+        eventsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        eventsViewModel.loadLocation()
+        rootView.locationTextView.text = eventsViewModel.savedLocation
+        eventsViewModel.loadLocationEvents(INITIAL_FETCHING_EVENTS)
 
         rootView.locationTextView.setOnClickListener {
-            val intent = Intent(activity, SearchLocationActivity::class.java)
-            startActivity(intent)
+            findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
         }
 
-        showNoInternetScreen(isNetworkConnected())
+        showNoInternetScreen(!isNetworkConnected(context) && eventsViewModel.events.value.isNullOrEmpty())
 
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected()
+            val isNetworkConnected = isNetworkConnected(context)
             if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents()
+                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
             }
-            showNoInternetScreen(isNetworkConnected)
+            showNoInternetScreen(!isNetworkConnected)
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
-        rootView.swiperefresh.setOnRefreshListener({
-            eventsViewModel.loadLocationEvents()
-        })
+        rootView.swiperefresh.setOnRefreshListener {
+            showNoInternetScreen(!isNetworkConnected(context))
+            if (!isNetworkConnected(context)) {
+                rootView.swiperefresh.isRefreshing = false
+            } else {
+                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
+            }
+        }
 
         return rootView
     }
 
-    private fun showNoInternetScreen(show: Boolean) {
-        rootView.homeScreenLL.visibility = if (show) View.VISIBLE else View.GONE
-        rootView.noInternetCard.visibility = if (!show) View.VISIBLE else View.GONE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
+                .setEventId(eventID)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                }
+            }
+        }
+
+        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
+            override fun onClick(event: Event) {
+                Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
+                }.also { intent ->
+                    startActivity(Intent.createChooser(intent, "Share Event Details"))
+                }
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                eventsViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                eventsListAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        eventsListAdapter.apply {
+            onEventClick = eventClickListener
+            onShareFabClick = shareFabClickListener
+            onFavFabClick = favFabClickListener
+        }
     }
 
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+    private fun showNoInternetScreen(show: Boolean) {
+        rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+    }
 
-        return connectivityManager?.activeNetworkInfo != null
+    private fun showEmptyMessage(itemCount: Int) {
+        rootView.noEventsMessage.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onStop() {
         rootView.swiperefresh?.setOnRefreshListener(null)
         super.onStop()
     }
+
+    override fun scrollToTop() = rootView.eventsNestedScrollView.smoothScrollTo(0, 0)
 }

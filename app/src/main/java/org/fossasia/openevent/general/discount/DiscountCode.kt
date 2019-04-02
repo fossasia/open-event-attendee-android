@@ -11,21 +11,21 @@ import org.fossasia.openevent.general.event.Event
 @Type("discount-code")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class DiscountCode(
-        @Id(IntegerIdHandler::class)
-        val id: Int,
-        val code: String,
-        val discountUrl: String? = null,
-        val type: String,
-        val value: Float,
-        val ticketsNumber: Int?,
-        val usedFor: String,
-        val tickets: String? = null,
-        val maxQuantity: Int?,
-        val minQuantity: Int?,
-        val isActive: Boolean = false,
-        val validFrom: String? = null,
-        val validTill: String? = null,
-        val createdAt: String? = null,
-        @Relationship("event")
-        val event: Event
+    @Id(IntegerIdHandler::class)
+    val id: Int,
+    val code: String,
+    val discountUrl: String? = null,
+    val type: String,
+    val value: Float,
+    val ticketsNumber: Int?,
+    val usedFor: String,
+    val tickets: String? = null,
+    val maxQuantity: Int?,
+    val minQuantity: Int?,
+    val isActive: Boolean = false,
+    val validFrom: String? = null,
+    val validTill: String? = null,
+    val createdAt: String? = null,
+    @Relationship("event")
+    val event: Event
 )

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/tick"
-        android:icon="@drawable/ic_baseline_tick_24dp"
+        android:icon="@drawable/ic_baseline_tick"
         android:title="tick"
         app:showAsAction="always" />
 

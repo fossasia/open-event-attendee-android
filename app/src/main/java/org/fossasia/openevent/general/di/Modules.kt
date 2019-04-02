@@ -1,81 +1,120 @@
 package org.fossasia.openevent.general.di
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
-import okhttp3.Authenticator
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventDatabase
 import org.fossasia.openevent.general.about.AboutEventViewModel
-import org.fossasia.openevent.general.attendees.*
+import org.fossasia.openevent.general.attendees.Attendee
+import org.fossasia.openevent.general.attendees.AttendeeApi
+import org.fossasia.openevent.general.attendees.AttendeeId
+import org.fossasia.openevent.general.attendees.AttendeeService
+import org.fossasia.openevent.general.attendees.AttendeeViewModel
 import org.fossasia.openevent.general.attendees.forms.CustomForm
-import org.fossasia.openevent.general.auth.*
+import org.fossasia.openevent.general.auth.AuthApi
+import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.auth.AuthService
+import org.fossasia.openevent.general.auth.EditProfileViewModel
+import org.fossasia.openevent.general.auth.LoginViewModel
+import org.fossasia.openevent.general.auth.ProfileViewModel
+import org.fossasia.openevent.general.auth.RequestAuthenticator
+import org.fossasia.openevent.general.auth.SignUp
+import org.fossasia.openevent.general.auth.SignUpViewModel
+import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.event.*
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventApi
+import org.fossasia.openevent.general.event.EventDetailsViewModel
+import org.fossasia.openevent.general.event.EventId
+import org.fossasia.openevent.general.event.EventLayoutType
+import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.common.EventsDiffCallback
+import org.fossasia.openevent.general.event.EventsListAdapter
+import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
-import org.fossasia.openevent.general.favorite.FavouriteEventsViewModel
-import org.fossasia.openevent.general.order.*
+import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
+import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
+import org.fossasia.openevent.general.order.Charge
+import org.fossasia.openevent.general.order.ConfirmOrder
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderApi
+import org.fossasia.openevent.general.order.OrderCompletedViewModel
+import org.fossasia.openevent.general.order.OrderDetailsViewModel
+import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.order.OrdersUnderUserViewModel
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
+import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
-import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.settings.SettingsFragmentViewModel
+import org.fossasia.openevent.general.search.SmartAuthViewModel
+import org.fossasia.openevent.general.search.LocationService
+import org.fossasia.openevent.general.search.LocationServiceImpl
+import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
-import org.fossasia.openevent.general.ticket.*
-import org.koin.android.architecture.ext.viewModel
+import org.fossasia.openevent.general.ticket.Ticket
+import org.fossasia.openevent.general.ticket.TicketApi
+import org.fossasia.openevent.general.ticket.TicketId
+import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module.applicationContext
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.ext.koin.viewModel
+import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
-val commonModule = applicationContext {
-    bean { Preference() }
-    bean { Network() }
+val commonModule = module {
+    single { Preference() }
+    single { Network() }
+    factory<LocationService> { LocationServiceImpl(androidContext()) }
 }
 
-val apiModule = applicationContext {
-    bean {
+val apiModule = module {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(EventApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(AuthApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(TicketApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(SocialLinkApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(EventTopicApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(AttendeeApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(OrderApi::class.java)
     }
-    bean {
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(PaypalApi::class.java)
     }
@@ -88,77 +127,81 @@ val apiModule = applicationContext {
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
-
 }
 
-val viewModelModule = applicationContext {
-    viewModel { LoginFragmentViewModel(get(), get()) }
+val viewModelModule = module {
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { EventsViewModel(get(), get()) }
-    viewModel { ProfileFragmentViewModel(get()) }
-    viewModel { SignUpFragmentViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get()) }
+    viewModel { SignUpViewModel(get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
-    viewModel { SearchTimeViewModel(get()) }
-    viewModel { TicketsViewModel(get(), get()) }
+    viewModel { TicketsViewModel(get(), get(), get()) }
     viewModel { AboutEventViewModel(get()) }
     viewModel { SocialLinksViewModel(get()) }
-    viewModel { FavouriteEventsViewModel(get()) }
-    viewModel { SettingsFragmentViewModel(get()) }
+    viewModel { FavoriteEventsViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
     viewModel { SimilarEventsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get()) }
-    viewModel { OrdersUnderUserVM(get(), get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get()) }
     viewModel { EditProfileViewModel(get(), get()) }
+    viewModel { GeoLocationViewModel(get()) }
+    viewModel { SmartAuthViewModel() }
 }
 
-val networkModule = applicationContext {
+val networkModule = module {
 
-    bean {
+    single {
         val objectMapper = jacksonObjectMapper()
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         objectMapper
     }
 
-    bean { RequestAuthenticator(get()) as Authenticator }
+    single { RequestAuthenticator(get()) as Interceptor }
 
-    bean {
+    single {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
 
         OkHttpClient().newBuilder()
-                .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
-                .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-                .addInterceptor(
-                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                )
-                .authenticator(get())
-                .build()
+            .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
+            .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
+            .addInterceptor(get())
+            .addNetworkInterceptor(StethoInterceptor())
+            .build()
     }
 
-    bean {
-        val baseUrl = "http://api.eventyay.com/v1/"
+    single {
+        val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
 
         Retrofit.Builder()
-                .client(get())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java, SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java, EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java, AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java, CustomForm::class.java))
-                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-                .baseUrl(baseUrl)
-                .build()
+            .client(get())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
+                SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+                EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+                AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+                CustomForm::class.java))
+            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+            .baseUrl(baseUrl)
+            .build()
     }
-
 }
 
-val databaseModule = applicationContext {
+val databaseModule = module {
 
-    bean {
+    single {
         Room.databaseBuilder(androidApplication(),
-                OpenEventDatabase::class.java, "open_event_database")
-                .fallbackToDestructiveMigration()
-                .build()
+            OpenEventDatabase::class.java, "open_event_database")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     factory {
@@ -173,7 +216,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.ticketsDao()
+        database.ticketDao()
     }
 
     factory {
@@ -183,7 +226,7 @@ val databaseModule = applicationContext {
 
     factory {
         val database: OpenEventDatabase = get()
-        database.attendeesDao()
+        database.attendeeDao()
     }
 
     factory {
@@ -195,5 +238,25 @@ val databaseModule = applicationContext {
         val database: OpenEventDatabase = get()
         database.orderDao()
     }
+}
 
+val fragmentsModule = module {
+
+    factory { EventsDiffCallback() }
+
+    scope(Scopes.EVENTS_FRAGMENT.toString()) {
+        EventsListAdapter(EventLayoutType.EVENTS, get())
+    }
+
+    scope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()) {
+        EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
+    }
+
+    scope(Scopes.FAVORITE_FRAGMENT.toString()) {
+        FavoriteEventsRecyclerAdapter(get())
+    }
+
+    scope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()) {
+        FavoriteEventsRecyclerAdapter(get())
+    }
 }

@@ -3,7 +3,11 @@ package org.fossasia.openevent.general.auth
 import io.reactivex.Single
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthApi {
 
@@ -24,5 +28,4 @@ interface AuthApi {
 
     @POST("upload/image")
     fun uploadImage(@Body uploadImage: UploadImage): Single<ImageResponse>
-
 }

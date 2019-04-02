@@ -1,6 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_ticket_details.view.*
 
@@ -24,6 +24,5 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         val subTotal: Float? = ticket.price?.toFloat()?.times(qty[adapterPosition])
         itemView.qty.text = qty[adapterPosition].toString()
         itemView.subTotal.text = "$$subTotal"
-
     }
 }

@@ -1,69 +1,96 @@
 package org.fossasia.openevent.general.settings
 
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.Preference
-import android.view.*
-import java.util.prefs.PreferenceChangeEvent
-import java.util.prefs.PreferenceChangeListener
-import org.fossasia.openevent.general.R
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.navArgs
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
-import org.fossasia.openevent.general.MainActivity
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.prefs.PreferenceChangeEvent
+import java.util.prefs.PreferenceChangeListener
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
-    private var email: String? = null
-    val EMAIL: String = "EMAIL"
-    val FORM_LINK: String = "https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
-    private val settingsViewModel by viewModel<SettingsFragmentViewModel>()
+    private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
+        "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
+    private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
+    private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
+    private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
+    private val WEBSITE_LINK: String = "https://eventyay.com/"
+    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
         preferenceChange(evt)
     }
 
-    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
+        val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportActionBar?.title = "Settings"
         setHasOptionsMenu(true)
 
-        //Set Email
-        email = arguments?.getString(EMAIL)
-        preferenceScreen.findPreference(resources.getString(R.string.key_profile)).summary = email
+        // Set Email
+        preferenceScreen.findPreference(resources.getString(R.string.key_profile))
+            .summary = safeArgs.email
 
-        //Set Build Version
-        preferenceScreen.findPreference(resources.getString(R.string.key_version)).title = "Version " + BuildConfig.VERSION_NAME
+        // Set Build Version
+        preferenceScreen.findPreference(resources.getString(R.string.key_version))
+            .title = "Version " + BuildConfig.VERSION_NAME
 
+        preferenceScreen.findPreference(resources.getString(R.string.key_timezone_switch))
+            .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        if (preference?.key == resources.getString(R.string.key_visit_website)) {
+            // Goes to website
+            Utils.openUrl(requireContext(), WEBSITE_LINK)
+            return true
+        }
         if (preference?.key == resources.getString(R.string.key_rating)) {
-            //Opens our app in play store
+            // Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
-            //Links to suggestion form
-            context?.let {
-                Utils.openUrl(it, FORM_LINK)
+            // Links to suggestion form
+            Utils.openUrl(requireContext(), FORM_LINK)
+            return true
+        }
+        if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
+            val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
+            val timeZonePreferenceKey = "useEventTimeZone"
+            when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
+                true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
+                false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
             }
+        }
+        if (preference?.key == getString(R.string.key_privacy)) {
+            Utils.openUrl(requireContext(), PRIVACY_LINK)
             return true
         }
-        if (preference?.key == resources.getString(R.string.key_profile)) {
-            //Logout Dialog shown
-            showDialog()
+        if (preference?.key == getString(R.string.key_terms_of_service)) {
+            Utils.openUrl(requireContext(), TERMS_OF_SERVICE_LINK)
             return true
         }
+        if (preference?.key == getString(R.string.key_cookie_policy)) {
+            Utils.openUrl(requireContext(), COOKIE_POLICY_LINK)
+            return true
+        }
+
         return false
     }
 
@@ -88,23 +115,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onDestroyView() {
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Profile"
         setHasOptionsMenu(false)
         super.onDestroyView()
-    }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(activity)
-        builder.setMessage(resources.getString(R.string.message))
-                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    if (settingsViewModel.isLoggedIn()) {
-                        settingsViewModel.logout()
-                        startActivity(Intent(context, MainActivity::class.java))
-                        activity?.finish()
-                    }
-                }
-                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
     }
 }

@@ -6,6 +6,11 @@
 
 An events app to discover events happening around the world using the Open Event Platform
 
+Application is available here:
+
+<a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
+<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='https://f-droid.org/badge/get-it-on.png' height="80"/></a>
+
 ## Roadmap
 
 Planned features & enhancements are:
@@ -19,7 +24,18 @@ Please join our mailing list to discuss questions regarding the project: https:/
 Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
 
 ## Screenshots
-
+<table>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611260-db5c3080-1f44-11e9-80f6-47c0c0401a70.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612594-c9c85800-1f47-11e9-9a66-c32b4f7c7f34.jpeg" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611528-72c18380-1f45-11e9-97c6-563e7d573e1c.png" height = "480" width="270"></td>
+        </tr>
+        <tr>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51611714-f3807f80-1f45-11e9-8d43-bb21c7795a45.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612103-c84a6000-1f46-11e9-8e63-3f8e8cec91af.png" height = "480" width="270"></td>
+<td><img src = "https://user-images.githubusercontent.com/31350501/51612107-caacba00-1f46-11e9-8a83-c0c33250dfb4.png" height = "480" width="270"></td>
+        </tr>
+</table>        
 
 ## Development
 
@@ -36,7 +52,7 @@ A native Android app using Kotlin for writing code.
 - InsertKoinIO [Docs](https://github.com/InsertKoinIO/koin)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - OkHttp [Docs](http://square.github.io/okhttp/)
-- Room Persistence Library [Docs] (https://developer.android.com/topic/libraries/architecture/room)
+- Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
 
 ### Project Conventions
 
@@ -54,9 +70,9 @@ Lastly, each class should only perform one task, do it well, and be unit tested 
 
 ## Contributions Best Practices
 
-### For first time Contributor
+### For first time Contributors
 
-First time contributors can read ContributionHelp.md file for help regarding creating issues and sending pull requests.
+First time contributors can read [CONTRIBUTING.md](/CONTRIBUTING.md) file for help regarding creating issues and sending pull requests.
 
 ### Branch Policy
 
@@ -70,10 +86,10 @@ We have the following branches
 	 - _versionCode_ : **Integer** : To be monotonically incremented with each merge. Failure to do so will lead to 				publishing error, and thus is a crucial step before any merge
 	 - _versionName_ : **String** : User visible version of the app. To be changed following [semantic versioning](http://semver.org/)
  * **apk** This branch contains two apk's, that are automatically generated on the merged pull request a) debug apk and b) release apk.
-    - Please download and test the app that is using the code from the dev and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
+    - Please download and test the app that is using the code from the development and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
 ### Code practices
 
-Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
+Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
  * Single commit per pull request
  * For writing commit messages please read the COMMITSTYLE carefully. Kindly adhere to the guidelines.
