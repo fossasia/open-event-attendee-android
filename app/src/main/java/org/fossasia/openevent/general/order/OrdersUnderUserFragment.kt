@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
+import kotlinx.android.synthetic.main.content_no_tickets.noTicketMessage
 import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
@@ -28,6 +30,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -61,6 +64,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     thisActivity.supportActionBar?.title = "Past Tickets"
                     thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     setHasOptionsMenu(true)
+                    context?.let { navAnimGone(activity?.navigation, it) }
                 }
                 false -> {
                     thisActivity.supportActionBar?.title = "Tickets"
@@ -150,8 +154,13 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private fun showNoTicketsScreen(show: Boolean) {
         noTicketsScreen.isVisible = show
-        findMyTickets.setOnClickListener {
-            Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+        if (safeArgs.showExpired) {
+            findMyTickets.isVisible = false
+            noTicketMessage.text = getString(R.string.no_past_tickets)
+        } else {
+            findMyTickets.setOnClickListener {
+                Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+            }
         }
     }
 
