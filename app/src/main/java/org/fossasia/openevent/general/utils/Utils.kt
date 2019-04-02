@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -16,7 +17,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -80,7 +80,7 @@ object Utils {
     }
 
     fun setToolbar(
-        activity: FragmentActivity?,
+        activity: Activity?,
         title: String = "",
         hasUpEnabled: Boolean = true,
         show: Boolean = true
