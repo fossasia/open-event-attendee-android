@@ -45,7 +45,6 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(itemView.eventImage)
         }
         if (!showExpired) {
-            itemView.alpha = 0.5F
             val matrix = ColorMatrix()
             matrix.setSaturation(0F)
             itemView.eventImage.colorFilter = ColorMatrixColorFilter(matrix)
