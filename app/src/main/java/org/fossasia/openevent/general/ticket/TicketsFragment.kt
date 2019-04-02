@@ -54,6 +54,7 @@ class TicketsFragment : Fragment() {
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(ticketId: Int, quantity: Int) {
                 handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
@@ -208,6 +209,15 @@ class TicketsFragment : Fragment() {
             showNoInternetScreen(false)
             ticketsViewModel.loadEvent(safeArgs.eventId)
             ticketsViewModel.loadTickets(safeArgs.eventId)
+
+            val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+            if (retainedTicketIdAndQty != null) {
+                for (idAndQty in retainedTicketIdAndQty) {
+                    handleTicketSelect(idAndQty.first, idAndQty.second)
+                }
+                ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            }
         }
     }
 

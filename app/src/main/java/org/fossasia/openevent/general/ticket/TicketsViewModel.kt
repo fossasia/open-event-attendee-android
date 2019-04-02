@@ -29,6 +29,7 @@ class TicketsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
+    val ticketIdAndQty = MutableLiveData<List<Pair<Int, Int>>>()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
