@@ -35,7 +35,7 @@ class SearchLocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
 
-        setToolbar(activity, "", false, false)
+        setToolbar(activity, hasUpEnabled = false, show = false)
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {

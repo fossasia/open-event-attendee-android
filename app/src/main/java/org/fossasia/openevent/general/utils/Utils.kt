@@ -79,12 +79,19 @@ object Utils {
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
     }
 
-    fun setToolbar(activity: FragmentActivity?, title: String, hasUpEnabled: Boolean = true, show: Boolean = true) {
-        val thisActivity = activity as? AppCompatActivity
-        thisActivity?.supportActionBar?.title = title
-        thisActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
-        if (show) thisActivity?.supportActionBar?.show()
-        else thisActivity?.supportActionBar?.hide()
+    fun setToolbar(
+        activity: FragmentActivity?,
+        title: String = "",
+        hasUpEnabled: Boolean = true,
+        show: Boolean = true
+    ) {
+        if (activity is AppCompatActivity) {
+            if (show) {
+                activity.supportActionBar?.title = title
+                activity.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+                activity.supportActionBar?.show()
+            } else activity.supportActionBar?.hide()
+        }
     }
 
     fun checkAndLoadFragment(

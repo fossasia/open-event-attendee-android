@@ -113,7 +113,7 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
-        setToolbar(activity, "")
+        setToolbar(activity)
         setHasOptionsMenu(true)
 
         rootView.buttonTickets.setOnClickListener {
@@ -140,7 +140,7 @@ class EventDetailsFragment : Fragment() {
                     setToolbar(activity, title)
                 else
                     // Toolbar title set to an empty string
-                    setToolbar(activity, "")
+                    setToolbar(activity)
             }
         }
 

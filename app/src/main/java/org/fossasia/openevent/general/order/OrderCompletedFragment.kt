@@ -43,7 +43,7 @@ class OrderCompletedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_order, container, false)
-        setToolbar(activity, "")
+        setToolbar(activity)
         setHasOptionsMenu(true)
 
         orderCompletedViewModel.loadEvent(safeArgs.eventId)

@@ -34,7 +34,7 @@ class SearchTimeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_time, container, false)
 
-        setToolbar(activity, "")
+        setToolbar(activity)
         setHasOptionsMenu(true)
         setCurrentChoice(safeArgs.time)
 
