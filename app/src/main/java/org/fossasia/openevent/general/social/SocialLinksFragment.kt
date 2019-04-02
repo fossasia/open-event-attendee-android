@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinkReloa
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialNoInternet
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
-import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -37,6 +36,7 @@ class SocialLinksFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
         }
+        loadSocialLink()
     }
 
     override fun onCreateView(
@@ -48,7 +48,7 @@ class SocialLinksFragment : Fragment() {
 
         rootView.progressBarSocial.isIndeterminate = true
 
-        linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.socialLinksRecycler.layoutManager = linearLayoutManager
 
@@ -80,7 +80,11 @@ class SocialLinksFragment : Fragment() {
                 Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
-        loadSocialLink()
+        socialLinksViewModel.internetError
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.socialNoInternet.isVisible = it
+            })
 
         return rootView
     }
@@ -91,11 +95,6 @@ class SocialLinksFragment : Fragment() {
     }
 
     private fun loadSocialLink() {
-        if (isNetworkConnected(context)) {
-            socialLinksViewModel.loadSocialLinks(id)
-            rootView.socialNoInternet.visibility = View.GONE
-        } else {
-            rootView.socialNoInternet.visibility = View.VISIBLE
-        }
+        socialLinksViewModel.checkAndLoadSocialLinks(id)
     }
 }

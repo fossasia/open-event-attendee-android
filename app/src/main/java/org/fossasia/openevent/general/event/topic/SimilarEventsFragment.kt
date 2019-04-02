@@ -51,6 +51,8 @@ class SimilarEventsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
         similarEventsViewModel.eventId = safeArgs.eventId
+        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
     }
 
     override fun onCreateView(
@@ -88,9 +90,6 @@ class SimilarEventsFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 progressBar.isVisible = it
             })
-
-        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
-        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
 
         return rootView
     }
@@ -139,7 +138,7 @@ class SimilarEventsFragment : Fragment() {
             onFavFabClick = favFabClickListener
         }
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         view.similarEventsRecycler.layoutManager = linearLayoutManager
 
