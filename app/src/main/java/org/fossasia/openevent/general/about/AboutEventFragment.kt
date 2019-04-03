@@ -11,13 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_about_event.view.appBar
 import kotlinx.android.synthetic.main.fragment_about_event.view.progressBarAbout
 import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventContent
 import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventDetails
 import kotlinx.android.synthetic.main.fragment_about_event.view.eventName
 import kotlinx.android.synthetic.main.fragment_about_event.view.detailsHeader
-import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventCollapsingLayout
+import kotlinx.android.synthetic.main.fragment_about_event.view.aboutEventImage
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
@@ -26,10 +27,9 @@ import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 
-class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
+class AboutEventFragment : Fragment() {
     private lateinit var rootView: View
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
-    private var isHideToolbarView: Boolean = false
     private lateinit var eventExtra: Event
     private var title: String = ""
     private val safeArgs: AboutEventFragmentArgs by navArgs()
@@ -45,8 +45,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
             .observe(viewLifecycleOwner, Observer {
                 loadEvent(it)
             })
-
-        rootView.appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error
             .nonNull()
@@ -71,26 +69,24 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         rootView.aboutEventContent.text = event.description?.stripHtml()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
+
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         rootView.eventName.text = event.name
-    }
+        Picasso.get()
+            .load(event.originalImageUrl)
+            .placeholder(R.drawable.header)
+            .into(rootView.aboutEventImage)
 
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val maxScroll = appBarLayout.totalScrollRange
-        val percentage = Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
-
-        if (percentage == 1f && isHideToolbarView) {
-            // Collapsed
-            rootView.detailsHeader.visibility = View.GONE
-            rootView.aboutEventCollapsingLayout.title = title
-            isHideToolbarView = !isHideToolbarView
-        }
-        if (percentage < 1f && !isHideToolbarView) {
-            // Not Collapsed
-            rootView.detailsHeader.visibility = View.VISIBLE
-            rootView.aboutEventCollapsingLayout.title = " "
-            isHideToolbarView = !isHideToolbarView
-        }
+        rootView.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
+            val thisActivity = activity
+            if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
+                rootView.detailsHeader.isVisible = false
+                if (thisActivity is AppCompatActivity) thisActivity.supportActionBar?.title = event.name
+            } else {
+                rootView.detailsHeader.isVisible = true
+                if (thisActivity is AppCompatActivity) thisActivity.supportActionBar?.title = ""
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
