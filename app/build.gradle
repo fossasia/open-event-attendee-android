@@ -17,8 +17,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 4
-        versionName "0.1.0"
+        versionCode 5
+        versionName "0.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -33,6 +33,7 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
@@ -71,6 +72,9 @@ android {
     }
     androidExtensions {
         experimental = true
+    }
+    aaptOptions {
+        cruncherEnabled = false
     }
 }
 
@@ -171,9 +175,6 @@ dependencies {
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
-
-    //Mapbox SDK plugins
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"

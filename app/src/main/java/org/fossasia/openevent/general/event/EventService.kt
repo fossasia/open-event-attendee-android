@@ -36,7 +36,7 @@ class EventService(
     private fun getEventTopicList(eventsList: List<Event>): List<EventTopic?> {
         return eventsList
                 .filter { it.eventTopic != null }
-                .map { it -> it.eventTopic }
+                .map { it.eventTopic }
                 .toList()
     }
 
