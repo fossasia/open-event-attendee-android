@@ -22,7 +22,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
-        resConfigs "en"
         manifestPlaceholders = [
                 STRIPE_API_TOKEN: STRIPE_API_TOKEN
         ]
