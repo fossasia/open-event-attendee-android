@@ -45,7 +45,7 @@ class EditProfileViewModel(
             .subscribe({
                 updateUser(it.url, firstName, lastName)
                 mutableMessage.value = resource.getString(R.string.image_upload_success_message)
-                Timber.d("Image uploaded " + it.url)
+                Timber.d("Image uploaded ${it.url}")
             }) {
                 mutableMessage.value = resource.getString(R.string.image_upload_error_message)
                 Timber.e(it, "Error uploading user!")
