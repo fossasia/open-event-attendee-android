@@ -64,7 +64,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     thisActivity.supportActionBar?.title = "Past Tickets"
                     thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     setHasOptionsMenu(true)
-                    context?.let { navAnimGone(activity?.navigation, it) }
+                    navAnimGone(activity?.navigation, requireContext())
                 }
                 false -> {
                     thisActivity.supportActionBar?.title = "Tickets"
