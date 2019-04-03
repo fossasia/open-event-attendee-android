@@ -55,10 +55,10 @@ object EventUtils {
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getEventDateTime(dateString: String, timeZone: String): ZonedDateTime {
+    fun getEventDateTime(dateString: String, timeZone: String?): ZonedDateTime {
         try {
             return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
-                .getBoolean("useEventTimeZone", false)) {
+                .getBoolean("useEventTimeZone", false) && !timeZone.isNullOrBlank()) {
 
                 true -> ZonedDateTime.parse(dateString)
                     .toOffsetDateTime()
@@ -74,7 +74,7 @@ object EventUtils {
         }
     }
 
-    fun getTimeInMilliSeconds(dateString: String, timeZone: String): Long {
+    fun getTimeInMilliSeconds(dateString: String, timeZone: String?): Long {
         return getEventDateTime(dateString, timeZone).toInstant().toEpochMilli()
     }
 
