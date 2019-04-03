@@ -274,6 +274,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_logo_width"
                 android:layout_marginBottom="@dimen/divider_margin_bottom"
+                android:scaleType="centerCrop"
                 android:src="@drawable/header"
                 android:visibility="gone" />
         </LinearLayout>

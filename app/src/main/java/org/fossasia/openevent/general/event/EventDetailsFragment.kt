@@ -246,6 +246,7 @@ class EventDetailsFragment : Fragment() {
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
                     .placeholder(R.drawable.ic_map_black)
+                    .error(R.drawable.ic_map_black)
                     .into(rootView.imageMap)
         }
 
