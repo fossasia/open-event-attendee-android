@@ -35,6 +35,11 @@
         <item name="android:enabled">false</item>
     </style>
 
+    <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/grey</item>
+        <item name="android:textColor">@color/text_color_chip_state_list</item>
+    </style>
+
     <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorSecondary</item>
     </style>
