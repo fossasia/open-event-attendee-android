@@ -88,7 +88,7 @@ class LoginViewModel(
                 mutableProgress.value = true
             }.doFinally {
                 mutableProgress.value = false
-            }.subscribe({ it ->
+            }.subscribe({
                 Timber.d("User Fetched")
                 mutableUser.value = it
             }) {

@@ -210,7 +210,7 @@ class EventDetailsFragment : Fragment() {
 
         // Event Description Section
         if (!event.description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, event.description?.stripHtml())
+            setTextField(rootView.eventDescription, event.description.stripHtml())
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
@@ -246,6 +246,7 @@ class EventDetailsFragment : Fragment() {
             Picasso.get()
                     .load(eventViewModel.loadMap(event))
                     .placeholder(R.drawable.ic_map_black)
+                    .error(R.drawable.ic_map_black)
                     .into(rootView.imageMap)
         }
 
