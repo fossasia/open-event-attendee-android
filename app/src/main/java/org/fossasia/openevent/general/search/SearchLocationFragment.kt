@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.search
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -15,7 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocationLinearLayout
+import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
 import org.fossasia.openevent.general.R
@@ -41,14 +42,18 @@ class SearchLocationFragment : Fragment() {
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
-            rootView.currentLocationLinearLayout.visibility = View.GONE
+            rootView.currentLocation.visibility = View.GONE
         })
 
-        rootView.currentLocationLinearLayout.setOnClickListener {
+        rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
             geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
+
+        searchLocationViewModel.autoPlaceSuggestion.observe(viewLifecycleOwner, Observer{
+            Log.i("PUI","list size ${it.size}")
+        })
 
         geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
             searchLocationViewModel.saveSearch(location)
@@ -63,6 +68,7 @@ class SearchLocationFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                searchLocationViewModel.loadSuggestions(newText)
                 return false
             }
         })
