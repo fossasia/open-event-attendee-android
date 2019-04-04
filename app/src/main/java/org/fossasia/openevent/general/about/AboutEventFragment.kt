@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,7 +32,6 @@ class AboutEventFragment : Fragment() {
     private lateinit var rootView: View
     private val aboutEventViewModel by viewModel<AboutEventViewModel>()
     private lateinit var eventExtra: Event
-    private var title: String = ""
     private val safeArgs: AboutEventFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,7 +65,6 @@ class AboutEventFragment : Fragment() {
 
     private fun loadEvent(event: Event) {
         eventExtra = event
-        title = eventExtra.name
         rootView.aboutEventContent.text = event.description?.stripHtml()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
@@ -79,12 +78,14 @@ class AboutEventFragment : Fragment() {
 
         rootView.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
             val thisActivity = activity
-            if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
-                rootView.detailsHeader.isVisible = false
-                if (thisActivity is AppCompatActivity) thisActivity.supportActionBar?.title = event.name
-            } else {
-                rootView.detailsHeader.isVisible = true
-                if (thisActivity is AppCompatActivity) thisActivity.supportActionBar?.title = ""
+            if (thisActivity is AppCompatActivity) {
+                if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
+                    rootView.detailsHeader.isVisible = false
+                    thisActivity.supportActionBar?.title = event.name
+                } else {
+                    rootView.detailsHeader.isVisible = true
+                    thisActivity.supportActionBar?.title = ""
+                }
             }
         })
     }
