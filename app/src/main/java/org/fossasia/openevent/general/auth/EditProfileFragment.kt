@@ -39,6 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class EditProfileFragment : Fragment() {
 
@@ -180,9 +181,7 @@ class EditProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = getString(R.string.edit_profile)
+        setToolbar(activity, "Edit Profile")
         setHasOptionsMenu(true)
         super.onResume()
     }

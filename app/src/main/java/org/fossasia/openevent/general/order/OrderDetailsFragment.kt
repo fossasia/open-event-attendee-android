@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +22,7 @@ import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class OrderDetailsFragment : Fragment() {
 
@@ -59,9 +59,7 @@ class OrderDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_order_details, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = ""
+        setToolbar(activity)
         setHasOptionsMenu(true)
 
         rootView.orderDetailsRecycler.layoutManager = LinearLayoutManager(activity)

@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,6 +33,7 @@ import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
@@ -156,9 +156,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = getString(R.string.profile)
+        setToolbar(activity, getString(R.string.profile), false)
         super.onResume()
     }
 

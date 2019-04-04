@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -83,6 +82,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
@@ -123,9 +123,7 @@ class AttendeeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_attendee, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = getString(R.string.attendee_details)
+        setToolbar(activity, getString(R.string.attendee_details))
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()
