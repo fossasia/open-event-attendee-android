@@ -35,8 +35,8 @@ import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
 import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
-import kotlinx.android.synthetic.main.content_event.view.logo
-import kotlinx.android.synthetic.main.content_event.view.logoIcon
+import kotlinx.android.synthetic.main.content_event.view.eventImage
+import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
@@ -139,7 +139,7 @@ class EventDetailsFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 if (thisActivity is AppCompatActivity) {
-                    if (scrollY > rootView.eventName.height + rootView.logo.height)
+                    if (scrollY > rootView.eventName.height + rootView.eventImage.height)
                         /*Toolbar title set to name of Event if scrolled more than
                         combined height of eventImage and eventName views*/
                         thisActivity.supportActionBar?.title = title
@@ -171,7 +171,7 @@ class EventDetailsFragment : Fragment() {
                     .load(event.logoUrl)
                     .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
-                    .into(rootView.logoIcon)
+                    .into(rootView.organizerLogoIcon)
 
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
@@ -272,7 +272,7 @@ class EventDetailsFragment : Fragment() {
             Picasso.get()
                     .load(it)
                     .placeholder(R.drawable.header)
-                    .into(rootView.logo)
+                    .into(rootView.eventImage)
         }
 
         // Add event to Calendar
