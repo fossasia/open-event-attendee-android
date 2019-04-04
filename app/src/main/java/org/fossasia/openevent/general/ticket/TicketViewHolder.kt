@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?) {
+    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?, ticketQuantity: Int) {
         itemView.ticketName.text = ticket.name
 
         if (ticket.minOrder > 0 && ticket.maxOrder > 0) {
@@ -31,6 +31,11 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
                 spinnerList)
+            val currentQuantityPosition = spinnerList.indexOf(ticketQuantity.toString())
+            if (currentQuantityPosition != -1) {
+                itemView.orderRange.setSelection(currentQuantityPosition)
+                itemView.order.text = ticketQuantity.toString()
+            }
         }
 
         itemView.order.setOnClickListener {
@@ -38,7 +43,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (ticket.price != null) {
-            itemView.price.text = "${eventCurrency}${ticket.price}"
+            itemView.price.text = "$eventCurrency${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {

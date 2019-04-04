@@ -36,14 +36,14 @@
                     android:text="@string/eventyay_logo"/>
                 <!-- Email Label -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_medium"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" >
+                    android:hint="@string/email" >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -55,13 +55,14 @@
 
                 <!-- Password Label -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_medium"
                     app:passwordToggleEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,9 +73,9 @@
                         android:drawableStart="@drawable/ic_lock_black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:theme="@style/AccentButton"
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,7 +108,7 @@
 
                 <ImageView
                     android:layout_width="@dimen/item_image_view_medium"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.2"
                     android:layout_gravity="end"
                     android:layout_marginRight="@dimen/layout_margin_medium"
@@ -116,21 +117,21 @@
 
                 <View
                     android:layout_width="@dimen/fab_width"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:visibility="invisible"
                     android:layout_weight="0.2"
                     app:srcCompat="@drawable/ic_check_black"/>
 
                 <ImageView
                     android:layout_width="@dimen/logo_icon_width"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.2"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_mail_outline_black"/>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.1"
                     android:textAlignment="center"
                     android:gravity="bottom"
@@ -140,7 +141,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.5"
                     android:textAlignment="center"
                     android:text="@string/email_sent_message"/>

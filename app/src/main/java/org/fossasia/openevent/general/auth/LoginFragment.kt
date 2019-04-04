@@ -53,7 +53,7 @@ class LoginFragment : Fragment() {
         val progressDialog = progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Login"
+            thisActivity.supportActionBar?.title = getString(R.string.login)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
@@ -71,43 +71,43 @@ class LoginFragment : Fragment() {
 
         smartAuthViewModel.id
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 email.text = SpannableStringBuilder(it)
             })
 
         smartAuthViewModel.password
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 password.text = SpannableStringBuilder(it)
             })
 
         loginViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
             })
 
         smartAuthViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
             })
 
         loginViewModel.showNoInternetDialog
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Utils.showNoInternetDialog(context)
             })
 
         loginViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
         loginViewModel.loggedIn
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loginViewModel.fetchProfile()
             })
 
@@ -133,7 +133,7 @@ class LoginFragment : Fragment() {
 
         loginViewModel.requestTokenSuccess
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
@@ -151,13 +151,13 @@ class LoginFragment : Fragment() {
 
         loginViewModel.isCorrectEmail
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 onEmailEntered(it)
             })
 
         loginViewModel.areFieldsCorrect
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loginButton.isEnabled = it
             })
 
@@ -177,7 +177,7 @@ class LoginFragment : Fragment() {
 
         loginViewModel.user
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
                 popBackStack()
             })

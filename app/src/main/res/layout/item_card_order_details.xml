@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/qrCodeView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/event_details_image"
+                android:layout_height="@dimen/event_details_image"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_medium"
                 android:scaleType="centerCrop" />
@@ -69,7 +69,7 @@
                 android:weightSum="2">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
@@ -103,7 +103,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
@@ -179,6 +179,7 @@
                 tools:text="@string/event_details" />
 
             <TextView
+                android:id="@+id/organizerLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
@@ -192,6 +193,17 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
                 tools:text="@string/organizer_preview" />
+
+            <Button
+                android:id="@+id/downloadButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:layout_marginTop="@dimen/padding_large"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:text="@string/download_ticket"
+                android:theme="@style/AccentButton" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

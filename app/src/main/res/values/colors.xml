@@ -6,6 +6,7 @@
     <color name="green">#5ed26b</color>
     <color name="black">#000000</color>
     <color name="grey">#ece9e9</color>
+    <color name="lightGrey">#F8F5F5</color>
     <color name="greyMore">#918e8e</color>
     <color name="lightPurple">#b498d1</color>
     <color name="dark_grey">#333333</color>
@@ -13,4 +14,7 @@
     <color name="lighter_grey">#757575</color>
     <color name="shimmer_background">#dddddd</color>
 
+    <color name="colorPrimaryVariant">#311B92</color>
+    <color name="colorSecondary">#03A9F4</color>
+    <color name="colorSecondaryVariant">#01579B</color>
 </resources>

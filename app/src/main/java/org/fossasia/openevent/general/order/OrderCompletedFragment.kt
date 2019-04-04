@@ -51,14 +51,14 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.loadEvent(safeArgs.eventId)
         orderCompletedViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
                 eventShare = it
             })
 
         orderCompletedViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.orderCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
@@ -79,7 +79,7 @@ class OrderCompletedFragment : Fragment() {
 
     private fun loadEventDetails(event: Event) {
         val dateString = StringBuilder()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
 
         rootView.name.text = event.name
         rootView.time.text = dateString.append(EventUtils.getFormattedDateShort(startsAt))
@@ -94,8 +94,12 @@ class OrderCompletedFragment : Fragment() {
         intent.type = "vnd.android.cursor.item/event"
         intent.putExtra(CalendarContract.Events.TITLE, event.name)
         intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
+        intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+            EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
     }
 

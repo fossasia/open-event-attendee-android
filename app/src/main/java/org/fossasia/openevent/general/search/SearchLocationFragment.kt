@@ -15,10 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_search_location.search
+import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocationLinearLayout
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
-import kotlinx.android.synthetic.main.fragment_search_location.view.search
-import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
+import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,27 +36,26 @@ class SearchLocationFragment : Fragment() {
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.title = ""
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
 
-        geoLocationViewModel.currentLocationVisibility.observe(this, Observer {
-            rootView.currentLocation.visibility = View.GONE
+        geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
+            rootView.currentLocationLinearLayout.visibility = View.GONE
         })
 
-        rootView.currentLocation.setOnClickListener {
+        rootView.currentLocationLinearLayout.setOnClickListener {
             checkLocationPermission()
             geoLocationViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
-        geoLocationViewModel.location.observe(this, Observer { location ->
+        geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
             searchLocationViewModel.saveSearch(location)
             redirectToMain()
         })
 
-        rootView.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        rootView.locationSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchLocationViewModel.saveSearch(query)
                 redirectToMain()
@@ -74,7 +72,18 @@ class SearchLocationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Utils.showSoftKeyboard(context, search)
+        Utils.showSoftKeyboard(context, rootView.locationSearchView)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Utils.hideSoftKeyboard(context, rootView)
+                activity?.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun checkLocationPermission() {
@@ -101,17 +110,6 @@ class SearchLocationFragment : Fragment() {
                     rootView.locationProgressBar.visibility = View.GONE
                 }
             }
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                Utils.hideSoftKeyboard(context, rootView)
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 }

@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="@dimen/card_corner_radius"
+    android:layout_margin="@dimen/layout_margin_medium"
+    app:cardElevation="@dimen/card_elevation"
     android:foreground="?android:attr/selectableItemBackground"
     android:background="@android:color/white">
 
@@ -16,25 +18,27 @@
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
         android:layout_marginRight="@dimen/fab_width"
-        app:elevation="0dp"
-        app:borderWidth="0dp"
+        app:elevation="@dimen/layout_margin_none"
+        app:borderWidth="@dimen/layout_margin_none"
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
+        app:tint="@color/colorAccent"
         app:srcCompat="@drawable/ic_share_grey" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/favoriteFab"
         android:layout_width="@dimen/fab_width"
         android:layout_height="@dimen/fab_height"
-        app:elevation="0dp"
-        app:borderWidth="0dp"
+        app:elevation="@dimen/layout_margin_none"
+        app:borderWidth="@dimen/layout_margin_none"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
         android:layout_marginRight="@dimen/layout_margin_small"
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
+        app:tint="@color/colorAccent"
         app:srcCompat="@drawable/ic_baseline_favorite_border" />
 
     <LinearLayout
@@ -45,21 +49,17 @@
         android:layout_marginBottom="@dimen/layout_margin_medium"
         android:layout_marginTop="@dimen/layout_margin_medium">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="@dimen/image_corner_radius"
+        <ImageView
+            android:id="@+id/eventImage"
+            android:layout_width="@dimen/layout_margin_search_view"
+            android:layout_height="@dimen/layout_margin_search_view"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"
+            android:background="@drawable/round_image"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
             android:layout_marginLeft="@dimen/layout_margin_large"
-            android:layout_marginTop="@dimen/layout_margin_moderate">
-            <ImageView
-                android:id="@+id/eventImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/placeholder" />
-        </androidx.cardview.widget.CardView>
+            android:layout_marginTop="@dimen/layout_margin_moderate"/>
 
         <LinearLayout
             android:layout_width="match_parent"

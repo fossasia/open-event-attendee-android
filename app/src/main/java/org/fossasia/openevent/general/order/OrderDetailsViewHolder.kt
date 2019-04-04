@@ -16,11 +16,14 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.name
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderIdentifier
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
+import kotlinx.android.synthetic.main.item_card_order_details.view.organizerLabel
+import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.utils.stripHtml
+import org.jetbrains.anko.browse
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -32,7 +35,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?
     ) {
         if (event != null) {
-            val formattedDateTime = EventUtils.getLocalizedDateTime(event.startsAt)
+            val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
             val formattedDate = EventUtils.getFormattedDateShort(formattedDateTime)
             val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
             val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
@@ -41,8 +44,12 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             itemView.location.text = event.locationName
             itemView.date.text = "$formattedDate\n$formattedTime $timezone"
             itemView.eventSummary.text = event.description?.stripHtml()
-            itemView.organizer.text = event.organizerName
 
+            if (event.organizerName.isNullOrEmpty()) {
+                itemView.organizerLabel.visibility = View.GONE
+            } else {
+                itemView.organizer.text = event.organizerName
+            }
             itemView.map.setOnClickListener {
                 val mapUrl = loadMapUrl(event)
                 val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
@@ -51,16 +58,26 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                     itemView.context.startActivity(mapIntent)
                 }
             }
+            if (!attendee.pdfUrl.isNullOrBlank()) {
+                itemView.downloadButton.isEnabled = true
+                itemView.downloadButton.setOnClickListener {
+                    itemView.context.browse(attendee.pdfUrl)
+                }
+            }
 
             itemView.calendar.setOnClickListener {
                 val intent = Intent(Intent.ACTION_INSERT)
                 intent.type = "vnd.android.cursor.item/event"
                 intent.putExtra(CalendarContract.Events.TITLE, event.name)
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description?.stripHtml())
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName)
+                intent.putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, event.timezone)
                 intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME, EventUtils.getTimeInMilliSeconds(event.startsAt))
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                    EventUtils.getTimeInMilliSeconds(event.startsAt, event.timezone))
                 intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME, EventUtils.getTimeInMilliSeconds(event.endsAt))
+                    CalendarContract.EXTRA_EVENT_END_TIME,
+                    EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
                 itemView.context.startActivity(intent)
             }
 

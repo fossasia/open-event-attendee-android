@@ -34,16 +34,6 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
     private var title: String = ""
     private val safeArgs: AboutEventFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        aboutEventViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEvent(it)
-            })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = layoutInflater.inflate(R.layout.fragment_about_event, container, false)
 
@@ -54,17 +44,23 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         }
         setHasOptionsMenu(true)
 
+        aboutEventViewModel.event
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                loadEvent(it)
+            })
+
         rootView.appBar.addOnOffsetChangedListener(this)
 
         aboutEventViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView, it, Snackbar.LENGTH_SHORT).show()
             })
 
         aboutEventViewModel.progressAboutEvent
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAbout.isVisible = it
             })
 
@@ -77,8 +73,8 @@ class AboutEventFragment : Fragment(), AppBarLayout.OnOffsetChangedListener {
         eventExtra = event
         title = eventExtra.name
         rootView.aboutEventContent.text = event.description?.stripHtml()
-        val startsAt = EventUtils.getLocalizedDateTime(event.startsAt)
-        val endsAt = EventUtils.getLocalizedDateTime(event.endsAt)
+        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
+        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.aboutEventDetails.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
         rootView.eventName.text = event.name
     }

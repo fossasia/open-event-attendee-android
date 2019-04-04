@@ -1,14 +1,11 @@
 package org.fossasia.openevent.general.auth
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -22,8 +19,12 @@ import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLa
 import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
-import kotlinx.android.synthetic.main.fragment_profile.view.editProfileButton
 import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
+import kotlinx.android.synthetic.main.fragment_profile.view.editProfileRL
+import kotlinx.android.synthetic.main.fragment_profile.view.logoutLL
+import kotlinx.android.synthetic.main.fragment_profile.view.manageEventsLL
+import kotlinx.android.synthetic.main.fragment_profile.view.settingsLL
+import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssuesLL
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.settings.SettingsFragmentArgs
@@ -68,23 +69,21 @@ class ProfileFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        setHasOptionsMenu(true)
-
         profileViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
         profileViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.profileCoordinatorLayout, it, Snackbar.LENGTH_SHORT).show()
             })
 
         profileViewModel.user
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
@@ -95,50 +94,32 @@ class ProfileFragment : Fragment() {
                         .transform(CircleTransform())
                         .into(rootView.avatar)
 
-                rootView.editProfileButton.setOnClickListener {
+                rootView.editProfileRL.setOnClickListener {
                     findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
                 }
             })
 
         fetchProfile()
 
-        return rootView
-    }
+        rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.orga_app -> {
-                startOrgaApp("com.eventyay.organizer")
-                return true
-            }
-            R.id.ticket_issues -> {
-                context?.let {
-                    Utils.openUrl(it, resources.getString(R.string.ticket_issues_url))
+        rootView.settingsLL.setOnClickListener {
+
+            SettingsFragmentArgs.Builder(emailSettings)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
                 }
-                return true
-            }
-            R.id.logout -> {
-                showDialog()
-                return true
-            }
-            R.id.settings -> {
-                // Only one nullable argument is passed to settings fragment so generated args class for it expects
-                // the argument to be passed in the Builder constructor only
-                SettingsFragmentArgs.Builder(emailSettings)
-                    .build()
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
-                    }
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.profile, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+        rootView.ticketIssuesLL.setOnClickListener {
+            Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+        }
+
+        rootView.logoutLL.setOnClickListener { showLogoutDialog() }
+
+        return rootView
     }
 
     private fun startOrgaApp(packageName: String) {
@@ -177,13 +158,12 @@ class ProfileFragment : Fragment() {
     override fun onResume() {
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        activity?.supportActionBar?.title = "Profile"
-        setHasOptionsMenu(true)
+        activity?.supportActionBar?.title = getString(R.string.profile)
         super.onResume()
     }
 
-    private fun showDialog() {
-            AlertDialog.Builder(activity).setMessage(resources.getString(R.string.message))
+    private fun showLogoutDialog() {
+            AlertDialog.Builder(requireContext()).setMessage(resources.getString(R.string.message))
             .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                 if (profileViewModel.isLoggedIn()) {
                     profileViewModel.logout()

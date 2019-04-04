@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
@@ -23,6 +24,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
     private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
+    private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
@@ -33,10 +35,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey)
+        val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Settings"
+        activity?.supportActionBar?.title = getString(R.string.settings)
         setHasOptionsMenu(true)
 
         // Set Email
@@ -46,9 +49,17 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         // Set Build Version
         preferenceScreen.findPreference(resources.getString(R.string.key_version))
             .title = "Version " + BuildConfig.VERSION_NAME
+
+        preferenceScreen.findPreference(resources.getString(R.string.key_timezone_switch))
+            .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        if (preference?.key == resources.getString(R.string.key_visit_website)) {
+            // Goes to website
+            Utils.openUrl(requireContext(), WEBSITE_LINK)
+            return true
+        }
         if (preference?.key == resources.getString(R.string.key_rating)) {
             // Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
@@ -56,21 +67,27 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             // Links to suggestion form
-            context?.let {
-                Utils.openUrl(it, FORM_LINK)
-            }
+            Utils.openUrl(requireContext(), FORM_LINK)
             return true
         }
+        if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
+            val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
+            val timeZonePreferenceKey = "useEventTimeZone"
+            when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
+                true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
+                false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
+            }
+        }
         if (preference?.key == getString(R.string.key_privacy)) {
-            context?.let { Utils.openUrl(it, PRIVACY_LINK) }
+            Utils.openUrl(requireContext(), PRIVACY_LINK)
             return true
         }
         if (preference?.key == getString(R.string.key_terms_of_service)) {
-            context?.let { Utils.openUrl(it, TERMS_OF_SERVICE_LINK) }
+            Utils.openUrl(requireContext(), TERMS_OF_SERVICE_LINK)
             return true
         }
         if (preference?.key == getString(R.string.key_cookie_policy)) {
-            context?.let { Utils.openUrl(it, COOKIE_POLICY_LINK) }
+            Utils.openUrl(requireContext(), COOKIE_POLICY_LINK)
             return true
         }
 
