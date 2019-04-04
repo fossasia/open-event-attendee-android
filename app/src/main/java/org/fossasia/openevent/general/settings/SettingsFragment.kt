@@ -39,7 +39,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Settings"
+        activity?.supportActionBar?.title = getString(R.string.settings)
         setHasOptionsMenu(true)
 
         // Set Email

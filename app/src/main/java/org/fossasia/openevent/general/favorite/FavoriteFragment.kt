@@ -68,7 +68,7 @@ class FavoriteFragment : Fragment() {
 
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Likes"
+            thisActivity.supportActionBar?.title = getString(R.string.likes)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 

@@ -53,7 +53,7 @@ class LoginFragment : Fragment() {
         val progressDialog = progressDialog(context)
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Login"
+            thisActivity.supportActionBar?.title = getString(R.string.login)
             thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)

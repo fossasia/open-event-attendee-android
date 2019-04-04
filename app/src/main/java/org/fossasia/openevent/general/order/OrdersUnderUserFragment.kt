@@ -67,7 +67,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     navAnimGone(activity?.navigation, requireContext())
                 }
                 false -> {
-                    thisActivity.supportActionBar?.title = "Tickets"
+                    thisActivity.supportActionBar?.title = getString(R.string.tickets)
                     thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
             }

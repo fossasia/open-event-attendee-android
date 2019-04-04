@@ -7,14 +7,17 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 
 class SignUpViewModel(
     private val authService: AuthService,
-    private val network: Network
+    private val network: Network,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -53,10 +56,10 @@ class SignUpViewModel(
             }, {
                 when {
                     it.toString().contains("HTTP 409") ->
-                        mutableError.value = "Unable to SignUp: Email already exists!"
+                        mutableError.value = resource.getString(R.string.sign_up_fail_email_exist_message)
                     it.toString().contains("HTTP 422") ->
-                        mutableError.value = "Unable to SignUp: Not a valid email address!"
-                    else -> mutableError.value = "Unable to SignUp!"
+                        mutableError.value = resource.getString(R.string.sign_up_fail_email_invalid_message)
+                    else -> mutableError.value = resource.getString(R.string.sign_up_fail_message)
                 }
                 Timber.d(it, "Failed")
             })
@@ -79,7 +82,7 @@ class SignUpViewModel(
                 Timber.d("Success!")
                 fetchProfile()
             }, {
-                mutableError.value = "Unable to Login automatically"
+                mutableError.value = resource.getString(R.string.login_automatically_fail_message)
                 Timber.d(it, "Failed")
             })
         )

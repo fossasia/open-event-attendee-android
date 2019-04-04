@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventUtils
@@ -16,7 +18,8 @@ import timber.log.Timber
 class OrdersUnderUserViewModel(
     private val orderService: OrderService,
     private val eventService: EventService,
-    private val authHolder: AuthHolder
+    private val authHolder: AuthHolder,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -62,7 +65,7 @@ class OrdersUnderUserViewModel(
             }, {
                 mutableshowShimmerResults.value = false
                 mutableNoTickets.value = true
-                mutableMessage.value = "Failed  to list Orders under a user"
+                mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
                 Timber.d(it, "Failed  to list Orders under a user ")
             })
         )
@@ -102,7 +105,7 @@ class OrdersUnderUserViewModel(
                 if (finalList.isEmpty()) mutableNoTickets.value = true
                 mutableEventAndOrderIdentifier.value = finalList
             }, {
-                mutableMessage.value = "Failed  to list events under a user"
+                mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")
             })
         )

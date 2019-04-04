@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class FavoriteEventsViewModel(private val eventService: EventService) : ViewModel() {
+class FavoriteEventsViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -32,7 +34,7 @@ class FavoriteEventsViewModel(private val eventService: EventService) : ViewMode
                     mutableProgress.value = false
                 }, {
                     Timber.e(it, "Error fetching favorite events")
-                    mutableError.value = "Error fetching favorite events"
+                    mutableError.value = resource.getString(R.string.fetch_favorite_events_error_message)
                 })
         )
     }
@@ -46,7 +48,7 @@ class FavoriteEventsViewModel(private val eventService: EventService) : ViewMode
                     Timber.d("Success")
                 }, {
                     Timber.e(it, "Error")
-                    mutableError.value = "Error"
+                    mutableError.value = resource.getString(R.string.error)
                 })
         )
     }

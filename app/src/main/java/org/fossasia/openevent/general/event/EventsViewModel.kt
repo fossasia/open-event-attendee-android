@@ -6,13 +6,18 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService, private val preference: Preference) :
-    ViewModel() {
+class EventsViewModel(
+    private val eventService: EventService,
+    private val preference: Preference,
+    private val resource: Resource
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -51,7 +56,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                     mutableEvents.value = it
                 }, {
                     Timber.e(it, "Error fetching events")
-                    mutableError.value = "Error fetching events"
+                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
                 })
             )
         }
@@ -69,7 +74,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
         )
     }
@@ -82,7 +87,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
-                mutableError.value = "Error"
+                mutableError.value = resource.getString(R.string.error)
             })
         )
     }
