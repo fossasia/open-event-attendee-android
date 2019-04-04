@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,6 +40,7 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 /**
  * Enum class for different layout types in the adapter.
@@ -86,13 +86,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
-
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.title = getString(R.string.events)
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        }
+        setToolbar(activity, "Events", false)
 
         rootView.progressBar.isIndeterminate = true
 

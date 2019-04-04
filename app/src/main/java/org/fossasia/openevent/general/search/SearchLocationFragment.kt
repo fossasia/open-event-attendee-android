@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.locationSear
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 const val LOCATION_PERMISSION_REQUEST = 1000
 
@@ -32,12 +32,7 @@ class SearchLocationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
-
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity, hasUpEnabled = true, show = true)
         setHasOptionsMenu(true)
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {

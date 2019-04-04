@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,6 +33,7 @@ import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
@@ -56,20 +56,14 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            when (safeArgs.showExpired) {
-                true -> {
-                    thisActivity.supportActionBar?.title = "Past Tickets"
-                    thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    setHasOptionsMenu(true)
-                    navAnimGone(activity?.navigation, requireContext())
-                }
-                false -> {
-                    thisActivity.supportActionBar?.title = getString(R.string.tickets)
-                    thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                }
+        when (safeArgs.showExpired) {
+            true -> {
+                setToolbar(activity, "Past Tickets")
+                setHasOptionsMenu(true)
+                navAnimGone(activity?.navigation, requireContext())
+            }
+            false -> {
+                setToolbar(activity, getString(R.string.tickets), false)
             }
         }
 

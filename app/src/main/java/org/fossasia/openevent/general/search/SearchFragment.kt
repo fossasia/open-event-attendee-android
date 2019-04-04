@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
@@ -27,6 +26,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -46,12 +46,7 @@ class SearchFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = getString(R.string.search)
-            thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        }
+        setToolbar(activity, getString(R.string.search), false)
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {

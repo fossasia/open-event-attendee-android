@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -11,6 +12,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -75,6 +77,21 @@ object Utils {
         val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
             as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
+    }
+
+    fun setToolbar(
+        activity: Activity?,
+        title: String = "",
+        hasUpEnabled: Boolean = true,
+        show: Boolean = true
+    ) {
+        if (activity is AppCompatActivity) {
+            if (show) {
+                activity.supportActionBar?.title = title
+                activity.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+                activity.supportActionBar?.show()
+            } else activity.supportActionBar?.hide()
+        }
     }
 
     fun checkAndLoadFragment(

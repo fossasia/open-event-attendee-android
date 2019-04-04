@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -42,6 +41,7 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class SearchResultsFragment : Fragment() {
     private lateinit var rootView: View
@@ -91,11 +91,7 @@ class SearchResultsFragment : Fragment() {
                 }
             }
         }
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = getString(R.string.search_results)
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
