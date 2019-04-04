@@ -17,8 +17,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 3
-        versionName "0.0.3a"
+        versionCode 5
+        versionName "0.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -33,6 +33,7 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
@@ -72,6 +73,9 @@ android {
     androidExtensions {
         experimental = true
     }
+    aaptOptions {
+        cruncherEnabled = false
+    }
 }
 
 spotless {
@@ -88,20 +92,20 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0-alpha03"
+    def lifecycle_version = "2.1.0-alpha04"
     def koin_version = "1.0.2"
     def roomVersion = "2.1.0-alpha06"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha01"
+    def nav_version = "2.1.0-alpha02"
     def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
     implementation 'com.google.android.material:material:1.1.0-alpha05'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
@@ -171,9 +175,6 @@ dependencies {
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
-
-    //Mapbox SDK plugins
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"

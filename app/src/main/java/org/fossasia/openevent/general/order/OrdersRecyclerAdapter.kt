@@ -9,6 +9,7 @@ import org.fossasia.openevent.general.event.Event
 class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
     private val eventAndOrderIdentifier = ArrayList<Pair<Event, String>>()
+    private val showExpired = false
     private var clickListener: OrderClickListener? = null
     var attendeesNumber = listOf<Int>()
 
@@ -16,7 +17,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
         clickListener = listener
     }
 
-    fun addAllPairs(list: List<Pair<Event, String>>) {
+    fun addAllPairs(list: List<Pair<Event, String>>, showExpired: Boolean) {
         if (eventAndOrderIdentifier.isNotEmpty())
             this.eventAndOrderIdentifier.clear()
         eventAndOrderIdentifier.addAll(list)
@@ -32,7 +33,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
             holder.bind(eventAndOrderIdentifier[position].first,
                 clickListener,
                 eventAndOrderIdentifier[position].second,
-                it)
+                it, showExpired)
         }
     }
 

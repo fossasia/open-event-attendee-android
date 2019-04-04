@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
 class LoginViewModel(
     private val authService: AuthService,
-    private val network: Network
+    private val network: Network,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -49,7 +52,7 @@ class LoginViewModel(
             }.subscribe({
                 mutableLoggedIn.value = true
             }, {
-                mutableError.value = "Unable to Login. Please check your credentials"
+                mutableError.value = resource.getString(R.string.login_fail_message)
             })
         )
     }
@@ -67,13 +70,13 @@ class LoginViewModel(
                 mutableRequestTokenSuccess.value = verifyMessage(it.message)
             }, {
                 mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
-                mutableError.value = "Email address not present in server. Please check your email"
+                mutableError.value = resource.getString(R.string.email_not_in_server_message)
             })
         )
     }
 
     private fun verifyMessage(message: String): Boolean {
-        if (message == "Email Sent") {
+        if (message == resource.getString(R.string.email_sent)) {
             return true
         }
         return false
@@ -88,12 +91,12 @@ class LoginViewModel(
                 mutableProgress.value = true
             }.doFinally {
                 mutableProgress.value = false
-            }.subscribe({ it ->
+            }.subscribe({
                 Timber.d("User Fetched")
                 mutableUser.value = it
             }) {
                 Timber.e(it, "Failure")
-                mutableError.value = "Failure"
+                mutableError.value = resource.getString(R.string.failure)
             })
     }
 

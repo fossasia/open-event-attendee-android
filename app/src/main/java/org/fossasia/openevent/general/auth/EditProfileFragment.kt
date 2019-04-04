@@ -115,7 +115,7 @@ class EditProfileFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-                if (it == USER_UPDATED) {
+                if (it == getString(R.string.user_update_success_message)) {
                     val thisActivity = activity
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
                 }
@@ -167,7 +167,7 @@ class EditProfileFragment : Fragment() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -195,12 +195,12 @@ class EditProfileFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
                 Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Granted !",
+                    rootView.editProfileCoordinatorLayout, getString(R.string.storage_permission_granted_message),
                     Snackbar.LENGTH_SHORT).show()
                 showFileChooser()
             } else {
                 Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Denied :(",
+                    rootView.editProfileCoordinatorLayout, getString(R.string.storage_permission_denied_message),
                     Snackbar.LENGTH_SHORT).show()
             }
         }

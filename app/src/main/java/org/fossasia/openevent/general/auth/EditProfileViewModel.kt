@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
-
-const val USER_UPDATED = "User updated successfully!"
 
 class EditProfileViewModel(
     private val authService: AuthService,
-    private val authHolder: AuthHolder
+    private val authHolder: AuthHolder,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -43,10 +44,10 @@ class EditProfileViewModel(
             }
             .subscribe({
                 updateUser(it.url, firstName, lastName)
-                mutableMessage.value = "Image uploaded successfully!"
-                Timber.d("Image uploaded " + it.url)
+                mutableMessage.value = resource.getString(R.string.image_upload_success_message)
+                Timber.d("Image uploaded ${it.url}")
             }) {
-                mutableMessage.value = "Error uploading image!"
+                mutableMessage.value = resource.getString(R.string.image_upload_error_message)
                 Timber.e(it, "Error uploading user!")
             })
     }
@@ -54,7 +55,7 @@ class EditProfileViewModel(
     fun updateUser(url: String?, firstName: String, lastName: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
-            mutableMessage.value = "Please provide first name and last name!"
+            mutableMessage.value = resource.getString(R.string.provide_name_message)
             return
         }
         compositeDisposable.add(authService.updateUser(
@@ -74,10 +75,10 @@ class EditProfileViewModel(
                 mutableProgress.value = false
             }
             .subscribe({
-                mutableMessage.value = USER_UPDATED
+                mutableMessage.value = resource.getString(R.string.user_update_success_message)
                 Timber.d("User updated")
             }) {
-                mutableMessage.value = "Error updating user!"
+                mutableMessage.value = resource.getString(R.string.user_update_error_message)
                 Timber.e(it, "Error updating user!")
             })
     }

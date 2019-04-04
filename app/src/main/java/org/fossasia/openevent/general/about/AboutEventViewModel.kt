@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class AboutEventViewModel(private val eventService: EventService) : ViewModel() {
+class AboutEventViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -24,7 +26,7 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
-            mutableError.value = "Error fetching event"
+            mutableError.value = Resource().getString(R.string.error_fetching_event_message)
             return
         }
         compositeDisposable.add(eventService.getEvent(id)
@@ -37,7 +39,7 @@ class AboutEventViewModel(private val eventService: EventService) : ViewModel() 
             }.subscribe({ eventList ->
                 mutableEvent.value = eventList
             }, {
-                mutableError.value = "Error fetching event"
+                mutableError.value = resource.getString(R.string.error_fetching_event_message)
                 Timber.e(it, "Error fetching event %d", id)
             })
         )
