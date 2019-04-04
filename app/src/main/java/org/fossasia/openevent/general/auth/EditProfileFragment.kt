@@ -22,7 +22,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
@@ -105,7 +105,7 @@ class EditProfileFragment : Fragment() {
         permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
-        rootView.buttonUpdate.setOnClickListener {
+        rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
                 rootView.lastName.text.toString())
