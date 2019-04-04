@@ -54,6 +54,7 @@ import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
+import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -91,9 +92,8 @@ class EventDetailsFragment : Fragment() {
                 eventShare = it
                 title = eventShare.name
 
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
-                }
+                // Update favorite icon and external event url menu option
+                activity?.invalidateOptionsMenu()
 
                 if (runOnce) {
                     loadSocialLinksFragment()
@@ -289,20 +289,19 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 // Add event to Calendar
                 startCalendar(eventShare)
-                return true
+                true
             }
             R.id.report_event -> {
                 reportEvent(eventShare)
-                return true
+                true
+            }
+            R.id.open_external_event_url -> {
+                eventShare.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
+                true
             }
             R.id.favorite_event -> {
                 eventViewModel.setFavorite(safeArgs.eventId, !(eventShare.favorite))
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white)
-                } else {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
-                }
-                return true
+                true
             }
             R.id.event_share -> {
                 val sendIntent = Intent()
@@ -310,7 +309,7 @@ class EventDetailsFragment : Fragment() {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
                 sendIntent.type = "text/plain"
                 rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
-                return true
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -351,6 +350,16 @@ class EventDetailsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.event_details, menu)
         menuActionBar = menu
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        if (::eventShare.isInitialized) {
+            if (eventShare.externalEventUrl == null) {
+                menu.findItem(R.id.open_external_event_url).isVisible = false
+            }
+            setFavoriteIconFilled(eventShare.favorite)
+        }
+        super.onPrepareOptionsMenu(menu)
     }
 
     private fun loadTicketFragment() {
@@ -396,7 +405,11 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    private fun setFavoriteIcon(id: Int) {
+    private fun setFavoriteIconFilled(filled: Boolean) {
+        val id = when {
+            filled -> R.drawable.ic_baseline_favorite_white
+            else -> R.drawable.ic_baseline_favorite_border_white
+        }
         menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
     }
 
