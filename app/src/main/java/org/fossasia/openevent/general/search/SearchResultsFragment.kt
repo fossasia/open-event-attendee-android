@@ -11,8 +11,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
 import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
@@ -20,6 +21,11 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroup
+import kotlinx.android.synthetic.main.fragment_search_results.view.today_chip
+import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrow_chip
+import kotlinx.android.synthetic.main.fragment_search_results.view.weekend_chip
+import kotlinx.android.synthetic.main.fragment_search_results.view.month_chip
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -53,7 +59,38 @@ class SearchResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
+        when (safeArgs.date) {
+            getString(R.string.today) -> rootView.today_chip.apply {
+                isChecked = true
+                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
+            }
+            getString(R.string.tomorrow) -> rootView.tomorrow_chip.apply {
+                isChecked = true
+                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
+            }
+            getString(R.string.weekend) -> rootView.weekend_chip.apply {
+                isChecked = true
+                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
+            }
+            getString(R.string.month) -> rootView.month_chip.apply {
+                isChecked = true
+                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
+            }
+        }
 
+        rootView.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
+            for (i in 0 until chipGroup.childCount) {
+                val chip = chipGroup.getChildAt(i) as Chip
+                if (chip.id != chipGroup.checkedChipId) {
+                    chip.chipBackgroundColor = resources.getColorStateList(R.color.grey)
+                    chip.isClickable = true
+                } else {
+                    chip.isClickable = false
+                    chip.chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
+                    performSearch(safeArgs, chip.text.toString())
+                }
+            }
+        }
         val thisActivity = activity
         if (thisActivity is AppCompatActivity) {
             thisActivity.supportActionBar?.title = getString(R.string.search_results)
@@ -144,10 +181,10 @@ class SearchResultsFragment : Fragment() {
         }
     }
 
-    private fun performSearch(args: SearchResultsFragmentArgs) {
+    private fun performSearch(args: SearchResultsFragmentArgs, eventDate: String = "") {
         val query = args.query
         val location = args.location
-        val date = args.date
+        val date = if (eventDate.isNotEmpty()) eventDate else args.date
         searchViewModel.searchEvent = query
         searchViewModel.loadEvents(location, date)
     }
