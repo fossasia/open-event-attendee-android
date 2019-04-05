@@ -24,10 +24,11 @@ import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
 import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroup
-import kotlinx.android.synthetic.main.fragment_search_results.view.today_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrow_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.weekend_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.month_chip
+import kotlinx.android.synthetic.main.fragment_search_results.view.todayChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrowChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.weekendChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.monthChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroupLayout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -64,10 +65,10 @@ class SearchResultsFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
         val selectedChip = when (safeArgs.date) {
-            getString(R.string.today) -> rootView.today_chip
-            getString(R.string.tomorrow) -> rootView.tomorrow_chip
-            getString(R.string.weekend) -> rootView.weekend_chip
-            getString(R.string.month) -> rootView.month_chip
+            getString(R.string.today) -> rootView.todayChip
+            getString(R.string.tomorrow) -> rootView.tomorrowChip
+            getString(R.string.weekend) -> rootView.weekendChip
+            getString(R.string.month) -> rootView.monthChip
             else -> null
         }
         selectedChip?.apply {
@@ -194,6 +195,7 @@ class SearchResultsFragment : Fragment() {
 
     private fun showNoInternetError(show: Boolean) {
         rootView.noInternetCard.isVisible = show
+        rootView.chipGroupLayout.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
