@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import android.content.res.ColorStateList
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -59,35 +62,35 @@ class SearchResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
-        when (safeArgs.date) {
-            getString(R.string.today) -> rootView.today_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.tomorrow) -> rootView.tomorrow_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.weekend) -> rootView.weekend_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.month) -> rootView.month_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
+
+        val selectedChip = when (safeArgs.date) {
+            getString(R.string.today) -> rootView.today_chip
+            getString(R.string.tomorrow) -> rootView.tomorrow_chip
+            getString(R.string.weekend) -> rootView.weekend_chip
+            getString(R.string.month) -> rootView.month_chip
+            else -> null
+        }
+        selectedChip?.apply {
+            isChecked = true
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         }
 
         rootView.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
-            for (i in 0 until chipGroup.childCount) {
-                val chip = chipGroup.getChildAt(i) as Chip
-                if (chip.id != chipGroup.checkedChipId) {
-                    chip.chipBackgroundColor = resources.getColorStateList(R.color.grey)
-                    chip.isClickable = true
-                } else {
-                    chip.isClickable = false
-                    chip.chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-                    performSearch(safeArgs, chip.text.toString())
+
+            chipGroup.children.forEach { chip ->
+                if (chip is Chip) {
+                    if (chip.id != chipGroup.checkedChipId) {
+                        chip.chipBackgroundColor =
+                            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.grey))
+                        chip.isClickable = true
+                    } else {
+                        chip.isClickable = false
+                        chip.chipBackgroundColor =
+                            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                        rootView.noSearchResults.isVisible = false
+                        favoriteEventsRecyclerAdapter.submitList(null)
+                        performSearch(safeArgs, chip.text.toString())
+                    }
                 }
             }
         }
@@ -186,11 +189,11 @@ class SearchResultsFragment : Fragment() {
     }
 
     private fun showNoSearchResults(events: List<Event>) {
-        rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
+        rootView.noSearchResults.isVisible = events.isEmpty()
     }
 
     private fun showNoInternetError(show: Boolean) {
-        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.isVisible = show
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

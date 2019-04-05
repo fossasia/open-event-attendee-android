@@ -40,6 +40,48 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:scrollbars="none"
+                    android:padding="@dimen/padding_medium"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.ChipGroup
+                        android:layout_width="wrap_content"
+                        android:id="@+id/chipGroup"
+                        app:singleSelection="true"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/today_chip"
+                            android:text="@string/today" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tomorrow_chip"
+                            android:text="@string/tomorrow" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/weekend_chip"
+                            android:layout_height="wrap_content"
+                            android:text="@string/weekend" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/month_chip"
+                            android:text="@string/month" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerSearch"
                 android:layout_width="match_parent"
@@ -64,49 +106,6 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <include layout="@layout/content_no_internet" />
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:scrollbars="none"
-                android:paddingLeft="@dimen/details_margin_small"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/details_margin_small">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
-                    android:id="@+id/chipGroup"
-                    app:singleSelection="true"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/CustomChipChoice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/today_chip"
-                        android:text="@string/today" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/CustomChipChoice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tomorrow_chip"
-                        android:text="@string/tomorrow" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/CustomChipChoice"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/weekend_chip"
-                        android:layout_height="wrap_content"
-                        android:text="@string/weekend" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/CustomChipChoice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/month_chip"
-                        android:text="@string/month" />
-                </com.google.android.material.chip.ChipGroup>
-            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/eventsRecycler"
