@@ -68,6 +68,7 @@
     <string name="last_name_optional">Last Name (Optional)</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
+    <string name="profile_photo">Profile Photo</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
