@@ -7,6 +7,8 @@ categories:
     label: fix
   - title: 🧰 Maintenance
     label: chore
+  - title: Dependencies and Libraries
+    label: dependencies
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
 template: |
   ## Changes
