@@ -1,0 +1,1078 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "2eccdc20f2068430bba84bf884a2ec02",
+    "entities": [
+      {
+        "tableName": "Event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `identifier` TEXT NOT NULL, `startsAt` TEXT NOT NULL, `endsAt` TEXT NOT NULL, `timezone` TEXT NOT NULL, `privacy` TEXT NOT NULL, `paymentCountry` TEXT, `paypalEmail` TEXT, `thumbnailImageUrl` TEXT, `schedulePublishedOn` TEXT, `paymentCurrency` TEXT, `organizerDescription` TEXT, `originalImageUrl` TEXT, `onsiteDetails` TEXT, `organizerName` TEXT, `largeImageUrl` TEXT, `deletedAt` TEXT, `ticketUrl` TEXT, `locationName` TEXT, `codeOfConduct` TEXT, `state` TEXT, `searchableLocationName` TEXT, `description` TEXT, `pentabarfUrl` TEXT, `xcalUrl` TEXT, `logoUrl` TEXT, `externalEventUrl` TEXT, `iconImageUrl` TEXT, `icalUrl` TEXT, `createdAt` TEXT, `bankDetails` TEXT, `chequeDetails` TEXT, `isComplete` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `refundPolicy` TEXT, `canPayByStripe` INTEGER NOT NULL, `canPayByCheque` INTEGER NOT NULL, `canPayByBank` INTEGER NOT NULL, `canPayByPaypal` INTEGER NOT NULL, `canPayOnsite` INTEGER NOT NULL, `isSponsorsEnabled` INTEGER NOT NULL, `hasOrganizerInfo` INTEGER NOT NULL, `isSessionsSpeakersEnabled` INTEGER NOT NULL, `isTicketingEnabled` INTEGER NOT NULL, `isTaxEnabled` INTEGER NOT NULL, `isMapShown` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, `eventTopic` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "identifier",
+            "columnName": "identifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startsAt",
+            "columnName": "startsAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endsAt",
+            "columnName": "endsAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timezone",
+            "columnName": "timezone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy",
+            "columnName": "privacy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentCountry",
+            "columnName": "paymentCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paypalEmail",
+            "columnName": "paypalEmail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnailImageUrl",
+            "columnName": "thumbnailImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schedulePublishedOn",
+            "columnName": "schedulePublishedOn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paymentCurrency",
+            "columnName": "paymentCurrency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "organizerDescription",
+            "columnName": "organizerDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "originalImageUrl",
+            "columnName": "originalImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "onsiteDetails",
+            "columnName": "onsiteDetails",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "organizerName",
+            "columnName": "organizerName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "largeImageUrl",
+            "columnName": "largeImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketUrl",
+            "columnName": "ticketUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationName",
+            "columnName": "locationName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "codeOfConduct",
+            "columnName": "codeOfConduct",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "searchableLocationName",
+            "columnName": "searchableLocationName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pentabarfUrl",
+            "columnName": "pentabarfUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "xcalUrl",
+            "columnName": "xcalUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "logoUrl",
+            "columnName": "logoUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "externalEventUrl",
+            "columnName": "externalEventUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconImageUrl",
+            "columnName": "iconImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "icalUrl",
+            "columnName": "icalUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bankDetails",
+            "columnName": "bankDetails",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "chequeDetails",
+            "columnName": "chequeDetails",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isComplete",
+            "columnName": "isComplete",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "refundPolicy",
+            "columnName": "refundPolicy",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "canPayByStripe",
+            "columnName": "canPayByStripe",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canPayByCheque",
+            "columnName": "canPayByCheque",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canPayByBank",
+            "columnName": "canPayByBank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canPayByPaypal",
+            "columnName": "canPayByPaypal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canPayOnsite",
+            "columnName": "canPayOnsite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSponsorsEnabled",
+            "columnName": "isSponsorsEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasOrganizerInfo",
+            "columnName": "hasOrganizerInfo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSessionsSpeakersEnabled",
+            "columnName": "isSessionsSpeakersEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isTicketingEnabled",
+            "columnName": "isTicketingEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isTaxEnabled",
+            "columnName": "isTaxEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isMapShown",
+            "columnName": "isMapShown",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "favorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventTopic",
+            "columnName": "eventTopic",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Event_eventTopic",
+            "unique": false,
+            "columnNames": [
+              "eventTopic"
+            ],
+            "createSql": "CREATE  INDEX `index_Event_eventTopic` ON `${TABLE_NAME}` (`eventTopic`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `contact` TEXT, `details` TEXT, `thumbnailImageUrl` TEXT, `iconImageUrl` TEXT, `smallImageUrl` TEXT, `avatarUrl` TEXT, `facebookUrl` TEXT, `twitterUrl` TEXT, `instagramUrl` TEXT, `googlePlusUrl` TEXT, `originalImageUrl` TEXT, `isVerified` INTEGER NOT NULL, `isAdmin` INTEGER, `isSuperAdmin` INTEGER, `createdAt` TEXT, `lastAccessedAt` TEXT, `deletedAt` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contact",
+            "columnName": "contact",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "details",
+            "columnName": "details",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnailImageUrl",
+            "columnName": "thumbnailImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconImageUrl",
+            "columnName": "iconImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "smallImageUrl",
+            "columnName": "smallImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "avatarUrl",
+            "columnName": "avatarUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "facebookUrl",
+            "columnName": "facebookUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "twitterUrl",
+            "columnName": "twitterUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "instagramUrl",
+            "columnName": "instagramUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "googlePlusUrl",
+            "columnName": "googlePlusUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "originalImageUrl",
+            "columnName": "originalImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isVerified",
+            "columnName": "isVerified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAdmin",
+            "columnName": "isAdmin",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isSuperAdmin",
+            "columnName": "isSuperAdmin",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastAccessedAt",
+            "columnName": "lastAccessedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SocialLink",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `link` TEXT NOT NULL, `name` TEXT NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "link",
+            "columnName": "link",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SocialLink_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_SocialLink_event` ON `${TABLE_NAME}` (`event`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Ticket",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `description` TEXT, `type` TEXT, `name` TEXT NOT NULL, `maxOrder` INTEGER NOT NULL, `isFeeAbsorbed` INTEGER, `isDescriptionVisible` INTEGER, `price` REAL, `position` TEXT, `quantity` TEXT, `isHidden` INTEGER, `salesStartsAt` TEXT, `salesEndsAt` TEXT, `minOrder` INTEGER NOT NULL, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxOrder",
+            "columnName": "maxOrder",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFeeAbsorbed",
+            "columnName": "isFeeAbsorbed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isDescriptionVisible",
+            "columnName": "isDescriptionVisible",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isHidden",
+            "columnName": "isHidden",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "salesStartsAt",
+            "columnName": "salesStartsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "salesEndsAt",
+            "columnName": "salesEndsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "minOrder",
+            "columnName": "minOrder",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Ticket_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Ticket_event` ON `${TABLE_NAME}` (`event`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Attendee",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstname",
+            "columnName": "firstname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastname",
+            "columnName": "lastname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isCheckedIn",
+            "columnName": "isCheckedIn",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pdfUrl",
+            "columnName": "pdfUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketId",
+            "columnName": "ticketId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticket",
+            "columnName": "ticket",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Attendee_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Attendee_event` ON `${TABLE_NAME}` (`event`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Ticket",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "ticket"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "EventTopic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT, `slug` TEXT, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "slug",
+            "columnName": "slug",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_EventTopic_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_EventTopic_event` ON `${TABLE_NAME}` (`event`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Order",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `event` INTEGER, `attendees` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentMode",
+            "columnName": "paymentMode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "identifier",
+            "columnName": "identifier",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "orderNotes",
+            "columnName": "orderNotes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zipcode",
+            "columnName": "zipcode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paidVia",
+            "columnName": "paidVia",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountCodeId",
+            "columnName": "discountCodeId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketsPdfUrl",
+            "columnName": "ticketsPdfUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionId",
+            "columnName": "transactionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "attendees",
+            "columnName": "attendees",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Order_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Order_event` ON `${TABLE_NAME}` (`event`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Attendee",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "attendees"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CustomForm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `form` TEXT NOT NULL, `fieldIdentifier` TEXT NOT NULL, `type` TEXT NOT NULL, `isRequired` INTEGER, `isIncluded` INTEGER, `isFixed` INTEGER, `ticketsNumber` INTEGER, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "form",
+            "columnName": "form",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fieldIdentifier",
+            "columnName": "fieldIdentifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRequired",
+            "columnName": "isRequired",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isIncluded",
+            "columnName": "isIncluded",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFixed",
+            "columnName": "isFixed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ticketsNumber",
+            "columnName": "ticketsNumber",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2eccdc20f2068430bba84bf884a2ec02\")"
+    ]
+  }
+}
