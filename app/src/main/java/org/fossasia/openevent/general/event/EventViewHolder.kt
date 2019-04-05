@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_card_events.view.date
@@ -14,9 +15,9 @@ import kotlinx.android.synthetic.main.item_card_events.view.shareFab
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.favorite.FAVORITE_EVENT_DATE_FORMAT
 import timber.log.Timber
+import java.lang.Exception
 
 /**
  * The [RecyclerView.ViewHolder] class for Event items list in [EventsFragment]
@@ -31,8 +32,6 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
 
     var eventClickListener: EventClickListener? = null
     var favFabClickListener: FavoriteFabClickListener? = null
-    var shareFabClickListener: ShareFabClickListener? = null
-
     /**
      * The function to bind the given data on the items in this recycler view.
      *
@@ -43,7 +42,6 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         event: Event,
         dateFormat: String
     ) {
-        containerView.eventImage.setImageResource(R.drawable.header)
         containerView.eventName.text = event.name
         containerView.locationName.text = event.locationName
 
@@ -63,7 +61,15 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
             Picasso.get()
                 .load(url)
                 .placeholder(R.drawable.header)
-                .into(containerView.eventImage)
+                .into(containerView.eventImage, object : Callback {
+                    override fun onSuccess() {
+                        containerView.eventImage.tag = "image_loading_success"
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Timber.e(e)
+                    }
+                })
         }
 
         containerView.setOnClickListener {
@@ -72,8 +78,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         }
 
         containerView.shareFab.setOnClickListener {
-            shareFabClickListener?.onClick(event)
-                ?: Timber.e("Share Fab Click listener on ${this::class.java.canonicalName} is null")
+            EventUtils.share(event, itemView.eventImage)
         }
 
         containerView.favoriteFab.setOnClickListener {

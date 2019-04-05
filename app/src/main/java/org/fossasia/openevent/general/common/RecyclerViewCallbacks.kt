@@ -26,15 +26,3 @@ interface FavoriteFabClickListener {
      */
     fun onClick(event: Event, itemPosition: Int)
 }
-
-/**
- * The callback interface for Share FAB clicks
- */
-interface ShareFabClickListener {
-    /**
-     * The function to be invoked when the fab is clicked
-     *
-     * @param event The event object for which the fab was clicked
-     */
-    fun onClick(event: Event)
-}

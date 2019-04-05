@@ -1,6 +1,13 @@
 package org.fossasia.openevent.general.event
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.widget.ImageView
+import androidx.core.content.FileProvider
 import androidx.preference.PreferenceManager
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
@@ -9,6 +16,8 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -194,5 +203,44 @@ object EventUtils {
             Timber.e(e, "Error formatting time")
             return ""
         }
+    }
+
+    /**
+     *  share event detail along with event image
+     *  if image loading is successful then imageView tag will be set to String
+     *  So if imageView tag is not null then share image else only event details
+     *  @param eventImage to extract the image and use context
+     *
+     */
+    fun share(event: Event, eventImage: ImageView) {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.type = "text/plain"
+        sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
+        eventImage.tag?.let {
+            val bmpUri = EventUtils.getLocalBitmapUri(eventImage)
+            if (bmpUri != null) {
+                sendIntent.type = "image/*"
+                sendIntent.putExtra(Intent.EXTRA_STREAM, bmpUri)
+            }
+        }
+        eventImage.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
+    }
+
+    private fun getLocalBitmapUri(imageView: ImageView): Uri? {
+        val drawable = imageView.drawable
+        if (drawable as? BitmapDrawable == null || drawable.bitmap == null)
+            return null
+
+        val file = File(imageView.context.cacheDir, "share_image_" + System.currentTimeMillis() + ".png")
+        return FileOutputStream(file)
+            .use { fos ->
+                drawable.bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos)
+                Timber.d("file: %s", file.absolutePath)
+                val bmpUri =
+                    FileProvider.getUriForFile(imageView.context, BuildConfig.APPLICATION_ID + ".provider", file)
+                Timber.d("uri: %s", bmpUri)
+                bmpUri
+            }
     }
 }
