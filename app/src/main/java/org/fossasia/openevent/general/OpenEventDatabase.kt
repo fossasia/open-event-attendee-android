@@ -25,7 +25,7 @@ import org.fossasia.openevent.general.ticket.TicketDao
 import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
-    EventTopic::class, Order::class, CustomForm::class], version = 1)
+    EventTopic::class, Order::class, CustomForm::class], version = 2)
 @TypeConverters(EventIdConverter::class, EventTopicIdConverter::class, TicketIdConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
