@@ -39,6 +39,8 @@ class SearchViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    private val mutableChipClickable = MutableLiveData<Boolean>()
+    val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
     private val savedNextDate = getNextDate()
@@ -56,6 +58,7 @@ class SearchViewModel(
         if (mutableEvents.value != null) {
             mutableShowShimmerResults.value = false
             mutableShowNoInternetError.value = false
+            mutableChipClickable.value = true
         }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
@@ -178,8 +181,10 @@ class SearchViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
+                mutableChipClickable.value = false
             }.doFinally {
                 mutableShowShimmerResults.value = false
+                mutableChipClickable.value = true
             }.subscribe({
                 mutableEvents.value = it
             }, {

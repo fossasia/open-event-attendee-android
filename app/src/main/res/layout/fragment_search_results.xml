@@ -56,20 +56,20 @@
                             style="@style/CustomChipChoice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/today_chip"
+                            android:id="@+id/todayChip"
                             android:text="@string/today" />
 
                     <com.google.android.material.chip.Chip
                             style="@style/CustomChipChoice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tomorrow_chip"
+                            android:id="@+id/tomorrowChip"
                             android:text="@string/tomorrow" />
 
                     <com.google.android.material.chip.Chip
                             style="@style/CustomChipChoice"
                             android:layout_width="wrap_content"
-                            android:id="@+id/weekend_chip"
+                            android:id="@+id/weekendChip"
                             android:layout_height="wrap_content"
                             android:text="@string/weekend" />
 
@@ -77,7 +77,7 @@
                             style="@style/CustomChipChoice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/month_chip"
+                            android:id="@+id/monthChip"
                             android:text="@string/month" />
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
