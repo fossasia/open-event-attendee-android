@@ -203,8 +203,9 @@ class EventDetailsFragment : Fragment() {
         }
 
         // Event Description Section
-        if (!event.description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, event.description.stripHtml())
+        val description = event.description.stripHtml()
+        if (!description.isNullOrEmpty()) {
+            setTextField(rootView.eventDescription, description)
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
