@@ -16,11 +16,11 @@ import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
-import kotlinx.android.synthetic.main.fragment_favorite.view.find_text
-import kotlinx.android.synthetic.main.fragment_favorite.view.today_button
-import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrow_button
-import kotlinx.android.synthetic.main.fragment_favorite.view.weekend_button
-import kotlinx.android.synthetic.main.fragment_favorite.view.month_button
+import kotlinx.android.synthetic.main.fragment_favorite.view.findText
+import kotlinx.android.synthetic.main.fragment_favorite.view.todayButton
+import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowButton
+import kotlinx.android.synthetic.main.fragment_favorite.view.weekendButton
+import kotlinx.android.synthetic.main.fragment_favorite.view.monthButton
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -65,9 +65,9 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
-        setToolbar(activity, "Likes", false)
+        setToolbar(activity, getString(R.string.likes), false)
 
-        rootView.find_text.setOnClickListener {
+        rootView.findText.setOnClickListener {
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(R.id.eventsFragment, false)
                 .setEnterAnim(R.anim.slide_in_right)
@@ -78,17 +78,17 @@ class FavoriteFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
         }
 
-        rootView.today_button.setOnClickListener {
-            openSearchResult(rootView.today_button.text.toString())
+        rootView.todayButton.setOnClickListener {
+            openSearchResult(rootView.todayButton.text.toString())
         }
-        rootView.tomorrow_button.setOnClickListener {
-            openSearchResult(rootView.tomorrow_button.text.toString())
+        rootView.tomorrowButton.setOnClickListener {
+            openSearchResult(rootView.tomorrowButton.text.toString())
         }
-        rootView.weekend_button.setOnClickListener {
-            openSearchResult(rootView.weekend_button.text.toString())
+        rootView.weekendButton.setOnClickListener {
+            openSearchResult(rootView.weekendButton.text.toString())
         }
-        rootView.month_button.setOnClickListener {
-            openSearchResult(rootView.month_button.text.toString())
+        rootView.monthButton.setOnClickListener {
+            openSearchResult(rootView.monthButton.text.toString())
         }
 
         favoriteEventViewModel.events

@@ -58,7 +58,6 @@ import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.search.LocationService
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.settings.SettingsViewModel
@@ -151,7 +150,6 @@ val viewModelModule = module {
     viewModel { OrderDetailsViewModel(get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
-    viewModel { SmartAuthViewModel() }
 }
 
 val networkModule = module {

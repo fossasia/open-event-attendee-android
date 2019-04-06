@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.todayChip
 import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrowChip
 import kotlinx.android.synthetic.main.fragment_search_results.view.weekendChip
 import kotlinx.android.synthetic.main.fragment_search_results.view.monthChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroupLayout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -205,6 +206,7 @@ class SearchResultsFragment : Fragment() {
 
     private fun showNoInternetError(show: Boolean) {
         rootView.noInternetCard.isVisible = show
+        rootView.chipGroupLayout.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
