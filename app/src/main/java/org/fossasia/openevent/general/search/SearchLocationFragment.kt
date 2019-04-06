@@ -3,25 +3,40 @@ package org.fossasia.openevent.general.search
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_search_location.eventLocationLv
+import kotlinx.android.synthetic.main.fragment_search_location.locationSearchView
+import kotlinx.android.synthetic.main.fragment_search_location.placeSuggestionsCard
+import kotlinx.android.synthetic.main.fragment_search_location.shimmerSearchEventTypes
+import kotlinx.android.synthetic.main.fragment_search_location.titleTv
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
+import kotlinx.android.synthetic.main.fragment_search_location.view.eventLocationLv
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
+import kotlinx.android.synthetic.main.fragment_search_location.view.rvAutoPlaces
+import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.utils.Utils
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.snackbar
+import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.ext.android.getOrCreateScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
 
@@ -30,14 +45,26 @@ class SearchLocationFragment : Fragment() {
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     private val safeArgs: SearchLocationFragmentArgs by navArgs()
+    private val eventLocationList: MutableList<String> = ArrayList()
+
+    private val placeSuggestionsAdapter: PlaceSuggestionsAdapter by inject(
+        scope = getOrCreateScope(Scopes.SEARCH_LOCATION_FRAGMENT.toString())
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
         setToolbar(activity, hasUpEnabled = true, show = true)
         setHasOptionsMenu(true)
+        searchLocationViewModel.loadEventsLocation()
+
+        setupPopularLocations()
+
+        setUpLocationSearchView()
+
+        setupRecyclerPlaceSuggestions()
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
-            rootView.currentLocation.visibility = View.GONE
+            rootView.currentLocation.isVisible = false
         })
 
         rootView.currentLocation.setOnClickListener {
@@ -46,26 +73,14 @@ class SearchLocationFragment : Fragment() {
             rootView.locationProgressBar.visibility = View.VISIBLE
         }
 
-        searchLocationViewModel.autoPlaceSuggestion.observe(viewLifecycleOwner, Observer{
-            Log.i("PUI","list size ${it.size}")
-        })
-
         geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
-            searchLocationViewModel.saveSearch(location)
-            redirectToMain()
+            savePlaceAndRedirectToMain(location)
         })
 
-        rootView.locationSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                searchLocationViewModel.saveSearch(query)
-                redirectToMain()
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                searchLocationViewModel.loadSuggestions(newText)
-                return false
-            }
+        searchLocationViewModel.placeSuggestions.observe(viewLifecycleOwner, Observer {
+            placeSuggestionsAdapter.submitList(it)
+            // To handle the case : search result comes after query is empty
+            toggleSuggestionVisibility(it.isNotEmpty() && locationSearchView.query.isNotEmpty())
         })
 
         return rootView
@@ -107,10 +122,85 @@ class SearchLocationFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationViewModel.configure()
                 } else {
-                    Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
+                    rootView.snackbar(R.string.cannot_fetch_location)
                     rootView.locationProgressBar.visibility = View.GONE
                 }
             }
+        }
+    }
+
+    private fun setupRecyclerPlaceSuggestions() {
+        rootView.rvAutoPlaces.layoutManager = LinearLayoutManager(context)
+        rootView.rvAutoPlaces.adapter = placeSuggestionsAdapter
+
+        placeSuggestionsAdapter.onSuggestionClick = {
+            savePlaceAndRedirectToMain(it)
+        }
+    }
+    private fun toggleSuggestionVisibility(state: Boolean) {
+        placeSuggestionsCard.isVisible = state
+
+        titleTv.isVisible = !state
+        eventLocationLv.isVisible = !state
+    }
+
+    private fun savePlaceAndRedirectToMain(place: String) {
+        searchLocationViewModel.saveSearch(place)
+        redirectToMain()
+    }
+
+    private fun setUpLocationSearchView() {
+        val subject = PublishSubject.create<String>()
+        rootView.locationSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                handleDisplayPlaceSuggestions(query, subject)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                handleDisplayPlaceSuggestions(newText, subject)
+                return false
+            }
+        })
+        searchLocationViewModel.handlePlaceSuggesstions(subject)
+    }
+
+    private fun handleDisplayPlaceSuggestions(query: String, subject: PublishSubject<String>) {
+        if (query.isNotEmpty()) {
+            subject.onNext(query)
+        } else {
+            toggleSuggestionVisibility(false)
+        }
+    }
+
+    private fun setupPopularLocations() {
+
+        val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, eventLocationList)
+        rootView.eventLocationLv.adapter = adapter
+
+        searchLocationViewModel.showShimmer
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
+                if (shouldShowShimmer) {
+                    rootView.shimmerSearchEventTypes.startShimmer()
+                    adapter.clear()
+                } else {
+                    rootView.shimmerSearchEventTypes.stopShimmer()
+                }
+                rootView.shimmerSearchEventTypes.isVisible = shouldShowShimmer
+            })
+
+        searchLocationViewModel.eventLocations
+            .nonNull()
+            .observe(this, Observer { list ->
+                list.forEach {
+                    eventLocationList.add(it.name)
+                }
+                adapter.notifyDataSetChanged()
+            })
+
+        rootView.eventLocationLv.setOnItemClickListener { parent, view, position, id ->
+            savePlaceAndRedirectToMain(eventLocationList[position])
         }
     }
 }

@@ -59,6 +59,8 @@
 
 -dontwarn com.google.errorprone.**
 
+-dontwarn com.mapbox.**
+
 -keep class org.fossasia.openevent.general.** {
   *;
 }

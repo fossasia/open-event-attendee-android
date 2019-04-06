@@ -16,6 +16,7 @@
         android:layout_marginEnd="@dimen/layout_margin_medium"
         android:layout_marginRight="@dimen/layout_margin_medium"
         android:inputType="textCapWords"
+        app:queryBackground="@null"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,10 +53,8 @@
         android:visibility="gone"
         tools:visibility="visible"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAutoPlaces"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/placeSuggestionsCard"
         android:layout_marginStart="@dimen/layout_margin_medium"
         android:layout_marginLeft="@dimen/layout_margin_medium"
         android:layout_marginTop="@dimen/layout_margin_medium"
@@ -64,7 +63,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardCornerRadius="@dimen/card_corner_radius"
         tools:visibility="visible">
-    </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAutoPlaces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

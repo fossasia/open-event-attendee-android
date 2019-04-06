@@ -66,6 +66,8 @@ import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.LocationService
 import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
+import org.fossasia.openevent.general.search.PlaceDiffCallback
+import org.fossasia.openevent.general.search.PlaceSuggestionsAdapter
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -259,6 +261,7 @@ val databaseModule = module {
 val fragmentsModule = module {
 
     factory { EventsDiffCallback() }
+    factory { PlaceDiffCallback() }
 
     scope(Scopes.EVENTS_FRAGMENT.toString()) {
         EventsListAdapter(EventLayoutType.EVENTS, get())
@@ -274,5 +277,9 @@ val fragmentsModule = module {
 
     scope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()) {
         FavoriteEventsRecyclerAdapter(get())
+    }
+
+    scope(Scopes.SEARCH_LOCATION_FRAGMENT.toString()) {
+        PlaceSuggestionsAdapter(get())
     }
 }
