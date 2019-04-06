@@ -11,15 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_social_links.eventHostDetails
 import kotlinx.android.synthetic.main.fragment_social_links.socialLinksRecycler
-import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_social_links.view.progressBarSocial
-import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinkReload
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialNoInternet
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -29,6 +27,7 @@ class SocialLinksFragment : Fragment() {
     private lateinit var rootView: View
     private var id: Long = -1
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var showErrorSnack: ((String) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +76,7 @@ class SocialLinksFragment : Fragment() {
         socialLinksViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                socialLinksCoordinatorLayout.longSnackbar(it)
+                showErrorSnack?.invoke(it)
             })
 
         socialLinksViewModel.internetError
@@ -87,6 +86,14 @@ class SocialLinksFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    /*
+        function to set errorSnackMessage CallBack, to be invoked ,
+        to be invoked when snack error is generated
+     */
+    fun setErrorSnack(errorSnack: (String) -> Unit) {
+        showErrorSnack = errorSnack
     }
 
     private fun handleVisibility(socialLinks: List<SocialLink>) {
