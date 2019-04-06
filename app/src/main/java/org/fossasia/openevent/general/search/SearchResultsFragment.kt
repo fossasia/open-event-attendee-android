@@ -134,6 +134,17 @@ class SearchResultsFragment : Fragment() {
                 Snackbar.make(rootView.searchRootLayout, it, Snackbar.LENGTH_LONG).show()
             })
 
+        searchViewModel.chipClickable
+            .nonNull()
+            .observe(this, Observer {
+                rootView.chipGroup.children.forEach { chip ->
+                    if (chip is Chip) {
+                        chip.isClickable = it
+                        if (chip.isChecked) chip.isClickable = false
+                    }
+                }
+            })
+
         rootView.retry.setOnClickListener {
             performSearch(safeArgs)
         }
