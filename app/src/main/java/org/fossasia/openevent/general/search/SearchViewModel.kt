@@ -46,6 +46,9 @@ class SearchViewModel(
     var savedLocation: String? = null
     var savedType: String? = null
     var savedTime: String? = null
+    var days: Array<String>? = resource.getStringArray(R.array.days)
+    var eventDate: String? = null
+    var eventType: String? = null
     private val savedNextDate = getNextDate()
     private val savedNextToNextDate = getNextToNextDate()
     private val savedWeekendDate = getWeekendDate()
@@ -78,12 +81,12 @@ class SearchViewModel(
     }
 
     fun loadEvents(location: String, time: String, type: String) {
-        if (mutableEvents.value != null) {
-            mutableShowShimmerResults.value = false
-            mutableShowNoInternetError.value = false
-            mutableChipClickable.value = true
+        if (!isConnected()) {
+                mutableChipClickable.value = true
+                return
         }
-        if (!isConnected()) return
+
+        mutableShowShimmerResults.value = true
         preference.putString(SAVED_LOCATION, location)
         val query: String = when {
             TextUtils.isEmpty(location) -> """[{
@@ -292,7 +295,6 @@ class SearchViewModel(
     fun isConnected(): Boolean {
         val isConnected = network.isNetworkConnected()
         mutableShowNoInternetError.value = !isConnected
-        mutableShowShimmerResults.value = isConnected
         return isConnected
     }
 

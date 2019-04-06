@@ -30,7 +30,6 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -42,6 +41,7 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
+import org.jetbrains.anko.design.snackbar
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -51,31 +51,29 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
         scope = getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString())
     )
-    private lateinit var days: Array<String>
-    private lateinit var eventDate: String
-    private lateinit var eventType: String
-    private var eventTypesList: List<EventType>? = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()))
 
-        days = resources.getStringArray(R.array.days)
-        eventDate = safeArgs.date
-        eventType = safeArgs.type
-
-        performSearch(safeArgs)
-        searchViewModel.loadEventTypes()
-        searchViewModel.eventTypes
-            .nonNull()
-            .observe(this, Observer { list ->
-                eventTypesList = list
-            })
+        if (searchViewModel.eventDate == null) {
+            searchViewModel.eventDate = safeArgs.date
+        }
+        if (searchViewModel.eventType == null) {
+            searchViewModel.eventType = safeArgs.type
+        }
+        if (searchViewModel.events.value == null) {
+            performSearch()
+        }
+        if (searchViewModel.eventTypes.value == null) {
+            searchViewModel.loadEventTypes()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        setChips(safeArgs.date, safeArgs.type)
+        setChips()
         setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
@@ -87,8 +85,8 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         searchViewModel.events
             .nonNull()
             .observe(this, Observer { list ->
-                favoriteEventsRecyclerAdapter.submitList(list)
                 showNoSearchResults(list)
+                favoriteEventsRecyclerAdapter.submitList(list)
                 Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
             })
 
@@ -101,12 +99,16 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     rootView.shimmerSearch.stopShimmer()
                 }
                 rootView.shimmerSearch.isVisible = it
+                rootView.eventsRecycler.isVisible = !it
             })
 
         searchViewModel.showNoInternetError
             .nonNull()
             .observe(this, Observer {
-                showNoInternetError(it)
+                if (it) {
+                    rootView.searchRootLayout.snackbar(getString(R.string.no_internet_connection_message))
+                }
+                showNoInternetError(it && searchViewModel.events.value.isNullOrEmpty())
             })
 
         searchViewModel.error
@@ -127,47 +129,51 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             })
 
         rootView.retry.setOnClickListener {
-            performSearch(safeArgs)
+            rootView.noSearchResults.isVisible = false
+            performSearch()
         }
 
         return rootView
     }
 
-    private fun setChips(date: String = eventDate, type: String = eventType) {
+    private fun setChips(
+        date: String = searchViewModel.eventDate ?: safeArgs.date,
+        type: String = searchViewModel.eventType ?: safeArgs.type
+    ) {
         if (rootView.chipGroup.childCount>0) {
             rootView.chipGroup.removeAllViews()
         }
             when {
             date != getString(R.string.anytime) && type != getString(R.string.anything) -> {
-                addchips(date, true)
-                addchips(type, true)
-                addchips("Clear All", false)
+                addChips(date, true)
+                addChips(type, true)
+                addChips("Clear All", false)
             }
             date != getString(R.string.anytime) && type == getString(R.string.anything) -> {
-                addchips(date, true)
+                addChips(date, true)
                 searchViewModel.eventTypes
                     .nonNull()
                     .observe(this, Observer { list ->
                         list.forEach {
-                            addchips(it.name, false)
+                            addChips(it.name, false)
                         }
                     })
             }
             date == getString(R.string.anytime) && type != getString(R.string.anything) -> {
-                addchips(type, true)
-                days.forEach {
-                    addchips(it, false)
+                addChips(type, true)
+                searchViewModel.days?.forEach {
+                    addChips(it, false)
                 }
             }
             else -> {
-                days.forEach {
-                    addchips(it, false)
+                searchViewModel.days?.forEach {
+                    addChips(it, false)
                 }
             }
         }
     }
 
-    private fun addchips(name: String, checked: Boolean) {
+    private fun addChips(name: String, checked: Boolean) {
         val newContext = ContextThemeWrapper(context, R.style.CustomChipChoice)
         val chip = Chip(newContext)
         chip.text = name
@@ -209,11 +215,11 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
     }
 
-    private fun performSearch(args: SearchResultsFragmentArgs) {
-        val query = args.query
-        val location = args.location
-        val type = eventType
-        val date = eventDate
+    private fun performSearch() {
+        val query = safeArgs.query
+        val location = safeArgs.location
+        val type = searchViewModel.eventType ?: safeArgs.type
+        val date = searchViewModel.eventDate ?: safeArgs.date
         searchViewModel.searchEvent = query
         searchViewModel.loadEvents(location, date, type)
     }
@@ -238,33 +244,34 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         if (isChecked) {
-            if (buttonView?.text == "Clear All") {
-                eventDate = getString(R.string.anytime)
-                eventType = getString(R.string.anything)
-                rootView.noSearchResults.isVisible = false
-                favoriteEventsRecyclerAdapter.submitList(null)
-                performSearch(safeArgs)
-                setChips()
-            }
-            days.forEach {
-                if (it == buttonView?.text) {
-                    eventDate = it
-                    setChips(date = it)
+            if (searchViewModel.isConnected()) {
+                if (buttonView?.text == "Clear All") {
+                    searchViewModel.eventDate = getString(R.string.anytime)
+                    searchViewModel.eventType = getString(R.string.anything)
                     rootView.noSearchResults.isVisible = false
-                    favoriteEventsRecyclerAdapter.submitList(null)
-                    performSearch(safeArgs)
-                    return@forEach
+                    performSearch()
+                    setChips()
                 }
-            }
-            eventTypesList?.forEach {
-                if (it.name == buttonView?.text) {
-                    eventType = it.name
-                    setChips(type = it.name)
-                    rootView.noSearchResults.isVisible = false
-                    favoriteEventsRecyclerAdapter.submitList(null)
-                    performSearch(safeArgs)
-                    return@forEach
+                searchViewModel.days?.forEach {
+                    if (it == buttonView?.text) {
+                        searchViewModel.eventDate = it
+                        setChips(date = it)
+                        rootView.noSearchResults.isVisible = false
+                        performSearch()
+                        return@forEach
+                    }
                 }
+                searchViewModel.eventTypes.value?.forEach {
+                    if (it.name == buttonView?.text) {
+                        searchViewModel.eventType = it.name
+                        setChips(type = it.name)
+                        rootView.noSearchResults.isVisible = false
+                        performSearch()
+                        return@forEach
+                    }
+                }
+            } else {
+                buttonView?.isChecked = false
             }
         }
     }
