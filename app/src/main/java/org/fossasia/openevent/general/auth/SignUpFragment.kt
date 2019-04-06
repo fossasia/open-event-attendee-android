@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollVie
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -45,7 +44,6 @@ import android.text.style.ClickableSpan
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
-    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -161,9 +159,6 @@ class SignUpFragment : Fragment() {
         signUpViewModel.loggedIn
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                smartAuthViewModel.saveCredential(
-                    activity, usernameSignUp.text.toString(),
-                    passwordSignUp.text.toString())
                 redirectToMain()
             })
 

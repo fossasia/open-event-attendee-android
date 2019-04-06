@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
@@ -38,7 +36,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
-    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
     private val safeArgs: LoginFragmentArgs by navArgs()
 
@@ -54,8 +51,6 @@ class LoginFragment : Fragment() {
         setHasOptionsMenu(true)
         showSnackbar()
 
-        smartAuthViewModel.buildCredential(activity, null)
-
         if (loginViewModel.isLoggedIn())
             popBackStack()
 
@@ -64,25 +59,7 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
-        smartAuthViewModel.id
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                email.text = SpannableStringBuilder(it)
-            })
-
-        smartAuthViewModel.password
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                password.text = SpannableStringBuilder(it)
-            })
-
         loginViewModel.progress
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                progressDialog.show(it)
-            })
-
-        smartAuthViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
@@ -167,16 +144,10 @@ class LoginFragment : Fragment() {
         loginViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
                 popBackStack()
             })
 
         return rootView
-    }
-
-    override fun onStart() {
-        super.onStart()
-        smartAuthViewModel.requestCredentials(activity)
     }
 
     private fun popBackStack() {
