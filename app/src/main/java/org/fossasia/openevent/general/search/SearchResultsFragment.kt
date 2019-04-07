@@ -195,9 +195,10 @@ class SearchResultsFragment : Fragment() {
     private fun performSearch(args: SearchResultsFragmentArgs, eventDate: String = "") {
         val query = args.query
         val location = args.location
+        val type = args.type
         val date = if (eventDate.isNotEmpty()) eventDate else args.date
         searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date)
+        searchViewModel.loadEvents(location, date, type)
     }
 
     private fun showNoSearchResults(events: List<Event>) {

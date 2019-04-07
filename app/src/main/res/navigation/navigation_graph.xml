@@ -47,6 +47,11 @@
             app:argType="string"
             android:defaultValue="@null"
             app:nullable="true"/>
+        <argument
+            android:name="@string/savedType"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true"/>
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
@@ -72,6 +77,18 @@
             android:defaultValue="@null"/>
     </fragment>
     <fragment
+        android:id="@+id/searchTypeFragment"
+        android:name="org.fossasia.openevent.general.search.SearchTypeFragment"
+        android:label="SearchTypeFragment"
+        tools:layout="@layout/fragment_search_type">
+
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+    <fragment
         android:id="@+id/searchResultsFragment"
         android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
         android:label="SearchResultsFragment"
@@ -89,6 +106,11 @@
 
         <argument
             android:name="date"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="type"
             app:argType="string"
             android:defaultValue="''"/>
     </fragment>

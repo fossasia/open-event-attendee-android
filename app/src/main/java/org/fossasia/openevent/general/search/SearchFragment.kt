@@ -13,6 +13,7 @@ import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
+import kotlinx.android.synthetic.main.fragment_search.view.eventTypeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -73,6 +74,8 @@ class SearchFragment : Fragment() {
                 rootView.timeTextView.text = time
             }
         }
+        val type = safeArgs?.stringSavedType
+        rootView.eventTypeTextView.text = if (type.isNullOrBlank()) getString(R.string.anything) else type
 
         searchViewModel.loadSavedLocation()
         rootView.locationTextView.text = searchViewModel.savedLocation
@@ -84,6 +87,16 @@ class SearchFragment : Fragment() {
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
+                }
+        }
+
+        rootView.eventTypeTextView.setOnClickListener {
+            SearchLocationFragmentArgs.Builder()
+                .setFromSearchFragment(true)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    Navigation.findNavController(rootView).navigate(R.id.searchTypeFragment, bundle, getAnimSlide())
                 }
         }
 
@@ -117,6 +130,7 @@ class SearchFragment : Fragment() {
                     .setQuery(query)
                     .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
                     .setDate((safeArgs?.stringSavedDate ?: getString(R.string.anytime)).nullToEmpty())
+                    .setType((safeArgs?.stringSavedType ?: getString(R.string.anything)).nullToEmpty())
                     .build()
                     .toBundle()
                     .also { bundle ->

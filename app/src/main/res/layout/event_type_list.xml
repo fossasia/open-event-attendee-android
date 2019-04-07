@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView
+    android:id="@+id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/layout_margin_large"
+    android:paddingTop="@dimen/layout_margin_large"
+    android:paddingBottom="@dimen/layout_margin_large"
+    android:gravity="center_vertical"
+    android:text="@string/anytime"
+    android:background="?attr/selectableItemBackground"
+    android:textColor="@color/black"
+    android:textSize="@dimen/text_size_expanded_title"
+    android:paddingLeft="@dimen/layout_margin_large"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
