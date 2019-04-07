@@ -12,15 +12,15 @@ import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_favorite.noLikedText
+import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import kotlinx.android.synthetic.main.fragment_favorite.view.findText
-import kotlinx.android.synthetic.main.fragment_favorite.view.todayButton
-import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowButton
-import kotlinx.android.synthetic.main.fragment_favorite.view.weekendButton
-import kotlinx.android.synthetic.main.fragment_favorite.view.monthButton
+import kotlinx.android.synthetic.main.fragment_favorite.view.todayChip
+import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowChip
+import kotlinx.android.synthetic.main.fragment_favorite.view.weekendChip
+import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -78,17 +78,17 @@ class FavoriteFragment : Fragment() {
             findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
         }
 
-        rootView.todayButton.setOnClickListener {
-            openSearchResult(rootView.todayButton.text.toString())
+        rootView.todayChip.setOnClickListener {
+            openSearchResult(rootView.todayChip.text.toString())
         }
-        rootView.tomorrowButton.setOnClickListener {
-            openSearchResult(rootView.tomorrowButton.text.toString())
+        rootView.tomorrowChip.setOnClickListener {
+            openSearchResult(rootView.tomorrowChip.text.toString())
         }
-        rootView.weekendButton.setOnClickListener {
-            openSearchResult(rootView.weekendButton.text.toString())
+        rootView.weekendChip.setOnClickListener {
+            openSearchResult(rootView.weekendChip.text.toString())
         }
-        rootView.monthButton.setOnClickListener {
-            openSearchResult(rootView.monthButton.text.toString())
+        rootView.monthChip.setOnClickListener {
+            openSearchResult(rootView.monthChip.text.toString())
         }
 
         favoriteEventViewModel.events
@@ -164,7 +164,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun showEmptyMessage(itemCount: Int) {
-        noLikedText.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+        noLikedLL.isVisible = (itemCount == 0)
     }
 
     private fun openSearchResult(time: String) {
