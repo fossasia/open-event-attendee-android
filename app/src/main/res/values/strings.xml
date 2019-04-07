@@ -294,4 +294,10 @@
     <!--social link fragment-->
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="anything">Anything</string>
+    <string name="and_i_m_up_for">And I\'m up for</string>
+    <string name="savedType">savedType</string>
+    <string name="what_type">What Sounds good?</string>
+
 </resources>

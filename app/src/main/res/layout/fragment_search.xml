@@ -82,6 +82,39 @@
                     android:layout_gravity="center_horizontal"
                     android:background="@color/grey" />
             </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:text="@string/and_i_m_up_for"
+                android:textSize="@dimen/text_size_large" />
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/eventTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/anything"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title_large"
+                    tools:text="@string/where" />
+
+                <View
+                    android:layout_width="@dimen/layout_margin_none"
+                    android:layout_height="@dimen/event_name_divider_height"
+                    android:layout_alignEnd="@id/eventTypeTextView"
+                    android:layout_alignLeft="@+id/eventTypeTextView"
+                    android:layout_alignRight="@id/eventTypeTextView"
+                    android:layout_alignStart="@+id/eventTypeTextView"
+                    android:layout_below="@id/eventTypeTextView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/grey" />
+            </RelativeLayout>
 
         </LinearLayout>
 
