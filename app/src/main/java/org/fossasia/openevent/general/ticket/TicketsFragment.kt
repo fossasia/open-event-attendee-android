@@ -1,12 +1,11 @@
 package org.fossasia.openevent.general.ticket
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
@@ -32,9 +33,11 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -51,15 +54,10 @@ class TicketsFragment : Fragment() {
         val ticketSelectedListener = object : TicketSelectedListener {
             override fun onSelected(ticketId: Int, quantity: Int) {
                 handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
-
-        ticketsViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
 
         ticketsViewModel.event
             .nonNull()
@@ -81,9 +79,7 @@ class TicketsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Ticket Details"
+        setToolbar(activity, "Ticket Details")
         setHasOptionsMenu(true)
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -97,7 +93,7 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.progressTickets
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarTicket.isVisible = it
                 rootView.ticketTableHeader.isGone = it
                 rootView.register.isGone = it
@@ -113,15 +109,24 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.ticketTableVisibility
             .nonNull()
-            .observe(this, Observer { ticketTableVisible ->
+            .observe(viewLifecycleOwner, Observer { ticketTableVisible ->
                 rootView.ticketTableHeader.isVisible = ticketTableVisible
                 rootView.register.isVisible = ticketTableVisible
                 rootView.ticketsRecycler.isVisible = ticketTableVisible
                 rootView.ticketInfoTextView.isGone = ticketTableVisible
             })
 
-        ticketsViewModel.loadEvent(safeArgs.eventId)
-        ticketsViewModel.loadTickets(safeArgs.eventId)
+        ticketsViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        rootView.retry.setOnClickListener {
+            loadTickets()
+        }
+
+        loadTickets()
 
         return rootView
     }
@@ -187,11 +192,38 @@ class TicketsFragment : Fragment() {
     }
 
     private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(resources.getString(R.string.no_tickets_message))
                 .setTitle(resources.getString(R.string.whoops))
                 .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
+    }
+
+    private fun loadTickets() {
+        if (!isNetworkConnected(context) && ticketsViewModel.tickets.value.isNullOrEmpty())
+            showNoInternetScreen(true)
+        else {
+            showNoInternetScreen(false)
+            ticketsViewModel.loadEvent(safeArgs.eventId)
+            ticketsViewModel.loadTickets(safeArgs.eventId)
+
+            val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+            if (retainedTicketIdAndQty != null) {
+                for (idAndQty in retainedTicketIdAndQty) {
+                    handleTicketSelect(idAndQty.first, idAndQty.second)
+                }
+                ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun showNoInternetScreen(show: Boolean) {
+        rootView.noInternetCard.isVisible = show
+        rootView.ticketTableHeader.isVisible = !show
+        rootView.ticketsRecycler.isVisible = !show
+        rootView.progressBarTicket.isVisible = !show
+        rootView.register.isVisible = !show
     }
 }

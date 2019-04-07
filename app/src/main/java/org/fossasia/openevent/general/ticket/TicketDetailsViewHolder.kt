@@ -14,14 +14,14 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         }
 
         if (ticket.price != null) {
-            itemView.price.text = "${eventCurrency}${ticket.price}"
+            itemView.price.text = "$eventCurrency${ticket.price}"
         }
 
         if (ticket.price == 0.toFloat()) {
             itemView.price.text = "Free"
         }
 
-        val subTotal: Float? = ticket.price?.toFloat()?.times(qty[adapterPosition])
+        val subTotal: Float? = ticket.price?.times(qty[adapterPosition])
         itemView.qty.text = qty[adapterPosition].toString()
         itemView.subTotal.text = "$$subTotal"
     }

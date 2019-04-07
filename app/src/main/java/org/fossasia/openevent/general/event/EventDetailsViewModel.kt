@@ -8,11 +8,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
-class EventDetailsViewModel(private val eventService: EventService) : ViewModel() {
+class EventDetailsViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -27,7 +29,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
-            mutableError.value = "Error fetching event"
+            mutableError.value = resource.getString(R.string.error_fetching_event_message)
             return
         }
         compositeDisposable.add(eventService.getEvent(id)
@@ -41,7 +43,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
-                mutableError.value = "Error fetching event"
+                mutableError.value = resource.getString(R.string.error_fetching_event_message)
             })
         )
     }
@@ -61,7 +63,7 @@ class EventDetailsViewModel(private val eventService: EventService) : ViewModel(
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
-                mutableError.value = "Error"
+                mutableError.value = resource.getString(R.string.error)
             })
         )
     }

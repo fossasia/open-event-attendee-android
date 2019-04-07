@@ -6,15 +6,18 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
 class OrderDetailsViewModel(
     private val eventService: EventService,
-    private val orderService: OrderService
+    private val orderService: OrderService,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -38,7 +41,7 @@ class OrderDetailsViewModel(
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
-                message.value = "Error fetching event"
+                message.value = resource.getString(R.string.error_fetching_event_message)
             })
         )
     }
@@ -59,7 +62,7 @@ class OrderDetailsViewModel(
                 mutableAttendees.value = it
             }, {
                 Timber.e(it, "Error fetching attendee details")
-                message.value = "Error fetching attendee details"
+                message.value = resource.getString(R.string.error_fetching_attendee_details_message)
             })
         )
     }

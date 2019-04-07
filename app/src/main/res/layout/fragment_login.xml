@@ -36,14 +36,14 @@
                     android:text="@string/eventyay_logo"/>
                 <!-- Email Label -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_medium"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" >
+                    android:hint="@string/email" >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -55,13 +55,14 @@
 
                 <!-- Password Label -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_medium"
                     app:passwordToggleEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,9 +73,9 @@
                         android:drawableStart="@drawable/ic_lock_black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:theme="@style/AccentButton"
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

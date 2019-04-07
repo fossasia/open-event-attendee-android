@@ -6,10 +6,15 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
-class SocialLinksViewModel(private val socialLinksService: SocialLinksService) : ViewModel() {
+class SocialLinksViewModel(
+    private val socialLinksService: SocialLinksService,
+    private val resource: Resource
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -31,7 +36,8 @@ class SocialLinksViewModel(private val socialLinksService: SocialLinksService) :
                 mutableProgress.value = false
             }, {
                 Timber.e(it, "Error fetching Social Links")
-                mutableError.value = "Error fetching Social Links"
+                mutableError.value = resource.getString(R.string.error_fetching_social_links_message)
+                mutableProgress.value = false
             })
         )
     }

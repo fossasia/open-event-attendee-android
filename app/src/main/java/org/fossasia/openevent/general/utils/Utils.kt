@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -11,6 +12,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -75,6 +77,21 @@ object Utils {
         val inputManager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
             as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
+    }
+
+    fun setToolbar(
+        activity: Activity?,
+        title: String = "",
+        hasUpEnabled: Boolean = true,
+        show: Boolean = true
+    ) {
+        if (activity is AppCompatActivity) {
+            if (show) {
+                activity.supportActionBar?.title = title
+                activity.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+                activity.supportActionBar?.show()
+            } else activity.supportActionBar?.hide()
+        }
     }
 
     fun checkAndLoadFragment(
@@ -144,6 +161,9 @@ object Utils {
         MASTER_CARD,
         AMERICAN_EXPRESS,
         NONE,
+        DISCOVER,
+        DINERS_CLUB,
+        UNIONPAY
     }
 
     fun getCardType(s: String): cardType {
@@ -151,10 +171,16 @@ object Utils {
         val masterCardPattern = Pattern.compile("^(5[1-5]|222[1-9]|22[3-9][0-9]|2[3-6]" +
             "[0-9]{2}|27[01][0-9]|2720)[0-9]{0,15}$")
         val americanExpressPattern = Pattern.compile("^3[47][0-9]{0,15}$")
+        val discoverPattern = Pattern.compile("^6[01][0-9]{0,15}$")
+        val dinersClubPattern = Pattern.compile("^3[0-9]{0,15}$")
+        val unionPayPattern = Pattern.compile("^6[20][0-9]{0,15}$")
         return when {
             americanExpressPattern.matcher(s).matches() -> cardType.AMERICAN_EXPRESS
             masterCardPattern.matcher(s).matches() -> cardType.MASTER_CARD
             visaPattern.matcher(s).matches() -> cardType.VISA
+            discoverPattern.matcher(s).matches() -> cardType.DISCOVER
+            dinersClubPattern.matcher(s).matches() -> cardType.DINERS_CLUB
+            unionPayPattern.matcher(s).matches() -> cardType.UNIONPAY
             else -> cardType.NONE
         }
     }

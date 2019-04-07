@@ -29,6 +29,7 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/searchResultsNestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -38,6 +39,49 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <HorizontalScrollView
+                    android:id="@+id/chipGroupLayout"
+                    android:layout_width="wrap_content"
+                    android:scrollbars="none"
+                    android:padding="@dimen/padding_medium"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.ChipGroup
+                        android:layout_width="wrap_content"
+                        android:id="@+id/chipGroup"
+                        app:singleSelection="true"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/todayChip"
+                            android:text="@string/today" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tomorrowChip"
+                            android:text="@string/tomorrow" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/weekendChip"
+                            android:layout_height="wrap_content"
+                            android:text="@string/weekend" />
+
+                    <com.google.android.material.chip.Chip
+                            style="@style/CustomChipChoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/monthChip"
+                            android:text="@string/month" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerSearch"
@@ -62,17 +106,7 @@
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <TextView
-                android:id="@+id/errorTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_extreme_large"
-                android:gravity="center_horizontal"
-                android:text="@string/error_message"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-                android:visibility="gone" />
+            <include layout="@layout/content_no_internet" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/eventsRecycler"

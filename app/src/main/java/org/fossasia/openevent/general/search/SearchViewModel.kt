@@ -7,17 +7,26 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextMonth
+import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToWeekendDate
+import org.fossasia.openevent.general.utils.DateTimeUtils.getWeekendDate
 import timber.log.Timber
 
 class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val network: Network
+    private val network: Network,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -30,20 +39,27 @@ class SearchViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    private val mutableChipClickable = MutableLiveData<Boolean>()
+    val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
-    private val savedNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextDate) }
-    private val savedNextToNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextDate) }
-    private val savedWeekendDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendDate) }
-    private val savedWeekendNextDate by lazy { preference.getString(SearchTimeViewModel.tokenKeyWeekendNextDate) }
-    private val savedNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextMonth) }
-    private val savedNextToNextMonth by lazy { preference.getString(SearchTimeViewModel.tokenKeyNextToNextMonth) }
+    private val savedNextDate = getNextDate()
+    private val savedNextToNextDate = getNextToNextDate()
+    private val savedWeekendDate = getWeekendDate()
+    private val savedWeekendNextDate = getNextToWeekendDate()
+    private val savedNextMonth = getNextMonth()
+    private val savedNextToNextMonth = getNextToNextMonth()
 
     fun loadSavedLocation() {
         savedLocation = preference.getString(SAVED_LOCATION)
     }
 
     fun loadEvents(location: String, time: String) {
+        if (mutableEvents.value != null) {
+            mutableShowShimmerResults.value = false
+            mutableShowNoInternetError.value = false
+            mutableChipClickable.value = true
+        }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
         val query: String = when {
@@ -101,7 +117,7 @@ class SearchViewModel(
                 |       'val':'$savedNextToNextDate%'
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "This Weekend" -> """[{
+            time == "This weekend" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -165,16 +181,17 @@ class SearchViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
+                mutableChipClickable.value = false
             }.doFinally {
                 mutableShowShimmerResults.value = false
+                mutableChipClickable.value = true
             }.subscribe({
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
         )
-        preference.remove(SearchTimeViewModel.tokenKeyNextDate)
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
@@ -185,7 +202,7 @@ class SearchViewModel(
                 Timber.d("Successfully added %d to favorites", eventId)
             }, {
                 Timber.e(it, "Error adding %d to favorites", eventId)
-                mutableError.value = "Error adding to favorites"
+                mutableError.value = resource.getString(R.string.error_adding_favorite_message)
             })
         )
     }

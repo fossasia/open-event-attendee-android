@@ -6,13 +6,18 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import timber.log.Timber
 
-class EventsViewModel(private val eventService: EventService, private val preference: Preference) :
-    ViewModel() {
+class EventsViewModel(
+    private val eventService: EventService,
+    private val preference: Preference,
+    private val resource: Resource
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -24,6 +29,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
     val error: LiveData<String> = mutableError
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
+    private var lastSearch = ""
 
     var savedLocation: String? = null
 
@@ -31,40 +37,44 @@ class EventsViewModel(private val eventService: EventService, private val prefer
         savedLocation = preference.getString(SAVED_LOCATION)
     }
 
-    fun loadLocationEvents() {
+    fun loadLocationEvents(loadingTag: Int) {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
 
-        compositeDisposable.add(eventService.getEventsByLocation(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                mutableShowShimmerEvents.value = true
-            }
-            .doFinally {
-                mutableProgress.value = false
-                mutableShowShimmerEvents.value = false
-            }.subscribe({
-                mutableEvents.value = it
-            }, {
-                Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
-            })
-        )
+        if (loadingTag == RELOADING_EVENTS || (loadingTag == INITIAL_FETCHING_EVENTS &&
+                lastSearch != savedLocation)) {
+            compositeDisposable.add(eventService.getEventsByLocation(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    mutableShowShimmerEvents.value = true
+                }
+                .doFinally {
+                    mutableProgress.value = false
+                    mutableShowShimmerEvents.value = false
+                    lastSearch = savedLocation ?: ""
+                }.subscribe({
+                    mutableEvents.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                })
+            )
+        }
     }
 
     fun loadEvents() {
         compositeDisposable.add(eventService.getEvents()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe({
+            .doOnSubscribe {
                 mutableProgress.value = true
-            }).doFinally({
+            }.doFinally {
                 mutableProgress.value = false
-            }).subscribe({
+            }.subscribe({
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
         )
     }
@@ -77,7 +87,7 @@ class EventsViewModel(private val eventService: EventService, private val prefer
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
-                mutableError.value = "Error"
+                mutableError.value = resource.getString(R.string.error)
             })
         )
     }

@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
@@ -22,6 +22,7 @@ import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class OrderDetailsFragment : Fragment() {
 
@@ -58,9 +59,7 @@ class OrderDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_order_details, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = ""
+        setToolbar(activity)
         setHasOptionsMenu(true)
 
         rootView.orderDetailsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -70,6 +69,7 @@ class OrderDetailsFragment : Fragment() {
         linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
+        LinearSnapHelper().attachToRecyclerView(rootView.orderDetailsRecycler)
 
         val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
             override fun onClick(eventID: Long) {
@@ -87,13 +87,13 @@ class OrderDetailsFragment : Fragment() {
 
         orderDetailsViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBar.isVisible = it
             })
 
         orderDetailsViewModel.message
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 Snackbar.make(rootView.orderDetailCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
             })
 

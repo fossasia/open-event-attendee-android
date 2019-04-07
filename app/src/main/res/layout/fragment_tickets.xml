@@ -65,7 +65,7 @@
                 android:id="@+id/ticketInfoTextView"
                 android:textAlignment="center"
                 android:visibility="gone"
-                android:text="No tickets available!"
+                android:text="@string/no_tickets_available"
                 android:padding="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
@@ -121,16 +121,18 @@
                 tools:itemCount="6"
                 tools:listitem="@layout/item_ticket" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/register"
+                style="@style/AppTheme.MaterialButton.RoundedCorners"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/layout_margin_large"
-                android:padding="@dimen/padding_medium"
-                android:backgroundTint="@color/colorAccent"
-                android:text="@string/register"
-                android:textColor="@android:color/white" />
+                android:layout_marginStart="@dimen/layout_margin_medium"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:text="@string/register" />
+            <include layout="@layout/content_no_internet" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

@@ -15,8 +15,11 @@ import kotlinx.android.synthetic.main.fragment_social_links.socialLinksRecycler
 import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_social_links.view.progressBarSocial
 import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinksRecycler
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialLinkReload
+import kotlinx.android.synthetic.main.fragment_social_links.view.socialNoInternet
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
+import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -34,21 +37,6 @@ class SocialLinksFragment : Fragment() {
         if (bundle != null) {
             id = bundle.getLong(EVENT_ID, -1)
         }
-
-        socialLinksViewModel.socialLinks
-            .nonNull()
-            .observe(this, Observer {
-                socialLinksRecyclerAdapter.addAll(it)
-                handleVisibility(it)
-                socialLinksRecyclerAdapter.notifyDataSetChanged()
-                Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
-            })
-
-        socialLinksViewModel.error
-            .nonNull()
-            .observe(this, Observer {
-                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-            })
     }
 
     override fun onCreateView(
@@ -67,13 +55,32 @@ class SocialLinksFragment : Fragment() {
         rootView.socialLinksRecycler.adapter = socialLinksRecyclerAdapter
         rootView.socialLinksRecycler.isNestedScrollingEnabled = false
 
+        rootView.socialLinkReload.setOnClickListener {
+            loadSocialLink()
+        }
+
         socialLinksViewModel.progress
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarSocial.isVisible = it
             })
 
-        socialLinksViewModel.loadSocialLinks(id)
+        socialLinksViewModel.socialLinks
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                socialLinksRecyclerAdapter.addAll(it)
+                handleVisibility(it)
+                socialLinksRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched social-links of size %s", socialLinksRecyclerAdapter.itemCount)
+            })
+
+        socialLinksViewModel.error
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        loadSocialLink()
 
         return rootView
     }
@@ -81,5 +88,14 @@ class SocialLinksFragment : Fragment() {
     private fun handleVisibility(socialLinks: List<SocialLink>) {
         eventHostDetails.isGone = socialLinks.isEmpty()
         socialLinksRecycler.isGone = socialLinks.isEmpty()
+    }
+
+    private fun loadSocialLink() {
+        if (isNetworkConnected(context)) {
+            socialLinksViewModel.loadSocialLinks(id)
+            rootView.socialNoInternet.visibility = View.GONE
+        } else {
+            rootView.socialNoInternet.visibility = View.VISIBLE
+        }
     }
 }

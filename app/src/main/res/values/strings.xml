@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eventyay Attendee</string>
+    <string name="app_name" translatable="false">Eventyay Attendee</string>
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
@@ -9,6 +9,7 @@
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
+    <string name="open_external_event_url">Open External Event URL</string>
     <string name="about">About</string>
     <string name="see_more">See more</string>
     <string name="see_less">See less</string>
@@ -18,6 +19,7 @@
     <string name="whats_good">What\'s good in</string>
     <string name="where">where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
+    <string name="error_fetching_events">We\'re having difficulty fetching event. Try again later.</string>
     <string name="tickets_sold_out">Sorry, All tickets for this event have been sold out!</string>
     <string name="retry">RETRY</string>
     <string name="more_like_this">More like this</string>
@@ -41,6 +43,7 @@
     <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
     <string name="event_details">Event details</string>
+    <string name="download_ticket">Download Ticket</string>
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
@@ -51,10 +54,10 @@
     <string name="settings">Settings</string>
     <string name="login">Login</string>
     <string name="forgot_password">I forgot my password</string>
-    <string name="email_sent_message">We just send you an email with a link to reset\nyour password </string>
+    <string name="email_sent_message">We just sent you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
-    <string name="email_id">example@gmail.com</string>
+    <string name="email_id" translatable="false">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
     <string name="edit_profile">Edit Profile</string>
@@ -65,9 +68,10 @@
     <string name="last_name_optional">Last Name (Optional)</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
+    <string name="profile_photo">Profile Photo</string>
 
     <!--eventyay-->
-    <string name="eventyay_logo">eventyay</string>
+    <string name="eventyay_logo" translatable="false">eventyay</string>
 
     <!--share details-->
     <string name="starts_on">Starts On :&#160;</string>
@@ -102,18 +106,26 @@
     <string name="item">Item</string>
     <string name="subtotal">Subtotal</string>
     <string name="view">(view)</string>
-    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 and more</string>
+    <string name="hide">(hide)</string>
+    <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 or more</string>
+    <string name="no_internet_connection_message">No internet connection!</string>
+    <string name="term_and_conditions">Please accept the terms and conditions!</string>
+    <string name="invalid_email_address_message">Invalid email address!</string>
+    <string name="invalid_card_data_message">Invalid card data</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
     <string name="no_ticket_message">Not seeing your tickets? Learn more about how to find them.</string>
+    <string name="no_past_tickets">No past tickets.</string>
+    <string name="past">Past ></string>
     <string name="find_my_tickets">Find my tickets</string>
+    <string name="no_tickets_available">No tickets available!</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
     <string name="card_type">Card Type</string>
     <string name="expiration_date">Expiration Date</string>
-    <string name="cvc">CVC</string>
+    <string name="cvc" translatable="false">CVC</string>
     <string name="postal_code">Postal Code</string>
     <string name="payment_info">Payment Info</string>
     <string name="not_you">Not you? </string>
@@ -129,18 +141,18 @@
     <string name="date">Date</string>
     <string name="order_identifier">Order Identifier</string>
     <string name="event_summary">Event Summary</string>
-    <string name="organizer_preview">Mario</string>
+    <string name="organizer_preview" translatable="false">Mario</string>
     <string name="event_summary_preview">Very nice</string>
-    <string name="order_identifier_preview">3456789</string>
-    <string name="location_preview">Singapore</string>
-    <string name="date_preview">Thu,June 14</string>
-    <string name="event_preview">FOSSASIA summit</string>
-    <string name="name_preview">Nikit Bhandari</string>
+    <string name="order_identifier_preview" translatable="false">3456789</string>
+    <string name="location_preview" translatable="false">Singapore</string>
+    <string name="date_preview" translatable="false">Thu,June 14</string>
+    <string name="event_preview" translatable="false">FOSSASIA summit</string>
+    <string name="name_preview" translatable="false">Nikit Bhandari</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
     <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
-    <string name="supportEmailId">support@eventyay.com</string>
+    <string name="supportEmailId" translatable="false">support@eventyay.com</string>
 
     <!--settings xml-->
     <string name="version_settings">Version</string>
@@ -148,23 +160,25 @@
     <string name="key_about">about</string>
     <string name="key_rating">rating</string>
     <string name="rating_settings">Rate Us</string>
-    <string name="app_name_capital">Open Event Android</string>
+    <string name="app_name_capital" translatable="false">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
-    <string name="key_acknowledgements">key_acknowledgements</string>
+    <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
     <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
-    <string name="key_timezone_switch">timeZoneSwitch</string>
+    <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
     <string name="timeZone_title">Use event\'s timezone</string>
     <string name="timeZone_summary">Your timezone is used when disabled.</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>
-    <string name="key_cookie_policy">cookie_policy</string>
+    <string name="key_cookie_policy" translatable="false">cookie_policy</string>
     <string name="title_terms_of_service">Terms of Service</string>
-    <string name="key_terms_of_service">terms_of_service</string>
+    <string name="key_terms_of_service" translatable="false">terms_of_service</string>
     <string name="legal">Legal</string>
+    <string name="visit_website">Visit Website</string>
+    <string name="key_visit_website">Visit_Website</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
@@ -174,6 +188,7 @@
     <!--liked events tab -->
     <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
     <string name="find_something_to_do">Find something to do!!</string>
+    <string name="remember_like">Remember to shortlist the events you like so you don\'t miss out!</string>
     <string name="current_location">Use my current location</string>
     <string name="error__fetching_location">Cannot fetch location without permission</string>
 
@@ -186,7 +201,37 @@
     <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
     <string name="stripe">Stripe</string>
-    <string name="paypal">PayPal</string>
+    <string name="paypal" translatable="false">PayPal</string>
+    <string name="country">Country</string>
+    <string name="month_string">Month</string>
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="year_string">Year</string>
+    <string name="select_card">Select a card type</string>
+    <string name="american_express_pay_message">Pay by American Express</string>
+    <string name="mastercard_pay_message">Pay by MasterCard</string>
+    <string name="visa_pay_message">Pay by Visa</string>
+    <string name="discover_pay_message">Pay by Discover</string>
+    <string name="diners_pay_message">Pay by Diners Club</string>
+    <string name="unionpay_pay_message">Pay by UnionPay</string>
+    <string name="create_attendee_success_message">Attendees created successfully!</string>
+    <string name="create_attendee_fail_message">Unable to create Attendee!</string>
+    <string name="fill_all_fields_message">Please fill in all the fields</string>
+    <string name="free">free</string>
+    <string name="order_success_message">Order created successfully!</string>
+    <string name="order_fail_message">Unable to create Order!</string>
+    <string name="payment_not_complete_message">Payment not completed!</string>
+    <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
@@ -194,6 +239,10 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
+    <string name="confirmation_dialog">Are you sure to confirm the order?</string>
+    <string name="order_not_completed">Order not completed!</string>
+    <string name="removed_from_liked">Removed %1$s from liked events</string>
+    <string name="undo">Undo</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">Where \ndo you \ngo out?</string>
@@ -204,5 +253,45 @@
     <string name="invalid_email_message">Your email address is invalid!</string>
     <string name="invalid_confirm_password_message">Your password and confirmation password do not match!</string>
     <string name="invalid_password_message">Password too short!</string>
+    <string name="empty_email_message">Email address cannot be empty</string>
+    <string name="empty_password_message">Password cannot be empty</string>
+    <string name="empty_confirm_password_message">Please confirm your password</string>
+    <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
+    <string name="sign_up_fail_email_exist_message">Unable to SignUp: Email already exists!</string>
+    <string name="sign_up_fail_email_invalid_message">Unable to SignUp: Not a valid email address!</string>
+    <string name="sign_up_fail_message">Unable to SignUp!</string>
+    <string name="login_automatically_fail_message">Unable to Login automatically</string>
+    <string name="login_fail_message">Unable to Login. Please check your credentials</string>
+    <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
+    <string name="email_sent">Email Sent</string>
+
+    <!--about event fragment-->
+    <string name="error_fetching_event_message">Error fetching event</string>
+    <string name="error_fetching_events_message">Error fetching events</string>
+    <string name="fetch_similar_events_error_message">Error fetching similar events</string>
+    <string name="error">Error</string>
+    <string name="fetch_favorite_events_error_message">Error fetching favorite events</string>
+    <string name="list_orders_fail_message">Failed  to list Orders under a user</string>
+    <string name="list_events_fail_message">Failed  to list events under a user</string>
+    <string name="error_adding_favorite_message">Error adding to favorites</string>
+    <string name="error_fetching_social_links_message">Error fetching Social Links</string>
+    <string name="error_fetching_tickets_message">Error fetching tickets</string>
+
+    <!--edit profile fragment-->
+    <string name="select_image">Select Image</string>
+    <string name="changes_not_saved">Your changes have not been saved</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+    <string name="storage_permission_granted_message">Permission to Access External Storage Granted !</string>
+    <string name="storage_permission_denied_message">Permission to Access External Storage Denied :(</string>
+    <string name="image_upload_success_message">Image uploaded successfully!</string>
+    <string name="image_upload_error_message">Error uploading image!</string>
+    <string name="provide_name_message">Please provide first name and last name!</string>
+    <string name="user_update_error_message">Error updating user!</string>
+    <string name="user_update_success_message">User updated successfully!</string>
+    <string name="failure">Failure</string>
+
+    <!--social link fragment-->
+    <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
 
 </resources>

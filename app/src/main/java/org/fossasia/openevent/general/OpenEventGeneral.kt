@@ -2,11 +2,13 @@ package org.fossasia.openevent.general
 
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
 import org.fossasia.openevent.general.di.databaseModule
 import org.fossasia.openevent.general.di.flavorSpecificModule
+import org.fossasia.openevent.general.di.fragmentsModule
 import org.fossasia.openevent.general.di.networkModule
 import org.fossasia.openevent.general.di.viewModelModule
 import org.koin.android.ext.android.startKoin
@@ -24,9 +26,19 @@ class OpenEventGeneral : MultiDexApplication() {
         super.onCreate()
         appContext = applicationContext
         startKoin(this, listOf(
-            commonModule, apiModule, viewModelModule, networkModule, databaseModule, flavorSpecificModule
+            commonModule,
+            apiModule,
+            viewModelModule,
+            networkModule,
+            databaseModule,
+            flavorSpecificModule,
+            fragmentsModule
         ))
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(applicationContext)
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
     }
 }
