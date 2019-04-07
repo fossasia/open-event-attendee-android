@@ -46,7 +46,6 @@
     <style name="AppTheme.MaterialButton.RoundedCorners" parent="AppTheme.MaterialButton">
         <item name="cornerRadius">@dimen/round_corners_button_radius</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_large</item>
     </style>
 </resources>
