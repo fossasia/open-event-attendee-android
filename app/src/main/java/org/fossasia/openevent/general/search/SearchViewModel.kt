@@ -54,7 +54,7 @@ class SearchViewModel(
         savedLocation = preference.getString(SAVED_LOCATION)
     }
 
-    fun loadEvents(location: String, time: String) {
+    fun loadEvents(location: String, time: String, type: String) {
         if (mutableEvents.value != null) {
             mutableShowShimmerResults.value = false
             mutableShowNoInternetError.value = false
@@ -68,6 +68,17 @@ class SearchViewModel(
                 |   'op':'ilike',
                 |   'val':'%$searchEvent%'
                 |}]""".trimMargin().replace("'", "'")
+            time == "Anytime" && type == "Anything" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |    }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
@@ -77,6 +88,14 @@ class SearchViewModel(
                 |       'name':'name',
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
+                |    }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |    }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
@@ -96,6 +115,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
@@ -115,6 +142,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextToNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
@@ -134,6 +169,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedWeekendNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
@@ -153,6 +196,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextToNextMonth%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             else -> """[{
@@ -172,6 +223,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
         }

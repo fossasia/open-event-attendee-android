@@ -6,13 +6,17 @@ import io.reactivex.Single
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
+import org.fossasia.openevent.general.event.types.EventType
+import org.fossasia.openevent.general.event.types.EventTypesApi
+
 import java.util.Locale.filter
 
 class EventService(
     private val eventApi: EventApi,
     private val eventDao: EventDao,
     private val eventTopicApi: EventTopicApi,
-    private val eventTopicsDao: EventTopicsDao
+    private val eventTopicsDao: EventTopicsDao,
+    private val eventTypesApi: EventTypesApi
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -42,6 +46,10 @@ class EventService(
 
     fun getEventTopics(): Flowable<List<EventTopic>> {
         return eventTopicsDao.getAllEventTopics()
+    }
+
+    fun getEventTypes(): Single<List<EventType>> {
+        return eventTypesApi.getEventTypes()
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
