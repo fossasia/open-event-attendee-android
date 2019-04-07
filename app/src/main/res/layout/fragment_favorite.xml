@@ -25,7 +25,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:orientation="horizontal"
-                   app:layout_constraintBottom_toTopOf="@id/find_text"
+                   app:layout_constraintBottom_toTopOf="@id/findText"
                    app:layout_constraintLeft_toLeftOf="parent"
                    app:layout_constraintRight_toRightOf="parent"
                    android:padding="@dimen/view_height_25dp">
@@ -53,79 +53,47 @@
                    android:textStyle="bold"
                    android:text="@string/find_something_to_do"
                    android:textColor="@color/black"
-                   android:id="@+id/find_text"
+                   android:id="@+id/findText"
                    app:layout_constraintLeft_toLeftOf="parent"
                    android:layout_marginLeft="@dimen/view_height_25dp"
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-               <TextView
-                   android:layout_width="wrap_content"
+               <com.google.android.material.chip.ChipGroup
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:background="@drawable/round_button"
-                   android:textAllCaps="false"
-                   android:text="@string/today"
-                   android:textSize="@dimen/text_size_small"
-                   android:id="@+id/today_button"
-                   android:paddingLeft="@dimen/padding_large"
-                   android:paddingRight="@dimen/padding_large"
-                   android:paddingTop="@dimen/image_corner_radius"
-                   android:paddingBottom="@dimen/image_corner_radius"
+                   android:orientation="horizontal"
                    android:layout_marginLeft="@dimen/view_height_25dp"
-                   android:layout_marginTop="@dimen/item_image_view"
+                   android:layout_marginTop="@dimen/view_height_25dp"
+                   app:chipSpacingHorizontal="@dimen/view_height_25dp"
+                   app:chipSpacingVertical="@dimen/divider_margin_top"
                    app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintTop_toBottomOf="@id/find_text"/>
+                   app:layout_constraintTop_toBottomOf="@id/findText">
+                   <com.google.android.material.chip.Chip
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/today"
+                       android:id="@+id/todayButton"/>
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:background="@drawable/round_button"
-                   android:textAllCaps="false"
-                   android:text="@string/tomorrow"
-                   android:paddingLeft="@dimen/padding_large"
-                   android:paddingRight="@dimen/padding_large"
-                   android:paddingTop="@dimen/image_corner_radius"
-                   android:paddingBottom="@dimen/image_corner_radius"
-                   android:textSize="@dimen/text_size_small"
-                   android:id="@+id/tomorrow_button"
-                   android:layout_marginTop="@dimen/item_image_view"
-                   app:layout_constraintTop_toBottomOf="@id/find_text"
-                   app:layout_constraintRight_toLeftOf="@id/weekend_button"
-                   app:layout_constraintLeft_toRightOf="@id/today_button"/>
+                   <com.google.android.material.chip.Chip
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/tomorrow"
+                       android:id="@+id/tomorrowButton"/>
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:background="@drawable/round_button"
-                   android:textAllCaps="false"
-                   android:text="@string/weekend"
-                   android:textSize="@dimen/text_size_small"
-                   android:id="@+id/weekend_button"
-                   android:paddingLeft="@dimen/padding_large"
-                   android:paddingRight="@dimen/padding_large"
-                   android:paddingTop="@dimen/image_corner_radius"
-                   android:paddingBottom="@dimen/image_corner_radius"
-                   android:layout_marginRight="@dimen/view_height_25dp"
-                   android:layout_marginTop="@dimen/item_image_view"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toBottomOf="@id/find_text"/>
+                   <com.google.android.material.chip.Chip
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/weekend"
+                       android:id="@+id/weekendButton"/>
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:background="@drawable/round_button"
-                   android:textAllCaps="false"
-                   android:text="@string/month"
-                   android:textSize="@dimen/text_size_small"
-                   android:id="@+id/month_button"
-                   android:paddingLeft="@dimen/padding_large"
-                   android:paddingRight="@dimen/padding_large"
-                   android:paddingTop="@dimen/image_corner_radius"
-                   android:paddingBottom="@dimen/image_corner_radius"
-                   android:layout_marginTop="@dimen/divider_margin_bottom"
-                   android:layout_marginLeft="@dimen/view_height_25dp"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintTop_toBottomOf="@id/today_button"/>
+                   <com.google.android.material.chip.Chip
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/month"
+                       android:textSize="@dimen/text_size_small"
+                       android:id="@+id/monthButton"/>
+               </com.google.android.material.chip.ChipGroup>
            </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar

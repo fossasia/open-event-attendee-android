@@ -24,16 +24,15 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_gravity="center_horizontal"
                 android:padding="@dimen/padding_large"
-                android:contentDescription="Profile Photo"
+                android:contentDescription="@string/profile_photo"
                 app:srcCompat="@drawable/ic_account_circle_grey" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/profilePhotoFab"
-                    android:layout_width="@dimen/fab_width"
-                    android:layout_height="@dimen/fab_height"
-                    app:fabCustomSize="@dimen/fab_height"
-                    app:backgroundTint="@color/colorPrimary"
-                    android:layout_margin="@dimen/layout_margin_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fabSize="mini"
+                    android:layout_margin="@dimen/layout_margin_large"
                     app:layout_constraintRight_toRightOf="@id/profilePhoto"
                     app:layout_constraintBottom_toBottomOf="@id/profilePhoto"
                     app:srcCompat="@drawable/ic_edit"/>
@@ -79,12 +78,11 @@
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonUpdate"
+        <Button
+            android:id="@+id/updateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:backgroundTint="@color/colorPrimary"
             android:text="@string/update"
             android:textColor="@android:color/white" />
 

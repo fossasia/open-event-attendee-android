@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import android.content.res.ColorStateList
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,10 +24,11 @@ import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
 import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroup
-import kotlinx.android.synthetic.main.fragment_search_results.view.today_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrow_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.weekend_chip
-import kotlinx.android.synthetic.main.fragment_search_results.view.month_chip
+import kotlinx.android.synthetic.main.fragment_search_results.view.todayChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.tomorrowChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.weekendChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.monthChip
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroupLayout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
@@ -59,35 +63,35 @@ class SearchResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
-        when (safeArgs.date) {
-            getString(R.string.today) -> rootView.today_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.tomorrow) -> rootView.tomorrow_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.weekend) -> rootView.weekend_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
-            getString(R.string.month) -> rootView.month_chip.apply {
-                isChecked = true
-                chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-            }
+
+        val selectedChip = when (safeArgs.date) {
+            getString(R.string.today) -> rootView.todayChip
+            getString(R.string.tomorrow) -> rootView.tomorrowChip
+            getString(R.string.weekend) -> rootView.weekendChip
+            getString(R.string.month) -> rootView.monthChip
+            else -> null
+        }
+        selectedChip?.apply {
+            isChecked = true
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         }
 
         rootView.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
-            for (i in 0 until chipGroup.childCount) {
-                val chip = chipGroup.getChildAt(i) as Chip
-                if (chip.id != chipGroup.checkedChipId) {
-                    chip.chipBackgroundColor = resources.getColorStateList(R.color.grey)
-                    chip.isClickable = true
-                } else {
-                    chip.isClickable = false
-                    chip.chipBackgroundColor = resources.getColorStateList(R.color.colorPrimary)
-                    performSearch(safeArgs, chip.text.toString())
+
+            chipGroup.children.forEach { chip ->
+                if (chip is Chip) {
+                    if (chip.id != chipGroup.checkedChipId) {
+                        chip.chipBackgroundColor =
+                            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.grey))
+                        chip.isClickable = true
+                    } else {
+                        chip.isClickable = false
+                        chip.chipBackgroundColor =
+                            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                        rootView.noSearchResults.isVisible = false
+                        favoriteEventsRecyclerAdapter.submitList(null)
+                        performSearch(safeArgs, chip.text.toString())
+                    }
                 }
             }
         }
@@ -128,6 +132,17 @@ class SearchResultsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 Snackbar.make(rootView.searchRootLayout, it, Snackbar.LENGTH_LONG).show()
+            })
+
+        searchViewModel.chipClickable
+            .nonNull()
+            .observe(this, Observer {
+                rootView.chipGroup.children.forEach { chip ->
+                    if (chip is Chip) {
+                        chip.isClickable = it
+                        if (chip.isChecked) chip.isClickable = false
+                    }
+                }
             })
 
         rootView.retry.setOnClickListener {
@@ -186,11 +201,12 @@ class SearchResultsFragment : Fragment() {
     }
 
     private fun showNoSearchResults(events: List<Event>) {
-        rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
+        rootView.noSearchResults.isVisible = events.isEmpty()
     }
 
     private fun showNoInternetError(show: Boolean) {
-        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.isVisible = show
+        rootView.chipGroupLayout.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
