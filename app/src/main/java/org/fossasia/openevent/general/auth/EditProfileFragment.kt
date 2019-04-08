@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
@@ -40,6 +39,7 @@ import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.snackbar
 
 class EditProfileFragment : Fragment() {
 
@@ -114,7 +114,7 @@ class EditProfileFragment : Fragment() {
         editProfileViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.editProfileCoordinatorLayout.snackbar(it)
                 if (it == getString(R.string.user_update_success_message)) {
                     val thisActivity = activity
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
@@ -194,14 +194,10 @@ class EditProfileFragment : Fragment() {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, getString(R.string.storage_permission_granted_message),
-                    Snackbar.LENGTH_SHORT).show()
+                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_granted_message))
                 showFileChooser()
             } else {
-                Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, getString(R.string.storage_permission_denied_message),
-                    Snackbar.LENGTH_SHORT).show()
+                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_denied_message))
             }
         }
     }
