@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -24,6 +25,8 @@ import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
+import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
@@ -32,11 +35,13 @@ import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
+    private val smartAuthViewModel by sharedViewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
     private val safeArgs: LoginFragmentArgs by navArgs()
 
@@ -60,6 +65,33 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
+        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+
+            smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
+
+            smartAuthViewModel.id
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    email.text = SpannableStringBuilder(it)
+                })
+
+            smartAuthViewModel.password
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    password.text = SpannableStringBuilder(it)
+                })
+
+            smartAuthViewModel.apiExceptionCodePair.nonNull().observe(viewLifecycleOwner, Observer {
+                    SmartAuthUtil.handleResolvableApiException(
+                        it.first, requireActivity(), it.second)
+            })
+
+            smartAuthViewModel.progress
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    progressDialog.show(it)
+                })
+        }
         loginViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -145,6 +177,11 @@ class LoginFragment : Fragment() {
         loginViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+                    smartAuthViewModel.saveCredential(
+                        email.text.toString(), password.text.toString(),
+                        SmartAuthUtil.getCredentialsClient(requireActivity()))
+                }
                 popBackStack()
             })
 
