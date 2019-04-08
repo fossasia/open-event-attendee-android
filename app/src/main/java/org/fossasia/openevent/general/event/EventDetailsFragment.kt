@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -63,6 +64,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import java.lang.Exception
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
@@ -265,9 +267,17 @@ class EventDetailsFragment : Fragment() {
         // Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.header)
-                    .into(rootView.eventImage)
+                .load(it)
+                .placeholder(R.drawable.header)
+                .into(rootView.eventImage, object : Callback {
+                    override fun onSuccess() {
+                        rootView.eventImage.tag = "image_loading_successful"
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Timber.e(e)
+                    }
+                })
         }
 
         // Add event to Calendar
@@ -299,12 +309,8 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.event_share -> {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
-                sendIntent.type = "text/plain"
-                rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
-                true
+                EventUtils.share(eventShare, rootView.eventImage)
+                return true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -415,5 +421,10 @@ class EventDetailsFragment : Fragment() {
         for (i in 0..(menuItemSize - 1)) {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
+    }
+
+    override fun onDestroy() {
+        Picasso.get().cancelRequest(rootView.eventImage)
+        super.onDestroy()
     }
 }

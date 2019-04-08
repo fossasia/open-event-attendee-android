@@ -10,7 +10,6 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 
 /**
  * The RecyclerView adapter class for displaying lists of Events.
@@ -28,7 +27,6 @@ class EventsListAdapter(
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null
-    var onShareFabClick: ShareFabClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val eventView = when (eventLayout) {
@@ -49,7 +47,6 @@ class EventsListAdapter(
         holder.apply {
             bind(event, EVENT_DATE_FORMAT)
             eventClickListener = onEventClick
-            shareFabClickListener = onShareFabClick
             favFabClickListener = onFavFabClick
         }
     }

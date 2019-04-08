@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.event.topic
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +22,8 @@ import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -113,18 +110,6 @@ class SimilarEventsFragment : Fragment() {
             }
         }
 
-        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
-            override fun onClick(event: Event) {
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-                }.also { intent ->
-                    startActivity(Intent.createChooser(intent, "Share Event Details"))
-                }
-            }
-        }
-
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
                 similarEventsViewModel.setFavorite(event.id, !event.favorite)
@@ -135,7 +120,6 @@ class SimilarEventsFragment : Fragment() {
 
         similarEventsListAdapter.apply {
             onEventClick = eventClickListener
-            onShareFabClick = shareFabClickListener
             onFavFabClick = favFabClickListener
         }
 
