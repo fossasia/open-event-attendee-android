@@ -170,6 +170,11 @@
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
     <string name="timeZone_title">Use event\'s timezone</string>
     <string name="timeZone_summary">Your timezone is used when disabled.</string>
+    <string name="key_change_password">changePassword</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>

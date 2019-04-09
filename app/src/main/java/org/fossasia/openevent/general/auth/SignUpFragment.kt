@@ -222,7 +222,7 @@ class SignUpFragment : Fragment() {
                     textInputLayoutPassword.isEndIconVisible = true
                 }
 
-                if (passwordSignUp.text.toString().length >= 6 || passwordSignUp.text.toString().isEmpty()) {
+                if (passwordSignUp.text.toString().length >= 6) {
                     textInputLayoutPassword.error = null
                     textInputLayoutPassword.isErrorEnabled = false
                 } else {
