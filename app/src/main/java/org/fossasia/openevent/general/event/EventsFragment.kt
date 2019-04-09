@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.event
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,7 +25,6 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -165,18 +163,6 @@ class EventsFragment : Fragment(), ScrollToTop {
             }
         }
 
-        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
-            override fun onClick(event: Event) {
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-                }.also { intent ->
-                    startActivity(Intent.createChooser(intent, "Share Event Details"))
-                }
-            }
-        }
-
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
                 eventsViewModel.setFavorite(event.id, !event.favorite)
@@ -187,7 +173,6 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         eventsListAdapter.apply {
             onEventClick = eventClickListener
-            onShareFabClick = shareFabClickListener
             onFavFabClick = favFabClickListener
         }
     }
