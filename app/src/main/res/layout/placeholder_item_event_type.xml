@@ -1,0 +1,25 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin_medium"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/layout_margin_none"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@android:color/white">
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_tickets_text_height"
+            android:id="@+id/eventType"
+            android:padding="@dimen/layout_margin_large"
+            android:gravity="center_vertical"
+            android:background="@color/shimmer_background"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

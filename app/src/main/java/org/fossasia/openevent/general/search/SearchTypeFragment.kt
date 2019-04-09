@@ -6,11 +6,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesLv
+import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -31,8 +33,20 @@ class SearchTypeFragment : Fragment() {
         setToolbar(activity, "", hasUpEnabled = true)
         setHasOptionsMenu(true)
         searchTypeViewModel.loadEventTypes()
-        val adapter = ArrayAdapter(context, R.layout.event_type_list, eventTypesList)
+        val adapter = ArrayAdapter(context, R.layout.item_event_type, eventTypesList)
         rootView.eventTypesLv.adapter = adapter
+
+        searchTypeViewModel.showShimmer
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
+                if (shouldShowShimmer) {
+                    rootView.shimmerSearchEventTypes.startShimmer()
+                    adapter.clear()
+                } else {
+                    rootView.shimmerSearchEventTypes.stopShimmer()
+                }
+                rootView.shimmerSearchEventTypes.isVisible = shouldShowShimmer
+            })
 
         searchTypeViewModel.eventTypes
             .nonNull()

@@ -21,11 +21,19 @@ class SearchTypeViewModel(
     private val compositeDisposable = CompositeDisposable()
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
+    private val mutableShowShimmer = MutableLiveData<Boolean>()
+    val showShimmer: LiveData<Boolean> = mutableShowShimmer
 
     fun loadEventTypes() {
         compositeDisposable.add(eventService.getEventTypes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmer.value = true
+            }
+            .doFinally {
+                mutableShowShimmer.value = false
+            }
             .subscribe({
                 mutableEventTypes.value = it
             }, {
