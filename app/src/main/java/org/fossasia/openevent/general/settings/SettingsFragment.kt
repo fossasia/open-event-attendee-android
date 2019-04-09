@@ -5,13 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.ProfileViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,6 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
     private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -38,7 +42,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        setToolbar(activity, "Settings")
+        setToolbar(activity, getString(R.string.settings))
         setHasOptionsMenu(true)
 
         // Set Email
@@ -67,6 +71,10 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         if (preference?.key == resources.getString(R.string.key_suggestion)) {
             // Links to suggestion form
             Utils.openUrl(requireContext(), FORM_LINK)
+            return true
+        }
+        if (preference?.key == getString(R.string.key_profile)) {
+            showLogoutDialog()
             return true
         }
         if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
@@ -99,6 +107,18 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         } catch (error: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketWebLink(packageName))))
         }
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(requireContext()).setMessage(getString(R.string.message))
+            .setPositiveButton(getString(R.string.logout)) { _, _ ->
+                if (profileViewModel.isLoggedIn()) {
+                    profileViewModel.logout()
+                    findNavController().popBackStack(R.id.eventsFragment, false)
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
