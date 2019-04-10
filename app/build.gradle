@@ -169,6 +169,7 @@ dependencies {
 
     //Anko
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'

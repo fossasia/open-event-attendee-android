@@ -15,7 +15,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order.view.add
 import kotlinx.android.synthetic.main.fragment_order.view.name
@@ -29,6 +28,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 class OrderCompletedFragment : Fragment() {
 
@@ -57,7 +57,7 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.orderCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.orderCoordinatorLayout.longSnackbar(it)
             })
 
         rootView.add.setOnClickListener {

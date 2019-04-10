@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
@@ -83,6 +82,8 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
@@ -335,7 +336,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
+                rootView.longSnackbar(it)
             })
 
         attendeeViewModel.progress
@@ -433,13 +434,11 @@ class AttendeeFragment : Fragment() {
 
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
-                Snackbar.make(rootView.attendeeScrollView, getString(R.string.no_internet_connection_message),
-                    Snackbar.LENGTH_LONG).show()
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
                 return@setOnClickListener
             }
             if (!rootView.acceptCheckbox.isChecked) {
-                Snackbar.make(rootView.attendeeScrollView,
-                    getString(R.string.term_and_conditions), Snackbar.LENGTH_LONG).show()
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.term_and_conditions))
                 return@setOnClickListener
             }
 
@@ -476,13 +475,12 @@ class AttendeeFragment : Fragment() {
                         }
                     })
                 } else {
-                    Snackbar.make(rootView.attendeeScrollView,
-                        getString(R.string.invalid_email_address_message), Snackbar.LENGTH_LONG).show()
+                    rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
                 }
             }
 
             builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                Snackbar.make(rootView, R.string.order_not_completed, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(getString(R.string.order_not_completed))
             }
             builder.show()
 
@@ -499,7 +497,7 @@ class AttendeeFragment : Fragment() {
         super.onResume()
         if (!isNetworkConnected(context)) {
             rootView.progressBarAttendee.isVisible = false
-            Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+            rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
         }
     }
 
@@ -522,9 +520,7 @@ class AttendeeFragment : Fragment() {
 
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
-            Snackbar.make(
-                rootView, getString(R.string.invalid_card_data_message), Snackbar.LENGTH_SHORT
-            ).show()
+            rootView.snackbar(getString(R.string.invalid_card_data_message))
         else
             Stripe(requireContext())
                 .createToken(card, API_KEY, object : TokenCallback {
@@ -535,9 +531,7 @@ class AttendeeFragment : Fragment() {
                     }
 
                     override fun onError(error: Exception) {
-                        Snackbar.make(
-                            rootView, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
-                        ).show()
+                        rootView.snackbar(error.localizedMessage.toString())
                     }
                 })
     }

@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_social_links.eventHostDetails
 import kotlinx.android.synthetic.main.fragment_social_links.socialLinksRecycler
 import kotlinx.android.synthetic.main.fragment_social_links.socialLinksCoordinatorLayout
@@ -21,6 +20,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_ID
 import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -77,7 +77,7 @@ class SocialLinksFragment : Fragment() {
         socialLinksViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(socialLinksCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                socialLinksCoordinatorLayout.longSnackbar(it)
             })
 
         loadSocialLink()
