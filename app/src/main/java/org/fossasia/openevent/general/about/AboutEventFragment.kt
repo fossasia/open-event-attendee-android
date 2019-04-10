@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -77,15 +76,12 @@ class AboutEventFragment : Fragment() {
             .into(rootView.aboutEventImage)
 
         rootView.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
-            val thisActivity = activity
-            if (thisActivity is AppCompatActivity) {
-                if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
-                    rootView.detailsHeader.isVisible = false
-                    thisActivity.supportActionBar?.title = event.name
-                } else {
-                    rootView.detailsHeader.isVisible = true
-                    thisActivity.supportActionBar?.title = ""
-                }
+            if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
+                rootView.detailsHeader.isVisible = false
+                setToolbar(activity, event.name)
+            } else {
+                rootView.detailsHeader.isVisible = true
+                setToolbar(activity)
             }
         })
     }
