@@ -59,6 +59,7 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.LocationService
 import org.fossasia.openevent.general.search.SearchTypeViewModel
@@ -146,7 +147,8 @@ val viewModelModule = module {
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get()) }
-    viewModel { SearchTypeViewModel(get()) }
+    viewModel { SearchTimeViewModel(get()) }
+    viewModel { SearchTypeViewModel(get(), get()) }
     viewModel { TicketsViewModel(get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { SocialLinksViewModel(get(), get()) }

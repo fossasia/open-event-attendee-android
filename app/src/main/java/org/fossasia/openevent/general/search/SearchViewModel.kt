@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
@@ -43,15 +44,37 @@ class SearchViewModel(
     val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
+    var savedType: String? = null
+    var savedTime: String? = null
     private val savedNextDate = getNextDate()
     private val savedNextToNextDate = getNextToNextDate()
     private val savedWeekendDate = getWeekendDate()
     private val savedWeekendNextDate = getNextToWeekendDate()
     private val savedNextMonth = getNextMonth()
     private val savedNextToNextMonth = getNextToNextMonth()
+    private val mutableEventTypes = MutableLiveData<List<EventType>>()
+    val eventTypes: LiveData<List<EventType>> = mutableEventTypes
+
+    fun loadEventTypes() {
+        compositeDisposable.add(eventService.getEventTypes()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEventTypes.value = it
+            }, {
+                Timber.e(it, "Error fetching events types")
+            })
+        )
+    }
 
     fun loadSavedLocation() {
         savedLocation = preference.getString(SAVED_LOCATION)
+    }
+    fun loadSavedType() {
+        savedType = preference.getString(SAVED_TYPE)
+    }
+    fun loadSavedTime() {
+        savedTime = preference.getString(SAVED_TIME)
     }
 
     fun loadEvents(location: String, time: String, type: String) {

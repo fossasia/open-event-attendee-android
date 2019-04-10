@@ -42,16 +42,6 @@
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search" >
-        <argument
-            android:name="@string/saved_date"
-            app:argType="string"
-            android:defaultValue="@null"
-            app:nullable="true"/>
-        <argument
-            android:name="@string/savedType"
-            app:argType="string"
-            android:defaultValue="@null"
-            app:nullable="true"/>
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
