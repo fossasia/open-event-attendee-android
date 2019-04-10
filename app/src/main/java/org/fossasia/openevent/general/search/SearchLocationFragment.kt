@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,8 +17,10 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocationLinearLayout
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
+import kotlinx.android.synthetic.main.fragment_search_location.view.eventLocationLv
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.snackbar
@@ -29,11 +32,28 @@ class SearchLocationFragment : Fragment() {
     private val searchLocationViewModel by viewModel<SearchLocationViewModel>()
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     private val safeArgs: SearchLocationFragmentArgs by navArgs()
+    private val eventLocationList: MutableList<String> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
         setToolbar(activity, hasUpEnabled = true, show = true)
         setHasOptionsMenu(true)
+        searchLocationViewModel.loadEventsLocation()
+        val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, eventLocationList)
+        rootView.eventLocationLv.adapter = adapter
+
+        searchLocationViewModel.eventLocations
+            .nonNull()
+            .observe(this, Observer { list ->
+                list.forEach {
+                    eventLocationList.add(it.name ?: "")
+                }
+                adapter.notifyDataSetChanged()
+            })
+        rootView.eventLocationLv.setOnItemClickListener { parent, view, position, id ->
+            searchLocationViewModel.saveSearch(eventLocationList[position])
+            redirectToMain()
+        }
 
         geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
             rootView.currentLocationLinearLayout.visibility = View.GONE
