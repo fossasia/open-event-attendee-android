@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesLv
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -19,9 +18,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchTypeFragment : Fragment() {
     private val searchTypeViewModel by viewModel<SearchTypeViewModel>()
-    private val safeArgs: SearchTypeFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private val eventTypesList: MutableList<String> = ArrayList()
+    private val eventTypesList: MutableList<String> = arrayListOf("Anything")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +38,7 @@ class SearchTypeFragment : Fragment() {
             .nonNull()
             .observe(this, Observer { list ->
                 list.forEach {
-                    eventTypesList.add(it.name ?: "")
+                    eventTypesList.add(it.name)
                 }
                 adapter.notifyDataSetChanged()
             })

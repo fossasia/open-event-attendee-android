@@ -11,7 +11,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 data class EventType(
     @Id(LongIdHandler::class)
     @PrimaryKey
-    val id: Long?,
-    val name: String?,
-    val slug: String?
+    val id: Long,
+    val name: String,
+    val slug: String
 )
