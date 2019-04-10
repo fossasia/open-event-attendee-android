@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+||||||| parent of 75180e7... feat: add Event Location (#1498)
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> 75180e7... feat: add Event Location (#1498)
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,14 +25,42 @@
         android:inputType="textCapWords"
         app:queryBackground="@null"
         app:iconifiedByDefault="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/location_hint"
         app:searchIcon="@null" />
 
+<<<<<<< HEAD
     <TextView
         android:id="@+id/currentLocation"
+||||||| parent of 75180e7... feat: add Event Location (#1498)
+    <LinearLayout
+        android:id="@+id/currentLocationLinearLayout"
+=======
+    <TextView
+        android:id="@+id/titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_margin_large"
+        android:layout_marginLeft="@dimen/layout_margin_large"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:text="@string/popular_locations"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/heading_text_size" />
+
+    <ListView
+        android:id="@+id/eventLocationLv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/layout_margin_large"
+        android:layout_marginLeft="@dimen/layout_margin_large"
+        android:layout_marginEnd="@dimen/layout_margin_large"
+        android:layout_marginRight="@dimen/layout_margin_large" />
+
+
+    <LinearLayout
+        android:id="@+id/currentLocationLinearLayout"
+>>>>>>> 75180e7... feat: add Event Location (#1498)
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_margin_medium"
@@ -60,6 +95,7 @@
         android:layout_marginTop="@dimen/layout_margin_medium"
         android:layout_marginEnd="@dimen/layout_margin_medium"
         android:layout_marginRight="@dimen/layout_margin_medium"
+<<<<<<< HEAD
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
@@ -69,6 +105,20 @@
         app:cardElevation="@dimen/card_elevation"
         app:cardCornerRadius="@dimen/card_corner_radius"
         tools:visibility="visible">
+||||||| parent of 75180e7... feat: add Event Location (#1498)
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:background="@drawable/round_background"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+=======
+        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:background="@drawable/round_background"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+>>>>>>> 75180e7... feat: add Event Location (#1498)
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAutoPlaces"
@@ -76,5 +126,29 @@
             android:layout_height="wrap_content">
         </androidx.recyclerview.widget.RecyclerView>
 
+<<<<<<< HEAD
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+||||||| parent of 75180e7... feat: add Event Location (#1498)
+        <ProgressBar
+            android:id="@+id/locationProgressBar"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+=======
+        <ProgressBar
+            android:id="@+id/locationProgressBar"
+            android:layout_width="@dimen/item_image_view_medium"
+            android:layout_height="@dimen/item_image_view_medium"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
+>>>>>>> 75180e7... feat: add Event Location (#1498)
