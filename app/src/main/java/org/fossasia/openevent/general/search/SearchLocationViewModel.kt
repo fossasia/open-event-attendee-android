@@ -21,6 +21,8 @@ class SearchLocationViewModel(
     private val compositeDisposable = CompositeDisposable()
     private val mutableEventLocations = MutableLiveData<List<EventLocation>>()
     val eventLocations: LiveData<List<EventLocation>> = mutableEventLocations
+    private val mutableShowShimmer = MutableLiveData<Boolean>()
+    val showShimmer: LiveData<Boolean> = mutableShowShimmer
 
     fun saveSearch(query: String) {
         preference.putString(SAVED_LOCATION, query)
@@ -30,6 +32,12 @@ class SearchLocationViewModel(
         compositeDisposable.add(eventService.getEventLocations()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmer.value = true
+            }
+            .doFinally {
+                mutableShowShimmer.value = false
+            }
             .subscribe({
                 mutableEventLocations.value = it
             }, {
