@@ -36,7 +36,7 @@ class SearchTypeFragment : Fragment() {
         val adapter = ArrayAdapter(context, R.layout.event_type_list, eventTypesList)
         rootView.eventTypesLv.adapter = adapter
 
-        searchTypeViewModel.eventLocations
+        searchTypeViewModel.eventTypes
             .nonNull()
             .observe(this, Observer { list ->
                 list.forEach {
@@ -61,8 +61,8 @@ class SearchTypeFragment : Fragment() {
     }
 
     private fun redirectToSearch(type: String) {
-        val args = SearchFragmentArgs.Builder().setStringSavedType(type).build().toBundle()
+        searchTypeViewModel.saveType(type)
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, args, navOptions)
+        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
     }
 }

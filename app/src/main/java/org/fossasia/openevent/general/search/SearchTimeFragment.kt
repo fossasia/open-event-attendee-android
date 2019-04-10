@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val ANYTIME = "Anytime"
 const val TODAY = "Today"
@@ -29,6 +30,8 @@ const val NEXT_MONTH = "In the next month"
 
 class SearchTimeFragment : Fragment() {
     private val safeArgs: SearchTimeFragmentArgs by navArgs()
+    private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
+
     private lateinit var rootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -78,9 +81,9 @@ class SearchTimeFragment : Fragment() {
     }
 
     private fun redirectToSearch(time: String) {
-        val args = SearchFragmentArgs.Builder().setStringSavedDate(time).build().toBundle()
+        searchTimeViewModel.saveTime(time)
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, args, navOptions)
+        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
