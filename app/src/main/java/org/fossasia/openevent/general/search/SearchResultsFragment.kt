@@ -15,7 +15,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
 import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
@@ -43,6 +42,7 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 class SearchResultsFragment : Fragment() {
     private lateinit var rootView: View
@@ -128,7 +128,7 @@ class SearchResultsFragment : Fragment() {
         searchViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.searchRootLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.searchRootLayout.longSnackbar(it)
             })
 
         searchViewModel.chipClickable

@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
@@ -38,6 +37,8 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 
@@ -99,7 +100,7 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(favoriteCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                favoriteCoordinatorLayout.longSnackbar(it)
             })
 
         favoriteEventViewModel.progress
@@ -131,13 +132,11 @@ class FavoriteFragment : Fragment() {
             override fun onClick(event: Event, itemPosition: Int) {
                 favoriteEventViewModel.setFavorite(event.id, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
-
-                Snackbar.make(favoriteCoordinatorLayout,
-                    getString(R.string.removed_from_liked, event.name), Snackbar.LENGTH_SHORT)
-                    .setAction(getString(R.string.undo)) {
-                        favoriteEventViewModel.setFavorite(event.id, true)
-                        favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
-                    }.show()
+                favoriteCoordinatorLayout.snackbar(getString(R.string.removed_from_liked, event.name),
+                    getString(R.string.undo)) {
+                    favoriteEventViewModel.setFavorite(event.id, true)
+                    favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                }
             }
         }
 

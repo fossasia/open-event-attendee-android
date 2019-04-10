@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocationLinearLayout
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
@@ -21,6 +20,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.snackbar
 
 const val LOCATION_PERMISSION_REQUEST = 1000
 
@@ -101,7 +101,7 @@ class SearchLocationFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationViewModel.configure()
                 } else {
-                    Snackbar.make(rootView, R.string.cannot_fetch_location, Snackbar.LENGTH_SHORT).show()
+                    rootView.snackbar(R.string.cannot_fetch_location)
                     rootView.locationProgressBar.visibility = View.GONE
                 }
             }
