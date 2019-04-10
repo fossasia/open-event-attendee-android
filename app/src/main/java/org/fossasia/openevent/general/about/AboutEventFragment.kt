@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_about_event.view.appBar
 import kotlinx.android.synthetic.main.fragment_about_event.view.progressBarAbout
@@ -26,6 +25,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.snackbar
 
 class AboutEventFragment : Fragment() {
     private lateinit var rootView: View
@@ -48,7 +48,7 @@ class AboutEventFragment : Fragment() {
         aboutEventViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView, it, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(it)
             })
 
         aboutEventViewModel.progressAboutEvent
