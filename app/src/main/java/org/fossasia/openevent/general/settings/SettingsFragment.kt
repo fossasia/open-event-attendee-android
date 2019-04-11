@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.material.snackbar.Snackbar
+import org.jetbrains.anko.design.snackbar
 import kotlinx.android.synthetic.main.dialog_change_password.view.oldPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPassword
@@ -65,6 +65,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        settingsViewModel.snackBar
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                view?.snackbar(it)
+            })
+
         if (preference?.key == getString(R.string.key_visit_website)) {
             // Goes to website
             Utils.openUrl(requireContext(), WEBSITE_LINK)
@@ -118,22 +124,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     private fun showChangePasswordDialog() {
-
-        settingsViewModel.snackBar
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                view?.let { it1 -> Snackbar.make(it1, it, Snackbar.LENGTH_SHORT).show() }
-            })
-
         val layout = layoutInflater.inflate(R.layout.dialog_change_password, null)
 
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Change Password")
+            .setTitle(getString(R.string.title_change_password))
             .setView(layout)
-            .setPositiveButton("Change") { _, _ ->
+            .setPositiveButton(getString(R.string.change)) { _, _ ->
                 settingsViewModel.changePassword(layout.oldPassword.text.toString(), layout.newPassword.text.toString())
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
             .show()
