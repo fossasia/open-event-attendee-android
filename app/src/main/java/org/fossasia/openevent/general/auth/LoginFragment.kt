@@ -173,7 +173,7 @@ class LoginFragment : Fragment() {
 
     private fun showSnackbar() {
         safeArgs.snackbarMessage?.let { textSnackbar ->
-            rootView.snackbar(textSnackbar)
+            rootView.loginCoordinatorLayout.snackbar(textSnackbar)
         }
     }
 }
