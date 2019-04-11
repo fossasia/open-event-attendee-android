@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="days">
+        <item>@string/today</item>
+        <item>@string/tomorrow</item>
+        <item>@string/weekend</item>
+        <item>@string/month</item>
+    </array>
+</resources>
