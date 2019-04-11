@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.firstNameText
 import kotlinx.android.synthetic.main.fragment_signup.lastNameText
@@ -40,6 +39,8 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 class SignUpFragment : Fragment() {
 
@@ -117,7 +118,7 @@ class SignUpFragment : Fragment() {
         rootView.signUpButton.setOnClickListener {
 
             if (!rootView.signUpCheckbox.isChecked) {
-                Snackbar.make(rootView, R.string.accept_terms_and_conditions, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.accept_terms_and_conditions)
                 return@setOnClickListener
             } else {
                 signUp.email = usernameSignUp.text.toString()
@@ -144,15 +145,13 @@ class SignUpFragment : Fragment() {
         signUpViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.signupNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+                rootView.signupNestedScrollView.longSnackbar(it)
             })
 
         signUpViewModel.signedUp
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(
-                    rootView.signupNestedScrollView, R.string.sign_up_success, Snackbar.LENGTH_SHORT
-                ).show()
+                rootView.signupNestedScrollView.snackbar(R.string.sign_up_success)
                 signUpViewModel.login(signUp)
             })
 
@@ -249,7 +248,7 @@ class SignUpFragment : Fragment() {
 
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
-        Snackbar.make(rootView, R.string.logged_in_automatically, Snackbar.LENGTH_SHORT).show()
+        rootView.snackbar(R.string.logged_in_automatically)
     }
 
     private fun validateRequiredFieldsEmpty(): Boolean {
@@ -279,7 +278,7 @@ class SignUpFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.sign_in_canceled)
                 true
             }
             else -> super.onOptionsItemSelected(item)

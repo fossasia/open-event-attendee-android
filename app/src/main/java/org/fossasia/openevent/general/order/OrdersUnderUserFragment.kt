@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
 import kotlinx.android.synthetic.main.content_no_tickets.noTicketMessage
@@ -34,6 +33,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
@@ -113,9 +113,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             ordersUnderUserVM.message
                 .nonNull()
                 .observe(viewLifecycleOwner, Observer {
-                    Snackbar.make(
-                        rootView.ordersUnderUserCoordinatorLayout, it, Snackbar.LENGTH_LONG
-                    ).show()
+                    rootView.ordersUnderUserCoordinatorLayout.longSnackbar(it)
                 })
 
             ordersUnderUserVM.noTickets

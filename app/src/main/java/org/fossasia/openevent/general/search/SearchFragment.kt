@@ -31,12 +31,6 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
-    private val safeArgs: SearchFragmentArgs? by lazy {
-        // When search fragment is opened using BottomNav, then fragment arguments are null
-        // navArgs delegate throws an IllegalStateException when arguments are null, so we construct SearchFragmentArgs
-        // from the arguments bundle
-        arguments?.let { SearchFragmentArgs.fromBundle(it) }
-    }
     private lateinit var rootView: View
     private lateinit var searchView: SearchView
 
@@ -59,8 +53,8 @@ class SearchFragment : Fragment() {
                     Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
                 }
         }
-
-        val time = safeArgs?.stringSavedDate
+        searchViewModel.loadSavedTime()
+        val time = searchViewModel.savedTime
         if (time.isNullOrBlank()) rootView.timeTextView.text = getString(R.string.anytime)
         else {
             try {
@@ -74,7 +68,8 @@ class SearchFragment : Fragment() {
                 rootView.timeTextView.text = time
             }
         }
-        val type = safeArgs?.stringSavedType
+        searchViewModel.loadSavedType()
+        val type = searchViewModel.savedType
         rootView.eventTypeTextView.text = if (type.isNullOrBlank()) getString(R.string.anything) else type
 
         searchViewModel.loadSavedLocation()
@@ -129,8 +124,8 @@ class SearchFragment : Fragment() {
                 SearchResultsFragmentArgs.Builder()
                     .setQuery(query)
                     .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
-                    .setDate((safeArgs?.stringSavedDate ?: getString(R.string.anytime)).nullToEmpty())
-                    .setType((safeArgs?.stringSavedType ?: getString(R.string.anything)).nullToEmpty())
+                    .setDate((searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty())
+                    .setType((searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty())
                     .build()
                     .toBundle()
                     .also { bundle ->

@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
 import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
 import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivider
@@ -27,6 +26,7 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
@@ -77,7 +77,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.similarEventsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.similarEventsCoordinatorLayout.longSnackbar(it)
             })
 
         similarEventsViewModel.progress

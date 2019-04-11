@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import org.fossasia.openevent.general.auth.EditProfileFragment
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
+import org.jetbrains.anko.design.snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -67,9 +67,7 @@ class MainActivity : AppCompatActivity() {
             R.id.loginFragment,
             R.id.signUpFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(
-                    mainFragmentCoordinatorLayout, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT
-                ).show()
+                mainFragmentCoordinatorLayout.snackbar(R.string.sign_in_canceled)
             }
             R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
             R.id.welcomeFragment -> finish()
