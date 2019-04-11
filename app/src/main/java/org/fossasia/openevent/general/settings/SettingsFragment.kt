@@ -5,7 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -18,6 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.snackbar
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
@@ -38,7 +42,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        setToolbar(activity, "Settings")
+        setToolbar(activity, getString(R.string.settings))
         setHasOptionsMenu(true)
 
         // Set Email
@@ -54,6 +58,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        settingsViewModel.snackBar
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                view?.snackbar(it)
+            })
+
         if (preference?.key == resources.getString(R.string.key_visit_website)) {
             // Goes to website
             Utils.openUrl(requireContext(), WEBSITE_LINK)
@@ -69,6 +79,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             Utils.openUrl(requireContext(), FORM_LINK)
             return true
         }
+        if (preference?.key == getString(R.string.key_delete_acc)) {
+            AlertDialog.Builder(requireContext()).setMessage(getString(R.string.delete_message))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    settingsViewModel.deleteAccount()
+                }
+                .setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.cancel() }
+                .show()
+            return true
+        }
         if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
             val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
             val timeZonePreferenceKey = "useEventTimeZone"
@@ -76,6 +95,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
                 false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
             }
+            return true
         }
         if (preference?.key == getString(R.string.key_privacy)) {
             Utils.openUrl(requireContext(), PRIVACY_LINK)

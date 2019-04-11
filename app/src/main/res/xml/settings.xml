@@ -28,6 +28,11 @@
         app:iconSpaceReserved="false">
 
         <Preference
+            android:key="@string/key_delete_acc"
+            android:title="@string/title_delete"
+            app:iconSpaceReserved="false" />
+
+        <Preference
             android:key="@string/key_profile"
             android:title="@string/logged_in_account"
             app:iconSpaceReserved="false" />

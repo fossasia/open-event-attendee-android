@@ -8,6 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.DELETE
 
 interface AuthApi {
 
@@ -22,6 +23,9 @@ interface AuthApi {
 
     @POST("auth/reset-password")
     fun requestToken(@Body requestToken: RequestToken): Single<RequestTokenResponse>
+
+    @DELETE("users/{id}")
+    fun deleteUser(@Path("id") id: Long): Single<RequestDeleteTokenResponse>
 
     @PATCH("users/{id}")
     fun updateUser(@Body user: User, @Path("id") id: Long): Single<User>

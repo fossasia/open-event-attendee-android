@@ -71,4 +71,8 @@ class AuthService(
         val requestToken = RequestToken(Email(email))
         return authApi.requestToken(requestToken)
     }
+
+    fun sendDeleteAccountRequest(id: Long = authHolder.getId()): Single<RequestDeleteTokenResponse> {
+        return authApi.deleteUser(id)
+    }
 }

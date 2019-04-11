@@ -165,6 +165,8 @@
     <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
     <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
+    <string name="key_delete_acc">deleteAccount</string>
+    <string name="title_delete">Delete Account</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
@@ -184,6 +186,9 @@
     <string name="message">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
     <string name="no_tickets">No Tickets</string>
+    <string name="delete_message">Are you sure you want to delete your account?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!--liked events tab -->
     <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
