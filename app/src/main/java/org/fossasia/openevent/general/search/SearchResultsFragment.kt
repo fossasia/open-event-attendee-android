@@ -63,8 +63,13 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         bindScope(getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()))
 
         days = resources.getStringArray(R.array.days)
-        eventDate = safeArgs.date
-        eventType = safeArgs.type
+
+        /*
+            If activity created by rotation, retrieve search params from viewModel
+            else use safeArgs
+         */
+        eventDate = searchViewModel.lastSearchedEventParams.time?.let { it } ?: safeArgs.date
+        eventType = searchViewModel.lastSearchedEventParams.type?.let { it } ?: safeArgs.type
 
         searchViewModel.loadEventTypes()
         searchViewModel.eventTypes
@@ -77,7 +82,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        setChips(safeArgs.date, safeArgs.type)
+        setChips(eventDate, eventType)
         setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
@@ -157,19 +162,22 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     .nonNull()
                     .observe(this, Observer { list ->
                         list.forEach {
-                            addChips(it.name, false)
+                            val checkStatus = searchViewModel.chipsStatus[it.name] ?: false
+                            addChips(it.name, checkStatus)
                         }
                     })
             }
             date == getString(R.string.anytime) && type != getString(R.string.anything) -> {
                 addChips(type, true)
                 days.forEach {
-                    addChips(it, false)
+                    val checkStatus = searchViewModel.chipsStatus[it] ?: false
+                    addChips(it, checkStatus)
                 }
             }
             else -> {
                 days.forEach {
-                    addChips(it, false)
+                    val checkStatus = searchViewModel.chipsStatus[it] ?: false
+                    addChips(it, checkStatus)
                 }
             }
         }
@@ -225,6 +233,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val date = eventDate
         val freeEvents = safeArgs.freeEvents
         searchViewModel.searchEvent = query
+
         searchViewModel.loadEvents(location, date, type, freeEvents)
     }
 
@@ -271,6 +280,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             if (buttonView?.text == "Clear All") {
                 eventDate = getString(R.string.anytime)
                 eventType = getString(R.string.anything)
+                searchViewModel.chipsStatus.clear()
                 rootView.noSearchResults.isVisible = false
                 favoriteEventsRecyclerAdapter.submitList(null)
                 searchViewModel.clearEvents()
@@ -283,6 +293,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     eventDate = it
                     setChips(date = it)
                     rootView.noSearchResults.isVisible = false
+                    searchViewModel.chipsStatus[it] = true
                     favoriteEventsRecyclerAdapter.submitList(null)
                     searchViewModel.clearEvents()
                     if (searchViewModel.isConnected()) performSearch()
@@ -294,6 +305,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 if (it.name == buttonView?.text) {
                     eventType = it.name
                     setChips(type = it.name)
+                    searchViewModel.chipsStatus[it.name] = true
                     rootView.noSearchResults.isVisible = false
                     favoriteEventsRecyclerAdapter.submitList(null)
                     searchViewModel.clearEvents()

@@ -42,9 +42,8 @@ class SearchViewModel(
     private val mutableChipClickable = MutableLiveData<Boolean>()
     val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
-    var savedLocation: String? = null
-    var savedType: String? = null
-    var savedTime: String? = null
+    val savedSearchEventParams = SearchEventParams()
+    val lastSearchedEventParams = SearchEventParams()
     private val savedNextDate = getNextDate()
     private val savedNextToNextDate = getNextToNextDate()
     private val savedWeekendDate = getWeekendDate()
@@ -53,6 +52,7 @@ class SearchViewModel(
     private val savedNextToNextMonth = getNextToNextMonth()
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
+    val chipsStatus = HashMap<String, Boolean>()
 
     fun loadEventTypes() {
         compositeDisposable.add(eventService.getEventTypes()
@@ -67,25 +67,27 @@ class SearchViewModel(
     }
 
     fun loadSavedLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION)
+        savedSearchEventParams.location = preference.getString(SAVED_LOCATION)
     }
     fun loadSavedType() {
-        savedType = preference.getString(SAVED_TYPE)
+        savedSearchEventParams.type = preference.getString(SAVED_TYPE)
     }
     fun loadSavedTime() {
-        savedTime = preference.getString(SAVED_TIME)
+        savedSearchEventParams.time = preference.getString(SAVED_TIME)
     }
 
     fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean) {
-        if (mutableEvents.value != null) {
-            mutableChipClickable.value = true
-            return
-        }
-        if (!isConnected()) return
-        preference.putString(SAVED_LOCATION, location)
+        val thisSearchEventParams = SearchEventParams(location, type, time)
+        if (lastSearchedEventParams != thisSearchEventParams) {
+            if (mutableEvents.value != null) {
+                mutableChipClickable.value = true
+                return
+            }
+            if (!isConnected()) return
+            preference.putString(SAVED_LOCATION, location)
 
-        val freeStuffFilter = if (freeEvents)
-            """, {
+            val freeStuffFilter = if (freeEvents)
+                """, {
                |    'name':'tickets',
                |    'op':'any',
                |    'val':{
@@ -96,13 +98,13 @@ class SearchViewModel(
                |}
             """.trimIndent()
             else ""
-        val query: String = when {
-            TextUtils.isEmpty(location) -> """[{
+            val query: String = when {
+                TextUtils.isEmpty(location) -> """[{
                 |   'name':'name',
                 |   'op':'ilike',
                 |   'val':'%$searchEvent%'
                 |}]""".trimMargin().replace("'", "'")
-            time == "Anytime" && type == "Anything" -> """[{
+                time == "Anytime" && type == "Anything" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -113,7 +115,7 @@ class SearchViewModel(
                 |       'val':'%$searchEvent%'
                 |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "Anytime" -> """[{
+                time == "Anytime" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -132,7 +134,7 @@ class SearchViewModel(
                 |       }
                 |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "Today" -> """[{
+                time == "Today" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -159,7 +161,7 @@ class SearchViewModel(
                 |       }
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "Tomorrow" -> """[{
+                time == "Tomorrow" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -186,7 +188,7 @@ class SearchViewModel(
                 |       }
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "This weekend" -> """[{
+                time == "This weekend" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -213,7 +215,7 @@ class SearchViewModel(
                 |       }
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
-            time == "In the next month" -> """[{
+                time == "In the next month" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -241,7 +243,7 @@ class SearchViewModel(
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
 
-            else -> """[{
+                else -> """[{
                 |   'and':[{
                 |       'name':'location-name',
                 |       'op':'ilike',
@@ -268,23 +270,30 @@ class SearchViewModel(
                 |       }
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
+            }
+            compositeDisposable.add(eventService.getSearchEvents(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    mutableShowShimmerResults.value = true
+                    mutableChipClickable.value = false
+                }.doFinally {
+                    mutableShowShimmerResults.value = false
+                    mutableChipClickable.value = true
+
+                    lastSearchedEventParams.let {
+                        it.location = location
+                        it.time = time
+                        it.type = type
+                    }
+                }.subscribe({
+                    mutableEvents.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                })
+            )
         }
-        compositeDisposable.add(eventService.getSearchEvents(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                mutableShowShimmerResults.value = true
-                mutableChipClickable.value = false
-            }.doFinally {
-                mutableShowShimmerResults.value = false
-                mutableChipClickable.value = true
-            }.subscribe({
-                mutableEvents.value = it
-            }, {
-                Timber.e(it, "Error fetching events")
-                mutableError.value = resource.getString(R.string.error_fetching_events_message)
-            })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
@@ -310,4 +319,10 @@ class SearchViewModel(
         super.onCleared()
         compositeDisposable.clear()
     }
+
+    data class SearchEventParams(
+        var location: String? = null,
+        var type: String? = null,
+        var time: String? = null
+    )
 }

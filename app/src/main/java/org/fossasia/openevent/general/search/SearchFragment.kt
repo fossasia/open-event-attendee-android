@@ -54,7 +54,7 @@ class SearchFragment : Fragment() {
                 }
         }
         searchViewModel.loadSavedTime()
-        val time = searchViewModel.savedTime
+        val time = searchViewModel.savedSearchEventParams.time
         if (time.isNullOrBlank()) rootView.timeTextView.text = getString(R.string.anytime)
         else {
             try {
@@ -69,11 +69,11 @@ class SearchFragment : Fragment() {
             }
         }
         searchViewModel.loadSavedType()
-        val type = searchViewModel.savedType
+        val type = searchViewModel.savedSearchEventParams.type
         rootView.eventTypeTextView.text = if (type.isNullOrBlank()) getString(R.string.anything) else type
 
         searchViewModel.loadSavedLocation()
-        rootView.locationTextView.text = searchViewModel.savedLocation
+        rootView.locationTextView.text = searchViewModel.savedSearchEventParams.location
 
         rootView.locationTextView.setOnClickListener {
             SearchLocationFragmentArgs.Builder()
@@ -124,8 +124,9 @@ class SearchFragment : Fragment() {
                 SearchResultsFragmentArgs.Builder()
                     .setQuery(query)
                     .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
-                    .setDate((searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty())
-                    .setType((searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty())
+                    .setDate((searchViewModel.savedSearchEventParams.time ?: getString(R.string.anytime)).nullToEmpty())
+                    .setType((searchViewModel.savedSearchEventParams.type ?: getString(R.string.anything))
+                        .nullToEmpty())
                     .build()
                     .toBundle()
                     .also { bundle ->
