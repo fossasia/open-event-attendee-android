@@ -2,6 +2,9 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.fossasia.openevent.general.auth.change.ChangeRequestToken
+import org.fossasia.openevent.general.auth.change.ChangeRequestTokenResponse
+import org.fossasia.openevent.general.auth.change.Password
 import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
@@ -70,5 +73,10 @@ class AuthService(
     fun sendResetPasswordEmail(email: String): Single<RequestTokenResponse> {
         val requestToken = RequestToken(Email(email))
         return authApi.requestToken(requestToken)
+    }
+
+    fun changePassword(oldPassword: String, newPassword: String): Single<ChangeRequestTokenResponse> {
+        val changeRequestToken = ChangeRequestToken(Password(oldPassword, newPassword))
+        return authApi.changeRequestToken(changeRequestToken)
     }
 }

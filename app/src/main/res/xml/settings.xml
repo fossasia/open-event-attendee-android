@@ -32,6 +32,11 @@
             android:title="@string/logged_in_account"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:key="@string/key_change_password"
+            android:title="@string/title_change_password"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:key="@string/key_timezone_switch"
             android:summary="@string/timeZone_summary"
