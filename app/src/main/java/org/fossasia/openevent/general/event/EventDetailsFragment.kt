@@ -205,7 +205,7 @@ class EventDetailsFragment : Fragment() {
         }
 
         // Event Description Section
-        val description = event.description.stripHtml()
+        val description = event.description.nullToEmpty().stripHtml()
         if (!description.isNullOrEmpty()) {
             setTextField(rootView.eventDescription, description)
 
