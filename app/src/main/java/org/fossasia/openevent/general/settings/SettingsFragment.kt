@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.settings
 
-import androidx.appcompat.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
