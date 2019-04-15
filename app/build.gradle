@@ -142,7 +142,7 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
 
@@ -169,6 +169,7 @@ dependencies {
 
     //Anko
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'

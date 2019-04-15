@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
@@ -39,6 +38,7 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 /**
  * Enum class for different layout types in the adapter.
@@ -115,7 +115,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         eventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+                eventsNestedScrollView.longSnackbar(it)
             })
 
         eventsViewModel.loadLocation()

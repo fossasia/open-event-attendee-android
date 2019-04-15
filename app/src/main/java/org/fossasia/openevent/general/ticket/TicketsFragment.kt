@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
@@ -38,6 +37,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -119,7 +119,7 @@ class TicketsFragment : Fragment() {
         ticketsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(ticketsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                ticketsCoordinatorLayout.longSnackbar(it)
             })
 
         rootView.retry.setOnClickListener {
@@ -135,7 +135,7 @@ class TicketsFragment : Fragment() {
         if (ticketsViewModel.isLoggedIn())
             redirectToAttendee()
         else {
-            Snackbar.make(ticketsCoordinatorLayout, getString(R.string.log_in_first), Snackbar.LENGTH_LONG).show()
+            ticketsCoordinatorLayout.longSnackbar(getString(R.string.log_in_first))
             redirectToLogin()
         }
     }

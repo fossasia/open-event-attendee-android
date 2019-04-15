@@ -192,7 +192,7 @@ class EventDetailsFragment : Fragment() {
             rootView.organizerContainer.isVisible = false
         }
 
-        currency = Currency.getInstance(event.paymentCurrency).symbol
+        currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             AboutEventFragmentArgs.Builder()
@@ -205,7 +205,7 @@ class EventDetailsFragment : Fragment() {
         }
 
         // Event Description Section
-        val description = event.description.stripHtml()
+        val description = event.description.nullToEmpty().stripHtml()
         if (!description.isNullOrEmpty()) {
             setTextField(rootView.eventDescription, description)
 

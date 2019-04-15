@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
@@ -31,6 +30,8 @@ import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
@@ -74,7 +75,7 @@ class LoginFragment : Fragment() {
         loginViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.loginCoordinatorLayout.longSnackbar(it)
             })
 
         loginViewModel.loggedIn
@@ -152,7 +153,7 @@ class LoginFragment : Fragment() {
 
     private fun popBackStack() {
         findNavController(rootView).popBackStack()
-        Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
+        rootView.snackbar(R.string.welcome_back)
     }
 
     private fun onEmailEntered(enable: Boolean) {
@@ -163,7 +164,7 @@ class LoginFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.sign_in_canceled)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -172,7 +173,7 @@ class LoginFragment : Fragment() {
 
     private fun showSnackbar() {
         safeArgs.snackbarMessage?.let { textSnackbar ->
-            Snackbar.make(rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT).show()
+            rootView.loginCoordinatorLayout.snackbar(textSnackbar)
         }
     }
 }
