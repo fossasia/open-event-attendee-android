@@ -221,4 +221,7 @@
     <string name="download_ticket">Lưu vé sự kiện</string>
     <string name="undo">Hoàn tác</string>
     <string name="removed_from_liked">Rời %1$s khỏi sự kiện yêu thích</string>
+
+    <!--Notification Fragment-->
+    <string name="no_notification_result">Bạn không có bất kỳ thông báo nào..</string>
 </resources>

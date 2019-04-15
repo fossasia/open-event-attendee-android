@@ -55,6 +55,10 @@ import org.fossasia.openevent.general.event.types.EventTypesApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
+import org.fossasia.openevent.general.notification.Notification
+import org.fossasia.openevent.general.notification.NotificationApi
+import org.fossasia.openevent.general.notification.NotificationService
+import org.fossasia.openevent.general.notification.NotificationViewModel
 import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.ConfirmOrder
 import org.fossasia.openevent.general.order.Order
@@ -176,6 +180,10 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(SponsorApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(NotificationApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
@@ -190,6 +198,7 @@ val apiModule = module {
     factory { SessionService(get(), get()) }
     factory { Resource() }
     factory { MutableConnectionLiveData() }
+    factory { NotificationService(get()) }
 }
 
 val viewModelModule = module {
@@ -219,6 +228,7 @@ val viewModelModule = module {
     viewModel { SmartAuthViewModel() }
     viewModel { SpeakerViewModel(get(), get()) }
     viewModel { SponsorsViewModel(get(), get()) }
+    viewModel { NotificationViewModel(get(), get(), get(), get()) }
 }
 
 val networkModule = module {
@@ -260,7 +270,7 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java,
-            Sponsor::class.java, EventFAQ::class.java)
+            Sponsor::class.java, EventFAQ::class.java, Notification::class.java)
 
         Retrofit.Builder()
             .client(get())

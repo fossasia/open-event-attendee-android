@@ -332,4 +332,9 @@
     <string name="sort_by">Sort By</string>
     <string name="category">Category</string>
 
+    <!--Notification fragment-->
+    <string name="msg_failed_to_load_notification">Failed to load notifications</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="no_notification_result">You don\'t have any notification..</string>
+
 </resources>
