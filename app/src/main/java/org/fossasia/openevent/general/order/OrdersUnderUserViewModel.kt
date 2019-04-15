@@ -71,6 +71,26 @@ class OrdersUnderUserViewModel(
         )
     }
 
+    fun orderUnderUsersLocal(showExpired: Boolean){
+        compositeDisposable.add(orderService.orderUserLocal(getId())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableshowShimmerResults.value = true
+                mutableNoTickets.value = false
+            }
+            .subscribe({
+                order = it
+            },{
+                mutableshowShimmerResults.value = false
+                mutableNoTickets.value = true
+                mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
+                Timber.d(it, "Failed  to list Orders under a user ")
+            })
+        )
+
+    }
+
     private fun eventsUnderUser(eventIds: String, showExpired: Boolean) {
         compositeDisposable.add(eventService.getEventsUnderUser(eventIds)
             .subscribeOn(Schedulers.io())
@@ -88,7 +108,7 @@ class OrdersUnderUserViewModel(
                     }
                     eventIdMap[it.id] = it
                 }
-                var eventAndIdentifier = ArrayList<Pair<Event, String>>()
+                val eventAndIdentifier = ArrayList<Pair<Event, String>>()
                 var finalList: List<Pair<Event, String>>
                 order.forEach {
                     val event = eventIdMap[it.event?.id]
@@ -96,10 +116,10 @@ class OrdersUnderUserViewModel(
                         eventAndIdentifier.add(Pair(event, it.identifier))
                 }
                 finalList = eventAndIdentifier
-                when (showExpired) {
-                    false -> finalList = finalList.filter {
+                finalList = when (showExpired) {
+                    false -> finalList.filter {
                         EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
-                    true -> finalList = finalList.filter {
+                    true -> finalList.filter {
                         EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
                 }
                 if (finalList.isEmpty()) mutableNoTickets.value = true

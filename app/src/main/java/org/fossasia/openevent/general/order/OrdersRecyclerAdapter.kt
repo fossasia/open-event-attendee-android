@@ -11,7 +11,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     private val eventAndOrderIdentifier = ArrayList<Pair<Event, String>>()
     private val showExpired = false
     private var clickListener: OrderClickListener? = null
-    var attendeesNumber = listOf<Int>()
+    private var attendeesNumber = listOf<Int>()
 
     fun setListener(listener: OrderClickListener) {
         clickListener = listener
@@ -29,7 +29,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        attendeesNumber[position]?.let {
+        attendeesNumber[position].let {
             holder.bind(eventAndOrderIdentifier[position].first,
                 clickListener,
                 eventAndOrderIdentifier[position].second,
