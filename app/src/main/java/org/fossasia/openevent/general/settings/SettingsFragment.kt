@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.settings
 
-import androidx.appcompat.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +7,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayou
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.ProfileViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,6 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
     private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -49,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        setToolbar(activity, "Settings")
+        setToolbar(activity, getString(R.string.settings))
         setHasOptionsMenu(true)
 
         // Set Email
@@ -86,8 +89,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             Utils.openUrl(requireContext(), FORM_LINK)
             return true
         }
+        if (preference?.key == getString(R.string.key_profile)) {
+            showLogoutDialog()
+            return true
+        }
         if (preference?.key == getString(R.string.key_change_password)) {
-            // Links to suggestion form
             showChangePasswordDialog()
             return true
         }
@@ -98,6 +104,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
                 false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
             }
+            return true
         }
         if (preference?.key == getString(R.string.key_privacy)) {
             Utils.openUrl(requireContext(), PRIVACY_LINK)
@@ -121,6 +128,18 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         } catch (error: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketWebLink(packageName))))
         }
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(requireContext()).setMessage(getString(R.string.message))
+            .setPositiveButton(getString(R.string.logout)) { _, _ ->
+                if (profileViewModel.isLoggedIn()) {
+                    profileViewModel.logout()
+                    findNavController().popBackStack(R.id.eventsFragment, false)
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .show()
     }
 
     private fun showChangePasswordDialog() {
