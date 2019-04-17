@@ -17,8 +17,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 6
-        versionName "0.1.2"
+        versionCode 7
+        versionName "0.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -158,7 +158,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:8.6.0'
+    implementation 'com.stripe:stripe-android:8.7.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
