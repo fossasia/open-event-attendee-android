@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -20,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import java.util.Calendar
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val ANYTIME = "Anytime"
 const val TODAY = "Today"
@@ -29,16 +30,14 @@ const val NEXT_MONTH = "In the next month"
 
 class SearchTimeFragment : Fragment() {
     private val safeArgs: SearchTimeFragmentArgs by navArgs()
+    private val searchTimeViewModel by viewModel<SearchTimeViewModel>()
+
     private lateinit var rootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_time, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = ""
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity)
         setHasOptionsMenu(true)
         setCurrentChoice(safeArgs.time)
 
@@ -82,9 +81,9 @@ class SearchTimeFragment : Fragment() {
     }
 
     private fun redirectToSearch(time: String) {
-        val args = SearchFragmentArgs.Builder().setStringSavedDate(time).build().toBundle()
+        searchTimeViewModel.saveTime(time)
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, args, navOptions)
+        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

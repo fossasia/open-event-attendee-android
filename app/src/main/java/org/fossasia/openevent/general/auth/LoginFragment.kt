@@ -8,13 +8,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
@@ -27,19 +25,23 @@ import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
+import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
-    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
+    private val smartAuthViewModel by sharedViewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
     private val safeArgs: LoginFragmentArgs by navArgs()
 
@@ -51,15 +53,9 @@ class LoginFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val progressDialog = progressDialog(context)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = "Login"
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        Utils.setToolbar(activity, getString(R.string.login))
         setHasOptionsMenu(true)
         showSnackbar()
-
-        smartAuthViewModel.buildCredential(activity, null)
 
         if (loginViewModel.isLoggedIn())
             popBackStack()
@@ -69,25 +65,34 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
-        smartAuthViewModel.id
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                email.text = SpannableStringBuilder(it)
+        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+
+            smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
+
+            smartAuthViewModel.id
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    email.text = SpannableStringBuilder(it)
+                })
+
+            smartAuthViewModel.password
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    password.text = SpannableStringBuilder(it)
+                })
+
+            smartAuthViewModel.apiExceptionCodePair.nonNull().observe(viewLifecycleOwner, Observer {
+                    SmartAuthUtil.handleResolvableApiException(
+                        it.first, requireActivity(), it.second)
             })
 
-        smartAuthViewModel.password
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                password.text = SpannableStringBuilder(it)
-            })
-
+            smartAuthViewModel.progress
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    progressDialog.show(it)
+                })
+        }
         loginViewModel.progress
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                progressDialog.show(it)
-            })
-
-        smartAuthViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
@@ -102,7 +107,7 @@ class LoginFragment : Fragment() {
         loginViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.loginCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.loginCoordinatorLayout.longSnackbar(it)
             })
 
         loginViewModel.loggedIn
@@ -137,15 +142,11 @@ class LoginFragment : Fragment() {
                 if (it) {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
-                    if (thisActivity is AppCompatActivity) {
-                        thisActivity.supportActionBar?.hide()
-                        Utils.navAnimGone(thisActivity.navigationAuth, requireContext())
-                    }
+                    Utils.setToolbar(activity, show = false)
+                    Utils.navAnimGone(activity?.navigationAuth, requireContext())
                 } else {
-                    if (thisActivity is AppCompatActivity) {
-                        thisActivity.supportActionBar?.show()
-                        Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
-                    }
+                    Utils.setToolbar(activity, getString(R.string.login))
+                    Utils.navAnimVisible(activity?.navigationAuth, requireContext())
                 }
             })
 
@@ -163,10 +164,8 @@ class LoginFragment : Fragment() {
 
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
-            if (thisActivity is AppCompatActivity) {
-                thisActivity.supportActionBar?.show()
-                Utils.navAnimVisible(thisActivity.navigationAuth, requireContext())
-            }
+            Utils.setToolbar(activity, getString(R.string.login))
+            Utils.navAnimVisible(activity?.navigationAuth, requireContext())
             rootView.loginLayout.visibility = View.VISIBLE
         }
 
@@ -178,21 +177,20 @@ class LoginFragment : Fragment() {
         loginViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                smartAuthViewModel.saveCredential(activity, email.text.toString(), password.text.toString())
+                if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+                    smartAuthViewModel.saveCredential(
+                        email.text.toString(), password.text.toString(),
+                        SmartAuthUtil.getCredentialsClient(requireActivity()))
+                }
                 popBackStack()
             })
 
         return rootView
     }
 
-    override fun onStart() {
-        super.onStart()
-        smartAuthViewModel.requestCredentials(activity)
-    }
-
     private fun popBackStack() {
         findNavController(rootView).popBackStack()
-        Snackbar.make(rootView, R.string.welcome_back, Snackbar.LENGTH_SHORT).show()
+        rootView.snackbar(R.string.welcome_back)
     }
 
     private fun onEmailEntered(enable: Boolean) {
@@ -203,7 +201,7 @@ class LoginFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.sign_in_canceled)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -212,7 +210,7 @@ class LoginFragment : Fragment() {
 
     private fun showSnackbar() {
         safeArgs.snackbarMessage?.let { textSnackbar ->
-            Snackbar.make(rootView.loginCoordinatorLayout, textSnackbar, Snackbar.LENGTH_SHORT).show()
+            rootView.loginCoordinatorLayout.snackbar(textSnackbar)
         }
     }
 }

@@ -11,6 +11,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
+        <item name="chipStyle">@style/CustomChipChoice</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -35,13 +36,18 @@
         <item name="android:enabled">false</item>
     </style>
 
+    <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/grey</item>
+        <item name="checkedIcon">@drawable/ic_baseline_tick</item>
+        <item name="android:textColor">@color/text_color_chip_state_list</item>
+    </style>
+
     <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorSecondary</item>
     </style>
     <style name="AppTheme.MaterialButton.RoundedCorners" parent="AppTheme.MaterialButton">
         <item name="cornerRadius">@dimen/round_corners_button_radius</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_large</item>
     </style>
 </resources>

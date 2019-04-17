@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,7 +26,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
@@ -83,6 +81,9 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
@@ -100,8 +101,8 @@ class AttendeeFragment : Fragment() {
     private var selectedPaymentOption: Int = -1
     private lateinit var paymentCurrency: String
     private var expiryMonth: Int = -1
-    private lateinit var expiryYear: String
-    private lateinit var cardBrand: String
+    private var expiryYear: String? = null
+    private var cardBrand: String? = null
     private lateinit var API_KEY: String
     private var singleTicket = false
     private var identifierList = ArrayList<String>()
@@ -123,9 +124,7 @@ class AttendeeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_attendee, container, false)
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = getString(R.string.attendee_details)
+        setToolbar(activity, getString(R.string.attendee_details))
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()
@@ -316,11 +315,14 @@ class AttendeeFragment : Fragment() {
             })
 
         rootView.view.setOnClickListener {
-            val currentVisibility: Boolean? = attendeeViewModel.ticketDetailsVisibility.value
-            if (currentVisibility == null) {
-                attendeeViewModel.ticketDetailsVisibility.value = false
+            val currentVisibility: Boolean = attendeeViewModel.ticketDetailsVisibility.value ?: false
+            if (rootView.view.text == context?.getString(R.string.view)) {
+                rootView.ticketDetails.visibility = View.VISIBLE
+                rootView.view.text = context?.getString(R.string.hide)
             } else {
                 attendeeViewModel.ticketDetailsVisibility.value = !currentVisibility
+                rootView.ticketDetails.visibility = View.GONE
+                rootView.view.text = context?.getString(R.string.view)
             }
         }
 
@@ -334,7 +336,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView, it, Snackbar.LENGTH_LONG).show()
+                rootView.longSnackbar(it)
             })
 
         attendeeViewModel.progress
@@ -432,12 +434,11 @@ class AttendeeFragment : Fragment() {
 
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
-                Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
                 return@setOnClickListener
             }
             if (!rootView.acceptCheckbox.isChecked) {
-                Snackbar.make(rootView.attendeeScrollView,
-                    "Please accept the terms and conditions!", Snackbar.LENGTH_LONG).show()
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.term_and_conditions))
                 return@setOnClickListener
             }
 
@@ -473,11 +474,13 @@ class AttendeeFragment : Fragment() {
                             sendToken()
                         }
                     })
-                } else Snackbar.make(rootView.attendeeScrollView, "Invalid email address!", Snackbar.LENGTH_LONG).show()
+                } else {
+                    rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
+                }
             }
 
             builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                Snackbar.make(rootView, R.string.order_not_completed, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(getString(R.string.order_not_completed))
             }
             builder.show()
 
@@ -494,7 +497,7 @@ class AttendeeFragment : Fragment() {
         super.onResume()
         if (!isNetworkConnected(context)) {
             rootView.progressBarAttendee.isVisible = false
-            Snackbar.make(rootView.attendeeScrollView, "No internet connection!", Snackbar.LENGTH_LONG).show()
+            rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
         }
     }
 
@@ -508,7 +511,7 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun sendToken() {
-        val card = Card(cardNumber.text.toString(), expiryMonth, expiryYear.toInt(), cvc.text.toString())
+        val card = Card(cardNumber.text.toString(), expiryMonth, expiryYear?.toInt(), cvc.text.toString())
         card.addressCountry = rootView.countryPicker.selectedItem.toString()
         card.addressZip = postalCode.text.toString()
 
@@ -517,9 +520,7 @@ class AttendeeFragment : Fragment() {
 
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
-            Snackbar.make(
-                rootView, "Invalid card data", Snackbar.LENGTH_SHORT
-            ).show()
+            rootView.snackbar(getString(R.string.invalid_card_data_message))
         else
             Stripe(requireContext())
                 .createToken(card, API_KEY, object : TokenCallback {
@@ -530,9 +531,7 @@ class AttendeeFragment : Fragment() {
                     }
 
                     override fun onError(error: Exception) {
-                        Snackbar.make(
-                            rootView, error.localizedMessage.toString(), Snackbar.LENGTH_LONG
-                        ).show()
+                        rootView.snackbar(error.localizedMessage.toString())
                     }
                 })
     }

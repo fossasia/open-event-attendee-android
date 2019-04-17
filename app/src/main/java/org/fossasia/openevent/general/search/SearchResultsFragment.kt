@@ -1,64 +1,82 @@
 package org.fossasia.openevent.general.search
 
-import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.CompoundButton
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
-import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
-import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroup
+import kotlinx.android.synthetic.main.fragment_search_results.view.chipGroupLayout
+import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
+import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
+import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
+import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import androidx.appcompat.view.ContextThemeWrapper
 
-class SearchResultsFragment : Fragment() {
+class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
+
     private lateinit var rootView: View
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchResultsFragmentArgs by navArgs()
     private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
         scope = getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString())
     )
-
+    private lateinit var days: Array<String>
+    private lateinit var eventDate: String
+    private lateinit var eventType: String
+    private var eventTypesList: List<EventType>? = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()))
+
+        days = resources.getStringArray(R.array.days)
+        eventDate = safeArgs.date
+        eventType = safeArgs.type
+
         performSearch(safeArgs)
+        searchViewModel.loadEventTypes()
+        searchViewModel.eventTypes
+            .nonNull()
+            .observe(this, Observer { list ->
+                eventTypesList = list
+            })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = getString(R.string.search_results)
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setChips(safeArgs.date, safeArgs.type)
+        setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
@@ -94,7 +112,18 @@ class SearchResultsFragment : Fragment() {
         searchViewModel.error
             .nonNull()
             .observe(this, Observer {
-                Snackbar.make(rootView.searchRootLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.searchRootLayout.longSnackbar(it)
+            })
+
+        searchViewModel.chipClickable
+            .nonNull()
+            .observe(this, Observer {
+                rootView.chipGroup.children.forEach { chip ->
+                    if (chip is Chip) {
+                        chip.isClickable = it
+                        if (chip.isChecked) chip.isClickable = false
+                    }
+                }
             })
 
         rootView.retry.setOnClickListener {
@@ -104,31 +133,68 @@ class SearchResultsFragment : Fragment() {
         return rootView
     }
 
+    private fun setChips(date: String = eventDate, type: String = eventType) {
+        if (rootView.chipGroup.childCount>0) {
+            rootView.chipGroup.removeAllViews()
+        }
+            when {
+            date != getString(R.string.anytime) && type != getString(R.string.anything) -> {
+                addchips(date, true)
+                addchips(type, true)
+                addchips("Clear All", false)
+            }
+            date != getString(R.string.anytime) && type == getString(R.string.anything) -> {
+                addchips(date, true)
+                searchViewModel.eventTypes
+                    .nonNull()
+                    .observe(this, Observer { list ->
+                        list.forEach {
+                            addchips(it.name, false)
+                        }
+                    })
+            }
+            date == getString(R.string.anytime) && type != getString(R.string.anything) -> {
+                addchips(type, true)
+                days.forEach {
+                    addchips(it, false)
+                }
+            }
+            else -> {
+                days.forEach {
+                    addchips(it, false)
+                }
+            }
+        }
+    }
+
+    private fun addchips(name: String, checked: Boolean) {
+        val newContext = ContextThemeWrapper(context, R.style.CustomChipChoice)
+        val chip = Chip(newContext)
+        chip.text = name
+        chip.isCheckable = true
+        chip.isChecked = checked
+        chip.isClickable = true
+        if (checked) {
+            chip.chipBackgroundColor =
+                ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+        }
+        chip.setOnCheckedChangeListener(this)
+        rootView.chipGroup.addView(chip)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
-                .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+            override fun onClick(eventID: Long) {
+                EventDetailsFragmentArgs.Builder()
+                    .setEventId(eventID)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
+                    }
             }
         }
-
-        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
-            override fun onClick(event: Event) {
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-                }.also { intent ->
-                    startActivity(Intent.createChooser(intent, "Share Event Details"))
-                }
-            }
-        }
-
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
                 searchViewModel.setFavorite(event.id, !event.favorite)
@@ -139,7 +205,6 @@ class SearchResultsFragment : Fragment() {
 
         favoriteEventsRecyclerAdapter.apply {
             onEventClick = eventClickListener
-            onShareFabClick = shareFabClickListener
             onFavFabClick = favFabClickListener
         }
     }
@@ -147,17 +212,19 @@ class SearchResultsFragment : Fragment() {
     private fun performSearch(args: SearchResultsFragmentArgs) {
         val query = args.query
         val location = args.location
-        val date = args.date
+        val type = eventType
+        val date = eventDate
         searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date)
+        searchViewModel.loadEvents(location, date, type)
     }
 
     private fun showNoSearchResults(events: List<Event>) {
-        rootView.noSearchResults.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
+        rootView.noSearchResults.isVisible = events.isEmpty()
     }
 
     private fun showNoInternetError(show: Boolean) {
-        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+        rootView.noInternetCard.isVisible = show
+        rootView.chipGroupLayout.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -167,6 +234,38 @@ class SearchResultsFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        if (isChecked) {
+            if (buttonView?.text == "Clear All") {
+                eventDate = getString(R.string.anytime)
+                eventType = getString(R.string.anything)
+                rootView.noSearchResults.isVisible = false
+                favoriteEventsRecyclerAdapter.submitList(null)
+                performSearch(safeArgs)
+                setChips()
+            }
+            days.forEach {
+                if (it == buttonView?.text) {
+                    eventDate = it
+                    setChips(date = it)
+                    rootView.noSearchResults.isVisible = false
+                    favoriteEventsRecyclerAdapter.submitList(null)
+                    performSearch(safeArgs)
+                    return@forEach
+                }
+            }
+            eventTypesList?.forEach {
+                if (it.name == buttonView?.text) {
+                    eventType = it.name
+                    setChips(type = it.name)
+                    rootView.noSearchResults.isVisible = false
+                    favoriteEventsRecyclerAdapter.submitList(null)
+                    performSearch(safeArgs)
+                    return@forEach
+                }
+            }
         }
     }
 }

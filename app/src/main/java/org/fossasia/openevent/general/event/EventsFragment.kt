@@ -1,18 +1,15 @@
 package org.fossasia.openevent.general.event
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
@@ -28,7 +25,6 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -41,6 +37,8 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 
 /**
  * Enum class for different layout types in the adapter.
@@ -86,13 +84,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
-
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.show()
-            thisActivity.supportActionBar?.title = "Events"
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        }
+        setToolbar(activity, "Events", false)
 
         rootView.progressBar.isIndeterminate = true
 
@@ -123,7 +115,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         eventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(eventsNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+                eventsNestedScrollView.longSnackbar(it)
             })
 
         eventsViewModel.loadLocation()
@@ -171,18 +163,6 @@ class EventsFragment : Fragment(), ScrollToTop {
             }
         }
 
-        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
-            override fun onClick(event: Event) {
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-                }.also { intent ->
-                    startActivity(Intent.createChooser(intent, "Share Event Details"))
-                }
-            }
-        }
-
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
                 eventsViewModel.setFavorite(event.id, !event.favorite)
@@ -193,7 +173,6 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         eventsListAdapter.apply {
             onEventClick = eventClickListener
-            onShareFabClick = shareFabClickListener
             onFavFabClick = favFabClickListener
         }
     }

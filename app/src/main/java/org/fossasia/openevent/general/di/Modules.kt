@@ -37,10 +37,15 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.common.EventsDiffCallback
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
+import org.fossasia.openevent.general.event.location.EventLocation
+import org.fossasia.openevent.general.event.location.EventLocationApi
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
+import org.fossasia.openevent.general.event.types.EventType
+import org.fossasia.openevent.general.event.types.EventTypesApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
@@ -56,10 +61,12 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.search.LocationService
+import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
+import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -118,36 +125,47 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(PaypalApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(EventTypesApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(EventLocationApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
+    factory { Resource() }
 }
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get()) }
-    viewModel { EventsViewModel(get(), get()) }
-    viewModel { ProfileViewModel(get()) }
-    viewModel { SignUpViewModel(get(), get()) }
-    viewModel { EventDetailsViewModel(get()) }
-    viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { SearchLocationViewModel(get()) }
-    viewModel { TicketsViewModel(get(), get(), get()) }
-    viewModel { AboutEventViewModel(get()) }
-    viewModel { SocialLinksViewModel(get()) }
-    viewModel { FavoriteEventsViewModel(get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { SignUpViewModel(get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { SearchLocationViewModel(get(), get()) }
+    viewModel { SearchTimeViewModel(get()) }
+    viewModel { SearchTypeViewModel(get(), get()) }
+    viewModel { TicketsViewModel(get(), get(), get(), get()) }
+    viewModel { AboutEventViewModel(get(), get()) }
+    viewModel { SocialLinksViewModel(get(), get(), get()) }
+    viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { SimilarEventsViewModel(get()) }
-    viewModel { OrderCompletedViewModel(get()) }
-    viewModel { OrdersUnderUserViewModel(get(), get(), get()) }
-    viewModel { OrderDetailsViewModel(get(), get()) }
-    viewModel { EditProfileViewModel(get(), get()) }
+    viewModel { SimilarEventsViewModel(get(), get()) }
+    viewModel { OrderCompletedViewModel(get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
+    viewModel { OrderDetailsViewModel(get(), get(), get()) }
+    viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
 }
@@ -188,7 +206,7 @@ val networkModule = module {
                 SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
                 EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
                 AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-                CustomForm::class.java))
+                CustomForm::class.java, EventLocation::class.java, EventType::class.java))
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .baseUrl(baseUrl)
             .build()

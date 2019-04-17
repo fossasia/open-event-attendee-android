@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.event.topic
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
 import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
 import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivider
@@ -23,13 +21,12 @@ import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.jetbrains.anko.design.longSnackbar
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
@@ -51,6 +48,8 @@ class SimilarEventsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
         similarEventsViewModel.eventId = safeArgs.eventId
+        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
+        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
     }
 
     override fun onCreateView(
@@ -80,7 +79,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.similarEventsCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
+                rootView.similarEventsCoordinatorLayout.longSnackbar(it)
             })
 
         similarEventsViewModel.progress
@@ -88,9 +87,6 @@ class SimilarEventsFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 progressBar.isVisible = it
             })
-
-        similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
-        similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
 
         return rootView
     }
@@ -113,18 +109,6 @@ class SimilarEventsFragment : Fragment() {
             }
         }
 
-        val shareFabClickListener: ShareFabClickListener = object : ShareFabClickListener {
-            override fun onClick(event: Event) {
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-                }.also { intent ->
-                    startActivity(Intent.createChooser(intent, "Share Event Details"))
-                }
-            }
-        }
-
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
                 similarEventsViewModel.setFavorite(event.id, !event.favorite)
@@ -135,11 +119,10 @@ class SimilarEventsFragment : Fragment() {
 
         similarEventsListAdapter.apply {
             onEventClick = eventClickListener
-            onShareFabClick = shareFabClickListener
             onFavFabClick = favFabClickListener
         }
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         view.similarEventsRecycler.layoutManager = linearLayoutManager
 

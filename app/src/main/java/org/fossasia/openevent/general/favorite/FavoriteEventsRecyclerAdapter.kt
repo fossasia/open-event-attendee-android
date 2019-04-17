@@ -14,7 +14,6 @@ import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.ShareFabClickListener
 
 /**
  * The RecyclerView adapter class for displaying favorite events list
@@ -30,7 +29,6 @@ class FavoriteEventsRecyclerAdapter(
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null
-    var onShareFabClick: ShareFabClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_favorite_event, parent, false)
@@ -48,7 +46,6 @@ class FavoriteEventsRecyclerAdapter(
             bind(event, FAVORITE_EVENT_DATE_FORMAT)
             eventClickListener = onEventClick
             favFabClickListener = onFavFabClick
-            shareFabClickListener = onShareFabClick
         }
     }
 }

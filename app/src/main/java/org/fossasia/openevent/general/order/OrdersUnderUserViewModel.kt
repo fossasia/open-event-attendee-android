@@ -6,16 +6,20 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.EventUtils
 import timber.log.Timber
 
 class OrdersUnderUserViewModel(
     private val orderService: OrderService,
     private val eventService: EventService,
-    private val authHolder: AuthHolder
+    private val authHolder: AuthHolder,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -40,12 +44,12 @@ class OrdersUnderUserViewModel(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun ordersUnderUser() {
+    fun ordersUnderUser(showExpired: Boolean) {
         compositeDisposable.add(orderService.orderUser(getId())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                mutableshowShimmerResults.value = mutableAttendeesNumber.value == null
+                mutableshowShimmerResults.value = true
                 mutableNoTickets.value = false
             }.subscribe({
                 order = it
@@ -53,7 +57,7 @@ class OrdersUnderUserViewModel(
                 val query = buildQuery(it)
 
                 if (idList.size != 0)
-                    eventsUnderUser(query)
+                    eventsUnderUser(query, showExpired)
                 else {
                     mutableshowShimmerResults.value = false
                     mutableNoTickets.value = true
@@ -61,13 +65,13 @@ class OrdersUnderUserViewModel(
             }, {
                 mutableshowShimmerResults.value = false
                 mutableNoTickets.value = true
-                mutableMessage.value = "Failed  to list Orders under a user"
+                mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
                 Timber.d(it, "Failed  to list Orders under a user ")
             })
         )
     }
 
-    private fun eventsUnderUser(eventIds: String) {
+    private fun eventsUnderUser(eventIds: String, showExpired: Boolean) {
         compositeDisposable.add(eventService.getEventsUnderUser(eventIds)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -84,15 +88,24 @@ class OrdersUnderUserViewModel(
                     }
                     eventIdMap[it.id] = it
                 }
-                val eventAndIdentifier = ArrayList<Pair<Event, String>>()
+                var eventAndIdentifier = ArrayList<Pair<Event, String>>()
+                var finalList: List<Pair<Event, String>>
                 order.forEach {
                     val event = eventIdMap[it.event?.id]
                     if (event != null && it.identifier != null)
                         eventAndIdentifier.add(Pair(event, it.identifier))
                 }
-                mutableEventAndOrderIdentifier.value = eventAndIdentifier
+                finalList = eventAndIdentifier
+                when (showExpired) {
+                    false -> finalList = finalList.filter {
+                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
+                    true -> finalList = finalList.filter {
+                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
+                }
+                if (finalList.isEmpty()) mutableNoTickets.value = true
+                mutableEventAndOrderIdentifier.value = finalList
             }, {
-                mutableMessage.value = "Failed  to list events under a user"
+                mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")
             })
         )

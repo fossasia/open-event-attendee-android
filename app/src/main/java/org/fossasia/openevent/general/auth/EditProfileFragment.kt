@@ -19,10 +19,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.buttonUpdate
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
@@ -39,6 +38,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.snackbar
 
 class EditProfileFragment : Fragment() {
 
@@ -104,7 +105,7 @@ class EditProfileFragment : Fragment() {
         permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
 
-        rootView.buttonUpdate.setOnClickListener {
+        rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
             editProfileViewModel.updateProfile(encodedImage, rootView.firstName.text.toString(),
                 rootView.lastName.text.toString())
@@ -113,8 +114,8 @@ class EditProfileFragment : Fragment() {
         editProfileViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.editProfileCoordinatorLayout, it, Snackbar.LENGTH_LONG).show()
-                if (it == USER_UPDATED) {
+                rootView.editProfileCoordinatorLayout.snackbar(it)
+                if (it == getString(R.string.user_update_success_message)) {
                     val thisActivity = activity
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
                 }
@@ -166,7 +167,7 @@ class EditProfileFragment : Fragment() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -180,9 +181,7 @@ class EditProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Edit Profile"
+        setToolbar(activity, "Edit Profile")
         setHasOptionsMenu(true)
         super.onResume()
     }
@@ -195,14 +194,10 @@ class EditProfileFragment : Fragment() {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Granted !",
-                    Snackbar.LENGTH_SHORT).show()
+                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_granted_message))
                 showFileChooser()
             } else {
-                Snackbar.make(
-                    rootView.editProfileCoordinatorLayout, "Permission to Access External Storage Denied :(",
-                    Snackbar.LENGTH_SHORT).show()
+                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_denied_message))
             }
         }
     }

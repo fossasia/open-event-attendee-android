@@ -14,7 +14,7 @@
 
 
         <ImageView
-            android:id="@+id/logo"
+            android:id="@+id/eventImage"
             android:layout_width="@dimen/layout_margin_none"
             android:layout_height="@dimen/layout_margin_none"
             android:scaleType="centerCrop"
@@ -27,29 +27,30 @@
 
         <TextView
             android:id="@+id/eventName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_margin_large"
             android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:fontFamily="sans-serif-light"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/text_size_extra_large"
-            app:layout_constraintStart_toStartOf="@+id/logo"
-            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintStart_toStartOf="@+id/eventImage"
+            app:layout_constraintTop_toBottomOf="@+id/eventImage"
+            app:layout_constraintEnd_toEndOf="@+id/eventImage"
             tools:text="Open Source Meetup" />
 
         <TextView
             android:id="@+id/eventOrganiserName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_moderate"
             android:fontFamily="sans-serif-thin"
-            android:text="TextView"
             android:textColor="@color/dark_grey"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/eventName"
             app:layout_constraintTop_toBottomOf="@+id/eventName"
+            app:layout_constraintEnd_toEndOf="@+id/eventName"
             tools:text="by FOSSASIA"
             android:visibility="gone" />
 
@@ -128,7 +129,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/refundPolicyLinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
@@ -179,7 +180,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/refundPolicyLinearLayout"
             tools:visibility="visible">
 
             <View
@@ -317,10 +318,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/logoIcon"
+                    android:id="@+id/organizerLogoIcon"
                     android:layout_width="@dimen/logo_icon_width"
                     android:layout_height="@dimen/logo_icon_height"
                     android:layout_marginRight="@dimen/layout_margin_large"
+                    android:layout_marginEnd="@dimen/layout_margin_large"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/layout_margin_small"
                     android:scaleType="centerCrop"
@@ -366,6 +368,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/padding_large"
+                android:paddingRight="@dimen/padding_large"
                 android:paddingTop="@dimen/padding_small" />
         </LinearLayout>
 

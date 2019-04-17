@@ -9,11 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.firstNameText
 import kotlinx.android.synthetic.main.fragment_signup.lastNameText
@@ -32,7 +30,6 @@ import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollVie
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.search.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -42,11 +39,12 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
-    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -57,11 +55,7 @@ class SignUpFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
 
         val progressDialog = Utils.progressDialog(context)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = getString(R.string.sign_up)
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        Utils.setToolbar(activity, getString(R.string.sign_up))
         setHasOptionsMenu(true)
 
         val paragraph = SpannableStringBuilder()
@@ -124,7 +118,7 @@ class SignUpFragment : Fragment() {
         rootView.signUpButton.setOnClickListener {
 
             if (!rootView.signUpCheckbox.isChecked) {
-                Snackbar.make(rootView, R.string.accept_terms_and_conditions, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.accept_terms_and_conditions)
                 return@setOnClickListener
             } else {
                 signUp.email = usernameSignUp.text.toString()
@@ -151,24 +145,19 @@ class SignUpFragment : Fragment() {
         signUpViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(rootView.signupNestedScrollView, it, Snackbar.LENGTH_LONG).show()
+                rootView.signupNestedScrollView.longSnackbar(it)
             })
 
         signUpViewModel.signedUp
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Snackbar.make(
-                    rootView.signupNestedScrollView, R.string.sign_up_success, Snackbar.LENGTH_SHORT
-                ).show()
+                rootView.signupNestedScrollView.snackbar(R.string.sign_up_success)
                 signUpViewModel.login(signUp)
             })
 
         signUpViewModel.loggedIn
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                smartAuthViewModel.saveCredential(
-                    activity, usernameSignUp.text.toString(),
-                    passwordSignUp.text.toString())
                 redirectToMain()
             })
 
@@ -232,7 +221,7 @@ class SignUpFragment : Fragment() {
                     textInputLayoutPassword.isEndIconVisible = true
                 }
 
-                if (passwordSignUp.text.toString().length >= 6 || passwordSignUp.text.toString().isEmpty()) {
+                if (passwordSignUp.text.toString().length >= 6) {
                     textInputLayoutPassword.error = null
                     textInputLayoutPassword.isErrorEnabled = false
                 } else {
@@ -259,7 +248,7 @@ class SignUpFragment : Fragment() {
 
     private fun redirectToMain() {
         findNavController(rootView).popBackStack()
-        Snackbar.make(rootView, R.string.logged_in_automatically, Snackbar.LENGTH_SHORT).show()
+        rootView.snackbar(R.string.logged_in_automatically)
     }
 
     private fun validateRequiredFieldsEmpty(): Boolean {
@@ -289,7 +278,7 @@ class SignUpFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                Snackbar.make(rootView, R.string.sign_in_canceled, Snackbar.LENGTH_SHORT).show()
+                rootView.snackbar(R.string.sign_in_canceled)
                 true
             }
             else -> super.onOptionsItemSelected(item)

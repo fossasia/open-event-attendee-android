@@ -132,6 +132,7 @@
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:text="@string/register" />
+            <include layout="@layout/content_no_internet" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

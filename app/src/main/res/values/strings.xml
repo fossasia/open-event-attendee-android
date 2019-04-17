@@ -9,6 +9,7 @@
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
+    <string name="open_external_event_url">Open External Event URL</string>
     <string name="about">About</string>
     <string name="see_more">See more</string>
     <string name="see_less">See less</string>
@@ -67,11 +68,7 @@
     <string name="last_name_optional">Last Name (Optional)</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
-
-    <!--edit profile dialog-->
-    <string name="changes_not_saved" translatable="false">Your changes have not been saved</string>
-    <string name="discard" translatable="false">Discard</string>
-    <string name="save" translatable="false">Save</string>
+    <string name="profile_photo">Profile Photo</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
@@ -111,10 +108,16 @@
     <string name="view">(view)</string>
     <string name="hide">(hide)</string>
     <string name="no_tickets_message">Invalid Quantity. Please enter a quantity of 1 or more</string>
+    <string name="no_internet_connection_message">No internet connection!</string>
+    <string name="term_and_conditions">Please accept the terms and conditions!</string>
+    <string name="invalid_email_address_message">Invalid email address!</string>
+    <string name="invalid_card_data_message">Invalid card data</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
     <string name="no_ticket_message">Not seeing your tickets? Learn more about how to find them.</string>
+    <string name="no_past_tickets">No past tickets.</string>
+    <string name="past">Past ></string>
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
 
@@ -122,7 +125,7 @@
     <string name="card_number">Card Number</string>
     <string name="card_type">Card Type</string>
     <string name="expiration_date">Expiration Date</string>
-    <string name="cvc">CVC</string>
+    <string name="cvc" translatable="false">CVC</string>
     <string name="postal_code">Postal Code</string>
     <string name="payment_info">Payment Info</string>
     <string name="not_you">Not you? </string>
@@ -138,11 +141,11 @@
     <string name="date">Date</string>
     <string name="order_identifier">Order Identifier</string>
     <string name="event_summary">Event Summary</string>
-    <string name="organizer_preview">Mario</string>
+    <string name="organizer_preview" translatable="false">Mario</string>
     <string name="event_summary_preview">Very nice</string>
     <string name="order_identifier_preview" translatable="false">3456789</string>
     <string name="location_preview" translatable="false">Singapore</string>
-    <string name="date_preview">Thu,June 14</string>
+    <string name="date_preview" translatable="false">Thu,June 14</string>
     <string name="event_preview" translatable="false">FOSSASIA summit</string>
     <string name="name_preview" translatable="false">Nikit Bhandari</string>
 
@@ -167,6 +170,12 @@
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
     <string name="timeZone_title">Use event\'s timezone</string>
     <string name="timeZone_summary">Your timezone is used when disabled.</string>
+    <string name="key_change_password">changePassword</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="change">Change</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
     <string name="cookie_policy">Cookie Policy</string>
@@ -200,6 +209,35 @@
     <string name="stripe">Stripe</string>
     <string name="paypal" translatable="false">PayPal</string>
     <string name="country">Country</string>
+    <string name="month_string">Month</string>
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="year_string">Year</string>
+    <string name="select_card">Select a card type</string>
+    <string name="american_express_pay_message">Pay by American Express</string>
+    <string name="mastercard_pay_message">Pay by MasterCard</string>
+    <string name="visa_pay_message">Pay by Visa</string>
+    <string name="discover_pay_message">Pay by Discover</string>
+    <string name="diners_pay_message">Pay by Diners Club</string>
+    <string name="unionpay_pay_message">Pay by UnionPay</string>
+    <string name="create_attendee_success_message">Attendees created successfully!</string>
+    <string name="create_attendee_fail_message">Unable to create Attendee!</string>
+    <string name="fill_all_fields_message">Please fill in all the fields</string>
+    <string name="free">free</string>
+    <string name="order_success_message">Order created successfully!</string>
+    <string name="order_fail_message">Unable to create Order!</string>
+    <string name="payment_not_complete_message">Payment not completed!</string>
+    <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
@@ -225,8 +263,48 @@
     <string name="empty_password_message">Password cannot be empty</string>
     <string name="empty_confirm_password_message">Please confirm your password</string>
     <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
+    <string name="sign_up_fail_email_exist_message">Unable to SignUp: Email already exists!</string>
+    <string name="sign_up_fail_email_invalid_message">Unable to SignUp: Not a valid email address!</string>
+    <string name="sign_up_fail_message">Unable to SignUp!</string>
+    <string name="login_automatically_fail_message">Unable to Login automatically</string>
+    <string name="login_fail_message">Unable to Login. Please check your credentials</string>
+    <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
+    <string name="email_sent">Email Sent</string>
+
+    <!--about event fragment-->
+    <string name="error_fetching_event_message">Error fetching event</string>
+    <string name="error_fetching_events_message">Error fetching events</string>
+    <string name="fetch_similar_events_error_message">Error fetching similar events</string>
+    <string name="error">Error</string>
+    <string name="fetch_favorite_events_error_message">Error fetching favorite events</string>
+    <string name="list_orders_fail_message">Failed  to list Orders under a user</string>
+    <string name="list_events_fail_message">Failed  to list events under a user</string>
+    <string name="error_adding_favorite_message">Error adding to favorites</string>
+    <string name="error_fetching_social_links_message">Error fetching Social Links</string>
+    <string name="error_fetching_tickets_message">Error fetching tickets</string>
+
+    <!--edit profile fragment-->
+    <string name="select_image">Select Image</string>
+    <string name="changes_not_saved">Your changes have not been saved</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+    <string name="storage_permission_granted_message">Permission to Access External Storage Granted !</string>
+    <string name="storage_permission_denied_message">Permission to Access External Storage Denied :(</string>
+    <string name="image_upload_success_message">Image uploaded successfully!</string>
+    <string name="image_upload_error_message">Error uploading image!</string>
+    <string name="provide_name_message">Please provide first name and last name!</string>
+    <string name="user_update_error_message">Error updating user!</string>
+    <string name="user_update_success_message">User updated successfully!</string>
+    <string name="failure">Failure</string>
 
     <!--social link fragment-->
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
+    <string name="popular_locations">Popular Locations</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="anything">Anything</string>
+    <string name="and_i_m_up_for">And I\'m up for</string>
+    <string name="savedType">savedType</string>
+    <string name="what_type">What Sounds good?</string>
 
 </resources>

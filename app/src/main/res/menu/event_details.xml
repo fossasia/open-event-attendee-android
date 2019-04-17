@@ -8,6 +8,9 @@
         <item
             android:id="@+id/report_event"
             android:title="@string/report_event" />
+        <item
+            android:id="@+id/open_external_event_url"
+            android:title="@string/open_external_event_url"/>
     </group>
     <item
         android:id="@+id/event_share"

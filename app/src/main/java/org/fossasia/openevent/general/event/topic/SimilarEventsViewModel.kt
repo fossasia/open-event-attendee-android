@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class SimilarEventsViewModel(private val eventService: EventService) : ViewModel() {
+class SimilarEventsViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -60,7 +62,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
                 mutableSimilarLocationEvents.value = it.filter { it.id != eventId }
             }, {
                 Timber.e(it, "Error fetching similar events")
-                mutableError.value = "Error fetching similar events"
+                mutableError.value = resource.getString(R.string.fetch_similar_events_error_message)
             })
         )
     }
@@ -73,7 +75,7 @@ class SimilarEventsViewModel(private val eventService: EventService) : ViewModel
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
-                mutableError.value = "Error"
+                mutableError.value = resource.getString(R.string.error)
             })
         )
     }

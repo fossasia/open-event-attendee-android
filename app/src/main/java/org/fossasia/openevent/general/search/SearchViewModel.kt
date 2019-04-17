@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
@@ -23,7 +26,8 @@ import timber.log.Timber
 class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val network: Network
+    private val network: Network,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -36,24 +40,48 @@ class SearchViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowNoInternetError = MutableLiveData<Boolean>()
     val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    private val mutableChipClickable = MutableLiveData<Boolean>()
+    val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
+    var savedType: String? = null
+    var savedTime: String? = null
     private val savedNextDate = getNextDate()
     private val savedNextToNextDate = getNextToNextDate()
     private val savedWeekendDate = getWeekendDate()
     private val savedWeekendNextDate = getNextToWeekendDate()
     private val savedNextMonth = getNextMonth()
     private val savedNextToNextMonth = getNextToNextMonth()
+    private val mutableEventTypes = MutableLiveData<List<EventType>>()
+    val eventTypes: LiveData<List<EventType>> = mutableEventTypes
+
+    fun loadEventTypes() {
+        compositeDisposable.add(eventService.getEventTypes()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEventTypes.value = it
+            }, {
+                Timber.e(it, "Error fetching events types")
+            })
+        )
+    }
 
     fun loadSavedLocation() {
         savedLocation = preference.getString(SAVED_LOCATION)
     }
+    fun loadSavedType() {
+        savedType = preference.getString(SAVED_TYPE)
+    }
+    fun loadSavedTime() {
+        savedTime = preference.getString(SAVED_TIME)
+    }
 
-    fun loadEvents(location: String, time: String) {
+    fun loadEvents(location: String, time: String, type: String) {
         if (mutableEvents.value != null) {
             mutableShowShimmerResults.value = false
             mutableShowNoInternetError.value = false
-            return
+            mutableChipClickable.value = true
         }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
@@ -63,6 +91,17 @@ class SearchViewModel(
                 |   'op':'ilike',
                 |   'val':'%$searchEvent%'
                 |}]""".trimMargin().replace("'", "'")
+            time == "Anytime" && type == "Anything" -> """[{
+                |   'and':[{
+                |       'name':'location-name',
+                |       'op':'ilike',
+                |       'val':'%$location%'
+                |    }, {
+                |       'name':'name',
+                |       'op':'ilike',
+                |       'val':'%$searchEvent%'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
@@ -72,6 +111,14 @@ class SearchViewModel(
                 |       'name':'name',
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
+                |    }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |    }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
@@ -91,6 +138,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
@@ -110,6 +165,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextToNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
@@ -129,6 +192,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedWeekendNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
@@ -148,6 +219,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextToNextMonth%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
             else -> """[{
@@ -167,6 +246,14 @@ class SearchViewModel(
                 |       'name':'starts-at',
                 |       'op':'lt',
                 |       'val':'$savedNextDate%'
+                |   }, {
+                |       'name':'event-type',
+                |       'op':'has',
+                |       'val': {
+                |       'name':'name',
+                |       'op':'eq',
+                |       'val':'$type'
+                |       }
                 |   }]
                 |}]""".trimMargin().replace("'", "\"")
         }
@@ -176,13 +263,15 @@ class SearchViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
+                mutableChipClickable.value = false
             }.doFinally {
                 mutableShowShimmerResults.value = false
+                mutableChipClickable.value = true
             }.subscribe({
                 mutableEvents.value = it
             }, {
                 Timber.e(it, "Error fetching events")
-                mutableError.value = "Error fetching events"
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
         )
     }
@@ -195,7 +284,7 @@ class SearchViewModel(
                 Timber.d("Successfully added %d to favorites", eventId)
             }, {
                 Timber.e(it, "Error adding %d to favorites", eventId)
-                mutableError.value = "Error adding to favorites"
+                mutableError.value = resource.getString(R.string.error_adding_favorite_message)
             })
         )
     }

@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
@@ -31,7 +33,8 @@ class AttendeeViewModel(
     private val eventService: EventService,
     private val orderService: OrderService,
     private val ticketService: TicketService,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -65,10 +68,10 @@ class AttendeeViewModel(
     private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
     val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
 
-    val month = ArrayList<String>()
-    val year = ArrayList<String>()
+    val month = ArrayList<String?>()
+    val year = ArrayList<String?>()
     val attendees = ArrayList<Attendee>()
-    val cardType = ArrayList<String>()
+    val cardType = ArrayList<String?>()
     var isAllDetailsFilled = true
 
     private var createAttendeeIterations = 0
@@ -83,36 +86,36 @@ class AttendeeViewModel(
 
     fun initializeSpinner() {
         // initialize months
-        month.add("Month")
-        month.add("January")
-        month.add("February")
-        month.add("March")
-        month.add("April")
-        month.add("May")
-        month.add("June")
-        month.add("July")
-        month.add("August")
-        month.add("September")
-        month.add("October")
-        month.add("November")
-        month.add("December")
+        month.add(resource.getString(R.string.month_string))
+        month.add(resource.getString(R.string.january))
+        month.add(resource.getString(R.string.february))
+        month.add(resource.getString(R.string.march))
+        month.add(resource.getString(R.string.april))
+        month.add(resource.getString(R.string.may))
+        month.add(resource.getString(R.string.june))
+        month.add(resource.getString(R.string.july))
+        month.add(resource.getString(R.string.august))
+        month.add(resource.getString(R.string.september))
+        month.add(resource.getString(R.string.october))
+        month.add(resource.getString(R.string.november))
+        month.add(resource.getString(R.string.december))
 
         // initialize years
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        year.add("Year")
+        year.add(resource.getString(R.string.year_string))
         val a = currentYear + 20
         for (i in currentYear..a) {
             year.add(i.toString())
         }
 
         // initialize card types
-        cardType.add("Select a card type")
-        cardType.add("Pay by American Express")
-        cardType.add("Pay by MasterCard")
-        cardType.add("Pay by Visa")
-        cardType.add("Pay by Discover")
-        cardType.add("Pay by Diners Club")
-        cardType.add("Pay by UnionPay")
+        cardType.add(resource.getString(R.string.select_card))
+        cardType.add(resource.getString(R.string.american_express_pay_message))
+        cardType.add(resource.getString(R.string.mastercard_pay_message))
+        cardType.add(resource.getString(R.string.visa_pay_message))
+        cardType.add(resource.getString(R.string.discover_pay_message))
+        cardType.add(resource.getString(R.string.diners_pay_message))
+        cardType.add(resource.getString(R.string.unionpay_pay_message))
     }
 
     fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
@@ -181,7 +184,7 @@ class AttendeeViewModel(
                 if (attendees.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
                     mutableIsAttendeeCreated.value = true
-                    mutableMessage.value = "Attendees created successfully!"
+                    mutableMessage.value = resource.getString(R.string.create_attendee_success_message)
                 }
                 Timber.d("Success! %s", attendees.toList().toString())
             }, {
@@ -189,7 +192,7 @@ class AttendeeViewModel(
                     if (it.message.equals(HttpErrors.CONFLICT)) {
                         mutableTicketSoldOut.value = true
                     } else {
-                        mutableMessage.value = "Unable to create Attendee!"
+                        mutableMessage.value = resource.getString(R.string.create_attendee_fail_message)
                         Timber.d(it, "Failed")
                         mutableTicketSoldOut.value = false
                     }
@@ -206,7 +209,7 @@ class AttendeeViewModel(
         attendees.forEach {
             if (it.email.isNullOrBlank() || it.firstname.isNullOrBlank() || it.lastname.isNullOrBlank()) {
                 if (isAllDetailsFilled)
-                    mutableMessage.value = "Please fill in all the fields"
+                    mutableMessage.value = resource.getString(R.string.fill_all_fields_message)
                 mutableIsAttendeeCreated.value = false
                 isAllDetailsFilled = false
                 return
@@ -252,9 +255,9 @@ class AttendeeViewModel(
     private fun createOrder() {
         val attendeeList = attendees.map { AttendeeId(it.id) }.toList()
         var amount = totalAmount.value
-        var paymentMode = paymentOption.toLowerCase()
+        var paymentMode: String? = paymentOption.toLowerCase()
         if (amount == null || amount <= 0) {
-            paymentMode = "free"
+            paymentMode = resource.getString(R.string.free)
             amount = null
         }
         val eventId = event.value?.id
@@ -273,18 +276,18 @@ class AttendeeViewModel(
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
                     Timber.d("Success placing order!")
-                    if (it.paymentMode == "free") {
+                    if (it.paymentMode == resource.getString(R.string.free)) {
                         confirmOrder = ConfirmOrder(it.id.toString(), "completed")
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    } else mutableMessage.value = "Order created successfully!"
+                    } else mutableMessage.value = resource.getString(R.string.order_success_message)
                 }, {
-                    mutableMessage.value = "Unable to create Order!"
+                    mutableMessage.value = resource.getString(R.string.order_fail_message)
                     Timber.d(it, "Failed creating Order")
                     deleteAttendees(order.attendees)
                 })
             )
         } else {
-            mutableMessage.value = "Unable to create Order!"
+            mutableMessage.value = resource.getString(R.string.order_fail_message)
         }
     }
 
@@ -297,11 +300,11 @@ class AttendeeViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableMessage.value = "Order created successfully!"
+                mutableMessage.value = resource.getString(R.string.order_success_message)
                 Timber.d("Updated order status successfully !")
                 paymentCompleted.value = true
             }, {
-                mutableMessage.value = "Unable to create Order!"
+                mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed updating order status")
             })
         )
@@ -356,7 +359,7 @@ class AttendeeViewModel(
                     Timber.d("Failed charging the user")
                 }
             }, {
-                mutableMessage.value = "Payment not completed!"
+                mutableMessage.value = resource.getString(R.string.payment_not_complete_message)
                 Timber.d(it, "Failed charging the user")
             })
         )

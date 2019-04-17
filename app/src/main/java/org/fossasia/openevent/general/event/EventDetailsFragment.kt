@@ -12,13 +12,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
 import kotlinx.android.synthetic.main.content_event.locationContainer
@@ -35,8 +35,8 @@ import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
 import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
-import kotlinx.android.synthetic.main.content_event.view.logo
-import kotlinx.android.synthetic.main.content_event.view.logoIcon
+import kotlinx.android.synthetic.main.content_event.view.eventImage
+import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
@@ -54,6 +54,7 @@ import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
+import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -62,6 +63,8 @@ import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import java.lang.Exception
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
@@ -91,9 +94,8 @@ class EventDetailsFragment : Fragment() {
                 eventShare = it
                 title = eventShare.name
 
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
-                }
+                // Update favorite icon and external event url menu option
+                activity?.invalidateOptionsMenu()
 
                 if (runOnce) {
                     loadSocialLinksFragment()
@@ -113,11 +115,7 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_event, container, false)
-        val thisActivity = activity
-        if (thisActivity is AppCompatActivity) {
-            thisActivity.supportActionBar?.title = ""
-            thisActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setToolbar(activity)
         setHasOptionsMenu(true)
 
         rootView.buttonTickets.setOnClickListener {
@@ -138,15 +136,13 @@ class EventDetailsFragment : Fragment() {
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                if (thisActivity is AppCompatActivity) {
-                    if (scrollY > rootView.eventName.height + rootView.logo.height)
-                        /*Toolbar title set to name of Event if scrolled more than
-                        combined height of eventImage and eventName views*/
-                        thisActivity.supportActionBar?.title = title
-                    else
-                        // Toolbar title set to an empty string
-                        thisActivity.supportActionBar?.title = ""
-                }
+                if (scrollY > rootView.eventName.height + rootView.eventImage.height)
+                    /*Toolbar title set to name of Event if scrolled more than
+                    combined height of eventImage and eventName views*/
+                    setToolbar(activity, title)
+                else
+                    // Toolbar title set to an empty string
+                    setToolbar(activity)
             }
         }
 
@@ -171,7 +167,7 @@ class EventDetailsFragment : Fragment() {
                     .load(event.logoUrl)
                     .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
                     .transform(CircleTransform())
-                    .into(rootView.logoIcon)
+                    .into(rootView.organizerLogoIcon)
 
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
@@ -196,7 +192,7 @@ class EventDetailsFragment : Fragment() {
             rootView.organizerContainer.isVisible = false
         }
 
-        currency = Currency.getInstance(event.paymentCurrency).symbol
+        currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             AboutEventFragmentArgs.Builder()
@@ -209,8 +205,9 @@ class EventDetailsFragment : Fragment() {
         }
 
         // Event Description Section
-        if (!event.description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, event.description.stripHtml())
+        val description = event.description.nullToEmpty().stripHtml()
+        if (!description.isNullOrEmpty()) {
+            setTextField(rootView.eventDescription, description)
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
@@ -270,9 +267,17 @@ class EventDetailsFragment : Fragment() {
         // Set Cover Image
         event.originalImageUrl?.let {
             Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.header)
-                    .into(rootView.logo)
+                .load(it)
+                .placeholder(R.drawable.header)
+                .into(rootView.eventImage, object : Callback {
+                    override fun onSuccess() {
+                        rootView.eventImage.tag = "image_loading_successful"
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Timber.e(e)
+                    }
+                })
         }
 
         // Add event to Calendar
@@ -289,27 +294,22 @@ class EventDetailsFragment : Fragment() {
             R.id.add_to_calendar -> {
                 // Add event to Calendar
                 startCalendar(eventShare)
-                return true
+                true
             }
             R.id.report_event -> {
                 reportEvent(eventShare)
-                return true
+                true
+            }
+            R.id.open_external_event_url -> {
+                eventShare.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
+                true
             }
             R.id.favorite_event -> {
                 eventViewModel.setFavorite(safeArgs.eventId, !(eventShare.favorite))
-                if (eventShare.favorite) {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_border_white)
-                } else {
-                    setFavoriteIcon(R.drawable.ic_baseline_favorite_white)
-                }
-                return true
+                true
             }
             R.id.event_share -> {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(eventShare))
-                sendIntent.type = "text/plain"
-                rootView.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
+                EventUtils.share(eventShare, rootView.eventImage)
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -351,6 +351,16 @@ class EventDetailsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.event_details, menu)
         menuActionBar = menu
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        if (::eventShare.isInitialized) {
+            if (eventShare.externalEventUrl == null) {
+                menu.findItem(R.id.open_external_event_url).isVisible = false
+            }
+            setFavoriteIconFilled(eventShare.favorite)
+        }
+        super.onPrepareOptionsMenu(menu)
     }
 
     private fun loadTicketFragment() {
@@ -396,7 +406,11 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    private fun setFavoriteIcon(id: Int) {
+    private fun setFavoriteIconFilled(filled: Boolean) {
+        val id = when {
+            filled -> R.drawable.ic_baseline_favorite_white
+            else -> R.drawable.ic_baseline_favorite_border_white
+        }
         menuActionBar?.findItem(R.id.favorite_event)?.icon = ContextCompat.getDrawable(requireContext(), id)
     }
 
@@ -407,5 +421,10 @@ class EventDetailsFragment : Fragment() {
         for (i in 0..(menuItemSize - 1)) {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
+    }
+
+    override fun onDestroy() {
+        Picasso.get().cancelRequest(rootView.eventImage)
+        super.onDestroy()
     }
 }

@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.order
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.squareup.picasso.Picasso
@@ -14,7 +16,8 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         event: Event,
         clickListener: OrdersRecyclerAdapter.OrderClickListener?,
         orderIdentifier: String?,
-        attendeesNumber: Int
+        attendeesNumber: Int,
+        showExpired: Boolean
     ) {
         val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
@@ -40,6 +43,11 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .load(it)
                     .placeholder(R.drawable.header)
                     .into(itemView.eventImage)
+        }
+        if (!showExpired) {
+            val matrix = ColorMatrix()
+            matrix.setSaturation(0F)
+            itemView.eventImage.colorFilter = ColorMatrixColorFilter(matrix)
         }
     }
 }

@@ -4,19 +4,33 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
+import org.jetbrains.anko.design.snackbar
+import kotlinx.android.synthetic.main.dialog_change_password.view.oldPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.ProfileViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.prefs.PreferenceChangeEvent
 import java.util.prefs.PreferenceChangeListener
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.nonNull
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
@@ -26,6 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
     private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val profileViewModel by viewModel<ProfileViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -37,46 +52,59 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setPreferencesFromResource(R.xml.settings, rootKey)
         val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val activity = activity as? AppCompatActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = "Settings"
+        setToolbar(activity, getString(R.string.settings))
         setHasOptionsMenu(true)
 
         // Set Email
-        preferenceScreen.findPreference(resources.getString(R.string.key_profile))
+        preferenceScreen.findPreference(getString(R.string.key_profile))
             .summary = safeArgs.email
 
         // Set Build Version
-        preferenceScreen.findPreference(resources.getString(R.string.key_version))
+        preferenceScreen.findPreference(getString(R.string.key_version))
             .title = "Version " + BuildConfig.VERSION_NAME
 
-        preferenceScreen.findPreference(resources.getString(R.string.key_timezone_switch))
+        preferenceScreen.findPreference(getString(R.string.key_timezone_switch))
             .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        if (preference?.key == resources.getString(R.string.key_visit_website)) {
+        settingsViewModel.snackBar
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                view?.snackbar(it)
+            })
+
+        if (preference?.key == getString(R.string.key_visit_website)) {
             // Goes to website
             Utils.openUrl(requireContext(), WEBSITE_LINK)
             return true
         }
-        if (preference?.key == resources.getString(R.string.key_rating)) {
+        if (preference?.key == getString(R.string.key_rating)) {
             // Opens our app in play store
             startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
-        if (preference?.key == resources.getString(R.string.key_suggestion)) {
+        if (preference?.key == getString(R.string.key_suggestion)) {
             // Links to suggestion form
             Utils.openUrl(requireContext(), FORM_LINK)
             return true
         }
-        if (preference?.key == resources.getString(R.string.key_timezone_switch)) {
+        if (preference?.key == getString(R.string.key_profile)) {
+            showLogoutDialog()
+            return true
+        }
+        if (preference?.key == getString(R.string.key_change_password)) {
+            showChangePasswordDialog()
+            return true
+        }
+        if (preference?.key == getString(R.string.key_timezone_switch)) {
             val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
             val timeZonePreferenceKey = "useEventTimeZone"
             when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
                 true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
                 false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
             }
+            return true
         }
         if (preference?.key == getString(R.string.key_privacy)) {
             Utils.openUrl(requireContext(), PRIVACY_LINK)
@@ -100,6 +128,119 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         } catch (error: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(settingsViewModel.getMarketWebLink(packageName))))
         }
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(requireContext()).setMessage(getString(R.string.message))
+            .setPositiveButton(getString(R.string.logout)) { _, _ ->
+                if (profileViewModel.isLoggedIn()) {
+                    profileViewModel.logout()
+                    findNavController().popBackStack(R.id.eventsFragment, false)
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .show()
+    }
+
+    private fun showChangePasswordDialog() {
+        val layout = layoutInflater.inflate(R.layout.dialog_change_password, null)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.title_change_password))
+            .setView(layout)
+            .setPositiveButton(getString(R.string.change)) { _, _ ->
+                settingsViewModel.changePassword(layout.oldPassword.text.toString(), layout.newPassword.text.toString())
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+
+        layout.newPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                */
+                if (!layout.textInputLayoutNewPassword.isEndIconVisible) {
+                    layout.textInputLayoutNewPassword.isEndIconVisible = true
+                }
+
+                if (layout.newPassword.text.toString().length >= 6) {
+                    layout.textInputLayoutNewPassword.error = null
+                    layout.textInputLayoutNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutNewPassword.error = getString(R.string.invalid_password_message)
+                }
+                if (layout.confirmNewPassword.text.toString() == layout.newPassword.text.toString()) {
+                    layout.textInputLayoutConfirmNewPassword.error = null
+                    layout.textInputLayoutConfirmNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutConfirmNewPassword.error =
+                        getString(R.string.invalid_confirm_password_message)
+                }
+                when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
+                    layout.textInputLayoutNewPassword.isErrorEnabled ||
+                    layout.oldPassword.text.toString().length < 6) {
+                    true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                    false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+        })
+
+        layout.confirmNewPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                 */
+                if (!layout.textInputLayoutConfirmNewPassword.isEndIconVisible) {
+                    layout.textInputLayoutConfirmNewPassword.isEndIconVisible = true
+                }
+
+                if (layout.confirmNewPassword.text.toString() == layout.newPassword.text.toString()) {
+                    layout.textInputLayoutConfirmNewPassword.error = null
+                    layout.textInputLayoutConfirmNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutConfirmNewPassword.error =
+                        getString(R.string.invalid_confirm_password_message)
+                }
+                when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
+                    layout.textInputLayoutNewPassword.isErrorEnabled ||
+                    layout.oldPassword.text.toString().length < 6) {
+                    true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                    false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+        })
+
+        layout.oldPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                 */
+                when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
+                    layout.textInputLayoutNewPassword.isErrorEnabled ||
+                    layout.oldPassword.text.toString().length < 6) {
+                    true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                    false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
