@@ -158,7 +158,7 @@ val viewModelModule = module {
     viewModel { SearchTypeViewModel(get(), get()) }
     viewModel { TicketsViewModel(get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
-    viewModel { SocialLinksViewModel(get(), get()) }
+    viewModel { SocialLinksViewModel(get(), get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SimilarEventsViewModel(get(), get()) }
