@@ -371,6 +371,42 @@
                 android:paddingRight="@dimen/padding_large"
                 android:paddingTop="@dimen/padding_small" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/feedbackContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/organizerContainer"
+            tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            android:background="@color/grey" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:text="@string/feedback"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedbackRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/similarEventsContainer"
@@ -381,7 +417,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/organizerContainer"
+            app:layout_constraintTop_toBottomOf="@id/feedbackContainer"
             tools:visibility="visible">
 
             <FrameLayout

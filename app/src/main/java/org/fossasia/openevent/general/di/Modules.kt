@@ -40,6 +40,8 @@ import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
+import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
 import org.fossasia.openevent.general.event.topic.EventTopic
@@ -132,11 +134,15 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(EventLocationApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(FeedbackApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
@@ -204,7 +210,8 @@ val networkModule = module {
                 SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
                 EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
                 AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-                CustomForm::class.java, EventLocation::class.java, EventType::class.java))
+                CustomForm::class.java, EventLocation::class.java, EventType::class.java,
+                Feedback::class.java))
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .baseUrl(baseUrl)
             .build()
