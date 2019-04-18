@@ -3,6 +3,8 @@ package org.fossasia.openevent.general.event
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
 import org.fossasia.openevent.general.event.topic.EventTopic
@@ -19,7 +21,8 @@ class EventService(
     private val eventTopicApi: EventTopicApi,
     private val eventTopicsDao: EventTopicsDao,
     private val eventTypesApi: EventTypesApi,
-    private val eventLocationApi: EventLocationApi
+    private val eventLocationApi: EventLocationApi,
+    private val eventFeedbackApi: FeedbackApi
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -57,6 +60,10 @@ class EventService(
 
     fun getEventTypes(): Single<List<EventType>> {
         return eventTypesApi.getEventTypes()
+    }
+
+    fun getEventFeedback(id: Long): Single<List<Feedback>> {
+        return eventFeedbackApi.getEventFeedback(id)
     }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {

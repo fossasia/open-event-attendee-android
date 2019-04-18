@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.feedback.Feedback
 import timber.log.Timber
 
 class EventDetailsViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
@@ -26,6 +27,20 @@ class EventDetailsViewModel(private val eventService: EventService, private val 
     val error: LiveData<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
+    private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
+    val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+
+    fun loadEventFeedback(id: Long) {
+        compositeDisposable.add(eventService.getEventFeedback(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEventFeedback.value = it
+            }, {
+                Timber.e(it, "Error fetching events feedback")
+            })
+        )
+    }
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {

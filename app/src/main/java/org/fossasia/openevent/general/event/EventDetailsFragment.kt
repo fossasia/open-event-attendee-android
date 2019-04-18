@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.aboutEventContainer
@@ -36,6 +37,8 @@ import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.eventImage
+import kotlinx.android.synthetic.main.content_event.view.feedbackContainer
+import kotlinx.android.synthetic.main.content_event.view.feedbackRv
 import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.organizerName
@@ -51,6 +54,7 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
@@ -73,6 +77,7 @@ const val EVENT_LOCATION = "eventLocation"
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
+    private val feedbackAdapter = FeedbackRecyclerAdapter()
 
     private lateinit var rootView: View
     private var eventTopicId: Long? = null
@@ -107,6 +112,7 @@ class EventDetailsFragment : Fragment() {
                 showEventErrorScreen(false)
                 setHasOptionsMenu(true)
             })
+        eventViewModel.loadEventFeedback(safeArgs.eventId)
     }
 
     override fun onCreateView(
@@ -118,6 +124,9 @@ class EventDetailsFragment : Fragment() {
         setToolbar(activity)
         setHasOptionsMenu(true)
 
+        rootView.feedbackRv.layoutManager = LinearLayoutManager(context)
+        rootView.feedbackRv.adapter = feedbackAdapter
+
         rootView.buttonTickets.setOnClickListener {
             loadTicketFragment()
         }
@@ -127,6 +136,11 @@ class EventDetailsFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 showEventErrorScreen(true)
             })
+
+        eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {
+            feedbackAdapter.addAll(it)
+            rootView.feedbackContainer.isVisible = !it.isEmpty()
+        })
 
         eventViewModel.loadEvent(safeArgs.eventId)
         rootView.retry.setOnClickListener {
