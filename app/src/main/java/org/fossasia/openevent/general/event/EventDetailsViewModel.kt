@@ -13,9 +13,15 @@ import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerService
 import timber.log.Timber
 
-class EventDetailsViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
+class EventDetailsViewModel(
+    private val eventService: EventService,
+    private val speakerService: SpeakerService,
+    private val resource: Resource
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -40,6 +46,24 @@ class EventDetailsViewModel(private val eventService: EventService, private val 
                 Timber.e(it, "Error fetching events feedback")
             })
         )
+    }
+    var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
+
+    fun fetchEventSpeakers(id: Long) {
+        speakerService.fetchSpeakersForEvent(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                //Do Nothing
+            }, {
+                Timber.e(it, "Error fetching speaker for event id %d", id)
+                mutableError.value = resource.getString(R.string.error_fetching_event_message)
+            })
+    }
+
+    fun loadEventSpeakers(id: Long): LiveData<List<Speaker>> {
+        eventSpeakers = speakerService.fetchSpeakersFromDb(id)
+        return eventSpeakers
     }
 
     fun loadEvent(id: Long) {

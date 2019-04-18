@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "2eccdc20f2068430bba84bf884a2ec02",
+    "identityHash": "29d454b1b501a8b9b411acc8476eab7c",
     "entities": [
       {
         "tableName": "Event",
@@ -1067,12 +1067,201 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "Speaker",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoUrl",
+            "columnName": "photoUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shortBiography",
+            "columnName": "shortBiography",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longBiography",
+            "columnName": "longBiography",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakingExperience",
+            "columnName": "speakingExperience",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "organisation",
+            "columnName": "organisation",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "twitter",
+            "columnName": "twitter",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "linkedin",
+            "columnName": "linkedin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "github",
+            "columnName": "github",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFeatured",
+            "columnName": "isFeatured",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SpeakerWithEvent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`event_id` INTEGER NOT NULL, `speaker_id` INTEGER NOT NULL, PRIMARY KEY(`event_id`, `speaker_id`), FOREIGN KEY(`event_id`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`speaker_id`) REFERENCES `Speaker`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "eventId",
+            "columnName": "event_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "speakerId",
+            "columnName": "speaker_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "event_id",
+            "speaker_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SpeakerWithEvent_event_id",
+            "unique": false,
+            "columnNames": [
+              "event_id"
+            ],
+            "createSql": "CREATE  INDEX `index_SpeakerWithEvent_event_id` ON `${TABLE_NAME}` (`event_id`)"
+          },
+          {
+            "name": "index_SpeakerWithEvent_speaker_id",
+            "unique": false,
+            "columnNames": [
+              "speaker_id"
+            ],
+            "createSql": "CREATE  INDEX `index_SpeakerWithEvent_speaker_id` ON `${TABLE_NAME}` (`speaker_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Speaker",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "speaker_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2eccdc20f2068430bba84bf884a2ec02\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"29d454b1b501a8b9b411acc8476eab7c\")"
     ]
   }
 }
