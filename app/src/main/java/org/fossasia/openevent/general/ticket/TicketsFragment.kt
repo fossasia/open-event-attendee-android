@@ -32,7 +32,6 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
-import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -79,7 +78,7 @@ class TicketsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
-        setToolbar(activity, "Ticket Details")
+        setToolbar(activity, getString(R.string.ticket_details))
         setHasOptionsMenu(true)
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -126,7 +125,12 @@ class TicketsFragment : Fragment() {
             loadTickets()
         }
 
-        loadTickets()
+        ticketsViewModel.connection
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                loadTickets()
+                showNoInternetScreen(!isConnected && ticketsViewModel.tickets.value == null)
+            })
 
         return rootView
     }
@@ -201,21 +205,23 @@ class TicketsFragment : Fragment() {
     }
 
     private fun loadTickets() {
-        if (!isNetworkConnected(context) && ticketsViewModel.tickets.value.isNullOrEmpty())
-            showNoInternetScreen(true)
-        else {
-            showNoInternetScreen(false)
+        val currentEvent = ticketsViewModel.event.value
+        if (currentEvent == null) {
             ticketsViewModel.loadEvent(safeArgs.eventId)
+        } else {
+            loadEventDetails(currentEvent)
+        }
+        if (ticketsViewModel.isConnected() && ticketsViewModel.tickets.value == null) {
             ticketsViewModel.loadTickets(safeArgs.eventId)
+        }
 
-            val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
-            if (retainedTicketIdAndQty != null) {
-                for (idAndQty in retainedTicketIdAndQty) {
-                    handleTicketSelect(idAndQty.first, idAndQty.second)
-                }
-                ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
+        val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+        if (retainedTicketIdAndQty != null) {
+            for (idAndQty in retainedTicketIdAndQty) {
+                handleTicketSelect(idAndQty.first, idAndQty.second)
             }
+            ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
+            ticketsRecyclerAdapter.notifyDataSetChanged()
         }
     }
 
@@ -223,7 +229,7 @@ class TicketsFragment : Fragment() {
         rootView.noInternetCard.isVisible = show
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
-        rootView.progressBarTicket.isVisible = !show
+        if (show) rootView.progressBarTicket.isVisible = false
         rootView.register.isVisible = !show
     }
 }

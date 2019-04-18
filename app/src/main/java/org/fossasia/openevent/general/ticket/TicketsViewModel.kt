@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
@@ -18,7 +19,8 @@ class TicketsViewModel(
     private val ticketService: TicketService,
     private val eventService: EventService,
     private val authHolder: AuthHolder,
-    private val resource: Resource
+    private val resource: Resource,
+    private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -26,6 +28,7 @@ class TicketsViewModel(
     private val mutableProgressTickets = MutableLiveData<Boolean>()
     val progressTickets: LiveData<Boolean> = mutableProgressTickets
     val tickets = MutableLiveData<List<Ticket>>()
+    val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
@@ -72,6 +75,8 @@ class TicketsViewModel(
             })
         )
     }
+
+    fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
     fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
         return ticketIdAndQty.sumBy { it.second } == 0

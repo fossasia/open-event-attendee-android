@@ -8,6 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -16,11 +17,13 @@ import timber.log.Timber
 class EventsViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val resource: Resource
+    private val resource: Resource,
+    private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
+    val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableEvents = MutableLiveData<List<Event>>()
@@ -29,37 +32,40 @@ class EventsViewModel(
     val error: LiveData<String> = mutableError
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
-    private var lastSearch = ""
-
-    var savedLocation: String? = null
+    var lastSearch = ""
+    private val mutableSavedLocation = MutableLiveData<String>()
+    val savedLocation: LiveData<String> = mutableSavedLocation
 
     fun loadLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION)
+        mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
     }
 
-    fun loadLocationEvents(loadingTag: Int) {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$savedLocation%\"}]"
+    fun loadLocationEvents() {
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%${mutableSavedLocation.value}%\"}]"
 
-        if (loadingTag == RELOADING_EVENTS || (loadingTag == INITIAL_FETCHING_EVENTS &&
-                lastSearch != savedLocation)) {
-            compositeDisposable.add(eventService.getEventsByLocation(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    mutableShowShimmerEvents.value = true
-                }
-                .doFinally {
-                    mutableProgress.value = false
-                    mutableShowShimmerEvents.value = false
-                    lastSearch = savedLocation ?: ""
-                }.subscribe({
-                    mutableEvents.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
-                })
-            )
-        }
+        compositeDisposable.add(eventService.getEventsByLocation(query)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                mutableShowShimmerEvents.value = true
+            }
+            .doFinally {
+                mutableProgress.value = false
+                mutableShowShimmerEvents.value = false
+                lastSearch = mutableSavedLocation.value ?: ""
+            }.subscribe({
+                mutableEvents.value = it
+            }, {
+                Timber.e(it, "Error fetching events")
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
+            })
+        )
+    }
+
+    fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
+
+    fun clearEvents() {
+        mutableEvents.value = null
     }
 
     fun loadEvents() {
