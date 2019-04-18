@@ -47,6 +47,7 @@
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
+    <string name="clear_all">Clear All</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
@@ -120,6 +121,7 @@
     <string name="past">Past ></string>
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
+    <string name="ticket_details">Ticket Details</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>

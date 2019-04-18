@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
-import org.fossasia.openevent.general.data.Network
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
@@ -26,7 +26,7 @@ import timber.log.Timber
 class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val network: Network,
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -38,8 +38,7 @@ class SearchViewModel(
     val events: LiveData<List<Event>> = mutableEvents
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
-    private val mutableShowNoInternetError = MutableLiveData<Boolean>()
-    val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableChipClickable = MutableLiveData<Boolean>()
     val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
@@ -79,9 +78,8 @@ class SearchViewModel(
 
     fun loadEvents(location: String, time: String, type: String) {
         if (mutableEvents.value != null) {
-            mutableShowShimmerResults.value = false
-            mutableShowNoInternetError.value = false
             mutableChipClickable.value = true
+            return
         }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
@@ -289,11 +287,10 @@ class SearchViewModel(
         )
     }
 
-    fun isConnected(): Boolean {
-        val isConnected = network.isNetworkConnected()
-        mutableShowNoInternetError.value = !isConnected
-        mutableShowShimmerResults.value = isConnected
-        return isConnected
+    fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
+
+    fun clearEvents() {
+        mutableEvents.value = null
     }
 
     override fun onCleared() {

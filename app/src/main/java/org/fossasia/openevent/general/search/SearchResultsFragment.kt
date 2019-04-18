@@ -63,7 +63,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         eventDate = safeArgs.date
         eventType = safeArgs.type
 
-        performSearch(safeArgs)
         searchViewModel.loadEventTypes()
         searchViewModel.eventTypes
             .nonNull()
@@ -103,10 +102,16 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 rootView.shimmerSearch.isVisible = it
             })
 
-        searchViewModel.showNoInternetError
+        searchViewModel.connection
             .nonNull()
-            .observe(this, Observer {
-                showNoInternetError(it)
+            .observe(this, Observer { isConnected ->
+                if (isConnected) {
+                    showNoInternetError(false)
+                    val currentEvents = searchViewModel.events.value
+                    if (currentEvents == null) performSearch()
+                } else {
+                    showNoInternetError(searchViewModel.events.value == null)
+                }
             })
 
         searchViewModel.error
@@ -127,7 +132,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             })
 
         rootView.retry.setOnClickListener {
-            performSearch(safeArgs)
+            performSearch()
         }
 
         return rootView
@@ -139,35 +144,35 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
             when {
             date != getString(R.string.anytime) && type != getString(R.string.anything) -> {
-                addchips(date, true)
-                addchips(type, true)
-                addchips("Clear All", false)
+                addChips(date, true)
+                addChips(type, true)
+                addChips(getString(R.string.clear_all), false)
             }
             date != getString(R.string.anytime) && type == getString(R.string.anything) -> {
-                addchips(date, true)
+                addChips(date, true)
                 searchViewModel.eventTypes
                     .nonNull()
                     .observe(this, Observer { list ->
                         list.forEach {
-                            addchips(it.name, false)
+                            addChips(it.name, false)
                         }
                     })
             }
             date == getString(R.string.anytime) && type != getString(R.string.anything) -> {
-                addchips(type, true)
+                addChips(type, true)
                 days.forEach {
-                    addchips(it, false)
+                    addChips(it, false)
                 }
             }
             else -> {
                 days.forEach {
-                    addchips(it, false)
+                    addChips(it, false)
                 }
             }
         }
     }
 
-    private fun addchips(name: String, checked: Boolean) {
+    private fun addChips(name: String, checked: Boolean) {
         val newContext = ContextThemeWrapper(context, R.style.CustomChipChoice)
         val chip = Chip(newContext)
         chip.text = name
@@ -209,9 +214,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
     }
 
-    private fun performSearch(args: SearchResultsFragmentArgs) {
-        val query = args.query
-        val location = args.location
+    private fun performSearch() {
+        searchViewModel.clearEvents()
+        val query = safeArgs.query
+        val location = safeArgs.location
         val type = eventType
         val date = eventDate
         searchViewModel.searchEvent = query
@@ -243,7 +249,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 eventType = getString(R.string.anything)
                 rootView.noSearchResults.isVisible = false
                 favoriteEventsRecyclerAdapter.submitList(null)
-                performSearch(safeArgs)
+                searchViewModel.clearEvents()
+                if (searchViewModel.isConnected()) performSearch()
+                else showNoInternetError(true)
                 setChips()
             }
             days.forEach {
@@ -252,7 +260,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     setChips(date = it)
                     rootView.noSearchResults.isVisible = false
                     favoriteEventsRecyclerAdapter.submitList(null)
-                    performSearch(safeArgs)
+                    searchViewModel.clearEvents()
+                    if (searchViewModel.isConnected()) performSearch()
+                    else showNoInternetError(true)
                     return@forEach
                 }
             }
@@ -262,7 +272,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     setChips(type = it.name)
                     rootView.noSearchResults.isVisible = false
                     favoriteEventsRecyclerAdapter.submitList(null)
-                    performSearch(safeArgs)
+                    searchViewModel.clearEvents()
+                    if (searchViewModel.isConnected()) performSearch()
+                    else showNoInternetError(true)
                     return@forEach
                 }
             }
