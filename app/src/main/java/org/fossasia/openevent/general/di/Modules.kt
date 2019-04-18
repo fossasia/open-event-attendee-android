@@ -75,6 +75,9 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerApi
+import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
@@ -140,11 +143,16 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(FeedbackApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SpeakerApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get(), get(), get(), get(), get(), get()) }
+    factory { SpeakerService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
@@ -158,7 +166,7 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
@@ -215,7 +223,7 @@ val networkModule = module {
                 EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
                 AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
                 CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-                Feedback::class.java))
+                Feedback::class.java, Speaker::class.java))
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .baseUrl(baseUrl)
             .build()
@@ -264,6 +272,14 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.orderDao()
+    }
+    factory {
+        val database: OpenEventDatabase = get()
+        database.speakerWithEventDao()
+    }
+    factory {
+        val database: OpenEventDatabase = get()
+        database.speakerDao()
     }
 }
 

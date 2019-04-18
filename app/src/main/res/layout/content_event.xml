@@ -409,7 +409,7 @@
 
 
         <LinearLayout
-            android:id="@+id/similarEventsContainer"
+            android:id="@+id/speakersContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -418,6 +418,49 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/feedbackContainer"
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:background="@color/grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:text="Speakers"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/event_details_headers" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/speakerRv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:itemCount="3"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                tools:listitem="@layout/item_speaker" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/similarEventsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/speakersContainer"
             tools:visibility="visible">
 
             <FrameLayout
