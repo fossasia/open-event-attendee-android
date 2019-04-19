@@ -403,6 +403,15 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feedbackRv"
+                tools:itemCount="3"
+                android:layout_width="match_parent"
+                tools:listitem="@layout/item_feedback"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/feedbackBtn"
+                android:text="@string/write_feedback"
+                android:layout_margin="@dimen/layout_margin_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

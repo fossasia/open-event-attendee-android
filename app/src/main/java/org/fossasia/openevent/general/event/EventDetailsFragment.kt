@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.eventImage
+import kotlinx.android.synthetic.main.content_event.view.feedbackBtn
 import kotlinx.android.synthetic.main.content_event.view.feedbackContainer
 import kotlinx.android.synthetic.main.content_event.view.feedbackRv
 import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
@@ -55,6 +56,7 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
@@ -71,6 +73,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
 import java.lang.Exception
 
 const val EVENT_ID = "eventId"
@@ -146,6 +149,10 @@ class EventDetailsFragment : Fragment() {
             feedbackAdapter.addAll(it)
             rootView.feedbackContainer.isVisible = !it.isEmpty()
         })
+
+        rootView.feedbackBtn.setOnClickListener {
+                checkForAuthentication()
+        }
 
         eventViewModel.loadEvent(safeArgs.eventId)
         rootView.retry.setOnClickListener {
@@ -453,6 +460,27 @@ class EventDetailsFragment : Fragment() {
         for (i in 0..(menuItemSize - 1)) {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
+    }
+    private fun checkForAuthentication() {
+        if (eventViewModel.isLoggedIn())
+            writefeedback()
+        else {
+            rootView.nestedContentEventScroll.longSnackbar(getString(R.string.log_in_first))
+            redirectToLogin()
+        }
+    }
+
+    private fun redirectToLogin() {
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, Utils.getAnimFade())
+            }
+    }
+
+    private fun writefeedback() {
     }
 
     override fun onDestroy() {

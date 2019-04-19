@@ -9,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -19,6 +20,7 @@ import timber.log.Timber
 
 class EventDetailsViewModel(
     private val eventService: EventService,
+    private val authHolder: AuthHolder,
     private val speakerService: SpeakerService,
     private val resource: Resource
 ) : ViewModel() {
@@ -35,6 +37,11 @@ class EventDetailsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+    var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
+
+    fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun getId() = authHolder.getId()
 
     fun loadEventFeedback(id: Long) {
         compositeDisposable.add(eventService.getEventFeedback(id)
@@ -47,7 +54,18 @@ class EventDetailsViewModel(
             })
         )
     }
-    var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
+
+    fun submitFeedback(feedback: Feedback) {
+        feedback.user?.id = getId()
+        compositeDisposable.add(eventService.submitFeedback(feedback)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+            }, {
+                it.message.toString() == "HTTP 400 BAD REQUEST"
+            })
+        )
+    }
 
     fun fetchEventSpeakers(id: Long) {
         speakerService.fetchSpeakersForEvent(id)

@@ -65,6 +65,9 @@ class EventService(
     fun getEventFeedback(id: Long): Single<List<Feedback>> {
         return eventFeedbackApi.getEventFeedback(id)
     }
+    fun submitFeedback(feedback: Feedback): Single<Feedback> {
+        return eventFeedbackApi.postfeedback(feedback)
+    }
 
     fun getSearchEvents(eventName: String): Single<List<Event>> {
         return eventApi.searchEvents("name", eventName).flatMap { apiList ->
