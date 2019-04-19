@@ -152,7 +152,9 @@ class EventDetailsFragment : Fragment() {
             eventViewModel.loadEvent(safeArgs.eventId)
         }
 
-        rootView.speakerRv.layoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.speakerRv.layoutManager = linearLayoutManager
         rootView.speakerRv.adapter = speakersAdapter
 
         // Set toolbar title to event name

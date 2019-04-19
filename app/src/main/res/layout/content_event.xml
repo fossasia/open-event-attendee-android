@@ -445,8 +445,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 tools:itemCount="3"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 tools:listitem="@layout/item_speaker" />
 
