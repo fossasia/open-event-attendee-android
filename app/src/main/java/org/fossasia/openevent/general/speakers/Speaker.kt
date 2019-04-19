@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.utils.stripHtml
 
 @Type("speaker")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -18,9 +19,9 @@ data class Speaker(
     val name: String?,
     val email: String?,
     val photoUrl: String?,
-    val shortBiography: String?,
-    val longBiography: String?,
-    val speakingExperience: String?,
+    var shortBiography: String?,
+    var longBiography: String?,
+    var speakingExperience: String?,
     val location: String?,
     val country: String?,
     val city: String?,
@@ -33,4 +34,10 @@ data class Speaker(
     val github: String?,
     val isFeatured: Boolean = false
 
-)
+) {
+    init {
+        shortBiography = shortBiography?.stripHtml()
+        longBiography = shortBiography?.stripHtml()
+        speakingExperience = shortBiography?.stripHtml()
+    }
+}

@@ -10,14 +10,13 @@ import kotlinx.android.synthetic.main.item_speaker.view.speakerOrgTv
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.stripHtml
 
 class SpeakerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(speaker: Speaker) {
         itemView.speakerNameTv.text = speaker.name
         itemView.speakerOrgTv.text = speaker.organisation
-        itemView.shortBioTv.text = speaker.shortBiography?.stripHtml()
+        itemView.shortBioTv.text = speaker.shortBiography
 
         Picasso.get()
             .load(speaker.photoUrl)
