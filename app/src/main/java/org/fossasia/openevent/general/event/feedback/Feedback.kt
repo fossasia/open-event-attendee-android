@@ -13,10 +13,9 @@ import org.fossasia.openevent.general.event.EventId
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
 data class Feedback(
     @Id(LongIdHandler::class)
-    val id: Long,
+    val id: Long? = null,
     val rating: String?,
     val comment: String?,
-    val deletedAt: String?,
     @Relationship("event")
     var event: EventId? = null,
     @Relationship("user")

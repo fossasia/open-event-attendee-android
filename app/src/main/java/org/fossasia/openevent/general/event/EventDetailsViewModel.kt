@@ -11,6 +11,7 @@ import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.User
+import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.feedback.Feedback
@@ -55,12 +56,13 @@ class EventDetailsViewModel(
         )
     }
 
-    fun submitFeedback(feedback: Feedback) {
-        feedback.user?.id = getId()
+    fun submitFeedback(comment: String, eventId: Long) {
+        val feedback = Feedback(rating = "4.0",comment = comment,event = EventId(eventId),user = UserId(getId()))
         compositeDisposable.add(eventService.submitFeedback(feedback)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+
             }, {
                 it.message.toString() == "HTTP 400 BAD REQUEST"
             })

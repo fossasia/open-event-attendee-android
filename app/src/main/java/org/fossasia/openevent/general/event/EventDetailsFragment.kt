@@ -5,13 +5,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -481,6 +484,22 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun writefeedback() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.confirmation_dialog)
+
+        val input = EditText(requireContext())
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            eventViewModel.submitFeedback(input.text.toString(),safeArgs.eventId)
+        }
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+//            rootView.snackbar(getString(R.string.order_not_completed))
+        }
+        builder.show()
     }
 
     override fun onDestroy() {
