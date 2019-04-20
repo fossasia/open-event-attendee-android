@@ -42,24 +42,25 @@ class EventsViewModel(
 
     fun loadLocationEvents() {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%${mutableSavedLocation.value}%\"}]"
-
-        compositeDisposable.add(eventService.getEventsByLocation(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                mutableShowShimmerEvents.value = true
-            }
-            .doFinally {
-                mutableProgress.value = false
-                mutableShowShimmerEvents.value = false
-                lastSearch = mutableSavedLocation.value ?: ""
-            }.subscribe({
-                mutableEvents.value = it
-            }, {
-                Timber.e(it, "Error fetching events")
-                mutableError.value = resource.getString(R.string.error_fetching_events_message)
-            })
-        )
+        if (lastSearch != savedLocation.value) {
+            compositeDisposable.add(eventService.getEventsByLocation(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    mutableShowShimmerEvents.value = true
+                }
+                .doFinally {
+                    mutableProgress.value = false
+                    mutableShowShimmerEvents.value = false
+                    lastSearch = mutableSavedLocation.value ?: ""
+                }.subscribe({
+                    mutableEvents.value = it
+                }, {
+                    Timber.e(it, "Error fetching events")
+                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                })
+            )
+        }
     }
 
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
