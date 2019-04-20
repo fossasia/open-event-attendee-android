@@ -413,7 +413,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/similarEventsContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -445,8 +445,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 tools:itemCount="3"
-                android:layout_marginLeft="@dimen/layout_margin_large"
-                android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 tools:listitem="@layout/item_speaker" />
 
