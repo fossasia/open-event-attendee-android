@@ -9,7 +9,9 @@ import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.event.subtopic.EventSubTopic
 import org.fossasia.openevent.general.event.topic.EventTopic
+import org.fossasia.openevent.general.event.types.EventType
 
 @Type("event")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -68,6 +70,13 @@ data class Event(
     val isMapShown: Boolean = false,
     var favorite: Boolean = false,
     @ColumnInfo(index = true)
-    @Relationship("event-topic")
-    var eventTopic: EventTopic? = null
+    @Relationship("event-topic", resolve = true)
+    var eventTopic: EventTopic? = null,
+    @ColumnInfo(index = true)
+    @Relationship("event-type", resolve = true)
+    var eventType: EventType? = null,
+    @ColumnInfo(index = true)
+    @Relationship("event-sub-topic", resolve = true)
+    var eventSubTopic: EventSubTopic? = null
+
 )

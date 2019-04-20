@@ -10,7 +10,7 @@ interface EventApi {
     @GET("events?include=event-topic")
     fun getEvents(): Single<List<Event>>
 
-    @GET("events?include=event-topic")
+    @GET("events?include=event-sub-topic,event-topic,event-type")
     fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Single<List<Event>>
 
     @GET

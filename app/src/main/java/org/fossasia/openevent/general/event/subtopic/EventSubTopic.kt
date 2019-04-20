@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.event.topic
+package org.fossasia.openevent.general.event.subtopic
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,10 +11,10 @@ import com.github.jasminb.jsonapi.annotations.Type
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 
-@Type("event-topic")
+@Type("event-sub-topic")
 @Entity(foreignKeys = [(ForeignKey(entity = Event::class, parentColumns = ["id"],
     childColumns = ["event"], onDelete = ForeignKey.CASCADE))])
-data class EventTopic(
+data class EventSubTopic(
     @Id(LongIdHandler::class)
     @PrimaryKey
     val id: Long,
