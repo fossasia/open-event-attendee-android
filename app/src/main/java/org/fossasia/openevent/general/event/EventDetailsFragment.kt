@@ -290,7 +290,7 @@ class EventDetailsFragment : Fragment() {
         if (event.eventTopic != null || !event.locationName.isNullOrBlank() ||
             !event.searchableLocationName.isNullOrBlank()) {
             similarEventsContainer.isVisible = true
-            eventTopicId = event.eventTopic?.id
+            eventTopicId = event.eventTopic?.id ?: 0
             eventLocation =
                 if (event.searchableLocationName.isNullOrBlank()) event.locationName
                 else event.searchableLocationName

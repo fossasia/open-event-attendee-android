@@ -1,10 +1,14 @@
 package org.fossasia.openevent.general.event
 
+import android.content.res.ColorStateList
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_card_events.view.chipTags
 import kotlinx.android.synthetic.main.item_card_events.view.date
 import kotlinx.android.synthetic.main.item_card_events.view.eventImage
 import kotlinx.android.synthetic.main.item_card_events.view.eventName
@@ -57,6 +61,19 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
 
         setFabBackground(event.favorite)
 
+        event.eventType.let {
+            if (it != null)
+                addchips(it.name)
+        }
+        event.eventTopic.let {
+            if (it != null)
+                addchips(it.name)
+        }
+        event.eventSubTopic.let {
+            if (it != null)
+                addchips(it.name)
+        }
+
         event.originalImageUrl?.let { url ->
             Picasso.get()
                 .load(url)
@@ -85,6 +102,18 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
             favFabClickListener?.onClick(event, adapterPosition)
                 ?: Timber.e("Favorite Fab Click listener on ${this::class.java.canonicalName} is null")
         }
+    }
+
+    private fun addchips(name: String) {
+        val chip = Chip(containerView.context)
+        chip.text = name
+        chip.isCheckable = false
+        chip.chipStartPadding = 0f
+        chip.chipEndPadding = 0f
+        chip.chipStrokeWidth = 2f
+        chip.chipStrokeColor =
+            ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.colorPrimary))
+        containerView.chipTags.addView(chip)
     }
 
     private fun setFabBackground(isFavorite: Boolean) {

@@ -5,6 +5,8 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.github.jasminb.jsonapi.ResourceConverter
+import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -44,6 +46,7 @@ import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
+import org.fossasia.openevent.general.event.subtopic.EventSubTopic
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.types.EventType
@@ -214,16 +217,20 @@ val networkModule = module {
     single {
         val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
+        val onlineApiResourceConverter = ResourceConverter(
+            objectMapper, Event::class.java, User::class.java,
+            SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+            EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+            AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+            CustomForm::class.java, EventLocation::class.java, EventType::class.java,
+            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java)
+
+        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
 
         Retrofit.Builder()
             .client(get())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
-                SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
-                EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
-                AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-                CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-                Feedback::class.java, Speaker::class.java))
+            .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .baseUrl(baseUrl)
             .build()
