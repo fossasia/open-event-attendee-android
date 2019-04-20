@@ -20,4 +20,4 @@ data class Feedback(
     var event: EventId? = null,
     @Relationship("user")
     var user: UserId? = null
-    )
+)

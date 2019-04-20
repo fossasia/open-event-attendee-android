@@ -57,12 +57,11 @@ class EventDetailsViewModel(
     }
 
     fun submitFeedback(comment: String, eventId: Long) {
-        val feedback = Feedback(rating = "4.0",comment = comment,event = EventId(eventId),user = UserId(getId()))
+        val feedback = Feedback(rating = "4.0", comment = comment, event = EventId(eventId), user = UserId(getId()))
         compositeDisposable.add(eventService.submitFeedback(feedback)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-
             }, {
                 it.message.toString() == "HTTP 400 BAD REQUEST"
             })

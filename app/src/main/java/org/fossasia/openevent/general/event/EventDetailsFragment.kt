@@ -5,14 +5,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -56,6 +54,7 @@ import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
 import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
+import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
@@ -484,22 +483,18 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun writefeedback() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.confirmation_dialog)
+        val layout = layoutInflater.inflate(R.layout.dialog_feedback, null)
 
-        val input = EditText(requireContext())
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            eventViewModel.submitFeedback(input.text.toString(),safeArgs.eventId)
-        }
-
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-//            rootView.snackbar(getString(R.string.order_not_completed))
-        }
-        builder.show()
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.submit_feedback))
+            .setView(layout)
+            .setPositiveButton(getString(R.string.submit)) { _, _ ->
+                eventViewModel.submitFeedback(layout.feedback.text.toString(), safeArgs.eventId)
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     override fun onDestroy() {
