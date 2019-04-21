@@ -79,7 +79,7 @@ class EventService(
         return eventDao.getFavoriteEvents()
     }
 
-    fun getEventsByLocation(locationName: String): Single<List<Event>> {
+    fun getEventsByLocation(locationName: String?): Single<List<Event>> {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
         return eventApi.searchEvents("name", query).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()

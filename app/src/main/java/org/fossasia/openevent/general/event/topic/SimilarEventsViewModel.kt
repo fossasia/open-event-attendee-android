@@ -48,9 +48,8 @@ class SimilarEventsViewModel(private val eventService: EventService, private val
     }
 
     fun loadSimilarLocationEvents(location: String) {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$location%\"}]"
 
-        compositeDisposable.add(eventService.getEventsByLocation(query)
+        compositeDisposable.add(eventService.getEventsByLocation(location)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

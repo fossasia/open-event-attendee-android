@@ -61,17 +61,16 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
 
         setFabBackground(event.favorite)
 
-        event.eventType.let {
-            if (it != null)
-                addchips(it.name)
-        }
-        event.eventTopic.let {
-            if (it != null)
-                addchips(it.name)
-        }
-        event.eventSubTopic.let {
-            if (it != null)
-                addchips(it.name)
+        if (containerView.chipTags != null) {
+                event.eventType?.let {
+                    addchips(it.name)
+                }
+                event.eventTopic?.let {
+                    addchips(it.name)
+                }
+                event.eventSubTopic?.let {
+                    addchips(it.name)
+                }
         }
 
         event.originalImageUrl?.let { url ->

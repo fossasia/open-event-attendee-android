@@ -41,9 +41,8 @@ class EventsViewModel(
     }
 
     fun loadLocationEvents() {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%${mutableSavedLocation.value}%\"}]"
         if (lastSearch != savedLocation.value) {
-            compositeDisposable.add(eventService.getEventsByLocation(query)
+            compositeDisposable.add(eventService.getEventsByLocation(mutableSavedLocation.value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
