@@ -171,6 +171,9 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
+    //Mapbox java sdk
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.5.0'
+
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
