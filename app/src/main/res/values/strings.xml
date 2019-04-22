@@ -303,11 +303,14 @@
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
     <string name="popular_locations">Popular Locations</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="anything">Anything</string>
     <string name="and_i_m_up_for">And I\'m up for</string>
     <string name="savedType">savedType</string>
     <string name="what_type">What Sounds good?</string>
     <string name="feedback">Feedback</string>
+
+    <string name="filter_set">Filter Done</string>
+    <string name="filter">Filter Search</string>
+    <string name="free_stuff">Free stuff only</string>
 
 </resources>

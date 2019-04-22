@@ -76,13 +76,26 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun loadEvents(location: String, time: String, type: String) {
+    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean) {
         if (mutableEvents.value != null) {
             mutableChipClickable.value = true
             return
         }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
+
+        val freeStuffFilter = if (freeEvents)
+            """, {
+               |    'name':'tickets',
+               |    'op':'any',
+               |    'val':{
+               |        'name':'price',
+               |        'op':'eq',
+               |        'val':'0'
+               |    }
+               |}
+            """.trimIndent()
+            else ""
         val query: String = when {
             TextUtils.isEmpty(location) -> """[{
                 |   'name':'name',
@@ -98,7 +111,7 @@ class SearchViewModel(
                 |       'name':'name',
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
-                |    }]
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
@@ -117,7 +130,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |    }]
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
                 |   'and':[{
@@ -144,7 +157,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -171,7 +184,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -198,7 +211,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -225,8 +238,9 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
+
             else -> """[{
                 |   'and':[{
                 |       'name':'location-name',
@@ -252,10 +266,9 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
-
         compositeDisposable.add(eventService.getSearchEvents(query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
