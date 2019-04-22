@@ -180,6 +180,17 @@
             android:defaultValue="-1L"/>
     </fragment>
     <fragment
+        android:id="@+id/eventFAQFragment"
+        android:name="org.fossasia.openevent.general.event.faq.EventFAQFragment"
+        android:label="EventFAQFragment"
+        tools:layout="@layout/fragment_event_faq">
+
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/ticketsFragment"
         android:name="org.fossasia.openevent.general.ticket.TicketsFragment"
         android:label="TicketsFragment"

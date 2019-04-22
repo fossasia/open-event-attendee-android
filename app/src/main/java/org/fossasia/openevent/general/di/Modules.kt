@@ -44,6 +44,8 @@ import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.event.feedback.FeedbackApi
+import org.fossasia.openevent.general.event.faq.EventFAQ
+import org.fossasia.openevent.general.event.faq.EventFAQApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
 import org.fossasia.openevent.general.event.subtopic.EventSubTopic
@@ -73,6 +75,7 @@ import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
+import org.fossasia.openevent.general.event.faq.EventFAQViewModel
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -150,11 +153,15 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(SpeakerApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(EventFAQApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
@@ -177,6 +184,7 @@ val viewModelModule = module {
     viewModel { SearchTypeViewModel(get(), get()) }
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
+    viewModel { EventFAQViewModel(get(), get()) }
     viewModel { SocialLinksViewModel(get(), get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
@@ -223,7 +231,8 @@ val networkModule = module {
             EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java)
+            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
+            EventFAQ::class.java)
 
         onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
 

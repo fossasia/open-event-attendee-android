@@ -11,6 +11,9 @@
         <item
             android:id="@+id/open_external_event_url"
             android:title="@string/open_external_event_url"/>
+        <item
+            android:id="@+id/open_faqs"
+            android:title="@string/frequently_asked_questions"/>
     </group>
     <item
         android:id="@+id/event_share"
