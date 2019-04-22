@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.SpeakerClickListener
 
 class SpeakerRecyclerAdapter : RecyclerView.Adapter<SpeakerViewHolder>() {
-    val speakersList = ArrayList<Speaker>()
+    private val speakersList = ArrayList<Speaker>()
+    var onSpeakerClick: SpeakerClickListener? = null
 
     fun addAll(speakersList: List<Speaker>) {
         if (speakersList.isNotEmpty())
@@ -22,8 +24,10 @@ class SpeakerRecyclerAdapter : RecyclerView.Adapter<SpeakerViewHolder>() {
 
     override fun onBindViewHolder(holder: SpeakerViewHolder, position: Int) {
         val speaker = speakersList[position]
-
-        holder.bind(speaker)
+        holder.apply {
+            bind(speaker)
+            speakerClickListener = onSpeakerClick
+        }
     }
 
     override fun getItemCount(): Int {

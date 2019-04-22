@@ -55,10 +55,12 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
+import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
+import org.fossasia.openevent.general.speakers.SpeakerFragmentArgs
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
@@ -152,10 +154,24 @@ class EventDetailsFragment : Fragment() {
             eventViewModel.loadEvent(safeArgs.eventId)
         }
 
+        val speakerClickListener: SpeakerClickListener = object : SpeakerClickListener {
+            override fun onClick(speakerId: Long) { SpeakerFragmentArgs.Builder()
+                .setSpeakerId(speakerId)
+                .build()
+                .toBundle()
+                .also { bundle ->
+                    findNavController(rootView).navigate(R.id.speakerFragment, bundle, getAnimSlide())
+                }
+            }
+        }
+
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.speakerRv.layoutManager = linearLayoutManager
         rootView.speakerRv.adapter = speakersAdapter
+        speakersAdapter.apply {
+            onSpeakerClick = speakerClickListener
+        }
 
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
