@@ -5,19 +5,22 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesLv
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchTypeFragment : Fragment() {
+    private val typesAdapter: SearchTypeAdapter = SearchTypeAdapter()
     private val searchTypeViewModel by viewModel<SearchTypeViewModel>()
+    private val safeArgs: SearchTypeFragmentArgs by navArgs()
     private lateinit var rootView: View
     private val eventTypesList: MutableList<String> = arrayListOf("Anything")
 
@@ -30,9 +33,9 @@ class SearchTypeFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_search_type, container, false)
         setToolbar(activity, "", hasUpEnabled = true)
         setHasOptionsMenu(true)
+        rootView.eventTypesRecyclerView.layoutManager = LinearLayoutManager(activity)
+        rootView.eventTypesRecyclerView.adapter = typesAdapter
         searchTypeViewModel.loadEventTypes()
-        val adapter = ArrayAdapter(context, R.layout.event_type_list, eventTypesList)
-        rootView.eventTypesLv.adapter = adapter
 
         searchTypeViewModel.eventTypes
             .nonNull()
@@ -40,11 +43,17 @@ class SearchTypeFragment : Fragment() {
                 list.forEach {
                     eventTypesList.add(it.name)
                 }
-                adapter.notifyDataSetChanged()
+                setCurrentChoice(safeArgs.type)
+                typesAdapter.addAll(eventTypesList)
+                typesAdapter.notifyDataSetChanged()
             })
-        rootView.eventTypesLv.setOnItemClickListener { parent, view, position, id ->
-            redirectToSearch(eventTypesList[position])
+
+        val listener: TypeClickListener = object : TypeClickListener {
+            override fun onClick(chosenType: String) {
+                redirectToSearch(chosenType)
+            }
         }
+        typesAdapter.setListener(listener)
         return rootView
     }
 
@@ -62,5 +71,14 @@ class SearchTypeFragment : Fragment() {
         searchTypeViewModel.saveType(type)
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
         Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+    }
+
+    private fun setCurrentChoice(value: String?) {
+        for (pos in 0 until eventTypesList.size) {
+            if (eventTypesList[pos] == value) {
+                typesAdapter.setCheckTypePosition(pos)
+                return
+            }
+        }
     }
 }

@@ -20,9 +20,11 @@
         android:textSize="@dimen/text_size_extra_large"
         android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/eventTypesLv"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/eventTypesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:scrollbars="none"/>
 </LinearLayout>
 
