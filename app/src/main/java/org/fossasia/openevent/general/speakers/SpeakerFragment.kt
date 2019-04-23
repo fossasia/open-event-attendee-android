@@ -68,11 +68,12 @@ class SpeakerFragment : Fragment() {
             false -> rootView.organization.text = speaker.organisation
         }
 
-        if (speaker.longBiography.isNullOrBlank()) {
-            if (speaker.shortBiography.isNullOrBlank())
+        when {
+            speaker.longBiography.isNullOrBlank() && speaker.shortBiography.isNullOrBlank() ->
                 rootView.aboutSpeakerContainer.isVisible = false
-            else rootView.bio.text = speaker.shortBiography.stripHtml()
-        } else rootView.bio.text = speaker.longBiography.stripHtml()
+            speaker.longBiography.isNullOrBlank() -> rootView.bio.text = speaker.shortBiography.stripHtml()
+            else -> rootView.bio.text = speaker.longBiography.stripHtml()
+        }
 
         if (speaker.email.isNullOrBlank() && speaker.mobile.isNullOrBlank() &&
             speaker.city.isNullOrBlank() && speaker.country.isNullOrBlank() &&
@@ -82,21 +83,20 @@ class SpeakerFragment : Fragment() {
         else {
             when (speaker.email.isNullOrBlank()) {
                 true -> rootView.email.isVisible = false
-                false -> rootView.email.text = "Email: " + speaker.email
+                false -> rootView.email.text = "Email: ${speaker.email}"
             }
 
             when (speaker.mobile.isNullOrBlank()) {
                 true -> rootView.mobile.isVisible = false
-                false -> rootView.mobile.text = "Phone Number: " + speaker.mobile
+                false -> rootView.mobile.text = "Phone Number: ${speaker.mobile}"
             }
 
-            if (!speaker.city.isNullOrBlank() && !speaker.country.isNullOrBlank()) {
-                rootView.from.text = "From: " + speaker.city + ", " + speaker.country
-            } else if (speaker.city.isNullOrBlank() && !speaker.country.isNullOrBlank()) {
-                rootView.from.text = "From: " + speaker.country
-            } else if (!speaker.city.isNullOrBlank() && speaker.country.isNullOrBlank()) {
-                rootView.from.text = "From: " + speaker.city
-            } else rootView.from.isVisible = false
+            when {
+                speaker.country.isNullOrBlank() && speaker.country.isNullOrBlank() -> rootView.from.isVisible = false
+                speaker.country.isNullOrBlank() -> rootView.from.text = "From: ${speaker.city}"
+                speaker.city.isNullOrBlank() -> rootView.from.text = "From: ${speaker.country}"
+                else -> rootView.from.text = "From: ${speaker.city}, ${speaker.country}"
+            }
 
             when (speaker.website.isNullOrBlank()) {
                 true -> rootView.website.isVisible = false
