@@ -27,6 +27,7 @@ class EventsListAdapter(
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null
+    var onHashtagClick: EventHashTagClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val eventView = when (eventLayout) {
@@ -48,6 +49,7 @@ class EventsListAdapter(
             bind(event, EVENT_DATE_FORMAT)
             eventClickListener = onEventClick
             favFabClickListener = onFavFabClick
+            hashTagClickListAdapter = onHashtagClick
         }
     }
 
@@ -57,4 +59,8 @@ class EventsListAdapter(
     fun clear() {
         this.submitList(emptyList())
     }
+}
+
+interface EventHashTagClickListener {
+    fun onClick(hashTagValue: String)
 }

@@ -28,6 +28,7 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -182,10 +183,30 @@ class EventsFragment : Fragment(), ScrollToTop {
             }
         }
 
+        val hashTagClickListener: EventHashTagClickListener = object : EventHashTagClickListener {
+            override fun onClick(hashTagValue: String) {
+                openSearch(hashTagValue)
+            }
+        }
+
         eventsListAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
+            onHashtagClick = hashTagClickListener
         }
+    }
+
+    private fun openSearch(hashTag: String) {
+        SearchResultsFragmentArgs.Builder()
+            .setQuery("")
+            .setLocation(Preference().getString(SAVED_LOCATION).toString())
+            .setDate(getString(R.string.anytime))
+            .setType(hashTag)
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
+            }
     }
 
     private fun showNoInternetScreen(show: Boolean) {

@@ -36,6 +36,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
 
     var eventClickListener: EventClickListener? = null
     var favFabClickListener: FavoriteFabClickListener? = null
+    var hashTagClickListAdapter: EventHashTagClickListener? = null
     /**
      * The function to bind the given data on the items in this recycler view.
      *
@@ -62,15 +63,15 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         setFabBackground(event.favorite)
 
         if (containerView.chipTags != null) {
-                event.eventType?.let {
-                    addchips(it.name)
-                }
-                event.eventTopic?.let {
-                    addchips(it.name)
-                }
-                event.eventSubTopic?.let {
-                    addchips(it.name)
-                }
+            event.eventType?.let {
+                addChips(it.name)
+            }
+            event.eventTopic?.let {
+                addChips(it.name)
+            }
+            event.eventSubTopic?.let {
+                addChips(it.name)
+            }
         }
 
         event.originalImageUrl?.let { url ->
@@ -103,7 +104,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         }
     }
 
-    private fun addchips(name: String) {
+    private fun addChips(name: String) {
         val chip = Chip(containerView.context)
         chip.text = name
         chip.isCheckable = false
@@ -112,6 +113,9 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         chip.chipStrokeWidth = 2f
         chip.chipStrokeColor =
             ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.colorPrimary))
+        chip.setOnClickListener {
+            hashTagClickListAdapter?.onClick(name)
+        }
         containerView.chipTags.addView(chip)
     }
 
