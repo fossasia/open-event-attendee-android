@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rootView"
+    android:orientation="vertical"
+    tools:context="org.fossasia.openevent.general.search.SearchFilterFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/PriceLabel"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:text="@string/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:padding="@dimen/padding_small"
+            android:textSize="@dimen/text_size_large"
+            android:text="@string/free_stuff"
+            android:id="@+id/freeStuffCheckBox"
+            android:layoutDirection="rtl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -103,6 +103,11 @@
             android:name="type"
             app:argType="string"
             android:defaultValue="''"/>
+
+        <argument
+            android:name="freeEvents"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -241,4 +246,36 @@
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_signup" />
+    <fragment
+        android:id="@+id/searchFilterFragment"
+        android:name="org.fossasia.openevent.general.search.SearchFilterFragment"
+        android:label="fragment_search_filter"
+        tools:layout="@layout/fragment_search_filter">
+
+        <argument
+            android:name="query"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="location"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="type"
+            app:argType="string"
+            android:defaultValue="''"/>
+
+        <argument
+            android:name="freeEvents"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
+    </fragment>
 </navigation>

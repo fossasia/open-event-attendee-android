@@ -3,6 +3,8 @@ package org.fossasia.openevent.general.search
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +44,7 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.navigation.fragment.findNavController
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -220,8 +223,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val location = safeArgs.location
         val type = eventType
         val date = eventDate
+        val freeEvents = safeArgs.freeEvents
         searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date, type)
+        searchViewModel.loadEvents(location, date, type, freeEvents)
     }
 
     private fun showNoSearchResults(events: List<Event>) {
@@ -239,9 +243,29 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 activity?.onBackPressed()
                 true
             }
+            R.id.filter -> {
+                SearchFilterFragmentArgs.Builder()
+                    .setDate(safeArgs.date)
+                    .setFreeEvents(safeArgs.freeEvents)
+                    .setLocation(safeArgs.location)
+                    .setType(safeArgs.type)
+                    .setQuery(safeArgs.query)
+                    .build()
+                    .toBundle()
+                    .also {
+                        Navigation.findNavController(rootView).navigate(R.id.searchFilterFragment, it, getAnimFade())
+                    }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_results, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         if (isChecked) {
             if (buttonView?.text == "Clear All") {
