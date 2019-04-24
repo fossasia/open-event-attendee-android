@@ -63,6 +63,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         setFabBackground(event.favorite)
 
         if (containerView.chipTags != null) {
+            containerView.chipTags.removeAllViews()
             event.eventType?.let {
                 addChips(it.name)
             }
