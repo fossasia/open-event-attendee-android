@@ -203,15 +203,18 @@ val networkModule = module {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
 
-        OkHttpClient().newBuilder()
+        val builder = OkHttpClient().newBuilder()
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
             .addInterceptor(get())
             .addNetworkInterceptor(StethoInterceptor())
-            .build()
+
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
+        }
+        builder.build()
     }
 
     single {
