@@ -151,6 +151,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         rootView.swiperefresh.setOnRefreshListener {
             showNoInternetScreen(!eventsViewModel.isConnected())
             eventsViewModel.clearEvents()
+            eventsViewModel.clearLastSearch()
             if (!eventsViewModel.isConnected()) {
                 rootView.swiperefresh.isRefreshing = false
             } else {

@@ -59,6 +59,8 @@ class EventsViewModel(
                     mutableError.value = resource.getString(R.string.error_fetching_events_message)
                 })
             )
+        } else {
+            mutableProgress.value = false
         }
     }
 
@@ -66,6 +68,10 @@ class EventsViewModel(
 
     fun clearEvents() {
         mutableEvents.value = null
+    }
+
+    fun clearLastSearch() {
+        lastSearch = ""
     }
 
     fun loadEvents() {
