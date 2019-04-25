@@ -86,8 +86,8 @@ class SearchFragment : Fragment() {
         }
 
         rootView.eventTypeTextView.setOnClickListener {
-            SearchLocationFragmentArgs.Builder()
-                .setFromSearchFragment(true)
+            SearchTypeFragmentArgs.Builder()
+                .setType(rootView.eventTypeTextView.text.toString())
                 .build()
                 .toBundle()
                 .also { bundle ->
