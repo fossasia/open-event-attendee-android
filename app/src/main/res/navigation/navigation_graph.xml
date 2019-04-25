@@ -110,6 +110,17 @@
             android:defaultValue="false"/>
     </fragment>
     <fragment
+        android:id="@+id/speakerFragment"
+        android:name="org.fossasia.openevent.general.speakers.SpeakerFragment"
+        android:label="SpeakerFragment"
+        tools:layout="@layout/fragment_speaker">
+
+        <argument
+            android:name="speakerId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment"

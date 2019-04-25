@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="@dimen/item_image_view_extra_large"
+        android:layout_height="@dimen/item_image_view_extra_large"
+        android:scaleType="centerCrop"
+        android:padding="@dimen/padding_large"
+        android:id="@+id/photo"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_account_circle_grey"/>
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_expanded_title_large"
+        tools:text="Anunay Rajhans"
+        android:textColor="@color/black"
+        android:id="@+id/name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_expanded_title"
+        tools:text="Software Developer"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/position"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_expanded_title"
+        tools:text="Google"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/organization"/>
+    <LinearLayout
+        android:id="@+id/aboutSpeakerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_large"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            android:background="@color/grey" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/divider_margin_top"
+            android:text="@string/about"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers" />
+
+        <TextView
+            android:id="@+id/bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:textColor="@color/light_grey"
+            tools:text="Description" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/speakerContactsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_large"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            android:background="@color/grey" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/divider_margin_top"
+            android:text="Contact"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers" />
+
+        <TextView
+            android:id="@+id/from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:textColor="@color/light_grey"
+            tools:text="City, country" />
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:textColor="@color/light_grey"
+            tools:text="abc@pqr.xyz" />
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:textColor="@color/light_grey"
+            tools:text="+919876543210" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginRight="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/divider_margin_top">
+            <ImageView
+                android:id="@+id/website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_link_black" />
+            <ImageView
+                android:id="@+id/twitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_twitter" />
+            <ImageView
+                android:id="@+id/facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_facebook" />
+            <ImageView
+                android:id="@+id/linkedin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_linkedin" />
+            <ImageView
+                android:id="@+id/github"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_github" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

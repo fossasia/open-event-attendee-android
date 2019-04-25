@@ -21,6 +21,8 @@ data class Speaker(
     val shortBiography: String?,
     val longBiography: String?,
     val speakingExperience: String?,
+    val position: String?,
+    val mobile: String?,
     val location: String?,
     val country: String?,
     val city: String?,

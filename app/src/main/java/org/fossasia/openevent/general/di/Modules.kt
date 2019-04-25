@@ -81,6 +81,7 @@ import org.fossasia.openevent.general.social.SocialLinksViewModel
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
+import org.fossasia.openevent.general.speakers.SpeakerViewModel
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
@@ -187,6 +188,7 @@ val viewModelModule = module {
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
+    viewModel { SpeakerViewModel(get(), get()) }
 }
 
 val networkModule = module {
