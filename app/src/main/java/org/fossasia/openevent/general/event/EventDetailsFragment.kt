@@ -57,6 +57,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.event.faq.EventFAQFragmentArgs
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
@@ -358,6 +359,16 @@ class EventDetailsFragment : Fragment() {
             }
             R.id.event_share -> {
                 EventUtils.share(eventShare, rootView.eventImage)
+                return true
+            }
+            R.id.open_faqs -> {
+                EventFAQFragmentArgs.Builder()
+                    .setEventId(safeArgs.eventId)
+                    .build()
+                    .toBundle()
+                    .also { bundle ->
+                        findNavController(rootView).navigate(R.id.eventFAQFragment, bundle, getAnimSlide())
+                    }
                 return true
             }
             else -> super.onOptionsItemSelected(item)
