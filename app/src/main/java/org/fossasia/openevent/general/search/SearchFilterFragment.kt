@@ -60,6 +60,8 @@ class SearchFilterFragment : Fragment() {
             }
             R.id.filter_set -> {
                 setBackIndicator()
+                val navigator = Navigation.findNavController(rootView)
+                navigator.popBackStack(R.id.searchResultsFragment, true)
                 SearchFilterFragmentArgs.Builder()
                     .setDate(safeArgs.date)
                     .setFreeEvents(isFreeStuffChecked)
@@ -69,8 +71,7 @@ class SearchFilterFragment : Fragment() {
                     .build()
                     .toBundle()
                     .also {
-                        Navigation.findNavController(rootView)
-                            .navigate(R.id.searchResultsFragment, it, getAnimFade())
+                        navigator.navigate(R.id.searchResultsFragment, it, getAnimFade())
                     }
                 true
             }
