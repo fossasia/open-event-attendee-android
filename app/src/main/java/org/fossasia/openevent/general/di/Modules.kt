@@ -182,7 +182,7 @@ val viewModelModule = module {
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
-    viewModel { SearchTypeViewModel(get(), get()) }
+    viewModel { SearchTypeViewModel(get(), get(), get()) }
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }

@@ -7,7 +7,6 @@ import android.widget.CheckedTextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.event_type_list.view.typeTextView
 import org.fossasia.openevent.general.R
-import timber.log.Timber
 
 class SearchTypeAdapter : RecyclerView.Adapter<SearchTypeViewHolder>() {
     private val types = ArrayList<String>()
@@ -51,7 +50,6 @@ class SearchTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if (typeView is CheckedTextView) {
             typeView.text = typeValue
             if (isChecked) {
-                Timber.d("DEBUGGING CHECKED CALLED: $typeValue")
                 typeView.setCheckMarkDrawable(R.drawable.ic_checked)
                 typeView.isChecked = true
             } else {

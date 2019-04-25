@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
+import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTitle
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -37,6 +41,17 @@ class SearchTypeFragment : Fragment() {
         rootView.eventTypesRecyclerView.adapter = typesAdapter
         searchTypeViewModel.loadEventTypes()
 
+        searchTypeViewModel.connection
+            .nonNull()
+            .observe(this, Observer { isConnected ->
+                if (isConnected) {
+                    searchTypeViewModel.loadEventTypes()
+                    showNoInternetError(false)
+                } else {
+                    showNoInternetError(searchTypeViewModel.eventTypes.value == null)
+                }
+            })
+
         searchTypeViewModel.eventTypes
             .nonNull()
             .observe(this, Observer { list ->
@@ -54,6 +69,11 @@ class SearchTypeFragment : Fragment() {
             }
         }
         typesAdapter.setListener(listener)
+
+        rootView.retry.setOnClickListener {
+            if (searchTypeViewModel.isConnected()) searchTypeViewModel.loadEventTypes()
+        }
+
         return rootView
     }
 
@@ -80,5 +100,11 @@ class SearchTypeFragment : Fragment() {
                 return
             }
         }
+    }
+
+    private fun showNoInternetError(show: Boolean) {
+        rootView.noInternetCard.isVisible = show
+        rootView.eventTypesRecyclerView.isVisible = !show
+        rootView.eventTypesTextTitle.isVisible = !show
     }
 }

@@ -10,7 +10,10 @@
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchTypeFragment">
 
+    <include layout="@layout/content_no_internet" />
+
     <TextView
+        android:id="@+id/eventTypesTextTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
