@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,10 +40,11 @@ import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
 import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.eventImage
-import kotlinx.android.synthetic.main.content_event.view.feedbackContainer
+import kotlinx.android.synthetic.main.content_event.view.feedbackBtn
 import kotlinx.android.synthetic.main.content_event.view.feedbackRv
 import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
+import kotlinx.android.synthetic.main.content_event.view.noFeedBackTv
 import kotlinx.android.synthetic.main.content_event.view.organizerName
 import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
@@ -52,9 +56,13 @@ import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
 import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
+import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
+import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
+import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
+import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.faq.EventFAQFragmentArgs
@@ -74,6 +82,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 import java.lang.Exception
 
 const val EVENT_ID = "eventId"
@@ -147,8 +157,18 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {
             feedbackAdapter.addAll(it)
-            rootView.feedbackContainer.isVisible = !it.isEmpty()
+            if (it.isEmpty()) {
+                rootView.feedbackRv.isVisible = false
+                rootView.noFeedBackTv.isVisible = true
+            } else {
+                rootView.feedbackRv.isVisible = true
+                rootView.noFeedBackTv.isVisible = false
+            }
         })
+
+        rootView.feedbackBtn.setOnClickListener {
+            checkForAuthentication()
+        }
 
         eventViewModel.loadEvent(safeArgs.eventId)
         rootView.retry.setOnClickListener {
@@ -480,6 +500,60 @@ class EventDetailsFragment : Fragment() {
         for (i in 0..(menuItemSize - 1)) {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
+    }
+    private fun checkForAuthentication() {
+        if (eventViewModel.isLoggedIn())
+            writefeedback()
+        else {
+            rootView.nestedContentEventScroll.longSnackbar(getString(R.string.log_in_first))
+            redirectToLogin()
+        }
+    }
+
+    private fun redirectToLogin() {
+        LoginFragmentArgs.Builder()
+            .setSnackbarMessage(getString(R.string.log_in_first))
+            .build()
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.loginFragment, bundle, Utils.getAnimFade())
+            }
+    }
+
+    private fun writefeedback() {
+        val layout = layoutInflater.inflate(R.layout.dialog_feedback, null)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.submit_feedback))
+            .setView(layout)
+            .setPositiveButton(getString(R.string.submit)) { _, _ ->
+                eventViewModel.submitFeedback(layout.feedback.text.toString(),
+                    layout.feedbackrating.rating,
+                    safeArgs.eventId)
+                rootView.snackbar(R.string.feedback_submitted)
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+
+            .show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        layout.feedback.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+
+                    if (layout.feedback.text.toString().isNotEmpty()) {
+                        layout.feedbackTextInputLayout.error = null
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                        layout.feedbackTextInputLayout.isErrorEnabled = false
+                    } else {
+                        layout.feedbackTextInputLayout.error = "Can't be Empty"
+                    }
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            })
     }
 
     override fun onDestroy() {

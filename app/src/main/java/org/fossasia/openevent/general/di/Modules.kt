@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
-import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -177,7 +176,7 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
@@ -238,8 +237,6 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             EventFAQ::class.java)
-
-        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
 
         Retrofit.Builder()
             .client(get())
