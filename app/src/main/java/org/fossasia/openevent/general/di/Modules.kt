@@ -84,6 +84,9 @@ import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.speakers.SpeakerViewModel
+import org.fossasia.openevent.general.sponsor.Sponsor
+import org.fossasia.openevent.general.sponsor.SponsorApi
+import org.fossasia.openevent.general.sponsor.SponsorService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
@@ -158,11 +161,17 @@ val apiModule = module {
         retrofit.create(EventFAQApi::class.java)
     }
 
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SponsorApi::class.java)
+    }
+
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
     factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
+    factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
@@ -176,7 +185,7 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
@@ -236,7 +245,7 @@ val networkModule = module {
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
-            EventFAQ::class.java)
+            EventFAQ::class.java, Sponsor::class.java)
 
         Retrofit.Builder()
             .client(get())
@@ -298,6 +307,16 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.speakerDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.sponsorWithEventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.sponsorDao()
     }
 }
 

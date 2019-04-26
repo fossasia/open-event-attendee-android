@@ -17,12 +17,15 @@ import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
+import org.fossasia.openevent.general.sponsor.Sponsor
+import org.fossasia.openevent.general.sponsor.SponsorService
 import timber.log.Timber
 
 class EventDetailsViewModel(
     private val eventService: EventService,
     private val authHolder: AuthHolder,
     private val speakerService: SpeakerService,
+    private val sponsorService: SponsorService,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -86,6 +89,20 @@ class EventDetailsViewModel(
         eventSpeakers = speakerService.fetchSpeakersFromDb(id)
         return eventSpeakers
     }
+
+    fun fetchEventSponsors(id: Long) {
+        sponsorService.fetchSponsorsWithEvent(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                //Do Nothing
+            }, {
+                Timber.e(it, "Error fetching sponsor for event id %d", id)
+                mutableError.value = resource.getString(R.string.error_fetching_event_message)
+            })
+    }
+
+    fun loadEventSponsors(id: Long): LiveData<List<Sponsor>> = sponsorService.fetchSponsorsFromDb(id)
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
