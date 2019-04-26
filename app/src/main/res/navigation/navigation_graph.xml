@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_search_location">
 
         <argument
-            android:name="FromSearchFragment"
+            android:name="fromSearchFragment"
             app:argType="boolean"
             android:defaultValue="false"/>
     </fragment>

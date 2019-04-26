@@ -166,9 +166,8 @@ class EventsFragment : Fragment(), ScrollToTop {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
+            override fun onClick(eventID: Long) {
+                EventDetailsFragmentArgs(eventID)
                 .toBundle()
                 .also { bundle ->
                     findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
@@ -198,12 +197,12 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     private fun openSearch(hashTag: String) {
-        SearchResultsFragmentArgs.Builder()
-            .setQuery("")
-            .setLocation(Preference().getString(SAVED_LOCATION).toString())
-            .setDate(getString(R.string.anytime))
-            .setType(hashTag)
-            .build()
+        SearchResultsFragmentArgs(
+            query = "",
+            location = Preference().getString(SAVED_LOCATION).toString(),
+            date = getString(R.string.anytime),
+            type = hashTag
+        )
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())

@@ -42,9 +42,7 @@ class ProfileFragment : Fragment() {
     private var emailSettings: String? = null
 
     private fun redirectToLogin() {
-        LoginFragmentArgs.Builder()
-            .setSnackbarMessage(getString(R.string.log_in_first))
-            .build()
+        LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
@@ -104,9 +102,7 @@ class ProfileFragment : Fragment() {
         rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
         rootView.settingsLL.setOnClickListener {
-
-            SettingsFragmentArgs.Builder(emailSettings)
-                .build()
+            SettingsFragmentArgs(emailSettings)
                 .toBundle()
                 .also { bundle ->
                     findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())

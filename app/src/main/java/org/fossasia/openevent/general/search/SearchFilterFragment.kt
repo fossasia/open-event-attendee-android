@@ -62,13 +62,13 @@ class SearchFilterFragment : Fragment() {
                 setBackIndicator()
                 val navigator = Navigation.findNavController(rootView)
                 navigator.popBackStack(R.id.searchResultsFragment, true)
-                SearchFilterFragmentArgs.Builder()
-                    .setDate(safeArgs.date)
-                    .setFreeEvents(isFreeStuffChecked)
-                    .setLocation(safeArgs.location)
-                    .setType(safeArgs.type)
-                    .setQuery(safeArgs.query)
-                    .build()
+                SearchFilterFragmentArgs(
+                    date = safeArgs.date,
+                    freeEvents = isFreeStuffChecked,
+                    location = safeArgs.location,
+                    type = safeArgs.type,
+                    query = safeArgs.query
+                )
                     .toBundle()
                     .also {
                         navigator.navigate(R.id.searchResultsFragment, it, getAnimFade())

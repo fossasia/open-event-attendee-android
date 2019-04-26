@@ -73,9 +73,7 @@ class OrderDetailsFragment : Fragment() {
 
         val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
+                EventDetailsFragmentArgs(eventID)
                     .toBundle()
                     .also { bundle ->
                         findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())

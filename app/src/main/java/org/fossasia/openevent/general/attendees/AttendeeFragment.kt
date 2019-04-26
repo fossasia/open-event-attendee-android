@@ -555,9 +555,7 @@ class AttendeeFragment : Fragment() {
 
     private fun openOrderCompletedFragment() {
         attendeeViewModel.paymentCompleted.value = false
-        OrderCompletedFragmentArgs.Builder()
-            .setEventId(safeArgs.eventId)
-            .build()
+        OrderCompletedFragmentArgs(safeArgs.eventId)
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())

@@ -81,10 +81,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    OrderDetailsFragmentArgs.Builder()
-                        .setEventId(eventID)
-                        .setOrders(orderIdentifier)
-                        .build()
+                    OrderDetailsFragmentArgs(eventID, orderIdentifier)
                         .toBundle()
                         .also { bundle ->
                             findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
@@ -93,9 +90,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             }
 
             rootView.expireFilter.setOnClickListener {
-                OrdersUnderUserFragmentArgs.Builder()
-                    .setShowExpired(true)
-                    .build()
+                OrdersUnderUserFragmentArgs(showExpired = true)
                     .toBundle()
                     .also { bundle ->
                         findNavController(rootView).navigate(R.id.orderUnderUserFragment, bundle, getAnimSlide())
@@ -156,9 +151,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs.Builder()
-            .setSnackbarMessage(getString(R.string.log_in_first))
-            .build()
+        LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
