@@ -194,9 +194,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
+                EventDetailsFragmentArgs(eventID)
                     .toBundle()
                     .also { bundle ->
                         Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
@@ -244,13 +242,13 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 true
             }
             R.id.filter -> {
-                SearchFilterFragmentArgs.Builder()
-                    .setDate(safeArgs.date)
-                    .setFreeEvents(safeArgs.freeEvents)
-                    .setLocation(safeArgs.location)
-                    .setType(safeArgs.type)
-                    .setQuery(safeArgs.query)
-                    .build()
+                SearchFilterFragmentArgs(
+                    date = safeArgs.date,
+                    freeEvents = safeArgs.freeEvents,
+                    location = safeArgs.location,
+                    type = safeArgs.type,
+                    query = safeArgs.query
+                )
                     .toBundle()
                     .also {
                         Navigation.findNavController(rootView).navigate(R.id.searchFilterFragment, it, getAnimFade())

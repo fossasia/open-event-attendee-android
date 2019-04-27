@@ -118,9 +118,8 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
+            override fun onClick(eventID: Long) {
+                EventDetailsFragmentArgs(eventID)
                 .toBundle()
                 .also { bundle ->
                     findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
@@ -151,11 +150,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun openSearchResult(time: String) {
-        SearchResultsFragmentArgs.Builder()
-            .setQuery("")
-            .setLocation(Preference().getString(SAVED_LOCATION).toString())
-            .setDate(time)
-            .build()
+        SearchResultsFragmentArgs(query = "", location = Preference().getString(SAVED_LOCATION).toString(), date = time)
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, Utils.getAnimSlide())

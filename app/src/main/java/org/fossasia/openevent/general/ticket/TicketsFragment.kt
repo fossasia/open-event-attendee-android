@@ -148,10 +148,7 @@ class TicketsFragment : Fragment() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
 
-        AttendeeFragmentArgs.Builder()
-            .setTicketIdAndQty(wrappedTicketAndQty)
-            .setEventId(safeArgs.eventId)
-            .build()
+        AttendeeFragmentArgs(eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty)
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
@@ -159,9 +156,7 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs.Builder()
-            .setSnackbarMessage(getString(R.string.log_in_first))
-            .build()
+        LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())

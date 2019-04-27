@@ -130,7 +130,7 @@ class EventDetailsFragment : Fragment() {
                 }
                 runOnce = false
 
-                Timber.d("Fetched events of id %d", safeArgs.eventId)
+                Timber.d("Fetched events of id ${safeArgs.eventId}")
                 showEventErrorScreen(false)
                 setHasOptionsMenu(true)
             })
@@ -183,9 +183,8 @@ class EventDetailsFragment : Fragment() {
         }
 
         val speakerClickListener: SpeakerClickListener = object : SpeakerClickListener {
-            override fun onClick(speakerId: Long) { SpeakerFragmentArgs.Builder()
-                .setSpeakerId(speakerId)
-                .build()
+            override fun onClick(speakerId: Long) {
+                SpeakerFragmentArgs(speakerId)
                 .toBundle()
                 .also { bundle ->
                     findNavController(rootView).navigate(R.id.speakerFragment, bundle, getAnimSlide())
@@ -282,9 +281,7 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            AboutEventFragmentArgs.Builder()
-                .setEventId(safeArgs.eventId)
-                .build()
+            AboutEventFragmentArgs(safeArgs.eventId)
                 .toBundle()
                 .also { bundle ->
                     findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
@@ -400,9 +397,7 @@ class EventDetailsFragment : Fragment() {
                 return true
             }
             R.id.open_faqs -> {
-                EventFAQFragmentArgs.Builder()
-                    .setEventId(safeArgs.eventId)
-                    .build()
+                EventFAQFragmentArgs(safeArgs.eventId)
                     .toBundle()
                     .also { bundle ->
                         findNavController(rootView).navigate(R.id.eventFAQFragment, bundle, getAnimSlide())
@@ -461,10 +456,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadTicketFragment() {
-        TicketsFragmentArgs.Builder()
-            .setEventId(safeArgs.eventId)
-            .setCurrency(currency)
-            .build()
+        TicketsFragmentArgs(safeArgs.eventId, currency)
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
@@ -529,9 +521,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs.Builder()
-            .setSnackbarMessage(getString(R.string.log_in_first))
-            .build()
+        LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.loginFragment, bundle, Utils.getAnimFade())

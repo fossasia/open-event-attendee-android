@@ -98,9 +98,7 @@ class SimilarEventsFragment : Fragment() {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
+                EventDetailsFragmentArgs(eventID)
                     .toBundle()
                     .also { bundle ->
                         findNavController(view).navigate(R.id.eventDetailsFragment, bundle,

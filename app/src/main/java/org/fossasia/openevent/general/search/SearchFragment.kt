@@ -45,9 +45,7 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            SearchTimeFragmentArgs.Builder()
-                .setTime(rootView.timeTextView.text.toString())
-                .build()
+            SearchTimeFragmentArgs(rootView.timeTextView.text.toString())
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
@@ -76,9 +74,7 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.text = searchViewModel.savedLocation
 
         rootView.locationTextView.setOnClickListener {
-            SearchLocationFragmentArgs.Builder()
-                .setFromSearchFragment(true)
-                .build()
+            SearchLocationFragmentArgs(fromSearchFragment = true)
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
@@ -86,9 +82,7 @@ class SearchFragment : Fragment() {
         }
 
         rootView.eventTypeTextView.setOnClickListener {
-            SearchTypeFragmentArgs.Builder()
-                .setType(rootView.eventTypeTextView.text.toString())
-                .build()
+            SearchLocationFragmentArgs(fromSearchFragment = true)
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchTypeFragment, bundle, getAnimSlide())
@@ -121,12 +115,12 @@ class SearchFragment : Fragment() {
         searchItem.actionView = searchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                SearchResultsFragmentArgs.Builder()
-                    .setQuery(query)
-                    .setLocation(rootView.locationTextView.text.toString().nullToEmpty())
-                    .setDate((searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty())
-                    .setType((searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty())
-                    .build()
+                SearchResultsFragmentArgs(
+                    query = query,
+                    location = rootView.locationTextView.text.toString().nullToEmpty(),
+                    date = (searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty(),
+                    type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
+                )
                     .toBundle()
                     .also { bundle ->
                         findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
