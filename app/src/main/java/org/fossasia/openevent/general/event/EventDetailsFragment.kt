@@ -52,6 +52,9 @@ import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.content_event.view.organizerContainer
 import kotlinx.android.synthetic.main.content_event.view.speakerRv
 import kotlinx.android.synthetic.main.content_event.view.speakersContainer
+import kotlinx.android.synthetic.main.content_event.view.sponsorsRecyclerView
+import kotlinx.android.synthetic.main.content_event.view.sponsorsSummaryContainer
+import kotlinx.android.synthetic.main.content_event.view.feedbackContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -71,6 +74,7 @@ import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.speakers.SpeakerFragmentArgs
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
+import org.fossasia.openevent.general.sponsor.SponsorRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
@@ -95,6 +99,7 @@ class EventDetailsFragment : Fragment() {
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
     private val feedbackAdapter = FeedbackRecyclerAdapter()
     private val speakersAdapter = SpeakerRecyclerAdapter()
+    private val sponsorsAdapter = SponsorRecyclerAdapter()
 
     private lateinit var rootView: View
     private var eventTopicId: Long? = null
@@ -131,6 +136,7 @@ class EventDetailsFragment : Fragment() {
             })
         eventViewModel.loadEventFeedback(safeArgs.eventId)
         eventViewModel.fetchEventSpeakers(safeArgs.eventId)
+        eventViewModel.fetchEventSponsors(safeArgs.eventId)
     }
 
     override fun onCreateView(
@@ -164,6 +170,7 @@ class EventDetailsFragment : Fragment() {
                 rootView.feedbackRv.isVisible = true
                 rootView.noFeedBackTv.isVisible = false
             }
+            rootView.feedbackContainer.isVisible = it.isNotEmpty()
         })
 
         rootView.feedbackBtn.setOnClickListener {
@@ -194,6 +201,11 @@ class EventDetailsFragment : Fragment() {
             onSpeakerClick = speakerClickListener
         }
 
+        val sponsorLinearLayoutManager = LinearLayoutManager(context)
+        sponsorLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.sponsorsRecyclerView.layoutManager = sponsorLinearLayoutManager
+        rootView.sponsorsRecyclerView.adapter = sponsorsAdapter
+
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rootView.nestedContentEventScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -213,6 +225,12 @@ class EventDetailsFragment : Fragment() {
             } else {
                 rootView.speakersContainer.visibility = View.VISIBLE
             }
+        })
+
+        eventViewModel.loadEventSponsors(safeArgs.eventId).observe(viewLifecycleOwner, Observer { sponsors ->
+            sponsorsAdapter.addAll(sponsors)
+            rootView.sponsorsSummaryContainer.visibility = if (sponsors.isEmpty()) View.GONE else View.VISIBLE
+            sponsorsAdapter.notifyDataSetChanged()
         })
 
         return rootView

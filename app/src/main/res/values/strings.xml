@@ -318,5 +318,7 @@
     <string name="filter_set">Filter Done</string>
     <string name="filter">Filter Search</string>
     <string name="free_stuff">Free stuff only</string>
+    <string name="speakers">Speakers</string>
+    <string name="sponsors">Sponsors</string>
 
 </resources>

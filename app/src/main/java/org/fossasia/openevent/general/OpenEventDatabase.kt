@@ -26,12 +26,17 @@ import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerDao
 import org.fossasia.openevent.general.speakers.SpeakerWithEvent
 import org.fossasia.openevent.general.speakers.SpeakerWithEventDao
+import org.fossasia.openevent.general.sponsor.Sponsor
+import org.fossasia.openevent.general.sponsor.SponsorDao
+import org.fossasia.openevent.general.sponsor.SponsorWithEvent
+import org.fossasia.openevent.general.sponsor.SponsorWithEventDao
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketDao
 import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
-    EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class], version = 3)
+    EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
+    SponsorWithEvent::class], version = 4)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
     EventSubTopicConverter::class, TicketIdConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class)
@@ -54,4 +59,8 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun eventTopicsDao(): EventTopicsDao
 
     abstract fun orderDao(): OrderDao
+
+    abstract fun sponsorDao(): SponsorDao
+
+    abstract fun sponsorWithEventDao(): SponsorWithEventDao
 }
