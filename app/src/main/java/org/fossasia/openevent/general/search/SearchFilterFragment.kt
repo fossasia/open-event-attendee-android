@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.search
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -9,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -17,13 +15,23 @@ import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButto
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
 import kotlinx.android.synthetic.main.fragment_search_filter.view.nameRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.radioGroup
+import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectCategory
+import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectDate
+import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectLocation
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+const val SEARCH_FILTER_FRAGMENT = "SearchFilterFragment"
 
 class SearchFilterFragment : Fragment() {
     private lateinit var rootView: View
     private var isFreeStuffChecked = false
+    private lateinit var selectedTime: String
+    private lateinit var selectedLocation: String
+    private lateinit var selectedCategory: String
+    private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchFilterFragmentArgs by navArgs()
     private lateinit var sortBy: String
     override fun onCreateView(
@@ -34,8 +42,8 @@ class SearchFilterFragment : Fragment() {
         setToolbar(activity)
         setHasOptionsMenu(true)
         rootView = inflater.inflate(R.layout.fragment_search_filter, container, false)
-        setFilterToolbar()
-        setFreeStuffCheckBox()
+        setFilterParams()
+        setFilters()
         setSortByRadioGroup()
         return rootView
     }
@@ -62,33 +70,22 @@ class SearchFilterFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun setFilterToolbar() {
-        val close = resources.getDrawable(R.drawable.ic_close)
-        setBackIndicator(close)
-    }
-
-    private fun setBackIndicator(indicator: Drawable? = null) {
-        (activity as? AppCompatActivity)?.supportActionBar?.setHomeAsUpIndicator(indicator)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                setBackIndicator()
                 activity?.onBackPressed()
                 true
             }
             R.id.filter_set -> {
-                setBackIndicator()
                 val navigator = Navigation.findNavController(rootView)
                 navigator.popBackStack(R.id.searchResultsFragment, true)
-                SearchFilterFragmentArgs(
-                    date = safeArgs.date,
+                SearchResultsFragmentArgs(
+                    date = selectedTime,
                     freeEvents = isFreeStuffChecked,
-                    location = safeArgs.location,
-                    sort = sortBy,
-                    type = safeArgs.type,
-                    query = safeArgs.query
+                    location = selectedLocation,
+                    type = selectedCategory,
+                    query = safeArgs.query,
+                    sort = sortBy
                 )
                     .toBundle()
                     .also {
@@ -100,7 +97,60 @@ class SearchFilterFragment : Fragment() {
         }
     }
 
-    private fun setFreeStuffCheckBox() {
+    private fun setFilterParams() {
+        with(searchViewModel) {
+            loadSavedLocation()
+            selectedLocation = savedLocation ?: getString(R.string.anywhere)
+            loadSavedTime()
+            selectedTime = savedTime ?: getString(R.string.anytime)
+            loadSavedType()
+            selectedCategory = savedType ?: getString(R.string.anything)
+        }
+    }
+    private fun setFilters() {
+
+        rootView.tvSelectDate.text = selectedTime
+        rootView.tvSelectDate.setOnClickListener {
+            SearchTimeFragmentArgs(
+                time = selectedTime,
+                fromFragmentName = SEARCH_FILTER_FRAGMENT,
+                query = safeArgs.query
+            )
+                .toBundle()
+                .also {
+                    Navigation.findNavController(rootView)
+                        .navigate(R.id.searchTimeFragment, it, getAnimFade())
+                }
+        }
+
+        rootView.tvSelectLocation.text = selectedLocation
+        rootView.tvSelectLocation.setOnClickListener {
+            SearchTimeFragmentArgs(
+                time = selectedLocation,
+                fromFragmentName = SEARCH_FILTER_FRAGMENT,
+                query = safeArgs.query
+            )
+                .toBundle()
+                .also {
+                    Navigation.findNavController(rootView)
+                        .navigate(R.id.searchLocationFragment, it, getAnimFade())
+                }
+        }
+
+        rootView.tvSelectCategory.text = selectedCategory
+        rootView.tvSelectCategory.setOnClickListener {
+            SearchTimeFragmentArgs(
+                time = selectedCategory,
+                fromFragmentName = SEARCH_FILTER_FRAGMENT,
+                query = safeArgs.query
+            )
+                .toBundle()
+                .also {
+                    Navigation.findNavController(rootView)
+                        .navigate(R.id.searchTypeFragment, it, getAnimFade())
+                }
+        }
+
         rootView.freeStuffCheckBox.isChecked = safeArgs.freeEvents
         rootView.freeStuffCheckBox.setOnCheckedChangeListener { _, isChecked ->
             isFreeStuffChecked = isChecked

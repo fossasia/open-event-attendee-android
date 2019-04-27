@@ -101,8 +101,20 @@ class SearchTypeFragment : Fragment() {
 
     private fun redirectToSearch(type: String) {
         searchTypeViewModel.saveType(type)
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+        val (destFragId, popUpId) = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
+            R.id.searchFilterFragment to R.id.searchResultsFragment
+        else
+            R.id.searchFragment to R.id.eventsFragment
+
+        val navOptions = NavOptions.Builder().setPopUpTo(popUpId, false).build()
+        Navigation.findNavController(rootView).navigate(destFragId, null, navOptions)
+        val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
+            SearchFilterFragmentArgs(
+                query = safeArgs.query
+            ).toBundle()
+        } else
+            null
+        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
     }
 
     private fun setCurrentChoice(value: String?) {

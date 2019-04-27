@@ -48,27 +48,27 @@ class SearchTimeFragment : Fragment() {
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             calendar.add(Calendar.DATE, 1)
-            redirectToSearch(getSimpleFormattedDate(calendar.time))
+            redirectToCaller(getSimpleFormattedDate(calendar.time))
         }
 
         rootView.anytimeTextView.setOnClickListener {
-            redirectToSearch(ANYTIME)
+            redirectToCaller(ANYTIME)
         }
 
         rootView.todayTextView.setOnClickListener {
-            redirectToSearch(TODAY)
+            redirectToCaller(TODAY)
         }
 
         rootView.tomorrowTextView.setOnClickListener {
-            redirectToSearch(TOMORROW)
+            redirectToCaller(TOMORROW)
         }
 
         rootView.thisWeekendTextView.setOnClickListener {
-            redirectToSearch(THIS_WEEKEND)
+            redirectToCaller(THIS_WEEKEND)
         }
 
         rootView.nextMonthTextView.setOnClickListener {
-            redirectToSearch(NEXT_MONTH)
+            redirectToCaller(NEXT_MONTH)
         }
 
         rootView.timeTextView.setOnClickListener {
@@ -80,10 +80,22 @@ class SearchTimeFragment : Fragment() {
         return rootView
     }
 
-    private fun redirectToSearch(time: String) {
+    private fun redirectToCaller(time: String) {
         searchTimeViewModel.saveTime(time)
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+        val (destFragId, popUpId) = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
+            R.id.searchFilterFragment to R.id.searchResultsFragment
+        else
+            R.id.searchFragment to R.id.eventsFragment
+
+        val navOptions = NavOptions.Builder().setPopUpTo(popUpId, false).build()
+
+        val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
+            SearchFilterFragmentArgs(
+                query = safeArgs.query
+            ).toBundle()
+        } else
+            null
+        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
