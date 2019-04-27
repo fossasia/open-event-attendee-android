@@ -31,4 +31,47 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sortLabel"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:text="@string/sort_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioGroup">
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/padding_small"
+                android:textSize="@dimen/text_size_large"
+                android:id="@+id/dateRadioButton"
+                android:checked="false" />
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/padding_small"
+                android:textSize="@dimen/text_size_large"
+                android:id="@+id/nameRadioButton"
+                android:layout_gravity="center_horizontal"
+                android:checked="false" />
+        </RadioGroup>
+
+    </LinearLayout>
 </LinearLayout>
