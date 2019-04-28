@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTitle
+import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -50,6 +51,17 @@ class SearchTypeFragment : Fragment() {
                 } else {
                     showNoInternetError(searchTypeViewModel.eventTypes.value == null)
                 }
+            })
+
+        searchTypeViewModel.showShimmer
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
+                if (shouldShowShimmer) {
+                    rootView.shimmerSearchEventTypes.startShimmer()
+                } else {
+                    rootView.shimmerSearchEventTypes.stopShimmer()
+                }
+                rootView.shimmerSearchEventTypes.isVisible = shouldShowShimmer
             })
 
         searchTypeViewModel.eventTypes
