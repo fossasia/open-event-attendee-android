@@ -150,7 +150,10 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun openSearchResult(time: String) {
-        SearchResultsFragmentArgs(query = "", location = Preference().getString(SAVED_LOCATION).toString(), date = time)
+        SearchResultsFragmentArgs(query = "",
+            location = Preference().getString(SAVED_LOCATION).toString(),
+            type = getString(R.string.anything),
+            date = time)
             .toBundle()
             .also { bundle ->
                 findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, Utils.getAnimSlide())
