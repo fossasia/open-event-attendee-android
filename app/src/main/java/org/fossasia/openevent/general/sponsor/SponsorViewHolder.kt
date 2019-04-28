@@ -10,7 +10,14 @@ import org.fossasia.openevent.general.utils.Utils
 
 class SponsorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(sponsor: Sponsor, isLastPreviewSponsor: Boolean, sponsorListSize: Int) {
+    lateinit var sponsorClickListener: SponsorClickListener
+
+    fun bind(
+        sponsor: Sponsor,
+        isLastPreviewSponsor: Boolean,
+        sponsorListSize: Int
+    ) {
+
         Picasso.get()
             .load(sponsor.logoUrl)
             .placeholder(Utils.requireDrawable(itemView.context, R.drawable.ic_account_circle_grey))
@@ -20,6 +27,10 @@ class SponsorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if (isLastPreviewSponsor) {
             itemView.sponsorImageView.foreground = itemView.context.getDrawable(R.drawable.foreground_black_blur)
             itemView.sponsorTextView.text = "+$sponsorListSize"
+        }
+
+        itemView.setOnClickListener {
+            sponsorClickListener.onClick()
         }
     }
 }

@@ -9,6 +9,7 @@ const val MAXIMUM_PREVIEW_SPONSOR = 8
 
 class SponsorRecyclerAdapter : RecyclerView.Adapter<SponsorViewHolder>() {
     private val sponsorList = ArrayList<Sponsor>()
+    lateinit var onSponsorClick: SponsorClickListener
 
     fun addAll(newSponsors: List<Sponsor>) {
         if (sponsorList.isNotEmpty()) sponsorList.clear()
@@ -16,8 +17,11 @@ class SponsorRecyclerAdapter : RecyclerView.Adapter<SponsorViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: SponsorViewHolder, position: Int) {
-        holder.bind(sponsorList[position],
-            sponsorList.size > MAXIMUM_PREVIEW_SPONSOR && position == MAXIMUM_PREVIEW_SPONSOR - 1, sponsorList.size)
+        holder.apply {
+            bind(sponsorList[position], sponsorList.size > MAXIMUM_PREVIEW_SPONSOR &&
+                position == MAXIMUM_PREVIEW_SPONSOR - 1, sponsorList.size)
+            sponsorClickListener = onSponsorClick
+        }
     }
 
     override fun getItemCount(): Int {
