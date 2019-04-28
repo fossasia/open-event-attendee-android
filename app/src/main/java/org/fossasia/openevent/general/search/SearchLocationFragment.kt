@@ -147,7 +147,7 @@ class SearchLocationFragment : Fragment() {
         val subject = PublishSubject.create<String>()
         rootView.locationSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                handleDisplayPlaceSuggestions(query, subject)
+                savePlaceAndRedirectToMain(query)
                 return false
             }
 
