@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -83,7 +84,7 @@ class EventService(
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
         return eventApi.searchEvents("name", query).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()
-            eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
+            //eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
             eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
                 updateFavorites(apiList, favIds)
             }
@@ -92,7 +93,8 @@ class EventService(
 
     fun updateFavorites(apiEvents: List<Event>, favEventIds: List<Long>): Single<List<Event>> {
         apiEvents.map { if (favEventIds.contains(it.id)) it.favorite = true }
-        eventDao.insertEvents(apiEvents)
+        Log.i("PUI", "size ${apiEvents.size}")
+        //eventDao.insertEvents(apiEvents)
         val eventIds = apiEvents.map { it.id }.toList()
         return eventDao.getEventWithIds(eventIds)
     }
@@ -132,6 +134,10 @@ class EventService(
                         }
         }
     }
+
+    fun storeEventToLocal(events:List<Event>) = eventDao.insertEvents(events)
+
+    fun getEventWithIds(eventIds: List<Long>) = eventDao.getEventWithIds(eventIds)
 
     private fun buildQuery(eventIds: List<Long>): String {
         var subQuery = ""

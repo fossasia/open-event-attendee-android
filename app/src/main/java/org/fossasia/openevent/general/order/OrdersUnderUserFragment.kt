@@ -76,7 +76,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
         if (ordersUnderUserVM.isLoggedIn()) {
-            if (ordersRecyclerAdapter.itemCount == 0) ordersUnderUserVM.ordersUnderUser(safeArgs.showExpired)
+            if (ordersRecyclerAdapter.itemCount == 0) ordersUnderUserVM.orderUnderUserLocal(safeArgs.showExpired)
             if (safeArgs.showExpired) rootView.expireFilter.isVisible = false
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {

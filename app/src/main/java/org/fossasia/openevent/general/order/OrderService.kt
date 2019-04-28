@@ -39,4 +39,8 @@ class OrderService(
     fun attendeesUnderOrder(orderIdentifier: String): Single<List<Attendee>> {
         return orderApi.attendeesUnderOrder(orderIdentifier)
     }
+
+    fun getOrderLocal() = orderDao.getOrdersLocal()
+
+    fun storeOrderLocal(orders:List<Order>) = orderDao.insertOrders(orders)
 }

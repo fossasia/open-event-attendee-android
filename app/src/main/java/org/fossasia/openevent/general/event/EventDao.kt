@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -13,7 +14,7 @@ interface EventDao {
     fun insertEvents(events: List<Event>)
 
     @Insert(onConflict = REPLACE)
-    fun insertEvent(event: Event)
+    fun insertEvent(event: Event) : Completable
 
     @Query("DELETE FROM Event")
     fun deleteAll()

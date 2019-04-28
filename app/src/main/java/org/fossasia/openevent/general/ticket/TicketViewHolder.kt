@@ -23,7 +23,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
                     itemView.order.text = spinnerList[pos]
-                    selectedListener?.onSelected(ticket.id, spinnerList[pos].toInt())
+                    selectedListener?.onSelected(ticket.id.toInt(), spinnerList[pos].toInt())
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {

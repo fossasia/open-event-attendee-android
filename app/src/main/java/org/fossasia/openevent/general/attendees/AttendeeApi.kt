@@ -23,4 +23,8 @@ interface AttendeeApi {
         @Path("id") id: Long,
         @Query("filter") filter: String
     ): Single<List<CustomForm>>
+
+    @GET("/v1/orders/{order_identifier}/attendees")
+    fun getAttendeesUnderOrder(@Path("order_identifier") identifier:String)
+        :Single<List<Attendee>>
 }

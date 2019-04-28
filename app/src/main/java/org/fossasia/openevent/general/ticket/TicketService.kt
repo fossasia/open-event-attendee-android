@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.provider.ContactsContract
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -32,4 +33,8 @@ class TicketService(private val ticketApi: TicketApi, private val ticketDao: Tic
     fun getTicketsWithIds(ids: List<Int>): Single<List<Ticket>> {
         return ticketDao.getTicketsWithIds(ids)
     }
+
+    fun getTicketsForEvent(eventId:Long) = ticketApi.getTickets(eventId)
+
+    fun storeTicketsToLocal(tickets:List<Ticket>) = ticketDao.insertTickets(tickets)
 }

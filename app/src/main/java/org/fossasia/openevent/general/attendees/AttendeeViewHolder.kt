@@ -34,7 +34,7 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         address = getAttendeeField("address"),
                         state = getAttendeeField("state"),
                         country = itemView.attendeeItemCountry.text.toString(),
-                        ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id.toLong()),
+                        ticket = TicketId(attendeeRecyclerAdapter.ticketList[position].id),
                         event = attendeeRecyclerAdapter.eventId)
                 attendeeRecyclerAdapter.attendeeList.add(position, attendee)
             }

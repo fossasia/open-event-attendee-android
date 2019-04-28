@@ -182,7 +182,7 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { SimilarEventsViewModel(get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get()) }
-    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(),get(),get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }

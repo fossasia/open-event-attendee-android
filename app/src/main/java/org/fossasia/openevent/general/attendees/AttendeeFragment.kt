@@ -366,7 +366,7 @@ class AttendeeFragment : Fragment() {
                 ticketsRecyclerAdapter.notifyDataSetChanged()
                 if (!singleTicket)
                     tickets.forEach { ticket ->
-                        val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id)
+                        val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id.toInt())
                         val iterations = pos?.let { ticketIdAndQty?.get(it)?.second } ?: 0
                         for (i in 0 until iterations)
                             attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), ticket)

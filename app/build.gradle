@@ -40,7 +40,7 @@ android {
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
         debug {
-            buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
+            buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
         }
     }
@@ -177,6 +177,7 @@ dependencies {
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
 
