@@ -105,6 +105,11 @@
             android:defaultValue="''"/>
 
         <argument
+            android:name="sort"
+            app:argType="string"
+            android:defaultValue="name"/>
+
+        <argument
             android:name="freeEvents"
             app:argType="boolean"
             android:defaultValue="false"/>
@@ -293,6 +298,11 @@
             android:name="type"
             app:argType="string"
             android:defaultValue="''"/>
+
+        <argument
+            android:name="sort"
+            app:argType="string"
+            android:defaultValue="name"/>
 
         <argument
             android:name="freeEvents"

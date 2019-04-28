@@ -320,5 +320,8 @@
     <string name="free_stuff">Free stuff only</string>
     <string name="speakers">Speakers</string>
     <string name="sponsors">Sponsors</string>
+    <string name="sort_by_name">name</string>
+    <string name="sort_by_date">starts-at</string>
+    <string name="sort_by">Sort By</string>
 
 </resources>

@@ -76,7 +76,7 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean) {
+    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
         if (mutableEvents.value != null) {
             mutableChipClickable.value = true
             return
@@ -269,7 +269,7 @@ class SearchViewModel(
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
-        compositeDisposable.add(eventService.getSearchEvents(query)
+        compositeDisposable.add(eventService.getSearchEvents(query, sortBy)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

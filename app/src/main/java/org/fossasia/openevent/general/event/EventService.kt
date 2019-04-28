@@ -76,8 +76,8 @@ class EventService(
         return eventFeedbackApi.postfeedback(feedback)
     }
 
-    fun getSearchEvents(eventName: String): Single<List<Event>> {
-        return eventApi.searchEvents("name", eventName).flatMap { apiList ->
+    fun getSearchEvents(eventName: String, sortBy: String): Single<List<Event>> {
+        return eventApi.searchEvents(sortBy, eventName).flatMap { apiList ->
             var eventIds = apiList.map { it.id }.toList()
             eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
                 updateFavorites(apiList, favIds)

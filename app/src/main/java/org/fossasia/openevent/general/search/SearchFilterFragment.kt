@@ -8,33 +8,53 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
+import kotlinx.android.synthetic.main.fragment_search_filter.view.nameRadioButton
+import kotlinx.android.synthetic.main.fragment_search_filter.view.radioGroup
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 
 class SearchFilterFragment : Fragment() {
-
     private lateinit var rootView: View
     private var isFreeStuffChecked = false
     private val safeArgs: SearchFilterFragmentArgs by navArgs()
-
+    private lateinit var sortBy: String
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         setToolbar(activity)
         setHasOptionsMenu(true)
         rootView = inflater.inflate(R.layout.fragment_search_filter, container, false)
         setFilterToolbar()
         setFreeStuffCheckBox()
+        setSortByRadioGroup()
         return rootView
+    }
+
+    private fun setSortByRadioGroup() {
+        sortBy = safeArgs.sort
+        if (sortBy == getString(R.string.sort_by_name)) {
+            rootView.nameRadioButton.isChecked = true
+        } else {
+            rootView.dateRadioButton.isChecked = true
+        }
+        rootView.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            val radio: RadioButton = rootView.findViewById(checkedId)
+            sortBy = if (radio.text == getString(R.string.sort_by_name)) {
+                getString(R.string.sort_by_name)
+            } else {
+                getString(R.string.sort_by_date)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -66,6 +86,7 @@ class SearchFilterFragment : Fragment() {
                     date = safeArgs.date,
                     freeEvents = isFreeStuffChecked,
                     location = safeArgs.location,
+                    sort = sortBy,
                     type = safeArgs.type,
                     query = safeArgs.query
                 )
