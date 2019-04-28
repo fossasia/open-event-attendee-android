@@ -49,4 +49,6 @@ class AttendeeService(
         = attendeeApi.getAttendeesUnderOrder(identifier)
 
     fun storeAttendees(attendees:List<Attendee>) = attendeeDao.insertAttendees(attendees)
+
+    fun getAttendeesWithIds(ids:List<Long>) = attendeeDao.getAttendeesWithIds(ids)
 }

@@ -132,7 +132,7 @@
             android:defaultValue="-1L"/>
 
         <argument
-            android:name="orders"
+            android:name="orderIdentifier"
             app:argType="string"
             android:defaultValue="-1"/>
     </fragment>

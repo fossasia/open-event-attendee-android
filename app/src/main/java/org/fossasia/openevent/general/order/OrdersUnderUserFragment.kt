@@ -83,7 +83,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
                     OrderDetailsFragmentArgs.Builder()
                         .setEventId(eventID)
-                        .setOrders(orderIdentifier)
+                        .setOrderIdentifier(orderIdentifier)
                         .build()
                         .toBundle()
                         .also { bundle ->

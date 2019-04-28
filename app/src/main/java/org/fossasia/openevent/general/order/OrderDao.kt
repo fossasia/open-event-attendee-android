@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import android.service.carrier.CarrierIdentifier
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,4 +18,7 @@ interface OrderDao {
 
     @Query("SELECT * FROM `order`")
     fun getOrdersLocal():Single<List<Order>>
+
+    @Query("SELECT * FROM `order` WHERE identifier = :identifier")
+    fun getOrder(identifier: String):Single<Order>
 }

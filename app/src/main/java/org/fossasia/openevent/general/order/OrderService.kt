@@ -43,4 +43,6 @@ class OrderService(
     fun getOrderLocal() = orderDao.getOrdersLocal()
 
     fun storeOrderLocal(orders:List<Order>) = orderDao.insertOrders(orders)
+
+    fun getOrderFromIdentifier(identifier:String) = orderDao.getOrder(identifier)
 }

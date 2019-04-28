@@ -35,7 +35,7 @@ class OrderDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ordersRecyclerAdapter.setOrderIdentifier(safeArgs.orders)
+        ordersRecyclerAdapter.setOrderIdentifier(safeArgs.orderIdentifier)
 
         orderDetailsViewModel.event
             .nonNull()
@@ -98,7 +98,7 @@ class OrderDetailsFragment : Fragment() {
             })
 
         orderDetailsViewModel.loadEvent(safeArgs.eventId)
-        orderDetailsViewModel.loadAttendeeDetails(safeArgs.orders)
+        orderDetailsViewModel.loadAttendeeDetailsFromIdentifier(safeArgs.orderIdentifier)
 
         return rootView
     }

@@ -29,7 +29,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        attendeesNumber[position]?.let {
+        attendeesNumber[position].let {
             holder.bind(eventAndOrderIdentifier[position].first,
                 clickListener,
                 eventAndOrderIdentifier[position].second,
