@@ -15,6 +15,7 @@ import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.sponsor.Sponsor
@@ -41,6 +42,8 @@ class EventDetailsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+    private val mutableEventSessions = MutableLiveData<List<Session>>()
+    val eventSessions: LiveData<List<Session>> = mutableEventSessions
     var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
@@ -72,7 +75,6 @@ class EventDetailsViewModel(
             })
         )
     }
-
     fun fetchEventSpeakers(id: Long) {
         speakerService.fetchSpeakersForEvent(id)
             .subscribeOn(Schedulers.io())
@@ -121,6 +123,18 @@ class EventDetailsViewModel(
             }, {
                 Timber.e(it, "Error fetching event %d", id)
                 mutableError.value = resource.getString(R.string.error_fetching_event_message)
+            })
+        )
+    }
+
+    fun loadEventSessions(id: Long) {
+        compositeDisposable.add(eventService.getEventSessions(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mutableEventSessions.value = it
+            }, {
+                Timber.e(it, "Error fetching events sessions")
             })
         )
     }
