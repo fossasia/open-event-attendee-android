@@ -74,6 +74,10 @@ import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
+import org.fossasia.openevent.general.sessions.Microlocation
+import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.SessionApi
+import org.fossasia.openevent.general.sessions.SessionType
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
@@ -161,6 +165,10 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(EventFAQApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SessionApi::class.java)
+    }
 
     single {
         val retrofit: Retrofit = get()
@@ -170,7 +178,7 @@ val apiModule = module {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
@@ -247,7 +255,8 @@ val networkModule = module {
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
-            EventFAQ::class.java, Sponsor::class.java)
+            Session::class.java, SessionType::class.java, Microlocation::class.java,
+            Sponsor::class.java, EventFAQ::class.java)
 
         Retrofit.Builder()
             .client(get())

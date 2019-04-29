@@ -50,6 +50,8 @@ import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.content_event.view.organizerContainer
+import kotlinx.android.synthetic.main.content_event.view.sessionContainer
+import kotlinx.android.synthetic.main.content_event.view.sessionsRv
 import kotlinx.android.synthetic.main.content_event.view.speakerRv
 import kotlinx.android.synthetic.main.content_event.view.speakersContainer
 import kotlinx.android.synthetic.main.content_event.view.sponsorsRecyclerView
@@ -71,6 +73,7 @@ import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.faq.EventFAQFragmentArgs
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
+import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.speakers.SpeakerFragmentArgs
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
@@ -102,6 +105,7 @@ class EventDetailsFragment : Fragment() {
     private val feedbackAdapter = FeedbackRecyclerAdapter()
     private val speakersAdapter = SpeakerRecyclerAdapter()
     private val sponsorsAdapter = SponsorRecyclerAdapter()
+    private val sessionsAdapter = SessionRecyclerAdapter()
 
     private lateinit var rootView: View
     private var eventTopicId: Long? = null
@@ -138,6 +142,7 @@ class EventDetailsFragment : Fragment() {
             })
         eventViewModel.loadEventFeedback(safeArgs.eventId)
         eventViewModel.fetchEventSpeakers(safeArgs.eventId)
+        eventViewModel.loadEventSessions(safeArgs.eventId)
         eventViewModel.fetchEventSponsors(safeArgs.eventId)
     }
 
@@ -233,12 +238,32 @@ class EventDetailsFragment : Fragment() {
                     setToolbar(activity)
             }
         }
+        val linearLayoutManagerSpeakers = LinearLayoutManager(context)
+        linearLayoutManagerSpeakers.orientation = LinearLayoutManager.HORIZONTAL
+
+        rootView.speakerRv.layoutManager = linearLayoutManagerSpeakers
+        rootView.speakerRv.adapter = speakersAdapter
+
         eventViewModel.loadEventSpeakers(safeArgs.eventId).observe(viewLifecycleOwner, Observer {
             speakersAdapter.addAll(it)
             if (it.isEmpty()) {
                 rootView.speakersContainer.visibility = View.GONE
             } else {
                 rootView.speakersContainer.visibility = View.VISIBLE
+            }
+        })
+        val linearLayoutManagerSessions = LinearLayoutManager(context)
+        linearLayoutManagerSessions.orientation = LinearLayoutManager.HORIZONTAL
+
+        rootView.sessionsRv.layoutManager = linearLayoutManagerSessions
+        rootView.sessionsRv.adapter = sessionsAdapter
+
+        eventViewModel.eventSessions.observe(viewLifecycleOwner, Observer {
+            sessionsAdapter.addAll(it)
+            if (it.isEmpty()) {
+                rootView.sessionContainer.visibility = View.GONE
+            } else {
+                rootView.sessionContainer.visibility = View.VISIBLE
             }
         })
 

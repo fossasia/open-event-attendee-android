@@ -14,7 +14,8 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
-
+import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.SessionApi
 import java.util.Locale.filter
 
 class EventService(
@@ -25,7 +26,8 @@ class EventService(
     private val eventTypesApi: EventTypesApi,
     private val eventLocationApi: EventLocationApi,
     private val eventFeedbackApi: FeedbackApi,
-    private val eventFAQApi: EventFAQApi
+    private val eventFAQApi: EventFAQApi,
+    private val eventSessionApi: SessionApi
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -75,7 +77,9 @@ class EventService(
     fun submitFeedback(feedback: Feedback): Single<Feedback> {
         return eventFeedbackApi.postfeedback(feedback)
     }
-
+    fun getEventSessions(id: Long): Single<List<Session>> {
+        return eventSessionApi.getSessionsForEvent(id)
+    }
     fun getSearchEvents(eventName: String, sortBy: String): Single<List<Event>> {
         return eventApi.searchEvents(sortBy, eventName).flatMap { apiList ->
             var eventIds = apiList.map { it.id }.toList()

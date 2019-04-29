@@ -433,7 +433,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/sponsorsSummaryContainer"
+            app:layout_constraintBottom_toTopOf="@id/sessionContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -454,7 +454,7 @@
                 android:layout_marginLeft="@dimen/layout_margin_large"
                 android:layout_marginRight="@dimen/layout_margin_large"
                 android:layout_marginBottom="@dimen/layout_margin_large"
-                android:text="@string/speakers"
+                android:text="Speakers"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/event_details_headers" />
 
@@ -471,11 +471,54 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/sessionContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/sponsorsSummaryContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/speakersContainer"
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                android:background="@color/grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin_large"
+                android:layout_marginRight="@dimen/layout_margin_large"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:text="Sessions"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/event_details_headers" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sessionsRv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:itemCount="3"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                tools:listitem="@layout/item_session" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/sponsorsSummaryContainer"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/speakersContainer"
+            app:layout_constraintTop_toBottomOf="@+id/sessionContainer"
             app:layout_constraintBottom_toTopOf="@+id/similarEventsContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
