@@ -87,6 +87,7 @@ import org.fossasia.openevent.general.speakers.SpeakerViewModel
 import org.fossasia.openevent.general.sponsor.Sponsor
 import org.fossasia.openevent.general.sponsor.SponsorApi
 import org.fossasia.openevent.general.sponsor.SponsorService
+import org.fossasia.openevent.general.sponsor.SponsorsViewModel
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
@@ -205,6 +206,7 @@ val viewModelModule = module {
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
     viewModel { SpeakerViewModel(get(), get()) }
+    viewModel { SponsorsViewModel(get(), get()) }
 }
 
 val networkModule = module {

@@ -126,6 +126,16 @@
             android:defaultValue="-1L"/>
     </fragment>
     <fragment
+        android:id="@+id/sponsorsFragment"
+        android:name="org.fossasia.openevent.general.sponsor.SponsorsFragment"
+        android:label="Sponsors"
+        tools:layout="@layout/fragment_sponsors">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment"

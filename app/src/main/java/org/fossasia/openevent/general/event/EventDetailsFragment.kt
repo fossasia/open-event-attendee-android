@@ -74,7 +74,9 @@ import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.social.SocialLinksFragment
 import org.fossasia.openevent.general.speakers.SpeakerFragmentArgs
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
+import org.fossasia.openevent.general.sponsor.SponsorClickListener
 import org.fossasia.openevent.general.sponsor.SponsorRecyclerAdapter
+import org.fossasia.openevent.general.sponsor.SponsorsFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
@@ -204,6 +206,20 @@ class EventDetailsFragment : Fragment() {
         sponsorLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rootView.sponsorsRecyclerView.layoutManager = sponsorLinearLayoutManager
         rootView.sponsorsRecyclerView.adapter = sponsorsAdapter
+
+        val sponsorClickListener: SponsorClickListener = object : SponsorClickListener {
+            override fun onClick() {
+                moveToSponsorSection()
+            }
+        }
+
+        sponsorsAdapter.apply {
+            onSponsorClick = sponsorClickListener
+        }
+
+        rootView.sponsorsSummaryContainer.setOnClickListener {
+            moveToSponsorSection()
+        }
 
         // Set toolbar title to event name
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -513,7 +529,7 @@ class EventDetailsFragment : Fragment() {
     }
     private fun checkForAuthentication() {
         if (eventViewModel.isLoggedIn())
-            writefeedback()
+            writeFeedback()
         else {
             rootView.nestedContentEventScroll.longSnackbar(getString(R.string.log_in_first))
             redirectToLogin()
@@ -528,7 +544,7 @@ class EventDetailsFragment : Fragment() {
             }
     }
 
-    private fun writefeedback() {
+    private fun writeFeedback() {
         val layout = layoutInflater.inflate(R.layout.dialog_feedback, null)
 
         val alertDialog = AlertDialog.Builder(requireContext())
@@ -562,6 +578,14 @@ class EventDetailsFragment : Fragment() {
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
             })
+    }
+
+    private fun moveToSponsorSection() {
+        SponsorsFragmentArgs(safeArgs.eventId)
+            .toBundle()
+            .also { bundle ->
+                findNavController(rootView).navigate(R.id.sponsorsFragment, bundle, getAnimSlide())
+            }
     }
 
     override fun onDestroy() {

@@ -237,6 +237,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/aboutEventContainer"
+            android:descendantFocusability="blocksDescendants"
             tools:visibility="visible">
 
             <View
@@ -478,6 +479,8 @@
             app:layout_constraintBottom_toTopOf="@+id/similarEventsContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:descendantFocusability="blocksDescendants"
+            android:background="?selectableItemBackground"
             tools:visibility="visible">
             <View
                 android:layout_width="match_parent"
