@@ -29,6 +29,8 @@ import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 
+const val SEARCH_FRAGMENT = "SearchFragment"
+
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
@@ -45,7 +47,8 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            SearchTimeFragmentArgs(rootView.timeTextView.text.toString())
+            SearchTimeFragmentArgs(rootView.timeTextView.text.toString(),
+                fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
@@ -74,7 +77,7 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.text = searchViewModel.savedLocation
 
         rootView.locationTextView.setOnClickListener {
-            SearchLocationFragmentArgs(fromSearchFragment = true)
+            SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
@@ -82,7 +85,7 @@ class SearchFragment : Fragment() {
         }
 
         rootView.eventTypeTextView.setOnClickListener {
-            SearchLocationFragmentArgs(fromSearchFragment = true)
+            SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
                 .also { bundle ->
                     Navigation.findNavController(rootView).navigate(R.id.searchTypeFragment, bundle, getAnimSlide())

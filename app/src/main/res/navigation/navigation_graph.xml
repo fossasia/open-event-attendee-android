@@ -50,9 +50,14 @@
         tools:layout="@layout/fragment_search_location">
 
         <argument
-            android:name="fromSearchFragment"
-            app:argType="boolean"
-            android:defaultValue="false"/>
+            android:name="fromFragmentName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="query"
+            app:argType="string"
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/searchTimeFragment"
@@ -65,6 +70,15 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <argument
+            android:name="fromFragmentName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="query"
+            app:argType="string"
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/searchTypeFragment"
@@ -77,6 +91,15 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <argument
+            android:name="fromFragmentName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="query"
+            app:argType="string"
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/searchResultsFragment"

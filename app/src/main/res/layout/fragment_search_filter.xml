@@ -4,8 +4,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rootView"
+    android:padding="@dimen/padding_medium"
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchFilterFragment">
+
+    <LinearLayout
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/dateLabel"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:text="@string/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:background="?selectableItemBackground"
+            android:drawableStart="@drawable/ic_time"
+            android:padding="@dimen/padding_small"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/padding_medium"
+            android:textSize="@dimen/text_size_larger"
+            android:text="@string/anytime"
+            android:id="@+id/tvSelectDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_margin_medium">
+
+        <TextView
+            android:id="@+id/locationLabel"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:text="@string/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:background="?selectableItemBackground"
+            android:drawableTint="@color/light_grey"
+            android:drawableStart="@drawable/ic_location_pin"
+            android:padding="@dimen/padding_small"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/padding_medium"
+            android:textSize="@dimen/text_size_larger"
+            android:text="@string/anywhere"
+            android:id="@+id/tvSelectLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_margin_medium">
+
+        <TextView
+            android:id="@+id/categoryLabel"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:text="@string/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:background="?selectableItemBackground"
+            android:drawableTint="@color/light_grey"
+            android:drawableStart="@drawable/ic_star_border"
+            android:padding="@dimen/padding_small"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/padding_medium"
+            android:textSize="@dimen/text_size_larger"
+            android:text="@string/anything"
+            android:id="@+id/tvSelectCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,14 +112,15 @@
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:padding="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/layout_margin_large"
+            android:padding="@dimen/padding_medium"
             android:textSize="@dimen/text_size_large"
+            android:textColor="@color/light_grey"
             android:text="@string/free_stuff"
             android:id="@+id/freeStuffCheckBox"
             android:layoutDirection="rtl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <LinearLayout
