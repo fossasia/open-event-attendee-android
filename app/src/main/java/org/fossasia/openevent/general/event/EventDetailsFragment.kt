@@ -13,43 +13,32 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_event.aboutEventContainer
-import kotlinx.android.synthetic.main.content_event.locationContainer
-import kotlinx.android.synthetic.main.content_event.organizerContainer
 import kotlinx.android.synthetic.main.content_event.similarEventsContainer
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsFirst
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsSecond
 import kotlinx.android.synthetic.main.content_event.view.eventDescription
 import kotlinx.android.synthetic.main.content_event.view.eventLocationLinearLayout
-import kotlinx.android.synthetic.main.content_event.view.eventLocationTextView
 import kotlinx.android.synthetic.main.content_event.view.eventName
 import kotlinx.android.synthetic.main.content_event.view.eventOrganiserDescription
-import kotlinx.android.synthetic.main.content_event.view.eventOrganiserName
 import kotlinx.android.synthetic.main.content_event.view.eventTimingLinearLayout
 import kotlinx.android.synthetic.main.content_event.view.imageMap
-import kotlinx.android.synthetic.main.content_event.view.locationUnderMap
 import kotlinx.android.synthetic.main.content_event.view.eventImage
 import kotlinx.android.synthetic.main.content_event.view.feedbackBtn
 import kotlinx.android.synthetic.main.content_event.view.feedbackRv
-import kotlinx.android.synthetic.main.content_event.view.organizerLogoIcon
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.noFeedBackTv
-import kotlinx.android.synthetic.main.content_event.view.organizerName
-import kotlinx.android.synthetic.main.content_event.view.refundPolicy
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
-import kotlinx.android.synthetic.main.content_event.view.organizerContainer
 import kotlinx.android.synthetic.main.content_event.view.sessionContainer
 import kotlinx.android.synthetic.main.content_event.view.sessionsRv
 import kotlinx.android.synthetic.main.content_event.view.speakerRv
@@ -65,11 +54,11 @@ import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
 import kotlinx.android.synthetic.main.fragment_event.eventCoordinatorLayout
-import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.common.SpeakerClickListener
+import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.faq.EventFAQFragmentArgs
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
@@ -84,7 +73,6 @@ import org.fossasia.openevent.general.sponsor.SponsorsFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimSlide
-import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
@@ -94,7 +82,6 @@ import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
-import java.lang.Exception
 
 const val EVENT_ID = "eventId"
 const val EVENT_TOPIC_ID = "eventTopicId"
@@ -109,6 +96,7 @@ class EventDetailsFragment : Fragment() {
     private val sessionsAdapter = SessionRecyclerAdapter()
 
     private lateinit var rootView: View
+    private lateinit var binding: FragmentEventBinding
     private var eventTopicId: Long? = null
     private var eventLocation: String? = null
     private lateinit var eventShare: Event
@@ -152,7 +140,8 @@ class EventDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_event, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event, container, false)
+        rootView = binding.root
         setToolbar(activity)
         setHasOptionsMenu(true)
 
@@ -280,23 +269,11 @@ class EventDetailsFragment : Fragment() {
     private fun loadEvent(event: Event) {
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
-
-        rootView.eventName.text = event.name
+        binding.event = event
+        binding.executePendingBindings()
 
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
-            rootView.eventOrganiserName.text = "by " + event.organizerName.nullToEmpty()
-            setTextField(rootView.eventOrganiserDescription, event.organizerDescription?.stripHtml()?.trim())
-            rootView.organizerName.text = event.organizerName.nullToEmpty()
-            rootView.eventOrganiserName.isVisible = true
-            organizerContainer.isVisible = true
-
-            Picasso.get()
-                    .load(event.logoUrl)
-                    .placeholder(requireDrawable(requireContext(), R.drawable.ic_person_black))
-                    .transform(CircleTransform())
-                    .into(rootView.organizerLogoIcon)
-
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
                     rootView.seeMoreOrganizer.text = getString(R.string.see_less)
@@ -316,10 +293,7 @@ class EventDetailsFragment : Fragment() {
                     rootView.eventOrganiserDescription.setOnClickListener(organizerDescriptionListener)
                 }
             }
-        } else {
-            rootView.organizerContainer.isVisible = false
         }
-
         currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
@@ -333,7 +307,6 @@ class EventDetailsFragment : Fragment() {
         // Event Description Section
         val description = event.description.nullToEmpty().stripHtml()
         if (!description.isNullOrEmpty()) {
-            setTextField(rootView.eventDescription, description)
 
             rootView.eventDescription.post {
                 if (rootView.eventDescription.lineCount > LINE_COUNT) {
@@ -343,26 +316,13 @@ class EventDetailsFragment : Fragment() {
                     rootView.seeMore.setOnClickListener(aboutEventOnClickListener)
                 }
             }
-        } else {
-            aboutEventContainer.isVisible = false
-        }
-
-        // Map Section
-        if (!event.locationName.isNullOrEmpty()) {
-            locationContainer.isVisible = true
-            rootView.eventLocationTextView.text = event.locationName
         }
 
         // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
 
         val locationNameIsEmpty = event.locationName.isNullOrEmpty()
-        locationContainer.isVisible = !locationNameIsEmpty
-        rootView.eventLocationLinearLayout.isVisible = !locationNameIsEmpty
-        rootView.locationUnderMap.isVisible = !locationNameIsEmpty
-        rootView.imageMap.isVisible = !locationNameIsEmpty
         if (!locationNameIsEmpty) {
-            rootView.locationUnderMap.text = event.locationName
             rootView.imageMap.setOnClickListener(mapClickListener)
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
@@ -377,9 +337,6 @@ class EventDetailsFragment : Fragment() {
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
         rootView.eventDateDetailsSecond.text = EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)
 
-        // Refund policy
-        rootView.refundPolicy.text = event.refundPolicy
-
         // Similar Events Section
         if (event.eventTopic != null || !event.locationName.isNullOrBlank() ||
             !event.searchableLocationName.isNullOrBlank()) {
@@ -388,22 +345,6 @@ class EventDetailsFragment : Fragment() {
             eventLocation =
                 if (event.searchableLocationName.isNullOrBlank()) event.locationName
                 else event.searchableLocationName
-        }
-
-        // Set Cover Image
-        event.originalImageUrl?.let {
-            Picasso.get()
-                .load(it)
-                .placeholder(R.drawable.header)
-                .into(rootView.eventImage, object : Callback {
-                    override fun onSuccess() {
-                        rootView.eventImage.tag = "image_loading_successful"
-                    }
-
-                    override fun onError(e: Exception?) {
-                        Timber.e(e)
-                    }
-                })
         }
 
         // Add event to Calendar
@@ -447,13 +388,6 @@ class EventDetailsFragment : Fragment() {
                 return true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun setTextField(textView: TextView, value: String?) {
-        when (value.isNullOrBlank()) {
-            true -> textView.isVisible = false
-            false -> textView.text = value
         }
     }
 
@@ -559,6 +493,7 @@ class EventDetailsFragment : Fragment() {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
     }
+
     private fun checkForAuthentication() {
         if (eventViewModel.isLoggedIn())
             writeFeedback()
