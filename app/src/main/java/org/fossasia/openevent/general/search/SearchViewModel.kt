@@ -4,10 +4,10 @@ import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
@@ -55,15 +55,13 @@ class SearchViewModel(
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
 
     fun loadEventTypes() {
-        compositeDisposable.add(eventService.getEventTypes()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventTypes()
+            .withDefaultSchedulers()
             .subscribe({
                 mutableEventTypes.value = it
             }, {
                 Timber.e(it, "Error fetching events types")
             })
-        )
     }
 
     fun loadSavedLocation() {
@@ -269,9 +267,8 @@ class SearchViewModel(
                 |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
-        compositeDisposable.add(eventService.getSearchEvents(query, sortBy)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getSearchEvents(query, sortBy)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
                 mutableChipClickable.value = false
@@ -284,20 +281,17 @@ class SearchViewModel(
                 Timber.e(it, "Error fetching events")
                 mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favorite)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.setFavorite(eventId, favorite)
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Successfully added %d to favorites", eventId)
             }, {
                 Timber.e(it, "Error adding %d to favorites", eventId)
                 mutableError.value = resource.getString(R.string.error_adding_favorite_message)
             })
-        )
     }
 
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false

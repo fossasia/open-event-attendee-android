@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.event.topic
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -32,9 +32,8 @@ class SimilarEventsViewModel(private val eventService: EventService, private val
         if (id == -1L) {
             return
         }
-        compositeDisposable.add(eventService.getSimilarEvents(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getSimilarEvents(id)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.subscribe({
@@ -44,14 +43,12 @@ class SimilarEventsViewModel(private val eventService: EventService, private val
                 Timber.e(it, "Error fetching similar events")
                 mutableError.value = "Error fetching similar events"
             })
-        )
     }
 
     fun loadSimilarLocationEvents(location: String) {
 
-        compositeDisposable.add(eventService.getEventsByLocation(location)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventsByLocation(location)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }
@@ -63,20 +60,17 @@ class SimilarEventsViewModel(private val eventService: EventService, private val
                 Timber.e(it, "Error fetching similar events")
                 mutableError.value = resource.getString(R.string.fetch_similar_events_error_message)
             })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favorite)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.setFavorite(eventId, favorite)
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
                 mutableError.value = resource.getString(R.string.error)
             })
-        )
     }
 
     override fun onCleared() {

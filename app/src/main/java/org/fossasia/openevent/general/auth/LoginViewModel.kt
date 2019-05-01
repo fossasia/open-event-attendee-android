@@ -4,10 +4,10 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
@@ -42,9 +42,8 @@ class LoginViewModel(
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
-        compositeDisposable.add(authService.login(email, password)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.login(email, password)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -54,14 +53,12 @@ class LoginViewModel(
             }, {
                 mutableError.value = resource.getString(R.string.login_fail_message)
             })
-        )
     }
 
     fun sendResetPasswordEmail(email: String) {
         if (!isConnected()) return
-        compositeDisposable.add(authService.sendResetPasswordEmail(email)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.sendResetPasswordEmail(email)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -72,7 +69,6 @@ class LoginViewModel(
                 mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
                 mutableError.value = resource.getString(R.string.email_not_in_server_message)
             })
-        )
     }
 
     private fun verifyMessage(message: String): Boolean {
@@ -84,9 +80,8 @@ class LoginViewModel(
 
     fun fetchProfile() {
         if (!isConnected()) return
-        compositeDisposable.add(authService.getProfile()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.getProfile()
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -97,7 +92,7 @@ class LoginViewModel(
             }) {
                 Timber.e(it, "Failure")
                 mutableError.value = resource.getString(R.string.failure)
-            })
+            }
     }
 
     override fun onCleared() {

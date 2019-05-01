@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.order
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -27,17 +27,15 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
             throw IllegalStateException("ID should never be -1")
         }
 
-        compositeDisposable.add(
+        compositeDisposable +=
             eventService.getEvent(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .withDefaultSchedulers()
                 .subscribe({
                     mutableEvent.value = it
                 }, {
                     Timber.e(it, "Error fetching event %d", id)
                     mutableMessage.value = resource.getString(R.string.error_fetching_event_message)
                 })
-        )
     }
 
     override fun onCleared() {

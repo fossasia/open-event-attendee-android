@@ -4,9 +4,9 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
@@ -43,9 +43,8 @@ class SignUpViewModel(
         email = signUp.email
         password = signUp.password
 
-        compositeDisposable.add(authService.signUp(signUp)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.signUp(signUp)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -63,16 +62,14 @@ class SignUpViewModel(
                 }
                 Timber.d(it, "Failed")
             })
-        )
     }
 
     fun login(signUp: SignUp) {
         if (!isConnected()) return
         email = signUp.email
         password = signUp.password
-        compositeDisposable.add(authService.login(email.nullToEmpty(), password.nullToEmpty())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.login(email.nullToEmpty(), password.nullToEmpty())
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -85,19 +82,17 @@ class SignUpViewModel(
                 mutableError.value = resource.getString(R.string.login_automatically_fail_message)
                 Timber.d(it, "Failed")
             })
-        )
     }
 
     private fun fetchProfile() {
         if (!isConnected()) return
-        compositeDisposable.add(authService.getProfile()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.getProfile()
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Fetched User Details")
             }) {
                 Timber.e(it, "Error loading user details")
-            })
+            }
     }
 
     override fun onCleared() {

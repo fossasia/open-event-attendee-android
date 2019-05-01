@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -33,9 +33,8 @@ class EditProfileViewModel(
             updateUser(null, firstName, lastName)
             return
         }
-        compositeDisposable.add(authService.uploadImage(UploadImage(encodedImage))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.uploadImage(UploadImage(encodedImage))
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }
@@ -49,7 +48,7 @@ class EditProfileViewModel(
             }) {
                 mutableMessage.value = resource.getString(R.string.image_upload_error_message)
                 Timber.e(it, "Error uploading user!")
-            })
+            }
     }
 
     fun updateUser(url: String?, firstName: String, lastName: String) {
@@ -58,7 +57,7 @@ class EditProfileViewModel(
             mutableMessage.value = resource.getString(R.string.provide_name_message)
             return
         }
-        compositeDisposable.add(authService.updateUser(
+        compositeDisposable += authService.updateUser(
             User(
                 id = id,
                 firstName = firstName,
@@ -66,8 +65,7 @@ class EditProfileViewModel(
                 avatarUrl = url
             ), id
         )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }
@@ -80,7 +78,7 @@ class EditProfileViewModel(
             }) {
                 mutableMessage.value = resource.getString(R.string.user_update_error_message)
                 Timber.e(it, "Error updating user!")
-            })
+            }
     }
 
     override fun onCleared() {

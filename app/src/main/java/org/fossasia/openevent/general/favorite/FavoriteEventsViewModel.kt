@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.favorite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -25,10 +25,9 @@ class FavoriteEventsViewModel(private val eventService: EventService, private va
     val events: LiveData<List<Event>> = mutableEvents
 
     fun loadFavoriteEvents() {
-        compositeDisposable.add(
+        compositeDisposable +=
             eventService.getFavoriteEvents()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .withDefaultSchedulers()
                 .subscribe({
                     mutableEvents.value = it
                     mutableProgress.value = false
@@ -36,21 +35,18 @@ class FavoriteEventsViewModel(private val eventService: EventService, private va
                     Timber.e(it, "Error fetching favorite events")
                     mutableError.value = resource.getString(R.string.fetch_favorite_events_error_message)
                 })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable.add(
+        compositeDisposable +=
             eventService.setFavorite(eventId, favorite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .withDefaultSchedulers()
                 .subscribe({
                     Timber.d("Success")
                 }, {
                     Timber.e(it, "Error")
                     mutableError.value = resource.getString(R.string.error)
                 })
-        )
     }
 
     override fun onCleared() {

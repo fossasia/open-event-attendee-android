@@ -3,10 +3,10 @@ package org.fossasia.openevent.general.social
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
@@ -30,9 +30,8 @@ class SocialLinksViewModel(
     val internetError: LiveData<Boolean> = mutableInternetError
 
     private fun loadSocialLinks(id: Long) {
-        compositeDisposable.add(socialLinksService.getSocialLinks(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += socialLinksService.getSocialLinks(id)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.subscribe({
@@ -43,7 +42,6 @@ class SocialLinksViewModel(
                 mutableError.value = resource.getString(R.string.error_fetching_social_links_message)
                 mutableProgress.value = false
             })
-        )
     }
 
     override fun onCleared() {
