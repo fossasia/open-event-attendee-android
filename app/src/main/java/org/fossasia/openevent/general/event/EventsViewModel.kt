@@ -97,6 +97,36 @@ class EventsViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Timber.d("Success")
+                if (favorite)
+                    addFavorite(eventId)
+                else {
+                    removeFavorite(eventId)
+                }
+            }, {
+                Timber.e(it, "Error")
+                mutableError.value = resource.getString(R.string.error)
+            })
+        )
+    }
+    private fun removeFavorite(eventId: Long) {
+        compositeDisposable.add(eventService.removeFav(eventId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Success")
+            }, {
+                Timber.e(it, "Error")
+                mutableError.value = resource.getString(R.string.error)
+            })
+        )
+    }
+
+    private fun addFavorite(eventId: Long) {
+        compositeDisposable.add(eventService.addFav(eventId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
                 mutableError.value = resource.getString(R.string.error)

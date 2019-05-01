@@ -79,6 +79,8 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionType
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.favorite.UserFavorite
+import org.fossasia.openevent.general.favorite.UserFavoriteApi
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -175,10 +177,15 @@ val apiModule = module {
         retrofit.create(SponsorApi::class.java)
     }
 
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(UserFavoriteApi::class.java)
+    }
+
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
@@ -256,7 +263,7 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             Session::class.java, SessionType::class.java, Microlocation::class.java,
-            Sponsor::class.java, EventFAQ::class.java)
+            Sponsor::class.java, EventFAQ::class.java, UserFavorite::class.java)
 
         Retrofit.Builder()
             .client(get())

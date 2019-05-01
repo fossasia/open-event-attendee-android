@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import okhttp3.ResponseBody
 import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.faq.EventFAQ
@@ -14,6 +15,8 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
+import org.fossasia.openevent.general.favorite.UserFavorite
+import org.fossasia.openevent.general.favorite.UserFavoriteApi
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import java.util.Locale.filter
@@ -27,7 +30,8 @@ class EventService(
     private val eventLocationApi: EventLocationApi,
     private val eventFeedbackApi: FeedbackApi,
     private val eventFAQApi: EventFAQApi,
-    private val eventSessionApi: SessionApi
+    private val eventSessionApi: SessionApi,
+    private val userFavoriteApi: UserFavoriteApi
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -76,6 +80,14 @@ class EventService(
     }
     fun submitFeedback(feedback: Feedback): Single<Feedback> {
         return eventFeedbackApi.postfeedback(feedback)
+    }
+
+    fun addFav(eventId: Long): Single<UserFavorite> {
+        return userFavoriteApi.postFavorite(UserFavorite(event = EventId(eventId)))
+    }
+
+    fun removeFav(eventId: Long): Single<ResponseBody> {
+        return userFavoriteApi.removeFavourite(eventId)
     }
     fun getEventSessions(id: Long): Single<List<Session>> {
         return eventSessionApi.getSessionsForEvent(id)
