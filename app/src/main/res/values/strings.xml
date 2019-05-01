@@ -324,5 +324,6 @@
     <string name="sort_by_name">name</string>
     <string name="sort_by_date">starts-at</string>
     <string name="sort_by">Sort By</string>
+    <string name="category">Category</string>
 
 </resources>

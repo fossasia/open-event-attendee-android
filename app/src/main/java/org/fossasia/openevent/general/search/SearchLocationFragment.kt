@@ -106,7 +106,11 @@ class SearchLocationFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        val fragmentId = if (safeArgs.fromSearchFragment) R.id.searchFragment else R.id.eventsFragment
+        val fragmentId = when (safeArgs.fromFragmentName) {
+            SEARCH_FRAGMENT -> R.id.searchFragment
+            SEARCH_FILTER_FRAGMENT -> R.id.searchFilterFragment
+            else -> R.id.eventsFragment
+        }
         Navigation.findNavController(rootView).popBackStack(fragmentId, false)
     }
 

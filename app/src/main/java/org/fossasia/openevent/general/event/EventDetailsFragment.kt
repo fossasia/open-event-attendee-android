@@ -64,6 +64,7 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
+import kotlinx.android.synthetic.main.fragment_event.eventCoordinatorLayout
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
@@ -510,6 +511,9 @@ class EventDetailsFragment : Fragment() {
         val bundle = Bundle()
         bundle.putLong(EVENT_ID, safeArgs.eventId)
         socialLinksFragemnt.arguments = bundle
+        socialLinksFragemnt.setErrorSnack {
+            eventCoordinatorLayout.longSnackbar(it)
+        }
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
     }
@@ -522,6 +526,9 @@ class EventDetailsFragment : Fragment() {
         eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
         eventLocation?.let { bundle.putString(EVENT_LOCATION, it) }
         similarEventsFragment.arguments = bundle
+        similarEventsFragment.setErrorSnack {
+            eventCoordinatorLayout.longSnackbar(it)
+        }
         childFragmentManager.beginTransaction()
             .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
@@ -548,7 +555,7 @@ class EventDetailsFragment : Fragment() {
         rootView.container.isVisible = !show
         rootView.eventErrorCard.isVisible = show
         val menuItemSize = menuActionBar?.size() ?: 0
-        for (i in 0..(menuItemSize - 1)) {
+        for (i in 0 until menuItemSize) {
             menuActionBar?.getItem(i)?.isVisible = !show
         }
     }

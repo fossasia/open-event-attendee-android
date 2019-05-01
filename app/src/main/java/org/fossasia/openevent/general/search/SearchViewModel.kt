@@ -300,6 +300,13 @@ class SearchViewModel(
         mutableEvents.value = null
     }
 
+    fun clearTimeAndType() {
+        preference.apply {
+            putString(SAVED_TYPE, "Anything")
+            putString(SAVED_TIME, "Anytime")
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

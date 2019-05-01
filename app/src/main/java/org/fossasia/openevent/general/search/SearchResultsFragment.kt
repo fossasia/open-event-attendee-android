@@ -274,6 +274,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 rootView.noSearchResults.isVisible = false
                 favoriteEventsRecyclerAdapter.submitList(null)
                 searchViewModel.clearEvents()
+                searchViewModel.clearTimeAndType()
                 if (searchViewModel.isConnected()) performSearch()
                 else showNoInternetError(true)
                 setChips()
