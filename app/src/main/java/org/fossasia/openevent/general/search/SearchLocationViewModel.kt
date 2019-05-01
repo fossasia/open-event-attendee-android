@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.BuildConfig
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -56,7 +58,7 @@ class SearchLocationViewModel(
         .build()
 
     fun handlePlaceSuggestions(observableQuery: Observable<String>) {
-        compositeDisposable.add(
+        compositeDisposable += (
             observableQuery.debounce(SEARCH_INTERVAL, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .subscribeOn(Schedulers.io())
@@ -68,9 +70,8 @@ class SearchLocationViewModel(
     }
 
     fun loadEventsLocation() {
-        compositeDisposable.add(eventService.getEventLocations()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventLocations()
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableShowShimmer.value = true
             }
@@ -82,7 +83,6 @@ class SearchLocationViewModel(
             }, {
                 Timber.e(it, "Error fetching events")
             })
-        )
     }
 
     override fun onCleared() {

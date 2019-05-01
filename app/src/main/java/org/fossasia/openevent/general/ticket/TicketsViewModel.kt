@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.ticket
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
@@ -44,9 +44,8 @@ class TicketsViewModel(
             mutableError.value = resource.getString(R.string.error_fetching_tickets_message)
             return
         }
-        compositeDisposable.add(ticketService.getTickets(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += ticketService.getTickets(id)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgressTickets.value = true
             }.subscribe({ ticketList ->
@@ -57,23 +56,20 @@ class TicketsViewModel(
                 mutableError.value = resource.getString(R.string.error_fetching_tickets_message)
                 Timber.e(it, "Error fetching tickets %d", id)
             })
-        )
     }
 
     fun loadEvent(id: Long) {
         if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
-        compositeDisposable.add(eventService.getEvent(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEvent(id)
+            .withDefaultSchedulers()
             .subscribe({
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
                 mutableError.value = resource.getString(R.string.error_fetching_event_message)
             })
-        )
     }
 
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false

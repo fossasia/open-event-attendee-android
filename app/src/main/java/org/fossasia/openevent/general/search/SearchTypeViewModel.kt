@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EventService
@@ -28,9 +28,8 @@ class SearchTypeViewModel(
     val showShimmer: LiveData<Boolean> = mutableShowShimmer
 
     fun loadEventTypes() {
-        compositeDisposable.add(eventService.getEventTypes()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventTypes()
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableShowShimmer.value = true
             }
@@ -42,7 +41,6 @@ class SearchTypeViewModel(
             }, {
                 Timber.e(it, "Error fetching events types")
             })
-        )
     }
 
     fun saveType(query: String) {

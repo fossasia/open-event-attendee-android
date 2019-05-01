@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.event.faq
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -25,16 +25,14 @@ class EventFAQViewModel(private val eventService: EventService, private val reso
             mutableError.value = Resource().getString(R.string.error_fetching_event_message)
             return
         }
-        compositeDisposable.add(eventService.getEventFAQs(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventFAQs(id)
+            .withDefaultSchedulers()
             .subscribe({ faqList ->
                 mutableEventFAQ.value = faqList
             }, {
                 mutableError.value = resource.getString(R.string.error_fetching_event_message)
                 Timber.e(it, "Error fetching event %d", id)
             })
-        )
     }
 
     override fun onCleared() {

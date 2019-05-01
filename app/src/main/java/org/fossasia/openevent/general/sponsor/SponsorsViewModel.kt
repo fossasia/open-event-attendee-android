@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.sponsor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
@@ -30,9 +30,8 @@ class SponsorsViewModel(
             return
         }
 
-        compositeDisposable.add(sponsorService.fetchSponsorsWithEvent(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += sponsorService.fetchSponsorsWithEvent(id)
+            .withDefaultSchedulers()
             .subscribe({
                 mutableSponsors.value = it
                 mutableProgress.value = false
@@ -40,7 +39,6 @@ class SponsorsViewModel(
                 Timber.e("Error fetching speaker for id $id")
                 mutableError.value = resource.getString(R.string.error_fetching_event_message)
             })
-        )
     }
 
     override fun onCleared() {

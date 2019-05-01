@@ -2,9 +2,9 @@ package org.fossasia.openevent.general.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import timber.log.Timber
@@ -18,14 +18,13 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun logout() {
-        compositeDisposable.add(authService.logout()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.logout()
+                .withDefaultSchedulers()
                 .subscribe({
                     Timber.d("Logged out!")
                 }) {
                     Timber.e(it, "Failure Logging out!")
-                })
+                }
     }
 
     fun getMarketAppLink(packageName: String): String {
@@ -37,9 +36,8 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
     }
 
     fun changePassword(oldPassword: String, newPassword: String) {
-        compositeDisposable.add(authService.changePassword(oldPassword, newPassword)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.changePassword(oldPassword, newPassword)
+            .withDefaultSchedulers()
             .subscribe({
                 if (it.passwordChanged) mutableSnackBar.value = "Password changed successfully!"
             }, {
@@ -47,7 +45,6 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
                     mutableSnackBar.value = "Incorrect Old Password provided!"
                 else mutableSnackBar.value = "Unable to change password!"
             })
-        )
     }
 
     override fun onCleared() {

@@ -3,15 +3,15 @@ package org.fossasia.openevent.general.event
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 
 class EventsViewModel(
@@ -42,9 +42,8 @@ class EventsViewModel(
 
     fun loadLocationEvents() {
         if (lastSearch != savedLocation.value) {
-            compositeDisposable.add(eventService.getEventsByLocation(mutableSavedLocation.value)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable += eventService.getEventsByLocation(mutableSavedLocation.value)
+                .withDefaultSchedulers()
                 .doOnSubscribe {
                     mutableShowShimmerEvents.value = true
                 }
@@ -58,7 +57,6 @@ class EventsViewModel(
                     Timber.e(it, "Error fetching events")
                     mutableError.value = resource.getString(R.string.error_fetching_events_message)
                 })
-            )
         } else {
             mutableProgress.value = false
         }
@@ -75,9 +73,8 @@ class EventsViewModel(
     }
 
     fun loadEvents() {
-        compositeDisposable.add(eventService.getEvents()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEvents()
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -88,20 +85,17 @@ class EventsViewModel(
                 Timber.e(it, "Error fetching events")
                 mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favorite)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.setFavorite(eventId, favorite)
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
                 mutableError.value = resource.getString(R.string.error)
             })
-        )
     }
 
     override fun onCleared() {

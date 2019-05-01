@@ -3,9 +3,9 @@ package org.fossasia.openevent.general.order
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
@@ -43,9 +43,8 @@ class OrdersUnderUserViewModel(
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun ordersUnderUser(showExpired: Boolean) {
-        compositeDisposable.add(orderService.orderUser(getId())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += orderService.orderUser(getId())
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableshowShimmerResults.value = true
                 mutableNoTickets.value = false
@@ -66,13 +65,11 @@ class OrdersUnderUserViewModel(
                 mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
                 Timber.d(it, "Failed  to list Orders under a user ")
             })
-        )
     }
 
     private fun eventsUnderUser(eventIds: List<Long>, showExpired: Boolean) {
-        compositeDisposable.add(eventService.getEventsUnderUser(eventIds)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventsUnderUser(eventIds)
+            .withDefaultSchedulers()
             .doFinally {
                 mutableshowShimmerResults.value = false
             }.subscribe({
@@ -106,7 +103,6 @@ class OrdersUnderUserViewModel(
                 mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")
             })
-        )
     }
 
     override fun onCleared() {
