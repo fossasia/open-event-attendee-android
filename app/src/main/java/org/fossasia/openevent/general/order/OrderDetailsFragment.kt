@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearSnapHelper
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
@@ -22,6 +21,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 
 class OrderDetailsFragment : Fragment() {
@@ -75,9 +75,7 @@ class OrderDetailsFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs(eventID)
                     .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.eventDetailsFragment, getAnimFade())
             }
         }
 

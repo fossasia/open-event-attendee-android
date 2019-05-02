@@ -14,7 +14,6 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -44,7 +43,7 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.navigation.fragment.findNavController
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -196,9 +195,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs(eventID)
                     .toBundle()
-                    .also { bundle ->
-                        Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                    }
+                    .navigateWithBundleTo(view, R.id.eventDetailsFragment, getAnimFade())
             }
         }
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
@@ -252,9 +249,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     sort = safeArgs.sort
                 )
                     .toBundle()
-                    .also {
-                        Navigation.findNavController(rootView).navigate(R.id.searchFilterFragment, it, getAnimFade())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.searchFilterFragment, getAnimFade())
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -30,7 +30,6 @@ import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
@@ -38,6 +37,8 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateTo
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 
 /**
@@ -137,7 +138,7 @@ class EventsFragment : Fragment(), ScrollToTop {
             })
 
         rootView.locationTextView.setOnClickListener {
-            findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
+            navigateTo(rootView, R.id.searchLocationFragment)
         }
 
         rootView.retry.setOnClickListener {
@@ -169,9 +170,7 @@ class EventsFragment : Fragment(), ScrollToTop {
             override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs(eventID)
                 .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.eventDetailsFragment, getAnimFade())
             }
         }
 
@@ -204,9 +203,7 @@ class EventsFragment : Fragment(), ScrollToTop {
             type = hashTag
         )
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
-            }
+            .navigateWithBundleTo(rootView, R.id.searchResultsFragment)
     }
 
     private fun showNoInternetScreen(show: Boolean) {

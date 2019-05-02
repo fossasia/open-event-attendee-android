@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectLocati
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val SEARCH_FILTER_FRAGMENT = "SearchFilterFragment"
@@ -77,8 +78,7 @@ class SearchFilterFragment : Fragment() {
                 true
             }
             R.id.filter_set -> {
-                val navigator = Navigation.findNavController(rootView)
-                navigator.popBackStack(R.id.searchResultsFragment, true)
+                findNavController(rootView).popBackStack(R.id.searchResultsFragment, true)
                 SearchResultsFragmentArgs(
                     date = selectedTime,
                     freeEvents = isFreeStuffChecked,
@@ -88,9 +88,7 @@ class SearchFilterFragment : Fragment() {
                     sort = sortBy
                 )
                     .toBundle()
-                    .also {
-                        navigator.navigate(R.id.searchResultsFragment, it, getAnimFade())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.searchResultsFragment, getAnimFade())
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -117,10 +115,7 @@ class SearchFilterFragment : Fragment() {
                 query = safeArgs.query
             )
                 .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchTimeFragment, it, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchTimeFragment, getAnimFade())
         }
 
         rootView.tvSelectLocation.text = selectedLocation
@@ -131,10 +126,7 @@ class SearchFilterFragment : Fragment() {
                 query = safeArgs.query
             )
                 .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchLocationFragment, it, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchLocationFragment, getAnimFade())
         }
 
         rootView.tvSelectCategory.text = selectedCategory
@@ -145,10 +137,7 @@ class SearchFilterFragment : Fragment() {
                 query = safeArgs.query
             )
                 .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchTypeFragment, it, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchTypeFragment, getAnimFade())
         }
 
         rootView.freeStuffCheckBox.isChecked = safeArgs.freeEvents

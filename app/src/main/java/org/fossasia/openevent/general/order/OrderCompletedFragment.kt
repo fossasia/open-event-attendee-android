@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
@@ -28,6 +27,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateTo
 import org.jetbrains.anko.design.longSnackbar
 
 class OrderCompletedFragment : Fragment() {
@@ -119,7 +119,7 @@ class OrderCompletedFragment : Fragment() {
 
     private fun openTicketDetails() {
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.orderUnderUserFragment, null, navOptions)
+        navigateTo(rootView, R.id.orderUnderUserFragment, navOptions)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

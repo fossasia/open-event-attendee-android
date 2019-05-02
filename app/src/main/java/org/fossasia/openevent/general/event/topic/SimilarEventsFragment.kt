@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_similar_events.moreLikeThis
@@ -23,7 +22,7 @@ import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventLayoutType
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
@@ -99,10 +98,7 @@ class SimilarEventsFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs(eventID)
                     .toBundle()
-                    .also { bundle ->
-                        findNavController(view).navigate(R.id.eventDetailsFragment, bundle,
-                            getAnimSlide())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.eventDetailsFragment)
             }
         }
 

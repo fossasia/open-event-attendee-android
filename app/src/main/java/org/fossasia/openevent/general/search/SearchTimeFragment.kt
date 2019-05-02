@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
@@ -20,6 +19,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val ANYTIME = "Anytime"
@@ -95,7 +95,7 @@ class SearchTimeFragment : Fragment() {
             ).toBundle()
         } else
             null
-        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
+        navArgs.navigateWithBundleTo(rootView, destFragId, navOptions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

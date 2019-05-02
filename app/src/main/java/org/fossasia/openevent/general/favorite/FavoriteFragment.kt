@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
@@ -28,7 +27,6 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
@@ -37,6 +35,8 @@ import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateTo
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -73,7 +73,7 @@ class FavoriteFragment : Fragment() {
                 .setPopEnterAnim(R.anim.slide_in_left)
                 .setPopExitAnim(R.anim.slide_out_right)
                 .build()
-            findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+            navigateTo(rootView, R.id.searchFragment, navOptions)
         }
 
         rootView.todayChip.setOnClickListener {
@@ -121,9 +121,7 @@ class FavoriteFragment : Fragment() {
             override fun onClick(eventID: Long) {
                 EventDetailsFragmentArgs(eventID)
                 .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.eventDetailsFragment, getAnimFade())
             }
         }
 
@@ -155,8 +153,6 @@ class FavoriteFragment : Fragment() {
             type = getString(R.string.anything),
             date = time)
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, Utils.getAnimSlide())
-            }
+            .navigateWithBundleTo(rootView, R.id.searchResultsFragment)
     }
 }

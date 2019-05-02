@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
@@ -75,13 +74,13 @@ import org.fossasia.openevent.general.order.OrderCompletedFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -557,9 +556,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.paymentCompleted.value = false
         OrderCompletedFragmentArgs(safeArgs.eventId)
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
-            }
+            .navigateWithBundleTo(rootView, R.id.orderCompletedFragment)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

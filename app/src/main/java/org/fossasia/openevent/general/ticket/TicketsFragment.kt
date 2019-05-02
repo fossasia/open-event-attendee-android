@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
@@ -31,11 +30,11 @@ import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 
 class TicketsFragment : Fragment() {
@@ -150,17 +149,13 @@ class TicketsFragment : Fragment() {
 
         AttendeeFragmentArgs(eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty)
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
-            }
+            .navigateWithBundleTo(rootView, R.id.attendeeFragment)
     }
 
     private fun redirectToLogin() {
         LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+            .navigateWithBundleTo(rootView, R.id.loginFragment, getAnimFade())
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {

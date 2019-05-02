@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
@@ -17,17 +16,16 @@ import kotlinx.android.synthetic.main.fragment_search.view.eventTypeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.navigation.Navigation
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDateWithoutYear
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 
 const val SEARCH_FRAGMENT = "SearchFragment"
 
@@ -50,9 +48,7 @@ class SearchFragment : Fragment() {
             SearchTimeFragmentArgs(rootView.timeTextView.text.toString(),
                 fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchTimeFragment)
         }
         searchViewModel.loadSavedTime()
         val time = searchViewModel.savedTime
@@ -79,17 +75,13 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.setOnClickListener {
             SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchLocationFragment)
         }
 
         rootView.eventTypeTextView.setOnClickListener {
             SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
                 .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchTypeFragment, bundle, getAnimSlide())
-                }
+                .navigateWithBundleTo(rootView, R.id.searchTypeFragment)
         }
 
         return rootView
@@ -125,9 +117,7 @@ class SearchFragment : Fragment() {
                     type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
                 )
                     .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.searchResultsFragment)
                 return false
             }
 

@@ -19,7 +19,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
@@ -72,7 +71,6 @@ import org.fossasia.openevent.general.sponsor.SponsorRecyclerAdapter
 import org.fossasia.openevent.general.sponsor.SponsorsFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
@@ -80,6 +78,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -183,9 +182,7 @@ class EventDetailsFragment : Fragment() {
             override fun onClick(speakerId: Long) {
                 SpeakerFragmentArgs(speakerId)
                 .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.speakerFragment, bundle, getAnimSlide())
-                }
+                .navigateWithBundleTo(rootView, R.id.speakerFragment)
             }
         }
 
@@ -299,9 +296,7 @@ class EventDetailsFragment : Fragment() {
         val aboutEventOnClickListener = View.OnClickListener {
             AboutEventFragmentArgs(safeArgs.eventId)
                 .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
-                }
+                .navigateWithBundleTo(rootView, R.id.aboutEventFragment)
         }
 
         // Event Description Section
@@ -382,9 +377,7 @@ class EventDetailsFragment : Fragment() {
             R.id.open_faqs -> {
                 EventFAQFragmentArgs(safeArgs.eventId)
                     .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventFAQFragment, bundle, getAnimSlide())
-                    }
+                    .navigateWithBundleTo(rootView, R.id.eventFAQFragment)
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -434,9 +427,7 @@ class EventDetailsFragment : Fragment() {
     private fun loadTicketFragment() {
         TicketsFragmentArgs(safeArgs.eventId, currency)
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
-            }
+            .navigateWithBundleTo(rootView, R.id.ticketsFragment)
     }
 
     private fun loadSocialLinksFragment() {
@@ -506,9 +497,7 @@ class EventDetailsFragment : Fragment() {
     private fun redirectToLogin() {
         LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, Utils.getAnimFade())
-            }
+            .navigateWithBundleTo(rootView, R.id.loginFragment)
     }
 
     private fun writeFeedback() {
@@ -550,9 +539,7 @@ class EventDetailsFragment : Fragment() {
     private fun moveToSponsorSection() {
         SponsorsFragmentArgs(safeArgs.eventId)
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.sponsorsFragment, bundle, getAnimSlide())
-            }
+            .navigateWithBundleTo(rootView, R.id.sponsorsFragment)
     }
 
     override fun onDestroy() {

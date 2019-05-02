@@ -33,6 +33,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.longSnackbar
 
 class OrdersUnderUserFragment : Fragment(), ScrollToTop {
@@ -83,9 +84,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
                     OrderDetailsFragmentArgs(eventID, orderIdentifier)
                         .toBundle()
-                        .also { bundle ->
-                            findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
-                        }
+                        .navigateWithBundleTo(rootView, R.id.orderDetailsFragment, getAnimFade())
                 }
             }
 

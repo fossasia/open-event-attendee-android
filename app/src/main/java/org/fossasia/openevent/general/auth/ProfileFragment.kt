@@ -33,6 +33,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateTo
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.jetbrains.anko.design.snackbar
 
 class ProfileFragment : Fragment() {
@@ -44,9 +46,7 @@ class ProfileFragment : Fragment() {
     private fun redirectToLogin() {
         LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+            .navigateWithBundleTo(rootView, R.id.loginFragment)
     }
 
     private fun redirectToEventsFragment() {
@@ -93,7 +93,7 @@ class ProfileFragment : Fragment() {
                         .into(rootView.avatar)
 
                 rootView.editProfileRL.setOnClickListener {
-                    findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                    navigateTo(rootView, R.id.editProfileFragment, getAnimFade())
                 }
             })
 
@@ -104,9 +104,7 @@ class ProfileFragment : Fragment() {
         rootView.settingsLL.setOnClickListener {
             SettingsFragmentArgs(emailSettings)
                 .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
-                }
+                .navigateWithBundleTo(rootView, R.id.settingsFragment, getAnimFade())
         }
 
         rootView.ticketIssuesLL.setOnClickListener {

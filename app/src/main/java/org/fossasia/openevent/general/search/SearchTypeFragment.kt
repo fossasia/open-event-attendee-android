@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
@@ -19,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTi
 import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.navigateTo
+import org.fossasia.openevent.general.utils.extensions.navigateWithBundleTo
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -107,14 +108,14 @@ class SearchTypeFragment : Fragment() {
             R.id.searchFragment to R.id.eventsFragment
 
         val navOptions = NavOptions.Builder().setPopUpTo(popUpId, false).build()
-        Navigation.findNavController(rootView).navigate(destFragId, null, navOptions)
+        navigateTo(rootView, destFragId, navOptions)
         val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
             SearchFilterFragmentArgs(
                 query = safeArgs.query
             ).toBundle()
         } else
             null
-        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
+        navArgs.navigateWithBundleTo(rootView, destFragId, navOptions)
     }
 
     private fun setCurrentChoice(value: String?) {
