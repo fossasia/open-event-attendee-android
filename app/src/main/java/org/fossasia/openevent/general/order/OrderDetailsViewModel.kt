@@ -28,6 +28,7 @@ class OrderDetailsViewModel(
     val attendees: LiveData<List<Attendee>> = mutableAttendees
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
+    var currentTicketPosition: Int = 0
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
