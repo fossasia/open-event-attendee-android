@@ -240,6 +240,8 @@
     <string name="order_fail_message">Unable to create Order!</string>
     <string name="payment_not_complete_message">Payment not completed!</string>
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
+    <string name="share_ticket">Share Ticket</string>
+    <string name="fail_sharing_ticket">Fail to share ticket</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>

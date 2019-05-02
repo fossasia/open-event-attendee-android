@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:id="@+id/eventCoordinatorLayout"
-    android:background="@android:color/white"
-    android:layout_height="match_parent">
-    <include
-        android:id="@+id/eventErrorCard"
-        layout="@layout/content_fetching_event_error"
-        android:visibility="gone" />
-    <FrameLayout
-        android:id="@+id/container"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="event"
+            type="org.fossasia.openevent.general.event.Event" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/eventCoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_dodgeInsetEdges="bottom">
+        android:background="@android:color/white">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonTickets"
-            style="@style/AppTheme.MaterialButton.RoundedCorners"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="@dimen/layout_margin_large"
-            android:text="@string/tickets"/>
+        <include
+            android:id="@+id/eventErrorCard"
+            layout="@layout/content_fetching_event_error"
+            android:visibility="gone" />
 
-        <include layout="@layout/content_event"
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/event_details_divider_margin"/>
+            app:layout_dodgeInsetEdges="bottom">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/event_details_divider_margin"
-            android:layout_gravity="bottom"
-            android:background="@color/grey"
-            android:layout_height="@dimen/event_details_divider"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonTickets"
+                style="@style/AppTheme.MaterialButton.RoundedCorners"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/layout_margin_large"
+                android:text="@string/tickets" />
 
-    </FrameLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <include
+                layout="@layout/content_event"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/event_details_divider_margin"
+                bind:event="@{event}" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/event_details_divider_margin"
+                android:background="@color/grey" />
+
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
