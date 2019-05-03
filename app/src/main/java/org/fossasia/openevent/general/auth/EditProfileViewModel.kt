@@ -10,6 +10,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
+import java.io.File
 
 class EditProfileViewModel(
     private val authService: AuthService,
@@ -25,10 +26,17 @@ class EditProfileViewModel(
     val user: LiveData<User> = mutableUser
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
+    private var updatedImageTemp = MutableLiveData<File>()
+    var avatarUpdated = false
+    var encodedImage: String? = null
 
     fun isLoggedIn() = authService.isLoggedIn()
 
-    fun updateProfile(encodedImage: String?, firstName: String, lastName: String) {
+    /**
+     *  @param firstName updated firstName
+     *  @param lastName updated lastName
+     */
+    fun updateProfile(firstName: String, lastName: String) {
         if (encodedImage.isNullOrEmpty()) {
             updateUser(null, firstName, lastName)
             return
@@ -51,7 +59,7 @@ class EditProfileViewModel(
             }
     }
 
-    fun updateUser(url: String?, firstName: String, lastName: String) {
+    private fun updateUser(url: String?, firstName: String, lastName: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
             mutableMessage.value = resource.getString(R.string.provide_name_message)
@@ -79,6 +87,14 @@ class EditProfileViewModel(
                 mutableMessage.value = resource.getString(R.string.user_update_error_message)
                 Timber.e(it, "Error updating user!")
             }
+    }
+
+    fun setUpdatedTempFile(file: File) {
+        updatedImageTemp.value = file
+    }
+
+    fun getUpdatedTempFile(): MutableLiveData<File> {
+        return updatedImageTemp
     }
 
     override fun onCleared() {
