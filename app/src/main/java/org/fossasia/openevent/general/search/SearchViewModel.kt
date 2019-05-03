@@ -313,18 +313,25 @@ class SearchViewModel(
         }
         compositeDisposable += eventService.getSearchEvents(query, sortBy)
             .withDefaultSchedulers()
+            .distinctUntilChanged()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
                 mutableChipClickable.value = false
             }.doFinally {
-                mutableShowShimmerResults.value = false
-                mutableChipClickable.value = true
+                stopLoaders()
             }.subscribe({
+                stopLoaders()
                 mutableEvents.value = it
             }, {
+                stopLoaders()
                 Timber.e(it, "Error fetching events")
                 mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
+    }
+
+    private fun stopLoaders() {
+        mutableShowShimmerResults.value = false
+        mutableChipClickable.value = true
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {

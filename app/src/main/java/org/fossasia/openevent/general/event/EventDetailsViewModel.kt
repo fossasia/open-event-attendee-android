@@ -60,8 +60,8 @@ class EventDetailsViewModel(
     val eventSponsors: LiveData<List<Sponsor>> = mutableEventSponsors
     private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
-    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
-    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
+    private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
+    val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -127,11 +127,16 @@ class EventDetailsViewModel(
         if (topicId != -1L) {
             compositeDisposable += eventService.getSimilarEvents(topicId)
                 .withDefaultSchedulers()
-                .subscribe({
-                    val similarEventList = mutableListOf<Event>()
-                    mutableSimilarEvents.value?.let { currentEvents -> similarEventList.addAll(currentEvents) }
-                    val list = it.filter { it.id != eventId }
+                .distinctUntilChanged()
+                .subscribe({ events ->
+                    val list = events.filter { it.id != eventId }
+                    val oldList = mutableSimilarEvents.value
+
+                    val similarEventList = mutableSetOf<Event>()
                     similarEventList.addAll(list)
+                    oldList?.let {
+                        similarEventList.addAll(it)
+                    }
                     mutableSimilarEvents.value = similarEventList
                 }, {
                     Timber.e(it, "Error fetching similar events")
@@ -142,11 +147,15 @@ class EventDetailsViewModel(
 
         compositeDisposable += eventService.getEventsByLocation(location)
             .withDefaultSchedulers()
-            .subscribe({
-                val similarEventList = mutableListOf<Event>()
-                mutableSimilarEvents.value?.let { currentEvents -> similarEventList.addAll(currentEvents) }
-                val list = it.filter { it.id != eventId }
+            .distinctUntilChanged()
+            .subscribe({ events ->
+                val list = events.filter { it.id != eventId }
+                val oldList = mutableSimilarEvents.value
+                val similarEventList = mutableSetOf<Event>()
                 similarEventList.addAll(list)
+                oldList?.let {
+                    similarEventList.addAll(it)
+                }
                 mutableSimilarEvents.value = similarEventList
             }, {
                 Timber.e(it, "Error fetching similar events")
@@ -176,6 +185,7 @@ class EventDetailsViewModel(
         }
         compositeDisposable += eventService.getEvent(id)
             .withDefaultSchedulers()
+            .distinctUntilChanged()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
