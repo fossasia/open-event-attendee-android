@@ -87,9 +87,10 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         }
 
         itemView.name.text = "${attendee.firstname} ${attendee.lastname}"
-        itemView.orderIdentifier.text = orderIdentifier
+        val ticketIdentifier = "$orderIdentifier-${attendee.id}"
+        itemView.orderIdentifier.text = ticketIdentifier
+        val bitmap = qrCode.generateQrBitmap(ticketIdentifier, 200, 200)
 
-        val bitmap = qrCode.generateQrBitmap(orderIdentifier, 200, 200)
         if (bitmap != null) {
             itemView.qrCodeView.setImageBitmap(bitmap)
         } else {
