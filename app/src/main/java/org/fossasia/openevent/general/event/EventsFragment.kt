@@ -28,9 +28,6 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
-import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
@@ -137,7 +134,7 @@ class EventsFragment : Fragment(), ScrollToTop {
             })
 
         rootView.locationTextView.setOnClickListener {
-            findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults())
         }
 
         rootView.retry.setOnClickListener {
@@ -167,11 +164,7 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs(eventID)
-                .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+                findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID))
             }
         }
 
@@ -197,16 +190,11 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     private fun openSearch(hashTag: String) {
-        SearchResultsFragmentArgs(
-            query = "",
-            location = Preference().getString(SAVED_LOCATION).toString(),
-            date = getString(R.string.anytime),
-            type = hashTag
-        )
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
-            }
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
+                query = "",
+                location = Preference().getString(SAVED_LOCATION).toString(),
+                date = getString(R.string.anytime),
+                type = hashTag))
     }
 
     private fun showNoInternetScreen(show: Boolean) {

@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
@@ -17,11 +16,10 @@ import kotlinx.android.synthetic.main.fragment_search.view.eventTypeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDateWithoutYear
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -47,12 +45,10 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         rootView.timeTextView.setOnClickListener {
-            SearchTimeFragmentArgs(rootView.timeTextView.text.toString(),
-                fromFragmentName = SEARCH_FRAGMENT)
-                .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchTimeFragment, bundle, getAnimSlide())
-                }
+            findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchTime(
+                rootView.timeTextView.text.toString(),
+                fromFragmentName = SEARCH_FRAGMENT
+            ))
         }
         searchViewModel.loadSavedTime()
         val time = searchViewModel.savedTime
@@ -77,19 +73,15 @@ class SearchFragment : Fragment() {
         rootView.locationTextView.text = searchViewModel.savedLocation
 
         rootView.locationTextView.setOnClickListener {
-            SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
-                .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, bundle, getAnimSlide())
-                }
+            findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchLocation(
+                fromFragmentName = SEARCH_FRAGMENT
+            ))
         }
 
         rootView.eventTypeTextView.setOnClickListener {
-            SearchLocationFragmentArgs(fromFragmentName = SEARCH_FRAGMENT)
-                .toBundle()
-                .also { bundle ->
-                    Navigation.findNavController(rootView).navigate(R.id.searchTypeFragment, bundle, getAnimSlide())
-                }
+            findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchType(
+                fromFragmentName = SEARCH_FRAGMENT
+            ))
         }
 
         return rootView
@@ -118,16 +110,12 @@ class SearchFragment : Fragment() {
         searchItem.actionView = searchView
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                SearchResultsFragmentArgs(
+                findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchResults(
                     query = query,
                     location = rootView.locationTextView.text.toString().nullToEmpty(),
                     date = (searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty(),
                     type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
-                )
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, getAnimSlide())
-                    }
+                ))
                 return false
             }
 

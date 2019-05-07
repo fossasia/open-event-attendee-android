@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectCatego
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectDate
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectLocation
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -77,20 +76,14 @@ class SearchFilterFragment : Fragment() {
                 true
             }
             R.id.filter_set -> {
-                val navigator = Navigation.findNavController(rootView)
-                navigator.popBackStack(R.id.searchResultsFragment, true)
-                SearchResultsFragmentArgs(
+                findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchResults(
                     date = selectedTime,
                     freeEvents = isFreeStuffChecked,
                     location = selectedLocation,
                     type = selectedCategory,
                     query = safeArgs.query,
                     sort = sortBy
-                )
-                    .toBundle()
-                    .also {
-                        navigator.navigate(R.id.searchResultsFragment, it, getAnimFade())
-                    }
+                ))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -111,44 +104,28 @@ class SearchFilterFragment : Fragment() {
 
         rootView.tvSelectDate.text = selectedTime
         rootView.tvSelectDate.setOnClickListener {
-            SearchTimeFragmentArgs(
+            findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchTime(
                 time = selectedTime,
                 fromFragmentName = SEARCH_FILTER_FRAGMENT,
                 query = safeArgs.query
-            )
-                .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchTimeFragment, it, getAnimFade())
-                }
+            ))
         }
 
         rootView.tvSelectLocation.text = selectedLocation
         rootView.tvSelectLocation.setOnClickListener {
-            SearchTimeFragmentArgs(
-                time = selectedLocation,
+            findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchLocation(
                 fromFragmentName = SEARCH_FILTER_FRAGMENT,
                 query = safeArgs.query
-            )
-                .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchLocationFragment, it, getAnimFade())
-                }
+            ))
         }
 
         rootView.tvSelectCategory.text = selectedCategory
         rootView.tvSelectCategory.setOnClickListener {
-            SearchTimeFragmentArgs(
-                time = selectedCategory,
-                fromFragmentName = SEARCH_FILTER_FRAGMENT,
-                query = safeArgs.query
-            )
-                .toBundle()
-                .also {
-                    Navigation.findNavController(rootView)
-                        .navigate(R.id.searchTypeFragment, it, getAnimFade())
-                }
+            findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchType(
+                selectedCategory,
+                SEARCH_FILTER_FRAGMENT,
+                safeArgs.query
+            ))
         }
 
         rootView.freeStuffCheckBox.isChecked = safeArgs.freeEvents

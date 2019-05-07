@@ -7,8 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
@@ -82,12 +81,10 @@ class SearchTimeFragment : Fragment() {
 
     private fun redirectToCaller(time: String) {
         searchTimeViewModel.saveTime(time)
-        val (destFragId, popUpId) = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
-            R.id.searchFilterFragment to R.id.searchResultsFragment
+        val destFragId = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
+            R.id.action_search_time_to_search_filter
         else
-            R.id.searchFragment to R.id.eventsFragment
-
-        val navOptions = NavOptions.Builder().setPopUpTo(popUpId, false).build()
+            R.id.action_search_time_to_search
 
         val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
             SearchFilterFragmentArgs(
@@ -95,7 +92,7 @@ class SearchTimeFragment : Fragment() {
             ).toBundle()
         } else
             null
-        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
+        findNavController(rootView).navigate(destFragId, navArgs)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

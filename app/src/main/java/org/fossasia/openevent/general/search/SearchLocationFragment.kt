@@ -107,11 +107,11 @@ class SearchLocationFragment : Fragment() {
 
     private fun redirectToMain() {
         val fragmentId = when (safeArgs.fromFragmentName) {
-            SEARCH_FRAGMENT -> R.id.searchFragment
-            SEARCH_FILTER_FRAGMENT -> R.id.searchFilterFragment
-            else -> R.id.eventsFragment
+            SEARCH_FRAGMENT -> R.id.action_search_location_to_search
+            SEARCH_FILTER_FRAGMENT -> R.id.action_search_location_to_search_filter
+            else -> R.id.action_search_location_to_events
         }
-        Navigation.findNavController(rootView).popBackStack(fragmentId, false)
+        Navigation.findNavController(rootView).navigate(fragmentId)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

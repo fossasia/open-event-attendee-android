@@ -55,24 +55,17 @@ import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayo
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
 import kotlinx.android.synthetic.main.fragment_event.eventCoordinatorLayout
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.about.AboutEventFragmentArgs
-import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
-import org.fossasia.openevent.general.event.faq.EventFAQFragmentArgs
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
 import org.fossasia.openevent.general.social.SocialLinksFragment
-import org.fossasia.openevent.general.speakers.SpeakerFragmentArgs
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
 import org.fossasia.openevent.general.sponsor.SponsorClickListener
 import org.fossasia.openevent.general.sponsor.SponsorRecyclerAdapter
-import org.fossasia.openevent.general.sponsor.SponsorsFragmentArgs
-import org.fossasia.openevent.general.ticket.TicketsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
@@ -181,11 +174,8 @@ class EventDetailsFragment : Fragment() {
 
         val speakerClickListener: SpeakerClickListener = object : SpeakerClickListener {
             override fun onClick(speakerId: Long) {
-                SpeakerFragmentArgs(speakerId)
-                .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.speakerFragment, bundle, getAnimSlide())
-                }
+                findNavController(rootView).navigate(EventDetailsFragmentDirections
+                    .actionEventDetailsToSpeaker(speakerId))
             }
         }
 
@@ -297,11 +287,8 @@ class EventDetailsFragment : Fragment() {
         currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            AboutEventFragmentArgs(safeArgs.eventId)
-                .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.aboutEventFragment, bundle, getAnimSlide())
-                }
+            findNavController(rootView).navigate(EventDetailsFragmentDirections
+                .actionEventDetailsToAboutEvent(safeArgs.eventId))
         }
 
         // Event Description Section
@@ -380,11 +367,8 @@ class EventDetailsFragment : Fragment() {
                 return true
             }
             R.id.open_faqs -> {
-                EventFAQFragmentArgs(safeArgs.eventId)
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventFAQFragment, bundle, getAnimSlide())
-                    }
+                findNavController(rootView).navigate(EventDetailsFragmentDirections
+                    .actionEventDetailsToFaq(safeArgs.eventId))
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -432,11 +416,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadTicketFragment() {
-        TicketsFragmentArgs(safeArgs.eventId, currency)
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.ticketsFragment, bundle, getAnimSlide())
-            }
+        findNavController(rootView).navigate(EventDetailsFragmentDirections
+            .actionEventDetailsToTickets(safeArgs.eventId, currency))
     }
 
     private fun loadSocialLinksFragment() {
@@ -504,11 +485,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs(getString(R.string.log_in_first))
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, Utils.getAnimFade())
-            }
+        findNavController(rootView).navigate(EventDetailsFragmentDirections
+            .actionEventDetailsToLogin(getString(R.string.log_in_first)))
     }
 
     private fun writeFeedback() {
@@ -548,11 +526,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun moveToSponsorSection() {
-        SponsorsFragmentArgs(safeArgs.eventId)
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.sponsorsFragment, bundle, getAnimSlide())
-            }
+        findNavController(rootView).navigate(EventDetailsFragmentDirections
+            .actionEventDetailsToSponsor(safeArgs.eventId))
     }
 
     override fun onDestroy() {

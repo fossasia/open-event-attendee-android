@@ -26,8 +26,6 @@ import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCardView
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -99,11 +97,8 @@ class OrderDetailsFragment : Fragment() {
 
         val eventDetailsListener = object : OrderDetailsRecyclerAdapter.EventDetailsListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs(eventID)
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                    }
+                findNavController(rootView).navigate(OrderDetailsFragmentDirections
+                    .actionOrderDetailsToEventDetails(eventID))
             }
         }
 

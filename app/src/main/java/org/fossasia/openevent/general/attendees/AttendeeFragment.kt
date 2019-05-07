@@ -71,11 +71,9 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.order.Charge
-import org.fossasia.openevent.general.order.OrderCompletedFragmentArgs
 import org.fossasia.openevent.general.ticket.TicketDetailsRecyclerAdapter
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -555,11 +553,8 @@ class AttendeeFragment : Fragment() {
 
     private fun openOrderCompletedFragment() {
         attendeeViewModel.paymentCompleted.value = false
-        OrderCompletedFragmentArgs(safeArgs.eventId)
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.orderCompletedFragment, bundle, getAnimFade())
-            }
+        findNavController(rootView).navigate(AttendeeFragmentDirections
+            .actionAttendeeToOrderCompleted(safeArgs.eventId))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

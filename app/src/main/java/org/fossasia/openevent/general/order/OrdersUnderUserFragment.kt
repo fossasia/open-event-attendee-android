@@ -23,11 +23,8 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersNest
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.expireFilter
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
-import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,20 +78,15 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
                 override fun onClick(eventID: Long, orderIdentifier: String) {
-                    OrderDetailsFragmentArgs(eventID, orderIdentifier)
-                        .toBundle()
-                        .also { bundle ->
-                            findNavController(rootView).navigate(R.id.orderDetailsFragment, bundle, getAnimFade())
-                        }
+                        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                            .actionOrderUserToOrderDetails(eventID, orderIdentifier))
                 }
             }
 
             rootView.expireFilter.setOnClickListener {
-                OrdersUnderUserFragmentArgs(showExpired = true)
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(rootView).navigate(R.id.orderUnderUserFragment, bundle, getAnimSlide())
-                    }
+                findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                    .actionOrderUserToOrderUserExpire(showExpired = true)
+                    )
             }
 
             ordersRecyclerAdapter.setListener(recyclerViewClickListener)
@@ -151,11 +143,8 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs(getString(R.string.log_in_first))
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+            .actionOrderUserToLogin(getString(R.string.log_in_first)))
     }
 
     override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)
