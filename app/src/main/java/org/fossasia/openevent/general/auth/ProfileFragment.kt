@@ -25,9 +25,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.settingsLL
 import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssuesLL
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.settings.SettingsFragmentArgs
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -42,11 +40,9 @@ class ProfileFragment : Fragment() {
     private var emailSettings: String? = null
 
     private fun redirectToLogin() {
-        LoginFragmentArgs(getString(R.string.log_in_first))
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+        findNavController(rootView).navigate(ProfileFragmentDirections
+            .actionProfileToLogin(getString(R.string.log_in_first))
+        )
     }
 
     private fun redirectToEventsFragment() {
@@ -93,7 +89,7 @@ class ProfileFragment : Fragment() {
                         .into(rootView.avatar)
 
                 rootView.editProfileRL.setOnClickListener {
-                    findNavController(rootView).navigate(R.id.editProfileFragment, null, getAnimFade())
+                        findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToEditProfile())
                 }
             })
 
@@ -102,11 +98,7 @@ class ProfileFragment : Fragment() {
         rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
         rootView.settingsLL.setOnClickListener {
-            SettingsFragmentArgs(emailSettings)
-                .toBundle()
-                .also { bundle ->
-                    findNavController(rootView).navigate(R.id.settingsFragment, bundle, getAnimFade())
-                }
+            findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToSettings(emailSettings))
         }
 
         rootView.ticketIssuesLL.setOnClickListener {

@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
@@ -101,20 +100,19 @@ class SearchTypeFragment : Fragment() {
 
     private fun redirectToSearch(type: String) {
         searchTypeViewModel.saveType(type)
-        val (destFragId, popUpId) = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
-            R.id.searchFilterFragment to R.id.searchResultsFragment
+        val destFragId = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
+            R.id.action_search_type_to_search_filter
         else
-            R.id.searchFragment to R.id.eventsFragment
+            R.id.action_search_type_to_search
 
-        val navOptions = NavOptions.Builder().setPopUpTo(popUpId, false).build()
-        Navigation.findNavController(rootView).navigate(destFragId, null, navOptions)
+        findNavController(rootView).navigate(destFragId)
         val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
             SearchFilterFragmentArgs(
                 query = safeArgs.query
             ).toBundle()
         } else
             null
-        Navigation.findNavController(rootView).navigate(destFragId, navArgs, navOptions)
+        findNavController(rootView).navigate(destFragId, navArgs)
     }
 
     private fun setCurrentChoice(value: String?) {

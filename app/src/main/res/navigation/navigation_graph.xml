@@ -9,17 +9,56 @@
         android:id="@+id/welcomeFragment"
         android:name="org.fossasia.openevent.general.welcome.WelcomeFragment"
         android:label="WelcomeFragment"
-        tools:layout="@layout/fragment_welcome" />
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcome_to_search"
+            app:destination="@id/searchLocationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
     <fragment
         android:id="@+id/eventsFragment"
         android:name="org.fossasia.openevent.general.event.EventsFragment"
         android:label="EventsFragment"
-        tools:layout="@layout/fragment_events" />
+        tools:layout="@layout/fragment_events" >
+        <action
+            android:id="@+id/action_events_to_search_location"
+            app:destination="@id/searchLocationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_events_to_events_detail"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_events_to_search_results"
+            app:destination="@id/searchResultsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+    </fragment>
     <fragment
         android:id="@+id/similarEventsFragment"
         android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
         android:label="SimilarEventsFragment"
         tools:layout="@layout/fragment_similar_events">
+
+        <action
+            android:id="@+id/action_similar_events_to_event_details"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <argument
             android:name="eventId"
@@ -42,12 +81,55 @@
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_search_time"
+            app:destination="@id/searchTimeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_to_search_location"
+            app:destination="@id/searchLocationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_to_search_type"
+            app:destination="@id/searchTypeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_to_search_results"
+            app:destination="@id/searchResultsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
         android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
         android:label="SearchLocationFragment"
         tools:layout="@layout/fragment_search_location">
+
+        <action android:id="@+id/action_search_location_to_search_filter"
+            app:destination="@id/searchFilterFragment"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/searchFilterFragment"/>
+
+        <action android:id="@+id/action_search_location_to_search"
+            app:destination="@id/searchFragment"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/searchFragment"/>
+
+        <action android:id="@+id/action_search_location_to_events"
+            app:destination="@id/eventsFragment"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/eventsFragment"/>
 
         <argument
             android:name="fromFragmentName"
@@ -64,6 +146,25 @@
         android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
         android:label="SearchTimeFragment"
         tools:layout="@layout/fragment_search_time">
+
+        <action
+            android:id="@+id/action_search_time_to_search_filter"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/searchResultsFragment"
+            app:destination="@id/searchFilterFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_time_to_search"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/eventsFragment"
+            app:destination="@id/searchFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <argument
             android:name="time"
@@ -86,6 +187,26 @@
         android:label="SearchTypeFragment"
         tools:layout="@layout/fragment_search_type">
 
+        <action
+            android:id="@+id/action_search_type_to_search_filter"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/searchResultsFragment"
+            app:destination="@id/searchFilterFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_type_to_search"
+            app:popUpToInclusive="false"
+            app:popUpTo="@id/eventsFragment"
+            app:destination="@id/searchFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+
         <argument
             android:name="type"
             app:argType="string"
@@ -106,6 +227,22 @@
         android:name="org.fossasia.openevent.general.search.SearchResultsFragment"
         android:label="SearchResultsFragment"
         tools:layout="@layout/fragment_search_results">
+
+        <action
+            android:id="@+id/action_search_results_to_event_detail"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
+            android:id="@+id/action_search_results_to_search_filter"
+            app:destination="@id/searchFilterFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <argument
             android:name="query"
@@ -162,12 +299,64 @@
         android:id="@+id/favoriteFragment"
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+
+        <action
+            android:id="@+id/action_favourite_to_search"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="false"
+            app:destination="@id/searchFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_favourite_to_event_details"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
+            android:id="@+id/action_favourite_to_search_results"
+            app:destination="@id/searchResultsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+    </fragment>
     <fragment
         android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
         android:label="OrdersUnderUserFragment"
         tools:layout="@layout/fragment_orders_under_user">
+
+        <action
+            android:id="@+id/action_order_user_to_order_details"
+            app:destination="@id/orderDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
+            android:id="@+id/action_order_user_to_order_user_expire"
+            app:destination="@id/orderUnderUserFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_order_user_to_login"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <argument
             android:name="showExpired"
@@ -179,6 +368,14 @@
         android:name="org.fossasia.openevent.general.order.OrderDetailsFragment"
         android:label="OrderDetailsFragment"
         tools:layout="@layout/fragment_order_details">
+
+        <action
+            android:id="@+id/action_order_details_to_event_details"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <argument
             android:name="eventId"
@@ -194,7 +391,30 @@
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
+            android:id="@+id/action_profile_to_edit_profile"
+            app:destination="@id/editProfileFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settingsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
@@ -215,6 +435,50 @@
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
         tools:layout="@layout/fragment_event">
+
+        <action
+            android:id="@+id/action_event_details_to_sponsor"
+            app:destination="@id/sponsorsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_event_details_to_login"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_tickets"
+            app:destination="@id/ticketsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_faq"
+            app:destination="@id/eventFAQFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_about_event"
+            app:destination="@id/aboutEventFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_speaker"
+            app:destination="@id/speakerFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <argument
             android:name="eventId"
@@ -250,6 +514,22 @@
         android:label="TicketsFragment"
         tools:layout="@layout/fragment_tickets">
 
+        <action
+            android:id="@+id/action_tickets_to_attendee"
+            app:destination="@id/attendeeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_tickets_to_login"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
         <argument
             android:name="eventId"
             app:argType="long"
@@ -267,6 +547,14 @@
         android:label="AttendeeFragment"
         tools:layout="@layout/fragment_attendee">
 
+        <action
+            android:id="@+id/action_attendee_to_order_completed"
+            app:destination="@id/orderCompletedFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
         <argument
             android:name="eventId"
             app:argType="long"
@@ -283,6 +571,12 @@
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"
         tools:layout="@layout/fragment_order">
+
+        <action
+            android:id="@+id/action_order_completed_to_order_user"
+            app:destination="@id/orderCompletedFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="false" />
 
         <argument
             android:name="eventId"
@@ -311,6 +605,37 @@
         android:name="org.fossasia.openevent.general.search.SearchFilterFragment"
         android:label="fragment_search_filter"
         tools:layout="@layout/fragment_search_filter">
+
+        <action
+            android:id="@+id/action_search_filter_to_search_results"
+            app:popUpTo="@id/searchResultsFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/searchResultsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_filter_to_search_time"
+            app:destination="@id/searchTimeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_filter_to_search_location"
+            app:destination="@id/searchLocationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_search_filter_to_search_type"
+            app:destination="@id/searchTypeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <argument
             android:name="query"

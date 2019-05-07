@@ -26,12 +26,8 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.attendees.AttendeeFragmentArgs
-import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -147,20 +143,15 @@ class TicketsFragment : Fragment() {
     private fun redirectToAttendee() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
-
-        AttendeeFragmentArgs(eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty)
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
-            }
+        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
+            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty
+        ))
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs(getString(R.string.log_in_first))
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToLogin(
+            getString(R.string.log_in_first)
+        ))
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {

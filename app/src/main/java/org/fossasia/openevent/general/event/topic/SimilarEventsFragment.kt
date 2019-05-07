@@ -19,11 +19,9 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventLayoutType
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
@@ -97,12 +95,8 @@ class SimilarEventsFragment : Fragment() {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs(eventID)
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(view).navigate(R.id.eventDetailsFragment, bundle,
-                            getAnimSlide())
-                    }
+                findNavController(view).navigate(SimilarEventsFragmentDirections
+                    .actionSimilarEventsToEventDetails(eventID))
             }
         }
 

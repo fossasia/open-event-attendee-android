@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
@@ -23,13 +22,9 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
-import org.fossasia.openevent.general.search.SearchResultsFragmentArgs
-import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
@@ -66,14 +61,7 @@ class FavoriteFragment : Fragment() {
         setToolbar(activity, getString(R.string.likes), false)
 
         rootView.findText.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.eventsFragment, false)
-                .setEnterAnim(R.anim.slide_in_right)
-                .setExitAnim(R.anim.slide_out_left)
-                .setPopEnterAnim(R.anim.slide_in_left)
-                .setPopExitAnim(R.anim.slide_out_right)
-                .build()
-            findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+            findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToSearch())
         }
 
         rootView.todayChip.setOnClickListener {
@@ -119,11 +107,7 @@ class FavoriteFragment : Fragment() {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs(eventID)
-                .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+                findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID))
             }
         }
 
@@ -150,13 +134,10 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun openSearchResult(time: String) {
-        SearchResultsFragmentArgs(query = "",
+        findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToSearchResults(query = "",
             location = Preference().getString(SAVED_LOCATION).toString(),
             type = getString(R.string.anything),
-            date = time)
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.searchResultsFragment, bundle, Utils.getAnimSlide())
-            }
+            date = time
+        ))
     }
 }
