@@ -52,14 +52,6 @@
         android:label="SimilarEventsFragment"
         tools:layout="@layout/fragment_similar_events">
 
-        <action
-            android:id="@+id/action_similar_events_to_event_details"
-            app:destination="@id/eventDetailsFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-
         <argument
             android:name="eventId"
             app:argType="long"
@@ -435,6 +427,14 @@
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
         tools:layout="@layout/fragment_event">
+
+        <action
+            android:id="@+id/action_similar_events_to_event_details"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <action
             android:id="@+id/action_event_details_to_sponsor"

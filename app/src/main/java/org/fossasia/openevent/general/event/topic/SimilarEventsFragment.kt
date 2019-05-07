@@ -21,6 +21,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.event.EventDetailsFragmentDirections
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.get
@@ -95,7 +96,7 @@ class SimilarEventsFragment : Fragment() {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                findNavController(view).navigate(SimilarEventsFragmentDirections
+                findNavController(view).navigate(EventDetailsFragmentDirections
                     .actionSimilarEventsToEventDetails(eventID))
             }
         }
