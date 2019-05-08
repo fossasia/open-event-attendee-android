@@ -120,7 +120,7 @@
 
         <action android:id="@+id/action_search_location_to_events"
             app:destination="@id/eventsFragment"
-            app:popUpToInclusive="false"
+            app:popUpToInclusive="true"
             app:popUpTo="@id/eventsFragment"/>
 
         <argument
