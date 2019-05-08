@@ -7,8 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
@@ -48,27 +47,27 @@ class SearchTimeFragment : Fragment() {
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             calendar.add(Calendar.DATE, 1)
-            redirectToSearch(getSimpleFormattedDate(calendar.time))
+            redirectToCaller(getSimpleFormattedDate(calendar.time))
         }
 
         rootView.anytimeTextView.setOnClickListener {
-            redirectToSearch(ANYTIME)
+            redirectToCaller(ANYTIME)
         }
 
         rootView.todayTextView.setOnClickListener {
-            redirectToSearch(TODAY)
+            redirectToCaller(TODAY)
         }
 
         rootView.tomorrowTextView.setOnClickListener {
-            redirectToSearch(TOMORROW)
+            redirectToCaller(TOMORROW)
         }
 
         rootView.thisWeekendTextView.setOnClickListener {
-            redirectToSearch(THIS_WEEKEND)
+            redirectToCaller(THIS_WEEKEND)
         }
 
         rootView.nextMonthTextView.setOnClickListener {
-            redirectToSearch(NEXT_MONTH)
+            redirectToCaller(NEXT_MONTH)
         }
 
         rootView.timeTextView.setOnClickListener {
@@ -80,10 +79,20 @@ class SearchTimeFragment : Fragment() {
         return rootView
     }
 
-    private fun redirectToSearch(time: String) {
+    private fun redirectToCaller(time: String) {
         searchTimeViewModel.saveTime(time)
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.searchFragment, null, navOptions)
+        val destFragId = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT)
+            R.id.action_search_time_to_search_filter
+        else
+            R.id.action_search_time_to_search
+
+        val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
+            SearchFilterFragmentArgs(
+                query = safeArgs.query
+            ).toBundle()
+        } else
+            null
+        findNavController(rootView).navigate(destFragId, navArgs)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -5,6 +5,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -40,8 +41,13 @@ import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
+import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.event.feedback.FeedbackApi
+import org.fossasia.openevent.general.event.faq.EventFAQ
+import org.fossasia.openevent.general.event.faq.EventFAQApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
+import org.fossasia.openevent.general.event.subtopic.EventSubTopic
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.types.EventType
@@ -67,11 +73,25 @@ import org.fossasia.openevent.general.search.LocationService
 import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
+import org.fossasia.openevent.general.sessions.Microlocation
+import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.SessionApi
+import org.fossasia.openevent.general.sessions.SessionType
+import org.fossasia.openevent.general.event.faq.EventFAQViewModel
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLinksViewModel
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerApi
+import org.fossasia.openevent.general.speakers.SpeakerService
+import org.fossasia.openevent.general.speakers.SpeakerViewModel
+import org.fossasia.openevent.general.sponsor.Sponsor
+import org.fossasia.openevent.general.sponsor.SponsorApi
+import org.fossasia.openevent.general.sponsor.SponsorService
+import org.fossasia.openevent.general.sponsor.SponsorsViewModel
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketApi
 import org.fossasia.openevent.general.ticket.TicketId
@@ -133,31 +153,56 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(EventLocationApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(FeedbackApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SpeakerApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(EventFAQApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SessionApi::class.java)
+    }
+
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(SponsorApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { SpeakerService(get(), get(), get()) }
+    factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
     factory { Resource() }
+    factory { MutableConnectionLiveData() }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
-    viewModel { SearchTypeViewModel(get(), get()) }
-    viewModel { TicketsViewModel(get(), get(), get(), get()) }
+    viewModel { SearchTypeViewModel(get(), get(), get()) }
+    viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
+    viewModel { EventFAQViewModel(get(), get()) }
     viewModel { SocialLinksViewModel(get(), get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
@@ -168,6 +213,8 @@ val viewModelModule = module {
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
+    viewModel { SpeakerViewModel(get(), get()) }
+    viewModel { SponsorsViewModel(get(), get()) }
 }
 
 val networkModule = module {
@@ -184,29 +231,37 @@ val networkModule = module {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
 
-        OkHttpClient().newBuilder()
+        val builder = OkHttpClient().newBuilder()
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
             .addInterceptor(get())
             .addNetworkInterceptor(StethoInterceptor())
-            .build()
+
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
+        }
+        builder.build()
     }
 
     single {
         val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
+        val onlineApiResourceConverter = ResourceConverter(
+            objectMapper, Event::class.java, User::class.java,
+            SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+            EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+            AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+            CustomForm::class.java, EventLocation::class.java, EventType::class.java,
+            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
+            Session::class.java, SessionType::class.java, Microlocation::class.java,
+            Sponsor::class.java, EventFAQ::class.java)
 
         Retrofit.Builder()
             .client(get())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(JSONAPIConverterFactory(objectMapper, Event::class.java, User::class.java,
-                SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
-                EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
-                AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-                CustomForm::class.java, EventLocation::class.java, EventType::class.java))
+            .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .baseUrl(baseUrl)
             .build()
@@ -255,6 +310,24 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.orderDao()
+    }
+    factory {
+        val database: OpenEventDatabase = get()
+        database.speakerWithEventDao()
+    }
+    factory {
+        val database: OpenEventDatabase = get()
+        database.speakerDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.sponsorWithEventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.sponsorDao()
     }
 }
 

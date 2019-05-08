@@ -45,6 +45,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/layout_margin_large"
                             android:textColor="@color/black"
+                            android:gravity="center"
                             android:textSize="@dimen/text_size_extra_large"
                             tools:text="India" />
 

@@ -106,13 +106,27 @@
             android:layout_marginTop="@dimen/layout_margin_small"
             android:layout_marginEnd="@dimen/layout_margin_medium"
             android:layout_marginRight="@dimen/layout_margin_medium"
-            android:layout_marginBottom="@dimen/layout_margin_extra_large"
             android:textSize="@dimen/text_size_small"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/eventName"
             app:layout_constraintTop_toBottomOf="@+id/eventName"
             tools:text="Jaipur, Rajasthan, India" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipTags"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_small"
+            android:layout_marginEnd="@dimen/layout_margin_medium"
+            android:layout_marginRight="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_extra_large"
+            app:chipSpacingVertical="4dp"
+            app:chipSpacingHorizontal="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/eventName"
+            app:layout_constraintTop_toBottomOf="@+id/locationName">
+        </com.google.android.material.chip.ChipGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

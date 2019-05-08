@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.location.LocationPermissionException
 import org.fossasia.openevent.general.location.NoLocationSourceException
@@ -21,7 +22,7 @@ class GeoLocationViewModel(private val locationService: LocationService) : ViewM
     private val compositeDisposable = CompositeDisposable()
 
     fun configure() {
-        compositeDisposable.add(locationService.getAdministrativeArea()
+        compositeDisposable += locationService.getAdministrativeArea()
             .subscribe(
                 { adminArea ->
                     mutableLocation.value = adminArea
@@ -41,7 +42,7 @@ class GeoLocationViewModel(private val locationService: LocationService) : ViewM
                         }
                     }
                 }
-            ))
+            )
     }
 
     override fun onCleared() {

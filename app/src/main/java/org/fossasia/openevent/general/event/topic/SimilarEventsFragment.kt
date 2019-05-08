@@ -15,18 +15,15 @@ import kotlinx.android.synthetic.main.fragment_similar_events.progressBar
 import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivider
 import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsRecycler
-import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsCoordinatorLayout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.event.EventDetailsFragmentArgs
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.event.EventDetailsFragmentDirections
 import org.fossasia.openevent.general.event.EventLayoutType
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.jetbrains.anko.design.longSnackbar
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.getOrCreateScope
@@ -43,6 +40,7 @@ class SimilarEventsFragment : Fragment() {
     private var similarIdEvents: MutableList<Event> = mutableListOf()
     private var similarLocationEvents: MutableList<Event> = mutableListOf()
     private var similarEvents: MutableList<Event> = mutableListOf()
+    private var showErrorSnack: ((String) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +77,7 @@ class SimilarEventsFragment : Fragment() {
         similarEventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.similarEventsCoordinatorLayout.longSnackbar(it)
+                showErrorSnack?.invoke(it)
             })
 
         similarEventsViewModel.progress
@@ -98,14 +96,8 @@ class SimilarEventsFragment : Fragment() {
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {
-                EventDetailsFragmentArgs.Builder()
-                    .setEventId(eventID)
-                    .build()
-                    .toBundle()
-                    .also { bundle ->
-                        findNavController(view).navigate(R.id.eventDetailsFragment, bundle,
-                            getAnimSlide())
-                    }
+                findNavController(view).navigate(EventDetailsFragmentDirections
+                    .actionSimilarEventsToEventDetails(eventID))
             }
         }
 
@@ -134,6 +126,14 @@ class SimilarEventsFragment : Fragment() {
         similarEventsDivider.isVisible = !similarEvents.isEmpty()
         moreLikeThis.isVisible = !similarEvents.isEmpty()
         similarEventsRecycler.isVisible = !similarEvents.isEmpty()
+    }
+
+    /*
+        function to set errorSnackMessage CallBack, to be invoked ,
+        to be invoked when snack error is generated
+     */
+    fun setErrorSnack(errorSnack: (String) -> Unit) {
+        showErrorSnack = errorSnack
     }
 
     private fun setUpAdapter() {

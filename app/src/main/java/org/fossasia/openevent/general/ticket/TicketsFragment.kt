@@ -26,13 +26,8 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.attendees.AttendeeFragmentArgs
-import org.fossasia.openevent.general.auth.LoginFragmentArgs
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
-import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -79,7 +74,7 @@ class TicketsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_tickets, container, false)
-        setToolbar(activity, "Ticket Details")
+        setToolbar(activity, getString(R.string.ticket_details))
         setHasOptionsMenu(true)
 
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -126,7 +121,12 @@ class TicketsFragment : Fragment() {
             loadTickets()
         }
 
-        loadTickets()
+        ticketsViewModel.connection
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                loadTickets()
+                showNoInternetScreen(!isConnected && ticketsViewModel.tickets.value == null)
+            })
 
         return rootView
     }
@@ -143,25 +143,15 @@ class TicketsFragment : Fragment() {
     private fun redirectToAttendee() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
-
-        AttendeeFragmentArgs.Builder()
-            .setTicketIdAndQty(wrappedTicketAndQty)
-            .setEventId(safeArgs.eventId)
-            .build()
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.attendeeFragment, bundle, getAnimSlide())
-            }
+        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
+            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty
+        ))
     }
 
     private fun redirectToLogin() {
-        LoginFragmentArgs.Builder()
-            .setSnackbarMessage(getString(R.string.log_in_first))
-            .build()
-            .toBundle()
-            .also { bundle ->
-                findNavController(rootView).navigate(R.id.loginFragment, bundle, getAnimFade())
-            }
+        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToLogin(
+            getString(R.string.log_in_first)
+        ))
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
@@ -201,21 +191,23 @@ class TicketsFragment : Fragment() {
     }
 
     private fun loadTickets() {
-        if (!isNetworkConnected(context) && ticketsViewModel.tickets.value.isNullOrEmpty())
-            showNoInternetScreen(true)
-        else {
-            showNoInternetScreen(false)
+        val currentEvent = ticketsViewModel.event.value
+        if (currentEvent == null) {
             ticketsViewModel.loadEvent(safeArgs.eventId)
+        } else {
+            loadEventDetails(currentEvent)
+        }
+        if (ticketsViewModel.isConnected() && ticketsViewModel.tickets.value == null) {
             ticketsViewModel.loadTickets(safeArgs.eventId)
+        }
 
-            val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
-            if (retainedTicketIdAndQty != null) {
-                for (idAndQty in retainedTicketIdAndQty) {
-                    handleTicketSelect(idAndQty.first, idAndQty.second)
-                }
-                ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
+        val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+        if (retainedTicketIdAndQty != null) {
+            for (idAndQty in retainedTicketIdAndQty) {
+                handleTicketSelect(idAndQty.first, idAndQty.second)
             }
+            ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
+            ticketsRecyclerAdapter.notifyDataSetChanged()
         }
     }
 
@@ -223,7 +215,7 @@ class TicketsFragment : Fragment() {
         rootView.noInternetCard.isVisible = show
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
-        rootView.progressBarTicket.isVisible = !show
+        if (show) rootView.progressBarTicket.isVisible = false
         rootView.register.isVisible = !show
     }
 }

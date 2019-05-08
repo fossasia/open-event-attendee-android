@@ -4,10 +4,10 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.AuthService
@@ -132,9 +132,8 @@ class AttendeeViewModel(
         }
         mutableQtyList.value = qty
 
-        compositeDisposable.add(ticketService.getTicketPriceWithIds(ticketIds)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += ticketService.getTicketPriceWithIds(ticketIds)
+            .withDefaultSchedulers()
             .subscribe({ prices ->
                 var total = 0.toFloat()
                 var index = 0
@@ -147,7 +146,6 @@ class AttendeeViewModel(
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
-        )
     }
 
     fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {
@@ -158,21 +156,18 @@ class AttendeeViewModel(
             }
         }
 
-        compositeDisposable.add(ticketService.getTicketsWithIds(ticketIds)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
+            .withDefaultSchedulers()
             .subscribe({
                 mutableTickets.value = it as MutableList<Ticket>?
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
-        )
     }
 
     private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
-        compositeDisposable.add(attendeeService.postAttendee(attendee)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += attendeeService.postAttendee(attendee)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -197,7 +192,6 @@ class AttendeeViewModel(
                         mutableTicketSoldOut.value = false
                     }
             })
-        )
     }
 
     fun createAttendees(attendees: List<Attendee>, country: String?, paymentOption: String) {
@@ -237,9 +231,8 @@ class AttendeeViewModel(
             Timber.e("TicketId cannot be null")
             return
         }
-        compositeDisposable.add(ticketService.getTicketDetails(ticketId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += ticketService.getTicketDetails(ticketId)
+            .withDefaultSchedulers()
             .subscribe({
                 tickets.value?.add(it)
                 Timber.d("Loaded tickets! %s", tickets.value?.toList().toString())
@@ -249,7 +242,6 @@ class AttendeeViewModel(
             }, {
                 Timber.d(it, "Error loading Ticket!")
             })
-        )
     }
 
     private fun createOrder() {
@@ -266,9 +258,8 @@ class AttendeeViewModel(
                 getId(), paymentMode, country, "pending", amount,
                 attendees = attendeeList, event = EventId(eventId)
             )
-            compositeDisposable.add(orderService.placeOrder(order)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable += orderService.placeOrder(order)
+                .withDefaultSchedulers()
                 .doOnSubscribe {
                     mutableProgress.value = true
                 }.doFinally {
@@ -285,16 +276,14 @@ class AttendeeViewModel(
                     Timber.d(it, "Failed creating Order")
                     deleteAttendees(order.attendees)
                 })
-            )
         } else {
             mutableMessage.value = resource.getString(R.string.order_fail_message)
         }
     }
 
     private fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
-        compositeDisposable.add(orderService.confirmOrder(identifier, order)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += orderService.confirmOrder(identifier, order)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -307,14 +296,11 @@ class AttendeeViewModel(
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed updating order status")
             })
-        )
     }
 
     fun getCustomFormsForAttendees(eventId: Long) {
-        val filter = "[{\"name\":\"form\",\"op\":\"eq\",\"val\":\"order\"}]"
-        compositeDisposable.add(attendeeService.getCustomFormsForAttendees(eventId, filter)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += attendeeService.getCustomFormsForAttendees(eventId)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.subscribe({
@@ -324,27 +310,23 @@ class AttendeeViewModel(
             }, {
                 Timber.d(it, "Failed fetching forms")
             })
-        )
     }
 
     private fun deleteAttendees(attendeeIds: List<AttendeeId>?) {
         attendeeIds?.forEach { attendeeId ->
-            compositeDisposable.add(attendeeService.deleteAttendee(attendeeId.id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable += attendeeService.deleteAttendee(attendeeId.id)
+                .withDefaultSchedulers()
                 .subscribe({
                     Timber.d("Deleted attendee $attendeeId.id")
                 }, {
                     Timber.d("Failed to delete attendee $it.id")
                 })
-            )
         }
     }
 
     fun completeOrder(charge: Charge) {
-        compositeDisposable.add(orderService.chargeOrder(orderIdentifier.toString(), charge)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += orderService.chargeOrder(orderIdentifier.toString(), charge)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -362,23 +344,20 @@ class AttendeeViewModel(
                 mutableMessage.value = resource.getString(R.string.payment_not_complete_message)
                 Timber.d(it, "Failed charging the user")
             })
-        )
     }
 
     fun loadEvent(id: Long) {
         if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
-        compositeDisposable.add(eventService.getEvent(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEvent(id)
+            .withDefaultSchedulers()
             .subscribe({
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
                 mutableMessage.value = "Error fetching event"
             })
-        )
     }
 
     fun loadUser() {
@@ -386,26 +365,23 @@ class AttendeeViewModel(
         if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
-        compositeDisposable.add(attendeeService.getAttendeeDetails(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += attendeeService.getAttendeeDetails(id)
+            .withDefaultSchedulers()
             .subscribe({
                 mutableAttendee.value = it
             }, {
                 Timber.e(it, "Error fetching user %d", id)
             })
-        )
     }
 
     fun logout() {
-        compositeDisposable.add(authService.logout()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.logout()
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Logged out!")
             }) {
                 Timber.e(it, "Failure Logging out!")
-            })
+            }
     }
 
     fun areAttendeeEmailsValid(attendees: ArrayList<Attendee>): Boolean {

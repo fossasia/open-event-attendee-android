@@ -17,9 +17,9 @@ import org.fossasia.openevent.general.event.EventId
 data class EventTopic(
     @Id(LongIdHandler::class)
     @PrimaryKey
-    val id: Long?,
-    val name: String?,
-    val slug: String?,
+    val id: Long,
+    val name: String,
+    val slug: String,
     @ColumnInfo(index = true)
     @Relationship("event")
     var event: EventId? = null

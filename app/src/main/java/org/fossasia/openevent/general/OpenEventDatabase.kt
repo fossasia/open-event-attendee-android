@@ -13,20 +13,32 @@ import org.fossasia.openevent.general.auth.UserDao
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.event.EventIdConverter
+import org.fossasia.openevent.general.event.subtopic.EventSubTopicConverter
 import org.fossasia.openevent.general.event.topic.EventTopic
-import org.fossasia.openevent.general.event.topic.EventTopicIdConverter
+import org.fossasia.openevent.general.event.topic.EventTopicConverter
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
+import org.fossasia.openevent.general.event.types.EventTypeConverter
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderDao
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerDao
+import org.fossasia.openevent.general.speakers.SpeakerWithEvent
+import org.fossasia.openevent.general.speakers.SpeakerWithEventDao
+import org.fossasia.openevent.general.sponsor.Sponsor
+import org.fossasia.openevent.general.sponsor.SponsorDao
+import org.fossasia.openevent.general.sponsor.SponsorWithEvent
+import org.fossasia.openevent.general.sponsor.SponsorWithEventDao
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketDao
 import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
-    EventTopic::class, Order::class, CustomForm::class], version = 2)
-@TypeConverters(EventIdConverter::class, EventTopicIdConverter::class, TicketIdConverter::class,
+    EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
+    SponsorWithEvent::class], version = 4)
+@TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
+    EventSubTopicConverter::class, TicketIdConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 
@@ -40,7 +52,15 @@ abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun attendeeDao(): AttendeeDao
 
+    abstract fun speakerDao(): SpeakerDao
+
+    abstract fun speakerWithEventDao(): SpeakerWithEventDao
+
     abstract fun eventTopicsDao(): EventTopicsDao
 
     abstract fun orderDao(): OrderDao
+
+    abstract fun sponsorDao(): SponsorDao
+
+    abstract fun sponsorWithEventDao(): SponsorWithEventDao
 }

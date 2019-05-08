@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
@@ -118,8 +116,7 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun openTicketDetails() {
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.eventsFragment, false).build()
-        Navigation.findNavController(rootView).navigate(R.id.orderUnderUserFragment, null, navOptions)
+        findNavController(rootView).navigate(OrderCompletedFragmentDirections.actionOrderCompletedToOrderUser())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

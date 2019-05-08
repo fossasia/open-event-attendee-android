@@ -4,12 +4,12 @@ import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
-import org.fossasia.openevent.general.data.Network
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
@@ -26,7 +26,7 @@ import timber.log.Timber
 class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
-    private val network: Network,
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -38,8 +38,7 @@ class SearchViewModel(
     val events: LiveData<List<Event>> = mutableEvents
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
-    private val mutableShowNoInternetError = MutableLiveData<Boolean>()
-    val showNoInternetError: LiveData<Boolean> = mutableShowNoInternetError
+    val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableChipClickable = MutableLiveData<Boolean>()
     val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
@@ -56,15 +55,13 @@ class SearchViewModel(
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
 
     fun loadEventTypes() {
-        compositeDisposable.add(eventService.getEventTypes()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getEventTypes()
+            .withDefaultSchedulers()
             .subscribe({
                 mutableEventTypes.value = it
             }, {
                 Timber.e(it, "Error fetching events types")
             })
-        )
     }
 
     fun loadSavedLocation() {
@@ -77,14 +74,26 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun loadEvents(location: String, time: String, type: String) {
+    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
         if (mutableEvents.value != null) {
-            mutableShowShimmerResults.value = false
-            mutableShowNoInternetError.value = false
             mutableChipClickable.value = true
+            return
         }
         if (!isConnected()) return
         preference.putString(SAVED_LOCATION, location)
+
+        val freeStuffFilter = if (freeEvents)
+            """, {
+               |    'name':'tickets',
+               |    'op':'any',
+               |    'val':{
+               |        'name':'price',
+               |        'op':'eq',
+               |        'val':'0'
+               |    }
+               |}
+            """.trimIndent()
+            else ""
         val query: String = when {
             TextUtils.isEmpty(location) -> """[{
                 |   'name':'name',
@@ -100,7 +109,7 @@ class SearchViewModel(
                 |       'name':'name',
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
-                |    }]
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
@@ -119,7 +128,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |    }]
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
                 |   'and':[{
@@ -146,7 +155,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -173,7 +182,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -200,7 +209,7 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -227,8 +236,9 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
+
             else -> """[{
                 |   'and':[{
                 |       'name':'location-name',
@@ -254,13 +264,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }]
+                |   }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
-
-        compositeDisposable.add(eventService.getSearchEvents(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.getSearchEvents(query, sortBy)
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
                 mutableChipClickable.value = false
@@ -273,27 +281,30 @@ class SearchViewModel(
                 Timber.e(it, "Error fetching events")
                 mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
-        )
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable.add(eventService.setFavorite(eventId, favorite)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += eventService.setFavorite(eventId, favorite)
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Successfully added %d to favorites", eventId)
             }, {
                 Timber.e(it, "Error adding %d to favorites", eventId)
                 mutableError.value = resource.getString(R.string.error_adding_favorite_message)
             })
-        )
     }
 
-    fun isConnected(): Boolean {
-        val isConnected = network.isNetworkConnected()
-        mutableShowNoInternetError.value = !isConnected
-        mutableShowShimmerResults.value = isConnected
-        return isConnected
+    fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
+
+    fun clearEvents() {
+        mutableEvents.value = null
+    }
+
+    fun clearTimeAndType() {
+        preference.apply {
+            putString(SAVED_TYPE, "Anything")
+            putString(SAVED_TIME, "Anytime")
+        }
     }
 
     override fun onCleared() {

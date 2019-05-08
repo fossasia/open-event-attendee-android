@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.SearchView
@@ -16,21 +18,85 @@
         android:layout_marginRight="@dimen/layout_margin_medium"
         android:inputType="textCapWords"
         app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/location_hint"
-        app:searchIcon="@null" />
+        app:searchIcon="@null"
+        app:queryBackground="@null"/>
 
     <TextView
-        android:id="@+id/titleTv"
+        android:id="@+id/currentLocation"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_margin_medium"
+        android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:layout_marginTop="@dimen/layout_margin_large"
+        android:drawableStart="@drawable/ic_location_pin"
+        android:drawableLeft="@drawable/ic_location_pin"
+        android:drawablePadding="@dimen/padding_medium"
+        android:drawableTint="@color/colorPrimary"
+        android:text="@string/current_location"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationSearchView" />
+
+    <ProgressBar
+        android:id="@+id/locationProgressBar"
+        android:layout_width="@dimen/item_image_view_medium"
+        android:layout_height="@dimen/item_image_view_medium"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:layout_marginStart="@dimen/layout_margin_medium"
+        app:layout_constraintStart_toEndOf="@+id/currentLocation"
+        app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/placeSuggestionsCard"
+        android:layout_marginStart="@dimen/layout_margin_medium"
+        android:layout_marginLeft="@dimen/layout_margin_medium"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginEnd="@dimen/layout_margin_medium"
+        android:layout_marginRight="@dimen/layout_margin_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        tools:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAutoPlaces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/currentLocation"
+        android:id="@+id/titleTv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_margin_large"
         android:layout_marginLeft="@dimen/layout_margin_large"
-        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginTop="@dimen/layout_margin_extra_large"
         android:text="@string/popular_locations"
         android:textColor="@android:color/black"
         android:textSize="@dimen/heading_text_size" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTv"
         android:id="@+id/shimmerSearchEventTypes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -62,6 +128,9 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ListView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shimmerSearchEventTypes"
         android:id="@+id/eventLocationLv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,38 +140,4 @@
         android:layout_marginEnd="@dimen/layout_margin_large"
         android:layout_marginRight="@dimen/layout_margin_large"
         android:layout_marginBottom="8dp" />
-
-
-    <LinearLayout
-        android:id="@+id/currentLocationLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_medium"
-        android:layout_marginEnd="@dimen/layout_margin_medium"
-        android:layout_marginRight="@dimen/layout_margin_medium"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:background="@drawable/round_background"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_medium">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_location_pin"
-            android:drawableLeft="@drawable/ic_location_pin"
-            android:drawablePadding="@dimen/padding_small"
-            android:text="@string/current_location"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_large" />
-
-        <ProgressBar
-            android:id="@+id/locationProgressBar"
-            android:layout_width="@dimen/item_image_view_medium"
-            android:layout_height="@dimen/item_image_view_medium"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginLeft="@dimen/layout_margin_large"
-            android:visibility="gone" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

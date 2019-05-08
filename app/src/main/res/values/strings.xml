@@ -47,6 +47,7 @@
     <string name="see_maps">See maps</string>
     <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
+    <string name="clear_all">Clear All</string>
 
     <!--profile details-->
     <string name="user_name">Username</string>
@@ -120,6 +121,7 @@
     <string name="past">Past ></string>
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
+    <string name="ticket_details">Ticket Details</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
@@ -238,6 +240,8 @@
     <string name="order_fail_message">Unable to create Order!</string>
     <string name="payment_not_complete_message">Payment not completed!</string>
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
+    <string name="share_ticket">Share Ticket</string>
+    <string name="fail_sharing_ticket">Fail to share ticket</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
@@ -301,10 +305,27 @@
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
     <string name="popular_locations">Popular Locations</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="anything">Anything</string>
     <string name="and_i_m_up_for">And I\'m up for</string>
     <string name="savedType">savedType</string>
     <string name="what_type">What Sounds good?</string>
+    <string name="feedback">Feedback</string>
+    <string name="write_feedback">Write Feedback</string>
+    <string name="submit">Submit</string>
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="feedback_submitted">Feedback submitted Successfully</string>
+    <string name="be_the_first_to_write_a_review">Be the first to write a review</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+
+    <string name="filter_set">Filter Done</string>
+    <string name="filter">Filter Search</string>
+    <string name="free_stuff">Free stuff only</string>
+    <string name="speakers">Speakers</string>
+    <string name="sponsors">Sponsors</string>
+    <string name="description_preview">Some description about this sponsor: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="sort_by_name">name</string>
+    <string name="sort_by_date">starts-at</string>
+    <string name="sort_by">Sort By</string>
+    <string name="category">Category</string>
 
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/layout_margin_medium">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/sponsorDetailLogo"
+            android:layout_width="@dimen/avatar_medium"
+            android:layout_height="@dimen/avatar_medium"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_account_circle_grey" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_small">
+            <TextView
+                android:id="@+id/sponsorDetailName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_larger"
+                android:layout_marginBottom="@dimen/layout_margin_small"
+                tools:text="@string/name_preview"/>
+
+            <TextView
+                android:id="@+id/sponsorDetailType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_small"
+                tools:text="Type: Diamond"/>
+
+            <TextView
+                android:id="@+id/sponsorDetailDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_small"
+                tools:text="@string/description_preview"/>
+
+            <ImageView
+                android:id="@+id/sponsorDetailURL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_link_black"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

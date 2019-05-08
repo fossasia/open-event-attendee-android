@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.welcome
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Preference
@@ -26,7 +27,7 @@ class WelcomeViewModel(private val locationService: LocationService, private val
     private val compositeDisposable = CompositeDisposable()
 
     fun configure() {
-        compositeDisposable.add(locationService.getAdministrativeArea()
+        compositeDisposable += locationService.getAdministrativeArea()
             .subscribe(
                 { adminArea ->
                     preference.putString(SAVED_LOCATION, adminArea)
@@ -47,7 +48,7 @@ class WelcomeViewModel(private val locationService: LocationService, private val
                         }
                     }
                 }
-            ))
+            )
     }
 
     override fun onCleared() {

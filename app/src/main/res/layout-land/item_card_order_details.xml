@@ -14,6 +14,7 @@
         app:cardElevation="@dimen/card_elevation"
         android:elevation="@dimen/card_elevation"
         android:paddingBottom="@dimen/padding_extra_small"
+        android:id="@+id/orderDetailCardView"
         android:foreground="?android:attr/selectableItemBackground">
         <LinearLayout
             android:layout_width="match_parent"

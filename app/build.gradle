@@ -6,19 +6,22 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
 
 android {
+    dataBinding {
+        enabled = true
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.eventyay.attendee"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName "0.2.0"
+        versionCode 8
+        versionName "0.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -94,7 +97,7 @@ repositories {
 dependencies {
     def lifecycle_version = "2.1.0-alpha04"
     def koin_version = "1.0.2"
-    def roomVersion = "2.1.0-alpha06"
+    def roomVersion = "2.1.0-alpha07"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
     def nav_version = "2.1.0-alpha02"
@@ -103,10 +106,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -151,6 +154,7 @@ dependencies {
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
@@ -170,6 +174,9 @@ dependencies {
     //Anko
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
+
+    //Mapbox java sdk
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.7.0'
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'

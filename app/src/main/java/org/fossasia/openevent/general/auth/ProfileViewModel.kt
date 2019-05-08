@@ -3,10 +3,10 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
+import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
@@ -21,25 +21,22 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val user: LiveData<User> = mutableUser
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
-    val avatarPicked = MutableLiveData<String>()
 
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun logout() {
-        compositeDisposable.add(authService.logout()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.logout()
+            .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Logged out!")
             }) {
                 Timber.e(it, "Failure Logging out!")
-            })
+            }
     }
 
     fun fetchProfile() {
-        compositeDisposable.add(authService.getProfile()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += authService.getProfile()
+            .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
@@ -50,7 +47,7 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }) {
                 Timber.e(it, "Failure")
                 mutableError.value = resource.getString(R.string.failure)
-            })
+            }
     }
 
     override fun onCleared() {

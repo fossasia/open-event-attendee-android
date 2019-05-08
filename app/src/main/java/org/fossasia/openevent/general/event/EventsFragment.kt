@@ -28,9 +28,6 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
-import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
-import org.fossasia.openevent.general.utils.Utils.getAnimFade
-import org.fossasia.openevent.general.utils.Utils.getAnimSlide
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
@@ -49,8 +46,6 @@ enum class EventLayoutType {
 }
 
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
-const val RELOADING_EVENTS: Int = 0
-const val INITIAL_FETCHING_EVENTS: Int = 1
 
 class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
@@ -84,7 +79,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
-        setToolbar(activity, "Events", false)
+        setToolbar(activity, getString(R.string.events), false)
 
         rootView.progressBar.isIndeterminate = true
 
@@ -119,30 +114,45 @@ class EventsFragment : Fragment(), ScrollToTop {
             })
 
         eventsViewModel.loadLocation()
-        rootView.locationTextView.text = eventsViewModel.savedLocation
-        eventsViewModel.loadLocationEvents(INITIAL_FETCHING_EVENTS)
+        rootView.locationTextView.text = eventsViewModel.savedLocation.value
+
+        eventsViewModel.savedLocation
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (eventsViewModel.lastSearch != it) {
+                    eventsViewModel.clearEvents()
+                }
+            })
+
+        eventsViewModel.connection
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                if (isConnected && eventsViewModel.events.value == null) {
+                    eventsViewModel.loadLocationEvents()
+                }
+                showNoInternetScreen(!isConnected && eventsViewModel.events.value == null)
+            })
 
         rootView.locationTextView.setOnClickListener {
-            findNavController(rootView).navigate(R.id.searchLocationFragment, null, getAnimSlide())
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchLocation())
         }
 
-        showNoInternetScreen(!isNetworkConnected(context) && eventsViewModel.events.value.isNullOrEmpty())
-
         rootView.retry.setOnClickListener {
-            val isNetworkConnected = isNetworkConnected(context)
-            if (eventsViewModel.savedLocation != null && isNetworkConnected) {
-                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
+            if (eventsViewModel.savedLocation.value != null && eventsViewModel.isConnected()) {
+                eventsViewModel.loadLocationEvents()
             }
-            showNoInternetScreen(!isNetworkConnected)
+            showNoInternetScreen(!eventsViewModel.isConnected())
         }
 
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
-            showNoInternetScreen(!isNetworkConnected(context))
-            if (!isNetworkConnected(context)) {
+            showNoInternetScreen(!eventsViewModel.isConnected())
+            eventsViewModel.clearEvents()
+            eventsViewModel.clearLastSearch()
+            if (!eventsViewModel.isConnected()) {
                 rootView.swiperefresh.isRefreshing = false
             } else {
-                eventsViewModel.loadLocationEvents(RELOADING_EVENTS)
+                eventsViewModel.loadLocationEvents()
             }
         }
 
@@ -153,13 +163,8 @@ class EventsFragment : Fragment(), ScrollToTop {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) { EventDetailsFragmentArgs.Builder()
-                .setEventId(eventID)
-                .build()
-                .toBundle()
-                .also { bundle ->
-                    findNavController(view).navigate(R.id.eventDetailsFragment, bundle, getAnimFade())
-                }
+            override fun onClick(eventID: Long) {
+                findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID))
             }
         }
 
@@ -171,10 +176,25 @@ class EventsFragment : Fragment(), ScrollToTop {
             }
         }
 
+        val hashTagClickListener: EventHashTagClickListener = object : EventHashTagClickListener {
+            override fun onClick(hashTagValue: String) {
+                openSearch(hashTagValue)
+            }
+        }
+
         eventsListAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
+            onHashtagClick = hashTagClickListener
         }
+    }
+
+    private fun openSearch(hashTag: String) {
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
+                query = "",
+                location = Preference().getString(SAVED_LOCATION).toString(),
+                date = getString(R.string.anytime),
+                type = hashTag))
     }
 
     private fun showNoInternetScreen(show: Boolean) {

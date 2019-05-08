@@ -10,7 +10,10 @@
     android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchTypeFragment">
 
+    <include layout="@layout/content_no_internet" />
+
     <TextView
+        android:id="@+id/eventTypesTextTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -19,10 +22,43 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_extra_large"
         android:textStyle="bold" />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerSearchEventTypes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <ListView
-        android:id="@+id/eventTypesLv"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+            <include layout="@layout/placeholder_item_event_type" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/eventTypesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:scrollbars="none"/>
 </LinearLayout>
 
