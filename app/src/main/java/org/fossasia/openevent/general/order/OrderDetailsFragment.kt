@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoo
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
 import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCardView
+import kotlinx.android.synthetic.main.item_enlarged_qr.view.enlargedQrImage
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -102,7 +104,15 @@ class OrderDetailsFragment : Fragment() {
             }
         }
 
-        ordersRecyclerAdapter.setListener(eventDetailsListener)
+        ordersRecyclerAdapter.setSeeEventListener(eventDetailsListener)
+
+        val qrImageListener = object : OrderDetailsRecyclerAdapter.QrImageClickListener {
+            override fun onClick(qrImage: Bitmap) {
+                showEnlargedQrImage(qrImage)
+            }
+        }
+
+        ordersRecyclerAdapter.setQrImageClickListener(qrImageListener)
 
         orderDetailsViewModel.progress
             .nonNull()
@@ -139,6 +149,23 @@ class OrderDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showEnlargedQrImage(bitmap: Bitmap) {
+        val brightAttributes = activity?.window?.attributes
+        orderDetailsViewModel.brightness = brightAttributes?.screenBrightness
+        brightAttributes?.screenBrightness = 1f
+        activity?.window?.attributes = brightAttributes
+
+        val dialogLayout = layoutInflater.inflate(R.layout.item_enlarged_qr, null)
+        dialogLayout.enlargedQrImage.setImageBitmap(bitmap)
+        AlertDialog.Builder(requireContext())
+            .setOnDismissListener {
+                val attributes = activity?.window?.attributes
+                attributes?.screenBrightness = orderDetailsViewModel.brightness
+                activity?.window?.attributes = attributes
+            }.setView(dialogLayout)
+            .create().show()
     }
 
     private fun shareCurrentTicket() {
