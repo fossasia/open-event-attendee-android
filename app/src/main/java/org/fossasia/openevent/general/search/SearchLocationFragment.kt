@@ -107,9 +107,9 @@ class SearchLocationFragment : Fragment() {
 
     private fun redirectToMain() {
         val fragmentId = when (safeArgs.fromFragmentName) {
-            SEARCH_FRAGMENT -> R.id.action_search_location_to_search
-            SEARCH_FILTER_FRAGMENT -> R.id.action_search_location_to_search_filter
-            else -> R.id.action_search_location_to_events
+            SEARCH_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearch()
+            SEARCH_FILTER_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearchFilter()
+            else -> SearchLocationFragmentDirections.actionSearchLocationToEvents()
         }
         Navigation.findNavController(rootView).navigate(fragmentId)
     }
