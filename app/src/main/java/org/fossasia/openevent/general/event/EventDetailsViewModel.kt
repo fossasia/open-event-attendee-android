@@ -15,6 +15,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.sponsor.Sponsor
@@ -27,6 +28,7 @@ class EventDetailsViewModel(
     private val authHolder: AuthHolder,
     private val speakerService: SpeakerService,
     private val sponsorService: SponsorService,
+    private val sessionService: SessionService,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -44,7 +46,7 @@ class EventDetailsViewModel(
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
     private val mutableEventSessions = MutableLiveData<List<Session>>()
     val eventSessions: LiveData<List<Session>> = mutableEventSessions
-    var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
+    private var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -119,8 +121,8 @@ class EventDetailsViewModel(
             })
     }
 
-    fun loadEventSessions(id: Long) {
-        compositeDisposable += eventService.getEventSessions(id)
+    fun fetchEventSessions(id: Long) {
+        compositeDisposable += sessionService.fetchSessionForEvent(id)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEventSessions.value = it
@@ -132,8 +134,8 @@ class EventDetailsViewModel(
     fun loadMap(event: Event): String {
         // location handling
         val BASE_URL = "https://api.mapbox.com/v4/mapbox.emerald/pin-l-marker+673ab7"
-        val LOCATION = "(" + event.longitude + "," + event.latitude + ")/" + event.longitude + "," + event.latitude
-        return BASE_URL + LOCATION + ",15/900x500.png?access_token=" + MAPBOX_KEY
+        val LOCATION = "(${event.longitude},${event.latitude})/${event.longitude},${event.latitude}"
+        return "$BASE_URL$LOCATION,15/900x500.png?access_token=$MAPBOX_KEY"
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {

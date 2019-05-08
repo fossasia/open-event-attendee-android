@@ -74,11 +74,13 @@ import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
-import org.fossasia.openevent.general.sessions.Microlocation
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
-import org.fossasia.openevent.general.sessions.SessionType
+import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.sessions.SessionViewModel
+import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
+import org.fossasia.openevent.general.sessions.sessiontype.SessionType
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -178,13 +180,14 @@ val apiModule = module {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
+    factory { SessionService(get(), get()) }
     factory { Resource() }
     factory { MutableConnectionLiveData() }
 }
@@ -194,7 +197,8 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SessionViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
@@ -255,7 +259,7 @@ val networkModule = module {
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
-            Session::class.java, SessionType::class.java, Microlocation::class.java,
+            Session::class.java, SessionType::class.java, MicroLocation::class.java,
             Sponsor::class.java, EventFAQ::class.java)
 
         Retrofit.Builder()
@@ -280,6 +284,11 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.eventDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.sessionDao()
     }
 
     factory {
