@@ -105,7 +105,6 @@ class SearchTypeFragment : Fragment() {
         else
             R.id.action_search_type_to_search
 
-        findNavController(rootView).navigate(destFragId)
         val navArgs = if (safeArgs.fromFragmentName == SEARCH_FILTER_FRAGMENT) {
             SearchFilterFragmentArgs(
                 query = safeArgs.query
