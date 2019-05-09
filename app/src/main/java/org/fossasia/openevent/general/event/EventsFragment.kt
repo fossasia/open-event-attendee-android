@@ -134,7 +134,7 @@ class EventsFragment : Fragment(), ScrollToTop {
             })
 
         rootView.locationTextView.setOnClickListener {
-            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults())
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchLocation())
         }
 
         rootView.retry.setOnClickListener {
