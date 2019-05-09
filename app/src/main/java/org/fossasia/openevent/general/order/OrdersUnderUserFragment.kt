@@ -55,7 +55,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         when (safeArgs.showExpired) {
             true -> {
-                setToolbar(activity, "Past Tickets")
+                setToolbar(activity, getString(R.string.past_tickets))
                 setHasOptionsMenu(true)
                 navAnimGone(activity?.navigation, requireContext())
             }

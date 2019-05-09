@@ -118,6 +118,7 @@
     <string name="view_ticket">View</string>
     <string name="no_ticket_message">Not seeing your tickets? Learn more about how to find them.</string>
     <string name="no_past_tickets">No past tickets.</string>
+    <string name="past_tickets">Past Tickets</string>
     <string name="past">Past ></string>
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
@@ -316,6 +317,7 @@
     <string name="feedback_submitted">Feedback submitted Successfully</string>
     <string name="be_the_first_to_write_a_review">Be the first to write a review</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="no_faq_message">There are no frequenly asked questions for this event.</string>
 
     <string name="filter_set">Filter Done</string>
     <string name="filter">Filter Search</string>

@@ -21,7 +21,7 @@ class EventFAQViewModel(private val eventService: EventService, private val reso
     val error: LiveData<String> = mutableError
 
     fun loadEventFaq(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             mutableError.value = Resource().getString(R.string.error_fetching_event_message)
             return
         }
