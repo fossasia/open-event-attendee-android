@@ -205,6 +205,8 @@
                         android:layout_height="@dimen/event_details_image"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/layout_margin_medium"
+                        android:padding="@dimen/padding_large"
+                        android:foreground="?selectableItemBackground"
                         android:scaleType="centerCrop" />
                     <TextView
                         android:id="@+id/organizerLabel"
