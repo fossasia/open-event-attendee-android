@@ -74,6 +74,10 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
+    fun setChipNotClickable() {
+        mutableChipClickable.value = false
+    }
+
     fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
         if (mutableEvents.value != null) {
             mutableChipClickable.value = true
