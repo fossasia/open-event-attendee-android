@@ -20,6 +20,10 @@ import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventTypeConverter
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderDao
+import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.SessionDao
+import org.fossasia.openevent.general.sessions.microlocation.MicroLocationConverter
+import org.fossasia.openevent.general.sessions.sessiontype.SessionTypeConverter
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
 import org.fossasia.openevent.general.speakers.Speaker
@@ -36,10 +40,10 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
     EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
-    SponsorWithEvent::class], version = 4)
+    SponsorWithEvent::class, Session::class], version = 5)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
-    EventSubTopicConverter::class, TicketIdConverter::class,
-    AttendeeIdConverter::class, ListAttendeeIdConverter::class)
+    EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class,
+    AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun eventDao(): EventDao
@@ -63,4 +67,6 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun sponsorDao(): SponsorDao
 
     abstract fun sponsorWithEventDao(): SponsorWithEventDao
+
+    abstract fun sessionDao(): SessionDao
 }

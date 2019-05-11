@@ -7,6 +7,7 @@
     android:layout_margin="@dimen/layout_margin_medium"
     android:elevation="@dimen/card_elevation"
     app:cardBackgroundColor="@android:color/white"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/card_corner_radius">
 
     <LinearLayout

@@ -55,6 +55,7 @@ import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayo
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
 import kotlinx.android.synthetic.main.fragment_event.eventCoordinatorLayout
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
@@ -124,7 +125,13 @@ class EventDetailsFragment : Fragment() {
             })
         eventViewModel.loadEventFeedback(safeArgs.eventId)
         eventViewModel.fetchEventSpeakers(safeArgs.eventId)
-        eventViewModel.loadEventSessions(safeArgs.eventId)
+        val allSessions = eventViewModel.eventSessions.value
+        if (allSessions == null) {
+            eventViewModel.fetchEventSessions(safeArgs.eventId)
+        } else {
+            sessionsAdapter.addAll(allSessions)
+            rootView.sessionContainer.isVisible = allSessions.isNotEmpty()
+        }
         eventViewModel.fetchEventSponsors(safeArgs.eventId)
     }
 
@@ -232,11 +239,22 @@ class EventDetailsFragment : Fragment() {
                 rootView.speakersContainer.visibility = View.VISIBLE
             }
         })
+
+        val sessionClickListener: SessionClickListener = object : SessionClickListener {
+            override fun onClick(sessionId: Long) {
+                findNavController(rootView).navigate(EventDetailsFragmentDirections
+                    .actionEventDetailsToSession(sessionId))
+            }
+        }
+
         val linearLayoutManagerSessions = LinearLayoutManager(context)
         linearLayoutManagerSessions.orientation = LinearLayoutManager.HORIZONTAL
 
         rootView.sessionsRv.layoutManager = linearLayoutManagerSessions
         rootView.sessionsRv.adapter = sessionsAdapter
+        sessionsAdapter.apply {
+            onSessionClick = sessionClickListener
+        }
 
         eventViewModel.eventSessions.observe(viewLifecycleOwner, Observer {
             sessionsAdapter.addAll(it)

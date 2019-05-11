@@ -262,6 +262,16 @@
             android:defaultValue="-1L"/>
     </fragment>
     <fragment
+        android:id="@+id/sessionFragment"
+        android:name="org.fossasia.openevent.general.sessions.SessionFragment"
+        android:label="SessionFragment"
+        tools:layout="@layout/fragment_session">
+        <argument
+            android:name="sessionId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/sponsorsFragment"
         android:name="org.fossasia.openevent.general.sponsor.SponsorsFragment"
         android:label="Sponsors"
@@ -416,6 +426,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
 
+        <action
+            android:id="@+id/action_event_details_to_session"
+            app:destination="@id/sessionFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_event_details_to_sponsor"
             app:destination="@id/sponsorsFragment"

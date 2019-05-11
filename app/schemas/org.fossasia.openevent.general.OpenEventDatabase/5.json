@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "1badd5e17f181e602314a4244c04cf56",
+    "version": 5,
+    "identityHash": "77cfd0b7528a803833b63c64c6d1db89",
     "entities": [
       {
         "tableName": "Event",
@@ -1098,7 +1098,7 @@
       },
       {
         "tableName": "Speaker",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `position` TEXT, `mobile` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1139,6 +1139,18 @@
           {
             "fieldPath": "speakingExperience",
             "columnName": "speakingExperience",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mobile",
+            "columnName": "mobile",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1284,12 +1296,298 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "Sponsor",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `url` TEXT, `logoUrl` TEXT, `level` INTEGER NOT NULL, `type` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "logoUrl",
+            "columnName": "logoUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SponsorWithEvent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`event_id` INTEGER NOT NULL, `sponsor_id` INTEGER NOT NULL, PRIMARY KEY(`event_id`, `sponsor_id`), FOREIGN KEY(`event_id`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`sponsor_id`) REFERENCES `Sponsor`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "eventId",
+            "columnName": "event_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sponsorId",
+            "columnName": "sponsor_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "event_id",
+            "sponsor_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SponsorWithEvent_event_id",
+            "unique": false,
+            "columnNames": [
+              "event_id"
+            ],
+            "createSql": "CREATE  INDEX `index_SponsorWithEvent_event_id` ON `${TABLE_NAME}` (`event_id`)"
+          },
+          {
+            "name": "index_SponsorWithEvent_sponsor_id",
+            "unique": false,
+            "columnNames": [
+              "sponsor_id"
+            ],
+            "createSql": "CREATE  INDEX `index_SponsorWithEvent_sponsor_id` ON `${TABLE_NAME}` (`sponsor_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Event",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Sponsor",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "sponsor_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Session",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shortAbstract",
+            "columnName": "shortAbstract",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comments",
+            "columnName": "comments",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longAbstract",
+            "columnName": "longAbstract",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "signupUrl",
+            "columnName": "signupUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endsAt",
+            "columnName": "endsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startsAt",
+            "columnName": "startsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "slidesUrl",
+            "columnName": "slidesUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "averageRating",
+            "columnName": "averageRating",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "submittedAt",
+            "columnName": "submittedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subtitle",
+            "columnName": "subtitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastModifiedAt",
+            "columnName": "lastModifiedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "videoUrl",
+            "columnName": "videoUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "audioUrl",
+            "columnName": "audioUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sessionType",
+            "columnName": "sessionType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microlocation",
+            "columnName": "microlocation",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Session_sessionType",
+            "unique": false,
+            "columnNames": [
+              "sessionType"
+            ],
+            "createSql": "CREATE  INDEX `index_Session_sessionType` ON `${TABLE_NAME}` (`sessionType`)"
+          },
+          {
+            "name": "index_Session_microlocation",
+            "unique": false,
+            "columnNames": [
+              "microlocation"
+            ],
+            "createSql": "CREATE  INDEX `index_Session_microlocation` ON `${TABLE_NAME}` (`microlocation`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1badd5e17f181e602314a4244c04cf56\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"77cfd0b7528a803833b63c64c6d1db89\")"
     ]
   }
 }

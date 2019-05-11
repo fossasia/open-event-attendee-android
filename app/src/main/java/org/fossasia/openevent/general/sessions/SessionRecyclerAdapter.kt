@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.SessionClickListener
 
 class SessionRecyclerAdapter : RecyclerView.Adapter<SessionViewHolder>() {
-    val sessionList = ArrayList<Session>()
+    private val sessionList = ArrayList<Session>()
+    var onSessionClick: SessionClickListener? = null
 
     fun addAll(sessionList: List<Session>) {
         if (sessionList.isNotEmpty())
@@ -21,9 +23,12 @@ class SessionRecyclerAdapter : RecyclerView.Adapter<SessionViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: SessionViewHolder, position: Int) {
-        val speaker = sessionList[position]
+        val session = sessionList[position]
 
-        holder.bind(speaker)
+        holder.apply {
+            bind(session)
+            sessionClickListener = onSessionClick
+        }
     }
 
     override fun getItemCount(): Int {
