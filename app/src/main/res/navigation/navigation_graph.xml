@@ -120,7 +120,7 @@
 
         <action android:id="@+id/action_search_location_to_events"
             app:destination="@id/eventsFragment"
-            app:popUpToInclusive="false"
+            app:popUpToInclusive="true"
             app:popUpTo="@id/eventsFragment"/>
 
         <argument
@@ -143,20 +143,12 @@
             android:id="@+id/action_search_time_to_search_filter"
             app:popUpToInclusive="false"
             app:popUpTo="@id/searchResultsFragment"
-            app:destination="@id/searchFilterFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchFilterFragment"/>
         <action
             android:id="@+id/action_search_time_to_search"
             app:popUpToInclusive="false"
             app:popUpTo="@id/eventsFragment"
-            app:destination="@id/searchFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchFragment"/>
 
         <argument
             android:name="time"
@@ -183,20 +175,12 @@
             android:id="@+id/action_search_type_to_search_filter"
             app:popUpToInclusive="false"
             app:popUpTo="@id/searchResultsFragment"
-            app:destination="@id/searchFilterFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchFilterFragment"/>
         <action
             android:id="@+id/action_search_type_to_search"
             app:popUpToInclusive="false"
             app:popUpTo="@id/eventsFragment"
-            app:destination="@id/searchFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchFragment"/>
 
 
         <argument
@@ -307,11 +291,7 @@
             android:id="@+id/action_favourite_to_search"
             app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="false"
-            app:destination="@id/searchFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchFragment" />
 
         <action
             android:id="@+id/action_favourite_to_event_details"
@@ -627,11 +607,7 @@
             android:id="@+id/action_search_filter_to_search_results"
             app:popUpTo="@id/searchResultsFragment"
             app:popUpToInclusive="true"
-            app:destination="@id/searchResultsFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/searchResultsFragment"/>
         <action
             android:id="@+id/action_search_filter_to_search_time"
             app:destination="@id/searchTimeFragment"

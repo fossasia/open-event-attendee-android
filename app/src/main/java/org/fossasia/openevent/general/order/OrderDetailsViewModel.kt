@@ -29,9 +29,10 @@ class OrderDetailsViewModel(
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     var currentTicketPosition: Int = 0
+    var brightness: Float? = 0f
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
 
