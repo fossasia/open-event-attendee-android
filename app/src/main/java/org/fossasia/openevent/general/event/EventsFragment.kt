@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
-import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
+import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
@@ -203,7 +203,7 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     private fun showEmptyMessage(itemCount: Int) {
-        rootView.noEventsMessage.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+        rootView.eventsEmptyView.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onStop() {

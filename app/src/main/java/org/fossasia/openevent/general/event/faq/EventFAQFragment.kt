@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_event_faq.view.faqContainer
+import kotlinx.android.synthetic.main.fragment_event_faq.view.faqEmptyView
 import kotlinx.android.synthetic.main.fragment_event_faq.view.faqRv
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.about.AboutEventFragmentArgs
@@ -33,7 +32,7 @@ class EventFAQFragment : Fragment() {
 
         eventFAQViewModel.eventFAQ.observe(viewLifecycleOwner, Observer {
             faqAdapter.addAll(it)
-            rootView.faqContainer.isVisible = !it.isEmpty()
+            rootView.faqEmptyView.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         })
 
         eventFAQViewModel.loadEventFaq(safeArgs.eventId)
