@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.logoutLL
 import kotlinx.android.synthetic.main.fragment_profile.view.manageEventsLL
 import kotlinx.android.synthetic.main.fragment_profile.view.settingsLL
 import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssuesLL
+import kotlinx.android.synthetic.main.fragment_profile.view.loginButton
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -41,7 +42,7 @@ class ProfileFragment : Fragment() {
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(ProfileFragmentDirections
-            .actionProfileToLogin(getString(R.string.log_in_first))
+            .actionProfileToLogin()
         )
     }
 
@@ -51,9 +52,13 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if (!profileViewModel.isLoggedIn()) {
-            redirectToLogin()
-        }
+        handleLayoutVisibility(profileViewModel.isLoggedIn())
+    }
+
+    private fun handleLayoutVisibility(isLoggedIn: Boolean) {
+        rootView.editProfileRL.isVisible = isLoggedIn
+        rootView.logoutLL.isVisible = isLoggedIn
+        rootView.loginButton.isVisible = !isLoggedIn
     }
 
     override fun onCreateView(
@@ -93,7 +98,7 @@ class ProfileFragment : Fragment() {
                 }
             })
 
-        fetchProfile()
+        if (profileViewModel.isLoggedIn()) fetchProfile()
 
         rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
@@ -106,6 +111,7 @@ class ProfileFragment : Fragment() {
         }
 
         rootView.logoutLL.setOnClickListener { showLogoutDialog() }
+        rootView.loginButton.setOnClickListener { redirectToLogin() }
 
         return rootView
     }

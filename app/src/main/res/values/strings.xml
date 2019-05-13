@@ -53,7 +53,7 @@
     <string name="user_name">Username</string>
     <string name="logout">Log out</string>
     <string name="settings">Settings</string>
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="forgot_password">I forgot my password</string>
     <string name="email_sent_message">We just sent you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
@@ -162,6 +162,7 @@
     <string name="key_version">version</string>
     <string name="key_about">about</string>
     <string name="key_rating">rating</string>
+    <string name="key_account">account</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital" translatable="false">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
@@ -188,6 +189,7 @@
     <string name="legal">Legal</string>
     <string name="visit_website">Visit Website</string>
     <string name="key_visit_website">Visit_Website</string>
+    <string name="not_logged_in">No account logged in</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
