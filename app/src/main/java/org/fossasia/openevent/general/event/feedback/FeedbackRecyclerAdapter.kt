@@ -6,13 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 
 class FeedbackRecyclerAdapter : RecyclerView.Adapter<FeedbackViewHolder>() {
-    val feedbackList = ArrayList<Feedback>()
+    private val feedbackList = ArrayList<Feedback>()
 
     fun addAll(feedbackList: List<Feedback>) {
         if (feedbackList.isNotEmpty())
             this.feedbackList.clear()
         this.feedbackList.addAll(feedbackList)
         notifyDataSetChanged()
+    }
+
+    fun add(feedback: Feedback) {
+        feedbackList.add(0, feedback)
+        notifyItemInserted(0)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedbackViewHolder {
