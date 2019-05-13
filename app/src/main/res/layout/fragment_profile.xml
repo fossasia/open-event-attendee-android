@@ -217,9 +217,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:elevation="@dimen/card_elevation" />
 
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            style="@style/AppTheme.MaterialButton.RoundedCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/layout_margin_large"
+            android:text="@string/login"
+            android:textAllCaps="false"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </ScrollView>
