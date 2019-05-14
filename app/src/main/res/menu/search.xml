@@ -7,5 +7,5 @@
             android:title="@string/search"
             app:iconTint="@android:color/white"
             app:actionViewClass="android.widget.SearchView"
-            app:showAsAction="ifRoom|collapseActionView" />
+            app:showAsAction="always|collapseActionView" />
 </menu>

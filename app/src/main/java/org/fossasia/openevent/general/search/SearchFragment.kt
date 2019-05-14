@@ -127,11 +127,19 @@ class SearchFragment : Fragment() {
         rootView.fabSearch.setOnClickListener {
             queryListener.onQueryTextSubmit(searchView.query.toString())
         }
+
+        if (searchViewModel.isQuerying) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchViewModel.searchViewQuery, false)
+            searchView.clearFocus()
+        }
         super.onPrepareOptionsMenu(menu)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        searchViewModel.isQuerying = !searchView.isIconified
+        searchViewModel.searchViewQuery = searchView.query.toString()
         searchView.isSaveEnabled = false
     }
 
