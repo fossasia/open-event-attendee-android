@@ -70,6 +70,9 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
     <string name="profile_photo">Profile Photo</string>
+    <string name="edit_profile_photo_message">Edit your profile picture</string>
+    <string name="delete">Delete</string>
+    <string name="new_photo">New Photo</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>

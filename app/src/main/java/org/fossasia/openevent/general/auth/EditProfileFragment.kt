@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -127,11 +128,7 @@ class EditProfileFragment : Fragment() {
             })
 
         rootView.profilePhotoFab.setOnClickListener {
-            if (permissionGranted) {
-                showFileChooser()
-            } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
-            }
+            showEditPhotoDialog()
         }
 
         return rootView
@@ -150,6 +147,31 @@ class EditProfileFragment : Fragment() {
                 Timber.d(e, "File Not Found Exception")
             }
         }
+    }
+
+    private fun showEditPhotoDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.edit_profile_photo_message))
+            .setNegativeButton(getString(R.string.delete)) { _, _ ->
+                clearAvatar()
+            }.setPositiveButton(getString(R.string.new_photo)) { _, _ ->
+                if (permissionGranted) {
+                    showFileChooser()
+                } else {
+                    requestPermissions(READ_STORAGE, REQUEST_CODE)
+                }
+            }.create().show()
+    }
+
+    private fun clearAvatar() {
+        val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
+        Picasso.get()
+            .load(R.drawable.ic_account_circle_grey)
+            .placeholder(drawable)
+            .transform(CircleTransform())
+            .into(rootView.profilePhoto)
+        editProfileViewModel.encodedImage = encodeImage(drawable.toBitmap(120, 120))
+        editProfileViewModel.avatarUpdated = true
     }
 
     private fun encodeImage(bitmap: Bitmap): String {
