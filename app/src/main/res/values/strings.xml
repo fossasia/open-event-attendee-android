@@ -302,6 +302,9 @@
     <string name="provide_name_message">Please provide first name and last name!</string>
     <string name="user_update_error_message">Error updating user!</string>
     <string name="user_update_success_message">User updated successfully!</string>
+    <string name="error_fetching_event_section_message">"Error fetching %1$s for the event</string>
+    <string name="error_submitting_feedback">Fail on submitting the feedback</string>
+    <string name="success_submitting_feedback">Feedback submitted</string>
     <string name="failure">Failure</string>
 
     <!--social link fragment-->
@@ -326,6 +329,7 @@
     <string name="free_stuff">Free stuff only</string>
     <string name="speakers">Speakers</string>
     <string name="sponsors">Sponsors</string>
+    <string name="sessions">Sessions</string>
     <string name="description_preview">Some description about this sponsor: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="sort_by_name">name</string>
     <string name="sort_by_date">starts-at</string>
