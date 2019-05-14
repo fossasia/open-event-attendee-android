@@ -12,12 +12,10 @@ class OrderService(
     fun placeOrder(order: Order): Single<Order> {
         return orderApi.placeOrder(order)
                 .map { order ->
-                    val attendeeIds = order.attendees?.map { order.id }
-                    if (attendeeIds != null) {
-                        attendeeDao.getAttendeesWithIds(attendeeIds).map {
-                            if (it.size == attendeeIds.size) {
-                                orderDao.insertOrder(order)
-                            }
+                    val attendeeIds = order.attendees.map { order.id }
+                    attendeeDao.getAttendeesWithIds(attendeeIds).map {
+                        if (it.size == attendeeIds.size) {
+                            orderDao.insertOrder(order)
                         }
                     }
                     order
@@ -32,11 +30,27 @@ class OrderService(
         return orderApi.confirmOrder(identifier, order)
     }
 
-    fun orderUser(userId: Long): Single<List<Order>> {
+    fun getOrdersOfUser(userId: Long): Single<List<Order>> {
         return orderApi.ordersUnderUser(userId)
+            .map {
+                orderDao.insertOrders(it)
+                it
+            }.onErrorResumeNext {
+                orderDao.getAllOrders().map { it }
+            }
     }
 
-    fun attendeesUnderOrder(orderIdentifier: String): Single<List<Attendee>> {
+    fun getOrderById(orderId: Long): Single<Order> {
+        return orderDao.getOrderById(orderId)
+    }
+
+    fun getAttendeesUnderOrder(orderIdentifier: String, attendeesIds: List<Long>): Single<List<Attendee>> {
         return orderApi.attendeesUnderOrder(orderIdentifier)
+            .map {
+                attendeeDao.insertAttendees(it)
+                it
+            }.onErrorResumeNext {
+                attendeeDao.getAttendeesWithIds(attendeesIds)
+            }
     }
 }

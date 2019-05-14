@@ -19,11 +19,14 @@ interface AttendeeDao {
     fun insertCustomForms(customForms: List<CustomForm>)
 
     @Query("DELETE FROM Attendee")
-    fun deleteAll()
+    fun deleteAllAttendees()
 
     @Query("SELECT * from Attendee WHERE id in (:ids)")
     fun getAttendeesWithIds(ids: List<Long>): Single<List<Attendee>>
 
     @Query("SELECT * from CustomForm WHERE event = :eventId")
     fun getCustomFormsForId(eventId: Long): Single<List<CustomForm>>
+
+    @Query("SELECT * FROM Attendee")
+    fun getAllAttendees(): Single<List<Attendee>>
 }

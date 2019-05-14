@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.attendees
 import androidx.room.TypeConverter
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class ListAttendeeIdConverter {
 
@@ -14,7 +15,7 @@ class ListAttendeeIdConverter {
 
     @TypeConverter
     fun toListAttendeeId(attendeeList: String): List<AttendeeId> {
-        val objectMapper = ObjectMapper()
+        val objectMapper = jacksonObjectMapper()
         val mapType = object : TypeReference<List<AttendeeId>>() {}
         return objectMapper.readValue(attendeeList, mapType)
     }

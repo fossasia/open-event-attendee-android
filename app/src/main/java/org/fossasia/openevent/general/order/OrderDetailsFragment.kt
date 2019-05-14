@@ -48,20 +48,18 @@ class OrderDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ordersRecyclerAdapter.setOrderIdentifier(safeArgs.orders)
+        ordersRecyclerAdapter.setOrderIdentifier(safeArgs.orderIdentifier)
 
         orderDetailsViewModel.event
             .nonNull()
             .observe(this, Observer {
                 ordersRecyclerAdapter.setEvent(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
             })
 
         orderDetailsViewModel.attendees
             .nonNull()
             .observe(this, Observer {
                 ordersRecyclerAdapter.addAll(it)
-                ordersRecyclerAdapter.notifyDataSetChanged()
                 Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
             })
     }
@@ -127,7 +125,7 @@ class OrderDetailsFragment : Fragment() {
             })
 
         orderDetailsViewModel.loadEvent(safeArgs.eventId)
-        orderDetailsViewModel.loadAttendeeDetails(safeArgs.orders)
+        orderDetailsViewModel.loadAttendeeDetails(safeArgs.orderId)
 
         return rootView
     }

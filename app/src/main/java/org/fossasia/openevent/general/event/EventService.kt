@@ -109,13 +109,25 @@ class EventService(
         return eventDao.getEvent(id)
     }
 
-    fun getEventFromApi(id: Long): Single<Event> {
-        return eventApi.getEventFromApi(id)
+    fun getEventById(eventId: Long): Single<Event> {
+        return eventDao.getEventById(eventId)
+            .onErrorResumeNext {
+                eventApi.getEventFromApi(eventId).map {
+                    eventDao.insertEvent(it)
+                    it
+                }
+            }
     }
 
     fun getEventsUnderUser(eventIds: List<Long>): Single<List<Event>> {
         val query = buildQuery(eventIds)
         return eventApi.eventsUnderUser(query)
+            .map {
+                eventDao.insertEvents(it)
+                it
+            }.onErrorResumeNext {
+                eventDao.getEventWithIds(eventIds).map { it }
+            }
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean): Completable {

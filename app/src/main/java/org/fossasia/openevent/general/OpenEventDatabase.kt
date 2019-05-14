@@ -40,7 +40,7 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
     EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
-    SponsorWithEvent::class, Session::class], version = 5)
+    SponsorWithEvent::class, Session::class], version = 6)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
     EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class)
