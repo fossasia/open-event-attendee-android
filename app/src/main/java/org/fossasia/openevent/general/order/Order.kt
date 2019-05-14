@@ -31,7 +31,7 @@ data class Order(
     val paymentMode: String? = null,
     val country: String? = null,
     val status: String? = null,
-    val amount: Float? = null,
+    val amount: Float = 0F,
     val identifier: String? = null,
     val orderNotes: String? = null,
     val completedAt: String? = null,

@@ -246,11 +246,11 @@ class AttendeeViewModel(
 
     private fun createOrder() {
         val attendeeList = attendees.map { AttendeeId(it.id) }.toList()
-        var amount = totalAmount.value
+        var amount: Float = totalAmount.value ?: 0F
         var paymentMode: String? = paymentOption.toLowerCase()
-        if (amount == null || amount <= 0) {
+        if (amount <= 0) {
             paymentMode = resource.getString(R.string.free)
-            amount = null
+            amount = 0F
         }
         val eventId = event.value?.id
         if (eventId != null) {
