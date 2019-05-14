@@ -44,6 +44,13 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_events_to_notification"
+            app:destination="@id/notificationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
     </fragment>
     <fragment
@@ -661,4 +668,9 @@
             android:defaultValue="false"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="org.fossasia.openevent.general.notification.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification" />
 </navigation>

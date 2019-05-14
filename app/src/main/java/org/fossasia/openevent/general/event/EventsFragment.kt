@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -75,7 +78,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
-
+        setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
@@ -195,6 +198,20 @@ class EventsFragment : Fragment(), ScrollToTop {
                 location = Preference().getString(SAVED_LOCATION).toString(),
                 date = getString(R.string.anytime),
                 type = hashTag))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.events, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.notifications -> {
+                findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showNoInternetScreen(show: Boolean) {

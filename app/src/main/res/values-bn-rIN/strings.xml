@@ -186,4 +186,8 @@
     <string name="invalid_password_message">খুব ছোট পাসওয়ার্ড!</string>
     <string name="country">দেশ</string>
     <string name="accept_terms_and_conditions">শর্তাবলী গ্রহণ করুন!</string>
+
+    <!--Notification Fragment-->
+    <string name="no_notification_result">আপনার কোন বিজ্ঞপ্তি নেই..</string>
+
 </resources>
