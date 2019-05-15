@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.settings
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -14,6 +15,8 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     private val mutableSnackBar = SingleLiveEvent<String>()
     val snackBar: LiveData<String> = mutableSnackBar
+    private val mutableUpdatedPassword = MutableLiveData<String>()
+    val updatedPassword: LiveData<String> = mutableUpdatedPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -39,7 +42,10 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
         compositeDisposable += authService.changePassword(oldPassword, newPassword)
             .withDefaultSchedulers()
             .subscribe({
-                if (it.passwordChanged) mutableSnackBar.value = "Password changed successfully!"
+                if (it.passwordChanged) {
+                    mutableSnackBar.value = "Password changed successfully!"
+                    mutableUpdatedPassword.value = newPassword
+                }
             }, {
                 if (it.message.toString() == "HTTP 400 BAD REQUEST")
                     mutableSnackBar.value = "Incorrect Old Password provided!"
