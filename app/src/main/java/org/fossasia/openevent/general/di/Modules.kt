@@ -35,11 +35,8 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventApi
 import org.fossasia.openevent.general.event.EventDetailsViewModel
 import org.fossasia.openevent.general.event.EventId
-import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventsViewModel
 import org.fossasia.openevent.general.event.feedback.Feedback
 import org.fossasia.openevent.general.event.feedback.FeedbackApi
@@ -53,7 +50,6 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
 import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
-import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
 import org.fossasia.openevent.general.notification.Notification
 import org.fossasia.openevent.general.notification.NotificationApi
@@ -105,8 +101,8 @@ import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.ticket.TicketsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -115,6 +111,8 @@ import java.util.concurrent.TimeUnit
 val commonModule = module {
     single { Preference() }
     single { Network() }
+    single { Resource() }
+    single { MutableConnectionLiveData() }
     factory<LocationService> { LocationServiceImpl(androidContext()) }
 }
 
@@ -196,8 +194,6 @@ val apiModule = module {
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
     factory { SessionService(get(), get()) }
-    factory { Resource() }
-    factory { MutableConnectionLiveData() }
     factory { NotificationService(get()) }
 }
 
@@ -347,26 +343,5 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.sponsorDao()
-    }
-}
-
-val fragmentsModule = module {
-
-    factory { EventsDiffCallback() }
-
-    scope(Scopes.EVENTS_FRAGMENT.toString()) {
-        EventsListAdapter(EventLayoutType.EVENTS, get())
-    }
-
-    scope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()) {
-        EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
-    }
-
-    scope(Scopes.FAVORITE_FRAGMENT.toString()) {
-        FavoriteEventsRecyclerAdapter(get())
-    }
-
-    scope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()) {
-        FavoriteEventsRecyclerAdapter(get())
     }
 }

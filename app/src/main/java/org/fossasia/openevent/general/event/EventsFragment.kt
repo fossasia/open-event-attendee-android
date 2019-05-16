@@ -27,14 +27,11 @@ import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollVie
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -54,14 +51,10 @@ class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
-    private val eventsListAdapter: EventsListAdapter by inject(
-        scope = getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString())
-    )
+    private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        bindScope(getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString()))
 
         eventsViewModel.events
             .nonNull()

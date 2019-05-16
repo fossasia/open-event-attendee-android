@@ -16,17 +16,15 @@ import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsDivid
 import kotlinx.android.synthetic.main.fragment_similar_events.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_similar_events.view.similarEventsRecycler
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventDetailsFragmentDirections
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.android.ext.android.get
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -44,7 +42,6 @@ class SimilarEventsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(Scopes.SIMILAR_EVENTS_FRAGMENT.toString()))
         similarEventsViewModel.eventId = safeArgs.eventId
         similarEventsViewModel.loadSimilarIdEvents(safeArgs.eventTopicId)
         similarEventsViewModel.loadSimilarLocationEvents(safeArgs.eventLocation.toString())
@@ -92,7 +89,7 @@ class SimilarEventsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        similarEventsListAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, get())
+        similarEventsListAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long) {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "77cfd0b7528a803833b63c64c6d1db89",
+    "identityHash": "1c62806166a2886751e22adada684c1a",
     "entities": [
       {
         "tableName": "Event",
@@ -864,7 +864,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `event` INTEGER, `attendees` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL NOT NULL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `event` INTEGER, `attendees` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`attendees`) REFERENCES `Attendee`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -894,7 +894,7 @@
             "fieldPath": "amount",
             "columnName": "amount",
             "affinity": "REAL",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "identifier",
@@ -1587,7 +1587,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"77cfd0b7528a803833b63c64c6d1db89\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1c62806166a2886751e22adada684c1a\")"
     ]
   }
 }
