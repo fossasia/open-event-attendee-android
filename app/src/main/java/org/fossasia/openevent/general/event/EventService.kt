@@ -14,7 +14,7 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
-import java.util.Locale.filter
+import java.util.Date
 
 class EventService(
     private val eventApi: EventApi,
@@ -88,7 +88,8 @@ class EventService(
     }
 
     fun getEventsByLocation(locationName: String?): Single<List<Event>> {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
+            "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
         return eventApi.searchEvents("name", query).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()
             eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
