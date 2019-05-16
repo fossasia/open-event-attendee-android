@@ -36,7 +36,7 @@ class PlaceSuggestionsAdapter :
         }
 
         override fun areContentsTheSame(oldItem: CarmenFeature, newItem: CarmenFeature): Boolean {
-            return oldItem == newItem
+            return oldItem.equals(newItem)
         }
     }
 }
