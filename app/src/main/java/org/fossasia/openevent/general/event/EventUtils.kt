@@ -22,6 +22,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object EventUtils {
 
@@ -268,5 +269,12 @@ object EventUtils {
                 Timber.d("uri: %s", bmpUri)
                 bmpUri
             }
+    }
+
+    fun getTimeInISO8601(date: Date): String {
+        val tz = TimeZone.getTimeZone(TimeZone.getDefault().id)
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
+        df.timeZone = tz
+        return df.format(date)
     }
 }
