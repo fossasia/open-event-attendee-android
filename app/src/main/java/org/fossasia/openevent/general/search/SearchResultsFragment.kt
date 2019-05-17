@@ -69,7 +69,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        setChips( eventDate, eventType)
+        setChips(eventDate, eventType)
         setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
@@ -134,7 +134,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun setChips(date: String = eventDate, type: String = eventType) {
-        if (rootView.chipGroup.childCount>0) {
+        if (rootView.chipGroup.childCount> 0) {
             rootView.chipGroup.removeAllViews()
         }
             when {

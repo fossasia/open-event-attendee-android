@@ -81,8 +81,8 @@ class EventDetailsViewModel(
     fun fetchEventSpeakers(id: Long) {
         speakerService.fetchSpeakersForEvent(id)
             .withDefaultSchedulers()
-            .subscribe ({
-                //Do Nothing
+            .subscribe({
+                // Do Nothing
             }, {
                 Timber.e(it, "Error fetching speaker for event id %d", id)
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
@@ -98,8 +98,8 @@ class EventDetailsViewModel(
     fun fetchEventSponsors(id: Long) {
         sponsorService.fetchSponsorsWithEvent(id)
             .withDefaultSchedulers()
-            .subscribe ({
-                //Do Nothing
+            .subscribe({
+                // Do Nothing
             }, {
                 Timber.e(it, "Error fetching sponsor for event id %d", id)
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
