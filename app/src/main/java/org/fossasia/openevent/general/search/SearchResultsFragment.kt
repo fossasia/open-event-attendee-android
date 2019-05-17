@@ -29,35 +29,30 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
+import org.fossasia.openevent.general.common.EventsDiffCallback
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     private lateinit var rootView: View
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchResultsFragmentArgs by navArgs()
-    private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
-        scope = getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString())
-    )
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
+
     private lateinit var days: Array<String>
     private lateinit var eventDate: String
     private lateinit var eventType: String
     private var eventTypesList: List<EventType>? = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()))
 
         days = resources.getStringArray(R.array.days)
         eventDate = searchViewModel.savedTime ?: safeArgs.date
