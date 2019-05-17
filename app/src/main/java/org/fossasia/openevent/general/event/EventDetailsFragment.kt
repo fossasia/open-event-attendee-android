@@ -23,7 +23,6 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_event.similarEventsContainer
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsFirst
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsSecond
 import kotlinx.android.synthetic.main.content_event.view.eventDescription
@@ -45,6 +44,10 @@ import kotlinx.android.synthetic.main.content_event.view.speakerRv
 import kotlinx.android.synthetic.main.content_event.view.speakersContainer
 import kotlinx.android.synthetic.main.content_event.view.sponsorsRecyclerView
 import kotlinx.android.synthetic.main.content_event.view.sponsorsSummaryContainer
+import kotlinx.android.synthetic.main.content_event.view.socialLinksRecycler
+import kotlinx.android.synthetic.main.content_event.view.socialLinkContainer
+import kotlinx.android.synthetic.main.content_event.view.similarEventsRecycler
+import kotlinx.android.synthetic.main.content_event.view.similarEventsContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -52,16 +55,17 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
-import kotlinx.android.synthetic.main.fragment_event.eventCoordinatorLayout
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
-import org.fossasia.openevent.general.event.topic.SimilarEventsFragment
 import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
-import org.fossasia.openevent.general.social.SocialLinksFragment
+import org.fossasia.openevent.general.social.SocialLinksRecyclerAdapter
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
 import org.fossasia.openevent.general.sponsor.SponsorClickListener
 import org.fossasia.openevent.general.sponsor.SponsorRecyclerAdapter
@@ -76,10 +80,6 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val EVENT_ID = "eventId"
-const val EVENT_TOPIC_ID = "eventTopicId"
-const val EVENT_LOCATION = "eventLocation"
-
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
@@ -87,18 +87,14 @@ class EventDetailsFragment : Fragment() {
     private val speakersAdapter = SpeakerRecyclerAdapter()
     private val sponsorsAdapter = SponsorRecyclerAdapter()
     private val sessionsAdapter = SessionRecyclerAdapter()
+    private val socialLinkAdapter = SocialLinksRecyclerAdapter()
+    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
 
     private lateinit var rootView: View
     private lateinit var binding: FragmentEventBinding
-    private var eventTopicId: Long? = null
-    private var eventLocation: String? = null
-    private lateinit var eventShare: Event
-    private var currency: String? = null
     private val LINE_COUNT: Int = 3
     private val LINE_COUNT_ORGANIZER: Int = 2
     private var menuActionBar: Menu? = null
-    private var title: String = ""
-    private var runOnce: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,32 +102,19 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 loadEvent(it)
-                eventShare = it
-                title = eventShare.name
+                if (eventViewModel.similarEvents.value == null) {
+                    val eventTopicId = it.eventTopic?.id ?: 0
+                    val eventLocation = it.searchableLocationName ?: it.locationName
+                    eventViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId, eventLocation)
+                }
 
                 // Update favorite icon and external event url menu option
                 activity?.invalidateOptionsMenu()
-
-                if (runOnce) {
-                    loadSocialLinksFragment()
-                    loadSimilarEventsFragment()
-                }
-                runOnce = false
 
                 Timber.d("Fetched events of id ${safeArgs.eventId}")
                 showEventErrorScreen(false)
                 setHasOptionsMenu(true)
             })
-        eventViewModel.loadEventFeedback(safeArgs.eventId)
-        eventViewModel.fetchEventSpeakers(safeArgs.eventId)
-        val allSessions = eventViewModel.eventSessions.value
-        if (allSessions == null) {
-            eventViewModel.fetchEventSessions(safeArgs.eventId)
-        } else {
-            sessionsAdapter.addAll(allSessions)
-            rootView.sessionContainer.isVisible = allSessions.isNotEmpty()
-        }
-        eventViewModel.fetchEventSponsors(safeArgs.eventId)
     }
 
     override fun onCreateView(
@@ -181,7 +164,16 @@ class EventDetailsFragment : Fragment() {
             checkForAuthentication()
         }
 
-        eventViewModel.loadEvent(safeArgs.eventId)
+        val socialLinkLinearLayoutManager = LinearLayoutManager(context)
+        socialLinkLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.socialLinksRecycler.layoutManager = socialLinkLinearLayoutManager
+        rootView.socialLinksRecycler.adapter = socialLinkAdapter
+
+        eventViewModel.socialLinks.observe(viewLifecycleOwner, Observer {
+            socialLinkAdapter.addAll(it)
+            rootView.socialLinkContainer.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
+        })
+
         rootView.retry.setOnClickListener {
             eventViewModel.loadEvent(safeArgs.eventId)
         }
@@ -226,7 +218,7 @@ class EventDetailsFragment : Fragment() {
                 if (scrollY > rootView.eventName.height + rootView.eventImage.height)
                     /*Toolbar title set to name of Event if scrolled more than
                     combined height of eventImage and eventName views*/
-                    setToolbar(activity, title)
+                    setToolbar(activity, eventViewModel.event.value?.name ?: "")
                 else
                     // Toolbar title set to an empty string
                     setToolbar(activity)
@@ -238,13 +230,9 @@ class EventDetailsFragment : Fragment() {
         rootView.speakerRv.layoutManager = linearLayoutManagerSpeakers
         rootView.speakerRv.adapter = speakersAdapter
 
-        eventViewModel.loadEventSpeakers(safeArgs.eventId).observe(viewLifecycleOwner, Observer {
+        eventViewModel.eventSpeakers.observe(viewLifecycleOwner, Observer {
             speakersAdapter.addAll(it)
-            if (it.isEmpty()) {
-                rootView.speakersContainer.visibility = View.GONE
-            } else {
-                rootView.speakersContainer.visibility = View.VISIBLE
-            }
+            rootView.speakersContainer.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
         })
 
         val sessionClickListener: SessionClickListener = object : SessionClickListener {
@@ -272,10 +260,19 @@ class EventDetailsFragment : Fragment() {
             }
         })
 
-        eventViewModel.loadEventSponsors(safeArgs.eventId).observe(viewLifecycleOwner, Observer { sponsors ->
+        eventViewModel.eventSponsors.observe(viewLifecycleOwner, Observer { sponsors ->
             sponsorsAdapter.addAll(sponsors)
             rootView.sponsorsSummaryContainer.visibility = if (sponsors.isEmpty()) View.GONE else View.VISIBLE
-            sponsorsAdapter.notifyDataSetChanged()
+        })
+
+        val similarLinearLayoutManager = LinearLayoutManager(context)
+        similarLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.similarEventsRecycler.layoutManager = similarLinearLayoutManager
+        rootView.similarEventsRecycler.adapter = similarEventsAdapter
+
+        eventViewModel.similarEvents.observe(viewLifecycleOwner, Observer { similarEvents ->
+            similarEventsAdapter.submitList(similarEvents)
+            rootView.similarEventsContainer.visibility = if (similarEvents.isNotEmpty()) View.VISIBLE else View.GONE
         })
 
         return rootView
@@ -309,7 +306,6 @@ class EventDetailsFragment : Fragment() {
                 }
             }
         }
-        currency = Currency.getInstance(event.paymentCurrency ?: "USD").symbol
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
             findNavController(rootView).navigate(EventDetailsFragmentDirections
@@ -349,19 +345,101 @@ class EventDetailsFragment : Fragment() {
         rootView.eventDateDetailsFirst.text = EventUtils.getFormattedEventDateTimeRange(startsAt, endsAt)
         rootView.eventDateDetailsSecond.text = EventUtils.getFormattedEventDateTimeRangeSecond(startsAt, endsAt)
 
-        // Similar Events Section
-        if (event.eventTopic != null || !event.locationName.isNullOrBlank() ||
-            !event.searchableLocationName.isNullOrBlank()) {
-            similarEventsContainer.isVisible = true
-            eventTopicId = event.eventTopic?.id ?: 0
-            eventLocation =
-                if (event.searchableLocationName.isNullOrBlank()) event.locationName
-                else event.searchableLocationName
-        }
-
         // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.eventTimingLinearLayout.setOnClickListener(dateClickListener)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        eventViewModel.connection
+            .nonNull()
+            .observe(this, Observer { isConnected ->
+                if (isConnected) {
+                    showEventErrorScreen(false)
+                    val currentEvent = eventViewModel.event.value
+                    if (currentEvent == null)
+                        eventViewModel.loadEvent(safeArgs.eventId)
+                    else
+                        loadEvent(currentEvent)
+
+                    val currentFeedback = eventViewModel.eventFeedback.value
+                    if (currentFeedback == null) {
+                        eventViewModel.fetchEventFeedback(safeArgs.eventId)
+                    } else {
+                        feedbackAdapter.addAll(currentFeedback)
+                        if (currentFeedback.isEmpty()) {
+                            rootView.feedbackRv.isVisible = false
+                            rootView.noFeedBackTv.isVisible = true
+                        } else {
+                            rootView.feedbackRv.isVisible = true
+                            rootView.noFeedBackTv.isVisible = false
+                        }
+                    }
+
+                    val currentSpeakers = eventViewModel.eventSpeakers.value
+                    if (currentSpeakers == null) {
+                        eventViewModel.fetchEventSpeakers(safeArgs.eventId)
+                    } else {
+                        speakersAdapter.addAll(currentSpeakers)
+                        rootView.speakersContainer.visibility =
+                            if (currentSpeakers.isEmpty()) View.GONE else View.VISIBLE
+                    }
+
+                    val currentSessions = eventViewModel.eventSessions.value
+                    if (currentSessions == null) {
+                        eventViewModel.fetchEventSessions(safeArgs.eventId)
+                    } else {
+                        sessionsAdapter.addAll(currentSessions)
+                        rootView.sessionContainer.visibility =
+                            if (currentSessions.isEmpty()) View.GONE else View.VISIBLE
+                    }
+
+                    val currentSponsors = eventViewModel.eventSponsors.value
+                    if (currentSponsors == null) {
+                        eventViewModel.fetchEventSponsors(safeArgs.eventId)
+                    } else {
+                        sponsorsAdapter.addAll(currentSponsors)
+                        rootView.sponsorsSummaryContainer.visibility =
+                            if (currentSponsors.isEmpty()) View.GONE else View.VISIBLE
+                    }
+
+                    val currentSocialLinks = eventViewModel.socialLinks.value
+                    if (currentSocialLinks == null) {
+                        eventViewModel.fetchSocialLink(safeArgs.eventId)
+                    } else {
+                        socialLinkAdapter.addAll(currentSocialLinks)
+                        rootView.socialLinkContainer.visibility =
+                            if (currentSocialLinks.isEmpty()) View.GONE else View.VISIBLE
+                    }
+                } else {
+                    val currentEvent = eventViewModel.event.value
+                    if (currentEvent == null)
+                        showEventErrorScreen(true)
+                    else
+                        loadEvent(currentEvent)
+                }
+            })
+
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long) {
+                findNavController(view)
+                    .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID))
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                eventViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                similarEventsAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        similarEventsAdapter.apply {
+            onEventClick = eventClickListener
+            onFavFabClick = favFabClickListener
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -372,23 +450,23 @@ class EventDetailsFragment : Fragment() {
             }
             R.id.add_to_calendar -> {
                 // Add event to Calendar
-                startCalendar(eventShare)
+                eventViewModel.event.value?.let { startCalendar(it) }
                 true
             }
             R.id.report_event -> {
-                reportEvent(eventShare)
+                eventViewModel.event.value?.let { reportEvent(it) }
                 true
             }
             R.id.open_external_event_url -> {
-                eventShare.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
+                eventViewModel.event.value?.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
                 true
             }
             R.id.favorite_event -> {
-                eventViewModel.setFavorite(safeArgs.eventId, !(eventShare.favorite))
+                eventViewModel.event.value?.let { eventViewModel.setFavorite(safeArgs.eventId, !it.favorite) }
                 true
             }
             R.id.event_share -> {
-                EventUtils.share(eventShare, rootView.eventImage)
+                eventViewModel.event.value?.let { EventUtils.share(it, rootView.eventImage) }
                 return true
             }
             R.id.open_faqs -> {
@@ -431,46 +509,18 @@ class EventDetailsFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (::eventShare.isInitialized) {
-            if (eventShare.externalEventUrl == null) {
+        eventViewModel.event.value?.let { currentEvent ->
+            if (currentEvent.externalEventUrl == null)
                 menu.findItem(R.id.open_external_event_url).isVisible = false
-            }
-            setFavoriteIconFilled(eventShare.favorite)
+            setFavoriteIconFilled(currentEvent.favorite)
         }
         super.onPrepareOptionsMenu(menu)
     }
 
     private fun loadTicketFragment() {
+        val currency = Currency.getInstance(eventViewModel.event.value?.paymentCurrency ?: "USD").symbol
         findNavController(rootView).navigate(EventDetailsFragmentDirections
             .actionEventDetailsToTickets(safeArgs.eventId, currency))
-    }
-
-    private fun loadSocialLinksFragment() {
-        // Initialise SocialLinks Fragment
-        val socialLinksFragemnt = SocialLinksFragment()
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, safeArgs.eventId)
-        socialLinksFragemnt.arguments = bundle
-        socialLinksFragemnt.setErrorSnack {
-            eventCoordinatorLayout.longSnackbar(it)
-        }
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.add(R.id.frameContainerSocial, socialLinksFragemnt).commit()
-    }
-
-    private fun loadSimilarEventsFragment() {
-        // Initialise SimilarEvents Fragment
-        val similarEventsFragment = SimilarEventsFragment()
-        val bundle = Bundle()
-        bundle.putLong(EVENT_ID, safeArgs.eventId)
-        eventTopicId?.let { bundle.putLong(EVENT_TOPIC_ID, it) }
-        eventLocation?.let { bundle.putString(EVENT_LOCATION, it) }
-        similarEventsFragment.arguments = bundle
-        similarEventsFragment.setErrorSnack {
-            eventCoordinatorLayout.longSnackbar(it)
-        }
-        childFragmentManager.beginTransaction()
-            .replace(R.id.frameContainerSimilarEvents, similarEventsFragment).commit()
     }
 
     private fun startMap(event: Event) {

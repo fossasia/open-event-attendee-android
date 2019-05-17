@@ -284,13 +284,11 @@
     <!--about event fragment-->
     <string name="error_fetching_event_message">Error fetching event</string>
     <string name="error_fetching_events_message">Error fetching events</string>
-    <string name="fetch_similar_events_error_message">Error fetching similar events</string>
     <string name="error">Error</string>
     <string name="fetch_favorite_events_error_message">Error fetching favorite events</string>
     <string name="list_orders_fail_message">Failed  to list Orders under a user</string>
     <string name="list_events_fail_message">Failed  to list events under a user</string>
     <string name="error_adding_favorite_message">Error adding to favorites</string>
-    <string name="error_fetching_social_links_message">Error fetching Social Links</string>
     <string name="error_fetching_tickets_message">Error fetching tickets</string>
 
     <!--edit profile fragment-->
@@ -313,6 +311,8 @@
     <!--social link fragment-->
     <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
     <string name="popular_locations">Popular Locations</string>
+    <string name="social_links">Social Link</string>
+    <string name="similar_events">Similar Events</string>
 
     <string name="anything">Anything</string>
     <string name="and_i_m_up_for">And I\'m up for</string>

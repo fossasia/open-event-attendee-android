@@ -14,6 +14,7 @@ class SocialLinksRecyclerAdapter : RecyclerView.Adapter<SocialLinksViewHolder>()
         if (socialLinkList.isNotEmpty())
             this.socialLinks.clear()
         this.socialLinks.addAll(socialLinkList)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SocialLinksViewHolder {
@@ -23,7 +24,6 @@ class SocialLinksRecyclerAdapter : RecyclerView.Adapter<SocialLinksViewHolder>()
 
     override fun onBindViewHolder(holder: SocialLinksViewHolder, position: Int) {
         val socialLink = socialLinks[position]
-
         holder.bind(socialLink)
     }
 

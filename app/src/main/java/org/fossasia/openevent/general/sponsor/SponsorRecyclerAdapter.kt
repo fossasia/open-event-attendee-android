@@ -14,6 +14,7 @@ class SponsorRecyclerAdapter : RecyclerView.Adapter<SponsorViewHolder>() {
     fun addAll(newSponsors: List<Sponsor>) {
         if (sponsorList.isNotEmpty()) sponsorList.clear()
         sponsorList.addAll(SponsorUtil.sortSponsorByLevel(newSponsors))
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: SponsorViewHolder, position: Int) {

@@ -54,28 +54,6 @@
 
     </fragment>
     <fragment
-        android:id="@+id/similarEventsFragment"
-        android:name="org.fossasia.openevent.general.event.topic.SimilarEventsFragment"
-        android:label="SimilarEventsFragment"
-        tools:layout="@layout/fragment_similar_events">
-
-        <argument
-            android:name="eventId"
-            app:argType="long"
-            android:defaultValue="-1L"/>
-
-        <argument
-            android:name="eventTopicId"
-            app:argType="long"
-            android:defaultValue="-1L"/>
-
-        <argument
-            android:name="eventLocation"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
-    </fragment>
-    <fragment
         android:id="@+id/searchFragment"
         android:name="org.fossasia.openevent.general.search.SearchFragment"
         android:label="SearchFragment"
