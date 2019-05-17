@@ -96,11 +96,11 @@ repositories {
 
 dependencies {
     def lifecycle_version = "2.2.0-alpha01"
-    def koin_version = "1.0.2"
+    def koin_version = "2.0.0-GA4"
     def roomVersion = "2.1.0-beta01"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha03"
+    def nav_version = "2.1.0-alpha04"
     def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -143,7 +143,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -176,13 +176,16 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //Mapbox java sdk
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.7.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     releaseImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
+
+    //LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"

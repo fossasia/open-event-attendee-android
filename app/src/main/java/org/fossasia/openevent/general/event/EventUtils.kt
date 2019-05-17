@@ -208,6 +208,30 @@ object EventUtils {
         }
     }
 
+    fun getFormattedDateWithoutWeekday(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, y")
+        return try {
+            dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            ""
+        }
+    }
+
+    fun getFormattedWeekDay(date: ZonedDateTime): String {
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE")
+        return try {
+            dateFormat.format(date)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Error formatting Date")
+            ""
+        }
+    }
+
+    fun getDayDifferenceFromToday(date: String): Long {
+        return (System.currentTimeMillis() - EventUtils.getTimeInMilliSeconds(date, null)) / (1000 * 60 * 60 * 24)
+    }
+
     /**
      *  share event detail along with event image
      *  if image loading is successful then imageView tag will be set to String

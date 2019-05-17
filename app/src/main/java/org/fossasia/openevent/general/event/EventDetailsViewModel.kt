@@ -38,12 +38,14 @@ class EventDetailsViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    private val mutablePopMessage = SingleLiveEvent<String>()
+    val popMessage: LiveData<String> = mutablePopMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+    private val mutableSubmittedFeedback = MutableLiveData<Feedback>()
+    val submittedFeedback: LiveData<Feedback> = mutableSubmittedFeedback
     private val mutableEventSessions = MutableLiveData<List<Session>>()
     val eventSessions: LiveData<List<Session>> = mutableEventSessions
     private var eventSpeakers: LiveData<List<Speaker>> = MutableLiveData()
@@ -59,6 +61,8 @@ class EventDetailsViewModel(
                 mutableEventFeedback.value = it
             }, {
                 Timber.e(it, "Error fetching events feedback")
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
+                    resource.getString(R.string.feedback))
             })
     }
 
@@ -68,9 +72,10 @@ class EventDetailsViewModel(
         compositeDisposable += eventService.submitFeedback(feedback)
             .withDefaultSchedulers()
             .subscribe({
-                //Do Nothing
+                mutablePopMessage.value = resource.getString(R.string.feedback_submitted)
+                mutableSubmittedFeedback.value = it
             }, {
-                it.message.toString() == "HTTP 400 BAD REQUEST"
+                mutablePopMessage.value = resource.getString(R.string.error_submitting_feedback)
             })
     }
     fun fetchEventSpeakers(id: Long) {
@@ -80,7 +85,8 @@ class EventDetailsViewModel(
                 //Do Nothing
             }, {
                 Timber.e(it, "Error fetching speaker for event id %d", id)
-                mutableError.value = resource.getString(R.string.error_fetching_event_message)
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
+                    resource.getString(R.string.speakers))
             })
     }
 
@@ -96,15 +102,16 @@ class EventDetailsViewModel(
                 //Do Nothing
             }, {
                 Timber.e(it, "Error fetching sponsor for event id %d", id)
-                mutableError.value = resource.getString(R.string.error_fetching_event_message)
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
+                    resource.getString(R.string.sponsors))
             })
     }
 
     fun loadEventSponsors(id: Long): LiveData<List<Sponsor>> = sponsorService.fetchSponsorsFromDb(id)
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
-            mutableError.value = resource.getString(R.string.error_fetching_event_message)
+        if (id == -1L) {
+            mutablePopMessage.value = resource.getString(R.string.error_fetching_event_message)
             return
         }
         compositeDisposable += eventService.getEvent(id)
@@ -117,7 +124,7 @@ class EventDetailsViewModel(
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
-                mutableError.value = resource.getString(R.string.error_fetching_event_message)
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_message)
             })
     }
 
@@ -127,6 +134,8 @@ class EventDetailsViewModel(
             .subscribe({
                 mutableEventSessions.value = it
             }, {
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
+                    resource.getString(R.string.sessions))
                 Timber.e(it, "Error fetching events sessions")
             })
     }
@@ -145,7 +154,7 @@ class EventDetailsViewModel(
                 Timber.d("Success")
             }, {
                 Timber.e(it, "Error")
-                mutableError.value = resource.getString(R.string.error)
+                mutablePopMessage.value = resource.getString(R.string.error)
             })
     }
 

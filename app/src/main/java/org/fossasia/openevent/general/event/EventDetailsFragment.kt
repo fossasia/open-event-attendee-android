@@ -45,7 +45,6 @@ import kotlinx.android.synthetic.main.content_event.view.speakerRv
 import kotlinx.android.synthetic.main.content_event.view.speakersContainer
 import kotlinx.android.synthetic.main.content_event.view.sponsorsRecyclerView
 import kotlinx.android.synthetic.main.content_event.view.sponsorsSummaryContainer
-import kotlinx.android.synthetic.main.content_event.view.feedbackContainer
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -152,10 +151,11 @@ class EventDetailsFragment : Fragment() {
             loadTicketFragment()
         }
 
-        eventViewModel.error
+        eventViewModel.popMessage
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                showEventErrorScreen(true)
+                rootView.snackbar(it)
+                showEventErrorScreen(it == getString(R.string.error_fetching_event_message))
             })
 
         eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {
@@ -167,8 +167,15 @@ class EventDetailsFragment : Fragment() {
                 rootView.feedbackRv.isVisible = true
                 rootView.noFeedBackTv.isVisible = false
             }
-            rootView.feedbackContainer.isVisible = it.isNotEmpty()
         })
+
+        eventViewModel.submittedFeedback
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                feedbackAdapter.add(it)
+                rootView.feedbackRv.isVisible = true
+                rootView.noFeedBackTv.isVisible = false
+            })
 
         rootView.feedbackBtn.setOnClickListener {
             checkForAuthentication()
@@ -517,7 +524,6 @@ class EventDetailsFragment : Fragment() {
                 eventViewModel.submitFeedback(layout.feedback.text.toString(),
                     layout.feedbackrating.rating,
                     safeArgs.eventId)
-                rootView.snackbar(R.string.feedback_submitted)
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()

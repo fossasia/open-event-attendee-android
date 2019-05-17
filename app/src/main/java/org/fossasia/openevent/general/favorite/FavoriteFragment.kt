@@ -19,16 +19,13 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.weekendChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -40,14 +37,7 @@ const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 class FavoriteFragment : Fragment() {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
-        scope = getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString())
-    )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(Scopes.FAVORITE_FRAGMENT.toString()))
-    }
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
 
     override fun onCreateView(
         inflater: LayoutInflater,
