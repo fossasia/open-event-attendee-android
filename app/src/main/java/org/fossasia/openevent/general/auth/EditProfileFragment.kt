@@ -179,7 +179,7 @@ class EditProfileFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val bytes = baos.toByteArray()
 
-        //create temp file
+        // create temp file
         try {
 
             val tempAvatar = File(context?.cacheDir, "tempAvatar")

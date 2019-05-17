@@ -52,7 +52,7 @@ class SmartAuthViewModel : ViewModel() {
             })
     }
 
-    fun saveCredential (id: String, password: String, credentialsClient: CredentialsClient) {
+    fun saveCredential(id: String, password: String, credentialsClient: CredentialsClient) {
         val credential = Credential.Builder(id).setPassword(password).build()
         credentialsClient.save(credential).addOnCompleteListener(
             OnCompleteListener<Void> { task ->

@@ -6,11 +6,11 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-fun <T> Single<T> .withDefaultSchedulers():
+fun <T> Single<T>.withDefaultSchedulers():
     Single<T> = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
-fun <T> Flowable<T> .withDefaultSchedulers():
+fun <T> Flowable<T>.withDefaultSchedulers():
     Flowable<T> = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
-fun Completable .withDefaultSchedulers():
+fun Completable.withDefaultSchedulers():
     Completable = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
