@@ -26,15 +26,17 @@ class SocialLinksViewHolder(itemView: View, private var context: Context) : Recy
     }
 
     private fun getSocialLinkDrawableId(name: String): Int {
-        if (name.contains("github")) return R.drawable.ic_github
-        else if (name.contains("twitter")) return R.drawable.ic_twitter
-        else if (name.contains("facebook")) return R.drawable.ic_facebook
-        else if (name.contains("linkedin")) return R.drawable.ic_linkedin
-        else if (name.contains("youtube")) return R.drawable.ic_youtube
-        else if (name.contains("google")) return R.drawable.ic_google_plus
-        else if (name.contains("wiki")) return R.drawable.ic_wikipedia
-        else if (name.contains("flickr")) return R.drawable.ic_flickr
-        else if (name.contains("blog")) return R.drawable.ic_blogger
-        else return R.drawable.ic_link_black
+        return when {
+            name.contains("github") -> R.drawable.ic_github
+            name.contains("twitter") -> R.drawable.ic_twitter
+            name.contains("facebook") -> R.drawable.ic_facebook
+            name.contains("linkedin") -> R.drawable.ic_linkedin
+            name.contains("youtube") -> R.drawable.ic_youtube
+            name.contains("google") -> R.drawable.ic_google_plus
+            name.contains("wiki") -> R.drawable.ic_wikipedia
+            name.contains("flickr") -> R.drawable.ic_flickr
+            name.contains("blog") -> R.drawable.ic_blogger
+            else -> R.drawable.ic_link_black
+        }
     }
 }

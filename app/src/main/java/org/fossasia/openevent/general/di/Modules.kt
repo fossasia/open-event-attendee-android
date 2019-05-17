@@ -49,7 +49,6 @@ import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
-import org.fossasia.openevent.general.event.topic.SimilarEventsViewModel
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
 import org.fossasia.openevent.general.notification.Notification
 import org.fossasia.openevent.general.notification.NotificationApi
@@ -85,7 +84,6 @@ import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
-import org.fossasia.openevent.general.social.SocialLinksViewModel
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
@@ -202,7 +200,7 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
@@ -212,10 +210,8 @@ val viewModelModule = module {
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
-    viewModel { SocialLinksViewModel(get(), get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { SimilarEventsViewModel(get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get()) }
