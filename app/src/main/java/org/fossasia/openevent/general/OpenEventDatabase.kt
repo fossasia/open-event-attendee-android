@@ -24,6 +24,7 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionDao
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocationConverter
 import org.fossasia.openevent.general.sessions.sessiontype.SessionTypeConverter
+import org.fossasia.openevent.general.sessions.track.TrackConverter
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinksDao
 import org.fossasia.openevent.general.speakers.Speaker
@@ -43,7 +44,7 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
     SponsorWithEvent::class, Session::class], version = 6)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
     EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class,
-    AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class)
+    AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class, TrackConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 
     abstract fun eventDao(): EventDao

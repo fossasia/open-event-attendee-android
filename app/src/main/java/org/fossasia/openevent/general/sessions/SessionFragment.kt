@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.sessions
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -12,7 +13,27 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_session.view.*
+import kotlinx.android.synthetic.main.fragment_session.view.progressBar
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrack
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailAbstract
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLanguage
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLanguageContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLocationInfoContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLocation
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTimeContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLocationImageMap
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailType
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailName
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailEndTime
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailStartTime
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailLocationContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailInfoLocation
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailAbstractContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailAbstractSeeMore
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrackContainer
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailSignUpButton
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrackIcon
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
@@ -46,6 +67,13 @@ class SessionFragment : Fragment() {
                 makeSessionView(it)
             })
 
+        sessionViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+                rootView.sessionDetailContainer.visibility = if (it) View.GONE else View.VISIBLE
+            })
+
         sessionViewModel.loadSession(safeArgs.sessionId)
 
         return rootView
@@ -59,6 +87,12 @@ class SessionFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Utils.setNewHeaderColor(activity, resources.getColor(R.color.colorPrimaryDark),
+            resources.getColor(R.color.colorPrimary))
     }
 
     private fun makeSessionView(session: Session) {
@@ -155,6 +189,17 @@ class SessionFragment : Fragment() {
                         rootView.sessionDetailAbstractContainer.setOnClickListener(sessionAbstractClickListener)
                     }
                 }
+            }
+        }
+
+        val track = session.track
+        when (track == null) {
+            true -> rootView.sessionDetailTrackContainer.visibility = View.GONE
+            false -> {
+                rootView.sessionDetailTrack.text = track.name
+                val trackColor = Color.parseColor(track.color)
+                rootView.sessionDetailTrackIcon.setColorFilter(trackColor)
+                Utils.setNewHeaderColor(activity, trackColor)
             }
         }
 

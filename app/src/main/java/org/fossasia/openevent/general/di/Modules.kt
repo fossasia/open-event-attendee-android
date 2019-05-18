@@ -80,6 +80,7 @@ import org.fossasia.openevent.general.event.faq.EventFAQViewModel
 import org.fossasia.openevent.general.sessions.SessionViewModel
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
 import org.fossasia.openevent.general.sessions.sessiontype.SessionType
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
@@ -262,7 +263,7 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java,
-            Sponsor::class.java, EventFAQ::class.java, Notification::class.java)
+            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java)
 
         Retrofit.Builder()
             .client(get())

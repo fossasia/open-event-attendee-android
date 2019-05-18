@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.sessions
 
+import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,9 @@ import kotlinx.android.synthetic.main.item_session.view.sessionType
 import kotlinx.android.synthetic.main.item_session.view.sessiontime
 import kotlinx.android.synthetic.main.item_session.view.shortAbstract
 import kotlinx.android.synthetic.main.item_session.view.title
+import kotlinx.android.synthetic.main.item_session.view.trackDetail
+import kotlinx.android.synthetic.main.item_session.view.trackText
+import kotlinx.android.synthetic.main.item_session.view.trackIcon
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -24,6 +28,15 @@ class SessionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         session.microlocation.let {
             itemView.mircolocation.text = it?.name
+        }
+
+        session.track.let {
+            if (it == null)
+                itemView.trackDetail.visibility = View.GONE
+            else {
+                itemView.trackText.text = it.name
+                itemView.trackIcon.setColorFilter(Color.parseColor(it.color))
+            }
         }
         when (session.startsAt.isNullOrBlank()) {
             true -> itemView.sessiontime.isVisible = false

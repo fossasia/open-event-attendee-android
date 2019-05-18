@@ -12,6 +12,7 @@ import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
 import org.fossasia.openevent.general.sessions.sessiontype.SessionType
+import org.fossasia.openevent.general.sessions.track.Track
 
 @Type("session")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -45,5 +46,8 @@ data class Session(
     var sessionType: SessionType? = null,
     @ColumnInfo(index = true)
     @Relationship("microlocation", resolve = true)
-    var microlocation: MicroLocation? = null
+    var microlocation: MicroLocation? = null,
+    @ColumnInfo(index = true)
+    @Relationship("track", resolve = true)
+    var track: Track? = null
 )
