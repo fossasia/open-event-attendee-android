@@ -16,6 +16,7 @@
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
+    <string name="track">Track</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
@@ -333,6 +334,7 @@
     <string name="speakers">Speakers</string>
     <string name="sponsors">Sponsors</string>
     <string name="sessions">Sessions</string>
+    <string name="session">Session</string>
     <string name="description_preview">Some description about this sponsor: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="sort_by_name">name</string>
     <string name="sort_by_date">starts-at</string>
@@ -343,5 +345,6 @@
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
+    <string name="color_code">Color Code:</string>
 
 </resources>
