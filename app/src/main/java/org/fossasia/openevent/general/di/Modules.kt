@@ -182,7 +182,7 @@ val apiModule = module {
     }
 
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get(), get()) }
+    factory { AuthService(get(), get(), get(), get(), get()) }
 
     factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }

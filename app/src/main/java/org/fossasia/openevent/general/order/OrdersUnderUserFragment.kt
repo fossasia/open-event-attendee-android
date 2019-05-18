@@ -77,9 +77,9 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             if (safeArgs.showExpired) rootView.expireFilter.isVisible = false
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
-                override fun onClick(eventID: Long, orderIdentifier: String) {
-                        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-                            .actionOrderUserToOrderDetails(eventID, orderIdentifier))
+                override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
+                    findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                        .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
                 }
             }
 
@@ -109,13 +109,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     showNoTicketsScreen(it)
                 })
 
-            ordersUnderUserVM.attendeesNumber
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    ordersRecyclerAdapter.setAttendeeNumber(it)
-                })
-
-            ordersUnderUserVM.eventAndOrderIdentifier
+            ordersUnderUserVM.eventAndOrder
                 .nonNull()
                 .observe(viewLifecycleOwner, Observer {
                     val list = it.sortedByDescending {

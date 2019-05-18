@@ -13,12 +13,12 @@ import org.fossasia.openevent.general.event.EventUtils
 class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(
-        event: Event,
-        clickListener: OrdersRecyclerAdapter.OrderClickListener?,
-        orderIdentifier: String?,
-        attendeesNumber: Int,
-        showExpired: Boolean
+        eventAndOrder: Pair<Event, Order>,
+        showExpired: Boolean,
+        listener: OrdersRecyclerAdapter.OrderClickListener?
     ) {
+        val event = eventAndOrder.first
+        val order = eventAndOrder.second
         val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
@@ -26,9 +26,10 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.eventName.text = event.name
         itemView.time.text = "Starts at $formattedTime $timezone"
         itemView.setOnClickListener {
-            orderIdentifier?.let { it1 -> clickListener?.onClick(event.id, it1) }
+            listener?.onClick(event.id, order.identifier ?: "", order.id)
         }
 
+        val attendeesNumber = order.attendees.size
         if (attendeesNumber == 1) {
             itemView.ticketsNumber.text = "See $attendeesNumber Ticket"
         } else {
@@ -44,7 +45,7 @@ class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .placeholder(R.drawable.header)
                     .into(itemView.eventImage)
         }
-        if (!showExpired) {
+        if (showExpired) {
             val matrix = ColorMatrix()
             matrix.setSaturation(0F)
             itemView.eventImage.colorFilter = ColorMatrixColorFilter(matrix)

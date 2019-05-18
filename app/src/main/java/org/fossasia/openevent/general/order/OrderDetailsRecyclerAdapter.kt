@@ -21,10 +21,12 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
         if (attendees.isNotEmpty())
             this.attendees.clear()
         this.attendees.addAll(attendeeList)
+        notifyDataSetChanged()
     }
 
     fun setEvent(event: Event?) {
         this.event = event
+        notifyDataSetChanged()
     }
 
     fun setSeeEventListener(listener: EventDetailsListener) {

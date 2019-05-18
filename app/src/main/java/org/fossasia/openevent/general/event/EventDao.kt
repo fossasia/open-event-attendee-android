@@ -24,6 +24,9 @@ interface EventDao {
     @Query("SELECT * from Event WHERE id = :id")
     fun getEvent(id: Long): Flowable<Event>
 
+    @Query("SELECT * FROM event WHERE id = :eventId")
+    fun getEventById(eventId: Long): Single<Event>
+
     @Query("SELECT * from Event WHERE id in (:ids)")
     fun getEventWithIds(ids: List<Long>): Single<List<Event>>
 

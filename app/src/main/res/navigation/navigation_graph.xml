@@ -350,9 +350,14 @@
             android:defaultValue="-1L"/>
 
         <argument
-            android:name="orders"
+            android:name="orderIdentifier"
             app:argType="string"
-            android:defaultValue="-1"/>
+            android:defaultValue=""/>
+
+        <argument
+            android:name="orderId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
