@@ -39,6 +39,7 @@ data class Attendee(
     @ColumnInfo(index = true)
     @Relationship("event")
     var event: EventId? = null,
+    @ColumnInfo(index = true)
     @Relationship("ticket")
     var ticket: TicketId? = null
 )

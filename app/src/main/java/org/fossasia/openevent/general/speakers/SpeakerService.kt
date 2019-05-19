@@ -24,6 +24,12 @@ class SpeakerService(
         return speakerWithEventDao.getSpeakerWithEventId(id)
     }
 
+    fun fetchSpeakerForSession(sessionId: Long): Single<List<Speaker>> =
+        speakerApi.getSpeakersForSession(sessionId)
+            .doOnSuccess {
+                speakerDao.insertSpeakers(it)
+            }
+
     fun fetchSpeaker(id: Long): Flowable<Speaker> {
         return speakerDao.getSpeaker(id)
     }

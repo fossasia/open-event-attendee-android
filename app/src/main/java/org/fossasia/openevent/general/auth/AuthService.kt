@@ -2,18 +2,22 @@ package org.fossasia.openevent.general.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.fossasia.openevent.general.attendees.AttendeeDao
 import org.fossasia.openevent.general.auth.change.ChangeRequestToken
 import org.fossasia.openevent.general.auth.change.ChangeRequestTokenResponse
 import org.fossasia.openevent.general.auth.change.Password
 import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
+import org.fossasia.openevent.general.order.OrderDao
 import timber.log.Timber
 
 class AuthService(
     private val authApi: AuthApi,
     private val authHolder: AuthHolder,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val orderDao: OrderDao,
+    private val attendeeDao: AttendeeDao
 ) {
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())
@@ -55,6 +59,8 @@ class AuthService(
         return Completable.fromAction {
             authHolder.token = null
             userDao.deleteUser(authHolder.getId())
+            orderDao.deleteAllOrders()
+            attendeeDao.deleteAllAttendees()
         }
     }
 
@@ -78,5 +84,9 @@ class AuthService(
     fun changePassword(oldPassword: String, newPassword: String): Single<ChangeRequestTokenResponse> {
         val changeRequestToken = ChangeRequestToken(Password(oldPassword, newPassword))
         return authApi.changeRequestToken(changeRequestToken)
+    }
+
+    fun checkEmail(email: String): Single<CheckEmailResponse> {
+        return authApi.checkEmail(Email(email))
     }
 }

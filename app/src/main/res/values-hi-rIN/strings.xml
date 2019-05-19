@@ -180,5 +180,8 @@
     <string name="invalid_confirm_password_message">आपका पासवर्ड और पुष्टिकरण पासवर्ड मेल नहीं खाते हैं!</string>
     <string name="invalid_password_message">पासवर्ड बहुत छोटा है!</string>
 
+    <!--Notification Fragment-->
+    <string name="no_notification_result">आपके पास कोई सूचना नहीं है..</string>
+
 </resources>
 

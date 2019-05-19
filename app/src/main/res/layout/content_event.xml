@@ -386,13 +386,34 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/frameContainerSocial"
+                <LinearLayout
+                    android:id="@+id/socialLinkContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingLeft="@dimen/padding_large"
                     android:paddingTop="@dimen/padding_small"
-                    android:paddingRight="@dimen/padding_large" />
+                    android:paddingRight="@dimen/padding_large"
+                    android:descendantFocusability="blocksDescendants"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/layout_margin_large"
+                        android:textColor="@color/dark_grey"
+                        android:text="@string/event_host_details" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/socialLinksRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/layout_margin_small"
+                        android:layout_marginBottom="@dimen/layout_margin_medium"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -405,6 +426,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/organizerContainer"
+                android:descendantFocusability="blocksDescendants"
+                android:animateLayoutChanges="true"
                 tools:visibility="visible">
 
                 <View
@@ -460,6 +483,9 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/feedbackContainer"
+                android:descendantFocusability="blocksDescendants"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
                 tools:visibility="visible">
 
                 <View
@@ -502,6 +528,9 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/speakersContainer"
+                android:descendantFocusability="blocksDescendants"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
                 tools:visibility="visible">
 
                 <View
@@ -546,6 +575,8 @@
                 android:descendantFocusability="blocksDescendants"
                 android:background="?selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@+id/sessionContainer"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
                 tools:visibility="visible">
 
                 <View
@@ -584,18 +615,39 @@
                 android:layout_height="wrap_content"
                 android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sponsorsSummaryContainer"
+                android:visibility="gone"
                 tools:visibility="visible">
 
-                <FrameLayout
-                    android:id="@+id/frameContainerSimilarEvents"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/event_details_divider"
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:layout_marginRight="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                    android:background="@color/grey" />
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/layout_margin_extra_large" />
+                    android:layout_marginLeft="@dimen/layout_margin_large"
+                    android:layout_marginRight="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
+                    android:text="@string/more_like_this"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/event_details_headers" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/similarEventsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/item_card_similar_events" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,8 +22,11 @@ import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPass
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
 import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.ProfileViewModel
+import org.fossasia.openevent.general.auth.SmartAuthUtil
+import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,6 +44,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val profileViewModel by viewModel<ProfileViewModel>()
+    private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
     private val safeArgs: SettingsFragmentArgs by navArgs()
 
     override fun preferenceChange(evt: PreferenceChangeEvent?) {
@@ -56,8 +60,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setHasOptionsMenu(true)
 
         // Set Email
-        preferenceScreen.findPreference(getString(R.string.key_profile))
-            .summary = safeArgs.email
+        preferenceScreen.findPreference(getString(R.string.key_account))
+            .summary = if (safeArgs.email.isNullOrEmpty()) getString(R.string.not_logged_in) else safeArgs.email
 
         // Set Build Version
         preferenceScreen.findPreference(getString(R.string.key_version))
@@ -65,6 +69,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
 
         preferenceScreen.findPreference(getString(R.string.key_timezone_switch))
             .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
+
+        preferenceScreen.findPreference(getString(R.string.key_profile)).isVisible = profileViewModel.isLoggedIn()
+        preferenceScreen.findPreference(getString(R.string.key_change_password)).isVisible =
+            profileViewModel.isLoggedIn()
+        preferenceScreen.findPreference(getString(R.string.key_timezone_switch)).isVisible =
+            profileViewModel.isLoggedIn()
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -72,6 +82,16 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 view?.snackbar(it)
+            })
+
+        settingsViewModel.updatedPassword
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+                    smartAuthViewModel.saveCredential(safeArgs.email.toString(),
+                        it,
+                        SmartAuthUtil.getCredentialsClient(requireActivity()))
+                }
             })
 
         if (preference?.key == getString(R.string.key_visit_website)) {

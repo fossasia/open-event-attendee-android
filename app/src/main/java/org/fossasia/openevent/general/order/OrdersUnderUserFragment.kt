@@ -32,6 +32,8 @@ import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
+const val ORDERS_FRAGMENT = "ordersFragment"
+
 class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private lateinit var rootView: View
@@ -55,7 +57,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         when (safeArgs.showExpired) {
             true -> {
-                setToolbar(activity, "Past Tickets")
+                setToolbar(activity, getString(R.string.past_tickets))
                 setHasOptionsMenu(true)
                 navAnimGone(activity?.navigation, requireContext())
             }
@@ -77,9 +79,9 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             if (safeArgs.showExpired) rootView.expireFilter.isVisible = false
 
             val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
-                override fun onClick(eventID: Long, orderIdentifier: String) {
-                        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-                            .actionOrderUserToOrderDetails(eventID, orderIdentifier))
+                override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
+                    findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                        .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
                 }
             }
 
@@ -109,13 +111,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
                     showNoTicketsScreen(it)
                 })
 
-            ordersUnderUserVM.attendeesNumber
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    ordersRecyclerAdapter.setAttendeeNumber(it)
-                })
-
-            ordersUnderUserVM.eventAndOrderIdentifier
+            ordersUnderUserVM.eventAndOrder
                 .nonNull()
                 .observe(viewLifecycleOwner, Observer {
                     val list = it.sortedByDescending {
@@ -144,7 +140,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-            .actionOrderUserToLogin(getString(R.string.log_in_first)))
+            .actionOrderUserToAuth(getString(R.string.log_in_first), ORDERS_FRAGMENT))
     }
 
     override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)

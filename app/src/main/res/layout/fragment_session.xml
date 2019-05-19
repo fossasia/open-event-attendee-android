@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ProgressBar
+    android:id="@+id/progressBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/layout_margin_extreme_large"
+    android:layout_centerHorizontal="true"/>
+<LinearLayout
+    android:id="@+id/sessionDetailContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_large">
+    <TextView
+        android:id="@+id/sessionDetailName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/dark_grey"
+        android:textSize="@dimen/text_size_extra_large"
+        tools:text="Session Name"/>
+    <TextView
+        android:id="@+id/sessionDetailType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="@color/dark_grey"
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/text_size_large"
+        tools:text="Type: Talk"/>
+    <LinearLayout
+        android:id="@+id/sessionDetailTimeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_baseline_event_grey" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/sessionDetailStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                tools:text="Tuesday, June 5 - 10:00 AM" />
+
+            <TextView
+                android:id="@+id/sessionDetailEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                tools:text="- Tuesday, June 5 - 12:00 PM GMT+1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionDetailLanguageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_language_black" />
+
+        <TextView
+            android:id="@+id/sessionDetailLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:layout_gravity="center"
+            android:textColor="@color/dark_grey"
+            tools:text="English" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionDetailTrackContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/sessionDetailTrackIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_track" />
+
+        <TextView
+            android:id="@+id/sessionDetailTrack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:layout_gravity="center"
+            android:textColor="@color/dark_grey"
+            tools:text="English" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionDetailLocationInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/layout_margin_medium"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_location_on_black" />
+
+            <TextView
+                android:id="@+id/sessionDetailInfoLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/layout_margin_medium"
+                android:layout_gravity="center"
+                android:textColor="@color/dark_grey"
+                tools:text="15 Science Centre Rd, Singapore 69890243" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/event_details_divider"
+        android:layout_marginBottom="@dimen/layout_margin_large"
+        android:background="@color/grey" />
+
+    <LinearLayout
+        android:id="@+id/sessionDetailAbstractContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers"
+            android:layout_marginBottom="@dimen/layout_margin_medium"/>
+        <TextView
+            android:id="@+id/sessionDetailAbstract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="4"
+            tools:text="@string/description_preview"/>
+        <TextView
+            android:id="@+id/sessionDetailAbstractSeeMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/see_more"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:background="@color/grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionDetailLocationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers"
+            android:layout_marginBottom="@dimen/layout_margin_medium"/>
+        <TextView
+            android:id="@+id/sessionDetailLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            tools:text="15 Science Centre Rd, Singapore 69890243"/>
+        <ImageView
+            android:id="@+id/sessionDetailLocationImageMap"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_logo_width"
+            android:background="?selectableItemBackground" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:background="@color/grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionDetailSpeakersContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/speakers"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers"
+            android:layout_marginBottom="@dimen/layout_margin_medium"/>
+        <ProgressBar
+            android:id="@+id/speakersProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/speakersUnderSessionRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:background="@color/grey" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sessionDetailSignUpButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.MaterialButton.RoundedCorners"
+        android:text="@string/sign_up"/>
+
+</LinearLayout>
+</RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>
+

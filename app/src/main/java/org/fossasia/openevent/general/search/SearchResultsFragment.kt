@@ -29,39 +29,34 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
+import org.fossasia.openevent.general.common.EventsDiffCallback
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     private lateinit var rootView: View
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchResultsFragmentArgs by navArgs()
-    private val favoriteEventsRecyclerAdapter: FavoriteEventsRecyclerAdapter by inject(
-        scope = getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString())
-    )
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
+
     private lateinit var days: Array<String>
     private lateinit var eventDate: String
     private lateinit var eventType: String
     private var eventTypesList: List<EventType>? = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(Scopes.SEARCH_RESULTS_FRAGMENT.toString()))
 
         days = resources.getStringArray(R.array.days)
-        eventDate = safeArgs.date
-        eventType = safeArgs.type
+        eventDate = searchViewModel.savedTime ?: safeArgs.date
+        eventType = searchViewModel.savedType ?: safeArgs.type
 
         searchViewModel.loadEventTypes()
         searchViewModel.eventTypes
@@ -74,7 +69,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
 
-        setChips(safeArgs.date, safeArgs.type)
+        setChips(eventDate, eventType)
         setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
@@ -139,7 +134,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun setChips(date: String = eventDate, type: String = eventType) {
-        if (rootView.chipGroup.childCount>0) {
+        if (rootView.chipGroup.childCount> 0) {
             rootView.chipGroup.removeAllViews()
         }
             when {
@@ -217,6 +212,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val date = eventDate
         val freeEvents = safeArgs.freeEvents
         val sortBy = safeArgs.sort
+        searchViewModel.setChipNotClickable()
         searchViewModel.searchEvent = query
         searchViewModel.loadEvents(location, date, type, freeEvents, sortBy)
     }
@@ -258,7 +254,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         if (isChecked) {
-            if (buttonView?.text == "Clear All") {
+            if (buttonView?.text == getString(R.string.clear_all)) {
+                searchViewModel.savedTime = null
+                searchViewModel.savedType = null
                 eventDate = getString(R.string.anytime)
                 eventType = getString(R.string.anything)
                 rootView.noSearchResults.isVisible = false
@@ -271,6 +269,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             }
             days.forEach {
                 if (it == buttonView?.text) {
+                    searchViewModel.savedTime = it
                     eventDate = it
                     setChips(date = it)
                     rootView.noSearchResults.isVisible = false
@@ -283,6 +282,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             }
             eventTypesList?.forEach {
                 if (it.name == buttonView?.text) {
+                    searchViewModel.savedType = it.name
                     eventType = it.name
                     setChips(type = it.name)
                     rootView.noSearchResults.isVisible = false

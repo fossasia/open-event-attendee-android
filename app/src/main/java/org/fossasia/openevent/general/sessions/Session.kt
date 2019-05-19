@@ -1,16 +1,26 @@
 package org.fossasia.openevent.general.sessions
 
+import androidx.annotation.NonNull
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
+import org.fossasia.openevent.general.sessions.sessiontype.SessionType
+import org.fossasia.openevent.general.sessions.track.Track
 
 @Type("session")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
+@Entity
 data class Session(
     @Id(LongIdHandler::class)
+    @PrimaryKey
+    @NonNull
     val id: Long,
     val shortAbstract: String? = null,
     val comments: String? = null,
@@ -31,8 +41,13 @@ data class Session(
     val lastModifiedAt: String? = null,
     val videoUrl: String? = null,
     val audioUrl: String? = null,
+    @ColumnInfo(index = true)
     @Relationship("session-type", resolve = true)
     var sessionType: SessionType? = null,
+    @ColumnInfo(index = true)
     @Relationship("microlocation", resolve = true)
-    var microlocation: Microlocation? = null
+    var microlocation: MicroLocation? = null,
+    @ColumnInfo(index = true)
+    @Relationship("track", resolve = true)
+    var track: Track? = null
 )

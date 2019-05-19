@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface SessionApi {
 
-    @GET("events/{eventId}/sessions?include=session-type,microlocation")
+    @GET("events/{eventId}/sessions?include=session-type,microlocation,track")
     fun getSessionsForEvent(
         @Path("eventId") eventId: Long,
         @Query("sort") sort: String = "created-at",

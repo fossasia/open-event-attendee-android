@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,19 +22,16 @@ import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
-import kotlinx.android.synthetic.main.fragment_events.view.noEventsMessage
+import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.di.Scopes
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.ext.android.bindScope
-import org.koin.androidx.scope.ext.android.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -51,14 +51,10 @@ class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
-    private val eventsListAdapter: EventsListAdapter by inject(
-        scope = getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString())
-    )
+    private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        bindScope(getOrCreateScope(Scopes.EVENTS_FRAGMENT.toString()))
 
         eventsViewModel.events
             .nonNull()
@@ -75,7 +71,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
-
+        setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
@@ -197,13 +193,27 @@ class EventsFragment : Fragment(), ScrollToTop {
                 type = hashTag))
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.events, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.notifications -> {
+                findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun showNoInternetScreen(show: Boolean) {
         rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
         rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showEmptyMessage(itemCount: Int) {
-        rootView.noEventsMessage.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+        rootView.eventsEmptyView.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onStop() {

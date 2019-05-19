@@ -15,6 +15,8 @@ class SmartAuthViewModel : ViewModel() {
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableApiExceptionRequestCodePair = MutableLiveData<Pair<Any, Any>>()
     val apiExceptionCodePair: LiveData<Pair<Any, Any>> = mutableApiExceptionRequestCodePair
+    private val mutableStatus = MutableLiveData<Boolean>()
+    val isCredentialStored: LiveData<Boolean> = mutableStatus
 
     fun requestCredentials(any: Any) {
         return

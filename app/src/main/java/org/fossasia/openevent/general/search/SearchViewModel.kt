@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
@@ -22,6 +23,7 @@ import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToWeekendDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getWeekendDate
 import timber.log.Timber
+import java.util.Date
 
 class SearchViewModel(
     private val eventService: EventService,
@@ -53,6 +55,8 @@ class SearchViewModel(
     private val savedNextToNextMonth = getNextToNextMonth()
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
+    var searchViewQuery: String = ""
+    var isQuerying = false
 
     fun loadEventTypes() {
         compositeDisposable += eventService.getEventTypes()
@@ -74,6 +78,10 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
+    fun setChipNotClickable() {
+        mutableChipClickable.value = false
+    }
+
     fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
         if (mutableEvents.value != null) {
             mutableChipClickable.value = true
@@ -91,7 +99,11 @@ class SearchViewModel(
                |        'op':'eq',
                |        'val':'0'
                |    }
-               |}
+               |}, {
+               |       'name':'ends-at',
+               |       'op':'ge',
+               |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+               |    }
             """.trimIndent()
             else ""
         val query: String = when {
@@ -99,7 +111,11 @@ class SearchViewModel(
                 |   'name':'name',
                 |   'op':'ilike',
                 |   'val':'%$searchEvent%'
-                |}]""".trimMargin().replace("'", "'")
+                |}, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }]""".trimMargin().replace("'", "'")
             time == "Anytime" && type == "Anything" -> """[{
                 |   'and':[{
                 |       'name':'location-name',
@@ -109,6 +125,10 @@ class SearchViewModel(
                 |       'name':'name',
                 |       'op':'ilike',
                 |       'val':'%$searchEvent%'
+                |    }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
@@ -128,6 +148,10 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
+                |    }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
@@ -155,7 +179,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }$freeStuffFilter]
+                |   }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -182,7 +210,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }$freeStuffFilter]
+                |   }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -209,7 +241,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }$freeStuffFilter]
+                |   }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -236,7 +272,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }$freeStuffFilter]
+                |   }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
 
             else -> """[{
@@ -264,7 +304,11 @@ class SearchViewModel(
                 |       'op':'eq',
                 |       'val':'$type'
                 |       }
-                |   }$freeStuffFilter]
+                |   }, {
+                |       'name':'ends-at',
+                |       'op':'ge',
+                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+                |    }$freeStuffFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
         compositeDisposable += eventService.getSearchEvents(query, sortBy)

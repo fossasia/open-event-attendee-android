@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import android.graphics.Bitmap
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,19 +15,26 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
     private var event: Event? = null
     private var orderIdentifier: String? = null
     private var eventDetailsListener: EventDetailsListener? = null
+    private var onQrImageClicked: QrImageClickListener? = null
 
     fun addAll(attendeeList: List<Attendee>) {
         if (attendees.isNotEmpty())
             this.attendees.clear()
         this.attendees.addAll(attendeeList)
+        notifyDataSetChanged()
     }
 
     fun setEvent(event: Event?) {
         this.event = event
+        notifyDataSetChanged()
     }
 
-    fun setListener(listener: EventDetailsListener) {
+    fun setSeeEventListener(listener: EventDetailsListener) {
         eventDetailsListener = listener
+    }
+
+    fun setQrImageClickListener(listener: QrImageClickListener) {
+        onQrImageClicked = listener
     }
 
     fun setOrderIdentifier(orderId: String?) {
@@ -40,7 +48,7 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
 
     override fun onBindViewHolder(holder: OrderDetailsViewHolder, position: Int) {
         val order = attendees[position]
-        holder.bind(order, event, orderIdentifier, eventDetailsListener)
+        holder.bind(order, event, orderIdentifier, eventDetailsListener, onQrImageClicked)
     }
 
     override fun getItemCount(): Int {
@@ -49,5 +57,9 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
 
     interface EventDetailsListener {
         fun onClick(eventID: Long)
+    }
+
+    interface QrImageClickListener {
+        fun onClick(qrImage: Bitmap)
     }
 }

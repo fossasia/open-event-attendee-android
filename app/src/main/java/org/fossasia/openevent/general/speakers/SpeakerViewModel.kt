@@ -31,7 +31,7 @@ class SpeakerViewModel(
         }
         compositeDisposable += speakerService.fetchSpeaker(id)
             .withDefaultSchedulers()
-            .subscribe ({
+            .subscribe({
                 mutableSpeaker.value = it
             }, {
                 Timber.e(it, "Error fetching speaker for id %d", id)

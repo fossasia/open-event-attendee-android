@@ -8,19 +8,19 @@ import org.fossasia.openevent.general.event.Event
 
 class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
-    private val eventAndOrderIdentifier = ArrayList<Pair<Event, String>>()
-    private val showExpired = false
+    private val eventAndOrderIdentifier = ArrayList<Pair<Event, Order>>()
+    private var showExpired = false
     private var clickListener: OrderClickListener? = null
-    var attendeesNumber = listOf<Int>()
 
     fun setListener(listener: OrderClickListener) {
         clickListener = listener
     }
 
-    fun addAllPairs(list: List<Pair<Event, String>>, showExpired: Boolean) {
+    fun addAllPairs(list: List<Pair<Event, Order>>, showExpired: Boolean) {
         if (eventAndOrderIdentifier.isNotEmpty())
             this.eventAndOrderIdentifier.clear()
         eventAndOrderIdentifier.addAll(list)
+        this.showExpired = showExpired
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
@@ -29,23 +29,14 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        attendeesNumber[position]?.let {
-            holder.bind(eventAndOrderIdentifier[position].first,
-                clickListener,
-                eventAndOrderIdentifier[position].second,
-                it, showExpired)
-        }
+        holder.bind(eventAndOrderIdentifier[position], showExpired, clickListener)
     }
 
     override fun getItemCount(): Int {
         return eventAndOrderIdentifier.size
     }
 
-    fun setAttendeeNumber(number: List<Int>) {
-        attendeesNumber = number
-    }
-
     interface OrderClickListener {
-        fun onClick(eventID: Long, orderIdentifier: String)
+        fun onClick(eventID: Long, orderIdentifier: String, orderId: Long)
     }
 }

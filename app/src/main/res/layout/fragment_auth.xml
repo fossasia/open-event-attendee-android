@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fossasia.openevent.general.auth.AuthFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/auth_title"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:textSize="@dimen/text_size_very_large"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_subtitle"
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/text_size_expanded_title"
+            android:layout_margin="@dimen/layout_margin_medium"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_large"
+            android:hint="@string/email" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_email_black"
+                android:drawablePadding="@dimen/layout_margin_moderate"
+                android:inputType="textEmailAddress"
+                android:drawableStart="@drawable/ic_email_black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getStartedButton"
+            style="@style/AppTheme.MaterialButton.RoundedCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/layout_margin_large"
+            android:text="@string/get_started"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</FrameLayout>

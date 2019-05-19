@@ -3,7 +3,7 @@ package org.fossasia.openevent.general.sponsor
 import androidx.lifecycle.LiveData
 import io.reactivex.Single
 
-class SponsorService (
+class SponsorService(
     private val sponsorApi: SponsorApi,
     private val sponsorDao: SponsorDao,
     private val sponsorWithEventDao: SponsorWithEventDao

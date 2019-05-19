@@ -24,17 +24,14 @@ class OrdersUnderUserViewModel(
 
     private val compositeDisposable = CompositeDisposable()
     private lateinit var order: List<Order>
-    private val mutableAttendeesNumber = MutableLiveData<List<Int>>()
-    val attendeesNumber: LiveData<List<Int>> = mutableAttendeesNumber
     private var eventIdMap = mutableMapOf<Long, Event>()
     private val eventIdAndTimes = mutableMapOf<Long, Int>()
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
-    private val mutableEventAndOrderIdentifier = MutableLiveData<List<Pair<Event, String>>>()
-    val eventAndOrderIdentifier: LiveData<List<Pair<Event, String>>> =
-        mutableEventAndOrderIdentifier
-    private val mutableshowShimmerResults = MutableLiveData<Boolean>()
-    val showShimmerResults: LiveData<Boolean> = mutableshowShimmerResults
+    private val mutableEventAndOrder = MutableLiveData<List<Pair<Event, Order>>>()
+    val eventAndOrder: LiveData<List<Pair<Event, Order>>> = mutableEventAndOrder
+    private val mutableShowShimmerResults = MutableLiveData<Boolean>()
+    val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
     private val mutableNoTickets = MutableLiveData<Boolean>()
     val noTickets: LiveData<Boolean> = mutableNoTickets
 
@@ -43,24 +40,22 @@ class OrdersUnderUserViewModel(
     fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun ordersUnderUser(showExpired: Boolean) {
-        compositeDisposable += orderService.orderUser(getId())
+        compositeDisposable += orderService.getOrdersOfUser(getId())
             .withDefaultSchedulers()
             .doOnSubscribe {
-                mutableshowShimmerResults.value = true
+                mutableShowShimmerResults.value = true
                 mutableNoTickets.value = false
             }.subscribe({
                 order = it
-                mutableAttendeesNumber.value = it.map { it.attendees.size }
-
                 val eventIds = it.mapNotNull { order -> order.event?.id }
                 if (eventIds.isNotEmpty()) {
                     eventsUnderUser(eventIds, showExpired)
                 } else {
-                    mutableshowShimmerResults.value = false
+                    mutableShowShimmerResults.value = false
                     mutableNoTickets.value = true
                 }
             }, {
-                mutableshowShimmerResults.value = false
+                mutableShowShimmerResults.value = false
                 mutableNoTickets.value = true
                 mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
                 Timber.d(it, "Failed  to list Orders under a user ")
@@ -71,7 +66,7 @@ class OrdersUnderUserViewModel(
         compositeDisposable += eventService.getEventsUnderUser(eventIds)
             .withDefaultSchedulers()
             .doFinally {
-                mutableshowShimmerResults.value = false
+                mutableShowShimmerResults.value = false
             }.subscribe({
                 val events = ArrayList<Event>()
                 it.map {
@@ -83,22 +78,20 @@ class OrdersUnderUserViewModel(
                     }
                     eventIdMap[it.id] = it
                 }
-                var eventAndIdentifier = ArrayList<Pair<Event, String>>()
-                var finalList: List<Pair<Event, String>>
+                val eventAndIdentifier = ArrayList<Pair<Event, Order>>()
                 order.forEach {
                     val event = eventIdMap[it.event?.id]
-                    if (event != null && it.identifier != null)
-                        eventAndIdentifier.add(Pair(event, it.identifier))
+                    if (event != null)
+                        eventAndIdentifier.add(Pair(event, it))
                 }
-                finalList = eventAndIdentifier
-                when (showExpired) {
-                    false -> finalList = finalList.filter {
+                val finalList = when (showExpired) {
+                    false -> eventAndIdentifier.filter {
                         EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
-                    true -> finalList = finalList.filter {
+                    true -> eventAndIdentifier.filter {
                         EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
                 }
                 if (finalList.isEmpty()) mutableNoTickets.value = true
-                mutableEventAndOrderIdentifier.value = finalList
+                mutableEventAndOrder.value = finalList
             }, {
                 mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")

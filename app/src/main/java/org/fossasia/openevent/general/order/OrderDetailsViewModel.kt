@@ -29,13 +29,14 @@ class OrderDetailsViewModel(
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     var currentTicketPosition: Int = 0
+    var brightness: Float? = 0f
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
 
-        compositeDisposable += eventService.getEventFromApi(id)
+        compositeDisposable += eventService.getEventById(id)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEvent.value = it
@@ -45,21 +46,34 @@ class OrderDetailsViewModel(
             })
     }
 
-    fun loadAttendeeDetails(id: String) {
-        if (id.equals(-1)) {
-            throw IllegalStateException("ID should never be -1")
-        }
+    fun loadAttendeeDetails(orderId: Long) {
+        if (orderId == -1L) return
 
-        compositeDisposable += orderService.attendeesUnderOrder(id)
+        compositeDisposable += orderService.getOrderById(orderId)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
-            }.doFinally {
-                mutableProgress.value = false
             }.subscribe({
-                mutableAttendees.value = it
+                loadAttendeeUnderOrder(it)
             }, {
                 Timber.e(it, "Error fetching attendee details")
+                mutableProgress.value = false
+                message.value = resource.getString(R.string.error_fetching_attendee_details_message)
+            })
+    }
+
+    private fun loadAttendeeUnderOrder(order: Order) {
+        val orderIdentifier = order.identifier ?: return
+
+        compositeDisposable += orderService
+            .getAttendeesUnderOrder(orderIdentifier, order.attendees.map { it.id })
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableAttendees.value = it
+                mutableProgress.value = false
+            }, {
+                Timber.e(it, "Error fetching attendee details")
+                mutableProgress.value = false
                 message.value = resource.getString(R.string.error_fetching_attendee_details_message)
             })
     }

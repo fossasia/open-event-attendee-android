@@ -14,9 +14,7 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
-import org.fossasia.openevent.general.sessions.Session
-import org.fossasia.openevent.general.sessions.SessionApi
-import java.util.Locale.filter
+import java.util.Date
 
 class EventService(
     private val eventApi: EventApi,
@@ -26,8 +24,7 @@ class EventService(
     private val eventTypesApi: EventTypesApi,
     private val eventLocationApi: EventLocationApi,
     private val eventFeedbackApi: FeedbackApi,
-    private val eventFAQApi: EventFAQApi,
-    private val eventSessionApi: SessionApi
+    private val eventFAQApi: EventFAQApi
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -77,12 +74,9 @@ class EventService(
     fun submitFeedback(feedback: Feedback): Single<Feedback> {
         return eventFeedbackApi.postfeedback(feedback)
     }
-    fun getEventSessions(id: Long): Single<List<Session>> {
-        return eventSessionApi.getSessionsForEvent(id)
-    }
     fun getSearchEvents(eventName: String, sortBy: String): Single<List<Event>> {
         return eventApi.searchEvents(sortBy, eventName).flatMap { apiList ->
-            var eventIds = apiList.map { it.id }.toList()
+            val eventIds = apiList.map { it.id }.toList()
             eventDao.getFavoriteEventWithinIds(eventIds).flatMap { favIds ->
                 updateFavorites(apiList, favIds)
             }
@@ -94,7 +88,8 @@ class EventService(
     }
 
     fun getEventsByLocation(locationName: String?): Single<List<Event>> {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}]"
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
+            "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
         return eventApi.searchEvents("name", query).flatMap { apiList ->
             val eventIds = apiList.map { it.id }.toList()
             eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
@@ -115,13 +110,25 @@ class EventService(
         return eventDao.getEvent(id)
     }
 
-    fun getEventFromApi(id: Long): Single<Event> {
-        return eventApi.getEventFromApi(id)
+    fun getEventById(eventId: Long): Single<Event> {
+        return eventDao.getEventById(eventId)
+            .onErrorResumeNext {
+                eventApi.getEventFromApi(eventId).map {
+                    eventDao.insertEvent(it)
+                    it
+                }
+            }
     }
 
     fun getEventsUnderUser(eventIds: List<Long>): Single<List<Event>> {
         val query = buildQuery(eventIds)
         return eventApi.eventsUnderUser(query)
+            .map {
+                eventDao.insertEvents(it)
+                it
+            }.onErrorResumeNext {
+                eventDao.getEventWithIds(eventIds).map { it }
+            }
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean): Completable {

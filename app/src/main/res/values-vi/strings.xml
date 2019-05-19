@@ -188,13 +188,11 @@
     <string name="error_fetching_attendee_details_message">Không thể tải thông tin người tham dự</string>
     <string name="error_fetching_event_message">Không thể tải sự kiện</string>
     <string name="error_fetching_events_message">Không thể tải sự kiện</string>
-    <string name="fetch_similar_events_error_message">Không thể tải sự kiện tương tự</string>
     <string name="error">Lỗi</string>
     <string name="fetch_favorite_events_error_message">Không thể tải các sự kiện được yêu thích</string>
     <string name="list_orders_fail_message">Không thể tải vé của người dùng</string>
     <string name="list_events_fail_message">Không thể tải sự kiện của người dùng</string>
     <string name="error_adding_favorite_message">Lỗi thêm vào yêu thích</string>
-    <string name="error_fetching_social_links_message">Không thể tải liên kết xã hội</string>
     <string name="error_fetching_tickets_message">Không thể tải vé</string>
     <string name="select_image">Lựa chọn hình ảnh</string>
     <string name="changes_not_saved">Thay đổi của bạn chưa được lưu lại</string>
@@ -221,4 +219,7 @@
     <string name="download_ticket">Lưu vé sự kiện</string>
     <string name="undo">Hoàn tác</string>
     <string name="removed_from_liked">Rời %1$s khỏi sự kiện yêu thích</string>
+
+    <!--Notification Fragment-->
+    <string name="no_notification_result">Bạn không có bất kỳ thông báo nào..</string>
 </resources>

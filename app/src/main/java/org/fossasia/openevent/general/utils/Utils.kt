@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.View
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
@@ -91,6 +94,20 @@ object Utils {
                 activity.supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
                 activity.supportActionBar?.show()
             } else activity.supportActionBar?.hide()
+        }
+    }
+
+    fun setNewHeaderColor(activity: Activity?, color: Int) {
+        if (activity is AppCompatActivity) {
+            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+            activity.window.statusBarColor = ColorUtils.blendARGB(color, Color.BLACK, 0.2f)
+        }
+    }
+
+    fun setNewHeaderColor(activity: Activity?, statusColor: Int, actionBarColor: Int) {
+        if (activity is AppCompatActivity) {
+            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(actionBarColor))
+            activity.window.statusBarColor = statusColor
         }
     }
 

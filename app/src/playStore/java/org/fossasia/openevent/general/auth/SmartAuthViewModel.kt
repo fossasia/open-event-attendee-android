@@ -25,6 +25,8 @@ class SmartAuthViewModel : ViewModel() {
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableApiExceptionRequestCodePair = MutableLiveData<Pair<ResolvableApiException, Int>>()
     val apiExceptionCodePair: LiveData<Pair<ResolvableApiException, Int>> = mutableApiExceptionRequestCodePair
+    private val mutableStatus = MutableLiveData<Boolean>()
+    val isCredentialStored: LiveData<Boolean> = mutableStatus
 
     fun requestCredentials(credentialsClient: CredentialsClient) {
         if (requestedCredentialsEarlier) return
@@ -41,7 +43,10 @@ class SmartAuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     mutableId.value = task.result?.credential?.id
                     mutablePassword.value = task.result?.credential?.password
+                    mutableStatus.value = true
                     return@OnCompleteListener
+                } else {
+                    mutableStatus.value = false
                 }
                 val e = task.exception
                 if (e is ResolvableApiException) {
@@ -52,7 +57,7 @@ class SmartAuthViewModel : ViewModel() {
             })
     }
 
-    fun saveCredential (id: String, password: String, credentialsClient: CredentialsClient) {
+    fun saveCredential(id: String, password: String, credentialsClient: CredentialsClient) {
         val credential = Credential.Builder(id).setPassword(password).build()
         credentialsClient.save(credential).addOnCompleteListener(
             OnCompleteListener<Void> { task ->
