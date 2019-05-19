@@ -251,6 +251,13 @@
         android:name="org.fossasia.openevent.general.sessions.SessionFragment"
         android:label="SessionFragment"
         tools:layout="@layout/fragment_session">
+        <action
+            android:id="@+id/action_session_to_speaker"
+            app:destination="@id/speakerFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <argument
             android:name="sessionId"
             app:argType="long"

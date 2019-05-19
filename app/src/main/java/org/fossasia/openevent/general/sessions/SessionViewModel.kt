@@ -3,17 +3,20 @@ package org.fossasia.openevent.general.sessions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerService
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 
 class SessionViewModel(
     private val sessionService: SessionService,
+    private val speakerService: SpeakerService,
     private val resource: Resource
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
@@ -24,6 +27,8 @@ class SessionViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
+    private val mutableSpeakers = MutableLiveData<List<Speaker>>()
+    val speakersUnderSession: LiveData<List<Speaker>> = mutableSpeakers
 
     fun loadSession(id: Long) {
         if (id == -1L) {
@@ -31,9 +36,8 @@ class SessionViewModel(
             return
         }
 
-        compositeDisposable.add(sessionService.fetchSession(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += sessionService.fetchSession(id)
+            .withDefaultSchedulers()
             .doOnSubscribe { mutableProgress.value = true }
             .subscribe({
                 mutableSession.value = it
@@ -43,7 +47,22 @@ class SessionViewModel(
                 mutableError.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.session))
             })
-        )
+    }
+
+    fun loadSpeakersUnderSession(id: Long) {
+        if (id == -1L) {
+            mutableError.value = resource.getString(R.string.error_fetching_speakers_for_session)
+            return
+        }
+
+        compositeDisposable += speakerService.fetchSpeakerForSession(id)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableSpeakers.value = it
+            }, {
+                Timber.e(it, "Error fetching speakers for session $id")
+                mutableError.value = resource.getString(R.string.error_fetching_speakers_for_session)
+            })
     }
 
     fun loadMap(latitude: String, longitude: String): String {

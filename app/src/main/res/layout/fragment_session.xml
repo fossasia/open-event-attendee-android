@@ -220,6 +220,36 @@
             android:background="@color/grey" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/sessionDetailSpeakersContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/speakers"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/event_details_headers"
+            android:layout_marginBottom="@dimen/layout_margin_medium"/>
+        <ProgressBar
+            android:id="@+id/speakersProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/speakersUnderSessionRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_divider"
+            android:layout_marginTop="@dimen/layout_margin_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:background="@color/grey" />
+    </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/sessionDetailSignUpButton"
         android:layout_width="match_parent"

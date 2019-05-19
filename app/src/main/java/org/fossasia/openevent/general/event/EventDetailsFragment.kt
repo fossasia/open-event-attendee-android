@@ -80,9 +80,6 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val EVENT_ID = "eventId"
-const val EVENT_TOPIC_ID = "eventTopicId"
-const val EVENT_LOCATION = "eventLocation"
 const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
 
 class EventDetailsFragment : Fragment() {
