@@ -1,0 +1,117 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/speakersCallEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="@dimen/item_image_view_large"
+            android:layout_height="@dimen/item_image_view_large"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_large">
+
+            <ImageView
+                android:layout_width="@dimen/item_image_view_large"
+                android:layout_height="@dimen/item_image_view_large"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/round_shape" />
+
+            <ImageView
+                android:layout_width="@dimen/item_image_view"
+                android:layout_height="@dimen/item_image_view"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_speakers_call"
+                app:tint="@color/colorPrimary"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:text="@string/no_speakers_call_message"
+            android:textSize="@dimen/text_size_medium" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_marginTop="@dimen/layout_margin_extreme_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitProposalButton"
+        style="@style/AppTheme.MaterialButton.RoundedCorners"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/layout_margin_large"
+        android:text="@string/submit_proposal"
+        android:visibility="gone"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/speakersCallContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_large"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/layout_margin_medium">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/text_size_extra_large"
+                    android:textStyle="bold"
+                    android:text="@string/call_for_speakers" />
+                <ImageView
+                    android:id="@+id/timeStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitStart"
+                    android:padding="@dimen/padding_medium"
+                    tools:src="@drawable/ic_speakers_call_open"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/speakersCallTimeDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                tools:text="Call for Speakers is open until Wed, Jul 31 8:30 PM"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:background="@color/grey" />
+
+            <TextView
+                android:id="@+id/speakersCallDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                tools:text="@string/description_preview"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

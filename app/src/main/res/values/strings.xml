@@ -338,6 +338,7 @@
     <string name="filter">Filter Search</string>
     <string name="free_stuff">Free stuff only</string>
     <string name="speakers">Speakers</string>
+    <string name="speakers_call">Speakers Call</string>
     <string name="sponsors">Sponsors</string>
     <string name="sessions">Sessions</string>
     <string name="session">Session</string>
@@ -352,5 +353,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
     <string name="color_code">Color Code:</string>
+    <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
+    <string name="call_for_speakers">Call For Speakers</string>
+    <string name="submit_proposal">Submit Proposal</string>
 
 </resources>

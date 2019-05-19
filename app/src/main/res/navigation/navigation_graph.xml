@@ -414,7 +414,13 @@
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
         tools:layout="@layout/fragment_event">
-
+        <action
+            android:id="@+id/action_event_details_to_speakers_call"
+            app:destination="@id/speakersCallFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_similar_events_to_event_details"
             app:destination="@id/eventDetailsFragment"
@@ -422,7 +428,6 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
-
         <action
             android:id="@+id/action_event_details_to_session"
             app:destination="@id/sessionFragment"
@@ -605,6 +610,21 @@
             android:name="redirectedFrom"
             app:argType="string"
             android:defaultValue="profile"/>
+    </fragment>
+    <fragment
+        android:id="@+id/speakersCallFragment"
+        android:name="org.fossasia.openevent.general.speakercall.SpeakersCallFragment"
+        android:label="SpeakersCallFragment"
+        tools:layout="@layout/fragment_speakers_call">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="timeZone"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"

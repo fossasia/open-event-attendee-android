@@ -467,6 +467,13 @@ class EventDetailsFragment : Fragment() {
                 eventViewModel.event.value?.let { eventViewModel.setFavorite(safeArgs.eventId, !it.favorite) }
                 true
             }
+            R.id.call_for_speakers -> {
+                eventViewModel.event.value?.let {
+                    findNavController(rootView).navigate(EventDetailsFragmentDirections
+                        .actionEventDetailsToSpeakersCall(it.id, it.timezone))
+                }
+                true
+            }
             R.id.event_share -> {
                 eventViewModel.event.value?.let { EventUtils.share(it, rootView.eventImage) }
                 return true
