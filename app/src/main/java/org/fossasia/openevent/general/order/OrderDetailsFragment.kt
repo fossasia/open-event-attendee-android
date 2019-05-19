@@ -149,6 +149,12 @@ class OrderDetailsFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ordersRecyclerAdapter.setQrImageClickListener(null)
+        ordersRecyclerAdapter.setSeeEventListener(null)
+    }
+
     private fun showEnlargedQrImage(bitmap: Bitmap) {
         val brightAttributes = activity?.window?.attributes
         orderDetailsViewModel.brightness = brightAttributes?.screenBrightness

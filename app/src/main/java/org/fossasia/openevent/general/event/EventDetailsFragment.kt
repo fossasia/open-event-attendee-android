@@ -558,6 +558,17 @@ class EventDetailsFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        speakersAdapter.onSpeakerClick = null
+        sponsorsAdapter.onSponsorClick = null
+        sessionsAdapter.onSessionClick = null
+        similarEventsAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+        }
+    }
+
     private fun loadTicketFragment() {
         val currency = Currency.getInstance(eventViewModel.event.value?.paymentCurrency ?: "USD").symbol
         findNavController(rootView).navigate(EventDetailsFragmentDirections

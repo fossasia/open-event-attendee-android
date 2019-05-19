@@ -29,11 +29,11 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
         notifyDataSetChanged()
     }
 
-    fun setSeeEventListener(listener: EventDetailsListener) {
+    fun setSeeEventListener(listener: EventDetailsListener?) {
         eventDetailsListener = listener
     }
 
-    fun setQrImageClickListener(listener: QrImageClickListener) {
+    fun setQrImageClickListener(listener: QrImageClickListener?) {
         onQrImageClicked = listener
     }
 

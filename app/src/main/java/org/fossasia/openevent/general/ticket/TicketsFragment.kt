@@ -133,6 +133,11 @@ class TicketsFragment : Fragment() {
         return rootView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ticketsRecyclerAdapter.setSelectListener(null)
+    }
+
     private fun checkForAuthentication() {
         if (ticketsViewModel.isLoggedIn())
             redirectToAttendee()
