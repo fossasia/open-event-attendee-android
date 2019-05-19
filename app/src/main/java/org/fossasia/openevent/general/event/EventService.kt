@@ -14,6 +14,8 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
+import org.fossasia.openevent.general.speakercall.SpeakersCall
+import org.fossasia.openevent.general.speakercall.SpeakersCallDao
 import java.util.Date
 
 class EventService(
@@ -24,7 +26,8 @@ class EventService(
     private val eventTypesApi: EventTypesApi,
     private val eventLocationApi: EventLocationApi,
     private val eventFeedbackApi: FeedbackApi,
-    private val eventFAQApi: EventFAQApi
+    private val eventFAQApi: EventFAQApi,
+    private val speakersCallDao: SpeakersCallDao
 ) {
 
     fun getEvents(): Flowable<List<Event>> {
@@ -153,6 +156,13 @@ class EventService(
                         }
         }
     }
+
+    fun getSpeakerCall(id: Long): Single<SpeakersCall> =
+        speakersCallDao.getSpeakerCall(id).onErrorResumeNext {
+            eventApi.getSpeakerCallForEvent(id).doAfterSuccess {
+                speakersCallDao.insertSpeakerCall(it)
+            }
+        }
 
     private fun buildQuery(eventIds: List<Long>): String {
         var subQuery = ""
