@@ -464,7 +464,10 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.favorite_event -> {
-                eventViewModel.event.value?.let { eventViewModel.setFavorite(safeArgs.eventId, !it.favorite) }
+                eventViewModel.event.value?.let {
+                    eventViewModel.setFavorite(safeArgs.eventId, !it.favorite)
+                    setFavoriteIconFilled(!it.favorite)
+                }
                 true
             }
             R.id.event_share -> {

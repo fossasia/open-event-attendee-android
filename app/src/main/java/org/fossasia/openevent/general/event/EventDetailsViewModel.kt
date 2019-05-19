@@ -214,6 +214,10 @@ class EventDetailsViewModel(
             .withDefaultSchedulers()
             .subscribe({
                 Timber.d("Success")
+                mutableEvent.value?.let {
+                    it.favorite = favorite
+                    mutableEvent.value = it
+                }
             }, {
                 Timber.e(it, "Error")
                 mutablePopMessage.value = resource.getString(R.string.error)

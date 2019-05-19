@@ -22,7 +22,7 @@ interface EventDao {
     fun getAllEvents(): Flowable<List<Event>>
 
     @Query("SELECT * from Event WHERE id = :id")
-    fun getEvent(id: Long): Flowable<Event>
+    fun getEvent(id: Long): Single<Event>
 
     @Query("SELECT * FROM event WHERE id = :eventId")
     fun getEventById(eventId: Long): Single<Event>

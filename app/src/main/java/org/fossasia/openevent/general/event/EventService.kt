@@ -106,7 +106,7 @@ class EventService(
         return eventDao.getEventWithIds(eventIds)
     }
 
-    fun getEvent(id: Long): Flowable<Event> {
+    fun getEvent(id: Long): Single<Event> {
         return eventDao.getEvent(id)
     }
 
