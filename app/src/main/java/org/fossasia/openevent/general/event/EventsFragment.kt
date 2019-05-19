@@ -202,6 +202,15 @@ class EventsFragment : Fragment(), ScrollToTop {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        eventsListAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+            onHashtagClick = null
+        }
+    }
+
     private fun openSearch(hashTag: String) {
             findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
                 query = "",

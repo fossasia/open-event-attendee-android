@@ -12,7 +12,7 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     private var showExpired = false
     private var clickListener: OrderClickListener? = null
 
-    fun setListener(listener: OrderClickListener) {
+    fun setListener(listener: OrderClickListener?) {
         clickListener = listener
     }
 

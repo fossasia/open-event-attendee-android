@@ -140,6 +140,14 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        favoriteEventsRecyclerAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+        }
+    }
+
     private fun showEmptyMessage(itemCount: Int) {
         noLikedLL.isVisible = (itemCount == 0)
     }

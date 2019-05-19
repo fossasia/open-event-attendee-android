@@ -139,6 +139,11 @@ class SessionFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        speakersAdapter.onSpeakerClick = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Utils.setNewHeaderColor(activity, resources.getColor(R.color.colorPrimaryDark),

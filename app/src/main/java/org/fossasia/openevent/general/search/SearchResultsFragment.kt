@@ -141,6 +141,14 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         return rootView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        favoriteEventsRecyclerAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+        }
+    }
+
     private fun setChips(date: String = eventDate, type: String = eventType) {
         if (rootView.chipGroup.childCount> 0) {
             rootView.chipGroup.removeAllViews()

@@ -126,6 +126,11 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         return rootView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ordersRecyclerAdapter.setListener(null)
+    }
+
     private fun showNoTicketsScreen(show: Boolean) {
         noTicketsScreen.isVisible = show
         if (safeArgs.showExpired) {
