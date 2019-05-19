@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
+import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import kotlinx.android.synthetic.main.fragment_session.view.progressBar
 import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrack
 import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailAbstract
@@ -34,7 +37,12 @@ import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailAbstrac
 import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrackContainer
 import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailSignUpButton
 import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailTrackIcon
+import kotlinx.android.synthetic.main.fragment_session.view.speakersUnderSessionRecycler
+import kotlinx.android.synthetic.main.fragment_session.view.speakersProgressBar
+import kotlinx.android.synthetic.main.fragment_session.view.sessionDetailSpeakersContainer
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.common.SpeakerClickListener
+import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -47,6 +55,7 @@ const val LINE_COUNT_ABSTRACT = 3
 class SessionFragment : Fragment() {
     private lateinit var rootView: View
     private val sessionViewModel by viewModel<SessionViewModel>()
+    private val speakersAdapter = SpeakerRecyclerAdapter()
     private val safeArgs: SessionFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,6 +68,9 @@ class SessionFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
+                if (it == getString(R.string.error_fetching_speakers_for_session)) {
+                    rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+                }
             })
 
         sessionViewModel.session
@@ -74,9 +86,46 @@ class SessionFragment : Fragment() {
                 rootView.sessionDetailContainer.visibility = if (it) View.GONE else View.VISIBLE
             })
 
+        sessionViewModel.speakersUnderSession
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                speakersAdapter.addAll(it)
+                if (it.isEmpty())
+                    rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+                else
+                    rootView.speakersProgressBar.visibility = View.GONE
+            })
+
         sessionViewModel.loadSession(safeArgs.sessionId)
+        val currentSpeakers = sessionViewModel.speakersUnderSession.value
+        if (currentSpeakers == null)
+            sessionViewModel.loadSpeakersUnderSession(safeArgs.sessionId)
+        else {
+            speakersAdapter.addAll(currentSpeakers)
+            if (currentSpeakers.isEmpty())
+                rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+            else
+                rootView.speakersProgressBar.visibility = View.GONE
+        }
+
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.orientation = HORIZONTAL
+        rootView.speakersUnderSessionRecycler.layoutManager = layoutManager
+        rootView.speakersUnderSessionRecycler.adapter = speakersAdapter
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val speakerClickListener = object : SpeakerClickListener {
+            override fun onClick(speakerId: Long) {
+                findNavController(rootView).navigate(SessionFragmentDirections.actionSessionToSpeaker(speakerId))
+            }
+        }
+        speakersAdapter.apply {
+            onSpeakerClick = speakerClickListener
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

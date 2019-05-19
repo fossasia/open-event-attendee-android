@@ -290,6 +290,7 @@
     <!--about event fragment-->
     <string name="error_fetching_event_message">Error fetching event</string>
     <string name="error_fetching_events_message">Error fetching events</string>
+    <string name="error_fetching_speakers_for_session">Error fetching speakers under this session</string>
     <string name="error">Error</string>
     <string name="fetch_favorite_events_error_message">Error fetching favorite events</string>
     <string name="list_orders_fail_message">Failed  to list Orders under a user</string>
