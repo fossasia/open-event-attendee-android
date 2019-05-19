@@ -19,11 +19,12 @@ import kotlinx.android.synthetic.main.fragment_notification.view.notificationCoo
 import kotlinx.android.synthetic.main.fragment_notification.view.noNotification
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+const val NOTIFICATION_FRAGMENT = "notificationFragment"
 
 class NotificationFragment : Fragment() {
     private val notificationViewModel by viewModel<NotificationViewModel>()
@@ -135,7 +136,11 @@ class NotificationFragment : Fragment() {
         LoginFragmentArgs(getString(R.string.log_in_first))
             .toBundle()
             .also {
-                Navigation.findNavController(rootView).navigate(R.id.loginFragment, it, Utils.getAnimFade())
+                Navigation.findNavController(rootView).navigate(
+                    NotificationFragmentDirections.actionNotificationToAuth(
+                        getString(R.string.log_in_first),
+                        NOTIFICATION_FRAGMENT)
+                )
             }
     }
 }

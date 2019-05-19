@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import io.reactivex.Single
 import org.fossasia.openevent.general.auth.change.ChangeRequestToken
 import org.fossasia.openevent.general.auth.change.ChangeRequestTokenResponse
+import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
 import retrofit2.http.Body
@@ -33,4 +34,7 @@ interface AuthApi {
 
     @POST("upload/image")
     fun uploadImage(@Body uploadImage: UploadImage): Single<ImageResponse>
+
+    @POST("users/checkEmail")
+    fun checkEmail(@Body email: Email): Single<CheckEmailResponse>
 }

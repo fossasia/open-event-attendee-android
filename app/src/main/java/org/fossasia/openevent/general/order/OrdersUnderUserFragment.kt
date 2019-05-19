@@ -32,6 +32,8 @@ import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
+const val ORDERS_FRAGMENT = "ordersFragment"
+
 class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private lateinit var rootView: View
@@ -138,7 +140,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-            .actionOrderUserToLogin(getString(R.string.log_in_first)))
+            .actionOrderUserToAuth(getString(R.string.log_in_first), ORDERS_FRAGMENT))
     }
 
     override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)

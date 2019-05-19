@@ -39,12 +39,18 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import androidx.navigation.fragment.navArgs
+import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
+import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
+import org.fossasia.openevent.general.ticket.TICKETS_FRAGMNET
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
+    private val safeArgs: SignUpFragmentArgs by navArgs()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -98,6 +104,7 @@ class SignUpFragment : Fragment() {
 
         rootView.signUpText.text = paragraph
         rootView.signUpText.movementMethod = LinkMovementMethod.getInstance()
+        rootView.usernameSignUp.text = SpannableStringBuilder(safeArgs.email)
 
         lateinit var confirmPassword: String
         val signUp = SignUp()
@@ -247,7 +254,16 @@ class SignUpFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        findNavController(rootView).popBackStack()
+        val destinationId =
+            when (safeArgs.redirectedFrom) {
+                PROFILE_FRAGMENT -> R.id.profileFragment
+                EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
+                ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
+                TICKETS_FRAGMNET -> R.id.ticketsFragment
+                NOTIFICATION_FRAGMENT -> R.id.notificationFragment
+                else -> R.id.eventsFragment
+            }
+        findNavController(rootView).popBackStack(destinationId, false)
         rootView.snackbar(R.string.logged_in_automatically)
     }
 
@@ -277,8 +293,7 @@ class SignUpFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                rootView.snackbar(R.string.sign_in_canceled)
+                activity?.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

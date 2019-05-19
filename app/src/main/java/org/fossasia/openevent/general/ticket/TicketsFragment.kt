@@ -34,6 +34,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
+const val TICKETS_FRAGMNET = "ticketsFragment"
+
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
     private val ticketsViewModel by viewModel<TicketsViewModel>()
@@ -149,8 +151,8 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToLogin(
-            getString(R.string.log_in_first)
+        findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAuth(
+            getString(R.string.log_in_first), TICKETS_FRAGMNET
         ))
     }
 

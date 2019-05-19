@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.loginButton
@@ -28,6 +27,10 @@ import kotlinx.android.synthetic.main.fragment_login.view.tick
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
+import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
+import org.fossasia.openevent.general.ticket.TICKETS_FRAGMNET
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
@@ -55,7 +58,6 @@ class LoginFragment : Fragment() {
         val progressDialog = progressDialog(context)
         Utils.setToolbar(activity, getString(R.string.login))
         setHasOptionsMenu(true)
-        showSnackbar()
 
         if (loginViewModel.isLoggedIn())
             popBackStack()
@@ -65,7 +67,9 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
-        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+        if (safeArgs.email.isNotEmpty()) {
+            rootView.email.text = SpannableStringBuilder(safeArgs.email)
+        } else if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
 
             smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
 
@@ -82,8 +86,8 @@ class LoginFragment : Fragment() {
                 })
 
             smartAuthViewModel.apiExceptionCodePair.nonNull().observe(viewLifecycleOwner, Observer {
-                    SmartAuthUtil.handleResolvableApiException(
-                        it.first, requireActivity(), it.second)
+                SmartAuthUtil.handleResolvableApiException(
+                    it.first, requireActivity(), it.second)
             })
 
             smartAuthViewModel.progress
@@ -92,6 +96,7 @@ class LoginFragment : Fragment() {
                     progressDialog.show(it)
                 })
         }
+
         loginViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -143,10 +148,8 @@ class LoginFragment : Fragment() {
                     rootView.sentEmailLayout.visibility = View.VISIBLE
                     rootView.loginLayout.visibility = View.GONE
                     Utils.setToolbar(activity, show = false)
-                    Utils.navAnimGone(activity?.navigationAuth, requireContext())
                 } else {
                     Utils.setToolbar(activity, getString(R.string.login))
-                    Utils.navAnimVisible(activity?.navigationAuth, requireContext())
                 }
             })
 
@@ -165,7 +168,6 @@ class LoginFragment : Fragment() {
         rootView.tick.setOnClickListener {
             rootView.sentEmailLayout.visibility = View.GONE
             Utils.setToolbar(activity, getString(R.string.login))
-            Utils.navAnimVisible(activity?.navigationAuth, requireContext())
             rootView.loginLayout.visibility = View.VISIBLE
         }
 
@@ -189,7 +191,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun popBackStack() {
-        findNavController(rootView).popBackStack()
+        val destinationId =
+        when (safeArgs.redirectedFrom) {
+            PROFILE_FRAGMENT -> R.id.profileFragment
+            EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
+            ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
+            TICKETS_FRAGMNET -> R.id.ticketsFragment
+            NOTIFICATION_FRAGMENT -> R.id.notificationFragment
+            else -> R.id.eventsFragment
+        }
+        findNavController(rootView).popBackStack(destinationId, false)
         rootView.snackbar(R.string.welcome_back)
     }
 
@@ -200,17 +211,10 @@ class LoginFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                findNavController(rootView).popBackStack(R.id.eventsFragment, false)
-                rootView.snackbar(R.string.sign_in_canceled)
+                activity?.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun showSnackbar() {
-        safeArgs.snackbarMessage?.let { textSnackbar ->
-            rootView.loginCoordinatorLayout.snackbar(textSnackbar)
         }
     }
 }

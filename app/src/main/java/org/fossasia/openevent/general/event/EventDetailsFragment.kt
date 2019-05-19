@@ -80,6 +80,11 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
+const val EVENT_ID = "eventId"
+const val EVENT_TOPIC_ID = "eventTopicId"
+const val EVENT_LOCATION = "eventLocation"
+const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
+
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
@@ -561,7 +566,7 @@ class EventDetailsFragment : Fragment() {
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(EventDetailsFragmentDirections
-            .actionEventDetailsToLogin(getString(R.string.log_in_first)))
+            .actionEventDetailsToAuth(getString(R.string.log_in_first), EVENT_DETAIL_FRAGMENT))
     }
 
     private fun writeFeedback() {

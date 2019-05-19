@@ -34,6 +34,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.snackbar
 
+const val PROFILE_FRAGMENT = "profileFragment"
+
 class ProfileFragment : Fragment() {
     private val profileViewModel by viewModel<ProfileViewModel>()
 
@@ -41,9 +43,7 @@ class ProfileFragment : Fragment() {
     private var emailSettings: String? = null
 
     private fun redirectToLogin() {
-        findNavController(rootView).navigate(ProfileFragmentDirections
-            .actionProfileToLogin()
-        )
+        findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToAuth(null, PROFILE_FRAGMENT))
     }
 
     private fun redirectToEventsFragment() {
