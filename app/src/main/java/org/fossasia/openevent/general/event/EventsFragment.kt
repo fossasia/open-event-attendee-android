@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
@@ -24,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
+import kotlinx.android.synthetic.main.item_card_events.view.eventImage
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
@@ -70,6 +73,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        postponeEnterTransition()
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
         setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
@@ -157,10 +161,23 @@ class EventsFragment : Fragment(), ScrollToTop {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
+            startPostponedEnterTransition()
+        }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID))
+            override fun onClick(eventID: Long, itemPosition: Int) {
+                var extras: Navigator.Extras? = null
+                val itemEventViewHolder = rootView.eventsRecycler.findViewHolderForAdapterPosition(itemPosition)
+                itemEventViewHolder?.let {
+                    if (itemEventViewHolder is EventViewHolder) {
+                        extras = FragmentNavigatorExtras(
+                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
+                    }
+                }
+                extras?.let {
+                    findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID), it)
+                } ?: findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID))
             }
         }
 

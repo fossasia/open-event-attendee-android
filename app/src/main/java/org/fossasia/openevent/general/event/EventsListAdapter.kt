@@ -46,7 +46,7 @@ class EventsListAdapter(
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.apply {
-            bind(event, EVENT_DATE_FORMAT)
+            bind(event, EVENT_DATE_FORMAT, position)
             eventClickListener = onEventClick
             favFabClickListener = onFavFabClick
             hashTagClickListAdapter = onHashtagClick

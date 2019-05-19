@@ -45,10 +45,12 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
      */
     fun bind(
         event: Event,
-        dateFormat: String
+        dateFormat: String,
+        itemPosition: Int
     ) {
         containerView.eventName.text = event.name
         containerView.locationName.text = event.locationName
+        containerView.eventImage.transitionName = "cardItemEventImage$itemPosition"
 
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
@@ -91,7 +93,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         }
 
         containerView.setOnClickListener {
-            eventClickListener?.onClick(event.id)
+            eventClickListener?.onClick(event.id, itemPosition)
                 ?: Timber.e("Event Click listener on ${this::class.java.canonicalName} is null")
         }
 

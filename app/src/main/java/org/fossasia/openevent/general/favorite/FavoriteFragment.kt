@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import kotlinx.android.synthetic.main.content_event.view.eventImage
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
@@ -24,6 +27,7 @@ import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.search.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,11 +48,15 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        postponeEnterTransition()
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false)
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
         setToolbar(activity, getString(R.string.likes), false)
+        rootView.viewTreeObserver.addOnDrawListener {
+            startPostponedEnterTransition()
+        }
 
         rootView.findText.setOnClickListener {
             findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToSearch())
@@ -96,8 +104,21 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID))
+            override fun onClick(eventID: Long, itemPosition: Int) {
+                var extras: Navigator.Extras? = null
+                val itemEventViewHolder = rootView.favoriteEventsRecycler.findViewHolderForAdapterPosition(itemPosition)
+                itemEventViewHolder?.let {
+                    if (itemEventViewHolder is EventViewHolder) {
+                        extras = FragmentNavigatorExtras(
+                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
+                    }
+                }
+
+                extras?.let {
+                    findNavController(rootView)
+                        .navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID), it)
+                } ?: findNavController(rootView)
+                    .navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID))
             }
         }
 

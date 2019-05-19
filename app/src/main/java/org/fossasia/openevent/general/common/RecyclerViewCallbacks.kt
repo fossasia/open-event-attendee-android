@@ -10,8 +10,9 @@ interface EventClickListener {
      * The function to be invoked when an event item is clicked
      *
      * @param eventID The ID of the clicked event
+     * @param itemPosition The position of event object in the adapter
      */
-    fun onClick(eventID: Long)
+    fun onClick(eventID: Long, itemPosition: Int)
 }
 
 /**
