@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import timber.log.Timber
 
@@ -40,13 +39,4 @@ fun setAvatarUrl(imageView: ImageView, url: String?) {
                 Timber.e(e)
             }
         })
-}
-
-@BindingAdapter("headerUrl")
-fun setOriginalImageUrl(imageView: ImageView, url: String?) {
-    Picasso.get()
-        .load(url)
-        .placeholder(R.drawable.header)
-        .transform(CircleTransform())
-        .into(imageView)
 }

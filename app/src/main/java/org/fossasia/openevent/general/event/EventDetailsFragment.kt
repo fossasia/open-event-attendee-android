@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,8 +21,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsFirst
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsSecond
@@ -124,6 +128,9 @@ class EventDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        postponeEnterTransition()
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event, container, false)
         rootView = binding.root
         setToolbar(activity)
@@ -286,6 +293,20 @@ class EventDetailsFragment : Fragment() {
         binding.event = event
         binding.executePendingBindings()
 
+        // Set Cover Image
+        Picasso.get()
+            .load(event.originalImageUrl)
+            .placeholder(R.drawable.header)
+            .into(rootView.eventImage, object : Callback {
+                override fun onSuccess() {
+                    startPostponedEnterTransition()
+                }
+
+                override fun onError(e: Exception?) {
+                    startPostponedEnterTransition()
+                }
+            })
+
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
             val organizerDescriptionListener = View.OnClickListener {
@@ -424,8 +445,19 @@ class EventDetailsFragment : Fragment() {
             })
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(view)
+            override fun onClick(eventID: Long, itemPosition: Int) {
+                var extras: Navigator.Extras? = null
+                val itemEventViewHolder = rootView.similarEventsRecycler.findViewHolderForAdapterPosition(itemPosition)
+                itemEventViewHolder?.let {
+                    if (itemEventViewHolder is EventViewHolder) {
+                        extras = FragmentNavigatorExtras(
+                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
+                    }
+                }
+                extras?.let {
+                    findNavController(view)
+                        .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID), it)
+                } ?: findNavController(view)
                     .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID))
             }
         }

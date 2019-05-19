@@ -14,7 +14,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -39,6 +39,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
 import org.fossasia.openevent.general.common.EventsDiffCallback
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import kotlinx.android.synthetic.main.item_card_events.view.eventImage
+import org.fossasia.openevent.general.event.EventViewHolder
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -68,6 +72,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
+        postponeEnterTransition()
 
         setChips(eventDate, eventType)
         setToolbar(activity, getString(R.string.search_results))
@@ -77,6 +82,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
         rootView.eventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+        rootView.viewTreeObserver.addOnDrawListener {
+            startPostponedEnterTransition()
+        }
 
         searchViewModel.events
             .nonNull()
@@ -185,8 +193,19 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                Navigation.findNavController(view)
+            override fun onClick(eventID: Long, itemPosition: Int) {
+                var extras: Navigator.Extras? = null
+                val itemEventViewHolder = rootView.eventsRecycler.findViewHolderForAdapterPosition(itemPosition)
+                itemEventViewHolder?.let {
+                    if (itemEventViewHolder is EventViewHolder) {
+                        extras = FragmentNavigatorExtras(
+                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
+                    }
+                }
+                extras?.let {
+                    findNavController(view).navigate(SearchResultsFragmentDirections
+                        .actionSearchResultsToEventDetail(eventId = eventID), it)
+                } ?: findNavController(view)
                     .navigate(SearchResultsFragmentDirections.actionSearchResultsToEventDetail(eventId = eventID))
             }
         }
@@ -233,7 +252,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 true
             }
             R.id.filter -> {
-                Navigation.findNavController(rootView)
+                findNavController(rootView)
                     .navigate(SearchResultsFragmentDirections.actionSearchResultsToSearchFilter(
                     date = safeArgs.date,
                     freeEvents = safeArgs.freeEvents,
