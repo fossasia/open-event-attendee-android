@@ -85,4 +85,8 @@ class AuthService(
         val changeRequestToken = ChangeRequestToken(Password(oldPassword, newPassword))
         return authApi.changeRequestToken(changeRequestToken)
     }
+
+    fun checkEmail(email: String): Single<CheckEmailResponse> {
+        return authApi.checkEmail(Email(email))
+    }
 }

@@ -318,8 +318,8 @@
             app:exitAnim="@anim/slide_out_left"/>
 
         <action
-            android:id="@+id/action_order_user_to_login"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_order_user_to_auth"
+            app:destination="@id/authFragment"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
@@ -365,8 +365,8 @@
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profile_to_login"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_profile_to_auth"
+            app:destination="@id/authFragment"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
@@ -432,8 +432,8 @@
             app:exitAnim="@anim/slide_out_left"/>
 
         <action
-            android:id="@+id/action_event_details_to_login"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_event_details_to_auth"
+            app:destination="@id/authFragment"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
@@ -510,8 +510,8 @@
             app:exitAnim="@anim/slide_out_left"/>
 
         <action
-            android:id="@+id/action_tickets_to_login"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_tickets_to_auth"
+            app:destination="@id/authFragment"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
@@ -575,18 +575,30 @@
         android:name="org.fossasia.openevent.general.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
-
         <argument
-            android:name="snackbarMessage"
+            android:name="email"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="false"
+            android:defaultValue="''"/>
+        <argument
+            android:name="redirectedFrom"
+            app:argType="string"
+            android:defaultValue="profile"/>
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"
         android:label="SignUpFragment"
-        tools:layout="@layout/fragment_signup" />
+        tools:layout="@layout/fragment_signup">
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="redirectedFrom"
+            app:argType="string"
+            android:defaultValue="profile"/>
+    </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"
         android:name="org.fossasia.openevent.general.search.SearchFilterFragment"
@@ -655,5 +667,44 @@
         android:id="@+id/notificationFragment"
         android:name="org.fossasia.openevent.general.notification.NotificationFragment"
         android:label="NotificationFragment"
-        tools:layout="@layout/fragment_notification" />
+        tools:layout="@layout/fragment_notification">
+
+        <action
+            android:id="@+id/action_notification_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="org.fossasia.openevent.general.auth.AuthFragment"
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth">
+        <action
+            android:id="@+id/action_auth_to_log_in"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_auth_to_sign_up"
+            app:destination="@id/signUpFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <argument
+            android:name="snackbarMessage"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="redirectedFrom"
+            app:argType="string"
+            app:nullable="false"/>
+    </fragment>
 </navigation>

@@ -29,6 +29,7 @@ import org.fossasia.openevent.general.auth.RequestAuthenticator
 import org.fossasia.openevent.general.auth.SignUp
 import org.fossasia.openevent.general.auth.SignUpViewModel
 import org.fossasia.openevent.general.auth.User
+import org.fossasia.openevent.general.auth.AuthViewModel
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
@@ -222,6 +223,7 @@ val viewModelModule = module {
     viewModel { SpeakerViewModel(get(), get()) }
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
+    viewModel { AuthViewModel(get(), get(), get()) }
 }
 
 val networkModule = module {

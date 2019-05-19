@@ -8,7 +8,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.navigation
-import kotlinx.android.synthetic.main.activity_main.navigationAuth
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import org.fossasia.openevent.general.auth.EditProfileFragment
 import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
-        setupWithNavController(navigationAuth, navController)
 
         navigation.setOnNavigationItemReselectedListener {
             val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
@@ -64,17 +62,11 @@ class MainActivity : AppCompatActivity() {
             R.id.favoriteFragment -> navAnimVisible(navigation, this@MainActivity)
             else -> navAnimGone(navigation, this@MainActivity)
         }
-        when (id) {
-            R.id.loginFragment,
-            R.id.signUpFragment -> navAnimVisible(navigationAuth, this@MainActivity)
-            else -> navAnimGone(navigationAuth, this@MainActivity)
-        }
     }
 
     override fun onBackPressed() {
         when (currentFragmentId) {
-            R.id.loginFragment,
-            R.id.signUpFragment -> {
+            R.id.authFragment -> {
                 navController.popBackStack(R.id.eventsFragment, false)
                 mainFragmentCoordinatorLayout.snackbar(R.string.sign_in_canceled)
             }
