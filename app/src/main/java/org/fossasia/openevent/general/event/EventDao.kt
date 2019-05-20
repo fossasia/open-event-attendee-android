@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.event.topic.EventTopic
 
 @Dao
 interface EventDao {
@@ -28,7 +29,7 @@ interface EventDao {
     fun getEventById(eventId: Long): Single<Event>
 
     @Query("SELECT * from Event WHERE id in (:ids)")
-    fun getEventWithIds(ids: List<Long>): Single<List<Event>>
+    fun getEventWithIds(ids: List<Long>): Flowable<List<Event>>
 
     @Query("UPDATE Event SET favorite = :favorite WHERE id = :eventId")
     fun setFavorite(eventId: Long, favorite: Boolean)
@@ -39,6 +40,9 @@ interface EventDao {
     @Query("SELECT id from Event WHERE favorite = 1 AND id in (:ids)")
     fun getFavoriteEventWithinIds(ids: List<Long>): Single<List<Long>>
 
-    @Query("SELECT * from Event WHERE eventTopic = :topicId")
-    fun getAllSimilarEvents(topicId: Long): Flowable<List<Event>>
+    @Query("SELECT * from Event WHERE eventTopic = :eventTopic")
+    fun getAllSimilarEvents(eventTopic: EventTopic): Flowable<List<Event>>
+
+    @Query("SELECT * FROM EventTopic WHERE id=:topicId")
+    fun getEventTopic(topicId: Long): Single<EventTopic>
 }

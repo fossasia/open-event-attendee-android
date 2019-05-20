@@ -280,7 +280,7 @@ class EventDetailsFragment : Fragment() {
         rootView.similarEventsRecycler.adapter = similarEventsAdapter
 
         eventViewModel.similarEvents.observe(viewLifecycleOwner, Observer { similarEvents ->
-            similarEventsAdapter.submitList(similarEvents)
+            similarEventsAdapter.submitList(similarEvents.toList())
             rootView.similarEventsContainer.visibility = if (similarEvents.isNotEmpty()) View.VISIBLE else View.GONE
         })
 
