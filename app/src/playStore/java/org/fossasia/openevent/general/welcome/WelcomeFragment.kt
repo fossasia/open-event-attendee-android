@@ -91,6 +91,8 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToMain() {
-        Navigation.findNavController(rootView).popBackStack()
+        Navigation.findNavController(rootView).navigate(
+            WelcomeFragmentDirections.actionWelcomeToEvents()
+        )
     }
 }
