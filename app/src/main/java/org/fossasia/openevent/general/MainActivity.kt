@@ -13,6 +13,7 @@ import org.fossasia.openevent.general.auth.EditProfileFragment
 import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.auth.SmartAuthUtil
+import org.fossasia.openevent.general.auth.AuthFragmentDirections
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 import org.jetbrains.anko.design.snackbar
@@ -43,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
-
         navigation.setOnNavigationItemReselectedListener {
             val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
             if (hostFragment is NavHostFragment) {
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         when (currentFragmentId) {
             R.id.authFragment -> {
-                navController.popBackStack(R.id.eventsFragment, false)
+                navController.navigate(AuthFragmentDirections.actionAuthToEventsPop())
                 mainFragmentCoordinatorLayout.snackbar(R.string.sign_in_canceled)
             }
             R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)

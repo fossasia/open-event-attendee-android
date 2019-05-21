@@ -717,6 +717,11 @@
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
         <action
+            android:id="@+id/action_auth_to_events_pop"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="true"/>
+        <action
             android:id="@+id/action_auth_to_log_in"
             app:destination="@id/loginFragment"
             app:popEnterAnim="@anim/fade_in"
