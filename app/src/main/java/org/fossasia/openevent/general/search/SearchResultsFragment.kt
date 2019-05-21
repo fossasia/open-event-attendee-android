@@ -43,6 +43,8 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.item_card_events.view.eventImage
 import org.fossasia.openevent.general.event.EventViewHolder
+import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
+import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -72,7 +74,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
-        postponeEnterTransition()
+        setPostponeSharedElementTransition()
 
         setChips(eventDate, eventType)
         setToolbar(activity, getString(R.string.search_results))
@@ -83,7 +85,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         rootView.eventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
         rootView.viewTreeObserver.addOnDrawListener {
-            startPostponedEnterTransition()
+            setStartPostponedEnterTransition()
         }
 
         searchViewModel.events

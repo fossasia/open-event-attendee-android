@@ -38,6 +38,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
+import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 
 /**
@@ -73,7 +75,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        postponeEnterTransition()
+        setPostponeSharedElementTransition()
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
         setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
@@ -162,7 +164,7 @@ class EventsFragment : Fragment(), ScrollToTop {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
-            startPostponedEnterTransition()
+            setStartPostponedEnterTransition()
         }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
