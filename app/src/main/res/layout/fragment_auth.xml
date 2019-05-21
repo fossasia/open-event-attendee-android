@@ -56,6 +56,20 @@
             android:text="@string/get_started"
             android:textAllCaps="false"/>
 
+        <TextView
+            android:id="@+id/orTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/or"
+            android:textColor="@android:color/black"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebookLoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_large"/>
+
     </LinearLayout>
 
 </FrameLayout>

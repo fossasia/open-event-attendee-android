@@ -62,6 +62,9 @@ class LoginFragment : Fragment() {
         if (loginViewModel.isLoggedIn())
             popBackStack()
 
+        val snackbarMessage = safeArgs.snackbarMessage
+        if (!snackbarMessage.isNullOrEmpty()) rootView.loginCoordinatorLayout.longSnackbar(snackbarMessage)
+
         rootView.loginButton.setOnClickListener {
             loginViewModel.login(email.text.toString(), password.text.toString())
             hideSoftKeyboard(context, rootView)

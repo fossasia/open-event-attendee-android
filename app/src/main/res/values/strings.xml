@@ -260,6 +260,9 @@
     <string name="order_not_completed">Order not completed!</string>
     <string name="removed_from_liked">Removed %1$s from liked events</string>
     <string name="undo">Undo</string>
+    <string name="email_already_registered">This email address is already registered with us. Please login to continue</string>
+    <string name="login_to_continue">Login_to_continue</string>
+    <string name="fb_email_not_registered">Email is not registered with this facebook account</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">Where \ndo you \ngo out?</string>
@@ -270,6 +273,7 @@
     <string name="auth_title">Let\'s get started</string>
     <string name="auth_subtitle">Sign up or log in to see what\'s happening near you</string>
     <string name="get_started">Get Started</string>
+    <string name="or">or</string>
 
     <!--sign up fragment-->
     <string name="invalid_email_message">Your email address is invalid!</string>

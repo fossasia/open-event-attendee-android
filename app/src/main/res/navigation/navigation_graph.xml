@@ -602,6 +602,12 @@
             android:name="redirectedFrom"
             app:argType="string"
             android:defaultValue="profile"/>
+        <argument
+            android:name="snackbarMessage"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
