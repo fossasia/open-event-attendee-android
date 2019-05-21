@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.Editable
 import android.text.TextWatcher
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,7 +24,6 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsFirst
 import kotlinx.android.synthetic.main.content_event.view.eventDateDetailsSecond
@@ -81,6 +79,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -128,8 +127,7 @@ class EventDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        postponeEnterTransition()
+        setSharedElementEnterTransition()
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event, container, false)
         rootView = binding.root
@@ -297,15 +295,7 @@ class EventDetailsFragment : Fragment() {
         Picasso.get()
             .load(event.originalImageUrl)
             .placeholder(R.drawable.header)
-            .into(rootView.eventImage, object : Callback {
-                override fun onSuccess() {
-                    startPostponedEnterTransition()
-                }
-
-                override fun onError(e: Exception?) {
-                    startPostponedEnterTransition()
-                }
-            })
+            .into(rootView.eventImage)
 
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
