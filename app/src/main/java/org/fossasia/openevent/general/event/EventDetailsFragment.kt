@@ -560,6 +560,7 @@ class EventDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Picasso.get().cancelRequest(rootView.eventImage)
         speakersAdapter.onSpeakerClick = null
         sponsorsAdapter.onSponsorClick = null
         sessionsAdapter.onSessionClick = null
@@ -654,10 +655,5 @@ class EventDetailsFragment : Fragment() {
     private fun moveToSponsorSection() {
         findNavController(rootView).navigate(EventDetailsFragmentDirections
             .actionEventDetailsToSponsor(safeArgs.eventId))
-    }
-
-    override fun onDestroy() {
-        Picasso.get().cancelRequest(rootView.eventImage)
-        super.onDestroy()
     }
 }
