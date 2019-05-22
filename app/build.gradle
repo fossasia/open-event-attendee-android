@@ -10,6 +10,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
+def PAYPAL_CLIENT_ID = System.getenv('PAYPAL_CLIENT_ID') ?: "NOT_PROVIDED"
 
 android {
     dataBinding {
@@ -39,11 +40,13 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
         }
     }
 
@@ -162,6 +165,9 @@ dependencies {
 
     // Stripe
     implementation 'com.stripe:stripe-android:9.0.1'
+
+    //PayPal
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'

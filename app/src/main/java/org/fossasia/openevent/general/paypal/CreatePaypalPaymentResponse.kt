@@ -7,5 +7,5 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 data class CreatePaypalPaymentResponse(
     val status: Boolean,
     val paymentId: String,
-    val error: String
+    val error: String? = null
 )
