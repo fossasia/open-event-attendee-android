@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.attendees
 
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.Editable
@@ -65,6 +64,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.Event
@@ -82,8 +82,6 @@ import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
-
-private const val STRIPE_KEY = "com.stripe.android.API_KEY"
 
 class AttendeeFragment : Fragment() {
 
@@ -112,8 +110,7 @@ class AttendeeFragment : Fragment() {
         eventId = EventId(safeArgs.eventId)
         ticketIdAndQty = safeArgs.ticketIdAndQty?.value
         singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
-        API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
-            ?.metaData?.getString(STRIPE_KEY).toString()
+        API_KEY = BuildConfig.STRIPE_API_KEY
     }
 
     override fun onCreateView(

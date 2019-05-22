@@ -25,9 +25,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
-        manifestPlaceholders = [
-                STRIPE_API_TOKEN: STRIPE_API_TOKEN
-        ]
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -41,10 +38,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
+            buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
+            buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
         }
     }
 
