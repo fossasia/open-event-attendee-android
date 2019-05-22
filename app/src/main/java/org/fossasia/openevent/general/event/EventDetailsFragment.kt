@@ -134,6 +134,12 @@ class EventDetailsFragment : Fragment() {
         setToolbar(activity)
         setHasOptionsMenu(true)
 
+        val currentEvent = eventViewModel.event.value
+        if (currentEvent != null)
+            loadEvent(currentEvent)
+        else
+            eventViewModel.loadEvent(safeArgs.eventId)
+
         rootView.feedbackRv.layoutManager = LinearLayoutManager(context)
         rootView.feedbackRv.adapter = feedbackAdapter
 
@@ -369,13 +375,6 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer { isConnected ->
                 if (isConnected) {
-                    showEventErrorScreen(false)
-                    val currentEvent = eventViewModel.event.value
-                    if (currentEvent == null)
-                        eventViewModel.loadEvent(safeArgs.eventId)
-                    else
-                        loadEvent(currentEvent)
-
                     val currentFeedback = eventViewModel.eventFeedback.value
                     if (currentFeedback == null) {
                         eventViewModel.fetchEventFeedback(safeArgs.eventId)
@@ -425,12 +424,6 @@ class EventDetailsFragment : Fragment() {
                         rootView.socialLinkContainer.visibility =
                             if (currentSocialLinks.isEmpty()) View.GONE else View.VISIBLE
                     }
-                } else {
-                    val currentEvent = eventViewModel.event.value
-                    if (currentEvent == null)
-                        showEventErrorScreen(true)
-                    else
-                        loadEvent(currentEvent)
                 }
             })
 
