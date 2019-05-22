@@ -185,7 +185,7 @@ dependencies {
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
 
     //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"
