@@ -3,29 +3,29 @@ package org.fossasia.openevent.general.event
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
+import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
+import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
-import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
-import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import kotlinx.android.synthetic.main.item_card_events.view.eventImage
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
@@ -34,29 +34,25 @@ import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
-import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.jetbrains.anko.design.longSnackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * Enum class for different layout types in the adapter.
  * This class can expand as number of layout types grow.
  */
-enum class EventLayoutType {
-    EVENTS, SIMILAR_EVENTS
-}
-
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 
 class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
-    private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
+    private val eventsListAdapter = EventsListAdapter(EventsDiffCallback())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +61,6 @@ class EventsFragment : Fragment(), ScrollToTop {
             .nonNull()
             .observe(this, Observer { list ->
                 eventsListAdapter.submitList(list)
-                showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
     }
@@ -106,6 +101,9 @@ class EventsFragment : Fragment(), ScrollToTop {
         eventsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                if(it){
+                    showEmptyMessage(eventsListAdapter.itemCount)
+                }
                 rootView.swiperefresh.isRefreshing = it
             })
 

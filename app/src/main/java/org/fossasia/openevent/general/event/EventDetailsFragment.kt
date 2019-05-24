@@ -93,7 +93,7 @@ class EventDetailsFragment : Fragment() {
     private val sponsorsAdapter = SponsorRecyclerAdapter()
     private val sessionsAdapter = SessionRecyclerAdapter()
     private val socialLinkAdapter = SocialLinksRecyclerAdapter()
-    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
+    private val similarEventsAdapter = SimilarEventsListAdapter(EventsDiffCallback())
 
     private lateinit var rootView: View
     private lateinit var binding: FragmentEventBinding

@@ -3,10 +3,10 @@ package org.fossasia.openevent.general.event
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.fossasia.openevent.general.event.feedback.Feedback
-import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.faq.EventFAQ
 import org.fossasia.openevent.general.event.faq.EventFAQApi
+import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.fossasia.openevent.general.event.location.EventLocationApi
 import org.fossasia.openevent.general.event.topic.EventTopic
@@ -17,6 +17,8 @@ import org.fossasia.openevent.general.event.types.EventTypesApi
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.speakercall.SpeakersCallDao
 import java.util.Date
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 class EventService(
     private val eventApi: EventApi,
@@ -109,6 +111,15 @@ class EventService(
                 eventDao.getEventWithIds(eventIds)
             }
     }
+
+    fun getEventsByLocationPaged(locationName: String?, page: Int): Flowable<List<Event>> {
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
+            "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
+        return eventApi.searchEventsPaged("name", query, page).flatMapPublisher { apiList ->
+            updateFavorites(apiList)
+        }
+    }
+
 
     fun getEvent(id: Long): Flowable<Event> {
         return eventDao.getEvent(id)

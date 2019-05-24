@@ -12,7 +12,17 @@ interface EventApi {
     fun getEvents(): Single<List<Event>>
 
     @GET("events?include=event-sub-topic,event-topic,event-type")
-    fun searchEvents(@Query("sort") sort: String, @Query("filter") eventName: String): Single<List<Event>>
+    fun searchEvents(
+        @Query("sort") sort: String,
+        @Query("filter") eventName: String
+    ): Single<List<Event>>
+
+    @GET("events?include=event-sub-topic,event-topic,event-type")
+    fun searchEventsPaged(
+        @Query("sort") sort: String,
+        @Query("filter") eventName: String,
+        @Query("page[number]") page: Int
+    ): Single<List<Event>>
 
     @GET
     fun getEvent(id: Long): Single<Event>
