@@ -5,7 +5,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.item_ticket_details.view.*
 
 class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(ticket: Ticket, qty: ArrayList<Int>, eventCurrency: String?) {
+    fun bind(ticket: Ticket, ticketQuantity: Int, eventCurrency: String?) {
         itemView.ticketName.text = ticket.name
 
         if (ticket.price != null) {
@@ -21,8 +21,8 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
             itemView.price.text = "Free"
         }
 
-        val subTotal: Float? = ticket.price?.times(qty[adapterPosition])
-        itemView.qty.text = qty[adapterPosition].toString()
+        val subTotal: Float? = ticket.price?.times(ticketQuantity)
+        itemView.qty.text = ticketQuantity.toString()
         itemView.subTotal.text = "$$subTotal"
     }
 }
