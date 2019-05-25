@@ -47,27 +47,6 @@ class TicketsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ticketsRecyclerAdapter.setCurrency(safeArgs.currency)
-
-        val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
-                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
-            }
-        }
-        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
-
-        ticketsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEventDetails(it)
-            })
-
-        ticketsViewModel.tickets
-            .nonNull()
-            .observe(this, Observer {
-                ticketsRecyclerAdapter.addAll(it)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
-            })
     }
 
     override fun onCreateView(
@@ -96,14 +75,6 @@ class TicketsFragment : Fragment() {
                 rootView.register.isGone = it
             })
 
-        rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
-                checkForAuthentication()
-            } else {
-                handleNoTicketsSelected()
-            }
-        }
-
         ticketsViewModel.ticketTableVisibility
             .nonNull()
             .observe(viewLifecycleOwner, Observer { ticketTableVisible ->
@@ -119,6 +90,27 @@ class TicketsFragment : Fragment() {
                 ticketsCoordinatorLayout.longSnackbar(it)
             })
 
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
+                ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
+
+        rootView.register.setOnClickListener {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                checkForAuthentication()
+            } else {
+                handleNoTicketsSelected()
+            }
+        }
+
         rootView.retry.setOnClickListener {
             loadTickets()
         }
@@ -131,6 +123,18 @@ class TicketsFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
+            }
+        }
+        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
     }
 
     override fun onDestroyView() {
