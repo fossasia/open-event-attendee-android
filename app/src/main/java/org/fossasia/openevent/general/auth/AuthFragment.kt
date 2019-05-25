@@ -7,14 +7,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_auth.view.getStartedButton
 import kotlinx.android.synthetic.main.fragment_auth.view.email
 import kotlinx.android.synthetic.main.fragment_auth.view.rootLayout
 import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.show
@@ -25,7 +27,7 @@ import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AuthFragment : Fragment() {
+class AuthFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var rootView: View
     private val authViewModel by viewModel<AuthViewModel>()
     private val safeArgs: AuthFragmentArgs by navArgs()
@@ -91,17 +93,24 @@ class AuthFragment : Fragment() {
     }
 
     private fun redirectToLogin(email: String = "") {
-        Navigation.findNavController(rootView)
+        findNavController(rootView)
             .navigate(AuthFragmentDirections
                 .actionAuthToLogIn(email, safeArgs.redirectedFrom)
             )
     }
 
     private fun redirectToSignUp() {
-        Navigation.findNavController(rootView)
+        findNavController(rootView)
             .navigate(AuthFragmentDirections
                 .actionAuthToSignUp(rootView.email.text.toString(), safeArgs.redirectedFrom)
             )
+    }
+
+    override fun handleBackPress() {
+        when (safeArgs.redirectedFrom) {
+            TICKETS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.ticketsFragment, false)
+            else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
