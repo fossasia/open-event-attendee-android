@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_welcome.view.pickCityButton
 import kotlinx.android.synthetic.main.fragment_welcome.view.currentLocation
 import kotlinx.android.synthetic.main.fragment_welcome.view.locationProgressBar
+import kotlinx.android.synthetic.main.fragment_welcome.view.skip
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,6 +46,10 @@ class WelcomeFragment : Fragment() {
             checkLocationPermission()
             welcomeViewModel.configure()
             rootView.locationProgressBar.visibility = View.VISIBLE
+        }
+
+        rootView.skip.setOnClickListener {
+            Navigation.findNavController(rootView).navigate(WelcomeFragmentDirections.actionWelcomeToEvents())
         }
 
         welcomeViewModel.redirectToMain.observe(this, Observer { redirect ->
