@@ -15,10 +15,17 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
         if (tickets.isNotEmpty())
             this.tickets.clear()
         this.tickets.addAll(ticketList)
+        notifyDataSetChanged()
     }
 
     fun setCurrency(currencyCode: String?) {
         eventCurrency = currencyCode
+    }
+
+    fun setQuantity(ticketQuantities: List<Int>) {
+        if (qty.isNotEmpty())qty.clear()
+        qty.addAll(ticketQuantities)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketDetailsViewHolder {
@@ -26,14 +33,8 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
         return TicketDetailsViewHolder(view)
     }
 
-    fun setQty(qty: ArrayList<Int>) {
-        this.qty = qty
-    }
-
     override fun onBindViewHolder(holder: TicketDetailsViewHolder, position: Int) {
-        val event = tickets[position]
-
-        holder.bind(event, qty, eventCurrency)
+        holder.bind(tickets[position], qty[position], eventCurrency)
     }
 
     override fun getItemCount(): Int {

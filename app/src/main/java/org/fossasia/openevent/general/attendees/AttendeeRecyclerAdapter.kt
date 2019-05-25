@@ -5,32 +5,45 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
-import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
 
 class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
-    val attendeeList = ArrayList<Attendee>()
-    val ticketList = ArrayList<Ticket>()
-    var eventId = EventId(-1)
-    val customForm = ArrayList<CustomForm>()
+    private val attendeeList = ArrayList<Attendee>()
+    private val ticketList = ArrayList<Ticket>()
+    private var qty = ArrayList<Int>()
+    private val customForm = ArrayList<CustomForm>()
+    private var eventId: Long = -1
+    var attendeeChangeListener: AttendeeDetailChangeListener? = null
 
-    fun addAll(attendeeList: List<Attendee>, ticketList: List<Ticket>) {
-        if (attendeeList.isNotEmpty())
-            this.attendeeList.clear()
-        this.attendeeList.addAll(attendeeList)
-        if (ticketList.isNotEmpty())
-            this.ticketList.clear()
-        this.ticketList.addAll(ticketList)
+    fun setEventId(newId: Long) {
+        eventId = newId
+    }
+
+    fun setQuantity(ticketQuantities: List<Int>) {
+        if (qty.isNotEmpty())qty.clear()
+        qty.addAll(ticketQuantities)
+    }
+
+    fun addAllTickets(tickets: List<Ticket>) {
+        if (ticketList.isNotEmpty()) ticketList.clear()
+        tickets.forEachIndexed { index, ticket ->
+            repeat(qty[index]) {
+                ticketList.add(ticket)
+            }
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addAllAttendees(attendees: List<Attendee>) {
+        if (attendeeList.isNotEmpty()) attendeeList.clear()
+        attendeeList.addAll(attendees)
+        notifyDataSetChanged()
     }
 
     fun setCustomForm(customForm: List<CustomForm>) {
-        this.customForm.clear()
+        if (customForm.isNotEmpty()) this.customForm.clear()
         this.customForm.addAll(customForm)
-    }
-
-    fun add(attendeeList: Attendee, ticket: Ticket) {
-        this.attendeeList.add(attendeeList)
-        this.ticketList.add(ticket)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendeeViewHolder {
@@ -39,10 +52,18 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AttendeeViewHolder, position: Int) {
-        holder.bind(this, position)
+        holder.apply {
+            if (attendeeList.size == ticketList.size)
+                bind(attendeeList[position], ticketList[position], customForm, position, eventId)
+            onAttendeeDetailChanged = attendeeChangeListener
+        }
     }
 
     override fun getItemCount(): Int {
         return attendeeList.size
     }
+}
+
+interface AttendeeDetailChangeListener {
+    fun onAttendeeDetailChanged(attendee: Attendee, position: Int)
 }
