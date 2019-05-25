@@ -27,6 +27,9 @@
     <string name="favorite_event">Favorite Event</string>
     <string name="refund_Policy">Refund Policy</string>
     <string name="no_events_message">Sorry, there are no events available</string>
+    <string name="skip">Skip</string>
+    <string name="choose_your_location">Choose your location</string>
+    <string name="choose_preferred_location_message">Please choose your preferred location</string>
 
     <!--Search event details-->
     <string name="search">Search</string>

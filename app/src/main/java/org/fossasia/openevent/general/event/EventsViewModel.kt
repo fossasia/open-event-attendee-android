@@ -38,9 +38,12 @@ class EventsViewModel(
 
     fun loadLocation() {
         mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
+            ?: resource.getString(R.string.choose_your_location)
     }
 
     fun loadLocationEvents() {
+        if (mutableSavedLocation.value == null) return
+
         if (lastSearch != savedLocation.value) {
             compositeDisposable += eventService.getEventsByLocation(mutableSavedLocation.value)
                 .withDefaultSchedulers()

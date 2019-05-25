@@ -7,6 +7,20 @@
     tools:context="org.fossasia.openevent.general.welcome.WelcomeFragment">
 
     <TextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="@dimen/layout_margin_medium"
+        android:background="?selectableItemBackground"
+        android:text="@string/skip"
+        android:textSize="@dimen/text_size_larger"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

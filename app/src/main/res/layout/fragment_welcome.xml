@@ -5,6 +5,20 @@
     android:layout_height="match_parent"
     tools:context="org.fossasia.openevent.general.welcome.WelcomeFragment">
 
+    <TextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        android:textSize="@dimen/text_size_larger"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginEnd="@dimen/layout_margin_medium"
+        android:padding="@dimen/layout_margin_medium"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="?selectableItemBackground" />
+
     <LinearLayout
         android:id="@+id/textLinearLayout"
         android:layout_width="match_parent"
