@@ -63,7 +63,7 @@
                     tools:text="10 items" />
 
                 <TextView
-                    android:id="@+id/view"
+                    android:id="@+id/ticketTableDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin_medium"
@@ -283,10 +283,22 @@
                         android:spinnerMode="dialog"/>
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/paymentSelector"
+                <LinearLayout
+                    android:id="@+id/paymentSelectorContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/layout_margin_small">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/payment"/>
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/paymentSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/stripePayment"

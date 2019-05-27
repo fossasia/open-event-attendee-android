@@ -21,9 +21,6 @@ interface TicketDao {
     @Query("SELECT * from Ticket WHERE id = :id")
     fun getTicketDetails(id: Long): Single<Ticket>
 
-    @Query("SELECT price from Ticket WHERE id in (:ids)")
-    fun getTicketPriceWithIds(ids: List<Int>): Single<List<Float>>
-
     @Query("SELECT * from Ticket WHERE id in (:ids)")
     fun getTicketsWithIds(ids: List<Int>): Single<List<Ticket>>
 }

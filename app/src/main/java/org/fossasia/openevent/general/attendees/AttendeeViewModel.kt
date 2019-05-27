@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.attendees
 
 import android.util.Patterns
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,6 @@ import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.HttpErrors
 import timber.log.Timber
-import java.util.Calendar
 
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
@@ -47,119 +47,64 @@ class AttendeeViewModel(
     val message: LiveData<String> = mutableMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
-    private val mutableAttendee = MutableLiveData<User>()
-    val attendee: LiveData<User> = mutableAttendee
-    private val mutablePaymentSelectorVisibility = MutableLiveData<Boolean>()
-    val paymentSelectorVisibility: LiveData<Boolean> = mutablePaymentSelectorVisibility
-    private val mutableTotalAmount = MutableLiveData<Float>()
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableTotalAmount = MutableLiveData<Float>(0F)
     val totalAmount: LiveData<Float> = mutableTotalAmount
-    private val mutableCountryVisibility = MutableLiveData<Boolean>()
-    val countryVisibility: LiveData<Boolean> = mutableCountryVisibility
-    private val mutableTotalQty = MutableLiveData<Int>()
-    val totalQty: LiveData<Int> = mutableTotalQty
-    private val mutableQtyList = MutableLiveData<ArrayList<Int>>()
-    val qtyList: LiveData<ArrayList<Int>> = mutableQtyList
     val paymentCompleted = MutableLiveData<Boolean>()
-    val ticketDetailsVisibility = MutableLiveData<Boolean>()
-    private val mutableTickets = MutableLiveData<MutableList<Ticket>>()
-    val tickets: LiveData<MutableList<Ticket>> = mutableTickets
+    private val mutableTickets = MutableLiveData<List<Ticket>>()
+    val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
     val forms: LiveData<List<CustomForm>> = mutableForms
     private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
     val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
 
-    val month = ArrayList<String?>()
-    val year = ArrayList<String?>()
     val attendees = ArrayList<Attendee>()
-    val cardType = ArrayList<String?>()
-    var isAllDetailsFilled = true
+    private val attendeesForOrder = ArrayList<Attendee>()
+    private val ticketsForOrder = ArrayList<Ticket>()
+    private lateinit var paymentOption: String
+    private lateinit var countryForOrder: String
 
     private var createAttendeeIterations = 0
-    var country: String? = null
-        private set
     var orderIdentifier: String? = null
         private set
-    private lateinit var paymentOption: String
     private lateinit var confirmOrder: ConfirmOrder
+
+    // Retained information
+    var countryPosition: Int = -1
+    var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    var selectedPaymentOption: Int = -1
+    var singleTicket = false
+    var monthSelectedPosition: Int = 0
+    var yearSelectedPosition: Int = 0
+    var cardTypePosition: Int = 0
+    var identifierList = ArrayList<String>()
+    var editTextList = ArrayList<EditText>()
+    var paymentCurrency: String = ""
+    var ticketDetailsVisible = false
 
     fun getId() = authHolder.getId()
 
-    fun initializeSpinner() {
-        // initialize months
-        month.add(resource.getString(R.string.month_string))
-        month.add(resource.getString(R.string.january))
-        month.add(resource.getString(R.string.february))
-        month.add(resource.getString(R.string.march))
-        month.add(resource.getString(R.string.april))
-        month.add(resource.getString(R.string.may))
-        month.add(resource.getString(R.string.june))
-        month.add(resource.getString(R.string.july))
-        month.add(resource.getString(R.string.august))
-        month.add(resource.getString(R.string.september))
-        month.add(resource.getString(R.string.october))
-        month.add(resource.getString(R.string.november))
-        month.add(resource.getString(R.string.december))
-
-        // initialize years
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        year.add(resource.getString(R.string.year_string))
-        val a = currentYear + 20
-        for (i in currentYear..a) {
-            year.add(i.toString())
-        }
-
-        // initialize card types
-        cardType.add(resource.getString(R.string.select_card))
-        cardType.add(resource.getString(R.string.american_express_pay_message))
-        cardType.add(resource.getString(R.string.mastercard_pay_message))
-        cardType.add(resource.getString(R.string.visa_pay_message))
-        cardType.add(resource.getString(R.string.discover_pay_message))
-        cardType.add(resource.getString(R.string.diners_pay_message))
-        cardType.add(resource.getString(R.string.unionpay_pay_message))
-    }
-
-    fun updatePaymentSelectorVisibility(ticketIdAndQty: List<Pair<Int, Int>>?) {
+    fun getTickets() {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
-        mutableTotalQty.value = 0
-
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
                 qty.add(it.second)
-                mutableTotalQty.value = totalQty.value?.plus(it.second)
-            }
-        }
-        mutableQtyList.value = qty
-
-        compositeDisposable += ticketService.getTicketPriceWithIds(ticketIds)
-            .withDefaultSchedulers()
-            .subscribe({ prices ->
-                var total = 0.toFloat()
-                var index = 0
-                prices?.forEach {
-                    total += it * qty[index++]
-                }
-                mutableTotalAmount.value = total
-                mutableCountryVisibility.value = total > 0
-                mutablePaymentSelectorVisibility.value = total != 0.toFloat()
-            }, {
-                Timber.e(it, "Error Loading tickets!")
-            })
-    }
-
-    fun ticketDetails(ticketIdAndQty: List<Pair<Int, Int>>?) {
-        val ticketIds = ArrayList<Int>()
-        ticketIdAndQty?.forEach {
-            if (it.second > 0) {
-                ticketIds.add(it.first)
             }
         }
 
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
-            .subscribe({
-                mutableTickets.value = it as MutableList<Ticket>?
+            .subscribe({ tickets ->
+                var prices = 0F
+                var index = 0
+                tickets.forEach {
+                    it.price?.let { price -> prices += price * qty[index++] }
+                }
+                mutableTickets.value = tickets
+                mutableTotalAmount.value = prices
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
@@ -175,13 +120,13 @@ class AttendeeViewModel(
                 if (createAttendeeIterations == totalAttendee)
                     mutableProgress.value = false
             }.subscribe({
-                attendees.add(it)
-                if (attendees.size == totalAttendee) {
+                attendeesForOrder.add(it)
+                if (attendeesForOrder.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
                     mutableIsAttendeeCreated.value = true
                     mutableMessage.value = resource.getString(R.string.create_attendee_success_message)
                 }
-                Timber.d("Success! %s", attendees.toList().toString())
+                Timber.d("Success! %s", attendeesForOrder.toList().toString())
             }, {
                 if (createAttendeeIterations + 1 == totalAttendee)
                     if (it.message.equals(HttpErrors.CONFLICT)) {
@@ -195,10 +140,10 @@ class AttendeeViewModel(
     }
 
     fun createAttendees(attendees: List<Attendee>, country: String?, paymentOption: String) {
-        this.country = country
+        attendeesForOrder.clear()
+        this.countryForOrder = country ?: ""
         this.paymentOption = paymentOption
-        this.attendees.clear()
-        isAllDetailsFilled = true
+        var isAllDetailsFilled = true
         createAttendeeIterations = 0
         attendees.forEach {
             if (it.email.isNullOrBlank() || it.firstname.isNullOrBlank() || it.lastname.isNullOrBlank()) {
@@ -217,11 +162,8 @@ class AttendeeViewModel(
     }
 
     private fun loadTicketsAndCreateOrder() {
-        if (this.tickets.value == null) {
-            this.mutableTickets.value = ArrayList()
-        }
-        this.tickets.value?.clear()
-        attendees.forEach {
+        ticketsForOrder.clear()
+        attendeesForOrder.forEach {
             loadTicket(it.ticket?.id)
         }
     }
@@ -234,9 +176,9 @@ class AttendeeViewModel(
         compositeDisposable += ticketService.getTicketDetails(ticketId)
             .withDefaultSchedulers()
             .subscribe({
-                tickets.value?.add(it)
-                Timber.d("Loaded tickets! %s", tickets.value?.toList().toString())
-                if (tickets.value?.size == attendees.size) {
+                ticketsForOrder.add(it)
+                Timber.d("Loaded tickets! %s", ticketsForOrder.toList().toString())
+                if (ticketsForOrder.size == attendeesForOrder.size) {
                     createOrder()
                 }
             }, {
@@ -245,17 +187,16 @@ class AttendeeViewModel(
     }
 
     private fun createOrder() {
-        val attendeeList = attendees.map { AttendeeId(it.id) }.toList()
-        var amount: Float = totalAmount.value ?: 0F
+        val attendeeList = attendeesForOrder.map { AttendeeId(it.id) }.toList()
+        val amount: Float = totalAmount.value ?: 0F
         var paymentMode: String? = paymentOption.toLowerCase()
         if (amount <= 0) {
             paymentMode = resource.getString(R.string.free)
-            amount = 0F
         }
         val eventId = event.value?.id
         if (eventId != null) {
             val order = Order(
-                getId(), paymentMode, country, "pending", amount,
+                getId(), paymentMode, countryForOrder, "pending", amount,
                 attendees = attendeeList, event = EventId(eventId)
             )
             compositeDisposable += orderService.placeOrder(order)
@@ -333,7 +274,6 @@ class AttendeeViewModel(
                 mutableProgress.value = false
             }.subscribe({
                 mutableMessage.value = it.message
-
                 if (it.status != null && it.status) {
                     confirmOrderStatus(orderIdentifier.toString(), confirmOrder)
                     Timber.d("Successfully  charged for the order!")
@@ -356,7 +296,7 @@ class AttendeeViewModel(
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
-                mutableMessage.value = "Error fetching event"
+                mutableMessage.value = resource.getString(R.string.error_fetching_event_message)
             })
     }
 
@@ -368,7 +308,7 @@ class AttendeeViewModel(
         compositeDisposable += attendeeService.getAttendeeDetails(id)
             .withDefaultSchedulers()
             .subscribe({
-                mutableAttendee.value = it
+                mutableUser.value = it
             }, {
                 Timber.e(it, "Error fetching user %d", id)
             })
