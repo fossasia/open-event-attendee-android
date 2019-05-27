@@ -41,8 +41,6 @@ class SearchViewModel(
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     val connection: LiveData<Boolean> = mutableConnectionLiveData
-    private val mutableChipClickable = MutableLiveData<Boolean>()
-    val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
     var savedType: String? = null
@@ -78,13 +76,8 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun setChipNotClickable() {
-        mutableChipClickable.value = false
-    }
-
     fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
         if (mutableEvents.value != null) {
-            mutableChipClickable.value = true
             return
         }
         if (!isConnected()) return
@@ -316,7 +309,6 @@ class SearchViewModel(
             .distinctUntilChanged()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
-                mutableChipClickable.value = false
             }.doFinally {
                 stopLoaders()
             }.subscribe({
@@ -331,7 +323,6 @@ class SearchViewModel(
 
     private fun stopLoaders() {
         mutableShowShimmerResults.value = false
-        mutableChipClickable.value = true
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
@@ -349,13 +340,6 @@ class SearchViewModel(
 
     fun clearEvents() {
         mutableEvents.value = null
-    }
-
-    fun clearTimeAndType() {
-        preference.apply {
-            putString(SAVED_TYPE, "Anything")
-            putString(SAVED_TIME, "Anytime")
-        }
     }
 
     override fun onCleared() {
