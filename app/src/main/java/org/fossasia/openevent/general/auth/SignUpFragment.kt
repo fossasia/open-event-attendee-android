@@ -43,7 +43,7 @@ import androidx.navigation.fragment.navArgs
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
-import org.fossasia.openevent.general.ticket.TICKETS_FRAGMNET
+import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -259,7 +259,7 @@ class SignUpFragment : Fragment() {
                 PROFILE_FRAGMENT -> R.id.profileFragment
                 EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
                 ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
-                TICKETS_FRAGMNET -> R.id.ticketsFragment
+                TICKETS_FRAGMENT -> R.id.ticketsFragment
                 NOTIFICATION_FRAGMENT -> R.id.notificationFragment
                 else -> R.id.eventsFragment
             }
