@@ -18,6 +18,9 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizerLabel
 import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
+import kotlinx.android.synthetic.main.item_card_order_details.view.checkInStatusView
+import kotlinx.android.synthetic.main.item_card_order_details.view.checkInStatusTextView
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
@@ -40,6 +43,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         val formattedDate = EventUtils.getFormattedDateShort(formattedDateTime)
         val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
         val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
+        val resources = itemView.resources
 
         itemView.eventName.text = event.name
         itemView.location.text = event.locationName
@@ -51,6 +55,20 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         } else {
             itemView.organizer.text = event.organizerName
         }
+
+        if (attendee.isCheckedIn != null) {
+            itemView.checkInStatusView.visibility = View.VISIBLE
+            if (attendee.isCheckedIn) {
+                itemView.checkInStatusTextView.text = resources.getString(R.string.checked_in)
+                itemView.checkInStatusView.backgroundTintList =
+                    resources.getColorStateList(android.R.color.holo_green_light)
+            } else {
+                itemView.checkInStatusTextView.text = resources.getString(R.string.not_checked_in)
+                itemView.checkInStatusView.backgroundTintList =
+                    resources.getColorStateList(android.R.color.holo_red_light)
+            }
+        }
+
         itemView.map.setOnClickListener {
             val mapUrl = loadMapUrl(event)
             val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
