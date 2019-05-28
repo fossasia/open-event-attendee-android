@@ -416,6 +416,15 @@
             app:nullable="true"/>
     </fragment>
     <fragment
+        android:id="@+id/conductCodeFragment"
+        android:name="org.fossasia.openevent.general.event.codeofconduct.ConductCodeFragment"
+        android:label="CodeOfConductFragment">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
@@ -423,6 +432,13 @@
         <action
             android:id="@+id/action_event_details_to_speakers_call"
             app:destination="@id/speakersCallFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_conduct_code"
+            app:destination="@id/conductCodeFragment"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"

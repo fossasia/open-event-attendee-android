@@ -493,6 +493,13 @@ class EventDetailsFragment : Fragment() {
                 eventViewModel.event.value?.let { EventUtils.share(it, rootView.eventImage) }
                 return true
             }
+            R.id.code_of_conduct -> {
+                eventViewModel.event.value?.let { event ->
+                        findNavController(rootView)
+                            .navigate(EventDetailsFragmentDirections.actionEventDetailsToConductCode(event.id))
+                }
+                return true
+            }
             R.id.open_faqs -> {
                 findNavController(rootView).navigate(EventDetailsFragmentDirections
                     .actionEventDetailsToFaq(safeArgs.eventId))
@@ -534,8 +541,10 @@ class EventDetailsFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         eventViewModel.event.value?.let { currentEvent ->
-            if (currentEvent.externalEventUrl == null)
+            if (currentEvent.externalEventUrl.isNullOrBlank())
                 menu.findItem(R.id.open_external_event_url).isVisible = false
+            if (currentEvent.codeOfConduct.isNullOrBlank())
+                menu.findItem(R.id.code_of_conduct).isVisible = false
             setFavoriteIconFilled(currentEvent.favorite)
         }
         super.onPrepareOptionsMenu(menu)
