@@ -159,6 +159,10 @@
     <string name="date_preview" translatable="false">Thu,June 14</string>
     <string name="event_preview" translatable="false">FOSSASIA summit</string>
     <string name="name_preview" translatable="false">Nikit Bhandari</string>
+    <string name="checkin_status">Check-in status</string>
+    <string name="checked_in">Checked In</string>
+    <string name="not_checked_in">Not Checked In</string>
+    <string name="not_available">Not available</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
