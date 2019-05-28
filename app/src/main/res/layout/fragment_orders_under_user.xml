@@ -6,73 +6,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/expireFilter"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_larger"
-        android:gravity="right"
-        android:background="@drawable/filled_border"
-        android:paddingTop="@dimen/padding_medium"
-        android:paddingBottom="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_large"
-        android:text="@string/past"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/ordersNestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:layout_marginBottom="@dimen/layout_margin_medium"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/expireFilter"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/expireFilter"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@drawable/filled_border"
+            android:gravity="right"
+            android:paddingTop="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_large"
+            android:paddingBottom="@dimen/padding_medium"
+            android:text="@string/past"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_larger"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ordersRecycler"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/ordersNestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@id/expireFilter">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:scrollbars="vertical"
-                tools:itemCount="6"
-                tools:listitem="@layout/item_card_order" />
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/noTicketsScreen"
-                layout="@layout/content_no_tickets"
-                android:visibility="gone" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ordersRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:scrollbars="vertical"
+                    tools:itemCount="6"
+                    tools:listitem="@layout/item_card_order" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/expireFilter"
-        android:visibility="gone">
+                <include
+                    android:id="@+id/noTicketsScreen"
+                    layout="@layout/content_no_tickets"
+                    android:visibility="gone" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/expireFilter">
 
-            <include layout="@layout/placeholder_item_card_tickets" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            <include layout="@layout/placeholder_item_card_tickets" />
+                        <include layout="@layout/placeholder_item_card_tickets" />
 
-            <include layout="@layout/placeholder_item_card_tickets" />
+                        <include layout="@layout/placeholder_item_card_tickets" />
 
-            <include layout="@layout/placeholder_item_card_tickets" />
+                        <include layout="@layout/placeholder_item_card_tickets" />
 
-            <include layout="@layout/placeholder_item_card_tickets" />
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                        <include layout="@layout/placeholder_item_card_tickets" />
 
+                        <include layout="@layout/placeholder_item_card_tickets" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
