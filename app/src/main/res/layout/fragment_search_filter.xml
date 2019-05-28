@@ -1,168 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootView"
-    android:padding="@dimen/padding_medium"
-    android:orientation="vertical"
     tools:context="org.fossasia.openevent.general.search.SearchFilterFragment">
 
     <LinearLayout
-        android:layout_marginBottom="@dimen/layout_margin_medium"
-        android:orientation="vertical"
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/dateLabel"
-            android:padding="@dimen/padding_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:text="@string/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:background="?selectableItemBackground"
-            android:drawableStart="@drawable/ic_time"
-            android:padding="@dimen/padding_small"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textSize="@dimen/text_size_larger"
-            android:text="@string/anytime"
-            android:id="@+id/tvSelectDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_medium">
+        android:padding="@dimen/padding_medium">
 
-        <TextView
-            android:id="@+id/locationLabel"
-            android:padding="@dimen/padding_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:text="@string/location"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:background="?selectableItemBackground"
-            android:drawableTint="@color/light_grey"
-            android:drawableStart="@drawable/ic_location_pin"
-            android:padding="@dimen/padding_small"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textSize="@dimen/text_size_larger"
-            android:text="@string/anywhere"
-            android:id="@+id/tvSelectLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_medium">
-
-        <TextView
-            android:id="@+id/categoryLabel"
-            android:padding="@dimen/padding_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:text="@string/category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:background="?selectableItemBackground"
-            android:drawableTint="@color/light_grey"
-            android:drawableStart="@drawable/ic_star_border"
-            android:padding="@dimen/padding_small"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textSize="@dimen/text_size_larger"
-            android:text="@string/anything"
-            android:id="@+id/tvSelectCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/PriceLabel"
-            android:padding="@dimen/padding_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:text="@string/price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:layout_marginEnd="@dimen/layout_margin_large"
-            android:padding="@dimen/padding_medium"
-            android:textSize="@dimen/text_size_large"
-            android:textColor="@color/light_grey"
-            android:text="@string/free_stuff"
-            android:id="@+id/freeStuffCheckBox"
-            android:layoutDirection="rtl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/sortLabel"
-            android:padding="@dimen/padding_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:text="@string/sort_by"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <RadioGroup
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/radioGroup">
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:orientation="vertical">
 
-            <RadioButton
+            <TextView
+                android:id="@+id/dateLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
                 android:text="@string/date"
-                android:layoutDirection="rtl"
-                android:padding="@dimen/padding_small"
-                android:textSize="@dimen/text_size_large"
-                android:id="@+id/dateRadioButton"
-                android:checked="false" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
 
-            <RadioButton
+            <TextView
+                android:id="@+id/tvSelectDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_margin_large"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/ic_time"
+                android:drawablePadding="@dimen/padding_medium"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_small"
+                android:text="@string/anytime"
+                android:textSize="@dimen/text_size_larger" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/locationLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
-                android:layoutDirection="rtl"
-                android:padding="@dimen/padding_small"
-                android:textSize="@dimen/text_size_large"
-                android:id="@+id/nameRadioButton"
-                android:layout_gravity="center_horizontal"
-                android:checked="false" />
-        </RadioGroup>
+                android:padding="@dimen/padding_medium"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
 
+            <TextView
+                android:id="@+id/tvSelectLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_margin_large"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/ic_location_pin"
+                android:drawablePadding="@dimen/padding_medium"
+                android:drawableTint="@color/light_grey"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_small"
+                android:text="@string/anywhere"
+                android:textSize="@dimen/text_size_larger" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_medium"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/categoryLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/category"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <TextView
+                android:id="@+id/tvSelectCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_margin_large"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/ic_star_border"
+                android:drawablePadding="@dimen/padding_medium"
+                android:drawableTint="@color/light_grey"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_small"
+                android:text="@string/anything"
+                android:textSize="@dimen/text_size_larger" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/PriceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/price"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <CheckBox
+                android:id="@+id/freeStuffCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_margin_large"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/free_stuff"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sortLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/sort_by"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_expanded_title" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/dateRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:layoutDirection="rtl"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/date"
+                    android:textSize="@dimen/text_size_large" />
+
+                <RadioButton
+                    android:id="@+id/nameRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:layoutDirection="rtl"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/name"
+                    android:textSize="@dimen/text_size_large" />
+            </RadioGroup>
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
