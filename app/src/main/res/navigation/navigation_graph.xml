@@ -240,6 +240,11 @@
             android:name="freeEvents"
             app:argType="boolean"
             android:defaultValue="false"/>
+
+        <argument
+            android:name="sessionsAndSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/speakerFragment"
@@ -711,6 +716,10 @@
             app:argType="boolean"
             android:defaultValue="false"/>
 
+        <argument
+            android:name="sessionsAndSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
