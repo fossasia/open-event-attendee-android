@@ -100,6 +100,7 @@ class AttendeeFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private val safeArgs: AttendeeFragmentArgs by navArgs()
+    var totalAmount = 0F
 
     private lateinit var API_KEY: String
 
@@ -218,6 +219,7 @@ class AttendeeFragment : Fragment() {
         attendeeViewModel.totalAmount
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                totalAmount = it
                 rootView.paymentSelectorContainer.visibility = if (it > 0) View.VISIBLE else View.GONE
                 rootView.countryPickerContainer.visibility = if (it > 0) View.VISIBLE else View.GONE
                 rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$it"
@@ -627,12 +629,13 @@ class AttendeeFragment : Fragment() {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(R.string.confirmation_dialog)
 
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            builder.setPositiveButton(android.R.string.yes) { _, _ ->
                 val attendees = attendeeViewModel.attendees
 
                 if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                     val country = rootView.countryPicker.selectedItem.toString()
-                    val paymentOption = rootView.paymentSelector.selectedItem.toString()
+                    val paymentOption = if (totalAmount != 0F) rootView.paymentSelector.selectedItem.toString()
+                                        else getString(R.string.free)
                     val company = rootView.company.text.toString()
                     val city = rootView.city.text.toString()
                     val taxId = rootView.taxId.text.toString()
@@ -645,13 +648,14 @@ class AttendeeFragment : Fragment() {
                 }
             }
 
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            builder.setNegativeButton(android.R.string.no) { _, _ ->
                 rootView.snackbar(getString(R.string.order_not_completed))
             }
             builder.show()
         }
 
         attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
+            if (totalAmount == 0F) return@Observer
             if (isAttendeeCreated &&
                 rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
                 sendToken()
