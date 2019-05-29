@@ -265,22 +265,113 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/item_attendee" />
 
-                <LinearLayout
-                    android:id="@+id/countryPickerContainer"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="@dimen/layout_margin_small">
+                    android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_small"
-                        android:text="@string/country"/>
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/countryPicker"
+                        android:text="Billing Information"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+                    <CheckBox
+                        android:id="@+id/billingEnabledCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/billingInfoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:spinnerMode="dialog"/>
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/company"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/company" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/taxId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/tax_id" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/address" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/city" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/postalCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/postal_code" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/countryPickerContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_small"
+                            android:text="@string/country"/>
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/countryPicker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dialog"/>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -288,11 +379,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginTop="@dimen/layout_margin_small"
                     android:layout_marginBottom="@dimen/layout_margin_small">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size"
                         android:text="@string/payment"/>
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/paymentSelector"
@@ -313,7 +406,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/payment_info"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/heading_text_size" />
+                        android:textSize="@dimen/text_size_larger" />
 
                     <TextView
                         android:id="@+id/offlinePaymentDescription"
@@ -457,21 +550,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/cvc" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/postalCode"
-                            android:inputType="number"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/postal_code" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 

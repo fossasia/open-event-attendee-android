@@ -36,6 +36,9 @@ data class Order(
     val discountCodeId: String? = null,
     val ticketsPdfUrl: String? = null,
     val transactionId: String? = null,
+    val isBillingEnabled: Boolean = false,
+    val taxBusinessInfo: String? = null,
+    val company: String? = null,
     @ColumnInfo(index = true)
     @Relationship("event")
     var event: EventId? = null,
