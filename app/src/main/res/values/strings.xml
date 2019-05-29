@@ -262,6 +262,10 @@
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
     <string name="share_ticket">Share Ticket</string>
     <string name="fail_sharing_ticket">Fail to share ticket</string>
+    <string name="company">Company</string>
+    <string name="tax_id">Tax ID or Business ID</string>
+    <string name="address">Address</string>
+    <string name="city">City</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>

@@ -65,6 +65,12 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
+import kotlinx.android.synthetic.main.fragment_attendee.view.city
+import kotlinx.android.synthetic.main.fragment_attendee.view.company
+import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
+import kotlinx.android.synthetic.main.fragment_attendee.view.address
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -143,6 +149,7 @@ class AttendeeFragment : Fragment() {
         setupUser()
         setupAttendeeDetails()
         setupCustomForms()
+        setupBillingInfo()
         setupCountryOptions()
         setupCardNumber()
         setupCardType()
@@ -339,6 +346,15 @@ class AttendeeFragment : Fragment() {
                 }
             }
             attendeeRecyclerAdapter.setCustomForm(currentForms)
+        }
+    }
+
+    private fun setupBillingInfo() {
+        rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
+        attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
+        rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            attendeeViewModel.billingEnabled = isChecked
+            rootView.billingInfoContainer.isVisible = isChecked
         }
     }
 
@@ -617,7 +633,13 @@ class AttendeeFragment : Fragment() {
                 if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                     val country = rootView.countryPicker.selectedItem.toString()
                     val paymentOption = rootView.paymentSelector.selectedItem.toString()
-                    attendeeViewModel.createAttendees(attendees, country, paymentOption)
+                    val company = rootView.company.text.toString()
+                    val city = rootView.city.text.toString()
+                    val taxId = rootView.taxId.text.toString()
+                    val address = rootView.address.text.toString()
+                    val postalCode = rootView.postalCode.text.toString()
+                    attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
+                        city, postalCode, paymentOption)
                 } else {
                     rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
                 }
@@ -662,8 +684,6 @@ class AttendeeFragment : Fragment() {
     private fun sendToken() {
         val card = Card(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
             attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
-        card.addressCountry = rootView.countryPicker.selectedItem.toString()
-        card.addressZip = rootView.postalCode.text.toString()
 
         if (card.brand != null && card.brand != "Unknown")
             rootView.selectCard.text = "Pay by ${card.brand}"
