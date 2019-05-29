@@ -17,6 +17,9 @@
         <item
             android:id="@+id/call_for_speakers"
             android:title="@string/call_for_speakers"/>
+        <item
+            android:id="@+id/code_of_conduct"
+            android:title="@string/code_of_conduct"/>
     </group>
     <item
         android:id="@+id/event_share"
