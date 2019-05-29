@@ -107,11 +107,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/PriceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_medium"
-                android:text="@string/price"
+                android:text="@string/filter"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -123,6 +122,17 @@
                 android:layoutDirection="rtl"
                 android:padding="@dimen/padding_medium"
                 android:text="@string/free_stuff"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
+
+            <CheckBox
+                android:id="@+id/sessionsAndSpeakerCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_margin_large"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/sessions_and_speakers"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
         </LinearLayout>

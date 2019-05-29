@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
+import kotlinx.android.synthetic.main.fragment_search_filter.view.sessionsAndSpeakerCheckBox
 import kotlinx.android.synthetic.main.fragment_search_filter.view.nameRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.radioGroup
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectCategory
@@ -20,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectDate
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectLocation
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val SEARCH_FILTER_FRAGMENT = "SearchFilterFragment"
@@ -33,6 +36,7 @@ class SearchFilterFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchFilterFragmentArgs by navArgs()
     private lateinit var sortBy: String
+    private var isSessionsAndSpeakersChecked = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +48,19 @@ class SearchFilterFragment : Fragment() {
         setFilterParams()
         setFilters()
         setSortByRadioGroup()
+
+        searchViewModel.mutableFreeTickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                isFreeStuffChecked = it
+            })
+
+        searchViewModel.mutableSessionAndSpeaker
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                isSessionsAndSpeakersChecked = true
+            })
+
         return rootView
     }
 
@@ -54,7 +71,7 @@ class SearchFilterFragment : Fragment() {
         } else {
             rootView.dateRadioButton.isChecked = true
         }
-        rootView.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        rootView.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val radio: RadioButton = rootView.findViewById(checkedId)
             sortBy = if (radio.text == getString(R.string.sort_by_name)) {
                 getString(R.string.sort_by_name)
@@ -82,7 +99,8 @@ class SearchFilterFragment : Fragment() {
                     location = selectedLocation,
                     type = selectedCategory,
                     query = safeArgs.query,
-                    sort = sortBy
+                    sort = sortBy,
+                    sessionsAndSpeakers = isSessionsAndSpeakersChecked
                 ))
                 true
             }
@@ -130,7 +148,12 @@ class SearchFilterFragment : Fragment() {
 
         rootView.freeStuffCheckBox.isChecked = safeArgs.freeEvents
         rootView.freeStuffCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            isFreeStuffChecked = isChecked
+            searchViewModel.mutableFreeTickets.postValue(isChecked)
+        }
+
+        rootView.sessionsAndSpeakerCheckBox.isChecked = safeArgs.sessionsAndSpeakers
+        rootView.sessionsAndSpeakerCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            searchViewModel.mutableSessionAndSpeaker.postValue(isChecked)
         }
     }
 }

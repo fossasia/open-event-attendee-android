@@ -41,6 +41,8 @@ class SearchViewModel(
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     val connection: LiveData<Boolean> = mutableConnectionLiveData
+    val mutableSessionAndSpeaker = MutableLiveData<Boolean>()
+    val mutableFreeTickets = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     var savedLocation: String? = null
     var savedType: String? = null
@@ -76,7 +78,14 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
+    fun loadEvents(
+        location: String,
+        time: String,
+        type: String,
+        freeEvents: Boolean,
+        sortBy: String,
+        sessionsAndSpeakers: Boolean
+    ) {
         if (mutableEvents.value != null) {
             return
         }
@@ -96,6 +105,14 @@ class SearchViewModel(
                |       'name':'ends-at',
                |       'op':'ge',
                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+               |    }
+            """.trimIndent()
+            else ""
+        val callForSpeakersFilter = if (sessionsAndSpeakers)
+            """, {
+               |       'name':'is-sessions-speakers-enabled',
+               |       'op':'eq',
+               |       'val':'true'
                |    }
             """.trimIndent()
             else ""
@@ -122,7 +139,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
@@ -145,7 +163,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
                 |   'and':[{
@@ -176,7 +195,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -207,7 +227,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -238,7 +259,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -269,7 +291,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
 
             else -> """[{
@@ -301,9 +324,11 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $callForSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
+        Timber.e(query)
         compositeDisposable += eventService.getSearchEvents(query, sortBy)
             .withDefaultSchedulers()
             .distinctUntilChanged()
