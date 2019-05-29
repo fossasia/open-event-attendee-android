@@ -42,6 +42,8 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePayment
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePaymentDescription
 import kotlinx.android.synthetic.main.fragment_attendee.view.month
 import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
 import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
@@ -63,6 +65,12 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
+import kotlinx.android.synthetic.main.fragment_attendee.view.city
+import kotlinx.android.synthetic.main.fragment_attendee.view.company
+import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
+import kotlinx.android.synthetic.main.fragment_attendee.view.address
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -141,7 +149,7 @@ class AttendeeFragment : Fragment() {
         setupUser()
         setupAttendeeDetails()
         setupCustomForms()
-        setupPaymentOptions()
+        setupBillingInfo()
         setupCountryOptions()
         setupCardNumber()
         setupCardType()
@@ -183,13 +191,16 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetailsUI(it)
+                setupPaymentOptions(it)
             })
 
         val currentEvent = attendeeViewModel.event.value
         if (currentEvent == null)
             attendeeViewModel.loadEvent(safeArgs.eventId)
-        else
+        else {
+            setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
+        }
     }
 
     private fun setupTicketDetailTable() {
@@ -338,6 +349,15 @@ class AttendeeFragment : Fragment() {
         }
     }
 
+    private fun setupBillingInfo() {
+        rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
+        attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
+        rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            attendeeViewModel.billingEnabled = isChecked
+            rootView.billingInfoContainer.isVisible = isChecked
+        }
+    }
+
     private fun setupCountryOptions() {
         ArrayAdapter.createFromResource(
             requireContext(), R.array.country_arrays,
@@ -359,10 +379,19 @@ class AttendeeFragment : Fragment() {
         rootView.countryPickerContainer.visibility = if (attendeeViewModel.singleTicket) View.VISIBLE else View.GONE
     }
 
-    private fun setupPaymentOptions() {
+    private fun setupPaymentOptions(event: Event) {
         val paymentOptions = ArrayList<String>()
-        paymentOptions.add(getString(R.string.paypal))
-        paymentOptions.add(getString(R.string.stripe))
+        if (event.canPayByPaypal)
+            paymentOptions.add(getString(R.string.paypal))
+        if (event.canPayByStripe)
+            paymentOptions.add(getString(R.string.stripe))
+        if (event.canPayOnsite)
+            paymentOptions.add(getString(R.string.on_site))
+        if (event.canPayByBank)
+            paymentOptions.add(getString(R.string.bank_transfer))
+        if (event.canPayByCheque)
+            paymentOptions.add(getString(R.string.cheque))
+
         rootView.paymentSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -370,10 +399,31 @@ class AttendeeFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 attendeeViewModel.selectedPaymentOption = position
-                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
-                    rootView.stripePayment.visibility = View.VISIBLE
-                else
-                    rootView.stripePayment.visibility = View.GONE
+                when (position) {
+                    paymentOptions.indexOf(getString(R.string.stripe)) -> {
+                        rootView.stripePayment.visibility = View.VISIBLE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                    paymentOptions.indexOf(getString(R.string.on_site)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.onsiteDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.bank_transfer)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.bankDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.cheque)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.chequeDetails
+                    }
+                    else -> {
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                }
             }
         }
         if (attendeeViewModel.selectedPaymentOption != -1)
@@ -548,6 +598,19 @@ class AttendeeFragment : Fragment() {
         rootView.accept.movementMethod = LinkMovementMethod.getInstance()
     }
 
+    private fun checkPaymentOptions(): Boolean =
+        when (rootView.paymentSelector.selectedItem.toString()) {
+            getString(R.string.paypal) -> {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
+                false
+            }
+            getString(R.string.cheque), getString(R.string.on_site), getString(R.string.bank_transfer) -> {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.offline_payment_message))
+                false
+            }
+            else -> true
+        }
+
     private fun setupRegisterOrder() {
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
@@ -559,6 +622,8 @@ class AttendeeFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            if (attendeeViewModel.totalAmount.value != 0F && !checkPaymentOptions()) return@setOnClickListener
+
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(R.string.confirmation_dialog)
 
@@ -568,7 +633,13 @@ class AttendeeFragment : Fragment() {
                 if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                     val country = rootView.countryPicker.selectedItem.toString()
                     val paymentOption = rootView.paymentSelector.selectedItem.toString()
-                    attendeeViewModel.createAttendees(attendees, country, paymentOption)
+                    val company = rootView.company.text.toString()
+                    val city = rootView.city.text.toString()
+                    val taxId = rootView.taxId.text.toString()
+                    val address = rootView.address.text.toString()
+                    val postalCode = rootView.postalCode.text.toString()
+                    attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
+                        city, postalCode, paymentOption)
                 } else {
                     rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
                 }
@@ -613,8 +684,6 @@ class AttendeeFragment : Fragment() {
     private fun sendToken() {
         val card = Card(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
             attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
-        card.addressCountry = rootView.countryPicker.selectedItem.toString()
-        card.addressZip = rootView.postalCode.text.toString()
 
         if (card.brand != null && card.brand != "Unknown")
             rootView.selectCard.text = "Pay by ${card.brand}"

@@ -27,6 +27,11 @@ import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.HttpErrors
 import timber.log.Timber
 
+const val ORDER_STATUS_PENDING = "pending"
+const val ORDER_STATUS_COMPLETED = "completed"
+const val ORDER_STATUS_PLACED = "placed"
+const val ORDER_STATUS_CANCELLED = "cancelled"
+
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
     private val authHolder: AuthHolder,
@@ -63,7 +68,12 @@ class AttendeeViewModel(
     private val attendeesForOrder = ArrayList<Attendee>()
     private val ticketsForOrder = ArrayList<Ticket>()
     private lateinit var paymentOption: String
-    private lateinit var countryForOrder: String
+    private var countryForOrder: String = ""
+    private var companyForOrder: String = ""
+    private var taxIdForOrder: String = ""
+    private var addressForOrder: String = ""
+    private var cityForOrder: String = ""
+    private var postalCodeForOrder: String = ""
 
     private var createAttendeeIterations = 0
     var orderIdentifier: String? = null
@@ -82,6 +92,7 @@ class AttendeeViewModel(
     var editTextList = ArrayList<EditText>()
     var paymentCurrency: String = ""
     var ticketDetailsVisible = false
+    var billingEnabled = false
 
     fun getId() = authHolder.getId()
 
@@ -139,9 +150,23 @@ class AttendeeViewModel(
             })
     }
 
-    fun createAttendees(attendees: List<Attendee>, country: String?, paymentOption: String) {
+    fun createAttendees(
+        attendees: List<Attendee>,
+        country: String?,
+        company: String,
+        taxId: String,
+        address: String,
+        city: String,
+        postalCode: String,
+        paymentOption: String
+    ) {
         attendeesForOrder.clear()
-        this.countryForOrder = country ?: ""
+        countryForOrder = country ?: ""
+        companyForOrder = company
+        taxIdForOrder = taxId
+        addressForOrder = address
+        cityForOrder = city
+        postalCodeForOrder = postalCode
         this.paymentOption = paymentOption
         var isAllDetailsFilled = true
         createAttendeeIterations = 0
@@ -195,10 +220,12 @@ class AttendeeViewModel(
         }
         val eventId = event.value?.id
         if (eventId != null) {
-            val order = Order(
-                getId(), paymentMode, countryForOrder, "pending", amount,
-                attendees = attendeeList, event = EventId(eventId)
-            )
+            var order = Order(id = getId(), paymentMode = paymentMode, status = ORDER_STATUS_PENDING, amount = amount,
+                attendees = attendeeList, event = EventId(eventId))
+            if (billingEnabled) {
+                order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
+                address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder)
+            }
             compositeDisposable += orderService.placeOrder(order)
                 .withDefaultSchedulers()
                 .doOnSubscribe {
@@ -209,7 +236,7 @@ class AttendeeViewModel(
                     orderIdentifier = it.identifier.toString()
                     Timber.d("Success placing order!")
                     if (it.paymentMode == resource.getString(R.string.free)) {
-                        confirmOrder = ConfirmOrder(it.id.toString(), "completed")
+                        confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
                     } else mutableMessage.value = resource.getString(R.string.order_success_message)
                 }, {
