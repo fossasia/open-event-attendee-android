@@ -42,6 +42,8 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePayment
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePaymentDescription
 import kotlinx.android.synthetic.main.fragment_attendee.view.month
 import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
 import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
@@ -141,7 +143,6 @@ class AttendeeFragment : Fragment() {
         setupUser()
         setupAttendeeDetails()
         setupCustomForms()
-        setupPaymentOptions()
         setupCountryOptions()
         setupCardNumber()
         setupCardType()
@@ -183,13 +184,16 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetailsUI(it)
+                setupPaymentOptions(it)
             })
 
         val currentEvent = attendeeViewModel.event.value
         if (currentEvent == null)
             attendeeViewModel.loadEvent(safeArgs.eventId)
-        else
+        else {
+            setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
+        }
     }
 
     private fun setupTicketDetailTable() {
@@ -359,10 +363,19 @@ class AttendeeFragment : Fragment() {
         rootView.countryPickerContainer.visibility = if (attendeeViewModel.singleTicket) View.VISIBLE else View.GONE
     }
 
-    private fun setupPaymentOptions() {
+    private fun setupPaymentOptions(event: Event) {
         val paymentOptions = ArrayList<String>()
-        paymentOptions.add(getString(R.string.paypal))
-        paymentOptions.add(getString(R.string.stripe))
+        if (event.canPayByPaypal)
+            paymentOptions.add(getString(R.string.paypal))
+        if (event.canPayByStripe)
+            paymentOptions.add(getString(R.string.stripe))
+        if (event.canPayOnsite)
+            paymentOptions.add(getString(R.string.on_site))
+        if (event.canPayByBank)
+            paymentOptions.add(getString(R.string.bank_transfer))
+        if (event.canPayByCheque)
+            paymentOptions.add(getString(R.string.cheque))
+
         rootView.paymentSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             paymentOptions)
         rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -370,10 +383,31 @@ class AttendeeFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 attendeeViewModel.selectedPaymentOption = position
-                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
-                    rootView.stripePayment.visibility = View.VISIBLE
-                else
-                    rootView.stripePayment.visibility = View.GONE
+                when (position) {
+                    paymentOptions.indexOf(getString(R.string.stripe)) -> {
+                        rootView.stripePayment.visibility = View.VISIBLE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                    paymentOptions.indexOf(getString(R.string.on_site)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.onsiteDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.bank_transfer)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.bankDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.cheque)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.chequeDetails
+                    }
+                    else -> {
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                }
             }
         }
         if (attendeeViewModel.selectedPaymentOption != -1)
@@ -548,6 +582,19 @@ class AttendeeFragment : Fragment() {
         rootView.accept.movementMethod = LinkMovementMethod.getInstance()
     }
 
+    private fun checkPaymentOptions(): Boolean =
+        when (rootView.paymentSelector.selectedItem.toString()) {
+            getString(R.string.paypal) -> {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
+                false
+            }
+            getString(R.string.cheque), getString(R.string.on_site), getString(R.string.bank_transfer) -> {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.offline_payment_message))
+                false
+            }
+            else -> true
+        }
+
     private fun setupRegisterOrder() {
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
@@ -558,6 +605,8 @@ class AttendeeFragment : Fragment() {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.term_and_conditions))
                 return@setOnClickListener
             }
+
+            if (attendeeViewModel.totalAmount.value != 0F && !checkPaymentOptions()) return@setOnClickListener
 
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(R.string.confirmation_dialog)

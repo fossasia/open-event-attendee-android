@@ -142,6 +142,11 @@
     <string name="not_you">Not you? </string>
     <string name="sign_out">Sign out</string>
     <string name="all_fees">All fees included in price</string>
+    <string name="on_site">On Site</string>
+    <string name="bank_transfer">Telegraphic Transfer/Bank Transfer</string>
+    <string name="cheque">Cheque</string>
+    <string name="paypal_payment_not_available">Paypal payment is not available in the app yet!</string>
+    <string name="offline_payment_message">This is offline payment method. Please follow payment instructions.</string>
 
     <!--order details-->
     <string name="order_completed">ORDER COMPLETED</string>

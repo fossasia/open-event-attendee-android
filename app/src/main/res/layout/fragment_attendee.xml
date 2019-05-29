@@ -301,6 +301,29 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/offlinePayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_medium"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_info"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size" />
+
+                    <TextView
+                        android:id="@+id/offlinePaymentDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_margin_medium"
+                        tools:text="@string/description_preview"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/stripePayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
