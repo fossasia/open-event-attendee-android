@@ -1,9 +1,11 @@
 package org.fossasia.openevent.general.order
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_card_order_details.view.calendar
 import kotlinx.android.synthetic.main.item_card_order_details.view.date
@@ -18,8 +20,9 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizerLabel
 import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
-import kotlinx.android.synthetic.main.item_card_order_details.view.checkInStatusView
-import kotlinx.android.synthetic.main.item_card_order_details.view.checkInStatusTextView
+import kotlinx.android.synthetic.main.item_card_order_details.view.checkedInLayout
+import kotlinx.android.synthetic.main.item_card_order_details.view.notCheckedInLayout
+import kotlinx.android.synthetic.main.item_card_order_details.view.notAvailableTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
@@ -27,6 +30,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.utils.stripHtml
 import org.jetbrains.anko.browse
+import java.lang.StringBuilder
 
 class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val qrCode = QrCode()
@@ -57,16 +61,28 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         }
 
         if (attendee.isCheckedIn != null) {
-            itemView.checkInStatusView.visibility = View.VISIBLE
-            if (attendee.isCheckedIn) {
-                itemView.checkInStatusTextView.text = resources.getString(R.string.checked_in)
-                itemView.checkInStatusView.backgroundTintList =
-                    resources.getColorStateList(android.R.color.holo_green_light)
-            } else {
-                itemView.checkInStatusTextView.text = resources.getString(R.string.not_checked_in)
-                itemView.checkInStatusView.backgroundTintList =
-                    resources.getColorStateList(android.R.color.holo_red_light)
+            itemView.checkedInLayout.isVisible = attendee.isCheckedIn
+            itemView.notCheckedInLayout.isVisible = !attendee.isCheckedIn
+        } else {
+            itemView.notAvailableTextView.visibility = View.VISIBLE
+        }
+
+        itemView.checkedInLayout.setOnClickListener {
+            if (attendee.checkinTimes.isNullOrEmpty()) return@setOnClickListener
+            val checkInTime = attendee.checkinTimes.split(",").toTypedArray()
+            val times = StringBuilder()
+            for (i in checkInTime.indices) {
+                val dateTime = EventUtils.getEventDateTime(checkInTime[i], null)
+                times.append(EventUtils.getFormattedDate(dateTime) + "\n")
+                times.append(EventUtils.getFormattedTime(dateTime) + "\n\n")
             }
+            if (attendee.isCheckedOut) times.append(resources.getString(R.string.checked_out))
+            AlertDialog.Builder(itemView.context)
+                .setTitle(resources.getString(R.string.check_in_times))
+                .setMessage(resources.getString(R.string.check_in_times))
+                .setMessage(times)
+                .setCancelable(true)
+                .show()
         }
 
         itemView.map.setOnClickListener {

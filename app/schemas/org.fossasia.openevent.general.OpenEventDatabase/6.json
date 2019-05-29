@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "24ed50935955154c79491815778897fb",
+    "identityHash": "c29e46595502e4aa3dfd4c5c66474e4a",
     "entities": [
       {
         "tableName": "Event",
@@ -681,7 +681,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `checkinTimes` TEXT, `isCheckedOut` INTEGER NOT NULL, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -736,6 +736,18 @@
             "columnName": "isCheckedIn",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "checkinTimes",
+            "columnName": "checkinTimes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isCheckedOut",
+            "columnName": "isCheckedOut",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "pdfUrl",
@@ -872,7 +884,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL NOT NULL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `event` INTEGER, `attendees` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `paymentMode` TEXT, `country` TEXT, `status` TEXT, `amount` REAL NOT NULL, `identifier` TEXT, `orderNotes` TEXT, `completedAt` TEXT, `city` TEXT, `address` TEXT, `createdAt` TEXT, `zipcode` TEXT, `paidVia` TEXT, `discountCodeId` TEXT, `ticketsPdfUrl` TEXT, `transactionId` TEXT, `isBillingEnabled` INTEGER NOT NULL, `taxBusinessInfo` TEXT, `company` TEXT, `event` INTEGER, `attendees` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -967,6 +979,24 @@
           {
             "fieldPath": "transactionId",
             "columnName": "transactionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isBillingEnabled",
+            "columnName": "isBillingEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taxBusinessInfo",
+            "columnName": "taxBusinessInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "company",
+            "columnName": "company",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1636,7 +1666,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"24ed50935955154c79491815778897fb\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c29e46595502e4aa3dfd4c5c66474e4a\")"
     ]
   }
 }
