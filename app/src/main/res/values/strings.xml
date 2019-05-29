@@ -366,6 +366,7 @@
     <string name="sort_by_date">starts-at</string>
     <string name="sort_by">Sort By</string>
     <string name="category">Category</string>
+    <string name="sessions_and_speakers">Sessions and speakers</string>
 
     <!--Notification fragment-->
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>

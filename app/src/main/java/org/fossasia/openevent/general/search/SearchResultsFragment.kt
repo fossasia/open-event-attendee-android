@@ -228,8 +228,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val date = eventDate
         val freeEvents = safeArgs.freeEvents
         val sortBy = safeArgs.sort
+
+        val sessionsAndSpeakers = safeArgs.sessionsAndSpeakers
         searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date, type, freeEvents, sortBy)
+        searchViewModel.loadEvents(location, date, type, freeEvents, sortBy, sessionsAndSpeakers)
     }
 
     private fun showNoSearchResults(events: List<Event>) {
@@ -255,7 +257,8 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                     location = safeArgs.location,
                     type = safeArgs.type,
                     query = safeArgs.query,
-                    sort = safeArgs.sort))
+                    sort = safeArgs.sort,
+                    sessionsAndSpeakers = safeArgs.sessionsAndSpeakers))
                 true
             }
             else -> super.onOptionsItemSelected(item)
