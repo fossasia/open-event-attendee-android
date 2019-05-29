@@ -13,12 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_order.view.add
-import kotlinx.android.synthetic.main.fragment_order.view.name
-import kotlinx.android.synthetic.main.fragment_order.view.share
-import kotlinx.android.synthetic.main.fragment_order.view.time
-import kotlinx.android.synthetic.main.fragment_order.view.view
+import kotlinx.android.synthetic.main.fragment_order_completed.view.orderCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_order_completed.view.add
+import kotlinx.android.synthetic.main.fragment_order_completed.view.name
+import kotlinx.android.synthetic.main.fragment_order_completed.view.share
+import kotlinx.android.synthetic.main.fragment_order_completed.view.time
+import kotlinx.android.synthetic.main.fragment_order_completed.view.view
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
@@ -40,7 +40,7 @@ class OrderCompletedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_order, container, false)
+        rootView = inflater.inflate(R.layout.fragment_order_completed, container, false)
         setToolbar(activity)
         setHasOptionsMenu(true)
 
