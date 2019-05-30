@@ -168,6 +168,8 @@
     <string name="checked_in">Checked In</string>
     <string name="not_checked_in">Not Checked In</string>
     <string name="not_available">Not available</string>
+    <string name="check_in_times">Check-in times</string>
+    <string name="checked_out">Checked out</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>

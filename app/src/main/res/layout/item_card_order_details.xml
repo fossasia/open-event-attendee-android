@@ -72,29 +72,61 @@
                 tools:text="@string/event" />
 
             <LinearLayout
+                android:id="@+id/checkedInLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/checkInStatusTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/not_available"
-                    android:textColor="@color/black"
+                    android:text="@string/checked_in"
+                    android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_large"/>
 
                 <View
-                    android:id="@+id/checkInStatusView"
                     android:layout_marginTop="@dimen/layout_margin_extra_small"
                     android:layout_marginStart="@dimen/layout_margin_small"
-                    android:visibility="gone"
+                    android:backgroundTint="@android:color/holo_green_light"
                     android:layout_width="@dimen/card_tickets_radius"
                     android:layout_height="@dimen/card_tickets_radius"
                     android:background="@drawable/circle_shape"/>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/notCheckedInLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_checked_in"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"/>
+
+                <View
+                    android:layout_marginTop="@dimen/layout_margin_extra_small"
+                    android:layout_marginStart="@dimen/layout_margin_small"
+                    app:tint="@android:color/holo_red_light"
+                    android:layout_width="@dimen/card_tickets_radius"
+                    android:layout_height="@dimen/card_tickets_radius"
+                    android:background="@drawable/circle_shape"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/notAvailableTextView"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_available"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:textSize="@dimen/text_size_large"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

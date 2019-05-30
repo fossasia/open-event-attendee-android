@@ -34,6 +34,8 @@ data class Attendee(
     val state: String? = null,
     val country: String? = null,
     val isCheckedIn: Boolean? = false,
+    val checkinTimes: String? = null,
+    val isCheckedOut: Boolean = false,
     val pdfUrl: String? = null,
     val ticketId: String? = null,
     @ColumnInfo(index = true)
