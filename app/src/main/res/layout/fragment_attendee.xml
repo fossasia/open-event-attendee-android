@@ -261,6 +261,12 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
+                <CheckBox
+                    android:id="@+id/sameBuyerCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/checkbox_message"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/attendeeRecycler"
                     android:layout_width="match_parent"

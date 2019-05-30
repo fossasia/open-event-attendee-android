@@ -14,6 +14,7 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     private val customForm = ArrayList<CustomForm>()
     private var eventId: Long = -1
     var attendeeChangeListener: AttendeeDetailChangeListener? = null
+    private var firstAttendee: Attendee? = null
 
     fun setEventId(newId: Long) {
         eventId = newId
@@ -46,6 +47,11 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun setFirstAttendee(attendee: Attendee?) {
+        firstAttendee = attendee
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendeeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_attendee, parent, false)
         return AttendeeViewHolder(view)
@@ -53,8 +59,12 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
 
     override fun onBindViewHolder(holder: AttendeeViewHolder, position: Int) {
         holder.apply {
-            if (attendeeList.size == ticketList.size)
-                bind(attendeeList[position], ticketList[position], customForm, position, eventId)
+            if (attendeeList.size == ticketList.size) {
+                if (position == 0)
+                    bind(attendeeList[position], ticketList[position], customForm, position, eventId, firstAttendee)
+                else
+                    bind(attendeeList[position], ticketList[position], customForm, position, eventId, null)
+            }
             onAttendeeDetailChanged = attendeeChangeListener
         }
     }
