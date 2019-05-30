@@ -11,6 +11,9 @@ import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketId
+import org.fossasia.openevent.general.utils.checkEmpty
+import org.fossasia.openevent.general.utils.checkValidEmail
+import org.fossasia.openevent.general.utils.setRequired
 
 class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var identifierList = ArrayList<String>()
@@ -19,6 +22,9 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(attendee: Attendee, ticket: Ticket, customForm: List<CustomForm>, position: Int, eventId: Long) {
 
+        itemView.itemEmailLayout.setRequired()
+        itemView.itemFirstNameLayout.setRequired()
+        itemView.itemLastNameLayout.setRequired()
         itemView.attendeeItemCountry.setText(attendee.country)
         itemView.attendeeItemLastName.setText(attendee.lastname)
         itemView.attendeeItemEmail.setText(attendee.email)
@@ -56,6 +62,10 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.countryArea.visibility = View.GONE
         }
     }
+
+    fun checkValidFields(): Boolean =
+        itemView.attendeeItemFirstName.checkEmpty() && itemView.attendeeItemLastName.checkEmpty() &&
+            itemView.attendeeItemEmail.checkEmpty() && itemView.attendeeItemEmail.checkValidEmail()
 
     private fun fillInformationSection(forms: List<CustomForm>, textWatcher: TextWatcher) {
         val layout = itemView.attendeeInformation

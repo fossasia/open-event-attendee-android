@@ -71,6 +71,15 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.city
 import kotlinx.android.synthetic.main.fragment_attendee.view.company
 import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
 import kotlinx.android.synthetic.main.fragment_attendee.view.address
+import kotlinx.android.synthetic.main.fragment_attendee.view.firstNameLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.lastNameLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.emailLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.companyLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.addressLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cvcLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -87,6 +96,9 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.setRequired
+import org.fossasia.openevent.general.utils.checkEmpty
+import org.fossasia.openevent.general.utils.checkValidEmail
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import java.util.Calendar
@@ -247,6 +259,9 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun setupUser() {
+        rootView.firstNameLayout.setRequired()
+        rootView.lastNameLayout.setRequired()
+        rootView.emailLayout.setRequired()
         attendeeViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer { user ->
@@ -352,6 +367,10 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun setupBillingInfo() {
+        rootView.companyLayout.setRequired()
+        rootView.addressLayout.setRequired()
+        rootView.cityLayout.setRequired()
+        rootView.postalCodeLayout.setRequired()
         rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
         attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
         rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
@@ -433,6 +452,8 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun setupCardNumber() {
+        rootView.cardNumberLayout.setRequired()
+        rootView.cvcLayout.setRequired()
         rootView.cardNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) { /*Do Nothing*/ }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
@@ -510,7 +531,6 @@ class AttendeeFragment : Fragment() {
     private fun setupYearOptions() {
         val year = ArrayList<String>()
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        year.add(getString(R.string.year_string))
         val a = currentYear + 20
         for (i in currentYear..a) {
             year.add(i.toString())
@@ -535,7 +555,6 @@ class AttendeeFragment : Fragment() {
 
     private fun setupCardType() {
         val cardType = ArrayList<String>()
-        cardType.add(getString(R.string.select_card))
         cardType.add(getString(R.string.american_express_pay_message))
         cardType.add(getString(R.string.mastercard_pay_message))
         cardType.add(getString(R.string.visa_pay_message))
@@ -613,6 +632,35 @@ class AttendeeFragment : Fragment() {
             else -> true
         }
 
+    private fun checkRequiredFields(): Boolean {
+        val checkBasicInfo = rootView.firstName.checkEmpty() && rootView.lastName.checkEmpty() &&
+            rootView.email.checkEmpty() && rootView.email.checkEmpty() && rootView.email.checkValidEmail()
+
+        var checkBillingInfo = true
+        if (rootView.billingEnabledCheckbox.isChecked) {
+            checkBillingInfo = rootView.company.checkEmpty() && rootView.company.checkEmpty() &&
+                rootView.address.checkEmpty() && rootView.city.checkEmpty() && rootView.postalCode.checkEmpty()
+        }
+
+        var checkStripeInfo = true
+        if (totalAmount != 0F && rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
+            checkStripeInfo = rootView.cardNumber.checkEmpty() && rootView.cvc.checkEmpty()
+        }
+
+        return checkBasicInfo && checkBillingInfo && checkAttendeesInfo() && checkStripeInfo
+    }
+
+    private fun checkAttendeesInfo(): Boolean {
+        var valid = true
+        for (pos in 0..attendeeRecyclerAdapter.itemCount) {
+            val viewHolderItem = rootView.attendeeRecycler.findViewHolderForAdapterPosition(pos)
+            if (viewHolderItem is AttendeeViewHolder) {
+                if (!viewHolderItem.checkValidFields()) valid = false
+            }
+        }
+        return valid
+    }
+
     private fun setupRegisterOrder() {
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
@@ -623,6 +671,8 @@ class AttendeeFragment : Fragment() {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.term_and_conditions))
                 return@setOnClickListener
             }
+
+            if (!checkRequiredFields()) return@setOnClickListener
 
             if (attendeeViewModel.totalAmount.value != 0F && !checkPaymentOptions()) return@setOnClickListener
 

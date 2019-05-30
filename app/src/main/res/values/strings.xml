@@ -375,5 +375,6 @@
     <string name="call_for_speakers">Call For Speakers</string>
     <string name="submit_proposal">Submit Proposal</string>
     <string name="code_of_conduct">Code Of Conduct</string>
+    <string name="empty_field_error_message">This field must not be empty</string>
 
 </resources>
