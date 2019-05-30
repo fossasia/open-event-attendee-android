@@ -196,47 +196,50 @@
                     android:textSize="@dimen/heading_text_size" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
+                    android:hint="@string/first_name"
                     android:layout_marginTop="@dimen/padding_medium">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lastNameLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
+                    android:hint="@string/last_name"
                     android:layout_marginTop="@dimen/padding_medium">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lastName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/last_name"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/emailLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_medium"
-                    android:layout_marginTop="@dimen/padding_medium">
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:hint="@string/email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/email"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -292,17 +295,18 @@
                     android:visibility="gone"
                     tools:visibility="visible">
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/companyLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/company" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/company"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/company" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -318,43 +322,46 @@
                             android:hint="@string/tax_id" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addressLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/address" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/address"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/address" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/cityLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/city" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/city"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/city" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/postalCodeLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/postal_code" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/postalCode"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/postal_code" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <LinearLayout
                         android:id="@+id/countryPickerContainer"
@@ -421,7 +428,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -432,18 +440,19 @@
                         android:textSize="@dimen/heading_text_size" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/cardNumberLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/card_number" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/cardNumber"
                             android:inputType="number"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/card_number" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -538,18 +547,19 @@
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/cvcLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
-                        android:layout_marginTop="@dimen/padding_medium">
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/cvc" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/cvc"
                             android:inputType="number"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/cvc" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
