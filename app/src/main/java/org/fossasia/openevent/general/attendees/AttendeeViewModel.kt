@@ -31,6 +31,12 @@ const val ORDER_STATUS_PENDING = "pending"
 const val ORDER_STATUS_COMPLETED = "completed"
 const val ORDER_STATUS_PLACED = "placed"
 const val ORDER_STATUS_CANCELLED = "cancelled"
+const val PAYMENT_MODE_FREE = "free"
+const val PAYMENT_MODE_BANK = "bank"
+const val PAYMENT_MODE_ONSITE = "onsite"
+const val PAYMENT_MODE_CHEQUE = "cheque"
+const val PAYMENT_MODE_PAYPAL = "paypal"
+const val PAYMENT_MODE_STRIPE = "stripe"
 
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
@@ -67,7 +73,7 @@ class AttendeeViewModel(
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
     private val ticketsForOrder = ArrayList<Ticket>()
-    private lateinit var paymentOption: String
+    private var paymentModeForOrder: String = PAYMENT_MODE_FREE
     private var countryForOrder: String = ""
     private var companyForOrder: String = ""
     private var taxIdForOrder: String = ""
@@ -158,7 +164,7 @@ class AttendeeViewModel(
         address: String,
         city: String,
         postalCode: String,
-        paymentOption: String
+        paymentMode: String
     ) {
         attendeesForOrder.clear()
         countryForOrder = country ?: ""
@@ -167,7 +173,7 @@ class AttendeeViewModel(
         addressForOrder = address
         cityForOrder = city
         postalCodeForOrder = postalCode
-        this.paymentOption = paymentOption
+        paymentModeForOrder = paymentMode
         var isAllDetailsFilled = true
         createAttendeeIterations = 0
         attendees.forEach {
@@ -214,14 +220,13 @@ class AttendeeViewModel(
     private fun createOrder() {
         val attendeeList = attendeesForOrder.map { AttendeeId(it.id) }.toList()
         val amount: Float = totalAmount.value ?: 0F
-        var paymentMode: String? = paymentOption.toLowerCase()
         if (amount <= 0) {
-            paymentMode = resource.getString(R.string.free)
+            paymentModeForOrder = PAYMENT_MODE_FREE
         }
         val eventId = event.value?.id
         if (eventId != null) {
-            var order = Order(id = getId(), paymentMode = paymentMode, status = ORDER_STATUS_PENDING, amount = amount,
-                attendees = attendeeList, event = EventId(eventId))
+            var order = Order(id = getId(), paymentMode = paymentModeForOrder, status = ORDER_STATUS_PENDING,
+                amount = amount, attendees = attendeeList, event = EventId(eventId))
             if (billingEnabled) {
                 order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
                 address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder)
@@ -235,10 +240,17 @@ class AttendeeViewModel(
                 }.subscribe({
                     orderIdentifier = it.identifier.toString()
                     Timber.d("Success placing order!")
-                    if (it.paymentMode == resource.getString(R.string.free)) {
-                        confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
-                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                    } else mutableMessage.value = resource.getString(R.string.order_success_message)
+                    when (it.paymentMode) {
+                        PAYMENT_MODE_FREE -> {
+                            confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
+                            confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                        }
+                        PAYMENT_MODE_CHEQUE, PAYMENT_MODE_BANK, PAYMENT_MODE_ONSITE -> {
+                            confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PLACED)
+                            confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                        }
+                        else -> mutableMessage.value = resource.getString(R.string.order_success_message)
+                    }
                 }, {
                     mutableMessage.value = resource.getString(R.string.order_fail_message)
                     Timber.d(it, "Failed creating Order")

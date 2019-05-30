@@ -606,10 +606,6 @@ class AttendeeFragment : Fragment() {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
                 false
             }
-            getString(R.string.cheque), getString(R.string.on_site), getString(R.string.bank_transfer) -> {
-                rootView.attendeeScrollView.longSnackbar(getString(R.string.offline_payment_message))
-                false
-            }
             else -> true
         }
 
@@ -634,8 +630,9 @@ class AttendeeFragment : Fragment() {
 
                 if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                     val country = rootView.countryPicker.selectedItem.toString()
-                    val paymentOption = if (totalAmount != 0F) rootView.paymentSelector.selectedItem.toString()
-                                        else getString(R.string.free)
+                    val paymentOption =
+                        if (totalAmount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
+                        else PAYMENT_MODE_FREE
                     val company = rootView.company.text.toString()
                     val city = rootView.city.text.toString()
                     val taxId = rootView.taxId.text.toString()
@@ -675,6 +672,16 @@ class AttendeeFragment : Fragment() {
                     openOrderCompletedFragment()
             })
     }
+
+    private fun getPaymentMode(paymentSelectedItem: String): String =
+        when (paymentSelectedItem) {
+            getString(R.string.cheque) -> PAYMENT_MODE_CHEQUE
+            getString(R.string.bank_transfer) -> PAYMENT_MODE_BANK
+            getString(R.string.stripe) -> PAYMENT_MODE_STRIPE
+            getString(R.string.paypal) -> PAYMENT_MODE_PAYPAL
+            getString(R.string.on_site) -> PAYMENT_MODE_ONSITE
+            else -> PAYMENT_MODE_FREE
+        }
 
     private fun showTicketSoldOutDialog(show: Boolean) {
         if (show) {
