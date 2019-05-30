@@ -596,11 +596,11 @@
         android:id="@+id/orderCompletedFragment"
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"
-        tools:layout="@layout/fragment_order">
+        tools:layout="@layout/fragment_order_completed">
 
         <action
             android:id="@+id/action_order_completed_to_order_user"
-            app:destination="@id/orderCompletedFragment"
+            app:destination="@id/orderUnderUserFragment"
             app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="false" />
 
