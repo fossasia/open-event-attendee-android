@@ -3,34 +3,50 @@ package org.fossasia.openevent.general.attendees
 import com.google.android.material.textfield.TextInputLayout
 import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import kotlinx.android.synthetic.main.item_attendee.view.*
+import kotlinx.android.synthetic.main.item_attendee.view.attendeeInformation
+import kotlinx.android.synthetic.main.item_attendee.view.moreAttendeeInformation
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketId
 import org.fossasia.openevent.general.utils.checkEmpty
 import org.fossasia.openevent.general.utils.checkValidEmail
-import org.fossasia.openevent.general.utils.setRequired
+import org.fossasia.openevent.general.utils.nullToEmpty
 
 class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var identifierList = ArrayList<String>()
     private var editTextList = ArrayList<EditText>()
     var onAttendeeDetailChanged: AttendeeDetailChangeListener? = null
 
-    fun bind(attendee: Attendee, ticket: Ticket, customForm: List<CustomForm>, position: Int, eventId: Long) {
+    fun bind(
+        attendee: Attendee,
+        ticket: Ticket,
+        customForm: List<CustomForm>,
+        position: Int,
+        eventId: Long,
+        firstAttendee: Attendee?
+    ) {
 
-        itemView.itemEmailLayout.setRequired()
-        itemView.itemFirstNameLayout.setRequired()
-        itemView.itemLastNameLayout.setRequired()
         itemView.attendeeItemCountry.setText(attendee.country)
         itemView.attendeeItemLastName.setText(attendee.lastname)
         itemView.attendeeItemEmail.setText(attendee.email)
         itemView.attendeeItemFirstName.setText(attendee.firstname)
         itemView.attendeeItemTicketName.text = "Ticket Name - ${ticket.name}"
 
+        if (firstAttendee != null) {
+            itemView.attendeeItemFirstName.text = SpannableStringBuilder(firstAttendee.firstname.nullToEmpty())
+            itemView.attendeeItemLastName.text = SpannableStringBuilder(firstAttendee.lastname.nullToEmpty())
+            itemView.attendeeItemEmail.text = SpannableStringBuilder(firstAttendee.email.nullToEmpty())
+        } else {
+            itemView.attendeeItemFirstName.text = SpannableStringBuilder("")
+            itemView.attendeeItemLastName.text = SpannableStringBuilder("")
+            itemView.attendeeItemEmail.text = SpannableStringBuilder("")
+        }
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val newAttendee = Attendee(
