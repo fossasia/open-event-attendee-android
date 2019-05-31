@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.junit.After
@@ -71,7 +72,7 @@ class EventUtilsTest {
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
             Event Location : Test Location
-            Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
+            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
 
@@ -87,7 +88,7 @@ class EventUtilsTest {
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
             Event Location : Test Location
-            Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
+            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
 
@@ -101,7 +102,7 @@ class EventUtilsTest {
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
             Event Location : Test Location
-            Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
+            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
 
@@ -117,7 +118,7 @@ class EventUtilsTest {
             Starts On : 15 Sep 2008 04:23 PM
             Ends On : 19 Sep 2008 07:55 PM
             Event Location : Test Location
-            Event Link : https://open-event-frontend-dev.herokuapp.com/e/abcdefgh
+            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
             """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
 

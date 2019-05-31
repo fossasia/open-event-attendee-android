@@ -37,11 +37,13 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
+            buildConfigField "String", "FRONTEND_URL", '"https://eventyay.com/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
+            buildConfigField "String", "FRONTEND_URL", '"https://fossasia.github.io/open-event-frontend/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
         }
@@ -108,7 +110,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -154,7 +156,7 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
     // Picasso
