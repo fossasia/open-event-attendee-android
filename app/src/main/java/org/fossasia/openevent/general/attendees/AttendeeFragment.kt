@@ -80,6 +80,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cvcLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -156,6 +157,19 @@ class AttendeeFragment : Fragment() {
                 rootView.progressBarAttendee.isVisible = it
                 rootView.register.isEnabled = !it
             })
+
+        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                attendeeRecyclerAdapter.setFirstAttendee(
+                    Attendee(firstname = rootView.firstName.text.toString(),
+                        lastname = rootView.lastName.text.toString(),
+                        email = rootView.email.text.toString(),
+                        id = attendeeViewModel.getId())
+                )
+            } else {
+                attendeeRecyclerAdapter.setFirstAttendee(null)
+            }
+        }
 
         setupEventInfo()
         setupTicketDetailTable()
@@ -241,8 +255,7 @@ class AttendeeFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { tickets ->
                 ticketsRecyclerAdapter.addAll(tickets)
-                if (!attendeeViewModel.singleTicket)
-                    attendeeRecyclerAdapter.addAllTickets(tickets)
+                attendeeRecyclerAdapter.addAllTickets(tickets)
             })
 
         val currentTickets = attendeeViewModel.tickets.value
@@ -301,37 +314,20 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun setupAttendeeDetails() {
-        if (attendeeViewModel.singleTicket)
-            rootView.attendeeRecycler.visibility = View.GONE
         rootView.attendeeRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.attendeeRecycler.adapter = attendeeRecyclerAdapter
         rootView.attendeeRecycler.isNestedScrollingEnabled = false
 
         if (attendeeViewModel.attendees.isEmpty()) {
-            if (attendeeViewModel.singleTicket) {
-                val pos = attendeeViewModel.ticketIdAndQty?.map { it.second }?.indexOf(1)
-                val ticket = pos?.let { it1 -> attendeeViewModel.ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                val attendee = Attendee(id = attendeeViewModel.getId(),
-                    firstname = rootView.firstName.text.toString(),
-                    lastname = rootView.lastName.text.toString(),
-                    city = getAttendeeField("city"),
-                    address = getAttendeeField("address"),
-                    state = getAttendeeField("state"),
-                    email = rootView.email.text.toString(),
-                    ticket = TicketId(ticket),
-                    event = EventId(safeArgs.eventId))
-                attendeeViewModel.attendees.add(attendee)
-            } else {
-                attendeeViewModel.ticketIdAndQty?.let {
-                    it.forEach { pair ->
-                        repeat(pair.second) {
-                            attendeeViewModel.attendees.add(Attendee(
-                                id = attendeeViewModel.getId(),
-                                firstname = "", lastname = "", city = getAttendeeField("city"),
-                                address = getAttendeeField("address"), state = getAttendeeField("state"),
-                                email = "", ticket = TicketId(pair.first.toLong()), event = EventId(safeArgs.eventId)
-                            ))
-                        }
+            attendeeViewModel.ticketIdAndQty?.let {
+                it.forEach { pair ->
+                    repeat(pair.second) {
+                        attendeeViewModel.attendees.add(Attendee(
+                            id = attendeeViewModel.getId(),
+                            firstname = "", lastname = "", city = getAttendeeField("city"),
+                            address = getAttendeeField("address"), state = getAttendeeField("state"),
+                            email = "", ticket = TicketId(pair.first.toLong()), event = EventId(safeArgs.eventId)
+                        ))
                     }
                 }
             }
