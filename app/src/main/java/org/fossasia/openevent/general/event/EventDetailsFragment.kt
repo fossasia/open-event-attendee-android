@@ -485,7 +485,7 @@ class EventDetailsFragment : Fragment() {
             R.id.call_for_speakers -> {
                 eventViewModel.event.value?.let {
                     findNavController(rootView).navigate(EventDetailsFragmentDirections
-                        .actionEventDetailsToSpeakersCall(it.id, it.timezone))
+                        .actionEventDetailsToSpeakersCall(it.identifier, it.id, it.timezone))
                 }
                 true
             }

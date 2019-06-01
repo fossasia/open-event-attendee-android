@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "c29e46595502e4aa3dfd4c5c66474e4a",
+    "identityHash": "e888653aeabddbde1210a0b6e549e7aa",
     "entities": [
       {
         "tableName": "Event",
@@ -1113,7 +1113,7 @@
       },
       {
         "tableName": "Speaker",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `position` TEXT, `mobile` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `position` TEXT, `mobile` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, `event` INTEGER, `user` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1234,6 +1234,18 @@
             "columnName": "isFeatured",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "user",
+            "columnName": "user",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1242,7 +1254,24 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_Speaker_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Speaker_event` ON `${TABLE_NAME}` (`event`)"
+          },
+          {
+            "name": "index_Speaker_user",
+            "unique": false,
+            "columnNames": [
+              "user"
+            ],
+            "createSql": "CREATE  INDEX `index_Speaker_user` ON `${TABLE_NAME}` (`user`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -1666,7 +1695,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c29e46595502e4aa3dfd4c5c66474e4a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e888653aeabddbde1210a0b6e549e7aa')"
     ]
   }
 }

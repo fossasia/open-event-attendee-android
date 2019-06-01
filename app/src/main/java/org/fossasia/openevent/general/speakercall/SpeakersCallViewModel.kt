@@ -6,30 +6,91 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.AuthHolder
+import org.fossasia.openevent.general.auth.AuthService
+import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.speakers.Speaker
+import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 
 class SpeakersCallViewModel(
     private val eventService: EventService,
-    private val resource: Resource
+    private val resource: Resource,
+    private val authHolder: AuthHolder,
+    private val authService: AuthService,
+    private val speakerService: SpeakerService
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     private val mutableSpeakersCall = MutableLiveData<SpeakersCall>()
     val speakersCall: LiveData<SpeakersCall> = mutableSpeakersCall
-    private val mutableError = SingleLiveEvent<String>()
-    val errorMessage: LiveData<String> = mutableError
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
     private val mutableProgress = MutableLiveData<Boolean>(true)
     val progress: LiveData<Boolean> = mutableProgress
+    private val mutableSpeaker = MutableLiveData<Speaker>()
+    val speaker: LiveData<Speaker> = mutableSpeaker
+    private val mutableUser = MutableLiveData<User>()
+    val user: LiveData<User> = mutableUser
+    private val mutableEmptySpeakersCall = MutableLiveData<Boolean>(true)
+    val emptySpeakersCall: LiveData<Boolean> = mutableEmptySpeakersCall
+
+    fun isLoggedIn(): Boolean = authHolder.isLoggedIn()
+
+    fun loadMyUserAndSpeaker(eventId: Long, eventIdentifier: String) {
+        compositeDisposable += authService.getProfile()
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({ user ->
+                mutableUser.value = user
+                loadMySpeaker(user, eventId, eventIdentifier)
+            }) {
+                Timber.e(it, "Failure")
+                mutableMessage.value = resource.getString(R.string.failure)
+            }
+    }
+
+    fun loadMySpeaker(user: User, eventId: Long, eventIdentifier: String) {
+        val query = """[{
+                |   'and':[{
+                |       'name':'event',
+                |       'op':'has',
+                |       'val': {
+                |           'name': 'identifier',
+                |           'op': 'eq',
+                |           'val': '$eventIdentifier'
+                |       }
+                |    }, {
+                |       'name':'email',
+                |       'op':'eq',
+                |       'val':'${user.email}'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+
+        compositeDisposable += speakerService.getSpeakerProfileOfEmailAndEvent(user, eventId, query)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableMessage.value = resource.getString(R.string.loading_speaker_profile_message)
+            }.subscribe({
+                mutableSpeaker.value = it
+            }, {
+                mutableMessage.value = resource.getString(R.string.no_speaker_profile_created_message)
+            })
+    }
 
     fun loadSpeakersCall(eventId: Long) {
         if (eventId == -1L) {
-            mutableError.value = resource.getString(R.string.error_fetching_event_section_message,
+            mutableMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                 resource.getString(R.string.speakers_call))
+            mutableEmptySpeakersCall.value = true
             mutableProgress.value = false
             return
         }
@@ -44,9 +105,11 @@ class SpeakersCallViewModel(
             }
             .subscribe({
                 mutableSpeakersCall.value = it
+                mutableEmptySpeakersCall.value = false
             }, {
-                mutableError.value = resource.getString(R.string.error_fetching_event_section_message,
+                mutableMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.speakers_call))
+                mutableEmptySpeakersCall.value = true
                 Timber.e(it, "Error fetching speakers call for event $eventId")
             })
     }
