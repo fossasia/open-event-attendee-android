@@ -132,10 +132,6 @@ class AttendeeViewModel(
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
-            }.doFinally {
-                createAttendeeIterations++
-                if (createAttendeeIterations == totalAttendee)
-                    mutableProgress.value = false
             }.subscribe({
                 attendeesForOrder.add(it)
                 if (attendeesForOrder.size == totalAttendee) {
@@ -233,11 +229,7 @@ class AttendeeViewModel(
             }
             compositeDisposable += orderService.placeOrder(order)
                 .withDefaultSchedulers()
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
-                    mutableProgress.value = false
-                }.subscribe({
+                .subscribe({
                     orderIdentifier = it.identifier.toString()
                     Timber.d("Success placing order!")
                     when (it.paymentMode) {
@@ -264,9 +256,7 @@ class AttendeeViewModel(
     private fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
         compositeDisposable += orderService.confirmOrder(identifier, order)
             .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }.doFinally {
+            .doFinally {
                 mutableProgress.value = false
             }.subscribe({
                 mutableMessage.value = resource.getString(R.string.order_success_message)

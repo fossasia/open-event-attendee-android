@@ -156,6 +156,10 @@ class AttendeeFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAttendee.isVisible = it
                 rootView.register.isEnabled = !it
+                rootView.register.text = if (!it) getString(R.string.register) else ""
+                rootView.register.backgroundTintList =
+                    if (it) resources.getColorStateList(R.color.grey)
+                    else resources.getColorStateList(R.color.colorAccent)
             })
 
         rootView.sameBuyerCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
