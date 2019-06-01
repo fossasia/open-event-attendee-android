@@ -378,6 +378,41 @@
             android:defaultValue="-1L"/>
     </fragment>
     <fragment
+        android:id="@+id/speakersCallProposalFragment"
+        android:name="org.fossasia.openevent.general.speakercall.SpeakersCallProposalFragment"
+        android:label="SpeakersCallProposal"
+        tools:layout="@layout/fragment_speakers_call_proposal">
+        <action
+            android:id="@+id/action_proposal_to_edit_speaker"
+            app:destination="@id/editSpeakerFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="speakerId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editSpeakerFragment"
+        android:name="org.fossasia.openevent.general.speakercall.EditSpeakerFragment"
+        android:label="EditSpeakerFragment"
+        tools:layout="@layout/fragment_proposal_speaker">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="speakerId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
         android:label="ProfileFragment"
@@ -643,6 +678,31 @@
         android:name="org.fossasia.openevent.general.speakercall.SpeakersCallFragment"
         android:label="SpeakersCallFragment"
         tools:layout="@layout/fragment_speakers_call">
+        <action
+            android:id="@+id/action_speakers_call_to_proposal"
+            app:destination="@+id/speakersCallProposalFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_speakers_call_to_add_speaker"
+            app:destination="@+id/editSpeakerFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_speakers_call_to_auth"
+            app:destination="@+id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <argument
+            android:name="eventIdentifier"
+            app:argType="string"
+            android:defaultValue="''"/>
         <argument
             android:name="eventId"
             app:argType="long"

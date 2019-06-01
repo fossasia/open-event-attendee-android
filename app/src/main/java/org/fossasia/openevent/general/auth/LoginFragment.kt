@@ -30,6 +30,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
+import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.show
@@ -198,6 +199,7 @@ class LoginFragment : Fragment() {
             ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
             TICKETS_FRAGMENT -> R.id.ticketsFragment
             NOTIFICATION_FRAGMENT -> R.id.notificationFragment
+            SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
             else -> R.id.eventsFragment
         }
         findNavController(rootView).popBackStack(destinationId, false)

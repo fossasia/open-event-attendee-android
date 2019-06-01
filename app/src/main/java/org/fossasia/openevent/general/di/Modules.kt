@@ -67,6 +67,8 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
+import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.LocationService
@@ -226,7 +228,9 @@ val viewModelModule = module {
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { SpeakersCallViewModel(get(), get()) }
+    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SpeakersCallProposalViewModel(get(), get()) }
+    viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
 }
 
 val networkModule = module {

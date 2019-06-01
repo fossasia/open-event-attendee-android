@@ -164,6 +164,7 @@
     <string name="date_preview" translatable="false">Thu,June 14</string>
     <string name="event_preview" translatable="false">FOSSASIA summit</string>
     <string name="name_preview" translatable="false">Nikit Bhandari</string>
+    <string name="email_preview" translatable="false">fossasia.asia@gmail.com</string>
     <string name="checkin_status">Check-in status</string>
     <string name="checked_in">Checked In</string>
     <string name="not_checked_in">Not Checked In</string>
@@ -374,10 +375,36 @@
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
     <string name="color_code">Color Code:</string>
+
+    <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
     <string name="call_for_speakers">Call For Speakers</string>
     <string name="submit_proposal">Submit Proposal</string>
     <string name="code_of_conduct">Code Of Conduct</string>
     <string name="empty_field_error_message">This field must not be empty</string>
+    <string name="proposal">Proposal</string>
+    <string name="speaker_details">My Speaker Details</string>
+    <string name="session_proposal_detail">Session Proposal Detail</string>
+    <string name="organization">Organization</string>
+    <string name="position">Position</string>
+    <string name="short_bio">Short Bio</string>
+    <string name="website">Website</string>
+    <string name="twitter">Twitter</string>
+    <string name="proposal_speaker">My Proposal Speaker</string>
+    <string name="no_speaker_info">You haven\'t had any speaker information</string>
+    <string name="load_speaker_info">Loading current speaker information</string>
+    <string name="add_speaker">Add Speaker</string>
+    <string name="fail_creating_speaker">Fail on creating speaker. Please try again.</string>
+    <string name="create_speaker">Create Speaker</string>
+    <string name="create_edit_speaker">Create/Edit Proposal</string>
+    <string name="create_proposal_message">Create proposal for this event or edit your speaker profile</string>
+    <string name="create_proposal">Create Proposal</string>
+    <string name="create_speaker_profile_message">You haven\'t created your speaker profile for this event</string>
+    <string name="edit_speaker">Edit Speaker</string>
+    <string name="continue_string">Continue</string>
+    <string name="loading_speaker_profile_message">Loading your speaker profile</string>
+    <string name="no_speaker_profile_created_message">You haven\'t created any speaker profile</string>
+    <string name="create_speaker_fail_message">Fail on creating speaker profile</string>
+    <string name="update_speaker_fail_message">Fail on updating speaker profile</string>
 
 </resources>
