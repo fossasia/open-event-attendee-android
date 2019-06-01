@@ -585,28 +585,35 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/register"
-                    style="@style/AppTheme.MaterialButton.RoundedCorners"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/details_margin_small"
-                    android:layout_marginEnd="@dimen/details_margin_small"
-                    android:layout_marginTop="@dimen/layout_margin_large"
-                    android:layout_marginBottom="@dimen/layout_margin_large"
-                    android:enabled="false"
-                    android:text="@string/register"/>
-            </LinearLayout>
+                    android:layout_gravity="center">
 
-            <ProgressBar
-                android:id="@+id/progressBarAttendee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:elevation="@dimen/card_elevation"
-                android:padding="@dimen/padding_small"
-                android:visibility="gone" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/register"
+                        style="@style/AppTheme.MaterialButton.RoundedCorners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/details_margin_small"
+                        android:layout_marginEnd="@dimen/details_margin_small"
+                        android:layout_marginTop="@dimen/layout_margin_large"
+                        android:layout_marginBottom="@dimen/layout_margin_large"
+                        android:enabled="false"
+                        android:text="@string/register"/>
+
+                    <ProgressBar
+                        android:layout_centerInParent="true"
+                        android:id="@+id/progressBarAttendee"
+                        android:layout_width="@dimen/spinner_height"
+                        android:layout_height="@dimen/spinner_width"
+                        android:elevation="@dimen/card_elevation"
+                        android:padding="@dimen/padding_small"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+                </RelativeLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>
