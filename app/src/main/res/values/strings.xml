@@ -130,6 +130,11 @@
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
     <string name="ticket_details">Ticket Details</string>
+    <string name="ticket_timeout_message">You have exceeded the time limit and your reservation has been released.\n\nThe purpose of this time limit is to ensure that registration is available to as many people as possible. We apologize for the inconvenience.</string>
+    <string name="ticket_timeout_info_message">After %1$s minutes, the reservation we are hodling will be released.</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="cancel_order_message">Are you sure to cancel this order?</string>
+    <string name="pending_order_cancelled_message">Pending order cancelled</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
