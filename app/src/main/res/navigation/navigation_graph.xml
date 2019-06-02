@@ -639,6 +639,12 @@
             app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="false" />
 
+        <action
+            android:id="@+id/action_order_completed_to_event_detail"
+            app:destination="@id/eventDetailsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="false" />
+
         <argument
             android:name="eventId"
             app:argType="long"
