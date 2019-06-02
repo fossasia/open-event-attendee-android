@@ -601,6 +601,11 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+
+        <argument
+            android:name="timeout"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/attendeeFragment"
@@ -616,6 +621,12 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
 
+        <action
+            android:id="@+id/action_attendee_to_ticket_pop"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/ticketsFragment"
+            app:destination="@+id/ticketsFragment"/>
+
         <argument
             android:name="eventId"
             app:argType="long"
@@ -624,6 +635,12 @@
         <argument
             android:name="ticketIdAndQty"
             app:argType="org.fossasia.openevent.general.ticket.TicketIdAndQtyWrapper"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+
+        <argument
+            android:name="currency"
+            app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
     </fragment>
