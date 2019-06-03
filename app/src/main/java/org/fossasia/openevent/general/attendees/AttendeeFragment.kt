@@ -168,7 +168,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                     else resources.getColorStateList(R.color.colorAccent)
             })
 
-        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 attendeeRecyclerAdapter.setFirstAttendee(
                     Attendee(firstname = rootView.firstName.text.toString(),
@@ -858,9 +858,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun loadUserUI(user: User) {
         rootView.helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
-        rootView.firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
-        rootView.lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
-        rootView.email.text = Editable.Factory.getInstance().newEditable(user.email.nullToEmpty())
+        rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
+        rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
+        rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())
+        rootView.firstName.isEnabled = false
+        rootView.lastName.isEnabled = false
+        rootView.email.isEnabled = false
     }
 
     private fun loadTicketDetailsTableUI(show: Boolean) {
