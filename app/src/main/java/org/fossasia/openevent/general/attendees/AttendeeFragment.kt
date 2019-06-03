@@ -234,11 +234,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.cancel_order))
             .setMessage(getString(R.string.cancel_order_message))
-            .setPositiveButton(getString(R.string.continue_string)) { _, _ -> /* Do Nothing */ }
-            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+            .setPositiveButton(getString(R.string.continue_string)) { _, _ ->
                 if (!attendeeViewModel.orderCreatedSuccess)
                     attendeeViewModel.cancelPendingOrder()
                 findNavController(rootView).popBackStack()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
             }.create()
             .show()
     }
