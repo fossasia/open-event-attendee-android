@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding_large">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size"
+                        android:text="@string/speaker_details"/>
+                    <ImageView
+                        android:id="@+id/expandSpeakerDetailButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:foreground="?selectableItemBackground"
+                        app:srcCompat="@drawable/ic_expand_icon"/>
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/speakerProgressBar"
+                    android:layout_marginTop="@dimen/layout_margin_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/speakerInfoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <ImageView
+                        android:id="@+id/speakerAvatar"
+                        android:layout_gravity="center"
+                        android:layout_width="@dimen/avatar_large"
+                        android:layout_height="@dimen/avatar_large"
+                        android:padding="@dimen/padding_large"
+                        app:srcCompat="@drawable/ic_account_circle_grey" />
+                    <LinearLayout
+                        android:id="@+id/speakerNameLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/ic_person" />
+
+                        <TextView
+                            android:id="@+id/speakerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/name_preview"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerEmailLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_email" />
+
+                        <TextView
+                            android:id="@+id/speakerEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/email_preview"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerOrganizationLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_organization" />
+
+                        <TextView
+                            android:id="@+id/speakerOrganization"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/organization"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerPositionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_position" />
+
+                        <TextView
+                            android:id="@+id/speakerPosition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/position"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerCountryLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_location_on_black" />
+
+                        <TextView
+                            android:id="@+id/speakerCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/country"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerBioLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_bio" />
+
+                        <TextView
+                            android:id="@+id/speakerShortBio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/short_bio"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/speakerWebsiteLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="?selectableItemBackground"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            app:srcCompat="@drawable/ic_website" />
+
+                        <TextView
+                            android:id="@+id/speakerWebsite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/layout_margin_medium"
+                            android:textColor="@color/dark_grey"
+                            tools:text="@string/website"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/heading_text_size"
+                    android:text="@string/session_proposal_detail"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

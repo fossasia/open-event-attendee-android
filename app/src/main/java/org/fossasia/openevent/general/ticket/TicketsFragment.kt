@@ -135,6 +135,8 @@ class TicketsFragment : Fragment() {
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
+
+        if (safeArgs.timeout) showTicketTimeoutDialog()
     }
 
     override fun onDestroyView() {
@@ -155,8 +157,17 @@ class TicketsFragment : Fragment() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
-            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty
+            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty, currency = safeArgs.currency
         ))
+    }
+
+    private fun showTicketTimeoutDialog() {
+        AlertDialog.Builder(requireContext())
+            .setPositiveButton(getString(R.string.ok)) { _, _ -> /*Do Nothing*/ }
+            .setTitle(getString(R.string.whoops))
+            .setMessage(getString(R.string.ticket_timeout_message))
+            .create()
+            .show()
     }
 
     private fun redirectToLogin() {

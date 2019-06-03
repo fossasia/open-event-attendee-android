@@ -10,6 +10,7 @@ import org.fossasia.openevent.general.attendees.ListAttendeeIdConverter
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
+import org.fossasia.openevent.general.auth.UserIdConverter
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.event.EventIdConverter
@@ -45,7 +46,7 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
     EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
     SponsorWithEvent::class, Session::class, SpeakersCall::class], version = 6)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
-    EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class,
+    EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class, UserIdConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class, TrackConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 

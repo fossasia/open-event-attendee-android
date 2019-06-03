@@ -42,10 +42,12 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.attendeeItemFirstName.text = SpannableStringBuilder(firstAttendee.firstname.nullToEmpty())
             itemView.attendeeItemLastName.text = SpannableStringBuilder(firstAttendee.lastname.nullToEmpty())
             itemView.attendeeItemEmail.text = SpannableStringBuilder(firstAttendee.email.nullToEmpty())
+            setFieldEditable(false)
         } else {
             itemView.attendeeItemFirstName.text = SpannableStringBuilder("")
             itemView.attendeeItemLastName.text = SpannableStringBuilder("")
             itemView.attendeeItemEmail.text = SpannableStringBuilder("")
+            setFieldEditable(true)
         }
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -77,6 +79,12 @@ class AttendeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if ((price != null && price.equals(0.toFloat())) || price == null) {
             itemView.countryArea.visibility = View.GONE
         }
+    }
+
+    private fun setFieldEditable(editable: Boolean) {
+        itemView.attendeeItemFirstName.isEnabled = editable
+        itemView.attendeeItemLastName.isEnabled = editable
+        itemView.attendeeItemEmail.isEnabled = editable
     }
 
     fun checkValidFields(): Boolean =

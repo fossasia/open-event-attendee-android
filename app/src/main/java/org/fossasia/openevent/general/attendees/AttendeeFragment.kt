@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.attendees
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.Spannable
@@ -81,6 +82,9 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutTextView
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutCounterLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutInfoTextView
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -96,6 +100,7 @@ import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.setRequired
 import org.fossasia.openevent.general.utils.checkEmpty
@@ -106,13 +111,14 @@ import java.util.Calendar
 import java.util.Currency
 import kotlin.collections.ArrayList
 
-class AttendeeFragment : Fragment() {
+class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private lateinit var rootView: View
     private val attendeeViewModel by viewModel<AttendeeViewModel>()
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private val safeArgs: AttendeeFragmentArgs by navArgs()
+    private lateinit var timer: CountDownTimer
     var totalAmount = 0F
 
     private lateinit var API_KEY: String
@@ -156,9 +162,13 @@ class AttendeeFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 rootView.progressBarAttendee.isVisible = it
                 rootView.register.isEnabled = !it
+                rootView.register.text = if (!it) getString(R.string.register) else ""
+                rootView.register.backgroundTintList =
+                    if (it) resources.getColorStateList(R.color.grey)
+                    else resources.getColorStateList(R.color.colorAccent)
             })
 
-        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 attendeeRecyclerAdapter.setFirstAttendee(
                     Attendee(firstname = rootView.firstName.text.toString(),
@@ -172,6 +182,7 @@ class AttendeeFragment : Fragment() {
         }
 
         setupEventInfo()
+        setupPendingOrder()
         setupTicketDetailTable()
         setupUser()
         setupAttendeeDetails()
@@ -213,12 +224,34 @@ class AttendeeFragment : Fragment() {
         attendeeRecyclerAdapter.attendeeChangeListener = null
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (this::timer.isInitialized)
+            timer.cancel()
+    }
+
+    override fun handleBackPress() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.cancel_order))
+            .setMessage(getString(R.string.cancel_order_message))
+            .setPositiveButton(getString(R.string.continue_string)) { _, _ -> /* Do Nothing */ }
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                if (!attendeeViewModel.orderCreatedSuccess)
+                    attendeeViewModel.cancelPendingOrder()
+                findNavController(rootView).popBackStack()
+            }.create()
+            .show()
+    }
+
     private fun setupEventInfo() {
         attendeeViewModel.event
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetailsUI(it)
                 setupPaymentOptions(it)
+                if (attendeeViewModel.pendingOrder.value != null) {
+                    setupCountDownTimer(it)
+                }
             })
 
         val currentEvent = attendeeViewModel.event.value
@@ -227,7 +260,50 @@ class AttendeeFragment : Fragment() {
         else {
             setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
+            if (attendeeViewModel.pendingOrder.value != null) {
+                setupCountDownTimer(currentEvent)
+            }
         }
+    }
+
+    private fun setupPendingOrder() {
+        attendeeViewModel.pendingOrder
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                attendeeViewModel.event.value?.let {
+                    setupCountDownTimer(it)
+                }
+            })
+
+        val currentPendingOrder = attendeeViewModel.pendingOrder.value
+        if (currentPendingOrder == null) {
+            attendeeViewModel.createPendingOrder(safeArgs.eventId)
+        }
+    }
+
+    private fun setupCountDownTimer(event: Event) {
+        rootView.timeoutCounterLayout.visibility = View.VISIBLE
+        rootView.timeoutInfoTextView.text =
+            getString(R.string.ticket_timeout_info_message, event.orderExpiryTime.toString())
+
+        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) event.orderExpiryTime * 60 * 1000L
+                                else attendeeViewModel.timeout
+        timer = object : CountDownTimer(timeLeft, 1000) {
+            override fun onFinish() {
+                if (!attendeeViewModel.orderCreatedSuccess)
+                    attendeeViewModel.cancelPendingOrder()
+                findNavController(rootView).navigate(AttendeeFragmentDirections
+                    .actionAttendeeToTicketPop(safeArgs.eventId, safeArgs.currency, true))
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                attendeeViewModel.timeout = millisUntilFinished
+                val minutes = millisUntilFinished / 1000 / 60
+                val seconds = millisUntilFinished / 1000 % 60
+                rootView.timeoutTextView.text = "$minutes:$seconds"
+            }
+        }
+        timer.start()
     }
 
     private fun setupTicketDetailTable() {
@@ -780,9 +856,12 @@ class AttendeeFragment : Fragment() {
 
     private fun loadUserUI(user: User) {
         rootView.helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
-        rootView.firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
-        rootView.lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
-        rootView.email.text = Editable.Factory.getInstance().newEditable(user.email.nullToEmpty())
+        rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
+        rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
+        rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())
+        rootView.firstName.isEnabled = false
+        rootView.lastName.isEnabled = false
+        rootView.email.isEnabled = false
     }
 
     private fun loadTicketDetailsTableUI(show: Boolean) {

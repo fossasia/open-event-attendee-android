@@ -36,6 +36,34 @@
                 tools:text="May 24 - May 25" />
 
             <LinearLayout
+                android:id="@+id/timeoutCounterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:padding="@dimen/padding_large"
+                android:background="@drawable/border_background_ticket_timer"
+                android:visibility="gone"
+                tools:visibility="visible">
+                <TextView
+                    android:id="@+id/timeoutTextView"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/text_size_expanded_title_large"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/timeoutInfoTextView"
+                    android:layout_weight="8"
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/text_size_large"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -585,28 +613,35 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/register"
-                    style="@style/AppTheme.MaterialButton.RoundedCorners"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/details_margin_small"
-                    android:layout_marginEnd="@dimen/details_margin_small"
-                    android:layout_marginTop="@dimen/layout_margin_large"
-                    android:layout_marginBottom="@dimen/layout_margin_large"
-                    android:enabled="false"
-                    android:text="@string/register"/>
-            </LinearLayout>
+                    android:layout_gravity="center">
 
-            <ProgressBar
-                android:id="@+id/progressBarAttendee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:elevation="@dimen/card_elevation"
-                android:padding="@dimen/padding_small"
-                android:visibility="gone" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/register"
+                        style="@style/AppTheme.MaterialButton.RoundedCorners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/details_margin_small"
+                        android:layout_marginEnd="@dimen/details_margin_small"
+                        android:layout_marginTop="@dimen/layout_margin_large"
+                        android:layout_marginBottom="@dimen/layout_margin_large"
+                        android:enabled="false"
+                        android:text="@string/register"/>
+
+                    <ProgressBar
+                        android:layout_centerInParent="true"
+                        android:id="@+id/progressBarAttendee"
+                        android:layout_width="@dimen/spinner_height"
+                        android:layout_height="@dimen/spinner_width"
+                        android:elevation="@dimen/card_elevation"
+                        android:padding="@dimen/padding_small"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+                </RelativeLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

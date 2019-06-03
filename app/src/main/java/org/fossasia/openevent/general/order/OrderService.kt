@@ -22,6 +22,9 @@ class OrderService(
                 }
     }
 
+    fun editOrder(orderIdentifier: String, order: Order): Single<Order> =
+        orderApi.editOrder(orderIdentifier, order)
+
     fun chargeOrder(identifier: String, charge: Charge): Single<Charge> {
         return orderApi.chargeOrder(identifier, charge)
     }

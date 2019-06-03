@@ -56,6 +56,7 @@ data class Event(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val refundPolicy: String? = null,
+    val orderExpiryTime: Int = 10,
 
     val canPayByStripe: Boolean = false,
     val canPayByCheque: Boolean = false,
