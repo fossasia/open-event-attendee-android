@@ -69,6 +69,8 @@ class AttendeeViewModel(
     val forms: LiveData<List<CustomForm>> = mutableForms
     private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
     val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
+    private val mutablePendingOrder = MutableLiveData<Order>()
+    val pendingOrder: LiveData<Order> = mutablePendingOrder
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -97,6 +99,8 @@ class AttendeeViewModel(
     var identifierList = ArrayList<String>()
     var editTextList = ArrayList<EditText>()
     var paymentCurrency: String = ""
+    var timeout: Long = -1L
+    var orderCreatedSuccess = false
     var ticketDetailsVisible = false
     var billingEnabled = false
 
@@ -127,15 +131,40 @@ class AttendeeViewModel(
             })
     }
 
+    fun cancelPendingOrder() {
+        var order = mutablePendingOrder.value
+        val identifier: String? = orderIdentifier
+        if (order == null || identifier == null) return
+
+        order = order.copy(status = ORDER_STATUS_CANCELLED)
+        compositeDisposable += orderService.editOrder(identifier, order)
+            .withDefaultSchedulers()
+            .subscribe({
+                Timber.d("Pending order cancelled")
+                mutableMessage.value = resource.getString(R.string.pending_order_cancelled_message)
+            }, {
+                Timber.e("Fail on cancelling order")
+            })
+    }
+
+    fun createPendingOrder(eventId: Long) {
+        val emptyOrder = Order(id = getId(), status = ORDER_STATUS_PENDING, event = EventId(eventId))
+
+        compositeDisposable += orderService.placeOrder(emptyOrder)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutablePendingOrder.value = it
+                orderIdentifier = it.identifier.toString()
+            }, {
+                Timber.e(it, "Fail on creating pending order")
+            })
+    }
+
     private fun createAttendee(attendee: Attendee, totalAttendee: Int) {
         compositeDisposable += attendeeService.postAttendee(attendee)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
-            }.doFinally {
-                createAttendeeIterations++
-                if (createAttendeeIterations == totalAttendee)
-                    mutableProgress.value = false
             }.subscribe({
                 attendeesForOrder.add(it)
                 if (attendeesForOrder.size == totalAttendee) {
@@ -218,55 +247,49 @@ class AttendeeViewModel(
     }
 
     private fun createOrder() {
+        var order = mutablePendingOrder.value
+        val identifier: String? = orderIdentifier
+        if (order == null || identifier == null) {
+            mutableMessage.value = resource.getString(R.string.order_fail_message)
+            return
+        }
         val attendeeList = attendeesForOrder.map { AttendeeId(it.id) }.toList()
         val amount: Float = totalAmount.value ?: 0F
         if (amount <= 0) {
             paymentModeForOrder = PAYMENT_MODE_FREE
         }
-        val eventId = event.value?.id
-        if (eventId != null) {
-            var order = Order(id = getId(), paymentMode = paymentModeForOrder, status = ORDER_STATUS_PENDING,
-                amount = amount, attendees = attendeeList, event = EventId(eventId))
-            if (billingEnabled) {
-                order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
+        order = order.copy(attendees = attendeeList, paymentMode = paymentModeForOrder, amount = amount)
+        if (billingEnabled) {
+            order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
                 address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder)
-            }
-            compositeDisposable += orderService.placeOrder(order)
-                .withDefaultSchedulers()
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.doFinally {
-                    mutableProgress.value = false
-                }.subscribe({
-                    orderIdentifier = it.identifier.toString()
-                    Timber.d("Success placing order!")
-                    when (it.paymentMode) {
-                        PAYMENT_MODE_FREE -> {
-                            confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
-                            confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                        }
-                        PAYMENT_MODE_CHEQUE, PAYMENT_MODE_BANK, PAYMENT_MODE_ONSITE -> {
-                            confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PLACED)
-                            confirmOrderStatus(it.identifier.toString(), confirmOrder)
-                        }
-                        else -> mutableMessage.value = resource.getString(R.string.order_success_message)
-                    }
-                }, {
-                    mutableMessage.value = resource.getString(R.string.order_fail_message)
-                    Timber.d(it, "Failed creating Order")
-                    deleteAttendees(order.attendees)
-                })
-        } else {
-            mutableMessage.value = resource.getString(R.string.order_fail_message)
         }
+        compositeDisposable += orderService.placeOrder(order)
+            .withDefaultSchedulers()
+            .subscribe({
+                orderIdentifier = it.identifier.toString()
+                Timber.d("Success placing order!")
+                when (it.paymentMode) {
+                    PAYMENT_MODE_FREE -> {
+                        confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
+                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                    }
+                    PAYMENT_MODE_CHEQUE, PAYMENT_MODE_BANK, PAYMENT_MODE_ONSITE -> {
+                        confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PLACED)
+                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                    }
+                    else -> mutableMessage.value = resource.getString(R.string.order_success_message)
+                }
+            }, {
+                mutableMessage.value = resource.getString(R.string.order_fail_message)
+                Timber.d(it, "Failed creating Order")
+                deleteAttendees(order.attendees)
+            })
     }
 
     private fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {
         compositeDisposable += orderService.confirmOrder(identifier, order)
             .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }.doFinally {
+            .doFinally {
                 mutableProgress.value = false
             }.subscribe({
                 mutableMessage.value = resource.getString(R.string.order_success_message)
