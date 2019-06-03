@@ -114,10 +114,14 @@ class EventService(
         return eventDao.getEvent(id)
     }
 
+    fun getEventByIdentifier(identifier: String): Single<Event> {
+        return eventApi.getEventFromApi(identifier)
+    }
+
     fun getEventById(eventId: Long): Single<Event> {
         return eventDao.getEventById(eventId)
             .onErrorResumeNext {
-                eventApi.getEventFromApi(eventId).map {
+                eventApi.getEventFromApi(eventId.toString()).map {
                     eventDao.insertEvent(it)
                     it
                 }
