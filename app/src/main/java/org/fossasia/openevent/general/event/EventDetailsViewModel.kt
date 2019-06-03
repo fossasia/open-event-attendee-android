@@ -198,6 +198,25 @@ class EventDetailsViewModel(
             })
     }
 
+    fun loadEventByIdentifier(identifier: String) {
+        if (identifier.isEmpty()) {
+            mutablePopMessage.value = resource.getString(R.string.error_fetching_event_message)
+            return
+        }
+        compositeDisposable += eventService.getEventByIdentifier(identifier)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableEvent.value = it
+            }, {
+                Timber.e(it, "Error fetching event")
+                mutablePopMessage.value = resource.getString(R.string.error_fetching_event_message)
+            })
+    }
+
     fun fetchEventSessions(id: Long) {
         if (id == -1L) return
 

@@ -19,6 +19,7 @@ import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAY_STORE_BUILD_FLAVOR = "playStore"
+const val EVENT_IDENTIFIER = "eventIdentifier"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -38,6 +39,21 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentFragmentId = destination.id
             handleNavigationVisibility(currentFragmentId)
+        }
+        handleAppLinkIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleAppLinkIntent(intent)
+    }
+
+    private fun handleAppLinkIntent(intent: Intent?) {
+        val appLinkData = intent?.data
+        if (appLinkData != null) {
+            val bundle = Bundle()
+            bundle.putString(EVENT_IDENTIFIER, appLinkData.lastPathSegment)
+            navController.navigate(R.id.eventDetailsFragment, bundle)
         }
     }
 
