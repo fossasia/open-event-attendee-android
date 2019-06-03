@@ -95,7 +95,6 @@ class AttendeeViewModel(
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0
-    var cardTypePosition: Int = 0
     var identifierList = ArrayList<String>()
     var editTextList = ArrayList<EditText>()
     var paymentCurrency: String = ""

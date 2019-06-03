@@ -41,7 +41,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
 import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePayment
 import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePaymentDescription
@@ -50,10 +49,8 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
 import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelectorContainer
-import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
 import kotlinx.android.synthetic.main.fragment_attendee.view.qty
 import kotlinx.android.synthetic.main.fragment_attendee.view.register
-import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
 import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
 import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
 import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
@@ -67,6 +64,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.city
 import kotlinx.android.synthetic.main.fragment_attendee.view.company
@@ -102,6 +100,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.setRequired
 import org.fossasia.openevent.general.utils.checkEmpty
 import org.fossasia.openevent.general.utils.checkValidEmail
@@ -157,15 +156,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 rootView.longSnackbar(it)
             })
 
+        val progressDialog = Utils.progressDialog(context, getString(R.string.creating_order_message))
         attendeeViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBarAttendee.isVisible = it
-                rootView.register.isEnabled = !it
-                rootView.register.text = if (!it) getString(R.string.register) else ""
-                rootView.register.backgroundTintList =
-                    if (it) resources.getColorStateList(R.color.grey)
-                    else resources.getColorStateList(R.color.colorAccent)
+                progressDialog.show(it)
             })
 
         rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
@@ -190,7 +185,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         setupBillingInfo()
         setupCountryOptions()
         setupCardNumber()
-        setupCardType()
         setupMonthOptions()
         setupYearOptions()
         setupTermsAndCondition()
@@ -214,7 +208,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     override fun onResume() {
         super.onResume()
         if (!isNetworkConnected(context)) {
-            rootView.progressBarAttendee.isVisible = false
             rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
         }
     }
@@ -324,8 +317,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 totalAmount = it
-                rootView.paymentSelectorContainer.visibility = if (it > 0) View.VISIBLE else View.GONE
-                rootView.countryPickerContainer.visibility = if (it > 0) View.VISIBLE else View.GONE
+                rootView.paymentSelectorContainer.isVisible = it > 0
+                rootView.countryPickerContainer.isVisible = it > 0
+                rootView.billingInfoCheckboxSection.isVisible = it > 0
                 rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$it"
             })
 
@@ -534,32 +528,18 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s == null || s.length < 3) {
-                    setCardSelectorAndError(0, visibility = true, error = false)
+                    setCardSelectorAndError(false)
                     return
                 }
                 val card = Utils.getCardType(s.toString())
                 if (card == Utils.cardType.NONE) {
-                    setCardSelectorAndError(0, visibility = true, error = true)
+                    setCardSelectorAndError(true)
                     return
                 }
-
-                val pos: Int = card.let {
-                    when (it) {
-                        Utils.cardType.AMERICAN_EXPRESS -> 1
-                        Utils.cardType.MASTER_CARD -> 2
-                        Utils.cardType.VISA -> 3
-                        Utils.cardType.DISCOVER -> 4
-                        Utils.cardType.DINERS_CLUB -> 5
-                        Utils.cardType.UNIONPAY -> 6
-                        else -> 0
-                    }
-                }
-                setCardSelectorAndError(pos, visibility = false, error = false)
+                setCardSelectorAndError(false)
             }
 
-            private fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
-                rootView.cardSelector.setSelection(pos, true)
-                rootView.cardSelector.isVisible = visibility
+            private fun setCardSelectorAndError(error: Boolean) {
                 if (error) {
                     rootView.cardNumber.error = "Invalid card number"
                     return
@@ -625,29 +605,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
 
         rootView.year.setSelection(attendeeViewModel.yearSelectedPosition)
-    }
-
-    private fun setupCardType() {
-        val cardType = ArrayList<String>()
-        cardType.add(getString(R.string.american_express_pay_message))
-        cardType.add(getString(R.string.mastercard_pay_message))
-        cardType.add(getString(R.string.visa_pay_message))
-        cardType.add(getString(R.string.discover_pay_message))
-        cardType.add(getString(R.string.diners_pay_message))
-        cardType.add(getString(R.string.unionpay_pay_message))
-
-        rootView.cardSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
-            cardType)
-        rootView.cardSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) { /* Do nothing */ }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                attendeeViewModel.cardTypePosition = pos
-                rootView.selectCard.text = cardType[pos]
-            }
-        }
-
-        rootView.cardSelector.setSelection(attendeeViewModel.cardTypePosition)
     }
 
     private fun setupTermsAndCondition() {
@@ -742,37 +699,30 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 return@setOnClickListener
             }
 
-            if (!checkRequiredFields()) return@setOnClickListener
+            if (!checkRequiredFields()) {
+                rootView.snackbar(R.string.fill_required_fields_message)
+                return@setOnClickListener
+            }
 
             if (attendeeViewModel.totalAmount.value != 0F && !checkPaymentOptions()) return@setOnClickListener
 
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(R.string.confirmation_dialog)
+            val attendees = attendeeViewModel.attendees
 
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                val attendees = attendeeViewModel.attendees
-
-                if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
-                    val country = rootView.countryPicker.selectedItem.toString()
-                    val paymentOption =
-                        if (totalAmount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
-                        else PAYMENT_MODE_FREE
-                    val company = rootView.company.text.toString()
-                    val city = rootView.city.text.toString()
-                    val taxId = rootView.taxId.text.toString()
-                    val address = rootView.address.text.toString()
-                    val postalCode = rootView.postalCode.text.toString()
-                    attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
-                        city, postalCode, paymentOption)
-                } else {
-                    rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
-                }
+            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                val country = rootView.countryPicker.selectedItem.toString()
+                val paymentOption =
+                    if (totalAmount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
+                    else PAYMENT_MODE_FREE
+                val company = rootView.company.text.toString()
+                val city = rootView.city.text.toString()
+                val taxId = rootView.taxId.text.toString()
+                val address = rootView.address.text.toString()
+                val postalCode = rootView.postalCode.text.toString()
+                attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
+                    city, postalCode, paymentOption)
+            } else {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
             }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                rootView.snackbar(getString(R.string.order_not_completed))
-            }
-            builder.show()
         }
 
         attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
@@ -820,9 +770,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         val card = Card(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
             attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
 
-        if (card.brand != null && card.brand != "Unknown")
-            rootView.selectCard.text = "Pay by ${card.brand}"
-
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
             rootView.snackbar(getString(R.string.invalid_card_data_message))
@@ -848,12 +795,25 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         attendeeViewModel.paymentCurrency = Currency.getInstance(event.paymentCurrency).symbol
         ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
 
-        rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
-        rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-            .append(" - ")
-            .append(EventUtils.getFormattedDate(endsAt))
-            .append(" • ")
-            .append(EventUtils.getFormattedTime(startsAt))
+        rootView.eventName.text = event.name
+
+        val startDate = EventUtils.getFormattedDate(startsAt)
+        val endDate = EventUtils.getFormattedDate(endsAt)
+        dateString.append(startDate)
+        if (startDate == endDate) {
+            dateString.append(" • ")
+                .append(EventUtils.getFormattedTime(startsAt))
+                .append(" - ")
+                .append(EventUtils.getFormattedTime(endsAt))
+        } else {
+            dateString.append(" - ")
+                .append(EventUtils.getFormattedTime(startsAt))
+                .append(" • ")
+                .append(endDate)
+                .append(" - ")
+                .append(EventUtils.getFormattedTime(endsAt))
+        }
+        rootView.time.text = dateString
     }
 
     private fun loadUserUI(user: User) {

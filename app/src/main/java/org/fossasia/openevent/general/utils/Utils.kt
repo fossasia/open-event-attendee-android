@@ -57,10 +57,13 @@ object Utils {
         return connectivityManager?.activeNetworkInfo != null
     }
 
-    fun progressDialog(context: Context?): ProgressDialog {
+    fun progressDialog(
+        context: Context?,
+        message: String? = context?.resources?.getString(R.string.loading_message)
+    ): ProgressDialog {
         val dialog = ProgressDialog(context)
         dialog.setCancelable(false)
-        dialog.setMessage("Loading...")
+        dialog.setMessage(message)
         return dialog
     }
 
