@@ -80,8 +80,11 @@ class EventService(
     }
 
     fun getSearchEvents(eventName: String, sortBy: String): Flowable<List<Event>> {
-        return eventApi.searchEvents(sortBy, eventName).flatMapPublisher { apiList ->
-            updateFavorites(apiList)
+        return eventApi.searchEvents(sortBy, eventName).flatMapPublisher { eventsList ->
+            eventsList.forEach {
+                it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
+            }
+            updateFavorites(eventsList)
         }
     }
 
@@ -97,7 +100,7 @@ class EventService(
         }
     }
 
-    fun updateFavorites(apiList: List<Event>): Flowable<List<Event>> {
+    private fun updateFavorites(apiList: List<Event>): Flowable<List<Event>> {
 
         val ids = apiList.map { it.id }.toList()
         eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
