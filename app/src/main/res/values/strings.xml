@@ -263,6 +263,7 @@
     <string name="create_attendee_success_message">Attendees created successfully!</string>
     <string name="create_attendee_fail_message">Unable to create Attendee!</string>
     <string name="fill_all_fields_message">Please fill in all the fields</string>
+    <string name="fill_required_fields_message">Please fill in all the required fields</string>
     <string name="free">free</string>
     <string name="order_success_message">Order created successfully!</string>
     <string name="order_fail_message">Unable to create Order!</string>
@@ -282,7 +283,6 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
-    <string name="confirmation_dialog">Are you sure to confirm the order?</string>
     <string name="order_not_completed">Order not completed!</string>
     <string name="removed_from_liked">Removed %1$s from liked events</string>
     <string name="undo">Undo</string>
@@ -411,5 +411,7 @@
     <string name="no_speaker_profile_created_message">You haven\'t created any speaker profile</string>
     <string name="create_speaker_fail_message">Fail on creating speaker profile</string>
     <string name="update_speaker_fail_message">Fail on updating speaker profile</string>
+    <string name="loading_message">Loading...</string>
+    <string name="creating_order_message">Creating order...</string>
 
 </resources>
