@@ -38,10 +38,8 @@ class SignUpViewModel(
     var email: String? = null
     var password: String? = null
 
-    fun signUp(signUp: SignUp, confirmPassword: String) {
+    fun signUp(signUp: SignUp) {
         if (!isConnected()) return
-        email = signUp.email
-        password = signUp.password
 
         compositeDisposable += authService.signUp(signUp)
             .withDefaultSchedulers()
