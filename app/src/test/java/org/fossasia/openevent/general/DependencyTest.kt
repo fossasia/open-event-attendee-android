@@ -18,7 +18,7 @@ class DependencyTest : KoinTest {
     fun testDependencies() {
         koinApplication {
             androidContext(mock(Application::class.java))
-            modules(commonModule, apiModule, databaseModule, networkModule, viewModelModule)
+            modules(listOf(commonModule, apiModule, databaseModule, networkModule, viewModelModule))
         }.checkModules()
     }
 }

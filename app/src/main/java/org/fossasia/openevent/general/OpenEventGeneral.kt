@@ -29,14 +29,14 @@ class OpenEventGeneral : MultiDexApplication() {
         startKoin {
             androidLogger()
             androidContext(this@OpenEventGeneral)
-            modules(
+            modules(listOf(
                 commonModule,
                 apiModule,
                 viewModelModule,
                 networkModule,
                 databaseModule,
                 flavorSpecificModule
-            )
+            ))
         }
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(applicationContext)
