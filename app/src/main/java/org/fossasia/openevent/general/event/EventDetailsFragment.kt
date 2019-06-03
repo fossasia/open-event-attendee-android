@@ -57,6 +57,7 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
+import org.fossasia.openevent.general.EVENT_IDENTIFIER
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
@@ -133,13 +134,14 @@ class EventDetailsFragment : Fragment() {
         rootView = binding.root
         setToolbar(activity)
         setHasOptionsMenu(true)
+        val eventIdentifier = arguments?.getString(EVENT_IDENTIFIER)
 
         val currentEvent = eventViewModel.event.value
-        if (currentEvent != null)
-            loadEvent(currentEvent)
-        else
-            eventViewModel.loadEvent(safeArgs.eventId)
-
+        when {
+            currentEvent != null -> loadEvent(currentEvent)
+            !eventIdentifier.isNullOrEmpty() -> eventViewModel.loadEventByIdentifier(eventIdentifier)
+            else -> eventViewModel.loadEvent(safeArgs.eventId)
+        }
         rootView.feedbackRv.layoutManager = LinearLayoutManager(context)
         rootView.feedbackRv.adapter = feedbackAdapter
 

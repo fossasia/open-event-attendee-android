@@ -48,6 +48,8 @@ import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
+private const val MINIMUM_PASSWORD_LENGTH = 8
+
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
@@ -133,8 +135,7 @@ class SignUpFragment : Fragment() {
                 signUp.password = passwordSignUp.text.toString()
                 signUp.firstName = firstNameText.text.toString()
                 signUp.lastName = lastNameText.text.toString()
-                confirmPassword = confirmPasswords.text.toString()
-                signUpViewModel.signUp(signUp, confirmPassword)
+                signUpViewModel.signUp(signUp)
             }
         }
 
@@ -229,7 +230,7 @@ class SignUpFragment : Fragment() {
                     textInputLayoutPassword.isEndIconVisible = true
                 }
 
-                if (passwordSignUp.text.toString().length >= 6) {
+                if (passwordSignUp.text.toString().length >= MINIMUM_PASSWORD_LENGTH) {
                     textInputLayoutPassword.error = null
                     textInputLayoutPassword.isErrorEnabled = false
                 } else {

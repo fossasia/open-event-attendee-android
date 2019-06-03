@@ -172,7 +172,6 @@
     <string name="sign_in_canceled">সিগণ ইন ক্যানসেল!</string>
     <string name="sign_up_success">সিগণ উপ সাফল্য!</string>
     <string name="cannot_fetch_location">অবস্থান আনা যাচ্ছে না!</string>
-    <string name="confirmation_dialog">আপনি কি অর্ডার কন্ফার্ম করতে চান?</string>
     <string name="order_not_completed">অর্ডার কমপ্লিট হয়নি!</string>
 
     <!--welcome fragment-->

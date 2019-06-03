@@ -40,12 +40,14 @@ android {
             buildConfigField "String", "FRONTEND_URL", '"https://eventyay.com/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            resValue "string",  "FRONTEND_HOST", "eventyay.com"
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
             buildConfigField "String", "FRONTEND_URL", '"https://fossasia.github.io/open-event-frontend/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            resValue "string", "FRONTEND_HOST", "fossasia.github.io/open-event-frontend"
         }
     }
 
@@ -97,7 +99,7 @@ repositories {
 
 dependencies {
     def lifecycle_version = "2.2.0-alpha01"
-    def koin_version = "2.0.0-GA6"
+    def koin_version = "2.0.1"
     def roomVersion = "2.1.0-rc01"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
