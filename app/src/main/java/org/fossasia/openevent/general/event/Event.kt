@@ -12,6 +12,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 import org.fossasia.openevent.general.event.subtopic.EventSubTopic
 import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.types.EventType
+import org.fossasia.openevent.general.speakercall.SpeakersCall
 
 @Type("event")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
@@ -72,12 +73,15 @@ data class Event(
     var favorite: Boolean = false,
     @ColumnInfo(index = true)
     @Relationship("event-topic", resolve = true)
-    var eventTopic: EventTopic? = null,
+    val eventTopic: EventTopic? = null,
     @ColumnInfo(index = true)
     @Relationship("event-type", resolve = true)
-    var eventType: EventType? = null,
+    val eventType: EventType? = null,
     @ColumnInfo(index = true)
     @Relationship("event-sub-topic", resolve = true)
-    var eventSubTopic: EventSubTopic? = null
+    val eventSubTopic: EventSubTopic? = null,
+    @ColumnInfo(index = true)
+    @Relationship("speakers-call", resolve = true)
+    val speakersCall: SpeakersCall? = null
 
 )
