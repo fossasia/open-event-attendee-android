@@ -41,8 +41,6 @@ class SearchViewModel(
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     val connection: LiveData<Boolean> = mutableConnectionLiveData
-    val mutableSessionAndSpeaker = MutableLiveData<Boolean>()
-    val mutableFreeTickets = MutableLiveData<Boolean>()
     var searchEvent: String? = null
     var savedLocation: String? = null
     var savedType: String? = null
@@ -84,7 +82,8 @@ class SearchViewModel(
         type: String,
         freeEvents: Boolean,
         sortBy: String,
-        sessionsAndSpeakers: Boolean
+        sessionsAndSpeakers: Boolean,
+        callForSpeakers: Boolean
     ) {
         if (mutableEvents.value != null) {
             return
@@ -108,7 +107,7 @@ class SearchViewModel(
                |    }
             """.trimIndent()
             else ""
-        val callForSpeakersFilter = if (sessionsAndSpeakers)
+        val sessionsAndSpeakersFilter = if (sessionsAndSpeakers)
             """, {
                |       'name':'is-sessions-speakers-enabled',
                |       'op':'eq',
@@ -140,7 +139,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
@@ -164,7 +163,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
                 |   'and':[{
@@ -196,7 +195,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -228,7 +227,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -260,7 +259,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -292,7 +291,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
 
             else -> """[{
@@ -325,7 +324,7 @@ class SearchViewModel(
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |    }$freeStuffFilter
-                |    $callForSpeakersFilter]
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
         Timber.e(query)
@@ -338,7 +337,7 @@ class SearchViewModel(
                 stopLoaders()
             }.subscribe({
                 stopLoaders()
-                mutableEvents.value = it
+                mutableEvents.value = if (callForSpeakers) it.filter { it.speakersCall != null } else it
             }, {
                 stopLoaders()
                 Timber.e(it, "Error fetching events")
