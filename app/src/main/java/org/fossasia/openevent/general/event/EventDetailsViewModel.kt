@@ -192,6 +192,7 @@ class EventDetailsViewModel(
                 mutableProgress.value = false
                 mutableEvent.value = it
             }, {
+                mutableProgress.value = false
                 Timber.e(it, "Error fetching event %d", id)
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_message)
             })
