@@ -30,6 +30,7 @@
             android:layout_margin="@dimen/layout_margin_medium"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -677,6 +677,11 @@
         android:name="org.fossasia.openevent.general.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_auth_pop"
+            app:destination="@id/authFragment"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -692,6 +697,11 @@
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_signup">
+        <action
+            android:id="@+id/action_signup_to_auth_pop"
+            app:destination="@id/authFragment"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -862,5 +872,9 @@
             android:name="redirectedFrom"
             app:argType="string"
             app:nullable="false"/>
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 </navigation>

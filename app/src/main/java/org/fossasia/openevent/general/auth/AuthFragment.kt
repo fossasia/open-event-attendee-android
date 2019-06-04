@@ -1,6 +1,9 @@
 package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -11,6 +14,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_auth.view.getStartedButton
 import kotlinx.android.synthetic.main.fragment_auth.view.email
+import kotlinx.android.synthetic.main.fragment_auth.view.emailLayout
 import kotlinx.android.synthetic.main.fragment_auth.view.rootLayout
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.ComplexBackPressFragment
@@ -58,8 +62,21 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
 
         rootView.getStartedButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
+            if (!Patterns.EMAIL_ADDRESS.matcher(rootView.email.text.toString()).matches()) {
+                rootView.emailLayout.error = getString(R.string.invalid_email_message)
+                return@setOnClickListener
+            }
             authViewModel.checkUser(rootView.email.text.toString())
         }
+
+        rootView.email.setText(safeArgs.email)
+        rootView.email.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
+            override fun afterTextChanged(s: Editable?) {
+                rootView.emailLayout.error = null
+            }
+        })
 
         authViewModel.isUserExists
             .nonNull()

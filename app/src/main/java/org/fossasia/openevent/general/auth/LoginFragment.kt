@@ -123,12 +123,14 @@ class LoginFragment : Fragment() {
             })
 
         rootView.email.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                findNavController(rootView).navigate(LoginFragmentDirections
+                    .actionLoginToAuthPop(redirectedFrom = safeArgs.redirectedFrom, email = s.toString()))
+            }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkFields(email.toString(), password.text.toString())
             }
         })
 

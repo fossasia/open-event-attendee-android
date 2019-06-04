@@ -26,8 +26,6 @@ class SignUpViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
-    private val mutableSignedUp = MutableLiveData<User>()
-    val signedUp: LiveData<User> = mutableSignedUp
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
@@ -48,7 +46,7 @@ class SignUpViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableSignedUp.value = it
+                login(signUp)
                 Timber.d("Success!")
             }, {
                 when {
@@ -62,7 +60,7 @@ class SignUpViewModel(
             })
     }
 
-    fun login(signUp: SignUp) {
+    private fun login(signUp: SignUp) {
         if (!isConnected()) return
         email = signUp.email
         password = signUp.password
