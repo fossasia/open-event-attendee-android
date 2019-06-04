@@ -135,6 +135,17 @@
                 android:text="@string/sessions_and_speakers"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
+
+            <CheckBox
+                android:id="@+id/callForSpeakerCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_margin_large"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/call_for_speakers"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
         </LinearLayout>
 
         <LinearLayout
