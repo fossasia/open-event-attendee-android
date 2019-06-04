@@ -76,6 +76,8 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
@@ -131,6 +133,7 @@ class EventDetailsFragment : Fragment() {
         setSharedElementEnterTransition()
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event, container, false)
+        val progressDialog = progressDialog(context, getString(R.string.loading_message))
         rootView = binding.root
         setToolbar(activity)
         setHasOptionsMenu(true)
@@ -154,6 +157,12 @@ class EventDetailsFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
                 showEventErrorScreen(it == getString(R.string.error_fetching_event_message))
+            })
+
+        eventViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
             })
 
         eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {

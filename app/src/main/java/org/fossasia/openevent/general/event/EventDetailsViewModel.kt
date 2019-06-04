@@ -188,9 +188,8 @@ class EventDetailsViewModel(
             .distinctUntilChanged()
             .doOnSubscribe {
                 mutableProgress.value = true
-            }.doFinally {
-                mutableProgress.value = false
             }.subscribe({
+                mutableProgress.value = false
                 mutableEvent.value = it
             }, {
                 Timber.e(it, "Error fetching event %d", id)
