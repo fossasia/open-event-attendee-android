@@ -34,7 +34,7 @@
             android:layout_marginTop="@dimen/padding_medium">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameSignUp"
+                android:id="@+id/emailSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_email_black"
