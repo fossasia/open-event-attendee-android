@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profileScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/profileCoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -79,6 +79,42 @@
                     app:srcCompat="@drawable/ic_edit"
                     app:tint="@color/dark_grey" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/verificationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium">
+
+                <ImageView
+                    android:id="@+id/verifiedTick"
+                    android:layout_width="@dimen/round_corners_button_radius"
+                    android:layout_height="@dimen/round_corners_button_radius"
+                    app:tint="@android:color/holo_green_light"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:src="@drawable/ic_tick_inside_circle"/>
+
+                <TextView
+                    android:id="@+id/verifiedTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="@string/verified" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/resendEmailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large"
+                android:padding="@dimen/padding_medium"
+                android:textColor="@android:color/holo_blue_light"
+                android:layout_marginStart="@dimen/layout_margin_medium"
+                android:text="@string/resend_verification_email"/>
 
             <LinearLayout
                 android:id="@+id/logoutLL"
@@ -207,15 +243,6 @@
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/text_size_expanded_title" />
             </LinearLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:elevation="@dimen/card_elevation" />
-
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton

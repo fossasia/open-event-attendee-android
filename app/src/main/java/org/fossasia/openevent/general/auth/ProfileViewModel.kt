@@ -19,8 +19,8 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -46,7 +46,22 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
                 this.mutableUser.value = user
             }) {
                 Timber.e(it, "Failure")
-                mutableError.value = resource.getString(R.string.failure)
+                mutableMessage.value = resource.getString(R.string.failure)
+            }
+    }
+
+    fun resendVerificationEmail(email: String) {
+        compositeDisposable += authService.resendVerificationEmail(email)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableMessage.value = it.message
+            }) {
+                Timber.e(it, "Failure")
+                mutableMessage.value = resource.getString(R.string.failure)
             }
     }
 

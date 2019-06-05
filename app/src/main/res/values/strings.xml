@@ -77,6 +77,9 @@
     <string name="edit_profile_photo_message">Edit your profile picture</string>
     <string name="delete">Delete</string>
     <string name="new_photo">New Photo</string>
+    <string name="verified">Verified</string>
+    <string name="not_verified">Your account hasn\'t been verified</string>
+    <string name="resend_verification_email">Resend verification email</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
