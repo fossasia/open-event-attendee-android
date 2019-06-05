@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButto
 import kotlinx.android.synthetic.main.item_card_order_details.view.checkedInLayout
 import kotlinx.android.synthetic.main.item_card_order_details.view.notCheckedInLayout
 import kotlinx.android.synthetic.main.item_card_order_details.view.notAvailableTextView
+import kotlinx.android.synthetic.main.item_card_order_details.view.ticketCountTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.Event
@@ -40,7 +41,9 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         event: Event?,
         orderIdentifier: String?,
         eventDetailsListener: OrderDetailsRecyclerAdapter.EventDetailsListener?,
-        qrImageClickListener: OrderDetailsRecyclerAdapter.QrImageClickListener?
+        qrImageClickListener: OrderDetailsRecyclerAdapter.QrImageClickListener?,
+        count: Int,
+        position: Int
     ) {
         if (event == null) return
         val formattedDateTime = EventUtils.getEventDateTime(event.startsAt, event.timezone)
@@ -53,6 +56,7 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         itemView.location.text = event.locationName
         itemView.date.text = "$formattedDate\n$formattedTime $timezone"
         itemView.eventSummary.text = event.description?.stripHtml()
+        itemView.ticketCountTextView.text = "Ticket ${position + 1} of $count"
 
         if (event.organizerName.isNullOrEmpty()) {
             itemView.organizerLabel.visibility = View.GONE

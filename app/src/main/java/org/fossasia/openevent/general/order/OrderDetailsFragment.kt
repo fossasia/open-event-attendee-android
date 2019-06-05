@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.core.content.FileProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,11 +22,12 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
-import kotlinx.android.synthetic.main.fragment_order_details.view.progressBar
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCardView
 import kotlinx.android.synthetic.main.item_enlarged_qr.view.enlargedQrImage
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -42,7 +42,6 @@ class OrderDetailsFragment : Fragment() {
     private lateinit var rootView: View
     private val orderDetailsViewModel by viewModel<OrderDetailsViewModel>()
     private val ordersRecyclerAdapter: OrderDetailsRecyclerAdapter = OrderDetailsRecyclerAdapter()
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private val safeArgs: OrderDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +72,12 @@ class OrderDetailsFragment : Fragment() {
         setToolbar(activity)
         setHasOptionsMenu(true)
 
-        rootView.orderDetailsRecycler.layoutManager = LinearLayoutManager(activity)
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
         rootView.orderDetailsRecycler.adapter = ordersRecyclerAdapter
         rootView.orderDetailsRecycler.isNestedScrollingEnabled = false
 
-        linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        rootView.orderDetailsRecycler.layoutManager = linearLayoutManager
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(rootView.orderDetailsRecycler)
         rootView.orderDetailsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -112,10 +110,11 @@ class OrderDetailsFragment : Fragment() {
 
         ordersRecyclerAdapter.setQrImageClickListener(qrImageListener)
 
+        val progressBar = progressDialog(context, getString(R.string.loading_message))
         orderDetailsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBar.isVisible = it
+                progressBar.show(it)
             })
 
         orderDetailsViewModel.message
