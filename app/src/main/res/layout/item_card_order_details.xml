@@ -1,13 +1,13 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/ticket_width"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:id="@+id/orderDetailCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin_large"
+        android:layout_margin="@dimen/layout_margin_medium"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation"
@@ -28,9 +28,35 @@
                 android:layout_height="@dimen/event_details_image"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_medium"
-                android:padding="@dimen/padding_large"
                 android:foreground="?selectableItemBackground"
+                android:padding="@dimen/padding_large"
                 android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_medium">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/greyMore"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/layout_margin_small"
+                    android:layout_height="@dimen/event_details_divider"/>
+                <TextView
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/ticketCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/greyMore"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/layout_margin_small"
+                    android:layout_height="@dimen/event_details_divider"/>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,6 +93,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:text="@string/checkin_status"
                 android:textSize="@dimen/text_size_large"
                 tools:text="@string/event" />
@@ -83,15 +110,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/checked_in"
                     android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/text_size_large"/>
+                    android:textSize="@dimen/text_size_large" />
 
                 <View
-                    android:layout_marginTop="@dimen/layout_margin_extra_small"
-                    android:layout_marginStart="@dimen/layout_margin_small"
-                    android:backgroundTint="@android:color/holo_green_light"
                     android:layout_width="@dimen/card_tickets_radius"
                     android:layout_height="@dimen/card_tickets_radius"
-                    android:background="@drawable/circle_shape"/>
+                    android:layout_marginStart="@dimen/layout_margin_small"
+                    android:layout_marginTop="@dimen/layout_margin_extra_small"
+                    android:background="@drawable/circle_shape"
+                    android:backgroundTint="@android:color/holo_green_light" />
 
             </LinearLayout>
 
@@ -107,26 +134,26 @@
                     android:layout_height="wrap_content"
                     android:text="@string/not_checked_in"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"/>
+                    android:textSize="@dimen/text_size_large" />
 
                 <View
-                    android:layout_marginTop="@dimen/layout_margin_extra_small"
-                    android:layout_marginStart="@dimen/layout_margin_small"
-                    app:tint="@android:color/holo_red_light"
                     android:layout_width="@dimen/card_tickets_radius"
                     android:layout_height="@dimen/card_tickets_radius"
-                    android:background="@drawable/circle_shape"/>
+                    android:layout_marginStart="@dimen/layout_margin_small"
+                    android:layout_marginTop="@dimen/layout_margin_extra_small"
+                    android:background="@drawable/circle_shape"
+                    app:tint="@android:color/holo_red_light" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/notAvailableTextView"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/not_available"
                 android:layout_marginBottom="@dimen/layout_margin_large"
-                android:textSize="@dimen/text_size_large"/>
+                android:text="@string/not_available"
+                android:textSize="@dimen/text_size_large"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,9 +167,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/layout_margin_medium"
+                    android:paddingTop="@dimen/layout_margin_medium"
                     android:paddingRight="@dimen/layout_margin_medium"
-                    android:paddingTop="@dimen/layout_margin_medium">
+                    android:paddingBottom="@dimen/layout_margin_medium">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -266,9 +293,9 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
                 android:layout_marginTop="@dimen/padding_large"
                 android:layout_marginBottom="@dimen/padding_medium"
+                android:enabled="true"
                 android:text="@string/download_ticket"
                 android:theme="@style/AccentButton" />
 
