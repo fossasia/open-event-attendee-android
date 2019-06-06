@@ -75,8 +75,10 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-        if (profileViewModel.isLoggedIn())
-            profileViewModel.fetchProfile()
+        if (profileViewModel.isLoggedIn()) {
+            profileViewModel.getProfile()
+            profileViewModel.syncProfile()
+        }
 
         val progressDialog = progressDialog(context, getString(R.string.loading_message))
         profileViewModel.progress
@@ -95,29 +97,40 @@ class ProfileFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 user = it
-                rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
-                rootView.email.text = it.email
-                emailSettings = it.email
-                rootView.verifiedTick.isVisible = it.isVerified
-                rootView.resendEmailTextView.isVisible = !it.isVerified
-                rootView.verifiedTextView.text =
-                    if (it.isVerified) getString(R.string.verified) else getString(R.string.not_verified)
-                if (it.isVerified)
-                    rootView.verifiedTextView.setTextColor(
-                        resources.getColorStateList(android.R.color.holo_green_light)
-                    )
-
-                Picasso.get()
-                        .load(it.avatarUrl)
-                        .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
-                        .transform(CircleTransform())
-                        .into(rootView.avatar)
-
-                rootView.editProfileRL.setOnClickListener {
-                        findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToEditProfile())
-                }
+                updateProfile(it)
             })
+
+        profileViewModel.updatedUser
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                user = it
+                updateProfile(it)
+            })
+
+        rootView.editProfileRL.setOnClickListener {
+            findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToEditProfile())
+        }
         return rootView
+    }
+
+    private fun updateProfile(it: User) {
+        rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
+        rootView.email.text = it.email
+        emailSettings = it.email
+        rootView.verifiedTick.isVisible = it.isVerified
+        rootView.resendEmailTextView.isVisible = !it.isVerified
+        rootView.verifiedTextView.text =
+            if (it.isVerified) getString(R.string.verified) else getString(R.string.not_verified)
+        if (it.isVerified)
+            rootView.verifiedTextView.setTextColor(
+                resources.getColorStateList(android.R.color.holo_green_light)
+            )
+
+        Picasso.get()
+            .load(it.avatarUrl)
+            .placeholder(requireDrawable(requireContext(), R.drawable.ic_account_circle_grey))
+            .transform(CircleTransform())
+            .into(rootView.avatar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
