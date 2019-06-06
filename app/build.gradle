@@ -103,7 +103,7 @@ dependencies {
     def roomVersion = "2.1.0-rc01"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha04"
+    def nav_version = "2.1.0-alpha05"
     def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
