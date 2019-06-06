@@ -170,7 +170,7 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun redirectToEventsFragment() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+        findNavController(rootView).navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEvents())
     }
 
     private fun openEventDetails() {
