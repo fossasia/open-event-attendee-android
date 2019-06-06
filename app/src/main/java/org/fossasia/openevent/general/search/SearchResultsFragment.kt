@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -38,10 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
 import org.fossasia.openevent.general.common.EventsDiffCallback
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import kotlinx.android.synthetic.main.item_card_events.view.eventImage
-import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 
@@ -190,20 +188,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long, itemPosition: Int) {
-                var extras: Navigator.Extras? = null
-                val itemEventViewHolder = rootView.eventsRecycler.findViewHolderForAdapterPosition(itemPosition)
-                itemEventViewHolder?.let {
-                    if (itemEventViewHolder is EventViewHolder) {
-                        extras = FragmentNavigatorExtras(
-                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
-                    }
-                }
-                extras?.let {
-                    findNavController(view).navigate(SearchResultsFragmentDirections
-                        .actionSearchResultsToEventDetail(eventId = eventID), it)
-                } ?: findNavController(view)
-                    .navigate(SearchResultsFragmentDirections.actionSearchResultsToEventDetail(eventId = eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(SearchResultsFragmentDirections.actionSearchResultsToEventDetail(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
