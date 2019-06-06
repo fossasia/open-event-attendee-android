@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.common
 
+import android.widget.ImageView
 import org.fossasia.openevent.general.event.Event
 
 /**
@@ -10,9 +11,9 @@ interface EventClickListener {
      * The function to be invoked when an event item is clicked
      *
      * @param eventID The ID of the clicked event
-     * @param itemPosition The position of event object in the adapter
+     * @param imageView The Image View of event object in the adapter
      */
-    fun onClick(eventID: Long, itemPosition: Int)
+    fun onClick(eventID: Long, imageView: ImageView)
 }
 
 /**

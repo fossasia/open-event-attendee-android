@@ -9,15 +9,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.content_event.view.eventImage
 import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventLayout
 import kotlinx.android.synthetic.main.fragment_order_completed.view.shimmerSimilarEvents
@@ -33,7 +32,6 @@ import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventViewHolder
 import org.fossasia.openevent.general.event.EventsListAdapter
 import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -116,20 +114,10 @@ class OrderCompletedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long, itemPosition: Int) {
-                var extras: Navigator.Extras? = null
-                val itemEventViewHolder = rootView.similarEventsRecycler.findViewHolderForAdapterPosition(itemPosition)
-                itemEventViewHolder?.let {
-                    if (itemEventViewHolder is EventViewHolder) {
-                        extras = FragmentNavigatorExtras(
-                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
-                    }
-                }
-                extras?.let {
-                    findNavController(view)
-                        .navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEventDetail(eventID), it)
-                } ?: findNavController(view)
-                    .navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEventDetail(eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEventDetail(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 

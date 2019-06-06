@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,7 +21,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -439,20 +439,10 @@ class EventDetailsFragment : Fragment() {
             })
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long, itemPosition: Int) {
-                var extras: Navigator.Extras? = null
-                val itemEventViewHolder = rootView.similarEventsRecycler.findViewHolderForAdapterPosition(itemPosition)
-                itemEventViewHolder?.let {
-                    if (itemEventViewHolder is EventViewHolder) {
-                        extras = FragmentNavigatorExtras(
-                            itemEventViewHolder.itemView.eventImage to "eventDetailImage")
-                    }
-                }
-                extras?.let {
-                    findNavController(view)
-                        .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID), it)
-                } ?: findNavController(view)
-                    .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 

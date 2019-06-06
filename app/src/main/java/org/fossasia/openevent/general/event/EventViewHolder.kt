@@ -93,7 +93,7 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
         }
 
         containerView.setOnClickListener {
-            eventClickListener?.onClick(event.id, itemPosition)
+            eventClickListener?.onClick(event.id, containerView.eventImage)
                 ?: Timber.e("Event Click listener on ${this::class.java.canonicalName} is null")
         }
 
