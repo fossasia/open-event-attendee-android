@@ -14,6 +14,8 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
+import org.fossasia.openevent.general.sessions.sessiontype.SessionType
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.speakercall.SpeakersCallDao
 import java.util.Date
@@ -47,6 +49,11 @@ class EventService(
                     }
         }
     }
+
+    fun fetchSessionTypesUnderEvent(eventId: Long): Single<List<SessionType>> =
+        eventApi.fetchSessionTypesUnderEvent(eventId)
+
+    fun fetchTracksUnderEvent(eventId: Long): Single<List<Track>> = eventApi.fetchTracksUnderEvent(eventId)
 
     fun getEventLocations(): Single<List<EventLocation>> {
         return eventLocationApi.getEventLocation()

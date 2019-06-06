@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "6dd7be6dcd6abac08bf30c108ac7bbc9",
+    "identityHash": "5e1272a367d30fbaab91c2c9cf91b5af",
     "entities": [
       {
         "tableName": "Event",
@@ -1486,7 +1486,7 @@
       },
       {
         "tableName": "Session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, `event` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1625,6 +1625,12 @@
             "columnName": "track",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1657,6 +1663,14 @@
               "track"
             ],
             "createSql": "CREATE  INDEX `index_Session_track` ON `${TABLE_NAME}` (`track`)"
+          },
+          {
+            "name": "index_Session_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Session_event` ON `${TABLE_NAME}` (`event`)"
           }
         ],
         "foreignKeys": []
@@ -1715,7 +1729,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6dd7be6dcd6abac08bf30c108ac7bbc9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5e1272a367d30fbaab91c2c9cf91b5af')"
     ]
   }
 }

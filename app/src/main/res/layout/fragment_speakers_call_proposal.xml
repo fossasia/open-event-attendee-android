@@ -221,7 +221,111 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/heading_text_size"
                     android:text="@string/session_proposal_detail"/>
+                <LinearLayout
+                    android:id="@+id/sessionInfoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/titleLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/title" >
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/sessionTypeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_large"
+                            android:text="@string/session_type"
+                            android:padding="@dimen/padding_extra_small"/>
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/sessionTypeSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_extra_small"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:background="@drawable/filled_border"
+                            android:spinnerMode="dialog" />
+                    </LinearLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/language" >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/language"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/short_abstract" >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/shortAbstract"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/comment" >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/trackContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_large"
+
+                            android:text="@string/track_required"
+                            android:padding="@dimen/padding_extra_small"/>
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/trackSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/layout_margin_medium"
+                            android:spinnerMode="dialog"
+                            android:background="@drawable/filled_border"
+                            android:padding="@dimen/padding_extra_small"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
             <View
@@ -230,6 +334,12 @@
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:background="@color/grey" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitProposalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.MaterialButton.RoundedCorners"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

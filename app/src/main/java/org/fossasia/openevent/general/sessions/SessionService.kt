@@ -18,4 +18,17 @@ class SessionService(
     fun fetchSession(id: Long): Flowable<Session> {
         return sessionDao.getSessionById(id)
     }
+
+    fun createSession(session: Session): Single<Session> =
+        sessionApi.createSession(session).doOnSuccess {
+            sessionDao.insertSession(it)
+        }
+
+    fun updateSession(sessionId: Long, session: Session): Single<Session> =
+        sessionApi.updateSession(sessionId, session).doOnSuccess {
+            sessionDao.insertSession(it)
+        }
+
+    fun getSessionsUnderSpeakerAndEvent(speakerId: Long, query: String): Single<List<Session>> =
+        sessionApi.getSessionsUnderSpeaker(speakerId, filter = query)
 }

@@ -115,9 +115,8 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEditSpeakerOrCreateProposalDialog(speakerId: Long) {
-        AlertDialog.Builder(requireContext())
+        val dialogBuilder = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.create_edit_speaker))
-            .setMessage(getString(R.string.create_proposal_message))
             .setPositiveButton(getString(R.string.create_proposal)) { _, _ ->
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToProposal(safeArgs.eventId, speakerId))
@@ -126,8 +125,15 @@ class SpeakersCallFragment : Fragment() {
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToAddSpeaker(safeArgs.eventId, speakerId))
             }
-            .create()
-            .show()
+        speakersCallViewModel.sessions.value?.let { sessions ->
+            if (sessions.isEmpty()) return@let
+
+            dialogBuilder.setItems(sessions.map { "Edit Session - ${it.title}" }.toTypedArray()) { _, position ->
+                findNavController(rootView).navigate(SpeakersCallFragmentDirections
+                    .actionSpeakersCallToProposal(safeArgs.eventId, speakerId, sessions[position].id))
+            }
+        }
+        dialogBuilder.create().show()
     }
 
     private fun showCreateSpeakerDialog() {

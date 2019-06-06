@@ -228,8 +228,8 @@ val viewModelModule = module {
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SpeakersCallProposalViewModel(get(), get()) }
+    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SpeakersCallProposalViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
 }
 

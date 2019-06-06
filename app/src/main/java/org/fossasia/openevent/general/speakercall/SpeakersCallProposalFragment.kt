@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,12 +32,31 @@ import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.speak
 import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.expandSpeakerDetailButton
 import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.speakerWebsite
 import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.speakerWebsiteLayout
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.title
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.titleLayout
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.submitProposalButton
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.sessionTypeContainer
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.sessionTypeSelector
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.trackSelector
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.trackContainer
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.comment
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.language
+import kotlinx.android.synthetic.main.fragment_speakers_call_proposal.view.shortAbstract
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EventId
+import org.fossasia.openevent.general.sessions.Session
+import org.fossasia.openevent.general.sessions.sessiontype.SessionType
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.checkEmpty
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.nullToEmpty
+import org.fossasia.openevent.general.utils.setRequired
+import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
@@ -43,6 +64,14 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var rootView: View
     private val speakersCallProposalViewModel by viewModel<SpeakersCallProposalViewModel>()
     private val safeArgs: SpeakersCallProposalFragmentArgs by navArgs()
+    private lateinit var sessionTypesList: List<SessionType>
+    private lateinit var tracksList: List<Track>
+    private var isAddingNewSession = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isAddingNewSession = (safeArgs.sessionId == -1L)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_speakers_call_proposal, container, false)
@@ -56,12 +85,33 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
                 loadSpeakerUI(it)
             })
 
+        speakersCallProposalViewModel.session
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                loadSessionUI(it)
+            })
+        if (!isAddingNewSession && speakersCallProposalViewModel.session.value == null)
+            speakersCallProposalViewModel.loadSession(safeArgs.sessionId)
+
+        val progressDialog = Utils.progressDialog(context, if (isAddingNewSession)
+            getString(R.string.creating_session_message) else getString(R.string.updating_session_message))
+        speakersCallProposalViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
+            })
+
         speakersCallProposalViewModel.speakerProgress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.speakerProgressBar.isVisible = it
             })
         rootView.speakerInfoContainer.isVisible = speakersCallProposalViewModel.isSpeakerInfoShown
+
+        rootView.titleLayout.setRequired()
+        setupSessionTypeAndTrack()
+        rootView.submitProposalButton.text =
+            if (isAddingNewSession) getString(R.string.create_session) else getString(R.string.update_session)
 
         return rootView
     }
@@ -75,9 +125,36 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
         else
             loadSpeakerUI(currentSpeaker)
 
+        speakersCallProposalViewModel.submitSuccess
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it)
+                    findNavController(rootView).popBackStack()
+            })
         rootView.expandSpeakerDetailButton.setOnClickListener {
             speakersCallProposalViewModel.isSpeakerInfoShown = !speakersCallProposalViewModel.isSpeakerInfoShown
             rootView.speakerInfoContainer.isVisible = speakersCallProposalViewModel.isSpeakerInfoShown
+        }
+
+        rootView.submitProposalButton.setOnClickListener {
+            if (rootView.title.checkEmpty()) {
+                val proposal = Session(
+                    id = speakersCallProposalViewModel.session.value?.id ?: speakersCallProposalViewModel.getId(),
+                    title = rootView.title.text.toString(),
+                    language = rootView.language.text.toString(),
+                    shortAbstract = rootView.shortAbstract.text.toString(),
+                    comments = rootView.comment.text.toString(),
+                    sessionType = sessionTypesList[speakersCallProposalViewModel.sessionTypePosition],
+                    track = tracksList[speakersCallProposalViewModel.trackPosition],
+                    event = EventId(safeArgs.eventId)
+                )
+                if (isAddingNewSession)
+                    speakersCallProposalViewModel.submitProposal(proposal)
+                else
+                    speakersCallProposalViewModel.editProposal(safeArgs.sessionId, proposal)
+            } else {
+                rootView.snackbar(getString(R.string.fill_all_fields_message))
+            }
         }
     }
 
@@ -101,6 +178,92 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
             .setPositiveButton(getString(R.string.continue_string)) { _, _ -> /*Do Nothing*/ }
             .create()
             .show()
+    }
+
+    private fun setupSessionTypeAndTrack() {
+        speakersCallProposalViewModel.tracks
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                tracksList = it
+                setupTracksSpinner(it)
+            })
+        val currentTracks = speakersCallProposalViewModel.tracks.value
+        if (currentTracks == null) {
+            speakersCallProposalViewModel.loadTracks(safeArgs.eventId)
+        } else {
+            setupTracksSpinner(currentTracks)
+            tracksList = currentTracks
+        }
+
+        speakersCallProposalViewModel.sessionTypes
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                sessionTypesList = it
+                setupSessionTypesSpinner(it)
+            })
+        val currentSessionTypes = speakersCallProposalViewModel.sessionTypes.value
+        if (currentSessionTypes == null) {
+            speakersCallProposalViewModel.loadSessionTypes(safeArgs.eventId)
+        } else {
+            setupSessionTypesSpinner(currentSessionTypes)
+            sessionTypesList = currentSessionTypes
+        }
+    }
+
+    private fun setupSessionTypesSpinner(sessionTypeList: List<SessionType>) {
+        if (sessionTypeList.isNullOrEmpty()) {
+            rootView.sessionTypeContainer.isVisible = false
+            return
+        }
+        rootView.sessionTypeContainer.isVisible = true
+        rootView.sessionTypeSelector.adapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, sessionTypeList.map { it.name })
+        rootView.sessionTypeSelector.setSelection(speakersCallProposalViewModel.sessionTypePosition)
+        rootView.sessionTypeSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) { /*Do Nothing*/ }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                speakersCallProposalViewModel.sessionTypePosition = position
+            }
+        }
+    }
+
+    private fun setupTracksSpinner(tracksList: List<Track>) {
+        if (tracksList.isNullOrEmpty()) {
+            rootView.trackContainer.isVisible = false
+            return
+        }
+        rootView.trackContainer.isVisible = true
+        rootView.trackSelector.adapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, tracksList.map { it.name })
+        rootView.trackSelector.setSelection(speakersCallProposalViewModel.trackPosition)
+        rootView.trackSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) { /*Do Nothing*/ }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                speakersCallProposalViewModel.trackPosition = position
+            }
+        }
+    }
+
+    private fun loadSessionUI(session: Session) {
+        rootView.title.setText(session.title.nullToEmpty())
+        rootView.language.setText(session.language.nullToEmpty())
+        rootView.shortAbstract.setText(session.shortAbstract.nullToEmpty())
+        rootView.comment.setText(session.comments.nullToEmpty())
+        if (this::sessionTypesList.isInitialized) {
+            session.sessionType?.let {
+                val sessionTypePos = sessionTypesList.indexOf(it)
+                speakersCallProposalViewModel.sessionTypePosition = sessionTypePos
+                rootView.sessionTypeSelector.setSelection(sessionTypePos)
+            }
+        }
+
+        if (this::tracksList.isInitialized) {
+            session.track?.let {
+                val trackPos = tracksList.indexOf(it)
+                speakersCallProposalViewModel.trackPosition = trackPos
+                rootView.trackSelector.setSelection(trackPos)
+            }
+        }
     }
 
     private fun loadSpeakerUI(speaker: Speaker) {

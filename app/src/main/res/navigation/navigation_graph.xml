@@ -402,6 +402,10 @@
             android:name="speakerId"
             app:argType="long"
             android:defaultValue="-1L"/>
+        <argument
+            android:name="sessionId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
     </fragment>
     <fragment
         android:id="@+id/editSpeakerFragment"
