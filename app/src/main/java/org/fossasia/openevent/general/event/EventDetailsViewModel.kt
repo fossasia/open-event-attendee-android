@@ -96,7 +96,15 @@ class EventDetailsViewModel(
     fun fetchEventSpeakers(id: Long) {
         if (id == -1L) return
 
-        compositeDisposable += speakerService.fetchSpeakersForEvent(id)
+        val query = """[{
+                |   'and':[{
+                |       'name':'is-featured',
+                |       'op':'eq',
+                |       'val':'true'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+
+        compositeDisposable += speakerService.fetchSpeakersForEvent(id, query)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEventSpeakers.value = it
