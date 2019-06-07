@@ -21,6 +21,8 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val user: LiveData<User> = mutableUser
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
+    private val mutableUpdatedUser = MutableLiveData<User>()
+    val updatedUser: LiveData<User> = mutableUpdatedUser
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -34,7 +36,7 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }
     }
 
-    fun fetchProfile() {
+    fun getProfile() {
         compositeDisposable += authService.getProfile()
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -47,6 +49,17 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }) {
                 Timber.e(it, "Failure")
                 mutableMessage.value = resource.getString(R.string.failure)
+            }
+    }
+
+    fun syncProfile() {
+        compositeDisposable += authService.syncProfile()
+            .withDefaultSchedulers()
+            .subscribe({ user ->
+                Timber.d("Response Success")
+                this.mutableUpdatedUser.value = user
+            }) {
+                Timber.e(it, "Failure")
             }
     }
 
