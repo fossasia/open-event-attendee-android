@@ -103,7 +103,7 @@ dependencies {
     def roomVersion = "2.1.0-rc01"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha04"
+    def nav_version = "2.1.0-alpha05"
     def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -150,7 +150,7 @@ dependencies {
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.6.0'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
