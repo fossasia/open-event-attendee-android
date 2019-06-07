@@ -29,11 +29,11 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
         notifyDataSetChanged()
     }
 
-    fun setSeeEventListener(listener: EventDetailsListener) {
+    fun setSeeEventListener(listener: EventDetailsListener?) {
         eventDetailsListener = listener
     }
 
-    fun setQrImageClickListener(listener: QrImageClickListener) {
+    fun setQrImageClickListener(listener: QrImageClickListener?) {
         onQrImageClicked = listener
     }
 
@@ -48,7 +48,8 @@ class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>
 
     override fun onBindViewHolder(holder: OrderDetailsViewHolder, position: Int) {
         val order = attendees[position]
-        holder.bind(order, event, orderIdentifier, eventDetailsListener, onQrImageClicked)
+        val count = attendees.size
+        holder.bind(order, event, orderIdentifier, eventDetailsListener, onQrImageClicked, count, position)
     }
 
     override fun getItemCount(): Int {

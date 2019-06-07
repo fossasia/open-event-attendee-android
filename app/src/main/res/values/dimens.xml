@@ -67,6 +67,7 @@
     <dimen name="item_image_view_large">130dp</dimen>
     <dimen name="item_image_view_extra_large">250dp</dimen>
     <dimen name="item_image_view_160dp">160dp</dimen>
+    <dimen name="profile_fragment_divider">0.5dp</dimen>
 
     <!--event details-->
     <dimen name="event_details_image">200dp</dimen>
@@ -96,4 +97,6 @@
     <!--social link fragment-->
     <dimen name="reload_button_width">40dp</dimen>
     <dimen name="reload_button_height">40dp</dimen>
+
+    <dimen name="ticket_width">326dp</dimen>
 </resources>

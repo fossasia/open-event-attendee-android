@@ -9,19 +9,31 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_order.view.orderCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_order.view.add
-import kotlinx.android.synthetic.main.fragment_order.view.name
-import kotlinx.android.synthetic.main.fragment_order.view.share
-import kotlinx.android.synthetic.main.fragment_order.view.time
-import kotlinx.android.synthetic.main.fragment_order.view.view
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventsRecycler
+import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventLayout
+import kotlinx.android.synthetic.main.fragment_order_completed.view.shimmerSimilarEvents
+import kotlinx.android.synthetic.main.fragment_order_completed.view.orderCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_order_completed.view.add
+import kotlinx.android.synthetic.main.fragment_order_completed.view.name
+import kotlinx.android.synthetic.main.fragment_order_completed.view.share
+import kotlinx.android.synthetic.main.fragment_order_completed.view.time
+import kotlinx.android.synthetic.main.fragment_order_completed.view.view
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.common.EventClickListener
+import org.fossasia.openevent.general.common.EventsDiffCallback
+import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventsListAdapter
+import org.fossasia.openevent.general.event.EventLayoutType
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,15 +46,21 @@ class OrderCompletedFragment : Fragment() {
     private lateinit var eventShare: Event
     private val safeArgs: OrderCompletedFragmentArgs by navArgs()
     private val orderCompletedViewModel by viewModel<OrderCompletedViewModel>()
+    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_order, container, false)
+        rootView = inflater.inflate(R.layout.fragment_order_completed, container, false)
         setToolbar(activity)
         setHasOptionsMenu(true)
+
+        val similarLinearLayoutManager = LinearLayoutManager(context)
+        similarLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        rootView.similarEventsRecycler.layoutManager = similarLinearLayoutManager
+        rootView.similarEventsRecycler.adapter = similarEventsAdapter
 
         orderCompletedViewModel.loadEvent(safeArgs.eventId)
         orderCompletedViewModel.event
@@ -50,12 +68,32 @@ class OrderCompletedFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
                 eventShare = it
+                val eventTopicId = it.eventTopic?.id ?: 0
+                orderCompletedViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId)
+            })
+
+        orderCompletedViewModel.similarEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                similarEventsAdapter.submitList(it.toList())
+                rootView.similarEventLayout.isVisible = it.isNotEmpty()
             })
 
         orderCompletedViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.orderCoordinatorLayout.longSnackbar(it)
+            })
+
+        orderCompletedViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.shimmerSimilarEvents.isVisible = it
+                if (it) {
+                    rootView.shimmerSimilarEvents.startShimmer()
+                } else {
+                    rootView.shimmerSimilarEvents.stopShimmer()
+                }
             })
 
         rootView.add.setOnClickListener {
@@ -71,6 +109,30 @@ class OrderCompletedFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val eventClickListener: EventClickListener = object : EventClickListener {
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEventDetail(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
+            }
+        }
+
+        val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
+            override fun onClick(event: Event, itemPosition: Int) {
+                orderCompletedViewModel.setFavorite(event.id, !event.favorite)
+                event.favorite = !event.favorite
+                similarEventsAdapter.notifyItemChanged(itemPosition)
+            }
+        }
+
+        similarEventsAdapter.apply {
+            onEventClick = eventClickListener
+            onFavFabClick = favFabClickListener
+        }
     }
 
     private fun loadEventDetails(event: Event) {
@@ -108,7 +170,7 @@ class OrderCompletedFragment : Fragment() {
     }
 
     private fun redirectToEventsFragment() {
-        findNavController(rootView).popBackStack(R.id.eventsFragment, false)
+        findNavController(rootView).navigate(OrderCompletedFragmentDirections.actionOrderCompletedToEvents())
     }
 
     private fun openEventDetails() {

@@ -17,13 +17,16 @@ import kotlinx.android.synthetic.main.fragment_profile.view.profileCoordinatorLa
 import kotlinx.android.synthetic.main.fragment_profile.view.avatar
 import kotlinx.android.synthetic.main.fragment_profile.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.name
-import kotlinx.android.synthetic.main.fragment_profile.view.progressBar
 import kotlinx.android.synthetic.main.fragment_profile.view.editProfileRL
 import kotlinx.android.synthetic.main.fragment_profile.view.logoutLL
 import kotlinx.android.synthetic.main.fragment_profile.view.manageEventsLL
 import kotlinx.android.synthetic.main.fragment_profile.view.settingsLL
 import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssuesLL
 import kotlinx.android.synthetic.main.fragment_profile.view.loginButton
+import kotlinx.android.synthetic.main.fragment_profile.view.verificationLayout
+import kotlinx.android.synthetic.main.fragment_profile.view.verifiedTextView
+import kotlinx.android.synthetic.main.fragment_profile.view.verifiedTick
+import kotlinx.android.synthetic.main.fragment_profile.view.resendEmailTextView
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -32,6 +35,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.jetbrains.anko.design.snackbar
 
 const val PROFILE_FRAGMENT = "profileFragment"
@@ -41,6 +46,7 @@ class ProfileFragment : Fragment() {
 
     private lateinit var rootView: View
     private var emailSettings: String? = null
+    private var user: User? = null
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToAuth(null, PROFILE_FRAGMENT))
@@ -59,6 +65,8 @@ class ProfileFragment : Fragment() {
         rootView.editProfileRL.isVisible = isLoggedIn
         rootView.logoutLL.isVisible = isLoggedIn
         rootView.loginButton.isVisible = !isLoggedIn
+        rootView.verificationLayout.isVisible = isLoggedIn
+        rootView.resendEmailTextView.isVisible = isLoggedIn
     }
 
     override fun onCreateView(
@@ -67,14 +75,17 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+        if (profileViewModel.isLoggedIn())
+            profileViewModel.fetchProfile()
 
+        val progressDialog = progressDialog(context, getString(R.string.loading_message))
         profileViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBar.isVisible = it
+                progressDialog.show(it)
             })
 
-        profileViewModel.error
+        profileViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.profileCoordinatorLayout.snackbar(it)
@@ -83,9 +94,18 @@ class ProfileFragment : Fragment() {
         profileViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                user = it
                 rootView.name.text = "${it.firstName.nullToEmpty()} ${it.lastName.nullToEmpty()}"
                 rootView.email.text = it.email
                 emailSettings = it.email
+                rootView.verifiedTick.isVisible = it.isVerified
+                rootView.resendEmailTextView.isVisible = !it.isVerified
+                rootView.verifiedTextView.text =
+                    if (it.isVerified) getString(R.string.verified) else getString(R.string.not_verified)
+                if (it.isVerified)
+                    rootView.verifiedTextView.setTextColor(
+                        resources.getColorStateList(android.R.color.holo_green_light)
+                    )
 
                 Picasso.get()
                         .load(it.avatarUrl)
@@ -97,8 +117,11 @@ class ProfileFragment : Fragment() {
                         findNavController(rootView).navigate(ProfileFragmentDirections.actionProfileToEditProfile())
                 }
             })
+        return rootView
+    }
 
-        if (profileViewModel.isLoggedIn()) fetchProfile()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         rootView.manageEventsLL.setOnClickListener { startOrgaApp("com.eventyay.organizer") }
 
@@ -113,7 +136,14 @@ class ProfileFragment : Fragment() {
         rootView.logoutLL.setOnClickListener { showLogoutDialog() }
         rootView.loginButton.setOnClickListener { redirectToLogin() }
 
-        return rootView
+        rootView.resendEmailTextView.setOnClickListener {
+            val userEmail = user?.email
+            if (userEmail != null) {
+                profileViewModel.resendVerificationEmail(userEmail)
+            } else {
+                rootView.profileCoordinatorLayout.snackbar(getString(R.string.error))
+            }
+        }
     }
 
     private fun startOrgaApp(packageName: String) {
@@ -139,14 +169,6 @@ class ProfileFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
-    }
-
-    private fun fetchProfile() {
-        if (!profileViewModel.isLoggedIn())
-            return
-
-        rootView.progressBar.isIndeterminate = true
-        profileViewModel.fetchProfile()
     }
 
     override fun onResume() {

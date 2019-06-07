@@ -11,8 +11,10 @@ import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import kotlinx.android.synthetic.main.fragment_search_filter.view.callForSpeakerCheckBox
 import kotlinx.android.synthetic.main.fragment_search_filter.view.dateRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.freeStuffCheckBox
+import kotlinx.android.synthetic.main.fragment_search_filter.view.sessionsAndSpeakerCheckBox
 import kotlinx.android.synthetic.main.fragment_search_filter.view.nameRadioButton
 import kotlinx.android.synthetic.main.fragment_search_filter.view.radioGroup
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectCategory
@@ -26,13 +28,13 @@ const val SEARCH_FILTER_FRAGMENT = "SearchFilterFragment"
 
 class SearchFilterFragment : Fragment() {
     private lateinit var rootView: View
-    private var isFreeStuffChecked = false
     private lateinit var selectedTime: String
     private lateinit var selectedLocation: String
     private lateinit var selectedCategory: String
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchFilterFragmentArgs by navArgs()
     private lateinit var sortBy: String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +46,7 @@ class SearchFilterFragment : Fragment() {
         setFilterParams()
         setFilters()
         setSortByRadioGroup()
+
         return rootView
     }
 
@@ -54,7 +57,7 @@ class SearchFilterFragment : Fragment() {
         } else {
             rootView.dateRadioButton.isChecked = true
         }
-        rootView.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        rootView.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val radio: RadioButton = rootView.findViewById(checkedId)
             sortBy = if (radio.text == getString(R.string.sort_by_name)) {
                 getString(R.string.sort_by_name)
@@ -78,11 +81,13 @@ class SearchFilterFragment : Fragment() {
             R.id.filter_set -> {
                 findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchResults(
                     date = selectedTime,
-                    freeEvents = isFreeStuffChecked,
+                    freeEvents = rootView.freeStuffCheckBox.isChecked,
                     location = selectedLocation,
                     type = selectedCategory,
                     query = safeArgs.query,
-                    sort = sortBy
+                    sort = sortBy,
+                    sessionsAndSpeakers = rootView.sessionsAndSpeakerCheckBox.isChecked,
+                    callForSpeakers = rootView.callForSpeakerCheckBox.isChecked
                 ))
                 true
             }
@@ -129,8 +134,7 @@ class SearchFilterFragment : Fragment() {
         }
 
         rootView.freeStuffCheckBox.isChecked = safeArgs.freeEvents
-        rootView.freeStuffCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            isFreeStuffChecked = isChecked
-        }
+        rootView.sessionsAndSpeakerCheckBox.isChecked = safeArgs.sessionsAndSpeakers
+        rootView.callForSpeakerCheckBox.isChecked = safeArgs.callForSpeakers
     }
 }

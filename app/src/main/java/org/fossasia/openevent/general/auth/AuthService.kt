@@ -89,4 +89,8 @@ class AuthService(
     fun checkEmail(email: String): Single<CheckEmailResponse> {
         return authApi.checkEmail(Email(email))
     }
+
+    fun resendVerificationEmail(email: String): Single<ResendVerificationEmailResponse> {
+        return authApi.resendVerificationEmail(RequestToken(Email(email)))
+    }
 }

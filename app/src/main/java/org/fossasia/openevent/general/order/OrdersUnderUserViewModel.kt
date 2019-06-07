@@ -65,9 +65,11 @@ class OrdersUnderUserViewModel(
     private fun eventsUnderUser(eventIds: List<Long>, showExpired: Boolean) {
         compositeDisposable += eventService.getEventsUnderUser(eventIds)
             .withDefaultSchedulers()
+            .distinctUntilChanged()
             .doFinally {
                 mutableShowShimmerResults.value = false
             }.subscribe({
+                mutableShowShimmerResults.value = false
                 val events = ArrayList<Event>()
                 it.map {
                     val times = eventIdAndTimes[it.id]
@@ -93,6 +95,7 @@ class OrdersUnderUserViewModel(
                 if (finalList.isEmpty()) mutableNoTickets.value = true
                 mutableEventAndOrder.value = finalList
             }, {
+                mutableShowShimmerResults.value = false
                 mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")
             })

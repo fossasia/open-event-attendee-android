@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
+import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
 import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
@@ -35,6 +38,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
+import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 
 /**
@@ -46,6 +51,7 @@ enum class EventLayoutType {
 }
 
 const val EVENT_DATE_FORMAT: String = "eventDateFormat"
+const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 
 class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
@@ -53,26 +59,17 @@ class EventsFragment : Fragment(), ScrollToTop {
     private val preference = Preference()
     private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        eventsViewModel.events
-            .nonNull()
-            .observe(this, Observer { list ->
-                eventsListAdapter.submitList(list)
-                showEmptyMessage(list.size)
-                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
-            })
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setPostponeSharedElementTransition()
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
         setHasOptionsMenu(true)
-        if (preference.getString(SAVED_LOCATION).isNullOrEmpty()) {
+        if (preference.getString(SAVED_LOCATION).isNullOrEmpty() &&
+            !preference.getBoolean(BEEN_TO_WELCOME_SCREEN, false)) {
+            preference.putBoolean(BEEN_TO_WELCOME_SCREEN, true)
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
         setToolbar(activity, getString(R.string.events), false)
@@ -95,6 +92,14 @@ class EventsFragment : Fragment(), ScrollToTop {
                     rootView.shimmerEvents.stopShimmer()
                 }
                 rootView.shimmerEvents.isVisible = shouldShowShimmer
+            })
+
+        eventsViewModel.events
+            .nonNull()
+            .observe(this, Observer { list ->
+                eventsListAdapter.submitList(list)
+                showEmptyMessage(list.size)
+                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
 
         eventsViewModel.progress
@@ -157,10 +162,14 @@ class EventsFragment : Fragment(), ScrollToTop {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
+            setStartPostponedEnterTransition()
+        }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(view).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 
@@ -182,6 +191,15 @@ class EventsFragment : Fragment(), ScrollToTop {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
             onHashtagClick = hashTagClickListener
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        eventsListAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+            onHashtagClick = null
         }
     }
 
@@ -213,7 +231,16 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     private fun showEmptyMessage(itemCount: Int) {
-        rootView.eventsEmptyView.visibility = if (itemCount == 0) View.VISIBLE else View.GONE
+        if (itemCount == 0) {
+            rootView.eventsEmptyView.visibility = View.VISIBLE
+            if (rootView.locationTextView.text == getString(R.string.choose_your_location)) {
+                rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
+            } else {
+                rootView.emptyEventsText.text = getString(R.string.no_events_message)
+            }
+        } else {
+            rootView.eventsEmptyView.visibility = View.GONE
+        }
     }
 
     override fun onStop() {

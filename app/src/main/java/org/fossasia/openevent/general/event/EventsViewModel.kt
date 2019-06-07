@@ -38,22 +38,26 @@ class EventsViewModel(
 
     fun loadLocation() {
         mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
+            ?: resource.getString(R.string.choose_your_location)
     }
 
     fun loadLocationEvents() {
+        if (mutableSavedLocation.value == null) return
+
         if (lastSearch != savedLocation.value) {
             compositeDisposable += eventService.getEventsByLocation(mutableSavedLocation.value)
                 .withDefaultSchedulers()
+                .distinctUntilChanged()
                 .doOnSubscribe {
                     mutableShowShimmerEvents.value = true
                 }
                 .doFinally {
-                    mutableProgress.value = false
-                    mutableShowShimmerEvents.value = false
-                    lastSearch = mutableSavedLocation.value ?: ""
+                    stopLoaders()
                 }.subscribe({
+                    stopLoaders()
                     mutableEvents.value = it
                 }, {
+                    stopLoaders()
                     Timber.e(it, "Error fetching events")
                     mutableError.value = resource.getString(R.string.error_fetching_events_message)
                 })
@@ -62,6 +66,11 @@ class EventsViewModel(
         }
     }
 
+    private fun stopLoaders() {
+        mutableProgress.value = false
+        mutableShowShimmerEvents.value = false
+        lastSearch = mutableSavedLocation.value ?: ""
+    }
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
     fun clearEvents() {

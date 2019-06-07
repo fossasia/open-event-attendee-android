@@ -67,6 +67,8 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.GeoLocationViewModel
 import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
+import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
 import org.fossasia.openevent.general.search.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.LocationService
@@ -78,6 +80,7 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.sessions.SessionViewModel
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
 import org.fossasia.openevent.general.sessions.sessiontype.SessionType
@@ -86,6 +89,7 @@ import org.fossasia.openevent.general.settings.SettingsViewModel
 import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
+import org.fossasia.openevent.general.speakercall.SpeakersCallViewModel
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
@@ -186,7 +190,7 @@ val apiModule = module {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
@@ -224,6 +228,9 @@ val viewModelModule = module {
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get(), get()) }
+    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SpeakersCallProposalViewModel(get(), get()) }
+    viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
 }
 
 val networkModule = module {
@@ -264,7 +271,7 @@ val networkModule = module {
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
-            Session::class.java, SessionType::class.java, MicroLocation::class.java,
+            Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
             Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java)
 
         Retrofit.Builder()
@@ -342,5 +349,10 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.sponsorDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.speakersCallDao()
     }
 }

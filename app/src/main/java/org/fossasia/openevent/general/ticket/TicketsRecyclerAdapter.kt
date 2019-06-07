@@ -18,7 +18,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
         this.tickets.addAll(ticketList)
     }
 
-    fun setSelectListener(listener: TicketSelectedListener) {
+    fun setSelectListener(listener: TicketSelectedListener?) {
         selectedListener = listener
     }
 

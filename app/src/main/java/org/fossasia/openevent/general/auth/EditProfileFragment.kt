@@ -31,6 +31,7 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.RotateBitmap
+import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -45,7 +46,7 @@ import java.io.FileNotFoundException
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.snackbar
 
-class EditProfileFragment : Fragment() {
+class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
     private val profileViewModel by viewModel<ProfileViewModel>()
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
@@ -209,7 +210,7 @@ class EditProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                handleBackPress()
+                activity?.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -241,7 +242,7 @@ class EditProfileFragment : Fragment() {
     /**
      * Handles back press when up button or back button is pressed
      */
-    fun handleBackPress() {
+    override fun handleBackPress() {
         val thisActivity = activity
         if (!editProfileViewModel.avatarUpdated && rootView.lastName.text.toString() == userLastName &&
             rootView.firstName.text.toString() == userFirstName) {

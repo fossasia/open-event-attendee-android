@@ -43,7 +43,7 @@ class FavoriteEventsRecyclerAdapter(
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.apply {
-            bind(event, FAVORITE_EVENT_DATE_FORMAT)
+            bind(event, FAVORITE_EVENT_DATE_FORMAT, position)
             eventClickListener = onEventClick
             favFabClickListener = onFavFabClick
         }

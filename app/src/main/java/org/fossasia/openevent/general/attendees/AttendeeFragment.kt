@@ -2,8 +2,8 @@ package org.fossasia.openevent.general.attendees
 
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.Spannable
@@ -23,7 +23,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
@@ -31,42 +30,63 @@ import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
-import kotlinx.android.synthetic.main.fragment_attendee.cardNumber
-import kotlinx.android.synthetic.main.fragment_attendee.cvc
-import kotlinx.android.synthetic.main.fragment_attendee.email
-import kotlinx.android.synthetic.main.fragment_attendee.firstName
-import kotlinx.android.synthetic.main.fragment_attendee.helloUser
-import kotlinx.android.synthetic.main.fragment_attendee.lastName
-import kotlinx.android.synthetic.main.fragment_attendee.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.cvc
+import kotlinx.android.synthetic.main.fragment_attendee.view.email
+import kotlinx.android.synthetic.main.fragment_attendee.view.firstName
+import kotlinx.android.synthetic.main.fragment_attendee.view.helloUser
+import kotlinx.android.synthetic.main.fragment_attendee.view.lastName
+import kotlinx.android.synthetic.main.fragment_attendee.view.postalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
-import kotlinx.android.synthetic.main.fragment_attendee.view.cardSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePayment
+import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePaymentDescription
 import kotlinx.android.synthetic.main.fragment_attendee.view.month
 import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
 import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
-import kotlinx.android.synthetic.main.fragment_attendee.view.progressBarAttendee
+import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelectorContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.qty
 import kotlinx.android.synthetic.main.fragment_attendee.view.register
-import kotlinx.android.synthetic.main.fragment_attendee.view.selectCard
 import kotlinx.android.synthetic.main.fragment_attendee.view.signOut
 import kotlinx.android.synthetic.main.fragment_attendee.view.stripePayment
 import kotlinx.android.synthetic.main.fragment_attendee.view.ticketDetails
 import kotlinx.android.synthetic.main.fragment_attendee.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_attendee.view.time
-import kotlinx.android.synthetic.main.fragment_attendee.view.view
+import kotlinx.android.synthetic.main.fragment_attendee.view.ticketTableDetails
 import kotlinx.android.synthetic.main.fragment_attendee.view.year
 import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
+import kotlinx.android.synthetic.main.fragment_attendee.view.city
+import kotlinx.android.synthetic.main.fragment_attendee.view.company
+import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
+import kotlinx.android.synthetic.main.fragment_attendee.view.address
+import kotlinx.android.synthetic.main.fragment_attendee.view.firstNameLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.lastNameLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.emailLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.companyLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.addressLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cvcLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutTextView
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutCounterLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutInfoTextView
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
+import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventUtils
@@ -78,42 +98,47 @@ import org.fossasia.openevent.general.utils.Utils.isNetworkConnected
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Currency
+import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.setRequired
+import org.fossasia.openevent.general.utils.checkEmpty
+import org.fossasia.openevent.general.utils.checkValidEmail
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+import java.util.Calendar
+import java.util.Currency
+import kotlin.collections.ArrayList
 
-private const val STRIPE_KEY = "com.stripe.android.API_KEY"
-
-class AttendeeFragment : Fragment() {
+class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private lateinit var rootView: View
     private val attendeeViewModel by viewModel<AttendeeViewModel>()
     private val ticketsRecyclerAdapter: TicketDetailsRecyclerAdapter = TicketDetailsRecyclerAdapter()
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private val safeArgs: AttendeeFragmentArgs by navArgs()
+    private lateinit var timer: CountDownTimer
+    var totalAmount = 0F
 
-    private lateinit var eventId: EventId
-    private var ticketIdAndQty: List<Pair<Int, Int>>? = null
-    private var selectedPaymentOption: Int = -1
-    private lateinit var paymentCurrency: String
-    private var expiryMonth: Int = -1
-    private var expiryYear: String? = null
-    private var cardBrand: String? = null
     private lateinit var API_KEY: String
-    private var singleTicket = false
-    private var identifierList = ArrayList<String>()
-    private var editTextList = ArrayList<EditText>()
-    private var amount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        eventId = EventId(safeArgs.eventId)
-        ticketIdAndQty = safeArgs.ticketIdAndQty?.value
-        singleTicket = ticketIdAndQty?.map { it.second }?.sum() == 1
-        API_KEY = activity?.packageManager?.getApplicationInfo(activity?.packageName, PackageManager.GET_META_DATA)
-            ?.metaData?.getString(STRIPE_KEY).toString()
+        if (attendeeViewModel.ticketIdAndQty == null) {
+            attendeeViewModel.ticketIdAndQty = safeArgs.ticketIdAndQty?.value
+            attendeeViewModel.singleTicket = safeArgs.ticketIdAndQty?.value?.map { it.second }?.sum() == 1
+        }
+        API_KEY = BuildConfig.STRIPE_API_KEY
+
+        attendeeRecyclerAdapter.setEventId(safeArgs.eventId)
+        if (attendeeViewModel.paymentCurrency.isNotBlank())
+            ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
+        safeArgs.ticketIdAndQty?.value?.let {
+            val quantities = it.map { pair -> pair.second }.filter { it != 0 }
+            ticketsRecyclerAdapter.setQuantity(quantities)
+            attendeeRecyclerAdapter.setQuantity(quantities)
+        }
+        attendeeViewModel.forms.value?.let { attendeeRecyclerAdapter.setCustomForm(it) }
     }
 
     override fun onCreateView(
@@ -125,6 +150,464 @@ class AttendeeFragment : Fragment() {
         setToolbar(activity, getString(R.string.attendee_details))
         setHasOptionsMenu(true)
 
+        attendeeViewModel.message
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.longSnackbar(it)
+            })
+
+        val progressDialog = Utils.progressDialog(context, getString(R.string.creating_order_message))
+        attendeeViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
+            })
+
+        rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                attendeeRecyclerAdapter.setFirstAttendee(
+                    Attendee(firstname = rootView.firstName.text.toString(),
+                        lastname = rootView.lastName.text.toString(),
+                        email = rootView.email.text.toString(),
+                        id = attendeeViewModel.getId())
+                )
+            } else {
+                attendeeRecyclerAdapter.setFirstAttendee(null)
+            }
+        }
+
+        setupEventInfo()
+        setupPendingOrder()
+        setupTicketDetailTable()
+        setupUser()
+        setupAttendeeDetails()
+        setupCustomForms()
+        setupBillingInfo()
+        setupCountryOptions()
+        setupCardNumber()
+        setupMonthOptions()
+        setupYearOptions()
+        setupTermsAndCondition()
+        setupRegisterOrder()
+
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val attendeeDetailChangeListener = object : AttendeeDetailChangeListener {
+            override fun onAttendeeDetailChanged(attendee: Attendee, position: Int) {
+                attendeeViewModel.attendees[position] = attendee
+            }
+        }
+        attendeeRecyclerAdapter.apply {
+            attendeeChangeListener = attendeeDetailChangeListener
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkConnected(context)) {
+            rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        attendeeRecyclerAdapter.attendeeChangeListener = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (this::timer.isInitialized)
+            timer.cancel()
+    }
+
+    override fun handleBackPress() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.cancel_order))
+            .setMessage(getString(R.string.cancel_order_message))
+            .setPositiveButton(getString(R.string.continue_string)) { _, _ ->
+                if (!attendeeViewModel.orderCreatedSuccess)
+                    attendeeViewModel.cancelPendingOrder()
+                findNavController(rootView).popBackStack()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }.create()
+            .show()
+    }
+
+    private fun setupEventInfo() {
+        attendeeViewModel.event
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                loadEventDetailsUI(it)
+                setupPaymentOptions(it)
+                if (attendeeViewModel.pendingOrder.value != null) {
+                    setupCountDownTimer(it)
+                }
+            })
+
+        val currentEvent = attendeeViewModel.event.value
+        if (currentEvent == null)
+            attendeeViewModel.loadEvent(safeArgs.eventId)
+        else {
+            setupPaymentOptions(currentEvent)
+            loadEventDetailsUI(currentEvent)
+            if (attendeeViewModel.pendingOrder.value != null) {
+                setupCountDownTimer(currentEvent)
+            }
+        }
+    }
+
+    private fun setupPendingOrder() {
+        attendeeViewModel.pendingOrder
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                attendeeViewModel.event.value?.let {
+                    setupCountDownTimer(it)
+                }
+            })
+
+        val currentPendingOrder = attendeeViewModel.pendingOrder.value
+        if (currentPendingOrder == null) {
+            attendeeViewModel.createPendingOrder(safeArgs.eventId)
+        }
+    }
+
+    private fun setupCountDownTimer(event: Event) {
+        rootView.timeoutCounterLayout.visibility = View.VISIBLE
+        rootView.timeoutInfoTextView.text =
+            getString(R.string.ticket_timeout_info_message, event.orderExpiryTime.toString())
+
+        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) event.orderExpiryTime * 60 * 1000L
+                                else attendeeViewModel.timeout
+        timer = object : CountDownTimer(timeLeft, 1000) {
+            override fun onFinish() {
+                if (!attendeeViewModel.orderCreatedSuccess)
+                    attendeeViewModel.cancelPendingOrder()
+                findNavController(rootView).navigate(AttendeeFragmentDirections
+                    .actionAttendeeToTicketPop(safeArgs.eventId, safeArgs.currency, true))
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                attendeeViewModel.timeout = millisUntilFinished
+                val minutes = millisUntilFinished / 1000 / 60
+                val seconds = millisUntilFinished / 1000 % 60
+                rootView.timeoutTextView.text = "$minutes:$seconds"
+            }
+        }
+        timer.start()
+    }
+
+    private fun setupTicketDetailTable() {
+        rootView.qty.text = " — ${attendeeViewModel.ticketIdAndQty?.map { it.second }?.sum()} items"
+        rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
+        rootView.ticketsRecycler.isNestedScrollingEnabled = false
+
+        rootView.ticketTableDetails.setOnClickListener {
+            attendeeViewModel.ticketDetailsVisible = !attendeeViewModel.ticketDetailsVisible
+            loadTicketDetailsTableUI(attendeeViewModel.ticketDetailsVisible)
+        }
+        loadTicketDetailsTableUI(attendeeViewModel.ticketDetailsVisible)
+
+        attendeeViewModel.totalAmount
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                totalAmount = it
+                rootView.paymentSelectorContainer.isVisible = it > 0
+                rootView.countryPickerContainer.isVisible = it > 0
+                rootView.billingInfoCheckboxSection.isVisible = it > 0
+                rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$it"
+            })
+
+        attendeeViewModel.tickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { tickets ->
+                ticketsRecyclerAdapter.addAll(tickets)
+                attendeeRecyclerAdapter.addAllTickets(tickets)
+            })
+
+        val currentTickets = attendeeViewModel.tickets.value
+        val currentTotalPrice = attendeeViewModel.totalAmount.value
+        if (currentTickets != null && currentTotalPrice != null) {
+            rootView.paymentSelector.visibility = if (currentTotalPrice > 0) View.VISIBLE else View.GONE
+            rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$currentTotalPrice"
+
+            ticketsRecyclerAdapter.addAll(currentTickets)
+            attendeeRecyclerAdapter.addAllTickets(currentTickets)
+        } else {
+            attendeeViewModel.getTickets()
+        }
+    }
+
+    private fun setupUser() {
+        rootView.firstNameLayout.setRequired()
+        rootView.lastNameLayout.setRequired()
+        rootView.emailLayout.setRequired()
+        attendeeViewModel.user
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { user ->
+                loadUserUI(user)
+                if (attendeeViewModel.singleTicket) {
+                    val pos = attendeeViewModel.ticketIdAndQty?.map { it.second }?.indexOf(1)
+                    val ticket = pos?.let { it1 -> attendeeViewModel.ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
+                    val attendee = Attendee(id = attendeeViewModel.getId(),
+                        firstname = rootView.firstName.text.toString(),
+                        lastname = rootView.lastName.text.toString(),
+                        city = getAttendeeField("city"),
+                        address = getAttendeeField("address"),
+                        state = getAttendeeField("state"),
+                        email = rootView.email.text.toString(),
+                        ticket = TicketId(ticket),
+                        event = EventId(safeArgs.eventId))
+                    attendeeViewModel.attendees.clear()
+                    attendeeViewModel.attendees.add(attendee)
+                }
+            })
+
+        rootView.signOut.setOnClickListener {
+            AlertDialog.Builder(requireContext()).setMessage(getString(R.string.message))
+                .setPositiveButton(getString(R.string.logout)) { _, _ ->
+                    attendeeViewModel.logout()
+                    activity?.onBackPressed()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+                .show()
+        }
+
+        val currentUser = attendeeViewModel.user.value
+        if (currentUser == null)
+            attendeeViewModel.loadUser()
+        else
+            loadUserUI(currentUser)
+    }
+
+    private fun setupAttendeeDetails() {
+        rootView.attendeeRecycler.layoutManager = LinearLayoutManager(activity)
+        rootView.attendeeRecycler.adapter = attendeeRecyclerAdapter
+        rootView.attendeeRecycler.isNestedScrollingEnabled = false
+
+        if (attendeeViewModel.attendees.isEmpty()) {
+            attendeeViewModel.ticketIdAndQty?.let {
+                it.forEach { pair ->
+                    repeat(pair.second) {
+                        attendeeViewModel.attendees.add(Attendee(
+                            id = attendeeViewModel.getId(),
+                            firstname = "", lastname = "", city = getAttendeeField("city"),
+                            address = getAttendeeField("address"), state = getAttendeeField("state"),
+                            email = "", ticket = TicketId(pair.first.toLong()), event = EventId(safeArgs.eventId)
+                        ))
+                    }
+                }
+            }
+        }
+        attendeeRecyclerAdapter.addAllAttendees(attendeeViewModel.attendees)
+    }
+
+    private fun setupCustomForms() {
+        attendeeViewModel.forms
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (attendeeViewModel.singleTicket) {
+                    fillInformationSection(it)
+                    if (it.isNotEmpty()) {
+                        rootView.moreAttendeeInformation.visibility = View.VISIBLE
+                    }
+                }
+                attendeeRecyclerAdapter.setCustomForm(it)
+            })
+
+        val currentForms = attendeeViewModel.forms.value
+        if (currentForms == null) {
+            attendeeViewModel.getCustomFormsForAttendees(safeArgs.eventId)
+        } else {
+            if (attendeeViewModel.singleTicket) {
+                fillInformationSection(currentForms)
+                if (currentForms.isNotEmpty()) {
+                    rootView.moreAttendeeInformation.visibility = View.VISIBLE
+                }
+            }
+            attendeeRecyclerAdapter.setCustomForm(currentForms)
+        }
+    }
+
+    private fun setupBillingInfo() {
+        rootView.companyLayout.setRequired()
+        rootView.addressLayout.setRequired()
+        rootView.cityLayout.setRequired()
+        rootView.postalCodeLayout.setRequired()
+        rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
+        attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
+        rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            attendeeViewModel.billingEnabled = isChecked
+            rootView.billingInfoContainer.isVisible = isChecked
+        }
+    }
+
+    private fun setupCountryOptions() {
+        ArrayAdapter.createFromResource(
+            requireContext(), R.array.country_arrays,
+            android.R.layout.simple_spinner_dropdown_item
+        ).also { adapter ->
+            rootView.countryPicker.adapter = adapter
+            if (attendeeViewModel.countryPosition == -1)
+                autoSetCurrentCountry()
+            else
+                rootView.countryPicker.setSelection(attendeeViewModel.countryPosition)
+        }
+        rootView.countryPicker.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) { /*Do nothing*/ }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                attendeeViewModel.countryPosition = position
+            }
+        }
+        rootView.countryPickerContainer.visibility = if (attendeeViewModel.singleTicket) View.VISIBLE else View.GONE
+    }
+
+    private fun setupPaymentOptions(event: Event) {
+        val paymentOptions = ArrayList<String>()
+        if (event.canPayByPaypal)
+            paymentOptions.add(getString(R.string.paypal))
+        if (event.canPayByStripe)
+            paymentOptions.add(getString(R.string.stripe))
+        if (event.canPayOnsite)
+            paymentOptions.add(getString(R.string.on_site))
+        if (event.canPayByBank)
+            paymentOptions.add(getString(R.string.bank_transfer))
+        if (event.canPayByCheque)
+            paymentOptions.add(getString(R.string.cheque))
+
+        rootView.paymentSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            paymentOptions)
+        rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) { /*Do nothing*/ }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                attendeeViewModel.selectedPaymentOption = position
+                when (position) {
+                    paymentOptions.indexOf(getString(R.string.stripe)) -> {
+                        rootView.stripePayment.visibility = View.VISIBLE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                    paymentOptions.indexOf(getString(R.string.on_site)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.onsiteDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.bank_transfer)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.bankDetails
+                    }
+                    paymentOptions.indexOf(getString(R.string.cheque)) -> {
+                        rootView.offlinePayment.visibility = View.VISIBLE
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePaymentDescription.text = event.chequeDetails
+                    }
+                    else -> {
+                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.visibility = View.GONE
+                    }
+                }
+            }
+        }
+        if (attendeeViewModel.selectedPaymentOption != -1)
+            rootView.paymentSelector.setSelection(attendeeViewModel.selectedPaymentOption)
+    }
+
+    private fun setupCardNumber() {
+        rootView.cardNumberLayout.setRequired()
+        rootView.cvcLayout.setRequired()
+        rootView.cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { /*Do Nothing*/ }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s == null || s.length < 3) {
+                    setCardSelectorAndError(false)
+                    return
+                }
+                val card = Utils.getCardType(s.toString())
+                if (card == Utils.cardType.NONE) {
+                    setCardSelectorAndError(true)
+                    return
+                }
+                setCardSelectorAndError(false)
+            }
+
+            private fun setCardSelectorAndError(error: Boolean) {
+                if (error) {
+                    rootView.cardNumber.error = "Invalid card number"
+                    return
+                }
+                rootView.cardNumber.error = null
+            }
+        })
+    }
+
+    private fun setupMonthOptions() {
+        val month = ArrayList<String>()
+        month.add(getString(R.string.month_string))
+        month.add(getString(R.string.january))
+        month.add(getString(R.string.february))
+        month.add(getString(R.string.march))
+        month.add(getString(R.string.april))
+        month.add(getString(R.string.may))
+        month.add(getString(R.string.june))
+        month.add(getString(R.string.july))
+        month.add(getString(R.string.august))
+        month.add(getString(R.string.september))
+        month.add(getString(R.string.october))
+        month.add(getString(R.string.november))
+        month.add(getString(R.string.december))
+
+        rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            month)
+        rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) { /* Do nothing */ }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                attendeeViewModel.monthSelectedPosition = p2
+                rootView.monthText.text = month[p2]
+            }
+        }
+        rootView.monthText.setOnClickListener {
+            rootView.month.performClick()
+        }
+
+        rootView.month.setSelection(attendeeViewModel.monthSelectedPosition)
+    }
+
+    private fun setupYearOptions() {
+        val year = ArrayList<String>()
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val a = currentYear + 20
+        for (i in currentYear..a) {
+            year.add(i.toString())
+        }
+
+        rootView.year.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            year)
+        rootView.year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) { /* Do nothing */ }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                attendeeViewModel.yearSelectedPosition = pos
+                rootView.yearText.text = year[pos]
+            }
+        }
+        rootView.yearText.setOnClickListener {
+            rootView.year.performClick()
+        }
+
+        rootView.year.setSelection(attendeeViewModel.yearSelectedPosition)
+    }
+
+    private fun setupTermsAndCondition() {
         val paragraph = SpannableStringBuilder()
         val startText = getString(R.string.start_text)
         val termsText = getString(R.string.terms_text)
@@ -165,271 +648,47 @@ class AttendeeFragment : Fragment() {
 
         rootView.accept.text = paragraph
         rootView.accept.movementMethod = LinkMovementMethod.getInstance()
+    }
 
-        rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
-        rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
-        rootView.ticketsRecycler.isNestedScrollingEnabled = false
-
-        rootView.attendeeRecycler.layoutManager = LinearLayoutManager(activity)
-        rootView.attendeeRecycler.adapter = attendeeRecyclerAdapter
-        rootView.attendeeRecycler.isNestedScrollingEnabled = false
-
-        linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        rootView.ticketsRecycler.layoutManager = linearLayoutManager
-
-        attendeeViewModel.ticketDetails(ticketIdAndQty)
-
-        attendeeViewModel.updatePaymentSelectorVisibility(ticketIdAndQty)
-        val paymentOptions = ArrayList<String>()
-        paymentOptions.add(getString(R.string.paypal))
-        paymentOptions.add(getString(R.string.stripe))
-        attendeeViewModel.paymentSelectorVisibility
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                if (it) {
-                    rootView.paymentSelector.visibility = View.VISIBLE
-                } else {
-                    rootView.paymentSelector.visibility = View.GONE
-                }
-            })
-        rootView.paymentSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
-            paymentOptions)
-        rootView.paymentSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                // Do nothing
+    private fun checkPaymentOptions(): Boolean =
+        when (rootView.paymentSelector.selectedItem.toString()) {
+            getString(R.string.paypal) -> {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
+                false
             }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                selectedPaymentOption = position
-                if (position == paymentOptions.indexOf(getString(R.string.stripe)))
-                    rootView.stripePayment.visibility = View.VISIBLE
-                else
-                    rootView.stripePayment.visibility = View.GONE
-            }
+            else -> true
         }
 
-        attendeeViewModel.initializeSpinner()
+    private fun checkRequiredFields(): Boolean {
+        val checkBasicInfo = rootView.firstName.checkEmpty() && rootView.lastName.checkEmpty() &&
+            rootView.email.checkEmpty() && rootView.email.checkEmpty() && rootView.email.checkValidEmail()
 
-        ArrayAdapter.createFromResource(
-            requireContext(), R.array.country_arrays,
-            android.R.layout.simple_spinner_dropdown_item
-        ).also { adapter ->
-            rootView.countryPicker.adapter = adapter
-            autoSetCurrentCountry()
+        var checkBillingInfo = true
+        if (rootView.billingEnabledCheckbox.isChecked) {
+            checkBillingInfo = rootView.company.checkEmpty() && rootView.company.checkEmpty() &&
+                rootView.address.checkEmpty() && rootView.city.checkEmpty() && rootView.postalCode.checkEmpty()
         }
 
-        rootView.cardNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s == null || s.length < 3) {
-                    setCardSelectorAndError(0, visibility = true, error = false)
-                    return
-                }
-                val card = Utils.getCardType(s.toString())
-                if (card == Utils.cardType.NONE) {
-                    setCardSelectorAndError(0, visibility = true, error = true)
-                    return
-                }
-
-                val pos: Int = card.let {
-                    when (it) {
-                        Utils.cardType.AMERICAN_EXPRESS -> 1
-                        Utils.cardType.MASTER_CARD -> 2
-                        Utils.cardType.VISA -> 3
-                        Utils.cardType.DISCOVER -> 4
-                        Utils.cardType.DINERS_CLUB -> 5
-                        Utils.cardType.UNIONPAY -> 6
-                        else -> 0
-                    }
-                }
-                setCardSelectorAndError(pos, visibility = false, error = false)
-            }
-
-            fun setCardSelectorAndError(pos: Int, visibility: Boolean, error: Boolean) {
-                rootView.cardSelector.setSelection(pos, true)
-                rootView.cardSelector.isVisible = visibility
-                if (error) {
-                    rootView.cardNumber.error = "Invalid card number"
-                    return
-                }
-                rootView.cardNumber.error = null
-            }
-        })
-        rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
-            attendeeViewModel.month)
-        rootView.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                // Do nothing
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                expiryMonth = p2
-                rootView.monthText.text = attendeeViewModel.month[p2]
-            }
-        }
-        rootView.monthText.setOnClickListener {
-            rootView.month.performClick()
+        var checkStripeInfo = true
+        if (totalAmount != 0F && rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
+            checkStripeInfo = rootView.cardNumber.checkEmpty() && rootView.cvc.checkEmpty()
         }
 
-        rootView.year.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
-            attendeeViewModel.year)
-        rootView.year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                // Do nothing
-            }
+        return checkBasicInfo && checkBillingInfo && checkAttendeesInfo() && checkStripeInfo
+    }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                expiryYear = attendeeViewModel.year[p2]
-                if (expiryYear == "Year")
-                    expiryYear = "2017" // invalid year, if the user hasn't selected the year
-                rootView.yearText.text = attendeeViewModel.year[p2]
+    private fun checkAttendeesInfo(): Boolean {
+        var valid = true
+        for (pos in 0..attendeeRecyclerAdapter.itemCount) {
+            val viewHolderItem = rootView.attendeeRecycler.findViewHolderForAdapterPosition(pos)
+            if (viewHolderItem is AttendeeViewHolder) {
+                if (!viewHolderItem.checkValidFields()) valid = false
             }
         }
-        rootView.yearText.setOnClickListener {
-            rootView.year.performClick()
-        }
+        return valid
+    }
 
-        rootView.cardSelector.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
-            attendeeViewModel.cardType)
-        rootView.cardSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                cardBrand = attendeeViewModel.cardType[p2]
-                rootView.selectCard.text = cardBrand
-            }
-        }
-        attendeeViewModel.qtyList
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                ticketsRecyclerAdapter.setQty(it)
-            })
-
-        rootView.view.setOnClickListener {
-            val currentVisibility: Boolean = attendeeViewModel.ticketDetailsVisibility.value ?: false
-            if (rootView.view.text == context?.getString(R.string.view)) {
-                rootView.ticketDetails.visibility = View.VISIBLE
-                rootView.view.text = context?.getString(R.string.hide)
-            } else {
-                attendeeViewModel.ticketDetailsVisibility.value = !currentVisibility
-                rootView.ticketDetails.visibility = View.GONE
-                rootView.view.text = context?.getString(R.string.view)
-            }
-        }
-
-        attendeeViewModel.ticketDetailsVisibility
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.view.text = if (it) getString(R.string.hide) else getString(R.string.view)
-                rootView.ticketDetails.visibility = if (it) View.VISIBLE else View.GONE
-            })
-
-        attendeeViewModel.message
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.longSnackbar(it)
-            })
-
-        attendeeViewModel.progress
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.progressBarAttendee.isVisible = it
-                rootView.register.isEnabled = !it
-            })
-
-        attendeeViewModel.event
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                loadEventDetails(it)
-            })
-
-        attendeeViewModel.totalAmount
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                amount = it
-            })
-
-        attendeeRecyclerAdapter.eventId = eventId
-        attendeeViewModel.tickets
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer { tickets ->
-                ticketsRecyclerAdapter.addAll(tickets)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
-                if (!singleTicket)
-                    tickets.forEach { ticket ->
-                        val pos = ticketIdAndQty?.map { it.first }?.indexOf(ticket.id)
-                        val iterations = pos?.let { ticketIdAndQty?.get(it)?.second } ?: 0
-                        for (i in 0 until iterations)
-                            attendeeRecyclerAdapter.add(Attendee(attendeeViewModel.getId()), ticket)
-                        attendeeRecyclerAdapter.notifyDataSetChanged()
-                    }
-            })
-
-        attendeeViewModel.totalQty
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.qty.text = " — $it items"
-            })
-
-        attendeeViewModel.countryVisibility
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                if (singleTicket) {
-                    rootView.countryPickerContainer.visibility = if (it) View.VISIBLE else View.GONE
-                }
-            })
-
-        attendeeViewModel.paymentCompleted
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                if (it)
-                    openOrderCompletedFragment()
-            })
-
-        attendeeViewModel.loadUser()
-        attendeeViewModel.loadEvent(safeArgs.eventId)
-
-        attendeeViewModel.attendee
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer { user ->
-                helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
-                firstName.text = Editable.Factory.getInstance().newEditable(user.firstName.nullToEmpty())
-                lastName.text = Editable.Factory.getInstance().newEditable(user.lastName.nullToEmpty())
-                email.text = Editable.Factory.getInstance().newEditable(user.email.nullToEmpty())
-            })
-
-        rootView.signOut.setOnClickListener {
-            AlertDialog.Builder(requireContext()).setMessage(resources.getString(R.string.message))
-                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    attendeeViewModel.logout()
-                    activity?.onBackPressed()
-                }
-                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-                .show()
-        }
-
-        attendeeViewModel.getCustomFormsForAttendees(eventId.id)
-
-        attendeeViewModel.forms
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                if (singleTicket)
-                    fillInformationSection(it)
-                attendeeRecyclerAdapter.setCustomForm(it)
-                if (singleTicket)
-                    if (!it.isEmpty()) {
-                        rootView.moreAttendeeInformation.visibility = View.VISIBLE
-                    }
-                attendeeRecyclerAdapter.notifyDataSetChanged()
-            })
-
+    private fun setupRegisterOrder() {
         rootView.register.setOnClickListener {
             if (!isNetworkConnected(context)) {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
@@ -440,64 +699,63 @@ class AttendeeFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(R.string.confirmation_dialog)
-
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                val attendees = ArrayList<Attendee>()
-                if (singleTicket) {
-                    val pos = ticketIdAndQty?.map { it.second }?.indexOf(1)
-                    val ticket = pos?.let { it1 -> ticketIdAndQty?.get(it1)?.first?.toLong() } ?: -1
-                    val attendee = Attendee(id = attendeeViewModel.getId(),
-                        firstname = firstName.text.toString(),
-                        lastname = lastName.text.toString(),
-                        city = getAttendeeField("city"),
-                        address = getAttendeeField("address"),
-                        state = getAttendeeField("state"),
-                        email = email.text.toString(),
-                        ticket = TicketId(ticket),
-                        event = eventId)
-                    attendees.add(attendee)
-                } else {
-                    attendees.addAll(attendeeRecyclerAdapter.attendeeList)
-                }
-
-                if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
-                    val country = rootView.countryPicker.selectedItem.toString()
-                    attendeeViewModel.createAttendees(attendees, country, paymentOptions[selectedPaymentOption])
-
-                    attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
-                        if (isAttendeeCreated && selectedPaymentOption ==
-                            paymentOptions.indexOf(getString(R.string.stripe))) {
-                            sendToken()
-                        }
-                    })
-                } else {
-                    rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
-                }
+            if (!checkRequiredFields()) {
+                rootView.snackbar(R.string.fill_required_fields_message)
+                return@setOnClickListener
             }
 
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                rootView.snackbar(getString(R.string.order_not_completed))
+            if (attendeeViewModel.totalAmount.value != 0F && !checkPaymentOptions()) return@setOnClickListener
+
+            val attendees = attendeeViewModel.attendees
+
+            if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
+                val country = rootView.countryPicker.selectedItem.toString()
+                val paymentOption =
+                    if (totalAmount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
+                    else PAYMENT_MODE_FREE
+                val company = rootView.company.text.toString()
+                val city = rootView.city.text.toString()
+                val taxId = rootView.taxId.text.toString()
+                val address = rootView.address.text.toString()
+                val postalCode = rootView.postalCode.text.toString()
+                attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
+                    city, postalCode, paymentOption)
+            } else {
+                rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
             }
-            builder.show()
-
-            attendeeViewModel.ticketSoldOut
-                .nonNull()
-                .observe(this, Observer {
-                    showTicketSoldOutDialog(it)
-                })
         }
-        return rootView
+
+        attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
+            if (totalAmount == 0F) return@Observer
+            if (isAttendeeCreated &&
+                rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
+                sendToken()
+            }
+        })
+
+        attendeeViewModel.ticketSoldOut
+            .nonNull()
+            .observe(this, Observer {
+                showTicketSoldOutDialog(it)
+            })
+
+        attendeeViewModel.paymentCompleted
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it)
+                    openOrderCompletedFragment()
+            })
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (!isNetworkConnected(context)) {
-            rootView.progressBarAttendee.isVisible = false
-            rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
+    private fun getPaymentMode(paymentSelectedItem: String): String =
+        when (paymentSelectedItem) {
+            getString(R.string.cheque) -> PAYMENT_MODE_CHEQUE
+            getString(R.string.bank_transfer) -> PAYMENT_MODE_BANK
+            getString(R.string.stripe) -> PAYMENT_MODE_STRIPE
+            getString(R.string.paypal) -> PAYMENT_MODE_PAYPAL
+            getString(R.string.on_site) -> PAYMENT_MODE_ONSITE
+            else -> PAYMENT_MODE_FREE
         }
-    }
 
     private fun showTicketSoldOutDialog(show: Boolean) {
         if (show) {
@@ -509,12 +767,8 @@ class AttendeeFragment : Fragment() {
     }
 
     private fun sendToken() {
-        val card = Card(cardNumber.text.toString(), expiryMonth, expiryYear?.toInt(), cvc.text.toString())
-        card.addressCountry = rootView.countryPicker.selectedItem.toString()
-        card.addressZip = postalCode.text.toString()
-
-        if (card.brand != null && card.brand != "Unknown")
-            rootView.selectCard.text = "Pay by ${card.brand}"
+        val card = Card(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
+            attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
 
         val validDetails: Boolean? = card.validateCard()
         if (validDetails != null && !validDetails)
@@ -534,21 +788,52 @@ class AttendeeFragment : Fragment() {
                 })
     }
 
-    private fun loadEventDetails(event: Event) {
+    private fun loadEventDetailsUI(event: Event) {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
-        val currency = Currency.getInstance(event.paymentCurrency)
-        paymentCurrency = currency.symbol
-        ticketsRecyclerAdapter.setCurrency(paymentCurrency)
+        attendeeViewModel.paymentCurrency = Currency.getInstance(event.paymentCurrency).symbol
+        ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
 
-        rootView.eventName.text = "${event.name} - ${EventUtils.getFormattedDate(startsAt)}"
-        rootView.amount.text = "Total: $paymentCurrency$amount"
-        rootView.time.text = dateString.append(EventUtils.getFormattedDate(startsAt))
-            .append(" - ")
-            .append(EventUtils.getFormattedDate(endsAt))
-            .append(" • ")
-            .append(EventUtils.getFormattedTime(startsAt))
+        rootView.eventName.text = event.name
+
+        val startDate = EventUtils.getFormattedDate(startsAt)
+        val endDate = EventUtils.getFormattedDate(endsAt)
+        dateString.append(startDate)
+        if (startDate == endDate) {
+            dateString.append(" • ")
+                .append(EventUtils.getFormattedTime(startsAt))
+                .append(" - ")
+                .append(EventUtils.getFormattedTime(endsAt))
+        } else {
+            dateString.append(" - ")
+                .append(EventUtils.getFormattedTime(startsAt))
+                .append(" • ")
+                .append(endDate)
+                .append(" - ")
+                .append(EventUtils.getFormattedTime(endsAt))
+        }
+        rootView.time.text = dateString
+    }
+
+    private fun loadUserUI(user: User) {
+        rootView.helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
+        rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
+        rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
+        rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())
+        rootView.firstName.isEnabled = false
+        rootView.lastName.isEnabled = false
+        rootView.email.isEnabled = false
+    }
+
+    private fun loadTicketDetailsTableUI(show: Boolean) {
+        if (show) {
+            rootView.ticketDetails.visibility = View.VISIBLE
+            rootView.ticketTableDetails.text = context?.getString(R.string.hide)
+        } else {
+            rootView.ticketDetails.visibility = View.GONE
+            rootView.ticketTableDetails.text = context?.getString(R.string.view)
+        }
     }
 
     private fun openOrderCompletedFragment() {
@@ -577,15 +862,15 @@ class AttendeeFragment : Fragment() {
                 inputLayout.addView(editTextSection)
                 inputLayout.setPadding(0, 0, 0, 20)
                 layout.addView(inputLayout)
-                identifierList.add(form.fieldIdentifier)
-                editTextList.add(editTextSection)
+                attendeeViewModel.identifierList.add(form.fieldIdentifier)
+                attendeeViewModel.editTextList.add(editTextSection)
             }
         }
     }
 
     private fun getAttendeeField(identifier: String): String {
-        val index = identifierList.indexOf(identifier)
-        return if (index == -1) "" else index.let { editTextList[it] }.text.toString()
+        val index = attendeeViewModel.identifierList.indexOf(identifier)
+        return if (index == -1) "" else index.let { attendeeViewModel.editTextList[it] }.text.toString()
     }
 
     private fun autoSetCurrentCountry() {

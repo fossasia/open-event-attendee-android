@@ -34,7 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
-const val TICKETS_FRAGMNET = "ticketsFragment"
+const val TICKETS_FRAGMENT = "ticketsFragment"
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -47,27 +47,6 @@ class TicketsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ticketsRecyclerAdapter.setCurrency(safeArgs.currency)
-
-        val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
-                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
-            }
-        }
-        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
-
-        ticketsViewModel.event
-            .nonNull()
-            .observe(this, Observer {
-                loadEventDetails(it)
-            })
-
-        ticketsViewModel.tickets
-            .nonNull()
-            .observe(this, Observer {
-                ticketsRecyclerAdapter.addAll(it)
-                ticketsRecyclerAdapter.notifyDataSetChanged()
-            })
     }
 
     override fun onCreateView(
@@ -96,14 +75,6 @@ class TicketsFragment : Fragment() {
                 rootView.register.isGone = it
             })
 
-        rootView.register.setOnClickListener {
-            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
-                checkForAuthentication()
-            } else {
-                handleNoTicketsSelected()
-            }
-        }
-
         ticketsViewModel.ticketTableVisibility
             .nonNull()
             .observe(viewLifecycleOwner, Observer { ticketTableVisible ->
@@ -119,6 +90,27 @@ class TicketsFragment : Fragment() {
                 ticketsCoordinatorLayout.longSnackbar(it)
             })
 
+        ticketsViewModel.event
+            .nonNull()
+            .observe(this, Observer {
+                loadEventDetails(it)
+            })
+
+        ticketsViewModel.tickets
+            .nonNull()
+            .observe(this, Observer {
+                ticketsRecyclerAdapter.addAll(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
+
+        rootView.register.setOnClickListener {
+            if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
+                checkForAuthentication()
+            } else {
+                handleNoTicketsSelected()
+            }
+        }
+
         rootView.retry.setOnClickListener {
             loadTickets()
         }
@@ -131,6 +123,25 @@ class TicketsFragment : Fragment() {
             })
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onSelected(ticketId: Int, quantity: Int) {
+                handleTicketSelect(ticketId, quantity)
+                ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
+            }
+        }
+        ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
+
+        if (safeArgs.timeout) showTicketTimeoutDialog()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ticketsRecyclerAdapter.setSelectListener(null)
     }
 
     private fun checkForAuthentication() {
@@ -146,13 +157,22 @@ class TicketsFragment : Fragment() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
-            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty
+            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty, currency = safeArgs.currency
         ))
+    }
+
+    private fun showTicketTimeoutDialog() {
+        AlertDialog.Builder(requireContext())
+            .setPositiveButton(getString(R.string.ok)) { _, _ -> /*Do Nothing*/ }
+            .setTitle(getString(R.string.whoops))
+            .setMessage(getString(R.string.ticket_timeout_message))
+            .create()
+            .show()
     }
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAuth(
-            getString(R.string.log_in_first), TICKETS_FRAGMNET
+            getString(R.string.log_in_first), TICKETS_FRAGMENT
         ))
     }
 

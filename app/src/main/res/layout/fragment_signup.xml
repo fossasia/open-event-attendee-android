@@ -31,16 +31,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium">
+            android:layout_marginTop="@dimen/padding_medium"
+            android:hint="@string/email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameSignUp"
+                android:id="@+id/emailSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_email_black"
                 android:drawablePadding="@dimen/layout_margin_moderate"
                 android:drawableStart="@drawable/ic_email_black"
-                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 

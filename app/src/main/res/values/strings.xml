@@ -27,6 +27,9 @@
     <string name="favorite_event">Favorite Event</string>
     <string name="refund_Policy">Refund Policy</string>
     <string name="no_events_message">Sorry, there are no events available</string>
+    <string name="skip">Skip</string>
+    <string name="choose_your_location">Choose your location</string>
+    <string name="choose_preferred_location_message">Please choose your preferred location</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
@@ -74,6 +77,9 @@
     <string name="edit_profile_photo_message">Edit your profile picture</string>
     <string name="delete">Delete</string>
     <string name="new_photo">New Photo</string>
+    <string name="verified">Verified</string>
+    <string name="not_verified">Your account hasn\'t been verified</string>
+    <string name="resend_verification_email">Resend verification email</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
@@ -127,6 +133,11 @@
     <string name="find_my_tickets">Find my tickets</string>
     <string name="no_tickets_available">No tickets available!</string>
     <string name="ticket_details">Ticket Details</string>
+    <string name="ticket_timeout_message">You have exceeded the time limit and your reservation has been released.\n\nThe purpose of this time limit is to ensure that registration is available to as many people as possible. We apologize for the inconvenience.</string>
+    <string name="ticket_timeout_info_message">After %1$s minutes, the reservation we are hodling will be released.</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="cancel_order_message">Are you sure to cancel this order?</string>
+    <string name="pending_order_cancelled_message">Pending order cancelled</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
@@ -135,9 +146,15 @@
     <string name="cvc" translatable="false">CVC</string>
     <string name="postal_code">Postal Code</string>
     <string name="payment_info">Payment Info</string>
+    <string name="payment">Payment</string>
     <string name="not_you">Not you? </string>
     <string name="sign_out">Sign out</string>
     <string name="all_fees">All fees included in price</string>
+    <string name="on_site">On Site</string>
+    <string name="bank_transfer">Telegraphic Transfer/Bank Transfer</string>
+    <string name="cheque">Cheque</string>
+    <string name="paypal_payment_not_available">Paypal payment is not available in the app yet!</string>
+    <string name="offline_payment_message">This is offline payment method. Please follow payment instructions.</string>
 
     <!--order details-->
     <string name="order_completed">ORDER COMPLETED</string>
@@ -155,6 +172,13 @@
     <string name="date_preview" translatable="false">Thu,June 14</string>
     <string name="event_preview" translatable="false">FOSSASIA summit</string>
     <string name="name_preview" translatable="false">Nikit Bhandari</string>
+    <string name="email_preview" translatable="false">fossasia.asia@gmail.com</string>
+    <string name="checkin_status">Check-in status</string>
+    <string name="checked_in">Checked In</string>
+    <string name="not_checked_in">Not Checked In</string>
+    <string name="not_available">Not available</string>
+    <string name="check_in_times">Check-in times</string>
+    <string name="checked_out">Checked out</string>
 
     <!--suggestion mail details-->
     <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
@@ -242,6 +266,7 @@
     <string name="create_attendee_success_message">Attendees created successfully!</string>
     <string name="create_attendee_fail_message">Unable to create Attendee!</string>
     <string name="fill_all_fields_message">Please fill in all the fields</string>
+    <string name="fill_required_fields_message">Please fill in all the required fields</string>
     <string name="free">free</string>
     <string name="order_success_message">Order created successfully!</string>
     <string name="order_fail_message">Unable to create Order!</string>
@@ -249,6 +274,11 @@
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
     <string name="share_ticket">Share Ticket</string>
     <string name="fail_sharing_ticket">Fail to share ticket</string>
+    <string name="company">Company</string>
+    <string name="tax_id">Tax ID or Business ID</string>
+    <string name="address">Address</string>
+    <string name="city">City</string>
+    <string name="checkbox_message">Ticket holder is the same person as ticket buyer</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
@@ -256,7 +286,6 @@
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
-    <string name="confirmation_dialog">Are you sure to confirm the order?</string>
     <string name="order_not_completed">Order not completed!</string>
     <string name="removed_from_liked">Removed %1$s from liked events</string>
     <string name="undo">Undo</string>
@@ -338,6 +367,7 @@
     <string name="filter">Filter Search</string>
     <string name="free_stuff">Free stuff only</string>
     <string name="speakers">Speakers</string>
+    <string name="speakers_call">Speakers Call</string>
     <string name="sponsors">Sponsors</string>
     <string name="sessions">Sessions</string>
     <string name="session">Session</string>
@@ -346,11 +376,45 @@
     <string name="sort_by_date">starts-at</string>
     <string name="sort_by">Sort By</string>
     <string name="category">Category</string>
+    <string name="sessions_and_speakers">Sessions and speakers</string>
 
     <!--Notification fragment-->
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
     <string name="color_code">Color Code:</string>
+
+    <!--Speaker Call Fragment-->
+    <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
+    <string name="call_for_speakers">Call For Speakers</string>
+    <string name="submit_proposal">Submit Proposal</string>
+    <string name="code_of_conduct">Code Of Conduct</string>
+    <string name="empty_field_error_message">This field must not be empty</string>
+    <string name="proposal">Proposal</string>
+    <string name="speaker_details">My Speaker Details</string>
+    <string name="session_proposal_detail">Session Proposal Detail</string>
+    <string name="organization">Organization</string>
+    <string name="position">Position</string>
+    <string name="short_bio">Short Bio</string>
+    <string name="website">Website</string>
+    <string name="twitter">Twitter</string>
+    <string name="proposal_speaker">My Proposal Speaker</string>
+    <string name="no_speaker_info">You haven\'t had any speaker information</string>
+    <string name="load_speaker_info">Loading current speaker information</string>
+    <string name="add_speaker">Add Speaker</string>
+    <string name="fail_creating_speaker">Fail on creating speaker. Please try again.</string>
+    <string name="create_speaker">Create Speaker</string>
+    <string name="create_edit_speaker">Create/Edit Proposal</string>
+    <string name="create_proposal_message">Create proposal for this event or edit your speaker profile</string>
+    <string name="create_proposal">Create Proposal</string>
+    <string name="create_speaker_profile_message">You haven\'t created your speaker profile for this event</string>
+    <string name="edit_speaker">Edit Speaker</string>
+    <string name="continue_string">Continue</string>
+    <string name="loading_speaker_profile_message">Loading your speaker profile</string>
+    <string name="no_speaker_profile_created_message">You haven\'t created any speaker profile</string>
+    <string name="create_speaker_fail_message">Fail on creating speaker profile</string>
+    <string name="update_speaker_fail_message">Fail on updating speaker profile</string>
+    <string name="loading_message">Loading...</string>
+    <string name="creating_order_message">Creating order...</string>
 
 </resources>

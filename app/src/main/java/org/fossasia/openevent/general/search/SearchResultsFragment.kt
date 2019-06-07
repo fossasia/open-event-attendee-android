@@ -9,12 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -39,6 +39,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
 import org.fossasia.openevent.general.common.EventsDiffCallback
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
+import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -68,8 +71,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
+        setPostponeSharedElementTransition()
 
-        setChips(eventDate, eventType)
+        setChips()
         setToolbar(activity, getString(R.string.search_results))
         setHasOptionsMenu(true)
 
@@ -77,6 +81,9 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
         rootView.eventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+        rootView.viewTreeObserver.addOnDrawListener {
+            setStartPostponedEnterTransition()
+        }
 
         searchViewModel.events
             .nonNull()
@@ -115,22 +122,19 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 rootView.searchRootLayout.longSnackbar(it)
             })
 
-        searchViewModel.chipClickable
-            .nonNull()
-            .observe(this, Observer {
-                rootView.chipGroup.children.forEach { chip ->
-                    if (chip is Chip) {
-                        chip.isClickable = it
-                        if (chip.isChecked) chip.isClickable = false
-                    }
-                }
-            })
-
         rootView.retry.setOnClickListener {
             performSearch()
         }
 
         return rootView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        favoriteEventsRecyclerAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+        }
     }
 
     private fun setChips(date: String = eventDate, type: String = eventType) {
@@ -141,7 +145,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             date != getString(R.string.anytime) && type != getString(R.string.anything) -> {
                 addChips(date, true)
                 addChips(type, true)
-                addChips(getString(R.string.clear_all), false)
             }
             date != getString(R.string.anytime) && type == getString(R.string.anything) -> {
                 addChips(date, true)
@@ -185,9 +188,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                Navigation.findNavController(view)
-                    .navigate(SearchResultsFragmentDirections.actionSearchResultsToEventDetail(eventId = eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(SearchResultsFragmentDirections.actionSearchResultsToEventDetail(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
@@ -212,9 +216,11 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val date = eventDate
         val freeEvents = safeArgs.freeEvents
         val sortBy = safeArgs.sort
-        searchViewModel.setChipNotClickable()
+        val callForSpeakers = safeArgs.callForSpeakers
+
+        val sessionsAndSpeakers = safeArgs.sessionsAndSpeakers
         searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date, type, freeEvents, sortBy)
+        searchViewModel.loadEvents(location, date, type, freeEvents, sortBy, sessionsAndSpeakers, callForSpeakers)
     }
 
     private fun showNoSearchResults(events: List<Event>) {
@@ -233,14 +239,16 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 true
             }
             R.id.filter -> {
-                Navigation.findNavController(rootView)
+                findNavController(rootView)
                     .navigate(SearchResultsFragmentDirections.actionSearchResultsToSearchFilter(
                     date = safeArgs.date,
                     freeEvents = safeArgs.freeEvents,
                     location = safeArgs.location,
                     type = safeArgs.type,
                     query = safeArgs.query,
-                    sort = safeArgs.sort))
+                    sort = safeArgs.sort,
+                    sessionsAndSpeakers = safeArgs.sessionsAndSpeakers,
+                    callForSpeakers = safeArgs.callForSpeakers))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -253,46 +261,31 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        if (isChecked) {
-            if (buttonView?.text == getString(R.string.clear_all)) {
-                searchViewModel.savedTime = null
-                searchViewModel.savedType = null
-                eventDate = getString(R.string.anytime)
-                eventType = getString(R.string.anything)
-                rootView.noSearchResults.isVisible = false
-                favoriteEventsRecyclerAdapter.submitList(null)
-                searchViewModel.clearEvents()
-                searchViewModel.clearTimeAndType()
-                if (searchViewModel.isConnected()) performSearch()
-                else showNoInternetError(true)
-                setChips()
-            }
-            days.forEach {
-                if (it == buttonView?.text) {
-                    searchViewModel.savedTime = it
-                    eventDate = it
-                    setChips(date = it)
-                    rootView.noSearchResults.isVisible = false
-                    favoriteEventsRecyclerAdapter.submitList(null)
-                    searchViewModel.clearEvents()
-                    if (searchViewModel.isConnected()) performSearch()
-                    else showNoInternetError(true)
-                    return@forEach
-                }
-            }
-            eventTypesList?.forEach {
-                if (it.name == buttonView?.text) {
-                    searchViewModel.savedType = it.name
-                    eventType = it.name
-                    setChips(type = it.name)
-                    rootView.noSearchResults.isVisible = false
-                    favoriteEventsRecyclerAdapter.submitList(null)
-                    searchViewModel.clearEvents()
-                    if (searchViewModel.isConnected()) performSearch()
-                    else showNoInternetError(true)
-                    return@forEach
-                }
+        days.forEach {
+            if (it == buttonView?.text) {
+                searchViewModel.savedTime = if (isChecked) it else null
+                eventDate = if (isChecked) it else getString(R.string.anytime)
+                setChips(date = it)
+                refreshEvents()
+                return@forEach
             }
         }
+        eventTypesList?.forEach {
+            if (it.name == buttonView?.text) {
+                searchViewModel.savedType = if (isChecked) it.name else null
+                eventType = if (isChecked) it.name else getString(R.string.anything)
+                refreshEvents()
+                return@forEach
+            }
+        }
+    }
+
+    private fun refreshEvents() {
+        setChips()
+        rootView.noSearchResults.isVisible = false
+        favoriteEventsRecyclerAdapter.submitList(null)
+        searchViewModel.clearEvents()
+        if (searchViewModel.isConnected()) performSearch()
+        else showNoInternetError(true)
     }
 }

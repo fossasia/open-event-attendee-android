@@ -17,47 +17,50 @@
         android:textSize="@dimen/heading_text_size" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemFirstNameLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium">
+        android:layout_marginTop="@dimen/padding_medium"
+        android:hint="@string/first_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/first_name"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemLastNameLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium">
+        android:layout_marginTop="@dimen/padding_medium"
+        android:hint="@string/last_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/last_name"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemEmailLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium">
+        android:layout_marginTop="@dimen/padding_medium"
+        android:hint="@string/email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/attendeeItemEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,7 +76,7 @@
             android:id="@+id/attendeeItemCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Country" />
+            android:hint="@string/country"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout

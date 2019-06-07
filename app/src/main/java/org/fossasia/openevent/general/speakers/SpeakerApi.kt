@@ -3,6 +3,10 @@ package org.fossasia.openevent.general.speakers
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.POST
+import retrofit2.http.Body
+import retrofit2.http.PATCH
 
 interface SpeakerApi {
 
@@ -14,4 +18,16 @@ interface SpeakerApi {
 
     @GET("speakers/{speaker_id}")
     fun getSpeakerWithId(@Path("speaker_id") id: Long): Single<Speaker>
+
+    @GET("users/{user_id}/speakers?include=event,user")
+    fun getSpeakerForUser(
+        @Path("user_id") userId: Long,
+        @Query("filter") query: String
+    ): Single<List<Speaker>>
+
+    @POST("/speakers")
+    fun addSpeaker(@Body speaker: Speaker): Single<Speaker>
+
+    @PATCH("speakers/{speakerId}")
+    fun updateSpeaker(@Path("speakerId") speakerId: Long, @Body speaker: Speaker): Single<Speaker>
 }

@@ -23,10 +23,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="@string/FRONTEND_HOST"
+                    android:pathPrefix="/e/" />
+            </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.stripe.android.API_KEY"
-            android:value="${STRIPE_API_TOKEN}"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

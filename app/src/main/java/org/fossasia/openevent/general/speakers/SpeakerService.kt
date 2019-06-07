@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.speakers
 import androidx.lifecycle.LiveData
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.auth.User
 
 class SpeakerService(
 
@@ -19,6 +20,25 @@ class SpeakerService(
             }
         }
     }
+
+    fun getSpeakerProfileOfEmailAndEvent(user: User, eventId: Long, query: String): Single<Speaker> =
+        speakerDao.getSpeakerByEmailAndEvent(user.email ?: "", eventId)
+            .onErrorResumeNext {
+                speakerApi.getSpeakerForUser(user.id, query).map {
+                    speakerDao.insertSpeakers(it)
+                    it.first()
+                }
+            }
+
+    fun addSpeaker(speaker: Speaker): Single<Speaker> =
+        speakerApi.addSpeaker(speaker).doOnSuccess {
+            speakerDao.insertSpeaker(it)
+        }
+
+    fun editSpeaker(speaker: Speaker): Single<Speaker> =
+        speakerApi.updateSpeaker(speaker.id, speaker).doOnSuccess {
+            speakerDao.insertSpeaker(it)
+        }
 
     fun fetchSpeakersFromDb(id: Long): LiveData<List<Speaker>> {
         return speakerWithEventDao.getSpeakerWithEventId(id)

@@ -17,6 +17,12 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/action_welcome_to_events"
+            app:destination="@id/eventsFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/eventsFragment"/>
+
     </fragment>
     <fragment
         android:id="@+id/eventsFragment"
@@ -234,6 +240,16 @@
             android:name="freeEvents"
             app:argType="boolean"
             android:defaultValue="false"/>
+
+        <argument
+            android:name="sessionsAndSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
+        <argument
+            android:name="callForSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/speakerFragment"
@@ -367,6 +383,41 @@
             android:defaultValue="-1L"/>
     </fragment>
     <fragment
+        android:id="@+id/speakersCallProposalFragment"
+        android:name="org.fossasia.openevent.general.speakercall.SpeakersCallProposalFragment"
+        android:label="SpeakersCallProposal"
+        tools:layout="@layout/fragment_speakers_call_proposal">
+        <action
+            android:id="@+id/action_proposal_to_edit_speaker"
+            app:destination="@id/editSpeakerFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="speakerId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editSpeakerFragment"
+        android:name="org.fossasia.openevent.general.speakercall.EditSpeakerFragment"
+        android:label="EditSpeakerFragment"
+        tools:layout="@layout/fragment_proposal_speaker">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="speakerId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/profileFragment"
         android:name="org.fossasia.openevent.general.auth.ProfileFragment"
         android:label="ProfileFragment"
@@ -410,11 +461,33 @@
             app:nullable="true"/>
     </fragment>
     <fragment
+        android:id="@+id/conductCodeFragment"
+        android:name="org.fossasia.openevent.general.event.codeofconduct.ConductCodeFragment"
+        android:label="CodeOfConductFragment">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
+    <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="org.fossasia.openevent.general.event.EventDetailsFragment"
         android:label="EventDetailsFragment"
         tools:layout="@layout/fragment_event">
-
+        <action
+            android:id="@+id/action_event_details_to_speakers_call"
+            app:destination="@id/speakersCallFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_conduct_code"
+            app:destination="@id/conductCodeFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_similar_events_to_event_details"
             app:destination="@id/eventDetailsFragment"
@@ -422,7 +495,6 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
-
         <action
             android:id="@+id/action_event_details_to_session"
             app:destination="@id/sessionFragment"
@@ -534,6 +606,11 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+
+        <argument
+            android:name="timeout"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/attendeeFragment"
@@ -549,6 +626,12 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
 
+        <action
+            android:id="@+id/action_attendee_to_ticket_pop"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/ticketsFragment"
+            app:destination="@+id/ticketsFragment"/>
+
         <argument
             android:name="eventId"
             app:argType="long"
@@ -559,18 +642,38 @@
             app:argType="org.fossasia.openevent.general.ticket.TicketIdAndQtyWrapper"
             app:nullable="true"
             android:defaultValue="@null"/>
+
+        <argument
+            android:name="currency"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/orderCompletedFragment"
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"
-        tools:layout="@layout/fragment_order">
+        tools:layout="@layout/fragment_order_completed">
 
         <action
             android:id="@+id/action_order_completed_to_order_user"
-            app:destination="@id/orderCompletedFragment"
+            app:destination="@id/orderUnderUserFragment"
             app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="false" />
+
+        <action
+            android:id="@+id/action_order_completed_to_event_detail"
+            app:destination="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_order_completed_to_events"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="true" />
 
         <argument
             android:name="eventId"
@@ -582,6 +685,11 @@
         android:name="org.fossasia.openevent.general.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_auth_pop"
+            app:destination="@id/authFragment"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -597,6 +705,11 @@
         android:name="org.fossasia.openevent.general.auth.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_signup">
+        <action
+            android:id="@+id/action_signup_to_auth_pop"
+            app:destination="@id/authFragment"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -605,6 +718,46 @@
             android:name="redirectedFrom"
             app:argType="string"
             android:defaultValue="profile"/>
+    </fragment>
+    <fragment
+        android:id="@+id/speakersCallFragment"
+        android:name="org.fossasia.openevent.general.speakercall.SpeakersCallFragment"
+        android:label="SpeakersCallFragment"
+        tools:layout="@layout/fragment_speakers_call">
+        <action
+            android:id="@+id/action_speakers_call_to_proposal"
+            app:destination="@+id/speakersCallProposalFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_speakers_call_to_add_speaker"
+            app:destination="@+id/editSpeakerFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_speakers_call_to_auth"
+            app:destination="@+id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <argument
+            android:name="eventIdentifier"
+            app:argType="string"
+            android:defaultValue="''"/>
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+        <argument
+            android:name="timeZone"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"
@@ -669,6 +822,15 @@
             app:argType="boolean"
             android:defaultValue="false"/>
 
+        <argument
+            android:name="sessionsAndSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
+        <argument
+            android:name="callForSpeakers"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -690,6 +852,11 @@
         android:name="org.fossasia.openevent.general.auth.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
+        <action
+            android:id="@+id/action_auth_to_events_pop"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_auth_to_log_in"
             app:destination="@id/loginFragment"
@@ -713,5 +880,9 @@
             android:name="redirectedFrom"
             app:argType="string"
             app:nullable="false"/>
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 </navigation>

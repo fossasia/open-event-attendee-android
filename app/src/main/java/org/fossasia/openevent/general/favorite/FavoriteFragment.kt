@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
@@ -29,6 +31,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
+import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -44,11 +48,15 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setPostponeSharedElementTransition()
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false)
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
         setToolbar(activity, getString(R.string.likes), false)
+        rootView.viewTreeObserver.addOnDrawListener {
+            setStartPostponedEnterTransition()
+        }
 
         rootView.findText.setOnClickListener {
             findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToSearch())
@@ -96,8 +104,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView).navigate(FavoriteFragmentDirections.actionFavouriteToEventDetails(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 
@@ -116,6 +125,14 @@ class FavoriteFragment : Fragment() {
         favoriteEventsRecyclerAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        favoriteEventsRecyclerAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
         }
     }
 

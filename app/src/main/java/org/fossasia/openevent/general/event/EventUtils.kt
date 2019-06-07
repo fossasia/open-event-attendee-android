@@ -33,12 +33,11 @@ object EventUtils {
 
     private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    private const val frontendUrl = "https://open-event-frontend-dev.herokuapp.com/e/"
 
     fun getSharableInfo(event: Event, resource: Resource = sharedResource): String {
         val description = event.description.nullToEmpty()
         val identifier = event.identifier
-        val eventUrl = frontendUrl + identifier
+        val eventUrl = BuildConfig.FRONTEND_URL + "e/" + identifier
 
         val message = StringBuilder()
 

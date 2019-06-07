@@ -16,6 +16,9 @@ interface OrderApi {
     @PATCH("orders/{orderIdentifier}")
     fun confirmOrder(@Path("orderIdentifier") orderIdentifier: String, @Body order: ConfirmOrder): Single<Order>
 
+    @PATCH("orders/{orderIdentifier}")
+    fun editOrder(@Path("orderIdentifier") orderIdentifier: String, @Body order: Order): Single<Order>
+
     @POST("orders/{orderIdentifier}/charge")
     fun chargeOrder(@Path("orderIdentifier") orderIdentifier: String, @Body charge: Charge): Single<Charge>
 

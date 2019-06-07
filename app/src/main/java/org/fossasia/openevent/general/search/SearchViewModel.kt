@@ -41,8 +41,6 @@ class SearchViewModel(
     private val mutableError = SingleLiveEvent<String>()
     val error: LiveData<String> = mutableError
     val connection: LiveData<Boolean> = mutableConnectionLiveData
-    private val mutableChipClickable = MutableLiveData<Boolean>()
-    val chipClickable: LiveData<Boolean> = mutableChipClickable
     var searchEvent: String? = null
     var savedLocation: String? = null
     var savedType: String? = null
@@ -69,7 +67,7 @@ class SearchViewModel(
     }
 
     fun loadSavedLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION)
+        savedLocation = preference.getString(SAVED_LOCATION) ?: resource.getString(R.string.choose_your_location)
     }
     fun loadSavedType() {
         savedType = preference.getString(SAVED_TYPE)
@@ -78,13 +76,16 @@ class SearchViewModel(
         savedTime = preference.getString(SAVED_TIME)
     }
 
-    fun setChipNotClickable() {
-        mutableChipClickable.value = false
-    }
-
-    fun loadEvents(location: String, time: String, type: String, freeEvents: Boolean, sortBy: String) {
+    fun loadEvents(
+        location: String,
+        time: String,
+        type: String,
+        freeEvents: Boolean,
+        sortBy: String,
+        sessionsAndSpeakers: Boolean,
+        callForSpeakers: Boolean
+    ) {
         if (mutableEvents.value != null) {
-            mutableChipClickable.value = true
             return
         }
         if (!isConnected()) return
@@ -103,6 +104,14 @@ class SearchViewModel(
                |       'name':'ends-at',
                |       'op':'ge',
                |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
+               |    }
+            """.trimIndent()
+            else ""
+        val sessionsAndSpeakersFilter = if (sessionsAndSpeakers)
+            """, {
+               |       'name':'is-sessions-speakers-enabled',
+               |       'op':'eq',
+               |       'val':'true'
                |    }
             """.trimIndent()
             else ""
@@ -129,7 +138,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Anytime" -> """[{
                 |   'and':[{
@@ -152,7 +162,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Today" -> """[{
                 |   'and':[{
@@ -183,7 +194,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "Tomorrow" -> """[{
                 |   'and':[{
@@ -214,7 +226,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "This weekend" -> """[{
                 |   'and':[{
@@ -245,7 +258,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
             time == "In the next month" -> """[{
                 |   'and':[{
@@ -276,7 +290,8 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
 
             else -> """[{
@@ -308,23 +323,30 @@ class SearchViewModel(
                 |       'name':'ends-at',
                 |       'op':'ge',
                 |       'val':'%${EventUtils.getTimeInISO8601(Date())}%'
-                |    }$freeStuffFilter]
+                |    }$freeStuffFilter
+                |    $sessionsAndSpeakersFilter]
                 |}]""".trimMargin().replace("'", "\"")
         }
+        Timber.e(query)
         compositeDisposable += eventService.getSearchEvents(query, sortBy)
             .withDefaultSchedulers()
+            .distinctUntilChanged()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
-                mutableChipClickable.value = false
             }.doFinally {
-                mutableShowShimmerResults.value = false
-                mutableChipClickable.value = true
+                stopLoaders()
             }.subscribe({
-                mutableEvents.value = it
+                stopLoaders()
+                mutableEvents.value = if (callForSpeakers) it.filter { it.speakersCall != null } else it
             }, {
+                stopLoaders()
                 Timber.e(it, "Error fetching events")
                 mutableError.value = resource.getString(R.string.error_fetching_events_message)
             })
+    }
+
+    private fun stopLoaders() {
+        mutableShowShimmerResults.value = false
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {
@@ -342,13 +364,6 @@ class SearchViewModel(
 
     fun clearEvents() {
         mutableEvents.value = null
-    }
-
-    fun clearTimeAndType() {
-        preference.apply {
-            putString(SAVED_TYPE, "Anything")
-            putString(SAVED_TIME, "Anytime")
-        }
     }
 
     override fun onCleared() {

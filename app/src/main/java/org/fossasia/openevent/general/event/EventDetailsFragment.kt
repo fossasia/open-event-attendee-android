@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,6 +21,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
@@ -55,6 +57,7 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
+import org.fossasia.openevent.general.EVENT_IDENTIFIER
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
@@ -73,10 +76,13 @@ import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.stripHtml
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -124,11 +130,21 @@ class EventDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setSharedElementEnterTransition()
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event, container, false)
+        val progressDialog = progressDialog(context, getString(R.string.loading_message))
         rootView = binding.root
         setToolbar(activity)
         setHasOptionsMenu(true)
+        val eventIdentifier = arguments?.getString(EVENT_IDENTIFIER)
 
+        val currentEvent = eventViewModel.event.value
+        when {
+            currentEvent != null -> loadEvent(currentEvent)
+            !eventIdentifier.isNullOrEmpty() -> eventViewModel.loadEventByIdentifier(eventIdentifier)
+            else -> eventViewModel.loadEvent(safeArgs.eventId)
+        }
         rootView.feedbackRv.layoutManager = LinearLayoutManager(context)
         rootView.feedbackRv.adapter = feedbackAdapter
 
@@ -141,6 +157,12 @@ class EventDetailsFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
                 showEventErrorScreen(it == getString(R.string.error_fetching_event_message))
+            })
+
+        eventViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
             })
 
         eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {
@@ -273,7 +295,7 @@ class EventDetailsFragment : Fragment() {
         rootView.similarEventsRecycler.adapter = similarEventsAdapter
 
         eventViewModel.similarEvents.observe(viewLifecycleOwner, Observer { similarEvents ->
-            similarEventsAdapter.submitList(similarEvents)
+            similarEventsAdapter.submitList(similarEvents.toList())
             rootView.similarEventsContainer.visibility = if (similarEvents.isNotEmpty()) View.VISIBLE else View.GONE
         })
 
@@ -285,6 +307,12 @@ class EventDetailsFragment : Fragment() {
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         binding.event = event
         binding.executePendingBindings()
+
+        // Set Cover Image
+        Picasso.get()
+            .load(event.originalImageUrl)
+            .placeholder(R.drawable.header)
+            .into(rootView.eventImage)
 
         // Organizer Section
         if (!event.organizerName.isNullOrEmpty()) {
@@ -358,13 +386,6 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer { isConnected ->
                 if (isConnected) {
-                    showEventErrorScreen(false)
-                    val currentEvent = eventViewModel.event.value
-                    if (currentEvent == null)
-                        eventViewModel.loadEvent(safeArgs.eventId)
-                    else
-                        loadEvent(currentEvent)
-
                     val currentFeedback = eventViewModel.eventFeedback.value
                     if (currentFeedback == null) {
                         eventViewModel.fetchEventFeedback(safeArgs.eventId)
@@ -414,19 +435,14 @@ class EventDetailsFragment : Fragment() {
                         rootView.socialLinkContainer.visibility =
                             if (currentSocialLinks.isEmpty()) View.GONE else View.VISIBLE
                     }
-                } else {
-                    val currentEvent = eventViewModel.event.value
-                    if (currentEvent == null)
-                        showEventErrorScreen(true)
-                    else
-                        loadEvent(currentEvent)
                 }
             })
 
         val eventClickListener: EventClickListener = object : EventClickListener {
-            override fun onClick(eventID: Long) {
-                findNavController(view)
-                    .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID))
+            override fun onClick(eventID: Long, imageView: ImageView) {
+                findNavController(rootView)
+                    .navigate(EventDetailsFragmentDirections.actionSimilarEventsToEventDetails(eventID),
+                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 
@@ -467,8 +483,22 @@ class EventDetailsFragment : Fragment() {
                 eventViewModel.event.value?.let { eventViewModel.setFavorite(safeArgs.eventId, !it.favorite) }
                 true
             }
+            R.id.call_for_speakers -> {
+                eventViewModel.event.value?.let {
+                    findNavController(rootView).navigate(EventDetailsFragmentDirections
+                        .actionEventDetailsToSpeakersCall(it.identifier, it.id, it.timezone))
+                }
+                true
+            }
             R.id.event_share -> {
                 eventViewModel.event.value?.let { EventUtils.share(it, rootView.eventImage) }
+                return true
+            }
+            R.id.code_of_conduct -> {
+                eventViewModel.event.value?.let { event ->
+                        findNavController(rootView)
+                            .navigate(EventDetailsFragmentDirections.actionEventDetailsToConductCode(event.id))
+                }
                 return true
             }
             R.id.open_faqs -> {
@@ -512,11 +542,27 @@ class EventDetailsFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         eventViewModel.event.value?.let { currentEvent ->
-            if (currentEvent.externalEventUrl == null)
+            if (currentEvent.externalEventUrl.isNullOrBlank())
                 menu.findItem(R.id.open_external_event_url).isVisible = false
+            if (currentEvent.codeOfConduct.isNullOrBlank())
+                menu.findItem(R.id.code_of_conduct).isVisible = false
+            if (currentEvent.speakersCall == null)
+                menu.findItem(R.id.call_for_speakers).isVisible = false
             setFavoriteIconFilled(currentEvent.favorite)
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Picasso.get().cancelRequest(rootView.eventImage)
+        speakersAdapter.onSpeakerClick = null
+        sponsorsAdapter.onSponsorClick = null
+        sessionsAdapter.onSessionClick = null
+        similarEventsAdapter.apply {
+            onEventClick = null
+            onFavFabClick = null
+        }
     }
 
     private fun loadTicketFragment() {
@@ -604,10 +650,5 @@ class EventDetailsFragment : Fragment() {
     private fun moveToSponsorSection() {
         findNavController(rootView).navigate(EventDetailsFragmentDirections
             .actionEventDetailsToSponsor(safeArgs.eventId))
-    }
-
-    override fun onDestroy() {
-        Picasso.get().cancelRequest(rootView.eventImage)
-        super.onDestroy()
     }
 }

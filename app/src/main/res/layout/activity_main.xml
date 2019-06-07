@@ -37,7 +37,7 @@
             android:foreground="?attr/selectableItemBackground"
             app:itemIconTint="@color/navigation_item"
             app:itemTextColor="@color/navigation_item"
-            app:labelVisibilityMode="labeled"
+            app:labelVisibilityMode="selected"
             app:menu="@menu/navigation" />
 
     </LinearLayout>

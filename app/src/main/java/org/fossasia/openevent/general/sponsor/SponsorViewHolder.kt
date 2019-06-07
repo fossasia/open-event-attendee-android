@@ -10,7 +10,7 @@ import org.fossasia.openevent.general.utils.Utils
 
 class SponsorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    lateinit var sponsorClickListener: SponsorClickListener
+    var sponsorClickListener: SponsorClickListener? = null
 
     fun bind(
         sponsor: Sponsor,
@@ -30,7 +30,7 @@ class SponsorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         itemView.setOnClickListener {
-            sponsorClickListener.onClick()
+            sponsorClickListener?.onClick()
         }
     }
 }

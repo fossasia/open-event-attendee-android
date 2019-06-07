@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.auth
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,20 +11,14 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import kotlinx.android.synthetic.main.fragment_signup.confirmPasswords
-import kotlinx.android.synthetic.main.fragment_signup.firstNameText
-import kotlinx.android.synthetic.main.fragment_signup.lastNameText
-import kotlinx.android.synthetic.main.fragment_signup.passwordSignUp
-import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutPassword
-import kotlinx.android.synthetic.main.fragment_signup.usernameSignUp
-import kotlinx.android.synthetic.main.fragment_signup.signUpButton
-import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutConfirmPassword
-import kotlinx.android.synthetic.main.fragment_signup.textInputLayoutEmail
+import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutPassword
+import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutConfirmPassword
+import kotlinx.android.synthetic.main.fragment_signup.view.firstNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
 import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
-import kotlinx.android.synthetic.main.fragment_signup.view.usernameSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.emailSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
@@ -43,9 +36,12 @@ import androidx.navigation.fragment.navArgs
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
-import org.fossasia.openevent.general.ticket.TICKETS_FRAGMNET
+import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
+import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+
+private const val MINIMUM_PASSWORD_LENGTH = 8
 
 class SignUpFragment : Fragment() {
 
@@ -104,10 +100,7 @@ class SignUpFragment : Fragment() {
 
         rootView.signUpText.text = paragraph
         rootView.signUpText.movementMethod = LinkMovementMethod.getInstance()
-        rootView.usernameSignUp.text = SpannableStringBuilder(safeArgs.email)
-
-        lateinit var confirmPassword: String
-        val signUp = SignUp()
+        rootView.emailSignUp.text = SpannableStringBuilder(safeArgs.email)
 
         rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
             when (actionId) {
@@ -123,17 +116,17 @@ class SignUpFragment : Fragment() {
         }
 
         rootView.signUpButton.setOnClickListener {
-
             if (!rootView.signUpCheckbox.isChecked) {
                 rootView.snackbar(R.string.accept_terms_and_conditions)
                 return@setOnClickListener
             } else {
-                signUp.email = usernameSignUp.text.toString()
-                signUp.password = passwordSignUp.text.toString()
-                signUp.firstName = firstNameText.text.toString()
-                signUp.lastName = lastNameText.text.toString()
-                confirmPassword = confirmPasswords.text.toString()
-                signUpViewModel.signUp(signUp, confirmPassword)
+                val signUp = SignUp(
+                    email = rootView.emailSignUp.text.toString(),
+                    password = rootView.passwordSignUp.text.toString(),
+                    firstName = rootView.firstNameText.text.toString(),
+                    lastName = rootView.lastNameText.text.toString()
+                )
+                signUpViewModel.signUp(signUp)
             }
         }
 
@@ -155,13 +148,6 @@ class SignUpFragment : Fragment() {
                 rootView.signupNestedScrollView.longSnackbar(it)
             })
 
-        signUpViewModel.signedUp
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.signupNestedScrollView.snackbar(R.string.sign_up_success)
-                signUpViewModel.login(signUp)
-            })
-
         signUpViewModel.loggedIn
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -171,25 +157,18 @@ class SignUpFragment : Fragment() {
         signUpViewModel.areFieldsCorrect
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                signUpButton.isEnabled = it
+                rootView.signUpButton.isEnabled = it
             })
 
-        rootView.usernameSignUp.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                if (Patterns.EMAIL_ADDRESS.matcher(usernameSignUp.text.toString()).matches()) {
-                    textInputLayoutEmail.error = null
-                    textInputLayoutEmail.isErrorEnabled = false
-                } else {
-                    textInputLayoutEmail.error = getString(R.string.invalid_email_message)
-                }
+        rootView.emailSignUp.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(text: Editable?) {
+                if (text.toString() != safeArgs.email)
+                    findNavController(rootView).navigate(SignUpFragmentDirections
+                        .actionSignupToAuthPop(redirectedFrom = safeArgs.redirectedFrom, email = text.toString()))
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpViewModel.checkFields(
-                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
-            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Do Nothing*/ }
         })
 
         rootView.confirmPasswords.addTextChangedListener(object : TextWatcher {
@@ -198,23 +177,23 @@ class SignUpFragment : Fragment() {
                 /* to make PasswordToggle visible again, if made invisible
                    after empty field error
                  */
-                if (!textInputLayoutConfirmPassword.isEndIconVisible) {
-                    textInputLayoutConfirmPassword.isEndIconVisible = true
+                if (!rootView.textInputLayoutConfirmPassword.isEndIconVisible) {
+                    rootView.textInputLayoutConfirmPassword.isEndIconVisible = true
                 }
 
-                if (confirmPasswords.text.toString() == passwordSignUp.text.toString()) {
-                    textInputLayoutConfirmPassword.error = null
-                    textInputLayoutConfirmPassword.isErrorEnabled = false
+                if (rootView.confirmPasswords.text.toString() == rootView.passwordSignUp.text.toString()) {
+                    rootView.textInputLayoutConfirmPassword.error = null
+                    rootView.textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
+                    rootView.textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
                 }
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpViewModel.checkFields(
-                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
+                signUpViewModel.checkFields(rootView.emailSignUp.text.toString(),
+                    rootView.passwordSignUp.text.toString(), rootView.confirmPasswords.text.toString())
             }
         })
 
@@ -224,29 +203,29 @@ class SignUpFragment : Fragment() {
                 /* to make PasswordToggle visible again, if made invisible
                    after empty field error
                 */
-                if (!textInputLayoutPassword.isEndIconVisible) {
-                    textInputLayoutPassword.isEndIconVisible = true
+                if (!rootView.textInputLayoutPassword.isEndIconVisible) {
+                    rootView.textInputLayoutPassword.isEndIconVisible = true
                 }
 
-                if (passwordSignUp.text.toString().length >= 6) {
-                    textInputLayoutPassword.error = null
-                    textInputLayoutPassword.isErrorEnabled = false
+                if (rootView.passwordSignUp.text.toString().length >= MINIMUM_PASSWORD_LENGTH) {
+                    rootView.textInputLayoutPassword.error = null
+                    rootView.textInputLayoutPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutPassword.error = getString(R.string.invalid_password_message)
+                    rootView.textInputLayoutPassword.error = getString(R.string.invalid_password_message)
                 }
-                if (confirmPasswords.text.toString() == passwordSignUp.text.toString()) {
-                    textInputLayoutConfirmPassword.error = null
-                    textInputLayoutConfirmPassword.isErrorEnabled = false
+                if (rootView.confirmPasswords.text.toString() == rootView.passwordSignUp.text.toString()) {
+                    rootView.textInputLayoutConfirmPassword.error = null
+                    rootView.textInputLayoutConfirmPassword.isErrorEnabled = false
                 } else {
-                    textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
+                    rootView.textInputLayoutConfirmPassword.error = getString(R.string.invalid_confirm_password_message)
                 }
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpViewModel.checkFields(
-                    usernameSignUp.text.toString(), passwordSignUp.text.toString(), confirmPasswords.text.toString())
+                signUpViewModel.checkFields(rootView.emailSignUp.text.toString(),
+                    rootView.passwordSignUp.text.toString(), rootView.confirmPasswords.text.toString())
             }
         })
 
@@ -259,8 +238,9 @@ class SignUpFragment : Fragment() {
                 PROFILE_FRAGMENT -> R.id.profileFragment
                 EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
                 ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
-                TICKETS_FRAGMNET -> R.id.ticketsFragment
+                TICKETS_FRAGMENT -> R.id.ticketsFragment
                 NOTIFICATION_FRAGMENT -> R.id.notificationFragment
+                SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
                 else -> R.id.eventsFragment
             }
         findNavController(rootView).popBackStack(destinationId, false)
@@ -271,20 +251,20 @@ class SignUpFragment : Fragment() {
 
         var status = true
 
-        if (usernameSignUp.text.isNullOrEmpty()) {
-            usernameSignUp.error = getString(R.string.empty_email_message)
+        if (rootView.emailSignUp.text.isNullOrEmpty()) {
+            rootView.emailSignUp.error = getString(R.string.empty_email_message)
             status = false
         }
-        if (passwordSignUp.text.isNullOrEmpty()) {
-            passwordSignUp.error = getString(R.string.empty_password_message)
+        if (rootView.passwordSignUp.text.isNullOrEmpty()) {
+            rootView.passwordSignUp.error = getString(R.string.empty_password_message)
             // make PasswordToggle invisible
-            textInputLayoutPassword.isEndIconVisible = false
+            rootView.textInputLayoutPassword.isEndIconVisible = false
             status = false
         }
-        if (confirmPasswords.text.isNullOrEmpty()) {
-            confirmPasswords.error = getString(R.string.empty_confirm_password_message)
+        if (rootView.confirmPasswords.text.isNullOrEmpty()) {
+            rootView.confirmPasswords.error = getString(R.string.empty_confirm_password_message)
             // make PasswordToggle invisible
-            textInputLayoutConfirmPassword.isEndIconVisible = false
+            rootView.textInputLayoutConfirmPassword.isEndIconVisible = false
             status = false
         }
         return status

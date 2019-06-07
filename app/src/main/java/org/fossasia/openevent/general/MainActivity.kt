@@ -9,16 +9,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
-import org.fossasia.openevent.general.auth.EditProfileFragment
 import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.auth.SmartAuthUtil
+import org.fossasia.openevent.general.auth.AuthFragment
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAY_STORE_BUILD_FLAVOR = "playStore"
+const val EVENT_IDENTIFIER = "eventIdentifier"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -39,11 +40,25 @@ class MainActivity : AppCompatActivity() {
             currentFragmentId = destination.id
             handleNavigationVisibility(currentFragmentId)
         }
+        handleAppLinkIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleAppLinkIntent(intent)
+    }
+
+    private fun handleAppLinkIntent(intent: Intent?) {
+        val appLinkData = intent?.data
+        if (appLinkData != null) {
+            val bundle = Bundle()
+            bundle.putString(EVENT_IDENTIFIER, appLinkData.lastPathSegment)
+            navController.navigate(R.id.eventDetailsFragment, bundle)
+        }
     }
 
     private fun setupBottomNavigationMenu(navController: NavController) {
         setupWithNavController(navigation, navController)
-
         navigation.setOnNavigationItemReselectedListener {
             val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
             if (hostFragment is NavHostFragment) {
@@ -65,19 +80,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        when (currentFragmentId) {
-            R.id.authFragment -> {
-                navController.popBackStack(R.id.eventsFragment, false)
-                mainFragmentCoordinatorLayout.snackbar(R.string.sign_in_canceled)
+        val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+        if (hostFragment is NavHostFragment) {
+            val currentFragment = hostFragment.childFragmentManager.fragments.first()
+            if (currentFragment is ComplexBackPressFragment) {
+                currentFragment.handleBackPress()
+                if (currentFragment is AuthFragment)
+                    mainFragmentCoordinatorLayout.snackbar(R.string.sign_in_canceled)
+                return
             }
+        }
+        when (currentFragmentId) {
             R.id.orderCompletedFragment -> navController.popBackStack(R.id.eventDetailsFragment, false)
             R.id.welcomeFragment -> finish()
-            R.id.editProfileFragment -> {
-
-                // Calls the handleBackPress method in EditProfileFragment
-                val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer) as? NavHostFragment
-                (hostFragment?.childFragmentManager?.fragments?.get(0) as? EditProfileFragment)?.handleBackPress()
-            }
             else -> super.onBackPressed()
         }
     }
@@ -109,4 +124,8 @@ class MainActivity : AppCompatActivity() {
 
 interface ScrollToTop {
     fun scrollToTop()
+}
+
+interface ComplexBackPressFragment {
+    fun handleBackPress()
 }

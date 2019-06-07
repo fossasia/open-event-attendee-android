@@ -47,6 +47,7 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.stripHtml
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -138,6 +139,11 @@ class SessionFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        speakersAdapter.onSpeakerClick = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Utils.setNewHeaderColor(activity, resources.getColor(R.color.colorPrimaryDark),
@@ -220,7 +226,7 @@ class SessionFragment : Fragment() {
         when (description.isNullOrBlank()) {
             true -> rootView.sessionDetailAbstractContainer.visibility = View.GONE
             false -> {
-                rootView.sessionDetailAbstract.text = description
+                rootView.sessionDetailAbstract.text = description.stripHtml()
                 val sessionAbstractClickListener = View.OnClickListener {
                     if (rootView.sessionDetailAbstractSeeMore.text == getString(R.string.see_more)) {
                         rootView.sessionDetailAbstractSeeMore.text = getString(R.string.see_less)
