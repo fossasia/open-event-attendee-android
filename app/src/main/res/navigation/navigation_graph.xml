@@ -669,6 +669,12 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
 
+        <action
+            android:id="@+id/action_order_completed_to_events"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="true" />
+
         <argument
             android:name="eventId"
             app:argType="long"
