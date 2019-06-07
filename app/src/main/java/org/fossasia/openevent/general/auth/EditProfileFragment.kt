@@ -88,7 +88,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                 }
             })
 
-        profileViewModel.fetchProfile()
+        profileViewModel.getProfile()
 
         editProfileViewModel.progress
             .nonNull()

@@ -76,6 +76,14 @@ class AuthService(
                 }
     }
 
+    fun syncProfile(id: Long = authHolder.getId()): Single<User> {
+        return authApi.getProfile(id)
+            .map {
+                userDao.insertUser(it)
+                it
+            }
+    }
+
     fun sendResetPasswordEmail(email: String): Single<RequestTokenResponse> {
         val requestToken = RequestToken(Email(email))
         return authApi.requestToken(requestToken)
