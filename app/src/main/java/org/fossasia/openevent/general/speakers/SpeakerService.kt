@@ -12,8 +12,8 @@ class SpeakerService(
     private val speakerWithEventDao: SpeakerWithEventDao
 
 ) {
-    fun fetchSpeakersForEvent(id: Long): Single<List<Speaker>> {
-        return speakerApi.getSpeakerForEvent(id).doOnSuccess { speakerList ->
+    fun fetchSpeakersForEvent(id: Long, query: String): Single<List<Speaker>> {
+        return speakerApi.getSpeakerForEvent(id, query).doOnSuccess { speakerList ->
             speakerList.forEach {
                 speakerDao.insertSpeaker(it)
                 speakerWithEventDao.insert(SpeakerWithEvent(id, it.id))
