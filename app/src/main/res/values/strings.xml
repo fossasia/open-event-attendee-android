@@ -71,6 +71,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>
+    <string name="details_of_the_user">Details of the user</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
     <string name="profile_photo">Profile Photo</string>

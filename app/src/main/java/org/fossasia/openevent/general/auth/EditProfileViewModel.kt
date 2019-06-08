@@ -36,9 +36,9 @@ class EditProfileViewModel(
      *  @param firstName updated firstName
      *  @param lastName updated lastName
      */
-    fun updateProfile(firstName: String, lastName: String) {
+    fun updateProfile(firstName: String, lastName: String, details: String) {
         if (encodedImage.isNullOrEmpty()) {
-            updateUser(null, firstName, lastName)
+            updateUser(null, firstName, lastName, details)
             return
         }
         compositeDisposable += authService.uploadImage(UploadImage(encodedImage))
@@ -50,7 +50,7 @@ class EditProfileViewModel(
                 mutableProgress.value = false
             }
             .subscribe({
-                updateUser(it.url, firstName, lastName)
+                updateUser(it.url, firstName, lastName, details)
                 mutableMessage.value = resource.getString(R.string.image_upload_success_message)
                 Timber.d("Image uploaded ${it.url}")
             }) {
@@ -59,7 +59,7 @@ class EditProfileViewModel(
             }
     }
 
-    private fun updateUser(url: String?, firstName: String, lastName: String) {
+    private fun updateUser(url: String?, firstName: String, lastName: String, details: String) {
         val id = authHolder.getId()
         if (firstName.isEmpty() || lastName.isEmpty()) {
             mutableMessage.value = resource.getString(R.string.provide_name_message)
@@ -70,7 +70,8 @@ class EditProfileViewModel(
                 id = id,
                 firstName = firstName,
                 lastName = lastName,
-                avatarUrl = url
+                avatarUrl = url,
+                details = details
             ), id
         )
             .withDefaultSchedulers()

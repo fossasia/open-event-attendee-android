@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.details
 import com.squareup.picasso.MemoryPolicy
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
@@ -58,6 +59,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
     private lateinit var userFirstName: String
     private lateinit var userLastName: String
+    private lateinit var userDetails: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,12 +73,16 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             .observe(viewLifecycleOwner, Observer {
                 userFirstName = it.firstName.nullToEmpty()
                 userLastName = it.lastName.nullToEmpty()
+                userDetails = it.details.nullToEmpty()
                 val imageUrl = it.avatarUrl.nullToEmpty()
                 if (rootView.firstName.text.isNullOrBlank()) {
                     rootView.firstName.setText(userFirstName)
                 }
                 if (rootView.lastName.text.isNullOrBlank()) {
                     rootView.lastName.setText(userLastName)
+                }
+                if (rootView.details.text.isNullOrBlank()) {
+                    rootView.details.setText(userDetails)
                 }
                 if (imageUrl.isNotEmpty() && !editProfileViewModel.avatarUpdated) {
                     val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
@@ -115,7 +121,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
             editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
-                rootView.lastName.text.toString())
+                rootView.lastName.text.toString(), rootView.details.text.toString())
         }
 
         editProfileViewModel.message
@@ -245,7 +251,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
     override fun handleBackPress() {
         val thisActivity = activity
         if (!editProfileViewModel.avatarUpdated && rootView.lastName.text.toString() == userLastName &&
-            rootView.firstName.text.toString() == userFirstName) {
+            rootView.firstName.text.toString() == userFirstName && rootView.details.text.toString() == userDetails) {
             if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
         } else {
             hideSoftKeyboard(context, rootView)
@@ -256,7 +262,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             }
             dialog.setPositiveButton(getString(R.string.save)) { _, _ ->
                 editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
-                    rootView.lastName.text.toString())
+                    rootView.lastName.text.toString(), rootView.details.text.toString())
             }
             dialog.create().show()
         }
