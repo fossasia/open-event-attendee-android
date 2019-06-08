@@ -279,6 +279,7 @@
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="checkbox_message">Ticket holder is the same person as ticket buyer</string>
+    <string name="verify_your_profile">Please verify your email to buy free tickets</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>

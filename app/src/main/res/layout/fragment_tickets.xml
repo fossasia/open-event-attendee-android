@@ -51,14 +51,6 @@
                 android:textSize="@dimen/text_size_large"
                 tools:text="May 24 - May 25" />
 
-            <ProgressBar
-                android:id="@+id/progressBarTicket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:elevation="@dimen/card_elevation"
-                android:visibility="gone" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
-import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
 import kotlinx.android.synthetic.main.fragment_tickets.view.register
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketInfoTextView
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
@@ -28,6 +27,8 @@ import kotlinx.android.synthetic.main.fragment_tickets.view.time
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -67,12 +68,11 @@ class TicketsFragment : Fragment() {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.progressTickets
+        val progressBar = progressDialog(context, getString(R.string.loading_message))
+        ticketsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBarTicket.isVisible = it
-                rootView.ticketTableHeader.isGone = it
-                rootView.register.isGone = it
+                progressBar.show(it)
             })
 
         ticketsViewModel.ticketTableVisibility
@@ -111,6 +111,26 @@ class TicketsFragment : Fragment() {
             }
         }
 
+        ticketsViewModel.amount
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it == 0f) {
+                    ticketsViewModel.getProfile()
+                } else {
+                    redirectToAttendee()
+                }
+            })
+
+        ticketsViewModel.isUserVerified
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it) {
+                    redirectToAttendee()
+                } else {
+                    redirectTProfile()
+                }
+            })
+
         rootView.retry.setOnClickListener {
             loadTickets()
         }
@@ -146,7 +166,7 @@ class TicketsFragment : Fragment() {
 
     private fun checkForAuthentication() {
         if (ticketsViewModel.isLoggedIn())
-            redirectToAttendee()
+            ticketsViewModel.getAmount(ticketIdAndQty)
         else {
             ticketsCoordinatorLayout.longSnackbar(getString(R.string.log_in_first))
             redirectToLogin()
@@ -154,7 +174,6 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
-
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
             eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty, currency = safeArgs.currency
@@ -174,6 +193,13 @@ class TicketsFragment : Fragment() {
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAuth(
             getString(R.string.log_in_first), TICKETS_FRAGMENT
         ))
+    }
+
+    private fun redirectTProfile() {
+        rootView.longSnackbar(getString(R.string.verify_your_profile))
+        findNavController(rootView).navigate(
+            TicketsFragmentDirections.actionTicketsToProfile()
+        )
     }
 
     private fun handleTicketSelect(id: Int, quantity: Int) {
@@ -237,7 +263,6 @@ class TicketsFragment : Fragment() {
         rootView.noInternetCard.isVisible = show
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
-        if (show) rootView.progressBarTicket.isVisible = false
         rootView.register.isVisible = !show
     }
 }
