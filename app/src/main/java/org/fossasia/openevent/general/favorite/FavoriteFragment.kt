@@ -53,7 +53,6 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
-        setToolbar(activity, getString(R.string.likes), false)
         rootView.viewTreeObserver.addOnDrawListener {
             setStartPostponedEnterTransition()
         }
@@ -134,6 +133,11 @@ class FavoriteFragment : Fragment() {
             onEventClick = null
             onFavFabClick = null
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolbar(activity, getString(R.string.likes), false)
     }
 
     private fun showEmptyMessage(itemCount: Int) {
