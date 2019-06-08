@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.event.feedback
+package org.fossasia.openevent.general.feedback
 
 import io.reactivex.Single
 import retrofit2.http.Body
@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface FeedbackApi {
 
-    @GET("events/{eventId}/feedbacks")
+    @GET("events/{eventId}/feedbacks?include=event")
     fun getEventFeedback(
         @Path("eventId") eventId: Long,
         @Query("sort") sort: String = "rating",

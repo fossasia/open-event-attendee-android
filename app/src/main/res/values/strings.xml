@@ -342,6 +342,9 @@
     <string name="error_fetching_event_section_message">"Error fetching %1$s for the event</string>
     <string name="error_submitting_feedback">Fail on submitting the feedback</string>
     <string name="success_submitting_feedback">Feedback submitted</string>
+    <string name="error_fetching_feedback_message">Error getting feedback for this event</string>
+    <string name="no_feedback_message">There are no feedback for this event.</string>
+    <string name="see_all_feedback">See all feedback</string>
     <string name="failure">Failure</string>
 
     <!--social link fragment-->

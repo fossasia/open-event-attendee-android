@@ -14,7 +14,8 @@ import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.feedback.Feedback
+import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -33,6 +34,7 @@ class EventDetailsViewModel(
     private val sponsorService: SponsorService,
     private val sessionService: SessionService,
     private val socialLinksService: SocialLinksService,
+    private val feedbackService: FeedbackService,
     private val resource: Resource,
     private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
@@ -70,7 +72,7 @@ class EventDetailsViewModel(
     fun fetchEventFeedback(id: Long) {
         if (id == -1L) return
 
-        compositeDisposable += eventService.getEventFeedback(id)
+        compositeDisposable += feedbackService.getEventFeedback(id)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEventFeedback.value = it
@@ -84,7 +86,7 @@ class EventDetailsViewModel(
     fun submitFeedback(comment: String, rating: Float?, eventId: Long) {
         val feedback = Feedback(rating = rating.toString(), comment = comment,
             event = EventId(eventId), user = UserId(getId()))
-        compositeDisposable += eventService.submitFeedback(feedback)
+        compositeDisposable += feedbackService.submitFeedback(feedback)
             .withDefaultSchedulers()
             .subscribe({
                 mutablePopMessage.value = resource.getString(R.string.feedback_submitted)
