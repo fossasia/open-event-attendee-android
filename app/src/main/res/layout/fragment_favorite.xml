@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/favoriteCoordinatorLayout">
 
     <FrameLayout
@@ -104,6 +105,7 @@
             android:id="@+id/favoriteEventsRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_medium"
             android:scrollbars="vertical" />
     </FrameLayout>
 

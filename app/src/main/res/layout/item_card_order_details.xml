@@ -1,4 +1,6 @@
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/mainLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/ticket_width"
@@ -41,20 +43,24 @@
                     android:layout_weight="1"
                     android:background="@color/greyMore"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/layout_margin_small"
+                    android:layout_marginTop="@dimen/layout_margin_small"
+                    android:layout_marginBottom="@dimen/layout_margin_small"
                     android:layout_height="@dimen/event_details_divider"/>
                 <TextView
                     android:textColor="@android:color/black"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/ticketCountTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_small"
+                    android:background="@drawable/curved_border"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@color/greyMore"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/layout_margin_small"
+                    android:layout_marginTop="@dimen/layout_margin_small"
+                    android:layout_marginBottom="@dimen/layout_margin_small"
                     android:layout_height="@dimen/event_details_divider"/>
             </LinearLayout>
 
@@ -62,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/name" />
 
             <TextView
@@ -78,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/event"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/event" />
 
             <TextView
@@ -95,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
                 android:text="@string/checkin_status"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/event" />
 
             <LinearLayout
@@ -175,7 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/date"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/date" />
 
                     <TextView
@@ -183,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/date_preview" />
 
                     <TextView
@@ -192,7 +198,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_to_calendar"
                         android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/text_size_large"
+                        android:background="?selectableItemBackground"
+                        android:paddingTop="@dimen/padding_small"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/add_to_calendar" />
                 </LinearLayout>
 
@@ -207,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/location"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/location" />
 
                     <TextView
@@ -215,7 +224,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/location_preview" />
 
                     <TextView
@@ -223,17 +232,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/see_maps"
+                        android:background="?selectableItemBackground"
+                        android:paddingTop="@dimen/padding_small"
+                        android:paddingBottom="@dimen/padding_small"
                         android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="@string/see_maps" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_small"
+                android:layout_marginBottom="@dimen/layout_margin_small"
+                android:layout_height="@dimen/event_details_divider"
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/order_identifier"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/order_identifier" />
 
             <TextView
@@ -249,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/event_summary"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/event_summary" />
 
             <TextView
@@ -269,7 +288,9 @@
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:text="@string/event_details"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
+                android:paddingBottom="@dimen/padding_small"
+                android:paddingTop="@dimen/padding_small"
                 tools:text="@string/event_details" />
 
             <TextView
@@ -277,7 +298,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/organizer" />
 
             <TextView

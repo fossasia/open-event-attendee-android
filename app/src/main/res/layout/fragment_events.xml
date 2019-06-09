@@ -136,6 +136,8 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/eventsRecycler"
+                            android:layout_marginStart="@dimen/layout_margin_medium"
+                            android:layout_marginEnd="@dimen/layout_margin_medium"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:paddingTop="@dimen/padding_medium"
