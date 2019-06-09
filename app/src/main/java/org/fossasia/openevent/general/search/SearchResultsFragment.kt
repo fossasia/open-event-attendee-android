@@ -74,8 +74,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         setPostponeSharedElementTransition()
 
         setChips()
-        setToolbar(activity, getString(R.string.search_results))
-        setHasOptionsMenu(true)
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
 
@@ -183,6 +181,12 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
         chip.setOnCheckedChangeListener(this)
         rootView.chipGroup.addView(chip)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolbar(activity, getString(R.string.search_results))
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
