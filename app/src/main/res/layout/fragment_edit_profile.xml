@@ -44,7 +44,7 @@
             android:layout_marginTop="@dimen/layout_margin_large"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/padding_large"
+            android:paddingBottom="@dimen/padding_medium"
             android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -77,6 +77,20 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_large"
+            android:hint="@string/details_of_the_user">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/updateButton"

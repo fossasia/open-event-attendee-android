@@ -23,6 +23,8 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val message: LiveData<String> = mutableMessage
     private val mutableUpdatedUser = MutableLiveData<User>()
     val updatedUser: LiveData<User> = mutableUpdatedUser
+    private val mutableUpdatedPassword = MutableLiveData<String>()
+    val updatedPassword: LiveData<String> = mutableUpdatedPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -34,6 +36,21 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }) {
                 Timber.e(it, "Failure Logging out!")
             }
+    }
+
+    fun changePassword(oldPassword: String, newPassword: String) {
+        compositeDisposable += authService.changePassword(oldPassword, newPassword)
+            .withDefaultSchedulers()
+            .subscribe({
+                if (it.passwordChanged) {
+                    mutableMessage.value = "Password changed successfully!"
+                    mutableUpdatedPassword.value = newPassword
+                }
+            }, {
+                if (it.message.toString() == "HTTP 400 BAD REQUEST")
+                    mutableMessage.value = "Incorrect Old Password provided!"
+                else mutableMessage.value = "Unable to change password!"
+            })
     }
 
     fun getProfile() {

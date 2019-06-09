@@ -38,6 +38,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/layout_margin_medium"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView

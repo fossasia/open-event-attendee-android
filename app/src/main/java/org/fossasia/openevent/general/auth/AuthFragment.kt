@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
@@ -126,6 +127,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
     override fun handleBackPress() {
         when (safeArgs.redirectedFrom) {
             TICKETS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.ticketsFragment, false)
+            EVENT_DETAIL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
             else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
         }
     }

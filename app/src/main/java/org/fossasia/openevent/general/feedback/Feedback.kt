@@ -1,5 +1,7 @@
-package org.fossasia.openevent.general.event.feedback
+package org.fossasia.openevent.general.feedback
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.LongIdHandler
@@ -11,8 +13,10 @@ import org.fossasia.openevent.general.event.EventId
 
 @Type("feedback")
 @JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
+@Entity
 data class Feedback(
     @Id(LongIdHandler::class)
+    @PrimaryKey
     val id: Long? = null,
     val rating: String?,
     val comment: String?,
