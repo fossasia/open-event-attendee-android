@@ -482,6 +482,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
         <action
+            android:id="@+id/action_event_details_to_feedback"
+            app:destination="@id/feedbackFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
             android:id="@+id/action_event_details_to_conduct_code"
             app:destination="@id/conductCodeFragment"
             app:popEnterAnim="@anim/slide_in_left"
@@ -837,7 +844,6 @@
         android:name="org.fossasia.openevent.general.notification.NotificationFragment"
         android:label="NotificationFragment"
         tools:layout="@layout/fragment_notification">
-
         <action
             android:id="@+id/action_notification_to_auth"
             app:destination="@id/authFragment"
@@ -846,7 +852,16 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
     </fragment>
-
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="org.fossasia.openevent.general.feedback.FeedbackFragment"
+        android:label="FeedbackFragment"
+        tools:layout="@layout/fragment_feedback">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
     <fragment
         android:id="@+id/authFragment"
         android:name="org.fossasia.openevent.general.auth.AuthFragment"

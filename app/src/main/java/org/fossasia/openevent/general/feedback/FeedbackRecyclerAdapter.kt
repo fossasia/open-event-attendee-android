@@ -1,11 +1,13 @@
-package org.fossasia.openevent.general.event.feedback
+package org.fossasia.openevent.general.feedback
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 
-class FeedbackRecyclerAdapter : RecyclerView.Adapter<FeedbackViewHolder>() {
+const val LIMITED_FEEDBACK_NUMBER = 2
+
+class FeedbackRecyclerAdapter(private val isLimited: Boolean = false) : RecyclerView.Adapter<FeedbackViewHolder>() {
     private val feedbackList = ArrayList<Feedback>()
 
     fun addAll(feedbackList: List<Feedback>) {
@@ -32,6 +34,9 @@ class FeedbackRecyclerAdapter : RecyclerView.Adapter<FeedbackViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return feedbackList.size
+        return if (isLimited && feedbackList.size > LIMITED_FEEDBACK_NUMBER)
+            LIMITED_FEEDBACK_NUMBER
+        else
+            feedbackList.size
     }
 }
