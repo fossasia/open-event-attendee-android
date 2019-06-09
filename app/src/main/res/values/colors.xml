@@ -15,6 +15,7 @@
     <color name="lighter_grey">#757575</color>
     <color name="shimmer_background">#dddddd</color>
     <color name="light_yellow">#ffffaa</color>
+    <color name="red">#e20404</color>
 
     <color name="colorPrimaryVariant">#311B92</color>
     <color name="colorSecondary">#03A9F4</color>

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_card_order_details.view.calendar
@@ -15,6 +17,7 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.eventSummary
 import kotlinx.android.synthetic.main.item_card_order_details.view.location
 import kotlinx.android.synthetic.main.item_card_order_details.view.map
 import kotlinx.android.synthetic.main.item_card_order_details.view.name
+import kotlinx.android.synthetic.main.item_card_order_details.view.mainLayout
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderIdentifier
 import kotlinx.android.synthetic.main.item_card_order_details.view.organizer
 import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
@@ -57,6 +60,17 @@ class OrderDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         itemView.date.text = "$formattedDate\n$formattedTime $timezone"
         itemView.eventSummary.text = event.description?.stripHtml()
         itemView.ticketCountTextView.text = "Ticket ${position + 1} of $count"
+        if (position == 0) {
+            val params: FrameLayout.LayoutParams =
+                FrameLayout.LayoutParams(resources.getDimension(R.dimen.ticket_width).toInt(), MATCH_PARENT)
+            params.leftMargin = resources.getDimension(R.dimen.layout_margin_large).toInt()
+            itemView.mainLayout.layoutParams = params
+        } else if (position + 1 == count) {
+            val params: FrameLayout.LayoutParams =
+                FrameLayout.LayoutParams(resources.getDimension(R.dimen.ticket_width).toInt(), MATCH_PARENT)
+            params.rightMargin = resources.getDimension(R.dimen.layout_margin_large).toInt()
+            itemView.mainLayout.layoutParams = params
+        }
 
         if (event.organizerName.isNullOrEmpty()) {
             itemView.organizerLabel.visibility = View.GONE

@@ -20,8 +20,10 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
+import kotlinx.android.synthetic.main.fragment_order_details.view.backgroundImage
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCardView
 import kotlinx.android.synthetic.main.item_enlarged_qr.view.enlargedQrImage
 import org.fossasia.openevent.general.BuildConfig
@@ -53,6 +55,11 @@ class OrderDetailsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 ordersRecyclerAdapter.setEvent(it)
+                Picasso.get()
+                    .load(it.originalImageUrl)
+                    .error(R.drawable.header)
+                    .placeholder(R.drawable.header)
+                    .into(rootView.backgroundImage)
             })
 
         orderDetailsViewModel.attendees
