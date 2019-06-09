@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.content_event.view.feedbackBtn
 import kotlinx.android.synthetic.main.content_event.view.feedbackRv
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.noFeedBackTv
+import kotlinx.android.synthetic.main.content_event.view.seeFeedbackTextView
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.content_event.view.sessionContainer
@@ -66,7 +67,8 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
-import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
+import org.fossasia.openevent.general.feedback.FeedbackRecyclerAdapter
+import org.fossasia.openevent.general.feedback.LIMITED_FEEDBACK_NUMBER
 import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
 import org.fossasia.openevent.general.social.SocialLinksRecyclerAdapter
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
@@ -91,7 +93,7 @@ const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
-    private val feedbackAdapter = FeedbackRecyclerAdapter()
+    private val feedbackAdapter = FeedbackRecyclerAdapter(true)
     private val speakersAdapter = SpeakerRecyclerAdapter()
     private val sponsorsAdapter = SponsorRecyclerAdapter()
     private val sessionsAdapter = SessionRecyclerAdapter()
@@ -170,9 +172,11 @@ class EventDetailsFragment : Fragment() {
             if (it.isEmpty()) {
                 rootView.feedbackRv.isVisible = false
                 rootView.noFeedBackTv.isVisible = true
+                rootView.seeFeedbackTextView.isVisible = false
             } else {
                 rootView.feedbackRv.isVisible = true
                 rootView.noFeedBackTv.isVisible = false
+                rootView.seeFeedbackTextView.isVisible = it.size >= LIMITED_FEEDBACK_NUMBER
             }
         })
 
@@ -457,6 +461,11 @@ class EventDetailsFragment : Fragment() {
         similarEventsAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
+        }
+        rootView.seeFeedbackTextView.setOnClickListener {
+            eventViewModel.event.value?.let {
+                findNavController(rootView).navigate(EventDetailsFragmentDirections.actionEventDetailsToFeedback(it.id))
+            }
         }
     }
 

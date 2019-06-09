@@ -39,8 +39,6 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsViewModel
-import org.fossasia.openevent.general.event.feedback.Feedback
-import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.faq.EventFAQ
 import org.fossasia.openevent.general.event.faq.EventFAQApi
 import org.fossasia.openevent.general.event.location.EventLocation
@@ -80,6 +78,10 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.feedback.FeedbackViewModel
+import org.fossasia.openevent.general.feedback.Feedback
+import org.fossasia.openevent.general.feedback.FeedbackService
+import org.fossasia.openevent.general.feedback.FeedbackApi
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.sessions.SessionViewModel
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
@@ -190,7 +192,7 @@ val apiModule = module {
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get()) }
@@ -199,6 +201,7 @@ val apiModule = module {
     factory { OrderService(get(), get(), get()) }
     factory { SessionService(get(), get()) }
     factory { NotificationService(get()) }
+    factory { FeedbackService(get(), get()) }
 }
 
 val viewModelModule = module {
@@ -206,7 +209,7 @@ val viewModelModule = module {
     viewModel { EventsViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
@@ -231,6 +234,7 @@ val viewModelModule = module {
     viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
     viewModel { SpeakersCallProposalViewModel(get(), get()) }
     viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
+    viewModel { FeedbackViewModel(get(), get()) }
 }
 
 val networkModule = module {
@@ -349,6 +353,11 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.sponsorDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.feedbackDao()
     }
 
     factory {

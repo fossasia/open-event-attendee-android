@@ -464,11 +464,27 @@
                     android:textSize="@dimen/heading_text_size"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/seeFeedbackTextView"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_all_feedback"
+                    android:padding="@dimen/padding_medium"
+                    android:background="?selectableItemBackground"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
                 <Button
                     android:id="@+id/feedbackBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/layout_margin_large"
+                    android:layout_marginTop="@dimen/layout_margin_small"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    android:layout_marginEnd="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
                     android:text="@string/write_feedback" />
             </LinearLayout>
 
