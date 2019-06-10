@@ -767,15 +767,15 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun sendToken() {
-        val card = Card(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
+        val cardBuilder = Card.Builder(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
             attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
 
-        val validDetails: Boolean? = card.validateCard()
+        val validDetails: Boolean? = cardBuilder.build().validateCard()
         if (validDetails != null && !validDetails)
             rootView.snackbar(getString(R.string.invalid_card_data_message))
         else
             Stripe(requireContext())
-                .createToken(card, API_KEY, object : TokenCallback {
+                .createToken(cardBuilder.build(), API_KEY, object : TokenCallback {
                     override fun onSuccess(token: Token) {
                         // Send this token to server
                         val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
