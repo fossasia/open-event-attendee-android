@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,16 +14,15 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
-import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
-import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
+import kotlinx.android.synthetic.main.fragment_events.view.scrollView
+import kotlinx.android.synthetic.main.fragment_events.view.notification
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
@@ -66,13 +62,12 @@ class EventsFragment : Fragment(), ScrollToTop {
     ): View? {
         setPostponeSharedElementTransition()
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
-        setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty() &&
             !preference.getBoolean(BEEN_TO_WELCOME_SCREEN, false)) {
             preference.putBoolean(BEEN_TO_WELCOME_SCREEN, true)
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
-        setToolbar(activity, getString(R.string.events), false)
+        setToolbar(activity, show = false)
 
         rootView.progressBar.isIndeterminate = true
 
@@ -111,7 +106,7 @@ class EventsFragment : Fragment(), ScrollToTop {
         eventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                eventsNestedScrollView.longSnackbar(it)
+                rootView.longSnackbar(it)
             })
 
         eventsViewModel.loadLocation()
@@ -165,6 +160,9 @@ class EventsFragment : Fragment(), ScrollToTop {
         rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
             setStartPostponedEnterTransition()
         }
+        rootView.notification.setOnClickListener {
+            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
+        }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long, imageView: ImageView) {
@@ -211,23 +209,9 @@ class EventsFragment : Fragment(), ScrollToTop {
                 type = hashTag))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.events, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.notifications -> {
-                findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun showNoInternetScreen(show: Boolean) {
-        rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
-        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+        if (show) rootView.shimmerEvents.isVisible = false
+        rootView.noInternetCard.isVisible = show
     }
 
     private fun showEmptyMessage(itemCount: Int) {
@@ -244,9 +228,9 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     override fun onStop() {
-        rootView.swiperefresh?.setOnRefreshListener(null)
+        rootView.swiperefresh.setOnRefreshListener(null)
         super.onStop()
     }
 
-    override fun scrollToTop() = rootView.eventsNestedScrollView.smoothScrollTo(0, 0)
+    override fun scrollToTop() = rootView.scrollView.smoothScrollTo(0, 0)
 }

@@ -1,151 +1,173 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/eventsNestedScrollView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:orientation="vertical"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:src="@drawable/background_fragment"
+                android:scaleType="fitXY"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_large"
+                    android:background="?selectableItemBackground"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/ic_notifications_white"/>
+                <ImageView
+                    android:id="@+id/eventIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/ic_event"/>
+                <TextView
+                    android:id="@+id/whatIsGoodText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    android:text="@string/whats_good"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    android:layout_marginStart="@dimen/layout_margin_extra_large"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/eventIcon" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/whatIsGoodText"
+                    app:layout_constraintLeft_toRightOf="@id/eventIcon"
+                    android:layout_marginStart="@dimen/layout_margin_extra_large">
+                    <TextView
+                        android:id="@+id/locationTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_extra_large"
+                        android:background="?selectableItemBackground"
+                        tools:text="India" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_alignEnd="@id/locationTextView"
+                        android:layout_alignStart="@+id/locationTextView"
+                        android:layout_below="@id/locationTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/eventsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:layout_marginEnd="@dimen/layout_margin_medium"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    app:layout_constraintTop_toBottomOf="@id/eventIcon"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:scrollbars="vertical" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerEvents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    app:layout_constraintTop_toBottomOf="@id/eventIcon"
+                    app:layout_constraintLeft_toLeftOf="parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <include layout="@layout/placeholder_item_card_events" />
+                        <include layout="@layout/placeholder_item_card_events" />
+                        <include layout="@layout/placeholder_item_card_events" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <LinearLayout
-                    android:id="@+id/homeScreenLL"
+                    android:id="@+id/eventsEmptyView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <RelativeLayout
+                        android:layout_width="@dimen/item_image_view_large"
+                        android:layout_height="@dimen/item_image_view_large"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/layout_margin_large">
+
+                        <ImageView
+                            android:layout_width="@dimen/item_image_view_large"
+                            android:layout_height="@dimen/item_image_view_large"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/round_shape" />
+
+                        <ImageView
+                            android:id="@+id/ticketImageView"
+                            android:layout_width="@dimen/item_image_view"
+                            android:layout_height="@dimen/item_image_view"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/ic_baseline_event"
+                            app:tint="@color/colorPrimary"/>
+
+                    </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/emptyEventsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/layout_margin_extra_large"
-                        android:text="@string/whats_good"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/heading_text_size" />
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
-
-                        <TextView
-                            android:id="@+id/locationTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/layout_margin_large"
-                            android:textColor="@color/black"
-                            android:gravity="center"
-                            android:textSize="@dimen/text_size_extra_large"
-                            tools:text="India" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/event_name_divider_height"
-                            android:layout_alignEnd="@id/locationTextView"
-                            android:layout_alignLeft="@+id/locationTextView"
-                            android:layout_alignRight="@id/locationTextView"
-                            android:layout_alignStart="@+id/locationTextView"
-                            android:layout_below="@id/locationTextView"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@color/grey" />
-                    </RelativeLayout>
-
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimmerEvents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <include layout="@layout/placeholder_item_card_events" />
-
-                            <include layout="@layout/placeholder_item_card_events" />
-
-                            <include layout="@layout/placeholder_item_card_events" />
-
-                        </LinearLayout>
-
-
-                    </com.facebook.shimmer.ShimmerFrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:id="@+id/eventsEmptyView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/padding_large"
-                            android:orientation="vertical"
-                            android:visibility="gone"
-                            tools:visibility="visible">
-                            <RelativeLayout
-                                android:layout_width="@dimen/item_image_view_large"
-                                android:layout_height="@dimen/item_image_view_large"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="@dimen/layout_margin_large">
-
-                                <ImageView
-                                    android:layout_width="@dimen/item_image_view_large"
-                                    android:layout_height="@dimen/item_image_view_large"
-                                    android:layout_centerInParent="true"
-                                    android:scaleType="centerCrop"
-                                    app:srcCompat="@drawable/round_shape" />
-
-                                <ImageView
-                                    android:id="@+id/ticketImageView"
-                                    android:layout_width="@dimen/item_image_view"
-                                    android:layout_height="@dimen/item_image_view"
-                                    android:layout_centerInParent="true"
-                                    android:scaleType="centerCrop"
-                                    app:srcCompat="@drawable/ic_baseline_event"
-                                    app:tint="@color/colorPrimary"/>
-
-                            </RelativeLayout>
-
-                            <TextView
-                                android:id="@+id/emptyEventsText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="@dimen/layout_margin_extra_large"
-                                android:text="@string/no_events_message"
-                                android:textSize="@dimen/text_size_medium" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="gone" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/eventsRecycler"
-                            android:layout_marginStart="@dimen/layout_margin_medium"
-                            android:layout_marginEnd="@dimen/layout_margin_medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingTop="@dimen/padding_medium"
-                            android:scrollbars="vertical" />
-                    </FrameLayout>
+                        android:text="@string/no_events_message"
+                        android:textSize="@dimen/text_size_medium" />
                 </LinearLayout>
 
-                <include layout="@layout/content_no_internet" />
-            </LinearLayout>
+                <include
+                    layout="@layout/content_no_internet"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

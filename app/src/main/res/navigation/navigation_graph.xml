@@ -319,10 +319,31 @@
 
     </fragment>
     <fragment
+        android:id="@+id/expiredOrderFragment"
+        android:name="org.fossasia.openevent.general.order.ExpiredOrderFragment"
+        android:label="expiredOrderFragment"
+        tools:layout="@layout/fragment_expired_order">
+        <action
+            android:id="@+id/action_order_expired_to_order_details"
+            app:destination="@id/orderDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
         android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
         android:label="OrdersUnderUserFragment"
         tools:layout="@layout/fragment_orders_under_user">
+
+        <action
+            android:id="@+id/action_order_user_to_order_expired"
+            app:destination="@id/expiredOrderFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <action
             android:id="@+id/action_order_user_to_order_details"
@@ -347,11 +368,6 @@
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
-
-        <argument
-            android:name="showExpired"
-            app:argType="boolean"
-            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
