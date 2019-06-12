@@ -1,10 +1,11 @@
-# open-event-android
+# Open Event Android App
 [![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=development)](https://travis-ci.org/fossasia/open-event-android?branch=development)
 [![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-android?branch=master)
 [![Join the chat at https://gitter.im/fossasia/open-event-android](https://badges.gitter.im/fossasia/open-event-android.svg)](https://gitter.im/fossasia/open-event-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:open-event@googlegroups.com)
+[![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/open-event)
+[![Twitter Follow](https://img.shields.io/twitter/follow/eventyay.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/eventyay)
 
-An events app to discover events happening around the world using the Open Event Platform
+An events app to discover events happening around the world using the Open Event Platform on Eventyay.com.
 
 Application is available here:
 
