@@ -11,8 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
-import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_favorite.view.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import kotlinx.android.synthetic.main.fragment_favorite.view.findText
@@ -20,7 +19,10 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.todayChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.weekendChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
+import kotlinx.android.synthetic.main.fragment_favorite.view.likesNumber
+import kotlinx.android.synthetic.main.fragment_favorite.view.scrollView
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
@@ -38,7 +40,7 @@ import org.jetbrains.anko.design.snackbar
 
 const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), ScrollToTop {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
     private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
@@ -78,6 +80,7 @@ class FavoriteFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list)
+                rootView.likesNumber.text = "${list.size} likes"
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", list.size)
             })
@@ -85,7 +88,7 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                favoriteCoordinatorLayout.longSnackbar(it)
+                rootView.longSnackbar(it)
             })
 
         favoriteEventViewModel.progress
@@ -113,7 +116,7 @@ class FavoriteFragment : Fragment() {
             override fun onClick(event: Event, itemPosition: Int) {
                 favoriteEventViewModel.setFavorite(event.id, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
-                favoriteCoordinatorLayout.snackbar(getString(R.string.removed_from_liked, event.name),
+                rootView.snackbar(getString(R.string.removed_from_liked, event.name),
                     getString(R.string.undo)) {
                     favoriteEventViewModel.setFavorite(event.id, true)
                     favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
@@ -137,11 +140,13 @@ class FavoriteFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolbar(activity, getString(R.string.likes), false)
+        setToolbar(activity, show = false)
     }
 
+    override fun scrollToTop() = rootView.scrollView.smoothScrollTo(0, 0)
+
     private fun showEmptyMessage(itemCount: Int) {
-        noLikedLL.isVisible = (itemCount == 0)
+        rootView.noLikedLL.isVisible = (itemCount == 0)
     }
 
     private fun openSearchResult(time: String) {
