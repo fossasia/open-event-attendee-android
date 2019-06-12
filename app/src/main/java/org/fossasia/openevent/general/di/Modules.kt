@@ -179,7 +179,6 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(SessionApi::class.java)
     }
-
     single {
         val retrofit: Retrofit = get()
         retrofit.create(SponsorApi::class.java)
@@ -223,7 +222,7 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
-    viewModel { OrderDetailsViewModel(get(), get(), get()) }
+    viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
