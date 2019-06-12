@@ -51,6 +51,7 @@ import kotlinx.android.synthetic.main.content_event.view.socialLinksRecycler
 import kotlinx.android.synthetic.main.content_event.view.socialLinkContainer
 import kotlinx.android.synthetic.main.content_event.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.content_event.view.similarEventsContainer
+import kotlinx.android.synthetic.main.content_event.view.alreadyRegisteredLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -158,6 +159,30 @@ class EventDetailsFragment : Fragment() {
         rootView.buttonTickets.setOnClickListener {
             loadTicketFragment()
         }
+
+        if (eventViewModel.orders.value == null)
+            eventViewModel.loadOrders()
+        eventViewModel.orders
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                it.forEach { order ->
+                    if (order.event?.id == safeArgs.eventId) {
+                        rootView.alreadyRegisteredLayout.visibility = View.VISIBLE
+                        rootView.alreadyRegisteredLayout.setOnClickListener {
+                            order.identifier?.let { identifier ->
+                                EventDetailsFragmentDirections.actionEventDetailsToOrderDetail(
+                                    eventId = safeArgs.eventId,
+                                    orderId = order.id,
+                                    orderIdentifier = identifier
+                                )
+                            }?.let { navigation ->
+                                findNavController(rootView).navigate(navigation)
+                            }
+                        }
+                        return@forEach
+                    }
+                }
+            })
 
         eventViewModel.popMessage
             .nonNull()

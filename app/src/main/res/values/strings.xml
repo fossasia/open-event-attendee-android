@@ -30,6 +30,8 @@
     <string name="skip">Skip</string>
     <string name="choose_your_location">Choose your location</string>
     <string name="choose_preferred_location_message">Please choose your preferred location</string>
+    <string name="already_registered_message">You\'re in it to win it</string>
+    <string name="see_your_ticket">See your ticket</string>
 
     <!--Search event details-->
     <string name="search">Search</string>

@@ -16,6 +16,8 @@ import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -36,6 +38,7 @@ class EventDetailsViewModel(
     private val socialLinksService: SocialLinksService,
     private val feedbackService: FeedbackService,
     private val resource: Resource,
+    private val orderService: OrderService,
     private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
@@ -64,6 +67,8 @@ class EventDetailsViewModel(
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
     private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
     val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
+    private val mutableOrders = MutableLiveData<List<Order>>()
+    val orders: LiveData<List<Order>> = mutableOrders
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -238,6 +243,18 @@ class EventDetailsViewModel(
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.sessions))
                 Timber.e(it, "Error fetching events sessions")
+            })
+    }
+
+    fun loadOrders() {
+        if (!isLoggedIn())
+            return
+        compositeDisposable += orderService.getOrdersOfUser(getId())
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableOrders.value = it
+            }, {
+                Timber.e(it, "Error fetching orders")
             })
     }
 
