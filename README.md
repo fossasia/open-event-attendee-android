@@ -9,8 +9,8 @@ An events app to discover events happening around the world using the Open Event
 
 Application is available here:
 
-<a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
-<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='https://f-droid.org/badge/get-it-on.png' height="80"/></a>
+<a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='docs/images/ic_play_store.png' height="80"/></a>
+<a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='docs/images/ic_fdroid.png' height="80"/></a>
 
 ## Roadmap
 
@@ -27,14 +27,19 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-andro
 ## Screenshots
 <table>
         <tr>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51611260-db5c3080-1f44-11e9-80f6-47c0c0401a70.png" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612594-c9c85800-1f47-11e9-9a66-c32b4f7c7f34.jpeg" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51611528-72c18380-1f45-11e9-97c6-563e7d573e1c.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_1.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_2.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_3.png" height = "480" width="270"></td>
         </tr>
         <tr>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51611714-f3807f80-1f45-11e9-8d43-bb21c7795a45.png" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612103-c84a6000-1f46-11e9-8e63-3f8e8cec91af.png" height = "480" width="270"></td>
-<td><img src = "https://user-images.githubusercontent.com/31350501/51612107-caacba00-1f46-11e9-8a83-c0c33250dfb4.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_4.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_5.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_6.png" height = "480" width="270"></td>
+        </tr>
+        <tr>
+<td><img src = "docs/images/screenshot_7.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_8.png" height = "480" width="270"></td>
+<td><img src = "docs/images/screenshot_9.png" height = "480" width="270"></td>
         </tr>
 </table>        
 
