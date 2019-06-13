@@ -1,17 +1,21 @@
 package org.fossasia.openevent.general.order
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,6 +32,7 @@ import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCa
 import kotlinx.android.synthetic.main.item_enlarged_qr.view.enlargedQrImage
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.order.invoice.DownloadInvoiceService
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -45,6 +50,10 @@ class OrderDetailsFragment : Fragment() {
     private val orderDetailsViewModel by viewModel<OrderDetailsViewModel>()
     private val ordersRecyclerAdapter: OrderDetailsRecyclerAdapter = OrderDetailsRecyclerAdapter()
     private val safeArgs: OrderDetailsFragmentArgs by navArgs()
+
+    private var writePermissionGranted = false
+    private val WRITE_REQUEST_CODE = 1
+    private val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +142,9 @@ class OrderDetailsFragment : Fragment() {
         orderDetailsViewModel.loadEvent(safeArgs.eventId)
         orderDetailsViewModel.loadAttendeeDetails(safeArgs.orderId)
 
+        writePermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+
         return rootView
     }
 
@@ -151,7 +163,28 @@ class OrderDetailsFragment : Fragment() {
                 shareCurrentTicket()
                 true
             }
+
+            R.id.download_invoice -> {
+                if (writePermissionGranted) {
+                    downloadInvoice()
+                } else {
+                    requestPermissions(permission, WRITE_REQUEST_CODE)
+                }
+
+                true
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == WRITE_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                writePermissionGranted = true
+                rootView.snackbar(getString(R.string.storage_permission_granted_message))
+                downloadInvoice()
+            } else {
+                rootView.snackbar(getString(R.string.storage_permission_denied_message))
+            }
         }
     }
 
@@ -159,6 +192,14 @@ class OrderDetailsFragment : Fragment() {
         super.onDestroyView()
         ordersRecyclerAdapter.setQrImageClickListener(null)
         ordersRecyclerAdapter.setSeeEventListener(null)
+    }
+
+    private fun downloadInvoice() {
+        val downloadPath = "${BuildConfig.DEFAULT_BASE_URL}orders/invoices/${safeArgs.orderIdentifier}"
+        val destinationPath = "${Environment.getExternalStorageDirectory().absolutePath}/DownloadManager/"
+        val fileName = "Invoice - ${orderDetailsViewModel.event.value?.name} - ${safeArgs.orderIdentifier}"
+        activity?.startService(DownloadInvoiceService.getDownloadService(requireContext(), downloadPath,
+            destinationPath, fileName, orderDetailsViewModel.getToken()))
     }
 
     private fun showEnlargedQrImage(bitmap: Bitmap) {

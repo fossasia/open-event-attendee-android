@@ -423,5 +423,6 @@
     <string name="creating_order_message">Creating order...</string>
     <string name="profile_settings">Profile Settings</string>
     <string name="loading_tickets">Loading tickets...</string>
+    <string name="download_invoice">Download Invoice</string>
 
 </resources>
