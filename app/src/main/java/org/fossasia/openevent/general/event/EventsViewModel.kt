@@ -38,7 +38,7 @@ class EventsViewModel(
 
     fun loadLocation() {
         mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
-            ?: resource.getString(R.string.choose_your_location)
+            ?: resource.getString(R.string.enter_location)
     }
 
     fun loadLocationEvents() {
