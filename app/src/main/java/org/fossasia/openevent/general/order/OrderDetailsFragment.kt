@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -74,6 +75,10 @@ class OrderDetailsFragment : Fragment() {
         orderDetailsViewModel.attendees
             .nonNull()
             .observe(this, Observer {
+                if (it.isEmpty()) {
+                    Toast.makeText(context, getString(R.string.error_fetching_attendees), Toast.LENGTH_SHORT).show()
+                    activity?.onBackPressed()
+                }
                 ordersRecyclerAdapter.addAll(it)
                 Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
             })
