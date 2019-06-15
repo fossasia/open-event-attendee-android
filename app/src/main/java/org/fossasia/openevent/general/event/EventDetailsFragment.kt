@@ -65,9 +65,9 @@ import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
+import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
 import org.fossasia.openevent.general.feedback.FeedbackRecyclerAdapter
 import org.fossasia.openevent.general.feedback.LIMITED_FEEDBACK_NUMBER
 import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
@@ -99,7 +99,7 @@ class EventDetailsFragment : Fragment() {
     private val sponsorsAdapter = SponsorRecyclerAdapter()
     private val sessionsAdapter = SessionRecyclerAdapter()
     private val socialLinkAdapter = SocialLinksRecyclerAdapter()
-    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
+    private val similarEventsAdapter = SimilarEventsListAdapter()
 
     private lateinit var rootView: View
     private lateinit var binding: FragmentEventBinding

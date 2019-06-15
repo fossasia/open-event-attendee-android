@@ -1,3 +1,24 @@
+<layout>
+    <data>
+        <variable
+            name="attendee"
+            type="org.fossasia.openevent.general.attendees.Attendee" />
+        <variable
+            name="event"
+            type="org.fossasia.openevent.general.event.Event" />
+        <variable
+            name="eventDate"
+            type="String" />
+        <variable
+            name="position"
+            type="Integer" />
+        <variable
+            name="count"
+            type="Integer" />
+        <variable
+            name="identifier"
+            type="String" />
+    </data>
 <androidx.core.widget.NestedScrollView
     android:id="@+id/mainLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -53,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_small"
+                    android:text="@{`Ticket ` + position + ` of ` + count}"
                     android:background="@drawable/curved_border"/>
                 <View
                     android:layout_width="0dp"
@@ -78,6 +100,7 @@
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title_large"
+                android:text="@{attendee.firstname + ` ` + attendee.lastname}"
                 tools:text="@string/name_preview" />
 
             <TextView
@@ -92,6 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/layout_margin_large"
+                android:text="@{event.name}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
                 tools:text="@string/event_preview" />
@@ -159,7 +183,7 @@
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:text="@string/not_available"
                 android:textSize="@dimen/text_size_large"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -174,7 +198,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/layout_margin_medium"
-                    android:paddingRight="@dimen/layout_margin_medium"
+                    android:paddingEnd="@dimen/layout_margin_medium"
                     android:paddingBottom="@dimen/layout_margin_medium">
 
                     <TextView
@@ -190,6 +214,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_medium"
+                        android:text="@{eventDate}"
                         tools:text="@string/date_preview" />
 
                     <TextView
@@ -224,6 +249,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
+                        android:text="@{event.locationName}"
                         android:textSize="@dimen/text_size_medium"
                         tools:text="@string/location_preview" />
 
@@ -262,6 +288,7 @@
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
+                android:text="@{identifier}"
                 tools:text="@string/order_identifier_preview" />
 
             <TextView
@@ -279,6 +306,7 @@
                 android:lines="2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
+                app:strippedHtml="@{event.description}"
                 tools:text="@string/event_summary_preview" />
 
             <TextView
@@ -299,6 +327,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
                 android:textSize="@dimen/text_size_medium"
+                app:hideIfEmpty="@{event.organizerName}"
                 tools:text="@string/organizer" />
 
             <TextView
@@ -307,6 +336,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
+                android:text="@{event.organizerName}"
                 tools:text="@string/organizer_preview" />
 
             <Button
@@ -323,3 +353,4 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.core.widget.NestedScrollView>
+</layout>

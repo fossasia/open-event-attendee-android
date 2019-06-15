@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+<data>
+    <variable
+        name="event"
+        type="org.fossasia.openevent.general.event.Event" />
+    <variable
+        name="position"
+        type="Integer" />
+    <variable
+        name="dateTime"
+        type="String" />
+    <variable
+        name="monthTime"
+        type="String" />
+</data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,6 +41,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:eventImage="@{event.originalImageUrl}"
+            android:transitionName="@{`cardItemEventImage` + position}"
             android:src="@drawable/header" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -51,7 +68,6 @@
             android:layout_height="@dimen/fab_height"
             app:fabCustomSize="@dimen/fab_height"
             android:layout_marginEnd="@dimen/fab_margin_right"
-            android:layout_marginRight="@dimen/fab_margin_right"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -67,11 +83,11 @@
             android:layout_width="@dimen/card_width_45dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_margin_small"
-            android:layout_marginLeft="@dimen/layout_margin_small"
             android:layout_marginTop="@dimen/layout_margin_extra_small"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryDark"
+            android:text="@{monthTime}"
             app:layout_constraintStart_toStartOf="@+id/eventImage"
             app:layout_constraintTop_toTopOf="@+id/eventName"
             tools:text="Jan" />
@@ -81,6 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:text="@{dateTime}"
             app:layout_constraintEnd_toEndOf="@+id/month"
             app:layout_constraintStart_toStartOf="@+id/month"
             app:layout_constraintTop_toBottomOf="@+id/month"
@@ -99,6 +116,7 @@
             android:ellipsize="end"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
+            android:text="@{event.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/month"
             app:layout_constraintTop_toBottomOf="@+id/shareFab"
@@ -110,11 +128,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_small"
             android:layout_marginEnd="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
             android:layout_marginBottom="@dimen/layout_margin_extra_large"
             android:lines="2"
             android:ellipsize="end"
             android:textSize="@dimen/text_size_small"
+            android:text="@{event.locationName}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/eventName"
@@ -123,3 +141,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

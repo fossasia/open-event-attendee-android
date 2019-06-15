@@ -1,3 +1,16 @@
+<layout>
+<data>
+    <import type="org.fossasia.openevent.general.event.EventUtils" />
+    <variable
+        name="event"
+        type="org.fossasia.openevent.general.event.Event" />
+    <variable
+        name="position"
+        type="Integer" />
+    <variable
+        name="dateTime"
+        type="String" />
+</data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,7 +30,7 @@
         android:layout_height="@dimen/fab_height"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
-        android:layout_marginRight="@dimen/fab_width"
+        android:layout_marginEnd="@dimen/fab_width"
         app:elevation="@dimen/layout_margin_none"
         app:borderWidth="@dimen/layout_margin_none"
         android:background="@android:color/white"
@@ -34,11 +47,12 @@
         app:borderWidth="@dimen/layout_margin_none"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/layout_margin_small"
-        android:layout_marginRight="@dimen/layout_margin_small"
+        android:layout_marginEnd="@dimen/layout_margin_small"
         android:background="@android:color/white"
         android:scaleType="center"
         app:backgroundTint="@android:color/white"
         app:tint="@color/colorAccent"
+        app:isFavorite="@{event.favorite}"
         app:srcCompat="@drawable/ic_baseline_favorite_border" />
 
     <LinearLayout
@@ -58,15 +72,17 @@
             android:src="@drawable/header"
             android:background="@drawable/round_image"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
-            android:layout_marginLeft="@dimen/layout_margin_large"
-            android:layout_marginTop="@dimen/layout_margin_moderate"/>
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginTop="@dimen/layout_margin_moderate"
+            app:eventImage="@{event.originalImageUrl}"
+            android:transitionName="@{`cardItemEventImage` + position}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin_large"
+            android:layout_marginStart="@dimen/layout_margin_large"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
-            android:layout_marginRight="@dimen/layout_margin_moderate"
+            android:layout_marginEnd="@dimen/layout_margin_moderate"
             android:layout_marginTop="@dimen/layout_margin_moderate"
             android:orientation="vertical">
 
@@ -79,6 +95,7 @@
                 android:layout_marginBottom="@dimen/details_margin_small"
                 android:textColor="@color/black"
                 android:textSize="@dimen/heading_text_size"
+                android:text="@{event.name}"
                 tools:text="Event Name" />
 
             <LinearLayout
@@ -93,15 +110,8 @@
                     android:textSize="@dimen/details_text_size"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    android:text="@{dateTime}"
                     tools:text="28" />
-
-                <TextView
-                    android:id="@+id/month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/details_margin_small"
-                    android:textSize="@dimen/details_text_size"
-                    tools:text="JUN" />
             </LinearLayout>
 
             <TextView
@@ -112,7 +122,9 @@
                 android:ellipsize="end"
                 android:layout_marginTop="@dimen/layout_margin_small"
                 android:textSize="@dimen/details_text_size"
+                android:text="@{event.locationName}"
                 tools:text="Location Name" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+</layout>
