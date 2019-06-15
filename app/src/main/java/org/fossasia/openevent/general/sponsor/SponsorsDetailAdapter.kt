@@ -64,7 +64,7 @@ class SponsorsDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         }
 
         itemView.sponsorDetailURL.setOnClickListener {
-            sponsorURLClickListener?.onClick(sponsor.url)
+            sponsorURLClickListener.onClick(sponsor.url)
         }
     }
 }

@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface SpeakerWithEventDao {
     @Query("""
-        SELECT * FROM speaker
+        SELECT speaker.* FROM speaker
         INNER JOIN speakerwithevent ON
         speaker.id = speakerwithevent.speaker_id
         WHERE speakerwithevent.event_id = :eventID
