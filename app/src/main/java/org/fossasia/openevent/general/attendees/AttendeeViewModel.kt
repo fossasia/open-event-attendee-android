@@ -173,6 +173,7 @@ class AttendeeViewModel(
                 }
                 Timber.d("Success! %s", attendeesForOrder.toList().toString())
             }, {
+                mutableProgress.value = false
                 if (createAttendeeIterations + 1 == totalAttendee)
                     if (it.message.equals(HttpErrors.CONFLICT)) {
                         mutableTicketSoldOut.value = true
@@ -281,6 +282,7 @@ class AttendeeViewModel(
             }, {
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed creating Order")
+                mutableProgress.value = false
                 deleteAttendees(order.attendees)
             })
     }

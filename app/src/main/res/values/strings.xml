@@ -281,6 +281,7 @@
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="checkbox_message">Ticket holder is the same person as ticket buyer</string>
+    <string name="error_fetching_attendees">Error fetching attendees</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
