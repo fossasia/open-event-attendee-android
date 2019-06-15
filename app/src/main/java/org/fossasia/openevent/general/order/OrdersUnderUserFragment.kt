@@ -58,7 +58,8 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
-        ordersUnderUserVM.ordersUnderUser(false)
+        if (ordersUnderUserVM.eventAndOrder.value == null)
+            ordersUnderUserVM.ordersUnderUser(false)
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
