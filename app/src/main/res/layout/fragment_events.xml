@@ -100,6 +100,18 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:scrollbars="vertical" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_extra_large"
+                    app:layout_constraintTop_toBottomOf="@id/eventIcon"
+                    app:layout_constraintLeft_toLeftOf="parent">
+                    <include
+                        layout="@layout/content_no_internet" />
+                </LinearLayout>
+
+
+
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/shimmerEvents"
                     android:layout_width="wrap_content"
@@ -159,13 +171,6 @@
                         android:text="@string/no_events_message"
                         android:textSize="@dimen/text_size_medium" />
                 </LinearLayout>
-
-                <include
-                    layout="@layout/content_no_internet"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>

@@ -67,7 +67,7 @@ class SearchViewModel(
     }
 
     fun loadSavedLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION) ?: resource.getString(R.string.choose_your_location)
+        savedLocation = preference.getString(SAVED_LOCATION) ?: resource.getString(R.string.enter_location)
     }
     fun loadSavedType() {
         savedType = preference.getString(SAVED_TYPE)

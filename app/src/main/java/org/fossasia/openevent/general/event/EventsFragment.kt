@@ -200,14 +200,18 @@ class EventsFragment : Fragment(), ScrollToTop {
     }
 
     private fun showNoInternetScreen(show: Boolean) {
-        if (show) rootView.shimmerEvents.isVisible = false
+        if (show) {
+            rootView.shimmerEvents.isVisible = false
+            rootView.eventsEmptyView.isVisible = false
+            eventsListAdapter.clear()
+        }
         rootView.noInternetCard.isVisible = show
     }
 
     private fun showEmptyMessage(itemCount: Int) {
         if (itemCount == 0) {
             rootView.eventsEmptyView.visibility = View.VISIBLE
-            if (rootView.locationTextView.text == getString(R.string.choose_your_location)) {
+            if (rootView.locationTextView.text == getString(R.string.enter_location)) {
                 rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
             } else {
                 rootView.emptyEventsText.text = getString(R.string.no_events_message)
