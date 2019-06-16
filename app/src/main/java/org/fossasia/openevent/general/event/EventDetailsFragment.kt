@@ -532,7 +532,7 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.event_share -> {
-                currentEvent?.let { EventUtils.share(it, rootView.eventImage) }
+                currentEvent?.let { EventUtils.share(it, requireContext()) }
                 return true
             }
             R.id.code_of_conduct -> {

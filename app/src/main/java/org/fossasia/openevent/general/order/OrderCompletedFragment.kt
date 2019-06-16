@@ -103,7 +103,7 @@ class OrderCompletedFragment : Fragment() {
         }
 
         rootView.share.setOnClickListener {
-            shareEvent(eventShare)
+            EventUtils.share(eventShare, requireContext())
         }
 
         return rootView
@@ -157,14 +157,6 @@ class OrderCompletedFragment : Fragment() {
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
             EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
-    }
-
-    private fun shareEvent(event: Event) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-        sendIntent.type = "text/plain"
-        startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
     private fun redirectToEventsFragment() {

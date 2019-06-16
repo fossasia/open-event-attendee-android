@@ -39,7 +39,7 @@ class SimilarEventViewHolder(
             eventClickListener?.onClick(event.id, itemView.eventImage)
         }
         itemView.shareFab.setOnClickListener {
-            EventUtils.share(event, itemView.eventImage)
+            EventUtils.share(event, itemView.context)
         }
         itemView.favoriteFab.setOnClickListener {
             favFabClickListener?.onClick(event, itemPosition)
