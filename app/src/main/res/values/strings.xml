@@ -125,6 +125,7 @@
     <string name="term_and_conditions">Please accept the terms and conditions!</string>
     <string name="invalid_email_address_message">Invalid email address!</string>
     <string name="invalid_card_data_message">Invalid card data</string>
+    <string name="invalid_card_number_message">Invalid card number</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>

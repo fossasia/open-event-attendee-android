@@ -118,6 +118,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private val attendeeRecyclerAdapter: AttendeeRecyclerAdapter = AttendeeRecyclerAdapter()
     private val safeArgs: AttendeeFragmentArgs by navArgs()
     private lateinit var timer: CountDownTimer
+    private lateinit var card: Card
     var totalAmount = 0F
 
     private lateinit var API_KEY: String
@@ -527,26 +528,22 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s == null || s.length < 3) {
-                    setCardSelectorAndError(false)
-                    return
-                }
-                val card = Utils.getCardType(s.toString())
-                if (card == Utils.cardType.NONE) {
-                    setCardSelectorAndError(true)
-                    return
-                }
-                setCardSelectorAndError(false)
-            }
-
-            private fun setCardSelectorAndError(error: Boolean) {
-                if (error) {
-                    rootView.cardNumber.error = "Invalid card number"
-                    return
+                if (s != null) {
+                    val cardType = Utils.getCardType(s.toString())
+                    if (cardType == Utils.cardType.NONE) {
+                        rootView.cardNumber.error = getString(R.string.invalid_card_number_message)
+                        return
+                    }
                 }
                 rootView.cardNumber.error = null
             }
         })
+        attendeeViewModel.stripeOrderMade
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it && this::card.isInitialized)
+                    sendToken(card)
+            })
     }
 
     private fun setupMonthOptions() {
@@ -656,6 +653,17 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
                 false
             }
+            getString(R.string.stripe) -> {
+                card = Card.create(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
+                    rootView.year.selectedItem.toString().toInt(), rootView.cvc.text.toString())
+
+                if (!card.validateCard()) {
+                    rootView.snackbar(getString(R.string.invalid_card_data_message))
+                    false
+                } else {
+                    true
+                }
+            }
             else -> true
         }
 
@@ -725,21 +733,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             }
         }
 
-        attendeeViewModel.isAttendeeCreated.observe(viewLifecycleOwner, Observer { isAttendeeCreated ->
-            if (totalAmount == 0F) return@Observer
-            if (isAttendeeCreated &&
-                rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
-                sendToken()
-            }
-        })
-
         attendeeViewModel.ticketSoldOut
             .nonNull()
             .observe(this, Observer {
                 showTicketSoldOutDialog(it)
             })
 
-        attendeeViewModel.paymentCompleted
+        attendeeViewModel.orderCompleted
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 if (it)
@@ -766,26 +766,17 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
     }
 
-    private fun sendToken() {
-        val cardBuilder = Card.Builder(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
-            attendeeViewModel.yearSelectedPosition, rootView.cvc.text.toString())
-
-        val validDetails: Boolean? = cardBuilder.build().validateCard()
-        if (validDetails != null && !validDetails)
-            rootView.snackbar(getString(R.string.invalid_card_data_message))
-        else
-            Stripe(requireContext())
-                .createToken(cardBuilder.build(), API_KEY, object : TokenCallback {
-                    override fun onSuccess(token: Token) {
-                        // Send this token to server
-                        val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
-                        attendeeViewModel.completeOrder(charge)
-                    }
-
-                    override fun onError(error: Exception) {
-                        rootView.snackbar(error.localizedMessage.toString())
-                    }
-                })
+    private fun sendToken(card: Card) {
+        Stripe(requireContext())
+            .createToken(card, API_KEY, object : TokenCallback {
+                override fun onSuccess(token: Token) {
+                    val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
+                    attendeeViewModel.chargeOrder(charge)
+                }
+                override fun onError(error: Exception) {
+                    rootView.snackbar(error.localizedMessage.toString())
+                }
+            })
     }
 
     private fun loadEventDetailsUI(event: Event) {
@@ -837,7 +828,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun openOrderCompletedFragment() {
-        attendeeViewModel.paymentCompleted.value = false
+        attendeeViewModel.orderCompleted.value = false
         findNavController(rootView).navigate(AttendeeFragmentDirections
             .actionAttendeeToOrderCompleted(safeArgs.eventId))
     }

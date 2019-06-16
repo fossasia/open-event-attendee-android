@@ -62,15 +62,15 @@ class AttendeeViewModel(
     val user: LiveData<User> = mutableUser
     private val mutableTotalAmount = MutableLiveData<Float>(0F)
     val totalAmount: LiveData<Float> = mutableTotalAmount
-    val paymentCompleted = MutableLiveData<Boolean>()
+    val orderCompleted = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<List<Ticket>>()
     val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
     val forms: LiveData<List<CustomForm>> = mutableForms
-    private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
-    val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
     private val mutablePendingOrder = MutableLiveData<Order>()
     val pendingOrder: LiveData<Order> = mutablePendingOrder
+    private val mutableStripeOrderMade = MutableLiveData<Boolean>(false)
+    val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -168,7 +168,6 @@ class AttendeeViewModel(
                 attendeesForOrder.add(it)
                 if (attendeesForOrder.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
-                    mutableIsAttendeeCreated.value = true
                     mutableMessage.value = resource.getString(R.string.create_attendee_success_message)
                 }
                 Timber.d("Success! %s", attendeesForOrder.toList().toString())
@@ -209,7 +208,6 @@ class AttendeeViewModel(
             if (it.email.isNullOrBlank() || it.firstname.isNullOrBlank() || it.lastname.isNullOrBlank()) {
                 if (isAllDetailsFilled)
                     mutableMessage.value = resource.getString(R.string.fill_all_fields_message)
-                mutableIsAttendeeCreated.value = false
                 isAllDetailsFilled = false
                 return
             }
@@ -277,6 +275,9 @@ class AttendeeViewModel(
                         confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PLACED)
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
                     }
+                    PAYMENT_MODE_STRIPE -> {
+                        mutableStripeOrderMade.value = true
+                    }
                     else -> mutableMessage.value = resource.getString(R.string.order_success_message)
                 }
             }, {
@@ -295,7 +296,7 @@ class AttendeeViewModel(
             }.subscribe({
                 mutableMessage.value = resource.getString(R.string.order_success_message)
                 Timber.d("Updated order status successfully !")
-                paymentCompleted.value = true
+                orderCompleted.value = true
             }, {
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed updating order status")
@@ -328,7 +329,7 @@ class AttendeeViewModel(
         }
     }
 
-    fun completeOrder(charge: Charge) {
+    fun chargeOrder(charge: Charge) {
         compositeDisposable += orderService.chargeOrder(orderIdentifier.toString(), charge)
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -338,6 +339,7 @@ class AttendeeViewModel(
             }.subscribe({
                 mutableMessage.value = it.message
                 if (it.status != null && it.status) {
+                    confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
                     confirmOrderStatus(orderIdentifier.toString(), confirmOrder)
                     Timber.d("Successfully  charged for the order!")
                 } else {
