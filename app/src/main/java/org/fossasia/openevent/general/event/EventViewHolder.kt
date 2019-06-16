@@ -63,7 +63,7 @@ class EventViewHolder(private val binding: ItemCardEventsBinding) : RecyclerView
         }
 
         itemView.shareFab.setOnClickListener {
-            EventUtils.share(event, itemView.eventImage)
+            EventUtils.share(event, itemView.context)
         }
 
         itemView.favoriteFab.setOnClickListener {

@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.event
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.junit.After
@@ -60,66 +59,6 @@ class EventUtilsTest {
         every { resource.getString(R.string.end_time) }.returns("End Time : ")
         every { resource.getString(R.string.event_location) }.returns("Event Location : ")
         every { resource.getString(R.string.event_link) }.returns("Event Link : ")
-    }
-
-    @Test
-    fun `should get sharable information`() {
-        val event = getEvent()
-        setupStringMock()
-        assertEquals("""
-            Event Name : Eva Event
-
-            Starts On : 15 Sep 2008 04:23 PM
-            Ends On : 19 Sep 2008 07:55 PM
-            Event Location : Test Location
-            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
-            """.trimIndent(), EventUtils.getSharableInfo(event, resource))
-    }
-
-    @Test
-    fun `should get sharable information with description`() {
-        val event = getEvent(description = "Amazing Event")
-        setupStringMock()
-        assertEquals("""
-            Event Name : Eva Event
-
-            Event Description : Amazing Event
-
-            Starts On : 15 Sep 2008 04:23 PM
-            Ends On : 19 Sep 2008 07:55 PM
-            Event Location : Test Location
-            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
-            """.trimIndent(), EventUtils.getSharableInfo(event, resource))
-    }
-
-    @Test
-    fun `should get sharable information with link`() {
-        val event = getEvent(identifier = "abcdefgh")
-        setupStringMock()
-        assertEquals("""
-            Event Name : Eva Event
-
-            Starts On : 15 Sep 2008 04:23 PM
-            Ends On : 19 Sep 2008 07:55 PM
-            Event Location : Test Location
-            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
-            """.trimIndent(), EventUtils.getSharableInfo(event, resource))
-    }
-
-    @Test
-    fun `should get sharable information complete`() {
-        val event = getEvent(description = "Fresher", identifier = "abcdefgh")
-        setupStringMock()
-        assertEquals("""
-            Event Name : Eva Event
-
-            Event Description : Fresher
-
-            Starts On : 15 Sep 2008 04:23 PM
-            Ends On : 19 Sep 2008 07:55 PM
-            Event Location : Test Location
-            Event Link : ${BuildConfig.FRONTEND_URL}e/abcdefgh
-            """.trimIndent(), EventUtils.getSharableInfo(event, resource))
     }
 
     @Test
