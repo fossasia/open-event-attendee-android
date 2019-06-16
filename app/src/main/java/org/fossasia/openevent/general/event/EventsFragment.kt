@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -38,22 +37,13 @@ import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementT
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 
-/**
- * Enum class for different layout types in the adapter.
- * This class can expand as number of layout types grow.
- */
-enum class EventLayoutType {
-    EVENTS, SIMILAR_EVENTS
-}
-
-const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 
 class EventsFragment : Fragment(), ScrollToTop {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
-    private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
+    private val eventsListAdapter = EventsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

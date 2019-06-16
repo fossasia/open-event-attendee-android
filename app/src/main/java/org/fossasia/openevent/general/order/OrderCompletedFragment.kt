@@ -28,12 +28,10 @@ import kotlinx.android.synthetic.main.fragment_order_completed.view.time
 import kotlinx.android.synthetic.main.fragment_order_completed.view.view
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventsListAdapter
-import org.fossasia.openevent.general.event.EventLayoutType
+import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +44,7 @@ class OrderCompletedFragment : Fragment() {
     private lateinit var eventShare: Event
     private val safeArgs: OrderCompletedFragmentArgs by navArgs()
     private val orderCompletedViewModel by viewModel<OrderCompletedViewModel>()
-    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
+    private val similarEventsAdapter = SimilarEventsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

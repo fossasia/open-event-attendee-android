@@ -38,7 +38,6 @@ import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
@@ -48,7 +47,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     private lateinit var rootView: View
     private val searchViewModel by viewModel<SearchViewModel>()
     private val safeArgs: SearchResultsFragmentArgs by navArgs()
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
 
     private lateinit var days: Array<String>
     private lateinit var eventDate: String

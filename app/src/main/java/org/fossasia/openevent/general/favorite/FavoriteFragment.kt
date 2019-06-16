@@ -25,7 +25,6 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.ScrollToTop
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.SAVED_LOCATION
@@ -38,12 +37,10 @@ import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTra
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
-
 class FavoriteFragment : Fragment(), ScrollToTop {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
