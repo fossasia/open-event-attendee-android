@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface SponsorWithEventDao {
     @Query("""
-        SELECT * FROM sponsor
+        SELECT sponsor.* FROM sponsor
         INNER JOIN sponsorwithevent ON
         sponsor_id = sponsorwithevent.sponsor_id
         WHERE sponsorwithevent.event_id = :eventID
