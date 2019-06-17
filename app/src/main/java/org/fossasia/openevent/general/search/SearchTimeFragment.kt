@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.search
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -14,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.tomorrowTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.thisWeekendTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.nextMonthTextView
+import kotlinx.android.synthetic.main.fragment_search_time.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
@@ -36,8 +36,7 @@ class SearchTimeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_time, container, false)
 
-        setToolbar(activity)
-        setHasOptionsMenu(true)
+        setToolbar(activity, show = false)
         setCurrentChoice(safeArgs.time)
 
         val calendar = Calendar.getInstance()
@@ -76,6 +75,10 @@ class SearchTimeFragment : Fragment() {
                 calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         return rootView
     }
 
@@ -93,16 +96,6 @@ class SearchTimeFragment : Fragment() {
         } else
             null
         findNavController(rootView).navigate(destFragId, navArgs)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun setCurrentChoice(value: String?) {

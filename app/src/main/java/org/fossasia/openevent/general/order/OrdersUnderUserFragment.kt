@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -30,7 +30,7 @@ import org.jetbrains.anko.design.longSnackbar
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 
-class OrdersUnderUserFragment : Fragment(), ScrollToTop {
+class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
@@ -128,7 +128,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             .actionOrderUserToAuth(getString(R.string.log_in_first), ORDERS_FRAGMENT))
     }
 
-    override fun scrollToTop() = rootView.scrollView.smoothScrollTo(0, 0)
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

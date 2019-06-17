@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.fossasia.openevent.general.search.SearchFilterFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="org.fossasia.openevent.general.search.SearchFilterFragment"
+    android:orientation="vertical">
+<androidx.cardview.widget.CardView
+    android:id="@+id/toolbarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="0dp">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back_black">
+    <ImageView
+        android:id="@+id/tick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="@dimen/padding_large"
+        android:src="@drawable/ic_baseline_tick"
+        android:tint="@color/black"/>
+</androidx.appcompat.widget.Toolbar>
+</androidx.cardview.widget.CardView>
+
+    <androidx.core.widget.NestedScrollView
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/padding_medium">
-
+        android:padding="@dimen/padding_large">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,23 +48,29 @@
                 android:id="@+id/dateLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
                 android:text="@string/date"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
             <TextView
                 android:id="@+id/tvSelectDate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/layout_margin_large"
                 android:background="?selectableItemBackground"
                 android:drawableStart="@drawable/ic_time"
                 android:drawablePadding="@dimen/padding_medium"
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_small"
                 android:text="@string/anytime"
-                android:textSize="@dimen/text_size_larger" />
+                android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,16 +83,16 @@
                 android:id="@+id/locationLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
                 android:text="@string/location"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
             <TextView
                 android:id="@+id/tvSelectLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/layout_margin_large"
                 android:background="?selectableItemBackground"
                 android:drawableStart="@drawable/ic_location_pin"
                 android:drawablePadding="@dimen/padding_medium"
@@ -68,7 +100,13 @@
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_small"
                 android:text="@string/anywhere"
-                android:textSize="@dimen/text_size_larger" />
+                android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
         </LinearLayout>
 
         <LinearLayout
@@ -81,16 +119,16 @@
                 android:id="@+id/categoryLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
                 android:text="@string/category"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
             <TextView
                 android:id="@+id/tvSelectCategory"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/layout_margin_large"
                 android:background="?selectableItemBackground"
                 android:drawableStart="@drawable/ic_star_border"
                 android:drawablePadding="@dimen/padding_medium"
@@ -98,7 +136,13 @@
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_small"
                 android:text="@string/anything"
-                android:textSize="@dimen/text_size_larger" />
+                android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,18 +153,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_medium"
                 android:text="@string/filter"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
             <CheckBox
                 android:id="@+id/freeStuffCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/layout_margin_large"
-                android:layoutDirection="rtl"
-                android:padding="@dimen/padding_medium"
                 android:text="@string/free_stuff"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
@@ -129,9 +171,6 @@
                 android:id="@+id/sessionsAndSpeakerCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/layout_margin_large"
-                android:layoutDirection="rtl"
-                android:padding="@dimen/padding_medium"
                 android:text="@string/sessions_and_speakers"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
@@ -140,12 +179,15 @@
                 android:id="@+id/callForSpeakerCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/layout_margin_large"
-                android:layoutDirection="rtl"
-                android:padding="@dimen/padding_medium"
                 android:text="@string/call_for_speakers"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_details_divider"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:background="@color/grey" />
         </LinearLayout>
 
         <LinearLayout
@@ -157,9 +199,10 @@
                 android:id="@+id/sortLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
                 android:text="@string/sort_by"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
             <RadioGroup
@@ -172,9 +215,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:layoutDirection="rtl"
-                    android:padding="@dimen/padding_small"
                     android:text="@string/date"
+                    android:textColor="@color/light_grey"
                     android:textSize="@dimen/text_size_large" />
 
                 <RadioButton
@@ -183,13 +225,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:checked="false"
-                    android:layoutDirection="rtl"
-                    android:padding="@dimen/padding_small"
                     android:text="@string/name"
+                    android:textColor="@color/light_grey"
                     android:textSize="@dimen/text_size_large" />
             </RadioGroup>
 
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
-
+</LinearLayout>
