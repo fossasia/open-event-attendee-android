@@ -137,7 +137,7 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // Location Play Service
-    playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
+    playStoreImplementation 'com.google.android.gms:play-services-location:17.0.0'
 
     //Smart Auth Play Service
     playStoreImplementation 'com.google.android.gms:play-services-auth:17.0.0'
