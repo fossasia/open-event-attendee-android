@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.likesNumber
 import kotlinx.android.synthetic.main.fragment_favorite.view.scrollView
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
@@ -37,7 +37,7 @@ import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTra
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-class FavoriteFragment : Fragment(), ScrollToTop {
+class FavoriteFragment : Fragment(), BottomIconDoubleClick {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
     private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
@@ -140,7 +140,7 @@ class FavoriteFragment : Fragment(), ScrollToTop {
         setToolbar(activity, show = false)
     }
 
-    override fun scrollToTop() = rootView.scrollView.smoothScrollTo(0, 0)
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
 
     private fun showEmptyMessage(itemCount: Int) {
         rootView.noLikedLL.isVisible = (itemCount == 0)

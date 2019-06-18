@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/layout_margin_large"
-    android:layout_marginTop="@dimen/layout_margin_large"
-    android:layout_marginRight="@dimen/layout_margin_large"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="org.fossasia.openevent.general.search.SearchTypeFragment">
+    tools:context="org.fossasia.openevent.general.search.SearchTypeFragment"
+    style="@style/AppTheme.NoActionBar">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back_black"/>
 
     <include layout="@layout/content_no_internet" />
 
@@ -16,8 +20,7 @@
         android:id="@+id/eventTypesTextTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:layout_marginStart="@dimen/layout_margin_large"
         android:text="@string/what_type"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_extra_large"
@@ -30,6 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/layout_margin_large"
             android:orientation="vertical">
 
             <include layout="@layout/placeholder_item_event_type" />
@@ -59,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null"
+        android:layout_margin="@dimen/layout_margin_large"
         android:scrollbars="none"/>
 </LinearLayout>
 

@@ -18,7 +18,7 @@
     <string name="location">Location</string>
     <string name="track">Track</string>
     <string name="whats_good">What\'s good in</string>
-    <string name="where">where?</string>
+    <string name="where">Where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
     <string name="error_fetching_events">We\'re having difficulty fetching event. Try again later.</string>
     <string name="tickets_sold_out">Sorry, All tickets for this event have been sold out!</string>

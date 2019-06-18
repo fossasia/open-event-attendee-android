@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.scrollView
 import kotlinx.android.synthetic.main.fragment_events.view.notification
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
@@ -39,7 +39,7 @@ import org.jetbrains.anko.design.longSnackbar
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 
-class EventsFragment : Fragment(), ScrollToTop {
+class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
@@ -226,5 +226,5 @@ class EventsFragment : Fragment(), ScrollToTop {
         super.onStop()
     }
 
-    override fun scrollToTop() = rootView.scrollView.smoothScrollTo(0, 0)
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
 }

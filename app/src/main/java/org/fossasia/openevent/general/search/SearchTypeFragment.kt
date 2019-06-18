@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -16,6 +15,7 @@ import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTitle
 import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
+import kotlinx.android.synthetic.main.fragment_search_type.view.toolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -35,8 +35,7 @@ class SearchTypeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_search_type, container, false)
-        setToolbar(activity, "", hasUpEnabled = true)
-        setHasOptionsMenu(true)
+        setToolbar(activity, show = false)
         rootView.eventTypesRecyclerView.layoutManager = LinearLayoutManager(activity)
         rootView.eventTypesRecyclerView.adapter = typesAdapter
         searchTypeViewModel.loadEventTypes()
@@ -85,17 +84,11 @@ class SearchTypeFragment : Fragment() {
             if (searchTypeViewModel.isConnected()) searchTypeViewModel.loadEventTypes()
         }
 
-        return rootView
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
+
+        return rootView
     }
 
     private fun redirectToSearch(type: String) {
