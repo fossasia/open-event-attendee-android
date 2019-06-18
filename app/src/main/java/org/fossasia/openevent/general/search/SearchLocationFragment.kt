@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -26,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.eventLocatio
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
 import kotlinx.android.synthetic.main.fragment_search_location.view.rvAutoPlaces
+import kotlinx.android.synthetic.main.fragment_search_location.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
@@ -47,8 +47,7 @@ class SearchLocationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_location, container, false)
-        setToolbar(activity, hasUpEnabled = true, show = true)
-        setHasOptionsMenu(true)
+        setToolbar(activity, show = false)
         searchLocationViewModel.loadEventsLocation()
 
         setupPopularLocations()
@@ -77,23 +76,17 @@ class SearchLocationFragment : Fragment() {
             toggleSuggestionVisibility(it.isNotEmpty() && locationSearchView.query.isNotEmpty())
         })
 
+        rootView.toolbar.setNavigationOnClickListener {
+            Utils.hideSoftKeyboard(context, rootView)
+            activity?.onBackPressed()
+        }
+
         return rootView
     }
 
     override fun onResume() {
         super.onResume()
         Utils.showSoftKeyboard(context, rootView.locationSearchView)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                Utils.hideSoftKeyboard(context, rootView)
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun checkLocationPermission() {

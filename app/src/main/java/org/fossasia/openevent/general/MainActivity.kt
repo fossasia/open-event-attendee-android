@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
             if (hostFragment is NavHostFragment) {
                 val currentFragment = hostFragment.childFragmentManager.fragments.first()
-                if (currentFragment is ScrollToTop) currentFragment.scrollToTop()
+                if (currentFragment is BottomIconDoubleClick) currentFragment.doubleClick()
             }
         }
     }
@@ -122,8 +122,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-interface ScrollToTop {
-    fun scrollToTop()
+interface BottomIconDoubleClick {
+    fun doubleClick()
 }
 
 interface ComplexBackPressFragment {

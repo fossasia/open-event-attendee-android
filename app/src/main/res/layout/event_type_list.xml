@@ -9,5 +9,5 @@
     android:text="@string/anytime"
     android:background="?attr/selectableItemBackground"
     android:textColor="@color/black"
-    android:textSize="@dimen/text_size_large"
+    android:textSize="@dimen/text_size_expanded_title"
     xmlns:android="http://schemas.android.com/apk/res/android" />

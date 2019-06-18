@@ -3,9 +3,6 @@ package org.fossasia.openevent.general.search
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
@@ -26,6 +23,10 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycle
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
 import kotlinx.android.synthetic.main.fragment_search_results.view.searchRootLayout
 import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
+import kotlinx.android.synthetic.main.fragment_search_results.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search_results.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_search_results.view.filter
+import kotlinx.android.synthetic.main.fragment_search_results.view.scrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
@@ -38,6 +39,7 @@ import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.widget.NestedScrollView
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
@@ -71,7 +73,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false)
         setPostponeSharedElementTransition()
-
+        setupToolbar()
         setChips()
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
@@ -167,6 +169,31 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
     }
 
+    private fun setupToolbar() {
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+        rootView.filter.setOnClickListener {
+            findNavController(rootView)
+                .navigate(SearchResultsFragmentDirections.actionSearchResultsToSearchFilter(
+                    date = safeArgs.date,
+                    freeEvents = safeArgs.freeEvents,
+                    location = safeArgs.location,
+                    type = safeArgs.type,
+                    query = safeArgs.query,
+                    sort = safeArgs.sort,
+                    sessionsAndSpeakers = safeArgs.sessionsAndSpeakers,
+                    callForSpeakers = safeArgs.callForSpeakers))
+        }
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > 0)
+                rootView.toolbarLayout.elevation = resources.getDimension(R.dimen.custom_toolbar_elevation)
+            else
+                rootView.toolbarLayout.elevation = 0F
+        }
+    }
+
     private fun addChips(name: String, checked: Boolean) {
         val newContext = ContextThemeWrapper(context, R.style.CustomChipChoice)
         val chip = Chip(newContext)
@@ -180,12 +207,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
         chip.setOnCheckedChangeListener(this)
         rootView.chipGroup.addView(chip)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setToolbar(activity, getString(R.string.search_results))
-        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -233,34 +254,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     private fun showNoInternetError(show: Boolean) {
         rootView.noInternetCard.isVisible = show
         rootView.chipGroupLayout.visibility = if (show) View.GONE else View.VISIBLE
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            R.id.filter -> {
-                findNavController(rootView)
-                    .navigate(SearchResultsFragmentDirections.actionSearchResultsToSearchFilter(
-                    date = safeArgs.date,
-                    freeEvents = safeArgs.freeEvents,
-                    location = safeArgs.location,
-                    type = safeArgs.type,
-                    query = safeArgs.query,
-                    sort = safeArgs.sort,
-                    sessionsAndSpeakers = safeArgs.sessionsAndSpeakers,
-                    callForSpeakers = safeArgs.callForSpeakers))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_results, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {

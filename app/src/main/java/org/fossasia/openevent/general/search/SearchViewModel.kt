@@ -53,7 +53,6 @@ class SearchViewModel(
     private val savedNextToNextMonth = getNextToNextMonth()
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
-    var searchViewQuery: String = ""
     var isQuerying = false
 
     fun loadEventTypes() {
