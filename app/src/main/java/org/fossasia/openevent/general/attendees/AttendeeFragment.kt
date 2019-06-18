@@ -166,9 +166,16 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
         rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                val firstName = rootView.firstName.text.toString()
+                val lastName = rootView.lastName.text.toString()
+                if (firstName.isEmpty() || lastName.isEmpty()) {
+                    rootView.longSnackbar(getString(R.string.fill_required_fields_message))
+                    rootView.sameBuyerCheckBox.isChecked = false
+                    return@setOnCheckedChangeListener
+                }
                 attendeeRecyclerAdapter.setFirstAttendee(
-                    Attendee(firstname = rootView.firstName.text.toString(),
-                        lastname = rootView.lastName.text.toString(),
+                    Attendee(firstname = firstName,
+                        lastname = lastName,
                         email = rootView.email.text.toString(),
                         id = attendeeViewModel.getId())
                 )
@@ -812,8 +819,8 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
         rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
         rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())
-        rootView.firstName.isEnabled = false
-        rootView.lastName.isEnabled = false
+        rootView.firstName.isEnabled = user.firstName.isNullOrEmpty()
+        rootView.lastName.isEnabled = user.lastName.isNullOrEmpty()
         rootView.email.isEnabled = false
     }
 
