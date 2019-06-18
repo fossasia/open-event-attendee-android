@@ -53,14 +53,18 @@
                     android:textSize="@dimen/text_size_expanded_title_large"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    tools:text="8:00"/>
                 <TextView
                     android:id="@+id/timeoutInfoTextView"
                     android:layout_weight="8"
                     android:layout_width="0dp"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/text_size_large"/>
+                    android:textSize="@dimen/text_size_large"
+                    android:paddingStart="@dimen/padding_medium"
+                    android:maxLines="2"
+                    tools:text="@string/description_preview"/>
             </LinearLayout>
 
             <LinearLayout
@@ -94,8 +98,8 @@
                     android:id="@+id/ticketTableDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/layout_margin_medium"
-                    android:text="(view)"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:text="@string/view"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_large"
                     tools:text=" (View)" />
@@ -176,6 +180,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/signOutLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin_extra_large"
@@ -185,9 +190,9 @@
 
                 <TextView
                     android:id="@+id/helloUser"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:textSize="@dimen/text_size_large"
                     tools:text="Hello user" />
 
@@ -202,12 +207,93 @@
                     android:id="@+id/signOut"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/details_margin_small"
+                    android:layout_marginStart="@dimen/details_margin_small"
                     android:text="@string/sign_out"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_large"
                     tools:text="Sign out" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signInLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_extra_large"
+                android:background="@drawable/filled_border"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/signInTextLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_large"
+                        android:text="@string/used_eventyay_before"/>
+                    <TextView
+                        android:id="@+id/signInText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_large"
+                        tools:text="Sign In for fast and easy orderting" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/signInEditLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/signInEmailLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:hint="@string/email">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/signInEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/signInPasswordLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:hint="@string/password">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/signInPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/loginButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="7"
+                            android:text="@string/login"
+                            android:layout_marginEnd="@dimen/layout_margin_medium"/>
+                        <Button
+                            android:id="@+id/cancelButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:text="@string/cancel"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -270,24 +356,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:id="@+id/attendeeInformation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_medium"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/moreAttendeeInformation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_medium"
-                        android:text="@string/other_information"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/heading_text_size"
-                        android:visibility="gone" />
-                </LinearLayout>
 
                 <CheckBox
                     android:id="@+id/sameBuyerCheckBox"
@@ -514,7 +582,7 @@
                                 android:id="@+id/monthText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/layout_margin_medium"
+                                android:layout_marginStart="@dimen/layout_margin_medium"
                                 android:textSize="@dimen/text_size_large" />
 
                             <androidx.appcompat.widget.AppCompatSpinner
@@ -536,14 +604,14 @@
                                 android:id="@+id/yearText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/layout_margin_medium"
+                                android:layout_marginStart="@dimen/layout_margin_medium"
                                 android:textSize="@dimen/text_size_large" />
 
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/year"
                                 android:layout_width="@dimen/spinner_width"
                                 android:layout_height="@dimen/spinner_width"
-                                android:layout_marginLeft="@dimen/layout_margin_medium"
+                                android:layout_marginStart="@dimen/layout_margin_medium"
                                 android:spinnerMode="dialog" />
                         </LinearLayout>
 
