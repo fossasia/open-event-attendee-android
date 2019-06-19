@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.snackbar
@@ -62,8 +63,10 @@ class SearchLocationFragment : Fragment() {
 
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
-            geoLocationViewModel.configure()
-            rootView.locationProgressBar.visibility = View.VISIBLE
+            if (isLocationEnabled(requireContext())) {
+                geoLocationViewModel.configure()
+                rootView.locationProgressBar.visibility = View.VISIBLE
+            }
         }
 
         geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
