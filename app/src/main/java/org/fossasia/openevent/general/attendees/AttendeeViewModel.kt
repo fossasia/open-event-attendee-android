@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
 import android.util.Patterns
-import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -69,7 +68,7 @@ class AttendeeViewModel(
     val forms: LiveData<List<CustomForm>> = mutableForms
     private val mutablePendingOrder = MutableLiveData<Order>()
     val pendingOrder: LiveData<Order> = mutablePendingOrder
-    private val mutableStripeOrderMade = MutableLiveData<Boolean>(false)
+    private val mutableStripeOrderMade = MutableLiveData<Boolean>()
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
 
     val attendees = ArrayList<Attendee>()
@@ -95,15 +94,42 @@ class AttendeeViewModel(
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0
-    var identifierList = ArrayList<String>()
-    var editTextList = ArrayList<EditText>()
     var paymentCurrency: String = ""
     var timeout: Long = -1L
     var orderCreatedSuccess = false
     var ticketDetailsVisible = false
     var billingEnabled = false
 
+    // Log in Information
+    private val mutableSignedIn = MutableLiveData<Boolean>(false)
+    val signedIn: LiveData<Boolean> = mutableSignedIn
+    var isShowingSignInText = true
+
     fun getId() = authHolder.getId()
+
+    fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun login(email: String, password: String) {
+
+        compositeDisposable += authService.login(email, password)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableSignedIn.value = true
+            }, {
+                mutableMessage.value = resource.getString(R.string.login_fail_message)
+            })
+    }
+
+    fun logOut() {
+        compositeDisposable += authService.logout()
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableSignedIn.value = false
+                mutableUser.value = null
+            }) {
+                Timber.e(it, "Failure Logging out!")
+            }
+    }
 
     fun getTickets() {
         val ticketIds = ArrayList<Int>()
@@ -377,16 +403,6 @@ class AttendeeViewModel(
             }, {
                 Timber.e(it, "Error fetching user %d", id)
             })
-    }
-
-    fun logout() {
-        compositeDisposable += authService.logout()
-            .withDefaultSchedulers()
-            .subscribe({
-                Timber.d("Logged out!")
-            }) {
-                Timber.e(it, "Failure Logging out!")
-            }
     }
 
     fun areAttendeeEmailsValid(attendees: ArrayList<Attendee>): Boolean {

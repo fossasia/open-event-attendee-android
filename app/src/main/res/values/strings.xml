@@ -283,11 +283,15 @@
     <string name="city">City</string>
     <string name="checkbox_message">Ticket holder is the same person as ticket buyer</string>
     <string name="error_fetching_attendees">Error fetching attendees</string>
+    <string name="used_eventyay_before">Used Eventyay before?</string>
+    <string name="sign_in_order_text">for fast and easy ordering</string>
+    <string name="sign_in_to_order_ticket">Please sign in to order the ticket</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
     <string name="log_in_first">You need to log in first!</string>
     <string name="sign_in_canceled">Sign In canceled!</string>
+    <string name="sign_in">Sign In</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
     <string name="order_not_completed">Order not completed!</string>
