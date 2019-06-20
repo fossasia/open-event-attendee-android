@@ -10,6 +10,10 @@ fun String?.nullToEmpty(): String {
     return this ?: ""
 }
 
+fun String?.emptyToNull(): String? {
+    return if (this == "") null else this
+}
+
 fun String?.stripHtml(): String? {
 
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -37,5 +41,16 @@ fun TextInputEditText.checkValidEmail(): Boolean {
 }
 
 fun TextInputLayout.setRequired() {
-    hint = "$hint *"
+    if (hint?.takeLast(1) != "*")
+        hint = "$hint *"
+}
+
+fun TextInputEditText.checkValidURI(): Boolean {
+    if (text.isNullOrBlank()) return false
+    if (!Patterns.WEB_URL.matcher(text.toString()).matches()) {
+        error = resources.getString(R.string.invalid_url_message)
+        return false
+    }
+
+    return true
 }

@@ -101,7 +101,7 @@ class AttendeeViewModel(
     var billingEnabled = false
 
     // Log in Information
-    private val mutableSignedIn = MutableLiveData<Boolean>(false)
+    private val mutableSignedIn = MutableLiveData(true)
     val signedIn: LiveData<Boolean> = mutableSignedIn
     var isShowingSignInText = true
 
