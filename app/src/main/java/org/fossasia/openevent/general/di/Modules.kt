@@ -199,13 +199,13 @@ val apiModule = module {
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
     factory { SessionService(get(), get()) }
-    factory { NotificationService(get()) }
+    factory { NotificationService(get(), get()) }
     factory { FeedbackService(get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -362,5 +362,10 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.speakersCallDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.notificationDao()
     }
 }
