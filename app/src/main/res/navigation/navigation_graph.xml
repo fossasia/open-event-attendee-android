@@ -678,6 +678,12 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+
+        <argument
+            android:name="amount"
+            app:argType="float"
+            app:nullable="false"
+            android:defaultValue="0.0"/>
     </fragment>
     <fragment
         android:id="@+id/orderCompletedFragment"
