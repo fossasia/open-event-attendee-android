@@ -2,8 +2,16 @@ package org.fossasia.openevent.general.ticket
 
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.discount.DiscountApi
+import org.fossasia.openevent.general.discount.DiscountCode
+import org.fossasia.openevent.general.event.EventUtils
+import java.util.Date
 
-class TicketService(private val ticketApi: TicketApi, private val ticketDao: TicketDao) {
+class TicketService(
+    private val ticketApi: TicketApi,
+    private val ticketDao: TicketDao,
+    private val discountApi: DiscountApi
+) {
 
     fun getTickets(id: Long): Flowable<List<Ticket>> {
         val ticketFlowable = ticketDao.getTicketsForEvent(id)
@@ -27,5 +35,12 @@ class TicketService(private val ticketApi: TicketApi, private val ticketDao: Tic
 
     fun getTicketsWithIds(ids: List<Int>): Single<List<Ticket>> {
         return ticketDao.getTicketsWithIds(ids)
+    }
+
+    fun getDiscountCode(code: String): Single<DiscountCode> {
+        val filter = "[{\"name\":\"is-active\",\"op\":\"like\",\"val\":\"true\"}," +
+            "{\"name\":\"valid-from\",\"op\":\"<\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}," +
+            "{\"name\":\"valid-till\",\"op\":\">\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
+        return discountApi.getDiscountCodes(code, filter)
     }
 }

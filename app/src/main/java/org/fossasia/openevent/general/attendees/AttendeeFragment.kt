@@ -125,7 +125,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private val safeArgs: AttendeeFragmentArgs by navArgs()
     private lateinit var timer: CountDownTimer
     private lateinit var card: Card
-    var totalAmount = 0F
 
     private lateinit var API_KEY: String
 
@@ -327,15 +326,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
         loadTicketDetailsTableUI(attendeeViewModel.ticketDetailsVisible)
 
-        attendeeViewModel.totalAmount
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                totalAmount = it
-                rootView.paymentSelectorContainer.isVisible = it > 0
-                rootView.countryPickerContainer.isVisible = it > 0
-                rootView.billingInfoCheckboxSection.isVisible = it > 0
-                rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$it"
-            })
+        attendeeViewModel.totalAmount.value = safeArgs.amount
+        rootView.paymentSelectorContainer.isVisible = safeArgs.amount > 0
+        rootView.countryPickerContainer.isVisible = safeArgs.amount > 0
+        rootView.billingInfoCheckboxSection.isVisible = safeArgs.amount > 0
+        rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
 
         attendeeViewModel.tickets
             .nonNull()
@@ -345,7 +340,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             })
 
         val currentTickets = attendeeViewModel.tickets.value
-        val currentTotalPrice = attendeeViewModel.totalAmount.value
+        val currentTotalPrice = safeArgs.amount
         if (currentTickets != null && currentTotalPrice != null) {
             rootView.paymentSelector.visibility = if (currentTotalPrice > 0) View.VISIBLE else View.GONE
             rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$currentTotalPrice"
@@ -749,7 +744,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
 
         var checkStripeInfo = true
-        if (totalAmount != 0F && rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
+        if (safeArgs.amount != 0F && rootView.paymentSelector.selectedItem.toString() == getString(R.string.stripe)) {
             checkStripeInfo = rootView.cardNumber.checkEmpty() && rootView.cvc.checkEmpty()
         }
 
@@ -795,7 +790,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             if (attendeeViewModel.areAttendeeEmailsValid(attendees)) {
                 val country = rootView.countryPicker.selectedItem.toString()
                 val paymentOption =
-                    if (totalAmount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
+                    if (safeArgs.amount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
                     else PAYMENT_MODE_FREE
                 val company = rootView.company.text.toString()
                 val city = rootView.city.text.toString()

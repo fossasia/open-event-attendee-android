@@ -100,7 +100,7 @@
     <!--add to calendar-->
     <string name="add_to_calendar">Add to Calendar</string>
 
-    <!--ticket details-->
+    <!--tickets fragment-->
     <string name="tickets">Tickets</string>
     <string name="sales_dates">Sales Dates</string>
     <string name="order_range">Order Range</string>
@@ -109,6 +109,11 @@
     <string name="ticket_name">Ticket Name</string>
     <string name="price">Price</string>
     <string name="qty">Qty</string>
+    <string name="error_fetching_discount_code">Error fetching discount code</string>
+    <string name="apply_discount_code">Apply discount code</string>
+    <string name="apply">Apply</string>
+    <string name="invalid_discount_code">Invalid discount code</string>
+    <string name="discount_code_applied">Discount code applied</string>
 
     <!--ticket details-->
     <string name="your_info">Your Info</string>

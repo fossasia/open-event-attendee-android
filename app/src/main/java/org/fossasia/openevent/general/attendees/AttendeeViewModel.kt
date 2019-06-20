@@ -59,9 +59,9 @@ class AttendeeViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableTotalAmount = MutableLiveData<Float>(0F)
-    val totalAmount: LiveData<Float> = mutableTotalAmount
     val orderCompleted = MutableLiveData<Boolean>()
+    val totalAmount = MutableLiveData<Float>(0F)
+    val paymentCompleted = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<List<Ticket>>()
     val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -133,24 +133,16 @@ class AttendeeViewModel(
 
     fun getTickets() {
         val ticketIds = ArrayList<Int>()
-        val qty = ArrayList<Int>()
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
-                qty.add(it.second)
             }
         }
 
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
             .subscribe({ tickets ->
-                var prices = 0F
-                var index = 0
-                tickets.forEach {
-                    it.price?.let { price -> prices += price * qty[index++] }
-                }
                 mutableTickets.value = tickets
-                mutableTotalAmount.value = prices
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
