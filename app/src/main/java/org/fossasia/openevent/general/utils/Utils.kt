@@ -4,11 +4,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -202,6 +205,19 @@ object Utils {
             dinersClubPattern.matcher(s).matches() -> cardType.DINERS_CLUB
             unionPayPattern.matcher(s).matches() -> cardType.UNIONPAY
             else -> cardType.NONE
+        }
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        val service = context.getSystemService(Context.LOCATION_SERVICE)
+        var locationEnabled = false
+        if (service is LocationManager) locationEnabled = service.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        return if (!locationEnabled) {
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            context.startActivity(intent)
+            false
+        } else {
+            true
         }
     }
 }
