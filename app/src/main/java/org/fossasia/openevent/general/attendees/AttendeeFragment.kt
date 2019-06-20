@@ -18,14 +18,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.textfield.TextInputLayout
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
@@ -39,14 +37,12 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.postalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
-import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeRecycler
 import kotlinx.android.synthetic.main.fragment_attendee.view.eventName
 import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePayment
 import kotlinx.android.synthetic.main.fragment_attendee.view.offlinePaymentDescription
 import kotlinx.android.synthetic.main.fragment_attendee.view.month
 import kotlinx.android.synthetic.main.fragment_attendee.view.monthText
-import kotlinx.android.synthetic.main.fragment_attendee.view.moreAttendeeInformation
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelector
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentSelectorContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.qty
@@ -83,9 +79,19 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
 import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutTextView
 import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutCounterLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutInfoTextView
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInPasswordLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInPassword
+import kotlinx.android.synthetic.main.fragment_attendee.view.loginButton
+import kotlinx.android.synthetic.main.fragment_attendee.view.cancelButton
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInEmailLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInEmail
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInEditLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInText
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInTextLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.signInLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.signOutLayout
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventId
@@ -187,7 +193,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         setupEventInfo()
         setupPendingOrder()
         setupTicketDetailTable()
-        setupUser()
+        setupSignOutLogIn()
         setupAttendeeDetails()
         setupCustomForms()
         setupBillingInfo()
@@ -351,10 +357,101 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
     }
 
-    private fun setupUser() {
+    private fun setupSignOutLogIn() {
+        rootView.signInEmailLayout.setRequired()
+        rootView.signInPasswordLayout.setRequired()
         rootView.firstNameLayout.setRequired()
         rootView.lastNameLayout.setRequired()
         rootView.emailLayout.setRequired()
+
+        setupSignInLayout()
+        setupUser()
+        setupLoginSignoutClickListener()
+
+        attendeeViewModel.signedIn
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { signedIn ->
+                rootView.signInLayout.isVisible = !signedIn
+                rootView.signOutLayout.isVisible = signedIn
+                if (signedIn) {
+                    rootView.sameBuyerCheckBox.isVisible = true
+                    attendeeViewModel.loadUser()
+                } else {
+                    attendeeViewModel.isShowingSignInText = true
+                    handleSignedOut()
+                }
+            })
+
+        if (attendeeViewModel.isLoggedIn()) {
+            rootView.signInLayout.isVisible = false
+            rootView.signOutLayout.isVisible = true
+            rootView.sameBuyerCheckBox.isVisible = true
+            val currentUser = attendeeViewModel.user.value
+            if (currentUser == null)
+                attendeeViewModel.loadUser()
+            else
+                loadUserUI(currentUser)
+        } else {
+            handleSignedOut()
+        }
+    }
+
+    private fun handleSignedOut() {
+        rootView.signInEditLayout.isVisible = !attendeeViewModel.isShowingSignInText
+        rootView.signInTextLayout.isVisible = attendeeViewModel.isShowingSignInText
+        rootView.email.setText("")
+        rootView.firstName.setText("")
+        rootView.lastName.setText("")
+        rootView.sameBuyerCheckBox.isChecked = false
+        rootView.sameBuyerCheckBox.isVisible = false
+    }
+
+    private fun setupSignInLayout() {
+        val stringBuilder = SpannableStringBuilder()
+        val signIn = getString(R.string.sign_in)
+        val signInForOrderText = getString(R.string.sign_in_order_text)
+        stringBuilder.append(signIn)
+        stringBuilder.append(" $signInForOrderText")
+        val signInSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                rootView.signInTextLayout.isVisible = false
+                rootView.signInEditLayout.isVisible = true
+                attendeeViewModel.isShowingSignInText = false
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+            }
+        }
+        stringBuilder.setSpan(signInSpan, 0, signIn.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        rootView.signInText.text = stringBuilder
+        rootView.signInText.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun setupLoginSignoutClickListener() {
+        rootView.cancelButton.setOnClickListener {
+            rootView.signInTextLayout.isVisible = true
+            rootView.signInEditLayout.isVisible = false
+            attendeeViewModel.isShowingSignInText = true
+        }
+
+        rootView.loginButton.setOnClickListener {
+            if (rootView.signInEmail.checkEmpty() && rootView.signInEmail.checkValidEmail() &&
+                rootView.signInPassword.checkEmpty())
+                attendeeViewModel.login(rootView.signInEmail.text.toString(), rootView.signInPassword.text.toString())
+        }
+
+        rootView.signOut.setOnClickListener {
+            if (!isNetworkConnected(context)) {
+                rootView.snackbar(getString(R.string.no_internet_connection_message))
+                return@setOnClickListener
+            }
+            attendeeViewModel.logOut()
+        }
+    }
+
+    private fun setupUser() {
         attendeeViewModel.user
             .nonNull()
             .observe(viewLifecycleOwner, Observer { user ->
@@ -365,9 +462,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                     val attendee = Attendee(id = attendeeViewModel.getId(),
                         firstname = rootView.firstName.text.toString(),
                         lastname = rootView.lastName.text.toString(),
-                        city = getAttendeeField("city"),
-                        address = getAttendeeField("address"),
-                        state = getAttendeeField("state"),
                         email = rootView.email.text.toString(),
                         ticket = TicketId(ticket),
                         event = EventId(safeArgs.eventId))
@@ -375,22 +469,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                     attendeeViewModel.attendees.add(attendee)
                 }
             })
-
-        rootView.signOut.setOnClickListener {
-            AlertDialog.Builder(requireContext()).setMessage(getString(R.string.message))
-                .setPositiveButton(getString(R.string.logout)) { _, _ ->
-                    attendeeViewModel.logout()
-                    activity?.onBackPressed()
-                }
-                .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-                .show()
-        }
-
-        val currentUser = attendeeViewModel.user.value
-        if (currentUser == null)
-            attendeeViewModel.loadUser()
-        else
-            loadUserUI(currentUser)
     }
 
     private fun setupAttendeeDetails() {
@@ -403,10 +481,8 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 it.forEach { pair ->
                     repeat(pair.second) {
                         attendeeViewModel.attendees.add(Attendee(
-                            id = attendeeViewModel.getId(),
-                            firstname = "", lastname = "", city = getAttendeeField("city"),
-                            address = getAttendeeField("address"), state = getAttendeeField("state"),
-                            email = "", ticket = TicketId(pair.first.toLong()), event = EventId(safeArgs.eventId)
+                            id = attendeeViewModel.getId(), firstname = "", lastname = "", email = "",
+                            ticket = TicketId(pair.first.toLong()), event = EventId(safeArgs.eventId)
                         ))
                     }
                 }
@@ -419,12 +495,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         attendeeViewModel.forms
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                if (attendeeViewModel.singleTicket) {
-                    fillInformationSection(it)
-                    if (it.isNotEmpty()) {
-                        rootView.moreAttendeeInformation.visibility = View.VISIBLE
-                    }
-                }
                 attendeeRecyclerAdapter.setCustomForm(it)
             })
 
@@ -432,12 +502,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         if (currentForms == null) {
             attendeeViewModel.getCustomFormsForAttendees(safeArgs.eventId)
         } else {
-            if (attendeeViewModel.singleTicket) {
-                fillInformationSection(currentForms)
-                if (currentForms.isNotEmpty()) {
-                    rootView.moreAttendeeInformation.visibility = View.VISIBLE
-                }
-            }
             attendeeRecyclerAdapter.setCustomForm(currentForms)
         }
     }
@@ -624,9 +688,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         paragraph.append(" $privacyText")
 
         val termsSpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds?.isUnderlineText = false
+                ds.isUnderlineText = false
             }
 
             override fun onClick(widget: View) {
@@ -635,9 +699,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
 
         val privacyPolicySpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds?.isUnderlineText = false
+                ds.isUnderlineText = false
             }
 
             override fun onClick(widget: View) {
@@ -705,6 +769,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun setupRegisterOrder() {
         rootView.register.setOnClickListener {
+            val currentUser = attendeeViewModel.user.value
+            if (currentUser == null) {
+                rootView.longSnackbar(getString(R.string.sign_in_to_order_ticket))
+                return@setOnClickListener
+            }
             if (!isNetworkConnected(context)) {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.no_internet_connection_message))
                 return@setOnClickListener
@@ -848,27 +917,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun fillInformationSection(forms: List<CustomForm>) {
-        val layout = rootView.attendeeInformation
-        for (form in forms) {
-            if (form.type == "text") {
-                val inputLayout = TextInputLayout(context)
-                val editTextSection = EditText(context)
-                editTextSection.hint = form.fieldIdentifier.capitalize()
-                inputLayout.addView(editTextSection)
-                inputLayout.setPadding(0, 0, 0, 20)
-                layout.addView(inputLayout)
-                attendeeViewModel.identifierList.add(form.fieldIdentifier)
-                attendeeViewModel.editTextList.add(editTextSection)
-            }
-        }
-    }
-
-    private fun getAttendeeField(identifier: String): String {
-        val index = attendeeViewModel.identifierList.indexOf(identifier)
-        return if (index == -1) "" else index.let { attendeeViewModel.editTextList[it] }.text.toString()
     }
 
     private fun autoSetCurrentCountry() {
