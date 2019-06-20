@@ -1,40 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/searchRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="org.fossasia.openevent.general.search.SearchResultsFragment">
-    <androidx.cardview.widget.CardView
-        android:id="@+id/toolbarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="0dp">
+    android:orientation="vertical">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
-        app:title="@string/search_results"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/black"
         android:layout_width="match_parent"
-        app:navigationIcon="@drawable/ic_arrow_back_white_cct"
+        app:navigationIcon="@drawable/ic_arrow_back_black"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:layout_width = "wrap_content"
+            android:gravity = "center_vertical"
+            android:layout_height = "match_parent" />
         <ImageView
             android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="@dimen/padding_large"
+            android:tint="@color/black"
             android:src="@drawable/ic_filter"/>
     </androidx.appcompat.widget.Toolbar>
-    </androidx.cardview.widget.CardView>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fitsSystemWindows="false"
+        tools:context="org.fossasia.openevent.general.search.SearchResultsFragment">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            android:background="@color/white">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/layout_margin_large"
+                        android:layout_marginBottom="@dimen/layout_margin_medium">
+
+                        <EditText
+                            android:id="@+id/searchText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="@string/search_hint"
+                            android:inputType="text"
+                            android:imeOptions="actionSearch"
+                            android:textSize="@dimen/text_size_extra_large"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/clearSearchText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foreground="?selectableItemBackground"
+                            android:padding="@dimen/padding_medium"
+                            android:scaleType="center"
+                            android:layout_marginEnd="@dimen/layout_margin_large"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@drawable/ic_clear" />
+                    </FrameLayout>
+                </LinearLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -83,6 +138,7 @@
                 tools:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
+                tools:visibility="gone"
                 android:id="@+id/eventsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -99,7 +155,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -114,4 +170,6 @@
             android:text="@string/no_search_results"
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
+
