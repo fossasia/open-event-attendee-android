@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
 import kotlinx.android.synthetic.main.fragment_events.view.scrollView
 import kotlinx.android.synthetic.main.fragment_events.view.notification
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDot
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.common.EventClickListener
@@ -66,6 +67,9 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+
+        eventsViewModel.getNotifications()
+        rootView.newNotificationDot.isVisible = preference.getBoolean(NEW_NOTIFICATIONS, false)
 
         eventsViewModel.showShimmerEvents
             .nonNull()

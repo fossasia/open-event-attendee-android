@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_notification.view.notificationCoo
 import kotlinx.android.synthetic.main.fragment_notification.view.noNotification
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.LoginFragmentArgs
+import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.event.NEW_NOTIFICATIONS
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.snackbar
@@ -30,6 +32,7 @@ class NotificationFragment : Fragment() {
     private val notificationViewModel by viewModel<NotificationViewModel>()
     private val recyclerAdapter = NotificationsRecyclerAdapter()
     private lateinit var rootView: View
+    private val preference = Preference()
 
     override fun onStart() {
         super.onStart()
@@ -54,6 +57,7 @@ class NotificationFragment : Fragment() {
             }
             rootView.notificationRecycler.layoutManager = LinearLayoutManager(requireContext())
             rootView.notificationRecycler.adapter = recyclerAdapter
+            preference.putBoolean(NEW_NOTIFICATIONS, false)
         }
         return rootView
     }

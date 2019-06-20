@@ -22,15 +22,26 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/notification"
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_large"
-                    android:background="?selectableItemBackground"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_notifications_white"/>
+                    android:padding="@dimen/padding_large">
+                    <ImageView
+                        android:id="@+id/notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:src="@drawable/ic_notifications_white"/>
+                    <ImageView
+                        android:id="@+id/newNotificationDot"
+                        android:layout_width="@dimen/text_size_small"
+                        android:layout_height="@dimen/text_size_small"
+                        android:src="@drawable/ic_circle"/>
+                </RelativeLayout>
+
                 <ImageView
                     android:id="@+id/eventIcon"
                     android:layout_width="60dp"
