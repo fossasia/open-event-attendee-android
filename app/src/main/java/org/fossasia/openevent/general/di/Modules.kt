@@ -74,6 +74,8 @@ import org.fossasia.openevent.general.search.SearchTypeViewModel
 import org.fossasia.openevent.general.search.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
+import org.fossasia.openevent.general.discount.DiscountApi
+import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
@@ -187,6 +189,10 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(NotificationApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(DiscountApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get(), get(), get()) }
@@ -194,18 +200,18 @@ val apiModule = module {
     factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
-    factory { TicketService(get(), get()) }
+    factory { TicketService(get(), get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
     factory { SessionService(get(), get()) }
-    factory { NotificationService(get()) }
+    factory { NotificationService(get(), get()) }
     factory { FeedbackService(get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -275,7 +281,8 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
-            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java)
+            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
+            DiscountCode::class.java)
 
         Retrofit.Builder()
             .client(get())
@@ -362,5 +369,10 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.speakersCallDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.notificationDao()
     }
 }

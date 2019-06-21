@@ -12,8 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/ticketsCoordinatorLayout"
-        android:descendantFocusability="blocksDescendants">
+        android:id="@+id/ticketsCoordinatorLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,14 +49,6 @@
                 android:layout_margin="@dimen/layout_margin_medium"
                 android:textSize="@dimen/text_size_large"
                 tools:text="May 24 - May 25" />
-
-            <ProgressBar
-                android:id="@+id/progressBarTicket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:elevation="@dimen/card_elevation"
-                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -120,6 +111,71 @@
                 android:layout_gravity="center"
                 tools:itemCount="6"
                 tools:listitem="@layout/item_ticket" />
+
+            <TextView
+                android:id="@+id/applyDiscountCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/apply_discount_code"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:textColor="@android:color/holo_blue_light"/>
+
+            <LinearLayout
+                android:id="@+id/discountCodeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <EditText
+                    android:id="@+id/discountCodeEditText"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/layout_margin_medium"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/applyButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:layout_marginEnd="@dimen/layout_margin_medium"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/discountCodeAppliedLayout"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/discount_code_applied"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@android:color/holo_green_light"
+                    android:layout_marginStart="@dimen/layout_margin_extra_large"/>
+
+                <TextView
+                    android:id="@+id/cancelDiscountCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/cancel"
+                    android:layout_marginEnd="@dimen/layout_margin_extra_large"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_blue_dark"/>
+
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/register"

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.ticket
 
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -19,15 +20,24 @@ import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.fragment_tickets.ticketsCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_tickets.view.eventName
 import kotlinx.android.synthetic.main.fragment_tickets.view.organizerName
-import kotlinx.android.synthetic.main.fragment_tickets.view.progressBarTicket
 import kotlinx.android.synthetic.main.fragment_tickets.view.register
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketInfoTextView
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketTableHeader
 import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsRecycler
 import kotlinx.android.synthetic.main.fragment_tickets.view.time
+import kotlinx.android.synthetic.main.fragment_tickets.view.ticketsCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_tickets.view.discountCodeEditText
+import kotlinx.android.synthetic.main.fragment_tickets.view.discountCodeLayout
+import kotlinx.android.synthetic.main.fragment_tickets.view.discountCodeAppliedLayout
+import kotlinx.android.synthetic.main.fragment_tickets.view.cancelDiscountCode
+import kotlinx.android.synthetic.main.fragment_tickets.view.applyDiscountCode
+import kotlinx.android.synthetic.main.fragment_tickets.view.applyButton
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,6 +45,9 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
 const val TICKETS_FRAGMENT = "ticketsFragment"
+private const val APPLY_DISCOUNT_CODE = 1
+private const val SHOW_DISCOUNT_CODE_LAYOUT = 2
+private const val DISCOUNT_CODE_APPLIED = 3
 
 class TicketsFragment : Fragment() {
     private val ticketsRecyclerAdapter: TicketsRecyclerAdapter = TicketsRecyclerAdapter()
@@ -43,6 +56,7 @@ class TicketsFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var totalAmount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +81,11 @@ class TicketsFragment : Fragment() {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ticketsRecycler.layoutManager = linearLayoutManager
 
-        ticketsViewModel.progressTickets
+        val progressDialog = progressDialog(context, getString(R.string.loading_message))
+        ticketsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBarTicket.isVisible = it
+                progressDialog.show(it)
                 rootView.ticketTableHeader.isGone = it
                 rootView.register.isGone = it
             })
@@ -82,11 +97,14 @@ class TicketsFragment : Fragment() {
                 rootView.register.isVisible = ticketTableVisible
                 rootView.ticketsRecycler.isVisible = ticketTableVisible
                 rootView.ticketInfoTextView.isGone = ticketTableVisible
+                rootView.applyDiscountCode.isVisible = ticketTableVisible
             })
 
         ticketsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                handleDiscountCodeVisibility()
+                rootView.discountCodeEditText.text = SpannableStringBuilder("")
                 ticketsCoordinatorLayout.longSnackbar(it)
             })
 
@@ -105,14 +123,56 @@ class TicketsFragment : Fragment() {
 
         rootView.register.setOnClickListener {
             if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
-                checkForAuthentication()
+                ticketsViewModel.getAmount(ticketIdAndQty)
             } else {
                 handleNoTicketsSelected()
             }
         }
 
+        ticketsViewModel.amount
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                totalAmount = it
+                checkForAuthentication()
+            })
+
         rootView.retry.setOnClickListener {
             loadTickets()
+        }
+
+        rootView.applyDiscountCode.setOnClickListener {
+            handleDiscountCodeVisibility(SHOW_DISCOUNT_CODE_LAYOUT)
+        }
+
+        rootView.applyButton.setOnClickListener {
+            if (rootView.discountCodeEditText.text.isNullOrEmpty()) {
+                rootView.discountCodeEditText.error = getString(R.string.empty_field_error_message)
+                return@setOnClickListener
+            }
+            hideSoftKeyboard(context, rootView)
+            ticketsViewModel.fetchDiscountCode(rootView.discountCodeEditText.text.toString().trim())
+        }
+
+        ticketsViewModel.discountCode
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it.eventId?.id != safeArgs.eventId) {
+                    handleDiscountCodeVisibility()
+                    rootView.ticketsCoordinatorLayout.longSnackbar(getString(R.string.invalid_discount_code))
+                    return@Observer
+                }
+                ticketsViewModel.appliedDiscountCode = it
+                ticketsRecyclerAdapter.applyDiscount(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+                handleDiscountCodeVisibility(DISCOUNT_CODE_APPLIED)
+            })
+
+        rootView.cancelDiscountCode.setOnClickListener {
+            rootView.discountCodeEditText.text = SpannableStringBuilder("")
+            ticketsViewModel.appliedDiscountCode = null
+            ticketsRecyclerAdapter.cancelDiscountCode()
+            ticketsRecyclerAdapter.notifyDataSetChanged()
+            handleDiscountCodeVisibility()
         }
 
         ticketsViewModel.connection
@@ -156,8 +216,12 @@ class TicketsFragment : Fragment() {
     private fun redirectToAttendee() {
 
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
+        ticketsViewModel.mutableAmount.value = null
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
-            eventId = safeArgs.eventId, ticketIdAndQty = wrappedTicketAndQty, currency = safeArgs.currency
+            eventId = safeArgs.eventId,
+            ticketIdAndQty = wrappedTicketAndQty,
+            currency = safeArgs.currency,
+            amount = totalAmount
         ))
     }
 
@@ -237,7 +301,26 @@ class TicketsFragment : Fragment() {
         rootView.noInternetCard.isVisible = show
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
-        if (show) rootView.progressBarTicket.isVisible = false
         rootView.register.isVisible = !show
+    }
+
+    private fun handleDiscountCodeVisibility(code: Int = APPLY_DISCOUNT_CODE) {
+        when (code) {
+            APPLY_DISCOUNT_CODE -> {
+                rootView.applyDiscountCode.visibility = View.VISIBLE
+                rootView.discountCodeAppliedLayout.visibility = View.GONE
+                rootView.discountCodeLayout.visibility = View.GONE
+            }
+            SHOW_DISCOUNT_CODE_LAYOUT -> {
+                rootView.applyDiscountCode.visibility = View.GONE
+                rootView.discountCodeAppliedLayout.visibility = View.GONE
+                rootView.discountCodeLayout.visibility = View.VISIBLE
+            }
+            DISCOUNT_CODE_APPLIED -> {
+                rootView.applyDiscountCode.visibility = View.GONE
+                rootView.discountCodeAppliedLayout.visibility = View.VISIBLE
+                rootView.discountCodeLayout.visibility = View.GONE
+            }
+        }
     }
 }

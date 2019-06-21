@@ -100,7 +100,7 @@
     <!--add to calendar-->
     <string name="add_to_calendar">Add to Calendar</string>
 
-    <!--ticket details-->
+    <!--tickets fragment-->
     <string name="tickets">Tickets</string>
     <string name="sales_dates">Sales Dates</string>
     <string name="order_range">Order Range</string>
@@ -109,6 +109,11 @@
     <string name="ticket_name">Ticket Name</string>
     <string name="price">Price</string>
     <string name="qty">Qty</string>
+    <string name="error_fetching_discount_code">Error fetching discount code</string>
+    <string name="apply_discount_code">Apply discount code</string>
+    <string name="apply">Apply</string>
+    <string name="invalid_discount_code">Invalid discount code</string>
+    <string name="discount_code_applied">Discount code applied</string>
 
     <!--ticket details-->
     <string name="your_info">Your Info</string>
@@ -277,6 +282,18 @@
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
     <string name="share_ticket">Share Ticket</string>
     <string name="fail_sharing_ticket">Fail to share ticket</string>
+    <string name="state">State</string>
+    <string name="job_title">Job Title</string>
+    <string name="phone">Phone</string>
+    <string name="tax_business_info">Tax Business Info</string>
+    <string name="billing_address">Billing Address</string>
+    <string name="billing_information">Billing Information</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="home_address">Home Address</string>
+    <string name="work_address">Work Address</string>
+    <string name="work_phone">Work Phone</string>
+    <string name="blog">Blog</string>
+    <string name="gender">Gender</string>
     <string name="company">Company</string>
     <string name="tax_id">Tax ID or Business ID</string>
     <string name="address">Address</string>
@@ -409,6 +426,8 @@
     <string name="short_bio">Short Bio</string>
     <string name="website">Website</string>
     <string name="twitter">Twitter</string>
+    <string name="facebook">Facebook</string>
+    <string name="github">Github</string>
     <string name="proposal_speaker">My Proposal Speaker</string>
     <string name="no_speaker_info">You haven\'t had any speaker information</string>
     <string name="load_speaker_info">Loading current speaker information</string>
@@ -430,5 +449,6 @@
     <string name="profile_settings">Profile Settings</string>
     <string name="loading_tickets">Loading tickets...</string>
     <string name="download_invoice">Download Invoice</string>
+    <string name="invalid_url_message">This is not a valid URL</string>
 
 </resources>

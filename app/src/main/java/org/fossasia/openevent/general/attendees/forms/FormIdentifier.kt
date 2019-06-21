@@ -1,0 +1,26 @@
+package org.fossasia.openevent.general.attendees.forms
+
+object FormIdentifier {
+    val FIRST_NAME = "firstname"
+    val LAST_NAME = "lastname"
+    val EMAIL = "email"
+    val ADDRESS = "address"
+    val CITY = "city"
+    val STATE = "state"
+    val COUNTRY = "country"
+    val JOB_TITLE = "job_title"
+    val PHONE = "phone"
+    val TAX_INFO = "tax_business_info"
+    val BILLING_ADDRESS = "billing_address"
+    val HOME_ADDRESS = "home_address"
+    val SHIPPING_ADDRESS = "shipping_address"
+    val COMPANY = "company"
+    val WORK_ADDRESS = "work_address"
+    val WORK_PHONE = "work_phone"
+    val WEBSITE = "website"
+    val BLOG = "blog"
+    val TWITTER = "twitter"
+    val FACEBOOK = "facebook"
+    val GITHUB = "github"
+    val GENDER = "gender"
+}

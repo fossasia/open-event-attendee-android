@@ -23,8 +23,8 @@ data class CustomForm(
     val form: String,
     val fieldIdentifier: String,
     val type: String,
-    val isRequired: Boolean? = false,
-    val isIncluded: Boolean? = false,
+    val isRequired: Boolean = false,
+    val isIncluded: Boolean = false,
     val isFixed: Boolean? = false,
     val ticketsNumber: Int? = null,
     @Relationship("event")
