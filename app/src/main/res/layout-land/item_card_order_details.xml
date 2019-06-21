@@ -1,340 +1,290 @@
 <layout>
-    <data>
-        <variable
-            name="attendee"
-            type="org.fossasia.openevent.general.attendees.Attendee" />
-        <variable
-            name="event"
-            type="org.fossasia.openevent.general.event.Event" />
-        <variable
-            name="eventDate"
-            type="String" />
-        <variable
-            name="position"
-            type="Integer" />
-        <variable
-            name="count"
-            type="Integer" />
-        <variable
-            name="identifier"
-            type="String" />
-    </data>
-<androidx.core.widget.NestedScrollView
-    android:id="@+id/mainLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/ticket_width"
-    android:layout_height="match_parent">
+	<data>
+		<variable name="attendee"
+			type="org.fossasia.openevent.general.attendees.Attendee" />
+		<variable name="event"
+			type="org.fossasia.openevent.general.event.Event" />
+		<variable name="eventDate" type="String" />
+		<variable name="position" type="Integer" />
+		<variable name="count" type="Integer" />
+		<variable name="identifier" type="String" />
+	</data>
+	<androidx.core.widget.NestedScrollView
+		android:id="@+id/mainLayout"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="@dimen/ticket_width"
+		android:layout_height="match_parent">
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin_medium"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="@dimen/card_elevation"
-        android:elevation="@dimen/card_elevation"
-        android:paddingBottom="@dimen/padding_extra_small"
-        android:id="@+id/orderDetailCardView"
-        android:foreground="?android:attr/selectableItemBackground">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_margin_large"
-            android:orientation="vertical"
-            android:padding="@dimen/layout_margin_medium">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_weight="6"
-                    android:layout_width="@dimen/layout_margin_none"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="1"
-                            android:layout_width="@dimen/layout_margin_none"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/name"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/name" />
+		<androidx.cardview.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/layout_margin_medium"
+			app:cardBackgroundColor="@android:color/white"
+			app:cardCornerRadius="@dimen/card_corner_radius"
+			app:cardElevation="@dimen/card_elevation"
+			android:elevation="@dimen/card_elevation"
+			android:paddingBottom="@dimen/padding_extra_small"
+			android:id="@+id/orderDetailCardView"
+			android:foreground="?android:attr/selectableItemBackground">
+			<LinearLayout android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_margin="@dimen/layout_margin_large"
+				android:orientation="vertical"
+				android:padding="@dimen/layout_margin_medium">
+				<LinearLayout android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
+					<LinearLayout android:layout_weight="6"
+						android:layout_width="@dimen/layout_margin_none"
+						android:orientation="vertical"
+						android:layout_height="wrap_content">
+						<LinearLayout android:orientation="horizontal"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
+							<LinearLayout android:orientation="vertical"
+								android:layout_weight="1"
+								android:layout_width="@dimen/layout_margin_none"
+								android:layout_height="wrap_content">
+								<TextView android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/name"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/name" />
 
-                            <TextView
-                                android:id="@+id/name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/layout_margin_large"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_expanded_title_large"
-                                android:text="@{attendee.firstname + ` ` + attendee.lastname}"
-                                tools:text="@string/name_preview" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_weight="1"
-                            android:layout_width="@dimen/layout_margin_none"
-                            android:layout_height="match_parent">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/event"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/event" />
+								<TextView android:id="@+id/name"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:layout_marginBottom="@dimen/layout_margin_large"
+									android:textColor="@color/black"
+									android:textSize="@dimen/text_size_expanded_title_large"
+									android:text="@{attendee.firstname + ` ` + attendee.lastname}"
+									tools:text="@string/name_preview" />
+							</LinearLayout>
+							<LinearLayout android:orientation="vertical"
+								android:layout_weight="1"
+								android:layout_width="@dimen/layout_margin_none"
+								android:layout_height="match_parent">
+								<TextView android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/event"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/event" />
 
-                            <TextView
-                                android:id="@+id/eventName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/layout_margin_large"
-                                android:textColor="@color/black"
-                                android:text="@{event.name}"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/event_preview" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/checkin_status"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event" />
+								<TextView android:id="@+id/eventName"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:layout_marginBottom="@dimen/layout_margin_large"
+									android:textColor="@color/black" android:text="@{event.name}"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/event_preview" />
+							</LinearLayout>
+						</LinearLayout>
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/checkin_status"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/event" />
 
-                    <LinearLayout
-                        android:id="@+id/checkedInLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:orientation="horizontal">
+						<LinearLayout android:id="@+id/checkedInLayout"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="@dimen/layout_margin_large"
+							android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/checked_in"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/text_size_large"/>
+							<TextView android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="@string/checked_in"
+								android:textColor="@color/colorAccent"
+								android:textSize="@dimen/text_size_large" />
 
-                        <View
-                            android:layout_marginTop="@dimen/layout_margin_extra_small"
-                            android:layout_marginStart="@dimen/layout_margin_small"
-                            android:backgroundTint="@android:color/holo_green_light"
-                            android:layout_width="@dimen/card_tickets_radius"
-                            android:layout_height="@dimen/card_tickets_radius"
-                            android:background="@drawable/circle_shape"/>
+							<View
+								android:layout_marginTop="@dimen/layout_margin_extra_small"
+								android:layout_marginStart="@dimen/layout_margin_small"
+								android:backgroundTint="@android:color/holo_green_light"
+								android:layout_width="@dimen/card_tickets_radius"
+								android:layout_height="@dimen/card_tickets_radius"
+								android:background="@drawable/circle_shape" />
 
-                    </LinearLayout>
+						</LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/notCheckedInLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:orientation="horizontal">
+						<LinearLayout android:id="@+id/notCheckedInLayout"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="@dimen/layout_margin_large"
+							android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_checked_in"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"/>
+							<TextView android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="@string/not_checked_in"
+								android:textColor="@color/black"
+								android:textSize="@dimen/text_size_large" />
 
-                        <View
-                            android:layout_marginTop="@dimen/layout_margin_extra_small"
-                            android:layout_marginStart="@dimen/layout_margin_small"
-                            app:tint="@android:color/holo_red_light"
-                            android:layout_width="@dimen/card_tickets_radius"
-                            android:layout_height="@dimen/card_tickets_radius"
-                            android:background="@drawable/circle_shape"/>
+							<View
+								android:layout_marginTop="@dimen/layout_margin_extra_small"
+								android:layout_marginStart="@dimen/layout_margin_small"
+								app:tint="@android:color/holo_red_light"
+								android:layout_width="@dimen/card_tickets_radius"
+								android:layout_height="@dimen/card_tickets_radius"
+								android:background="@drawable/circle_shape" />
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="@dimen/layout_margin_none"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/layout_margin_medium"
-                            android:paddingEnd="@dimen/layout_margin_medium"
-                            android:paddingTop="@dimen/layout_margin_medium">
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:layout_width="match_parent"
+							android:layout_height="match_parent">
+							<LinearLayout
+								android:layout_width="@dimen/layout_margin_none"
+								android:layout_height="wrap_content" android:layout_weight="1"
+								android:orientation="vertical"
+								android:paddingBottom="@dimen/layout_margin_medium"
+								android:paddingEnd="@dimen/layout_margin_medium"
+								android:paddingTop="@dimen/layout_margin_medium">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/date"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/date" />
+								<TextView android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/date"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/date" />
 
-                            <TextView
-                                android:id="@+id/date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:text="@{eventDate}"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/date_preview" />
+								<TextView android:id="@+id/date"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:textColor="@color/black" android:text="@{eventDate}"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/date_preview" />
 
-                            <TextView
-                                android:id="@+id/calendar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/add_to_calendar"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/add_to_calendar" />
-                        </LinearLayout>
+								<TextView android:id="@+id/calendar"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/add_to_calendar"
+									android:textColor="@color/colorAccent"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/add_to_calendar" />
+							</LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="@dimen/layout_margin_none"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+							<LinearLayout
+								android:layout_width="@dimen/layout_margin_none"
+								android:layout_height="match_parent" android:layout_weight="1"
+								android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/location"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/location" />
+								<TextView android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/location"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/location" />
 
-                            <TextView
-                                android:id="@+id/location"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:text="@{event.locationName}"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/location_preview" />
+								<TextView android:id="@+id/location"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:textColor="@color/black"
+									android:text="@{event.locationName}"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/location_preview" />
 
-                            <TextView
-                                android:id="@+id/map"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/see_maps"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/text_size_large"
-                                tools:text="@string/see_maps" />
-                        </LinearLayout>
+								<TextView android:id="@+id/map"
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="@string/see_maps"
+									android:textColor="@color/colorAccent"
+									android:textSize="@dimen/text_size_large"
+									tools:text="@string/see_maps" />
+							</LinearLayout>
 
 
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/order_identifier"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/order_identifier" />
+						</LinearLayout>
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/order_identifier"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/order_identifier" />
 
-                    <TextView
-                        android:id="@+id/orderIdentifier"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:text="@{identifier}"
-                        tools:text="@string/order_identifier_preview" />
+						<TextView android:id="@+id/orderIdentifier"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="@dimen/layout_margin_large"
+							android:textColor="@color/black"
+							android:textSize="@dimen/text_size_large"
+							android:text="@{identifier}"
+							tools:text="@string/order_identifier_preview" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event_summary"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_summary" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/event_summary"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/event_summary" />
 
-                    <TextView
-                        android:id="@+id/eventSummary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="2"
-                        android:textColor="@color/black"
-                        app:strippedHtml="@{event.description}"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_summary_preview" />
+						<TextView android:id="@+id/eventSummary"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:ellipsize="end"
+							android:lines="2" android:textColor="@color/black"
+							app:strippedHtml="@{event.description}"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/event_summary_preview" />
 
-                    <TextView
-                        android:id="@+id/eventDetails"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_margin_large"
-                        android:text="@string/event_details"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/event_details" />
+						<TextView android:id="@+id/eventDetails"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="@dimen/layout_margin_large"
+							android:text="@string/event_details"
+							android:textColor="@color/colorAccent"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/event_details" />
 
-                </LinearLayout>
+					</LinearLayout>
 
-                <LinearLayout
-                    android:layout_weight="0"
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/qrCodeView"
-                        android:layout_width="@dimen/event_details_image"
-                        android:layout_height="@dimen/event_details_image"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/layout_margin_medium"
-                        android:padding="@dimen/padding_large"
-                        android:foreground="?selectableItemBackground"
-                        android:scaleType="centerCrop" />
+					<LinearLayout android:layout_weight="0"
+						android:layout_width="wrap_content" android:orientation="vertical"
+						android:layout_height="match_parent">
+						<ImageView android:id="@+id/qrCodeView"
+							android:layout_width="@dimen/event_details_image"
+							android:layout_height="@dimen/event_details_image"
+							android:layout_gravity="center"
+							android:layout_margin="@dimen/layout_margin_medium"
+							android:padding="@dimen/padding_large"
+							android:foreground="?selectableItemBackground"
+							android:scaleType="centerCrop" />
 
-                    <TextView
-                        android:id="@+id/ticketCountTextView"
-                        android:textColor="@android:color/black"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_margin="@dimen/layout_margin_medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+						<TextView android:id="@+id/ticketCountTextView"
+							android:textColor="@android:color/black"
+							android:layout_gravity="center_horizontal"
+							android:layout_margin="@dimen/layout_margin_medium"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" />
 
-                    <TextView
-                        android:id="@+id/organizerLabel"
-                        android:paddingTop="@dimen/padding_medium"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/organizer"
-                        app:hideIfEmpty="@{event.organizerName}"
-                        android:textSize="@dimen/text_size_large"
-                        tools:text="@string/organizer" />
+						<TextView android:id="@+id/organizerLabel"
+							android:paddingTop="@dimen/padding_medium"
+							android:layout_gravity="center"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/organizer"
+							app:hideIfEmpty="@{event.organizerName}"
+							android:textSize="@dimen/text_size_large"
+							tools:text="@string/organizer" />
 
-                    <TextView
-                        android:id="@+id/organizer"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:text="@{event.organizerName}"
-                        tools:text="@string/organizer_preview" />
-                </LinearLayout>
-            </LinearLayout>
+						<TextView android:id="@+id/organizer"
+							android:layout_gravity="center"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textColor="@color/black"
+							android:textSize="@dimen/text_size_large"
+							android:text="@{event.organizerName}"
+							tools:text="@string/organizer_preview" />
+					</LinearLayout>
+				</LinearLayout>
 
-            <Button
-                android:id="@+id/downloadButton"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_medium"
-                android:text="@string/download_ticket"
-                android:theme="@style/AccentButton" />
+				<Button android:id="@+id/downloadButton"
+					style="@style/Widget.AppCompat.Button.Colored"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/padding_large"
+					android:layout_marginBottom="@dimen/padding_medium"
+					android:text="@string/download_ticket"
+					android:theme="@style/AccentButton" />
 
-        </LinearLayout>
+			</LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-</androidx.core.widget.NestedScrollView>
+		</androidx.cardview.widget.CardView>
+	</androidx.core.widget.NestedScrollView>
 </layout>

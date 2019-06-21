@@ -1,221 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profileScrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:id="@+id/accountInfoContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_large"
-            android:layout_marginBottom="@dimen/layout_margin_medium"
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginEnd="@dimen/layout_margin_large"
-            android:orientation="vertical"
-            android:background="@drawable/border_curved">
-            <ImageView
-                android:id="@+id/accountAvatar"
-                android:layout_width="@dimen/item_image_view_large"
-                android:layout_height="@dimen/item_image_view_large"
-                android:padding="@dimen/padding_large"
-                android:layout_gravity="center_horizontal"
-                tools:src="@drawable/ic_account_circle_grey"/>
-            <TextView
-                android:id="@+id/accountName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title"
-                tools:text="@string/name_preview"/>
-            <TextView
-                android:id="@+id/accountEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:gravity="center"
-                tools:text="@string/email_preview" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/profileSettingContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:layout_marginBottom="@dimen/layout_margin_medium"
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginEnd="@dimen/layout_margin_large"
-            android:paddingStart="@dimen/padding_large"
-            android:paddingEnd="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_medium"
-            android:background="@drawable/border_curved"
-            android:visibility="gone"
-            tools:visibility="visible">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title"
-                android:text="@string/profile_settings"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/event_details_divider"
-                android:layout_marginTop="@dimen/layout_margin_small"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:background="@color/grey" />
-            <TextView
-                android:id="@+id/accountVerified"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:drawablePadding="@dimen/padding_medium"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/ic_tick_inside_circle"
-                android:textColor="@android:color/holo_green_light"
-                android:text="@string/verified"/>
-            <TextView
-                android:id="@+id/accountNotVerified"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:drawablePadding="@dimen/padding_medium"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/colorAccent"
-                android:text="@string/not_verified"/>
-            <TextView
-                android:id="@+id/editProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/edit_profile"/>
-            <TextView
-                android:id="@+id/changePassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:text="Change Password"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:layout_marginBottom="@dimen/layout_margin_medium"
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginEnd="@dimen/layout_margin_large"
-            android:paddingStart="@dimen/padding_large"
-            android:paddingEnd="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_medium"
-            android:background="@drawable/border_curved">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title"
-                android:text="General Settings and Support"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/event_details_divider"
-                android:layout_marginTop="@dimen/layout_margin_small"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:background="@color/grey" />
-            <TextView
-                android:id="@+id/settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/settings"/>
-            <TextView
-                android:id="@+id/manageEvents"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:text="@string/manage_events"
-                android:background="?attr/selectableItemBackground"/>
-            <TextView
-                android:id="@+id/ticketIssues"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/ticket_issues"
-                android:layout_marginBottom="@dimen/layout_margin_medium" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:layout_marginBottom="@dimen/layout_margin_large"
-            android:layout_marginStart="@dimen/layout_margin_large"
-            android:layout_marginEnd="@dimen/layout_margin_large"
-            android:paddingStart="@dimen/padding_large"
-            android:paddingEnd="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_medium"
-            android:background="@drawable/border_curved">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title"
-                android:text="Login"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/event_details_divider"
-                android:layout_marginTop="@dimen/layout_margin_small"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
-                android:background="@color/grey" />
-            <TextView
-                android:id="@+id/logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/logout"
-                android:drawablePadding="@dimen/padding_medium"
-                android:textColor="@color/red"
-                android:layout_marginBottom="@dimen/layout_margin_medium" />
-            <TextView
-                android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/login"
-                android:drawablePadding="@dimen/padding_medium"
-                android:textColor="@color/colorAccent"
-                android:layout_marginBottom="@dimen/layout_margin_medium" />
-        </LinearLayout>
-    </LinearLayout>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/profileScrollView" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:fillViewport="true"
+	android:fitsSystemWindows="true">
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<LinearLayout android:id="@+id/accountInfoContainer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/layout_margin_large"
+			android:layout_marginBottom="@dimen/layout_margin_medium"
+			android:layout_marginStart="@dimen/layout_margin_large"
+			android:layout_marginEnd="@dimen/layout_margin_large"
+			android:orientation="vertical"
+			android:background="@drawable/border_curved">
+			<ImageView android:id="@+id/accountAvatar"
+				android:layout_width="@dimen/item_image_view_large"
+				android:layout_height="@dimen/item_image_view_large"
+				android:padding="@dimen/padding_large"
+				android:layout_gravity="center_horizontal"
+				tools:src="@drawable/ic_account_circle_grey" />
+			<TextView android:id="@+id/accountName"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal" android:textColor="@color/black"
+				android:textSize="@dimen/text_size_expanded_title"
+				tools:text="@string/name_preview" />
+			<TextView android:id="@+id/accountEmail"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:layout_marginBottom="@dimen/layout_margin_medium"
+				android:gravity="center" tools:text="@string/email_preview" />
+		</LinearLayout>
+		<LinearLayout android:id="@+id/profileSettingContainer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="vertical"
+			android:layout_marginTop="@dimen/layout_margin_medium"
+			android:layout_marginBottom="@dimen/layout_margin_medium"
+			android:layout_marginStart="@dimen/layout_margin_large"
+			android:layout_marginEnd="@dimen/layout_margin_large"
+			android:paddingStart="@dimen/padding_large"
+			android:paddingEnd="@dimen/padding_large"
+			android:paddingTop="@dimen/padding_medium"
+			android:background="@drawable/border_curved"
+			android:visibility="gone" tools:visibility="visible">
+			<TextView android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/black"
+				android:textSize="@dimen/text_size_expanded_title"
+				android:text="@string/profile_settings" />
+			<View android:layout_width="match_parent"
+				android:layout_height="@dimen/event_details_divider"
+				android:layout_marginTop="@dimen/layout_margin_small"
+				android:layout_marginBottom="@dimen/layout_margin_medium"
+				android:background="@color/grey" />
+			<TextView android:id="@+id/accountVerified"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:drawablePadding="@dimen/padding_medium"
+				android:background="?attr/selectableItemBackground"
+				android:drawableEnd="@drawable/ic_tick_inside_circle"
+				android:textColor="@android:color/holo_green_light"
+				android:text="@string/verified" />
+			<TextView android:id="@+id/accountNotVerified"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:drawablePadding="@dimen/padding_medium"
+				android:background="?attr/selectableItemBackground"
+				android:textColor="@color/colorAccent"
+				android:text="@string/not_verified" />
+			<TextView android:id="@+id/editProfile"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/edit_profile" />
+			<TextView android:id="@+id/changePassword"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:layout_marginBottom="@dimen/layout_margin_medium"
+				android:text="Change Password" />
+		</LinearLayout>
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="vertical"
+			android:layout_marginTop="@dimen/layout_margin_medium"
+			android:layout_marginBottom="@dimen/layout_margin_medium"
+			android:layout_marginStart="@dimen/layout_margin_large"
+			android:layout_marginEnd="@dimen/layout_margin_large"
+			android:paddingStart="@dimen/padding_large"
+			android:paddingEnd="@dimen/padding_large"
+			android:paddingTop="@dimen/padding_medium"
+			android:background="@drawable/border_curved">
+			<TextView android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/black"
+				android:textSize="@dimen/text_size_expanded_title"
+				android:text="General Settings and Support" />
+			<View android:layout_width="match_parent"
+				android:layout_height="@dimen/event_details_divider"
+				android:layout_marginTop="@dimen/layout_margin_small"
+				android:layout_marginBottom="@dimen/layout_margin_medium"
+				android:background="@color/grey" />
+			<TextView android:id="@+id/settings"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/settings" />
+			<TextView android:id="@+id/manageEvents"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:text="@string/manage_events"
+				android:background="?attr/selectableItemBackground" />
+			<TextView android:id="@+id/ticketIssues"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/ticket_issues"
+				android:layout_marginBottom="@dimen/layout_margin_medium" />
+		</LinearLayout>
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="vertical"
+			android:layout_marginTop="@dimen/layout_margin_medium"
+			android:layout_marginBottom="@dimen/layout_margin_large"
+			android:layout_marginStart="@dimen/layout_margin_large"
+			android:layout_marginEnd="@dimen/layout_margin_large"
+			android:paddingStart="@dimen/padding_large"
+			android:paddingEnd="@dimen/padding_large"
+			android:paddingTop="@dimen/padding_medium"
+			android:background="@drawable/border_curved">
+			<TextView android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/black"
+				android:textSize="@dimen/text_size_expanded_title"
+				android:text="Login" />
+			<View android:layout_width="match_parent"
+				android:layout_height="@dimen/event_details_divider"
+				android:layout_marginTop="@dimen/layout_margin_small"
+				android:layout_marginBottom="@dimen/layout_margin_medium"
+				android:background="@color/grey" />
+			<TextView android:id="@+id/logout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/logout"
+				android:drawablePadding="@dimen/padding_medium"
+				android:textColor="@color/red"
+				android:layout_marginBottom="@dimen/layout_margin_medium" />
+			<TextView android:id="@+id/login"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/text_size_large"
+				android:paddingTop="@dimen/padding_small"
+				android:paddingBottom="@dimen/padding_small"
+				android:background="?attr/selectableItemBackground"
+				android:text="@string/login"
+				android:drawablePadding="@dimen/padding_medium"
+				android:textColor="@color/colorAccent"
+				android:layout_marginBottom="@dimen/layout_margin_medium" />
+		</LinearLayout>
+	</LinearLayout>
 </ScrollView>

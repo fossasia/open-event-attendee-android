@@ -1,155 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/background_fragment"
-            android:scaleType="fitXY"/>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/likesTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_extra_large"
-                android:text="@string/likes"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_expanded_title_large"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
-                android:id="@+id/likesNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:textSize="@dimen/text_size_large"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/likesTitle"
-                android:textColor="@color/white"
-                tools:text="2 likes" />
-            <ProgressBar
-                android:layout_gravity="center"
-                android:id="@+id/favoriteProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible">
-            </ProgressBar>
+<androidx.core.widget.NestedScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/scrollView" android:orientation="vertical"
+	android:fitsSystemWindows="true" android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<FrameLayout android:layout_width="match_parent"
+		android:layout_height="match_parent">
+		<ImageView android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:src="@drawable/background_fragment" android:scaleType="fitXY" />
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<TextView android:id="@+id/likesTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/layout_margin_large"
+				android:layout_marginTop="@dimen/layout_margin_extra_large"
+				android:text="@string/likes" android:textColor="@color/white"
+				android:textStyle="bold"
+				android:textSize="@dimen/text_size_expanded_title_large"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+			<TextView android:id="@+id/likesNumber"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:layout_marginTop="@dimen/layout_margin_large"
+				android:textSize="@dimen/text_size_large"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/likesTitle"
+				android:textColor="@color/white" tools:text="2 likes" />
+			<ProgressBar android:layout_gravity="center"
+				android:id="@+id/favoriteProgressBar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:visibility="gone"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				tools:visibility="visible">
+			</ProgressBar>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/favoriteEventsRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_large"
-                android:layout_marginStart="@dimen/layout_margin_medium"
-                android:layout_marginEnd="@dimen/layout_margin_medium"
-                app:layout_constraintTop_toBottomOf="@id/likesNumber"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:scrollbars="vertical" />
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/favoriteEventsRecycler"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/layout_margin_large"
+				android:layout_marginTop="@dimen/layout_margin_large"
+				android:layout_marginStart="@dimen/layout_margin_medium"
+				android:layout_marginEnd="@dimen/layout_margin_medium"
+				app:layout_constraintTop_toBottomOf="@id/likesNumber"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				android:scrollbars="vertical" />
 
-            <LinearLayout
-                android:id="@+id/noLikedLL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textAlignment="center"
-                android:orientation="vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+			<LinearLayout android:id="@+id/noLikedLL"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:textAlignment="center" android:orientation="vertical"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_expanded_title_medium"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/find_something_to_do"
-                    android:textColor="@color/black"
-                    android:id="@+id/findText"/>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/text_size_expanded_title_medium"
+					android:textStyle="bold" android:layout_gravity="center_horizontal"
+					android:text="@string/find_something_to_do"
+					android:textColor="@color/black" android:id="@+id/findText" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/chipGroup"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/view_height_25dp"
-                    app:chipSpacingHorizontal="@dimen/view_height_25dp"
-                    app:chipSpacingVertical="@dimen/divider_margin_top">
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/today"
-                        android:checkable="false"
-                        android:id="@+id/todayChip"/>
+				<com.google.android.material.chip.ChipGroup
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:id="@+id/chipGroup"
+					android:layout_gravity="center_horizontal"
+					android:orientation="horizontal"
+					android:layout_marginTop="@dimen/view_height_25dp"
+					app:chipSpacingHorizontal="@dimen/view_height_25dp"
+					app:chipSpacingVertical="@dimen/divider_margin_top">
+					<com.google.android.material.chip.Chip
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="@string/today"
+						android:checkable="false" android:id="@+id/todayChip" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tomorrow"
-                        android:checkable="false"
-                        android:id="@+id/tomorrowChip"/>
+					<com.google.android.material.chip.Chip
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/tomorrow" android:checkable="false"
+						android:id="@+id/tomorrowChip" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/weekend"
-                        android:checkable="false"
-                        android:id="@+id/weekendChip"/>
+					<com.google.android.material.chip.Chip
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/weekend" android:checkable="false"
+						android:id="@+id/weekendChip" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/month"
-                        android:textSize="@dimen/text_size_small"
-                        android:checkable="false"
-                        android:id="@+id/monthChip"/>
-                </com.google.android.material.chip.ChipGroup>
+					<com.google.android.material.chip.Chip
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="@string/month"
+						android:textSize="@dimen/text_size_small"
+						android:checkable="false" android:id="@+id/monthChip" />
+				</com.google.android.material.chip.ChipGroup>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/view_height_25dp">
+				<LinearLayout android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_horizontal"
+					android:orientation="horizontal"
+					android:padding="@dimen/view_height_25dp">
 
-                    <ImageView
-                        android:layout_width="@dimen/event_details_divider_margin"
-                        android:layout_height="@dimen/event_details_divider_margin"
-                        android:layout_gravity="center_vertical"
-                        app:srcCompat="@drawable/ic_baseline_favorite"
-                        android:id="@+id/likeIcon"
-                        android:layout_marginRight="@dimen/layout_margin_large"/>
+					<ImageView
+						android:layout_width="@dimen/event_details_divider_margin"
+						android:layout_height="@dimen/event_details_divider_margin"
+						android:layout_gravity="center_vertical"
+						app:srcCompat="@drawable/ic_baseline_favorite"
+						android:id="@+id/likeIcon"
+						android:layout_marginRight="@dimen/layout_margin_large" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_small"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/remember_like"
-                        android:id="@+id/likeText"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textSize="@dimen/text_size_small"
+						android:layout_gravity="center_vertical"
+						android:text="@string/remember_like" android:id="@+id/likeText" />
+				</LinearLayout>
+			</LinearLayout>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</FrameLayout>
 </androidx.core.widget.NestedScrollView>

@@ -1,53 +1,60 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorOnSecondary">@android:color/white</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-        <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
-        <item name="chipStyle">@style/CustomChipChoice</item>
-    </style>
+	<!-- Base application theme. -->
+	<style name="AppTheme"
+		parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="colorOnSecondary">@android:color/white</item>
+		<item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+		<item name="colorSecondary">@color/colorSecondary</item>
+		<item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+		<item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
+		<item name="chipStyle">@style/CustomChipChoice</item>
+	</style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+	<style name="AppTheme.NoActionBar">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
 
-    <style name="AppTheme.AboutEvent" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
+	<style name="AppTheme.AboutEvent"
+		parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+	<style name="AppTheme.PopupOverlay"
+		parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
-    </style>
+	<style name="SplashTheme"
+		parent="Theme.MaterialComponents.NoActionBar">
+		<item name="android:windowBackground">@drawable/background_splash</item>
+	</style>
 
-    <style name="AccentButton" parent="AppTheme.MaterialButton">
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="colorPrimary">@color/colorAccent</item>
-        <item name="colorOnPrimary">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:padding">@dimen/padding_medium</item>
-        <item name="android:enabled">false</item>
-    </style>
+	<style name="AccentButton" parent="AppTheme.MaterialButton">
+		<item name="colorButtonNormal">@color/colorPrimary</item>
+		<item name="colorPrimary">@color/colorAccent</item>
+		<item name="colorOnPrimary">@android:color/white</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:padding">@dimen/padding_medium</item>
+		<item name="android:enabled">false</item>
+	</style>
 
-    <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Filter">
-        <item name="chipBackgroundColor">@color/grey</item>
-        <item name="checkedIcon">@drawable/ic_baseline_tick</item>
-        <item name="android:textColor">@color/text_color_chip_state_list</item>
-    </style>
+	<style name="CustomChipChoice"
+		parent="@style/Widget.MaterialComponents.Chip.Filter">
+		<item name="chipBackgroundColor">@color/grey</item>
+		<item name="checkedIcon">@drawable/ic_baseline_tick</item>
+		<item name="android:textColor">@color/text_color_chip_state_list</item>
+	</style>
 
-    <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/colorSecondary</item>
-    </style>
-    <style name="AppTheme.MaterialButton.RoundedCorners" parent="AppTheme.MaterialButton">
-        <item name="cornerRadius">@dimen/round_corners_button_radius</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">@dimen/text_size_large</item>
-    </style>
+	<style name="AppTheme.MaterialButton"
+		parent="Widget.MaterialComponents.Button">
+		<item name="backgroundTint">@color/colorSecondary</item>
+	</style>
+	<style name="AppTheme.MaterialButton.RoundedCorners"
+		parent="AppTheme.MaterialButton">
+		<item name="cornerRadius">@dimen/round_corners_button_radius</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">@dimen/text_size_large</item>
+	</style>
 </resources>

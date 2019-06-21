@@ -1,69 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context="org.fossasia.openevent.general.search.SearchTypeFragment"
-    style="@style/AppTheme.NoActionBar">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_arrow_back_black"/>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@android:color/white"
+	android:orientation="vertical"
+	tools:context="org.fossasia.openevent.general.search.SearchTypeFragment"
+	style="@style/AppTheme.NoActionBar">
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar" android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:navigationIcon="@drawable/ic_arrow_back_black" />
 
-    <include layout="@layout/content_no_internet" />
+	<include layout="@layout/content_no_internet" />
 
-    <TextView
-        android:id="@+id/eventTypesTextTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_large"
-        android:text="@string/what_type"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_extra_large"
-        android:textStyle="bold" />
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerSearchEventTypes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+	<TextView android:id="@+id/eventTypesTextTitle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/layout_margin_large"
+		android:text="@string/what_type" android:textColor="@color/black"
+		android:textSize="@dimen/text_size_extra_large"
+		android:textStyle="bold" />
+	<com.facebook.shimmer.ShimmerFrameLayout
+		android:id="@+id/shimmerSearchEventTypes"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/layout_margin_large"
-            android:orientation="vertical">
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_margin="@dimen/layout_margin_large"
+			android:orientation="vertical">
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-            <include layout="@layout/placeholder_item_event_type" />
+			<include layout="@layout/placeholder_item_event_type" />
 
-        </LinearLayout>
+		</LinearLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+	</com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventTypesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:layout_margin="@dimen/layout_margin_large"
-        android:scrollbars="none"/>
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/eventTypesRecyclerView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:divider="@null"
+		android:layout_margin="@dimen/layout_margin_large"
+		android:scrollbars="none" />
 </LinearLayout>
 

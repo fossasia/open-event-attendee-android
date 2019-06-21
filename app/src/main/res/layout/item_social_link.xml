@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_social_link_parent"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/layout_social_link_parent"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imgSocialLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/layout_margin_medium"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="SocialLink"
-        android:tint="@android:color/white" />
+	<ImageView android:id="@+id/imgSocialLink"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="@dimen/layout_margin_medium"
+		android:background="?attr/selectableItemBackgroundBorderless"
+		android:contentDescription="SocialLink"
+		android:tint="@android:color/white" />
 </FrameLayout>

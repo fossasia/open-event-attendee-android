@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/orderDetailCoordinatorLayout">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:id="@+id/orderDetailCoordinatorLayout">
 
-    <ImageView
-        android:id="@+id/backgroundImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/header"/>
+	<ImageView android:id="@+id/backgroundImage"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" android:scaleType="centerCrop"
+		android:src="@drawable/header" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orderDetailsRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        tools:listitem="@layout/item_card_order_details" />
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/orderDetailsRecycler"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_gravity="center_horizontal"
+		tools:listitem="@layout/item_card_order_details" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

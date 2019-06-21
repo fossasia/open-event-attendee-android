@@ -1,94 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_margin_medium"
-    android:elevation="@dimen/card_elevation"
-    app:cardBackgroundColor="@android:color/white"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="@dimen/card_corner_radius">
+<androidx.cardview.widget.CardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="300dp" android:layout_height="wrap_content"
+	android:layout_margin="@dimen/layout_margin_medium"
+	android:elevation="@dimen/card_elevation"
+	app:cardBackgroundColor="@android:color/white"
+	android:foreground="?android:attr/selectableItemBackground"
+	app:cardCornerRadius="@dimen/card_corner_radius">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/layout_margin_medium"
-        android:orientation="vertical">
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="@dimen/layout_margin_medium"
+		android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
-            tools:text="Human Library"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_expanded_title" />
+		<TextView android:id="@+id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:ellipsize="end"
+			android:lines="1" tools:text="Human Library"
+			android:textColor="@color/black"
+			android:textSize="@dimen/text_size_expanded_title" />
 
-        <TextView
-            android:id="@+id/sessionType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_small"
-            android:ellipsize="end"
-            android:lines="1"
-            tools:text="Experience"
-            android:textSize="@dimen/text_size_large" />
+		<TextView android:id="@+id/sessionType"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/layout_margin_small"
+			android:ellipsize="end" android:lines="1" tools:text="Experience"
+			android:textSize="@dimen/text_size_large" />
 
-        <TextView
-            android:id="@+id/mircolocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_large"
-            android:drawableStart="@drawable/ic_location_on_black"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/text_size_large"
-            tools:text="Location" />
+		<TextView android:id="@+id/mircolocation"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/layout_margin_large"
+			android:drawableStart="@drawable/ic_location_on_black"
+			android:drawablePadding="@dimen/padding_medium"
+			android:textColor="@color/dark_grey"
+			android:textSize="@dimen/text_size_large" tools:text="Location" />
 
-        <TextView
-            android:id="@+id/sessiontime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:drawableStart="@drawable/ic_baseline_event_grey"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/text_size_large"
-            tools:text="Tuesday June 5" />
-        <LinearLayout
-            android:layout_marginTop="@dimen/layout_margin_medium"
-            android:id="@+id/trackDetail"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/trackIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_track"/>
-            <TextView
-                android:id="@+id/trackText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_medium"
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/text_size_large"
-                tools:text="Machine Learning" />
-        </LinearLayout>
+		<TextView android:id="@+id/sessiontime"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/layout_margin_medium"
+			android:drawableStart="@drawable/ic_baseline_event_grey"
+			android:drawablePadding="@dimen/padding_medium"
+			android:textColor="@color/dark_grey"
+			android:textSize="@dimen/text_size_large" tools:text="Tuesday June 5" />
+		<LinearLayout
+			android:layout_marginTop="@dimen/layout_margin_medium"
+			android:id="@+id/trackDetail" android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			<ImageView android:id="@+id/trackIcon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/ic_track" />
+			<TextView android:id="@+id/trackText"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/padding_medium"
+				android:textColor="@color/dark_grey"
+				android:textSize="@dimen/text_size_large"
+				tools:text="Machine Learning" />
+		</LinearLayout>
 
-        <TextView
-            android:id="@+id/shortAbstract"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/divider_margin_top"
-            android:ellipsize="end"
-            android:lines="3"
-            android:drawablePadding="@dimen/padding_medium"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/text_size_large"
-            tools:text="@string/description_preview"/>
-    </LinearLayout>
+		<TextView android:id="@+id/shortAbstract"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/divider_margin_top"
+			android:ellipsize="end" android:lines="3"
+			android:drawablePadding="@dimen/padding_medium"
+			android:textColor="@color/dark_grey"
+			android:textSize="@dimen/text_size_large"
+			tools:text="@string/description_preview" />
+	</LinearLayout>
 
 </androidx.cardview.widget.CardView>

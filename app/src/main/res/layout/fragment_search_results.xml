@@ -1,175 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/black"
-        android:layout_width="match_parent"
-        app:navigationIcon="@drawable/ic_arrow_back_black"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/toolbarTitle"
-            style = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            android:layout_width = "wrap_content"
-            android:gravity = "center_vertical"
-            android:layout_height = "match_parent" />
-        <ImageView
-            android:id="@+id/filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:padding="@dimen/padding_large"
-            android:tint="@color/black"
-            android:src="@drawable/ic_filter"/>
-    </androidx.appcompat.widget.Toolbar>
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar" android:background="@color/colorPrimary"
+		app:titleTextColor="@color/black" android:layout_width="match_parent"
+		app:navigationIcon="@drawable/ic_arrow_back_black"
+		android:layout_height="wrap_content"
+		android:backgroundTint="@color/white"
+		app:layout_constraintTop_toTopOf="parent">
+		<TextView android:id="@+id/toolbarTitle"
+			style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+			android:layout_width="wrap_content" android:gravity="center_vertical"
+			android:layout_height="match_parent" />
+		<ImageView android:id="@+id/filter"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="end"
+			android:padding="@dimen/padding_large" android:tint="@color/black"
+			android:src="@drawable/ic_filter" />
+	</androidx.appcompat.widget.Toolbar>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fitsSystemWindows="false"
-        tools:context="org.fossasia.openevent.general.search.SearchResultsFragment">
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:background="@color/white">
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/layout_margin_large"
-                        android:layout_marginBottom="@dimen/layout_margin_medium">
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:layout_width="match_parent" android:layout_height="0dp"
+		android:layout_weight="1" android:fitsSystemWindows="false"
+		tools:context="org.fossasia.openevent.general.search.SearchResultsFragment">
+		<com.google.android.material.appbar.AppBarLayout
+			android:id="@+id/appBar" android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:elevation="0dp"
+			android:background="@color/white">
+			<com.google.android.material.appbar.CollapsingToolbarLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:layout_scrollFlags="scroll|exitUntilCollapsed">
+				<LinearLayout android:layout_width="match_parent"
+					android:layout_height="wrap_content" android:orientation="vertical">
+					<FrameLayout android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="@dimen/layout_margin_large"
+						android:layout_marginBottom="@dimen/layout_margin_medium">
 
-                        <EditText
-                            android:id="@+id/searchText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:hint="@string/search_hint"
-                            android:inputType="text"
-                            android:imeOptions="actionSearch"
-                            android:textSize="@dimen/text_size_extra_large"
-                            android:textStyle="bold"/>
+						<EditText android:id="@+id/searchText"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content" android:background="@null"
+							android:hint="@string/search_hint" android:inputType="text"
+							android:imeOptions="actionSearch"
+							android:textSize="@dimen/text_size_extra_large"
+							android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/clearSearchText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?selectableItemBackground"
-                            android:padding="@dimen/padding_medium"
-                            android:scaleType="center"
-                            android:layout_marginEnd="@dimen/layout_margin_large"
-                            android:layout_gravity="end|center_vertical"
-                            android:background="@drawable/ic_clear" />
-                    </FrameLayout>
-                </LinearLayout>
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+						<ImageView android:id="@+id/clearSearchText"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:foreground="?selectableItemBackground"
+							android:padding="@dimen/padding_medium"
+							android:scaleType="center"
+							android:layout_marginEnd="@dimen/layout_margin_large"
+							android:layout_gravity="end|center_vertical"
+							android:background="@drawable/ic_clear" />
+					</FrameLayout>
+				</LinearLayout>
+			</com.google.android.material.appbar.CollapsingToolbarLayout>
+		</com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+		<androidx.core.widget.NestedScrollView
+			android:id="@+id/scrollView" android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="vertical"
+			android:clipToPadding="false"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+			<LinearLayout android:layout_width="match_parent"
+				android:layout_height="match_parent" android:orientation="vertical">
 
-            <HorizontalScrollView
-                android:id="@+id/chipGroupLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
-                android:scrollbars="none">
+				<HorizontalScrollView
+					android:id="@+id/chipGroupLayout"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/padding_medium" android:scrollbars="none">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </HorizontalScrollView>
+					<com.google.android.material.chip.ChipGroup
+						android:id="@+id/chipGroup" android:layout_width="wrap_content"
+						android:layout_height="wrap_content" />
+				</HorizontalScrollView>
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+				<com.facebook.shimmer.ShimmerFrameLayout
+					android:id="@+id/shimmerSearch" android:layout_width="match_parent"
+					android:layout_height="wrap_content" android:visibility="gone">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+					<LinearLayout android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:orientation="vertical">
 
-                    <include layout="@layout/placeholder_item_card_search" />
+						<include layout="@layout/placeholder_item_card_search" />
 
-                    <include layout="@layout/placeholder_item_card_search" />
+						<include layout="@layout/placeholder_item_card_search" />
 
-                    <include layout="@layout/placeholder_item_card_search" />
+						<include layout="@layout/placeholder_item_card_search" />
 
-                    <include layout="@layout/placeholder_item_card_search" />
+						<include layout="@layout/placeholder_item_card_search" />
 
-                    <include layout="@layout/placeholder_item_card_search" />
-                </LinearLayout>
-            </com.facebook.shimmer.ShimmerFrameLayout>
+						<include layout="@layout/placeholder_item_card_search" />
+					</LinearLayout>
+				</com.facebook.shimmer.ShimmerFrameLayout>
 
-            <include
-                layout="@layout/content_no_internet"
-                tools:visibility="gone" />
+				<include layout="@layout/content_no_internet"
+					tools:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                tools:visibility="gone"
-                android:id="@+id/eventsRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_card_favorite_event" />
+				<androidx.recyclerview.widget.RecyclerView
+					tools:visibility="gone" android:id="@+id/eventsRecycler"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent" android:scrollbars="vertical"
+					tools:listitem="@layout/item_card_favorite_event" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+			</LinearLayout>
+		</androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/noSearchResults"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+		<LinearLayout android:id="@+id/noSearchResults"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" android:layout_gravity="center"
+			android:gravity="center" android:orientation="vertical"
+			android:visibility="gone" app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:layout_width="@dimen/item_image_view"
-            android:layout_height="@dimen/item_image_view"
-            app:srcCompat="@drawable/ic_search_grey" />
+			<ImageView android:layout_width="@dimen/item_image_view"
+				android:layout_height="@dimen/item_image_view"
+				app:srcCompat="@drawable/ic_search_grey" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_search_results"
-            android:textSize="@dimen/text_size_medium" />
-    </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/no_search_results"
+				android:textSize="@dimen/text_size_medium" />
+		</LinearLayout>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
 

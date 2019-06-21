@@ -1,77 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
-        android:title="@string/logged_in_account"
-        android:key="@string/key_account"
-        app:iconSpaceReserved="false">
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<PreferenceCategory
+		android:title="@string/logged_in_account"
+		android:key="@string/key_account" app:iconSpaceReserved="false">
 
-        <Preference
-            android:key="@string/key_profile"
-            android:title="@string/profile"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_profile"
+			android:title="@string/profile" app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_change_password"
-            android:title="@string/title_change_password"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_change_password"
+			android:title="@string/title_change_password"
+			app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:key="@string/key_timezone_switch"
-            android:summary="@string/timeZone_summary"
-            android:title="@string/timeZone_title"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+		<SwitchPreference
+			android:key="@string/key_timezone_switch"
+			android:summary="@string/timeZone_summary"
+			android:title="@string/timeZone_title" app:iconSpaceReserved="false" />
+	</PreferenceCategory>
 
-    <PreferenceCategory
-        android:key="@string/key_about"
-        android:title="@string/about"
-        app:iconSpaceReserved="false">
+	<PreferenceCategory android:key="@string/key_about"
+		android:title="@string/about" app:iconSpaceReserved="false">
 
-        <Preference
-            android:key="@string/key_visit_website"
-            android:title="@string/visit_website"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_visit_website"
+			android:title="@string/visit_website" app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_rating"
-            android:title="@string/rating_settings"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_rating"
+			android:title="@string/rating_settings" app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_suggestion"
-            android:title="@string/suggestion_settings"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_suggestion"
+			android:title="@string/suggestion_settings"
+			app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+	</PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/legal"
-        app:iconSpaceReserved="false">
+	<PreferenceCategory android:title="@string/legal"
+		app:iconSpaceReserved="false">
 
-        <Preference
-            android:key="@string/key_privacy"
-            android:title="@string/privacy"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_privacy"
+			android:title="@string/privacy" app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_terms_of_service"
-            android:title="@string/title_terms_of_service"
-            app:iconSpaceReserved="false" />
+		<Preference android:key="@string/key_terms_of_service"
+			android:title="@string/title_terms_of_service"
+			app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_cookie_policy"
-            android:title="@string/cookie_policy"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+		<Preference android:key="@string/key_cookie_policy"
+			android:title="@string/cookie_policy" app:iconSpaceReserved="false" />
+	</PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/app_name_capital"
-        app:iconSpaceReserved="false">
+	<PreferenceCategory
+		android:title="@string/app_name_capital" app:iconSpaceReserved="false">
 
-        <Preference
-            android:key="@string/key_version"
-            android:title="@string/version_settings"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+		<Preference android:key="@string/key_version"
+			android:title="@string/version_settings"
+			app:iconSpaceReserved="false" />
+	</PreferenceCategory>
 </PreferenceScreen>

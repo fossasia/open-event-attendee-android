@@ -1,413 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="attendee"
-            type="org.fossasia.openevent.general.attendees.Attendee" />
-        <variable
-            name="ticket"
-            type="org.fossasia.openevent.general.ticket.Ticket" />
-    </data>
+	<data>
+		<variable name="attendee"
+			type="org.fossasia.openevent.general.attendees.Attendee" />
+		<variable name="ticket"
+			type="org.fossasia.openevent.general.ticket.Ticket" />
+	</data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:background="@drawable/curved_border"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
-        android:padding="@dimen/layout_margin_medium"
-        android:orientation="vertical">
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:background="@drawable/curved_border"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/layout_margin_extra_large"
+		android:padding="@dimen/layout_margin_medium"
+		android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/details_margin_small"
-            android:textColor="@color/black"
-            android:text="@{`Ticket ` + ticket.name}"
-            android:textSize="@dimen/heading_text_size" />
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/details_margin_small"
+			android:textColor="@color/black"
+			android:text="@{`Ticket ` + ticket.name}"
+			android:textSize="@dimen/heading_text_size" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/firstNameLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/first_name"
-            android:visibility="gone"
-            tools:visibility="visible">
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/firstNameLayout"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/first_name" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/firstName" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:inputType="text" />
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lastNameLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/last_name"
-            android:visibility="gone"
-            tools:visibility="visible">
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/lastNameLayout"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/last_name" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/lastName" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:inputType="text" />
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/email"
-            android:visibility="gone"
-            tools:visibility="visible">
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/emailLayout"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/email" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/email" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="textEmailAddress" />
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/cityLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/city"
-            android:visibility="gone"
-            tools:visibility="visible">
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/cityLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/city" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.email}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/stateLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/state"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/city" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.email}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/stateLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/state" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.state}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/countryLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/country"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/state" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.state}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/countryLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/country" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/country"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.country}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/jobTitleLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/job_title"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/country" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.country}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/jobTitleLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/job_title" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/jobTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.jobTitle}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/phoneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/phone"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/jobTitle" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.jobTitle}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/phoneLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/phone" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.phone}"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/taxBusinessInfoLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/tax_business_info"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/phone" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.phone}" android:inputType="phone" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/taxBusinessInfoLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/tax_business_info" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/taxBusinessInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.taxBusinessInfo}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/billingAddressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/billing_address"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/taxBusinessInfo"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.taxBusinessInfo}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/billingAddressLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/billing_address" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/billingAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.billingAddress}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/homeAddressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/home_address"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/billingAddress" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.billingAddress}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/homeAddressLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/home_address" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/homeAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.homeAddress}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/shippingAddressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/shipping_address"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/homeAddress" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.homeAddress}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/shippingAddressLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/shipping_address" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/shippingAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.shippingAddress}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/companyLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/company"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/shippingAddress"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.shippingAddress}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/companyLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/company" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.company}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/workAddressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/work_address"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/company" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.company}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/workAddressLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/work_address" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/workAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.workAddress}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/addressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/work_address"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/workAddress" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.workAddress}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/addressLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/work_address" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.workAddress}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/workPhoneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/work_phone"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/address" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.workAddress}" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/workPhoneLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/work_phone" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/workPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.workPhone}"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/websiteLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/website"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/workPhone" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.workPhone}" android:inputType="phone" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/websiteLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/website" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/website"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.website}"
-                android:inputType="textUri"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/blogLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/blog"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/website" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.website}" android:inputType="textUri" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/blogLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/blog" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/blog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.blog}"
-                android:inputType="textUri"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/twitterLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/twitter"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/blog" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:text="@{attendee.blog}"
+				android:inputType="textUri" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/twitterLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/twitter" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/twitter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.twitter}"
-                android:inputType="textUri"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/facebookLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/facebook"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/twitter" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.twitter}" android:inputType="textUri" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/facebookLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/facebook" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/facebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.facebook}"
-                android:inputType="textUri"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/githubLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/github"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/facebook" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.facebook}" android:inputType="textUri" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/githubLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/github" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/github"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.github}"
-                android:inputType="textUri"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/genderLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/gender"
-            android:visibility="gone"
-            tools:visibility="visible">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/github" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.github}" android:inputType="textUri" />
+		</com.google.android.material.textfield.TextInputLayout>
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			android:id="@+id/genderLayout" android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/padding_medium"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:hint="@string/gender" android:visibility="gone"
+			tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{attendee.gender}"/>
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/gender" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{attendee.gender}" />
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
 </layout>

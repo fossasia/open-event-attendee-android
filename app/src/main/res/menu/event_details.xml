@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:id="@+id/event_menu">
-        <item
-            android:id="@+id/add_to_calendar"
-            android:title="@string/add_to_calendar" />
-        <item
-            android:id="@+id/report_event"
-            android:title="@string/report_event" />
-        <item
-            android:id="@+id/open_external_event_url"
-            android:title="@string/open_external_event_url"/>
-        <item
-            android:id="@+id/open_faqs"
-            android:title="@string/frequently_asked_questions"/>
-        <item
-            android:id="@+id/call_for_speakers"
-            android:title="@string/call_for_speakers"/>
-        <item
-            android:id="@+id/code_of_conduct"
-            android:title="@string/code_of_conduct"/>
-    </group>
-    <item
-        android:id="@+id/event_share"
-        android:icon="@drawable/ic_share_white"
-        android:title="@string/share"
-        app:showAsAction="always"/>
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<group android:id="@+id/event_menu">
+		<item android:id="@+id/add_to_calendar"
+			android:title="@string/add_to_calendar" />
+		<item android:id="@+id/report_event"
+			android:title="@string/report_event" />
+		<item android:id="@+id/open_external_event_url"
+			android:title="@string/open_external_event_url" />
+		<item android:id="@+id/open_faqs"
+			android:title="@string/frequently_asked_questions" />
+		<item android:id="@+id/call_for_speakers"
+			android:title="@string/call_for_speakers" />
+		<item android:id="@+id/code_of_conduct"
+			android:title="@string/code_of_conduct" />
+	</group>
+	<item android:id="@+id/event_share"
+		android:icon="@drawable/ic_share_white" android:title="@string/share"
+		app:showAsAction="always" />
 
-    <item
-        android:id="@+id/favorite_event"
-        android:icon="@drawable/ic_baseline_favorite_border_white"
-        android:title="@string/favorite_event"
-        app:showAsAction="always"/>
+	<item android:id="@+id/favorite_event"
+		android:icon="@drawable/ic_baseline_favorite_border_white"
+		android:title="@string/favorite_event" app:showAsAction="always" />
 </menu>

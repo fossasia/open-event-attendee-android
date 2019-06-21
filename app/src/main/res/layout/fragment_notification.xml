@@ -1,76 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/swiperefresh"
-    tools:context="org.fossasia.openevent.general.notification.NotificationFragment">
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" android:id="@+id/swiperefresh"
+	tools:context="org.fossasia.openevent.general.notification.NotificationFragment">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/notificationCoordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:id="@+id/notificationCoordinatorLayout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-        <include
-            layout="@layout/content_no_internet"
-            android:visibility="gone" />
+		<include layout="@layout/content_no_internet"
+			android:visibility="gone" />
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerNotifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+		<com.facebook.shimmer.ShimmerFrameLayout
+			android:id="@+id/shimmerNotifications"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+			<LinearLayout android:layout_width="match_parent"
+				android:layout_height="match_parent" android:orientation="vertical">
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-                <include layout="@layout/placeholder_item_card_notification" />
+				<include layout="@layout/placeholder_item_card_notification" />
 
-            </LinearLayout>
+			</LinearLayout>
 
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+		</com.facebook.shimmer.ShimmerFrameLayout>
 
-        <LinearLayout
-            android:id="@+id/noNotification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+		<LinearLayout android:id="@+id/noNotification"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:gravity="center" android:orientation="vertical"
+			android:visibility="gone">
 
-            <ImageView
-                android:layout_width="@dimen/item_image_view"
-                android:layout_height="@dimen/item_image_view"
-                app:srcCompat="@drawable/ic_notifications_none" />
+			<ImageView android:layout_width="@dimen/item_image_view"
+				android:layout_height="@dimen/item_image_view"
+				app:srcCompat="@drawable/ic_notifications_none" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_notification_result"
-                android:textSize="@dimen/text_size_medium" />
-        </LinearLayout>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/no_notification_result"
+				android:textSize="@dimen/text_size_medium" />
+		</LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notificationRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/notificationRecycler"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
