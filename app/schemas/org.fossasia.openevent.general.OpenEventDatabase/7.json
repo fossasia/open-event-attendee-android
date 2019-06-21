@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "f5ec0200fcd3a46867ccaee3b01c6cc2",
+    "identityHash": "06a54ddeb3dbdb28ac9394d3b2ca2a79",
     "entities": [
       {
         "tableName": "Event",
@@ -701,7 +701,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `isCheckedIn` INTEGER, `checkinTimes` TEXT, `isCheckedOut` INTEGER NOT NULL, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `jobTitle` TEXT, `phone` TEXT, `taxBusinessInfo` TEXT, `billingAddress` TEXT, `homeAddress` TEXT, `shippingAddress` TEXT, `company` TEXT, `workAddress` TEXT, `workPhone` TEXT, `website` TEXT, `blog` TEXT, `github` TEXT, `facebook` TEXT, `twitter` TEXT, `gender` TEXT, `isCheckedIn` INTEGER, `checkinTimes` TEXT, `isCheckedOut` INTEGER NOT NULL, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -748,6 +748,96 @@
           {
             "fieldPath": "country",
             "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "jobTitle",
+            "columnName": "jobTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taxBusinessInfo",
+            "columnName": "taxBusinessInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "billingAddress",
+            "columnName": "billingAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "homeAddress",
+            "columnName": "homeAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shippingAddress",
+            "columnName": "shippingAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "company",
+            "columnName": "company",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "workAddress",
+            "columnName": "workAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "workPhone",
+            "columnName": "workPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "blog",
+            "columnName": "blog",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "github",
+            "columnName": "github",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "twitter",
+            "columnName": "twitter",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1053,7 +1143,7 @@
       },
       {
         "tableName": "CustomForm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `form` TEXT NOT NULL, `fieldIdentifier` TEXT NOT NULL, `type` TEXT NOT NULL, `isRequired` INTEGER, `isIncluded` INTEGER, `isFixed` INTEGER, `ticketsNumber` INTEGER, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `form` TEXT NOT NULL, `fieldIdentifier` TEXT NOT NULL, `type` TEXT NOT NULL, `isRequired` INTEGER NOT NULL, `isIncluded` INTEGER NOT NULL, `isFixed` INTEGER, `ticketsNumber` INTEGER, `event` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -1083,13 +1173,13 @@
             "fieldPath": "isRequired",
             "columnName": "isRequired",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "isIncluded",
             "columnName": "isIncluded",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "isFixed",
@@ -1809,7 +1899,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f5ec0200fcd3a46867ccaee3b01c6cc2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '06a54ddeb3dbdb28ac9394d3b2ca2a79')"
     ]
   }
 }

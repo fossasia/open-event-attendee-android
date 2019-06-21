@@ -3,7 +3,7 @@ package org.fossasia.openevent.general.attendees
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.databinding.ItemAttendeeBinding
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.ticket.Ticket
 
@@ -53,18 +53,14 @@ class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendeeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_attendee, parent, false)
-        return AttendeeViewHolder(view)
+        val binding = ItemAttendeeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AttendeeViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AttendeeViewHolder, position: Int) {
         holder.apply {
-            if (attendeeList.size == ticketList.size) {
-                if (position == 0)
-                    bind(attendeeList[position], ticketList[position], customForm, position, eventId, firstAttendee)
-                else
-                    bind(attendeeList[position], ticketList[position], customForm, position, eventId, null)
-            }
+            if (attendeeList.size == ticketList.size)
+                bind(attendeeList[position], ticketList[position], customForm, position, eventId, firstAttendee)
             onAttendeeDetailChanged = attendeeChangeListener
         }
     }

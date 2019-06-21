@@ -18,7 +18,7 @@ interface AttendeeApi {
     @DELETE("attendees/{attendeeId}")
     fun deleteAttendee(@Path("attendeeId") id: Long): Completable
 
-    @GET("events/{id}/custom-forms?include=event&fields[event]=id")
+    @GET("events/{id}/custom-forms")
     fun getCustomFormsForAttendees(
         @Path("id") id: Long,
         @Query("filter") filter: String
