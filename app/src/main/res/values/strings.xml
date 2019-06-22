@@ -450,5 +450,6 @@
     <string name="loading_tickets">Loading tickets...</string>
     <string name="download_invoice">Download Invoice</string>
     <string name="invalid_url_message">This is not a valid URL</string>
+    <string name="recent_locations">Recent Locations</string>
 
 </resources>
