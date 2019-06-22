@@ -100,6 +100,7 @@ class ProfileFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
+                profileViewModel.mutableMessage.postValue(null)
             })
 
         profileViewModel.user

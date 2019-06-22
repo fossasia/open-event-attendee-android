@@ -19,7 +19,7 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableMessage = SingleLiveEvent<String>()
+    val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
     private val mutableUpdatedUser = MutableLiveData<User>()
     val updatedUser: LiveData<User> = mutableUpdatedUser
