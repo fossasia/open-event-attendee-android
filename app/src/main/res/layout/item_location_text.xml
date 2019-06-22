@@ -1,0 +1,10 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/locationText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/padding_large"
+    android:paddingEnd="@dimen/padding_large"
+    android:background="?selectableItemBackground"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall" />
