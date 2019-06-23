@@ -18,9 +18,12 @@ import org.fossasia.openevent.general.event.location.EventLocation
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import timber.log.Timber
+import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
 const val SAVED_LOCATION = "LOCATION"
+const val SAVED_LOCATION_LIST = "LOCATION_LIST"
+const val SAVED_LOCATION_LIST_SIZE = 7
 const val SEARCH_INTERVAL = 250L
 
 class SearchLocationViewModel(
@@ -34,11 +37,35 @@ class SearchLocationViewModel(
     private val mutableShowShimmer = MutableLiveData<Boolean>()
     val showShimmer: LiveData<Boolean> = mutableShowShimmer
     private var geoCodingRequest: MapboxGeocoding? = null
+    private val savedLocationList = mutableListOf<String>()
 
     val placeSuggestions = MutableLiveData<List<CarmenFeature>>()
 
     fun saveSearch(query: String) {
         preference.putString(SAVED_LOCATION, query)
+
+        if (savedLocationList.size == SAVED_LOCATION_LIST_SIZE)
+            savedLocationList.removeAt(SAVED_LOCATION_LIST_SIZE - 1)
+        val index = savedLocationList.indexOf(query)
+        if (index != -1) savedLocationList.removeAt(index)
+            savedLocationList.add(0, query)
+
+        val stringBuilder = StringBuilder()
+        for (location in savedLocationList) {
+            stringBuilder.append(location)
+            if (location != savedLocationList.last()) stringBuilder.append(",")
+        }
+        preference.putString(SAVED_LOCATION_LIST, stringBuilder.toString())
+    }
+
+    fun getRecentLocationList(): List<String> {
+        val locationsString = preference.getString(SAVED_LOCATION_LIST, "")
+        if (!locationsString.isNullOrBlank()) {
+            val locations = locationsString.split(",")
+            savedLocationList.clear()
+            savedLocationList.addAll(locations)
+        }
+        return savedLocationList
     }
 
     private fun loadPlaceSuggestions(query: String) {
