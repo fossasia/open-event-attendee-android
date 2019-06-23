@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/background_fragment_search"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/searchText"
@@ -45,6 +45,16 @@
             android:textSize="@dimen/text_size_extra_large"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recentSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchText"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <LinearLayout
             android:id="@+id/searchInfoContainer"
