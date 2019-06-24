@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     style="@style/AppTheme.NoActionBar"
-    tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
+    tools:context="org.fossasia.openevent.general.search.time.SearchTimeFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

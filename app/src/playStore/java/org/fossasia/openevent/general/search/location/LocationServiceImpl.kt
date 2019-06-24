@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.location
 
 import android.content.Context
 import android.location.Geocoder

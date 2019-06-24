@@ -72,9 +72,9 @@ class SignUpFragment : Fragment() {
         paragraph.append(" $privacyText")
 
         val termsSpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds?.isUnderlineText = false
+                ds.isUnderlineText = false
             }
 
             override fun onClick(widget: View) {
@@ -83,9 +83,9 @@ class SignUpFragment : Fragment() {
         }
 
         val privacyPolicySpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds?.isUnderlineText = false
+                ds.isUnderlineText = false
             }
 
             override fun onClick(widget: View) {
@@ -102,7 +102,7 @@ class SignUpFragment : Fragment() {
         rootView.signUpText.movementMethod = LinkMovementMethod.getInstance()
         rootView.emailSignUp.text = SpannableStringBuilder(safeArgs.email)
 
-        rootView.lastNameText.setOnEditorActionListener { v, actionId, event ->
+        rootView.lastNameText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     if (validateRequiredFieldsEmpty()) {

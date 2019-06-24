@@ -17,15 +17,19 @@ import kotlinx.android.synthetic.main.fragment_search.view.searchText
 import kotlinx.android.synthetic.main.fragment_search.view.searchInfoContainer
 import kotlinx.android.synthetic.main.fragment_search.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search.view.backgroundImage
+import kotlinx.android.synthetic.main.fragment_search.view.recentSearch
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDateWithoutYear
+import org.fossasia.openevent.general.search.recentsearch.RecentSearchAdapter
+import org.fossasia.openevent.general.search.recentsearch.RecentSearchListener
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
@@ -34,8 +38,10 @@ import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
+import org.jetbrains.anko.design.snackbar
 
 const val SEARCH_FRAGMENT = "SearchFragment"
+const val RECENT_SEARCHES = "recentSearches"
 
 class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleClick {
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -48,6 +54,7 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
         setToolbar()
+        setupRecentSearch()
 
         rootView.timeTextView.setOnClickListener {
             findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchTime(
@@ -105,7 +112,7 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
             if (!searchViewModel.isQuerying)
                 startQuerying()
         }
-        rootView.searchText.setOnEditorActionListener { v, actionId, event ->
+        rootView.searchText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event.action == KeyEvent.ACTION_DOWN &&
@@ -129,6 +136,27 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
         startQuerying()
     }
 
+    private fun setupRecentSearch() {
+        val adapter = RecentSearchAdapter()
+        adapter.addAll(searchViewModel.getRecentSearches())
+        rootView.recentSearch.layoutManager = LinearLayoutManager(context)
+        rootView.recentSearch.adapter = adapter
+        adapter.setListener(object : RecentSearchListener {
+            override fun removeSearch(position: Int, recentSearch: Pair<String, String>) {
+                adapter.removeRecentSearchAt(position)
+                searchViewModel.removeRecentSearch(position)
+                rootView.snackbar("Removed recent search ${recentSearch.first}", getString(R.string.undo)) {
+                    adapter.addRecentSearch(position, recentSearch)
+                    searchViewModel.saveRecentSearch(recentSearch.first, recentSearch.second, position)
+                }
+            }
+
+            override fun clickSearch(searchText: String, searchLocation: String) {
+                makeSearch(searchText, searchLocation, false)
+            }
+        })
+    }
+
     private fun setToolbar() {
         setToolbar(activity, show = false)
         rootView.toolbar.setNavigationOnClickListener {
@@ -139,14 +167,17 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
         }
     }
 
-    private fun makeSearch() {
+    private fun makeSearch(query: String? = null, location: String? = null, saveQuery: Boolean = true) {
         searchViewModel.isQuerying = false
+        val searchQuery = query ?: rootView.searchText.text.toString()
+        val searchLocation = location ?: rootView.locationTextView.text.toString().nullToEmpty()
         findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchResults(
-            query = rootView.searchText.text.toString(),
-            location = rootView.locationTextView.text.toString().nullToEmpty(),
+            query = searchQuery,
+            location = searchLocation,
             date = (searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty(),
             type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
         ))
+        if (saveQuery) searchViewModel.saveRecentSearch(searchQuery, searchLocation)
         rootView.searchText.setText("")
     }
 
@@ -159,6 +190,7 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
             .into(rootView.backgroundImage)
         rootView.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back_white_cct)
         rootView.searchText.requestFocus()
+        rootView.recentSearch.isVisible = true
         showSoftKeyboard(context, rootView)
     }
 
@@ -172,6 +204,7 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
             .placeholder(background)
             .into(rootView.backgroundImage)
         rootView.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_search_white)
+        rootView.recentSearch.isVisible = false
         hideSoftKeyboard(context, rootView)
     }
 }

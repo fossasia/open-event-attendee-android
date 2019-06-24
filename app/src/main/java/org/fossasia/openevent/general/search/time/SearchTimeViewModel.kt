@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.time
 
 import androidx.lifecycle.ViewModel
 import org.fossasia.openevent.general.data.Preference
