@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.type
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

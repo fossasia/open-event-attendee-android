@@ -242,7 +242,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             onFavFabClick = favFabClickListener
         }
 
-        rootView.searchText.setOnEditorActionListener { v, actionId, event ->
+        rootView.searchText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event.action == KeyEvent.ACTION_DOWN &&

@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
-        android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
+        android:name="org.fossasia.openevent.general.search.location.SearchLocationFragment"
         android:label="SearchLocationFragment"
         tools:layout="@layout/fragment_search_location">
 
@@ -126,7 +126,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchTimeFragment"
-        android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
+        android:name="org.fossasia.openevent.general.search.time.SearchTimeFragment"
         android:label="SearchTimeFragment"
         tools:layout="@layout/fragment_search_time">
 
@@ -158,7 +158,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchTypeFragment"
-        android:name="org.fossasia.openevent.general.search.SearchTypeFragment"
+        android:name="org.fossasia.openevent.general.search.type.SearchTypeFragment"
         android:label="SearchTypeFragment"
         tools:layout="@layout/fragment_search_type">
 

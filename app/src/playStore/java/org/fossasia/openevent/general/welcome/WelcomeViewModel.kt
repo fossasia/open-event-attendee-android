@@ -9,7 +9,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.location.LocationPermissionException
 import org.fossasia.openevent.general.location.NoLocationSourceException
-import org.fossasia.openevent.general.search.LocationService
+import org.fossasia.openevent.general.search.location.LocationService
 
 const val SAVED_LOCATION = "LOCATION"
 

@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.type
 
 import android.view.LayoutInflater
 import android.view.View

@@ -13,7 +13,7 @@ import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.notification.Notification
 import org.fossasia.openevent.general.notification.NotificationService
-import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 

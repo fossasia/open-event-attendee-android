@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.location
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.rvAutoPlaces
 import kotlinx.android.synthetic.main.fragment_search_location.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearchEventTypes
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.fossasia.openevent.general.utils.Utils.setToolbar

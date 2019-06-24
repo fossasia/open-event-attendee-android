@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.type
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTi
 import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
 import kotlinx.android.synthetic.main.fragment_search_type.view.toolbar
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
+import org.fossasia.openevent.general.search.SearchFilterFragmentArgs
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel

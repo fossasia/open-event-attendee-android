@@ -1,4 +1,4 @@
-package org.fossasia.openevent.general.search
+package org.fossasia.openevent.general.search.time
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.fragment_search_time.view.toolbar
 import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
+import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
+import org.fossasia.openevent.general.search.SearchFilterFragmentArgs
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,7 +43,7 @@ class SearchTimeFragment : Fragment() {
 
         val calendar = Calendar.getInstance()
 
-        val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
