@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -22,17 +21,20 @@ import kotlinx.android.synthetic.main.fragment_signup.view.emailSignUp
 import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
+import kotlinx.android.synthetic.main.fragment_signup.view.toolbar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
+import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
@@ -55,50 +57,15 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 
-        val progressDialog = Utils.progressDialog(context)
-        Utils.setToolbar(activity, getString(R.string.sign_up))
-        setHasOptionsMenu(true)
-
-        val paragraph = SpannableStringBuilder()
-        val startText = getString(R.string.start_text)
-        val termsText = getString(R.string.terms_text)
-        val middleText = getString(R.string.middle_text)
-        val privacyText = getString(R.string.privacy_text)
-
-        paragraph.append(startText)
-        paragraph.append(" $termsText")
-        paragraph.append(" $middleText")
-        paragraph.append(" $privacyText")
-
-        val termsSpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.terms_of_service))
-            }
+        val progressDialog = progressDialog(context)
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
 
-        val privacyPolicySpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.privacy_policy))
-            }
-        }
-
-        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length + 2,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
-
-        rootView.signUpText.text = paragraph
+        rootView.signUpText.text = getTermsAndPolicyText(requireContext(), resources)
         rootView.signUpText.movementMethod = LinkMovementMethod.getInstance()
         rootView.emailSignUp.text = SpannableStringBuilder(safeArgs.email)
 
@@ -108,7 +75,7 @@ class SignUpFragment : Fragment() {
                     if (validateRequiredFieldsEmpty()) {
                         rootView.signUpButton.performClick()
                     }
-                    Utils.hideSoftKeyboard(context, rootView)
+                    hideSoftKeyboard(context, rootView)
                     true
                 }
                 else -> false
@@ -139,7 +106,7 @@ class SignUpFragment : Fragment() {
         signUpViewModel.showNoInternetDialog
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Utils.showNoInternetDialog(context)
+                showNoInternetDialog(context)
             })
 
         signUpViewModel.error
@@ -152,12 +119,6 @@ class SignUpFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 redirectToMain()
-            })
-
-        signUpViewModel.areFieldsCorrect
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                rootView.signUpButton.isEnabled = it
             })
 
         rootView.emailSignUp.addTextChangedListener(object : TextWatcher {
@@ -192,8 +153,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpViewModel.checkFields(rootView.emailSignUp.text.toString(),
-                    rootView.passwordSignUp.text.toString(), rootView.confirmPasswords.text.toString())
+                rootView.signUpButton.isEnabled = checkPassword()
             }
         })
 
@@ -224,8 +184,7 @@ class SignUpFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                signUpViewModel.checkFields(rootView.emailSignUp.text.toString(),
-                    rootView.passwordSignUp.text.toString(), rootView.confirmPasswords.text.toString())
+                rootView.signUpButton.isEnabled = checkPassword()
             }
         })
 
@@ -246,6 +205,11 @@ class SignUpFragment : Fragment() {
         findNavController(rootView).popBackStack(destinationId, false)
         rootView.snackbar(R.string.logged_in_automatically)
     }
+
+    private fun checkPassword() =
+        rootView.passwordSignUp.text.toString().isNotEmpty() &&
+        rootView.passwordSignUp.text.toString().length >= MINIMUM_PASSWORD_LENGTH &&
+        rootView.passwordSignUp.text.toString() == rootView.confirmPasswords.text.toString()
 
     private fun validateRequiredFieldsEmpty(): Boolean {
 
@@ -268,15 +232,5 @@ class SignUpFragment : Fragment() {
             status = false
         }
         return status
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }

@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.loginButton
@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_login.view.loginButton
 import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
 import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
 import kotlinx.android.synthetic.main.fragment_login.view.tick
+import kotlinx.android.synthetic.main.fragment_login.view.toolbar
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
@@ -32,8 +33,9 @@ import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
 import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -57,8 +59,10 @@ class LoginFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val progressDialog = progressDialog(context)
-        Utils.setToolbar(activity, getString(R.string.login))
-        setHasOptionsMenu(true)
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         if (loginViewModel.isLoggedIn())
             popBackStack()
@@ -69,6 +73,7 @@ class LoginFragment : Fragment() {
         }
 
         if (safeArgs.email.isNotEmpty()) {
+            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
             rootView.email.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
@@ -117,7 +122,7 @@ class LoginFragment : Fragment() {
         loginViewModel.showNoInternetDialog
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Utils.showNoInternetDialog(context)
+                showNoInternetDialog(context)
             })
 
         loginViewModel.error
@@ -134,11 +139,10 @@ class LoginFragment : Fragment() {
 
         rootView.password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
-
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(password: CharSequence, start: Int, before: Int, count: Int) {
-                loginViewModel.checkFields(email.text.toString(), password.toString())
+                    loginButton.isEnabled = password.isNotEmpty()
             }
         })
 
@@ -146,30 +150,20 @@ class LoginFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 if (it) {
-                    rootView.sentEmailLayout.visibility = View.VISIBLE
-                    rootView.loginLayout.visibility = View.GONE
-                    Utils.setToolbar(activity, show = false)
+                    rootView.sentEmailLayout.isVisible = true
+                    rootView.tick.isVisible = true
+                    rootView.loginLayout.isVisible = false
+                    rootView.toolbar.isVisible = true
                 } else {
-                    Utils.setToolbar(activity, getString(R.string.login))
+                    rootView.toolbar.isVisible = false
                 }
             })
 
-        loginViewModel.isCorrectEmail
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                onEmailEntered(it)
-            })
-
-        loginViewModel.areFieldsCorrect
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                loginButton.isEnabled = it
-            })
-
         rootView.tick.setOnClickListener {
-            rootView.sentEmailLayout.visibility = View.GONE
-            Utils.setToolbar(activity, getString(R.string.login))
-            rootView.loginLayout.visibility = View.VISIBLE
+            rootView.sentEmailLayout.isVisible = false
+            rootView.tick.isVisible = false
+            rootView.toolbar.isVisible = true
+            rootView.loginLayout.isVisible = true
         }
 
         rootView.forgotPassword.setOnClickListener {
@@ -204,19 +198,5 @@ class LoginFragment : Fragment() {
         }
         findNavController(rootView).popBackStack(destinationId, false)
         rootView.snackbar(R.string.welcome_back)
-    }
-
-    private fun onEmailEntered(enable: Boolean) {
-        rootView.forgotPassword.isVisible = enable
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }
