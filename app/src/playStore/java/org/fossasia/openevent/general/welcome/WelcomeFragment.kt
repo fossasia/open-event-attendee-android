@@ -24,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_SAVED = "LOCATION_SAVED"
 const val LOCATION_PERMISSION_REQUEST = 1000
+const val WELCOME_FRAGMENT = "welcomeFragment"
 
 class WelcomeFragment : Fragment() {
     private lateinit var rootView: View
@@ -49,12 +50,12 @@ class WelcomeFragment : Fragment() {
         }
 
         rootView.skip.setOnClickListener {
-            Navigation.findNavController(rootView).navigate(WelcomeFragmentDirections.actionWelcomeToEvents())
+            redirectToAuth()
         }
 
         welcomeViewModel.redirectToMain.observe(this, Observer { redirect ->
             if (redirect) {
-                redirectToMain()
+                redirectToAuth()
             }
         })
 
@@ -95,9 +96,11 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    private fun redirectToMain() {
+    private fun redirectToAuth() {
         Navigation.findNavController(rootView).navigate(
-            WelcomeFragmentDirections.actionWelcomeToEvents()
+            WelcomeFragmentDirections.actionWelcomeToAuth(
+                redirectedFrom = WELCOME_FRAGMENT
+            )
         )
     }
 }

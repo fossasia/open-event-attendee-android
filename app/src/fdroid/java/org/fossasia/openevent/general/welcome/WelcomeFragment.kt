@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.fragment_welcome.view.pickCityButton
 import kotlinx.android.synthetic.main.fragment_welcome.view.skip
 import org.fossasia.openevent.general.R
 
+const val WELCOME_FRAGMENT = "welcomeFragment"
+
 class WelcomeFragment : Fragment() {
     private lateinit var rootView: View
 
@@ -27,7 +29,9 @@ class WelcomeFragment : Fragment() {
         }
 
         rootView.skip.setOnClickListener {
-            findNavController().navigate(WelcomeFragmentDirections.actionWelcomeToEvents())
+            findNavController().navigate(WelcomeFragmentDirections.actionWelcomeToAuth(
+                redirectedFrom = WELCOME_FRAGMENT
+            ))
         }
 
         return rootView
