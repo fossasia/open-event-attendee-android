@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -18,9 +17,10 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.editProfileCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.toolbar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.details
 import com.squareup.picasso.MemoryPolicy
@@ -67,6 +67,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            handleBackPress()
+        }
 
         profileViewModel.user
             .nonNull()
@@ -127,7 +132,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         editProfileViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.editProfileCoordinatorLayout.snackbar(it)
+                rootView.snackbar(it)
                 if (it == getString(R.string.user_update_success_message)) {
                     val thisActivity = activity
                     if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
@@ -213,22 +218,6 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onResume() {
-        setToolbar(activity, "Edit Profile")
-        setHasOptionsMenu(true)
-        super.onResume()
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -237,10 +226,10 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_granted_message))
+                rootView.snackbar(getString(R.string.storage_permission_granted_message))
                 showFileChooser()
             } else {
-                rootView.editProfileCoordinatorLayout.snackbar(getString(R.string.storage_permission_denied_message))
+                rootView.snackbar(getString(R.string.storage_permission_denied_message))
             }
         }
     }
@@ -252,7 +241,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         val thisActivity = activity
         if (!editProfileViewModel.avatarUpdated && rootView.lastName.text.toString() == userLastName &&
             rootView.firstName.text.toString() == userFirstName && rootView.details.text.toString() == userDetails) {
-            if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
+            findNavController(rootView).popBackStack()
         } else {
             hideSoftKeyboard(context, rootView)
             val dialog = AlertDialog.Builder(requireContext())

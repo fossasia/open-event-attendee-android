@@ -105,6 +105,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.ComplexBackPressFragment
+import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.setRequired
@@ -671,45 +672,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupTermsAndCondition() {
-        val paragraph = SpannableStringBuilder()
-        val startText = getString(R.string.start_text)
-        val termsText = getString(R.string.terms_text)
-        val middleText = getString(R.string.middle_text)
-        val privacyText = getString(R.string.privacy_text)
-
-        paragraph.append(startText)
-        paragraph.append(" $termsText")
-        paragraph.append(" $middleText")
-        paragraph.append(" $privacyText")
-
-        val termsSpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.terms_of_service))
-            }
-        }
-
-        val privacyPolicySpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View) {
-                Utils.openUrl(requireContext(), getString(R.string.privacy_policy))
-            }
-        }
-
-        paragraph.setSpan(termsSpan, startText.length, startText.length + termsText.length + 2,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        paragraph.setSpan(privacyPolicySpan, paragraph.length - privacyText.length, paragraph.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
-
-        rootView.accept.text = paragraph
+        rootView.accept.text = getTermsAndPolicyText(requireContext(), resources)
         rootView.accept.movementMethod = LinkMovementMethod.getInstance()
     }
 

@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,13 +11,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_arrow_back_black">
+            <ImageView
+                android:id="@+id/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="@dimen/padding_large"
+                android:tint="@color/black"
+                android:src="@drawable/ic_settings"/>
+        </androidx.appcompat.widget.Toolbar>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/auth_title"
             android:layout_marginTop="@dimen/layout_margin_large"
-            android:textSize="@dimen/text_size_very_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"
+            android:textSize="@dimen/text_size_extra_large"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"/>
 
@@ -26,8 +43,10 @@
             android:text="@string/auth_subtitle"
             android:textColor="@android:color/black"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/text_size_expanded_title"
-            android:layout_margin="@dimen/layout_margin_medium"/>
+            android:textSize="@dimen/heading_text_size"
+            android:paddingStart="@dimen/padding_large"
+            android:paddingEnd="@dimen/padding_large"
+            android:layout_marginBottom="@dimen/layout_margin_large"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
@@ -39,9 +58,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
+                android:transitionName="emailAuthTransition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_email_black"
                 android:drawablePadding="@dimen/layout_margin_moderate"
                 android:inputType="textEmailAddress"
                 android:drawableStart="@drawable/ic_email_black" />
@@ -49,11 +68,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/getStartedButton"
-            style="@style/AppTheme.MaterialButton.RoundedCorners"
+            style="@style/AppTheme.MaterialButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="@dimen/layout_margin_large"
+            android:layout_marginStart="@dimen/layout_margin_large"
+            android:layout_marginEnd="@dimen/layout_margin_large"
             android:text="@string/get_started"
             android:textAllCaps="false"/>
 

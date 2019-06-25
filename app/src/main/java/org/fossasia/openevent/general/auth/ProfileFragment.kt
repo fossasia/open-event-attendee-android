@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.accountName
 import kotlinx.android.synthetic.main.fragment_profile.view.accountNotVerified
 import kotlinx.android.synthetic.main.fragment_profile.view.accountVerified
 import kotlinx.android.synthetic.main.fragment_profile.view.profileSettingContainer
+import kotlinx.android.synthetic.main.fragment_profile.view.profileScrollView
 import kotlinx.android.synthetic.main.fragment_profile.view.editProfile
 import kotlinx.android.synthetic.main.fragment_profile.view.manageEvents
 import kotlinx.android.synthetic.main.fragment_profile.view.settings
@@ -38,6 +39,7 @@ import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -50,7 +52,7 @@ import org.jetbrains.anko.design.snackbar
 
 const val PROFILE_FRAGMENT = "profileFragment"
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), BottomIconDoubleClick {
     private val profileViewModel by viewModel<ProfileViewModel>()
     private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
 
@@ -84,6 +86,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+        setToolbar(activity, show = false)
         if (profileViewModel.isLoggedIn()) {
             profileViewModel.getProfile()
             profileViewModel.syncProfile()
@@ -144,6 +147,8 @@ class ProfileFragment : Fragment() {
             .transform(CircleTransform())
             .into(rootView.accountAvatar)
     }
+
+    override fun doubleClick() = rootView.profileScrollView.smoothScrollTo(0, 0)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -283,11 +288,6 @@ class ProfileFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
-    }
-
-    override fun onResume() {
-        setToolbar(activity, getString(R.string.profile), false)
-        super.onResume()
     }
 
     private fun showLogoutDialog() {
