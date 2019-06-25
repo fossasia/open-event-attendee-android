@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,10 +17,12 @@ import kotlinx.android.synthetic.main.fragment_auth.view.getStartedButton
 import kotlinx.android.synthetic.main.fragment_auth.view.email
 import kotlinx.android.synthetic.main.fragment_auth.view.emailLayout
 import kotlinx.android.synthetic.main.fragment_auth.view.rootLayout
+import kotlinx.android.synthetic.main.fragment_auth.view.skipTextView
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
@@ -27,16 +30,20 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.welcome.WELCOME_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val FIRST_TIME_LOGIN = "firstTimeLogin"
 
 class AuthFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var rootView: View
     private val authViewModel by viewModel<AuthViewModel>()
     private val safeArgs: AuthFragmentArgs by navArgs()
     private val smartAuthViewModel by sharedViewModel<SmartAuthViewModel>()
+    private val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +67,14 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
 
         val snackbarMessage = safeArgs.snackbarMessage
         if (!snackbarMessage.isNullOrEmpty()) rootView.snackbar(snackbarMessage)
+
+        rootView.skipTextView.isVisible = preference.getBoolean(FIRST_TIME_LOGIN, true)
+        rootView.skipTextView.setOnClickListener {
+            preference.putBoolean(FIRST_TIME_LOGIN, false)
+            findNavController(rootView).navigate(
+                AuthFragmentDirections.actionAuthToEventsPop()
+            )
+        }
 
         rootView.getStartedButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
@@ -128,6 +143,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
         when (safeArgs.redirectedFrom) {
             TICKETS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.ticketsFragment, false)
             EVENT_DETAIL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
+            WELCOME_FRAGMENT -> findNavController(rootView).popBackStack(R.id.welcomeFragment, false)
             else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
         }
     }

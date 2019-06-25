@@ -57,6 +57,16 @@
             android:text="@string/get_started"
             android:textAllCaps="false"/>
 
+        <TextView
+            android:id="@+id/skipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_margin_medium"
+            android:textColor="@android:color/holo_blue_light"
+            android:text="@string/skip_for_now"
+            android:textSize="@dimen/text_size_medium"/>
+
     </LinearLayout>
 
 </FrameLayout>

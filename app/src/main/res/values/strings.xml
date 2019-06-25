@@ -324,6 +324,7 @@
     <string name="auth_title">Let\'s get started</string>
     <string name="auth_subtitle">Sign up or log in to see what\'s happening near you</string>
     <string name="get_started">Get Started</string>
+    <string name="skip_for_now">Skip for now</string>
 
     <!--sign up fragment-->
     <string name="invalid_email_message">Your email address is invalid!</string>
