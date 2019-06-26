@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        custom:navigationIcon="@drawable/ic_arrow_back_white_cct">
+        <ImageView
+            android:id="@+id/tick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="@dimen/padding_large"
+            android:src="@drawable/ic_baseline_tick"/>
+    </androidx.appcompat.widget.Toolbar>
+    <com.isseiaoki.simplecropview.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        custom:scv_background_color="@color/black"
+        custom:scv_handle_color="@color/colorAccent"
+        custom:scv_guide_color="@color/colorAccent"
+        custom:scv_frame_color="@color/colorAccent"
+        custom:scv_touch_padding="@dimen/padding_medium"
+        custom:scv_handle_show_mode="show_always"
+        custom:scv_guide_show_mode="show_always"
+        tools:src="@drawable/header"/>
+</LinearLayout>

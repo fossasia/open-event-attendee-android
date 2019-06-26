@@ -77,9 +77,6 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
     <string name="profile_photo">Profile Photo</string>
-    <string name="edit_profile_photo_message">Edit your profile picture</string>
-    <string name="delete">Delete</string>
-    <string name="new_photo">New Photo</string>
     <string name="verified">Verified</string>
     <string name="not_verified">Account not verified. Click to verify</string>
 
@@ -452,5 +449,10 @@
     <string name="download_invoice">Download Invoice</string>
     <string name="invalid_url_message">This is not a valid URL</string>
     <string name="recent_locations">Recent Locations</string>
+    <string name="edit_image">Edit Image</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="replace_image">Replace Image</string>
+    <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
+    <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
 
 </resources>

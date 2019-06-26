@@ -60,6 +60,7 @@
     <dimen name="placeholder_tickets_view_height">30dp</dimen>
     <dimen name="round_corners_button_radius">20dp</dimen>
     <dimen name="custom_toolbar_elevation">8dp</dimen>
+    <dimen name="icon_edit_profile_height">80dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>
