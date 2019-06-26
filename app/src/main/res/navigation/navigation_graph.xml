@@ -467,7 +467,34 @@
         android:id="@+id/editProfileFragment"
         android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
         android:label="EditProfileFragment"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_edit_profile_to_crop_image"
+            app:destination="@id/cropImageFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <argument
+            android:name="croppedImage"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/cropImageFragment"
+        android:name="org.fossasia.openevent.general.auth.CropImageFragment"
+        android:label="CropImageFragment"
+        tools:layout="@layout/fragment_crop_image">
+        <action
+            android:id="@+id/action_crop_image_to_edit_profile_pop"
+            app:destination="@id/editProfileFragment"
+            app:popUpTo="@id/editProfileFragment"
+            app:popUpToInclusive="true"/>
+        <argument
+            android:name="imageToCrop"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.fossasia.openevent.general.settings.SettingsFragment"

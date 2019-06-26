@@ -181,6 +181,9 @@ dependencies {
     //Mapbox java sdk
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
 
+    // SimpleCropView
+    implementation 'com.isseiaoki:simplecropview:1.1.8'
+
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
