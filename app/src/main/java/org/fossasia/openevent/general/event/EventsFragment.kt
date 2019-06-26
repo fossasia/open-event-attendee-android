@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +25,10 @@ import kotlinx.android.synthetic.main.fragment_events.view.scrollView
 import kotlinx.android.synthetic.main.fragment_events.view.notification
 import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDot
+import kotlinx.android.synthetic.main.fragment_events.view.toolbar
+import kotlinx.android.synthetic.main.fragment_events.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToolbar
+import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.common.EventClickListener
@@ -36,6 +41,8 @@ import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
@@ -70,6 +77,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         eventsViewModel.getNotifications()
         rootView.newNotificationDot.isVisible = preference.getBoolean(NEW_NOTIFICATIONS, false)
+        rootView.newNotificationDotToolbar.isVisible = preference.getBoolean(NEW_NOTIFICATIONS, false)
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -105,6 +113,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         eventsViewModel.loadLocation()
         rootView.locationTextView.text = eventsViewModel.savedLocation.value
+        rootView.toolbar.title = rootView.locationTextView.text
 
         eventsViewModel.savedLocation
             .nonNull()
@@ -155,7 +164,10 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             setStartPostponedEnterTransition()
         }
         rootView.notification.setOnClickListener {
-            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
+            moveToNotification()
+        }
+        rootView.notificationToolbar.setOnClickListener {
+            moveToNotification()
         }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
@@ -184,6 +196,13 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             onFavFabClick = favFabClickListener
             onHashtagClick = hashTagClickListener
         }
+
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.locationTextView.y + rootView.locationTextView.height &&
+                !rootView.toolbarLayout.isVisible) rootView.toolbarLayout.showWithFading()
+            else if (scrollY < rootView.locationTextView.y + rootView.locationTextView.height &&
+                rootView.toolbarLayout.isVisible) rootView.toolbarLayout.hideWithFading()
+        }
     }
 
     override fun onDestroyView() {
@@ -194,6 +213,9 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             onHashtagClick = null
         }
     }
+
+    private fun moveToNotification() =
+        findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
 
     private fun openSearch(hashTag: String) {
             findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(

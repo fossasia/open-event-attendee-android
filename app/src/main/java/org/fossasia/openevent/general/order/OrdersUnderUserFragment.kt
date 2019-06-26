@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSea
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsTitle
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.EventUtils
@@ -26,6 +29,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val ORDERS_FRAGMENT = "ordersFragment"
@@ -110,6 +115,13 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         }
         rootView.findMyTickets.setOnClickListener {
             Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+        }
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.ticketsTitle.y && !rootView.toolbarLayout.isVisible) {
+                rootView.toolbarLayout.showWithFading()
+            } else if (scrollY < rootView.ticketsTitle.y && rootView.toolbarLayout.isVisible) {
+                rootView.toolbarLayout.hideWithFading()
+            }
         }
     }
 
