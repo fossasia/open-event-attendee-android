@@ -3,20 +3,30 @@ package org.fossasia.openevent.general.search.location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import java.lang.IllegalArgumentException
 
-class GeoLocationViewModel(locationService: LocationService) : ViewModel() {
+class GeoLocationViewModel(private val locationService: LocationService) : ViewModel() {
     private val mutableLocation = MutableLiveData<String>()
     val location: LiveData<String> = mutableLocation
-    private val mutableVisibility = MutableLiveData<Boolean>(false)
-    val currentLocationVisibility: LiveData<Boolean> = mutableVisibility
-    private val mutableOpenLocationSettings = MutableLiveData<Boolean>()
-    val openLocationSettings: LiveData<Boolean> = mutableOpenLocationSettings
     private val mutableErrorMessage = SingleLiveEvent<String>()
     val errorMessage: LiveData<String> = mutableErrorMessage
+    private val compositeDisposable = CompositeDisposable()
 
     fun configure() {
-        mutableVisibility.value = false
-        return
+        compositeDisposable += locationService.getAdministrativeArea()
+            .subscribe({
+                mutableLocation.value = it
+            }, {
+                mutableErrorMessage.value = if (it is IllegalArgumentException) "No area found"
+                                            else "Something went wrong"
+            })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

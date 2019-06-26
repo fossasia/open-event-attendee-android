@@ -66,10 +66,6 @@ class SearchLocationFragment : Fragment() {
 
         setupRecentSearchLocations()
 
-        geoLocationViewModel.currentLocationVisibility.observe(viewLifecycleOwner, Observer {
-            rootView.currentLocation.isVisible = false
-        })
-
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
             if (isLocationEnabled(requireContext())) {
@@ -81,6 +77,13 @@ class SearchLocationFragment : Fragment() {
         geoLocationViewModel.location.observe(viewLifecycleOwner, Observer { location ->
             savePlaceAndRedirectToMain(location)
         })
+
+        geoLocationViewModel.errorMessage
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.snackbar(it)
+                rootView.locationProgressBar.visibility = View.GONE
+            })
 
         searchLocationViewModel.placeSuggestions.observe(viewLifecycleOwner, Observer {
             placeSuggestionsAdapter.submitList(it)
