@@ -7,7 +7,6 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import org.fossasia.openevent.general.di.apiModule
 import org.fossasia.openevent.general.di.commonModule
 import org.fossasia.openevent.general.di.databaseModule
-import org.fossasia.openevent.general.di.flavorSpecificModule
 import org.fossasia.openevent.general.di.networkModule
 import org.fossasia.openevent.general.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -34,8 +33,7 @@ class OpenEventGeneral : MultiDexApplication() {
                 apiModule,
                 viewModelModule,
                 networkModule,
-                databaseModule,
-                flavorSpecificModule
+                databaseModule
             ))
         }
         Timber.plant(Timber.DebugTree())

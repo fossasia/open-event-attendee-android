@@ -1,10 +1,8 @@
 package org.fossasia.openevent.general.welcome
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,11 @@ import kotlinx.android.synthetic.main.fragment_welcome.view.currentLocation
 import kotlinx.android.synthetic.main.fragment_welcome.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_welcome.view.skip
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.search.location.GeoLocationViewModel
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_SAVED = "LOCATION_SAVED"
@@ -28,7 +30,8 @@ const val WELCOME_FRAGMENT = "welcomeFragment"
 
 class WelcomeFragment : Fragment() {
     private lateinit var rootView: View
-    private val welcomeViewModel by viewModel<WelcomeViewModel>()
+    private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
+    val preference = Preference()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
@@ -39,35 +42,25 @@ class WelcomeFragment : Fragment() {
             Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, null, Utils.getAnimSlide())
         }
 
-        welcomeViewModel.currentLocationVisibility.observe(this, Observer {
-            rootView.currentLocation.visibility = View.GONE
-        })
-
         rootView.currentLocation.setOnClickListener {
             checkLocationPermission()
-            welcomeViewModel.configure()
-            rootView.locationProgressBar.visibility = View.VISIBLE
+            if (isLocationEnabled(requireContext())) {
+                geoLocationViewModel.configure()
+                rootView.locationProgressBar.visibility = View.VISIBLE
+            }
         }
 
         rootView.skip.setOnClickListener {
             redirectToAuth()
         }
 
-        welcomeViewModel.redirectToMain.observe(this, Observer { redirect ->
-            if (redirect) {
-                redirectToAuth()
-            }
+        geoLocationViewModel.location.observe(this, Observer {
+            preference.putString(SAVED_LOCATION, it)
+            redirectToAuth()
         })
 
-        welcomeViewModel.openLocationSettings.observe(this, Observer { open ->
-            if (open) {
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        })
-
-        welcomeViewModel.errorMessage.observe(this, Observer { message ->
-            rootView.locationProgressBar.visibility = View.VISIBLE
+        geoLocationViewModel.errorMessage.observe(this, Observer { message ->
+            rootView.locationProgressBar.visibility = View.GONE
             Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
         })
 
@@ -78,7 +71,7 @@ class WelcomeFragment : Fragment() {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    welcomeViewModel.configure()
+                    geoLocationViewModel.configure()
                 } else {
                     Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.visibility = View.GONE
