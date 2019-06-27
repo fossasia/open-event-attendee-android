@@ -206,12 +206,13 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        rootView.swiperefresh.setOnRefreshListener(null)
         eventsListAdapter.apply {
             onEventClick = null
             onFavFabClick = null
             onHashtagClick = null
         }
+        super.onDestroyView()
     }
 
     private fun moveToNotification() =
@@ -245,11 +246,6 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         } else {
             rootView.eventsEmptyView.visibility = View.GONE
         }
-    }
-
-    override fun onStop() {
-        rootView.swiperefresh.setOnRefreshListener(null)
-        super.onStop()
     }
 
     override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
