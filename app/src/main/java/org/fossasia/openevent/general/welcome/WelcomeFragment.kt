@@ -20,11 +20,9 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.location.GeoLocationViewModel
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
-import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val LOCATION_SAVED = "LOCATION_SAVED"
 const val LOCATION_PERMISSION_REQUEST = 1000
 const val WELCOME_FRAGMENT = "welcomeFragment"
 
@@ -39,7 +37,8 @@ class WelcomeFragment : Fragment() {
         if (thisActivity is AppCompatActivity)
             thisActivity.supportActionBar?.hide()
         rootView.pickCityButton.setOnClickListener {
-            Navigation.findNavController(rootView).navigate(R.id.searchLocationFragment, null, Utils.getAnimSlide())
+            Navigation.findNavController(rootView)
+                .navigate(WelcomeFragmentDirections.actionWelcomeToSearch(WELCOME_FRAGMENT))
         }
 
         rootView.currentLocation.setOnClickListener {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,8 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.weekendChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.likesNumber
 import kotlinx.android.synthetic.main.fragment_favorite.view.scrollView
+import kotlinx.android.synthetic.main.fragment_favorite.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_favorite.view.likesTitle
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.Event
@@ -34,6 +37,8 @@ import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+import org.fossasia.openevent.general.utils.extensions.showWithFading
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -124,6 +129,13 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
         favoriteEventsRecyclerAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
+        }
+
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.likesTitle.y && !rootView.toolbarLayout.isVisible)
+                rootView.toolbarLayout.showWithFading()
+            else if (scrollY < rootView.likesTitle.y && rootView.toolbarLayout.isVisible)
+                rootView.toolbarLayout.hideWithFading()
         }
     }
 

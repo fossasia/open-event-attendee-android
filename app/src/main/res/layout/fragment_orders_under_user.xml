@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.core.widget.NestedScrollView
     android:id="@+id/scrollView"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
@@ -149,3 +152,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </androidx.core.widget.NestedScrollView>
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/toolbarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/custom_toolbar_elevation"
+    android:visibility="gone">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@color/white"
+        app:title="@string/tickets"/>
+</androidx.cardview.widget.CardView>
+</FrameLayout>
