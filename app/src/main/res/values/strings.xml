@@ -403,6 +403,10 @@
     <string name="sort_by">Sort By</string>
     <string name="category">Category</string>
     <string name="sessions_and_speakers">Sessions and speakers</string>
+    <string name="rate_eventyay">Rate Eventyay</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="rate_eventyay_dialog_message">If you enjoy using Eventyay, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks fot your support!</string>
 
     <!--Notification fragment-->
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>
