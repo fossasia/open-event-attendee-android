@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.BuildConfig
@@ -250,8 +249,6 @@ val networkModule = module {
         objectMapper
     }
 
-    single { RequestAuthenticator(get()) as Interceptor }
-
     single {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
@@ -259,7 +256,7 @@ val networkModule = module {
         val builder = OkHttpClient().newBuilder()
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-            .addInterceptor(get())
+            .addInterceptor(RequestAuthenticator(get()))
             .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
