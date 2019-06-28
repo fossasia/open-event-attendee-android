@@ -78,7 +78,8 @@ class OrderCompletedFragment : Fragment() {
                 loadEventDetails(it)
                 eventShare = it
                 val eventTopicId = it.eventTopic?.id ?: 0
-                orderCompletedViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId)
+                val location = it.searchableLocationName ?: it.locationName
+                orderCompletedViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId, location)
             })
 
         orderCompletedViewModel.similarEvents
