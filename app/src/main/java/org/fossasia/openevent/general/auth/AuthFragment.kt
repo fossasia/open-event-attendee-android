@@ -27,6 +27,8 @@ import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.order.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.show
@@ -160,6 +162,8 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             EVENT_DETAIL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
             WELCOME_FRAGMENT -> findNavController(rootView).popBackStack(R.id.welcomeFragment, false)
             PROFILE_FRAGMENT -> findNavController(rootView).popBackStack(R.id.profileFragment, false)
+            SEARCH_RESULTS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.searchResultsFragment, false)
+            ORDER_COMPLETED_FRAGMENT -> findNavController(rootView).popBackStack(R.id.orderCompletedFragment, false)
             else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
         }
     }

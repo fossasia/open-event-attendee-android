@@ -48,6 +48,8 @@ import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
+import org.fossasia.openevent.general.favorite.FavoriteEvent
+import org.fossasia.openevent.general.favorite.FavoriteEventApi
 import org.fossasia.openevent.general.favorite.FavoriteEventsViewModel
 import org.fossasia.openevent.general.notification.Notification
 import org.fossasia.openevent.general.notification.NotificationApi
@@ -193,11 +195,15 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(DiscountApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(FavoriteEventApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get(), get(), get(), get()) }
+    factory { AuthService(get(), get(), get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get(), get()) }
@@ -210,13 +216,13 @@ val apiModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
@@ -224,9 +230,9 @@ val viewModelModule = module {
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
-    viewModel { FavoriteEventsViewModel(get(), get()) }
+    viewModel { FavoriteEventsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { OrderCompletedViewModel(get(), get()) }
+    viewModel { OrderCompletedViewModel(get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
@@ -274,7 +280,7 @@ val networkModule = module {
         val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
         val onlineApiResourceConverter = ResourceConverter(
-            objectMapper, Event::class.java, User::class.java,
+            objectMapper, Event::class.java, User::class.java, FavoriteEvent::class.java,
             SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
             EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,

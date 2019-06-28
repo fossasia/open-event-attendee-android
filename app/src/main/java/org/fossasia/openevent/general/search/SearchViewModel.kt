@@ -7,18 +7,21 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.search.time.SAVED_TIME
 import org.fossasia.openevent.general.search.type.SAVED_TYPE
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
@@ -33,7 +36,8 @@ class SearchViewModel(
     private val eventService: EventService,
     private val preference: Preference,
     private val mutableConnectionLiveData: MutableConnectionLiveData,
-    private val resource: Resource
+    private val resource: Resource,
+    private val authHolder: AuthHolder
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -42,8 +46,8 @@ class SearchViewModel(
     val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
     private val mutableEvents = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> = mutableEvents
-    private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     var searchEvent: String? = null
     var savedLocation: String? = null
@@ -93,6 +97,8 @@ class SearchViewModel(
         Timber.d("DEBUGGING SAVED: $builder")
         preference.putString(RECENT_SEARCHES, builder.toString())
     }
+
+    fun isLoggedIn() = authHolder.isLoggedIn()
 
     fun loadEventTypes() {
         compositeDisposable += eventService.getEventTypes()
@@ -379,7 +385,7 @@ class SearchViewModel(
             }, {
                 stopLoaders()
                 Timber.e(it, "Error fetching events")
-                mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                mutableMessage.value = resource.getString(R.string.error_fetching_events_message)
             })
     }
 
@@ -387,14 +393,37 @@ class SearchViewModel(
         mutableShowShimmerResults.value = false
     }
 
-    fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable += eventService.setFavorite(eventId, favorite)
+    fun setFavorite(event: Event, favorite: Boolean) {
+        if (favorite) {
+            addFavorite(event)
+        } else {
+            removeFavorite(event)
+        }
+    }
+
+    private fun addFavorite(event: Event) {
+        val favoriteEvent = FavoriteEvent(authHolder.getId(), EventId(event.id))
+        compositeDisposable += eventService.addFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
             .subscribe({
-                Timber.d("Successfully added %d to favorites", eventId)
+                mutableMessage.value = resource.getString(R.string.add_event_to_shortlist_message)
             }, {
-                Timber.e(it, "Error adding %d to favorites", eventId)
-                mutableError.value = resource.getString(R.string.error_adding_favorite_message)
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on adding like for event ID ${event.id}")
+            })
+    }
+
+    private fun removeFavorite(event: Event) {
+        val favoriteEventId = event.favoriteEventId ?: return
+
+        val favoriteEvent = FavoriteEvent(favoriteEventId, EventId(event.id))
+        compositeDisposable += eventService.removeFavorite(favoriteEvent, event)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableMessage.value = resource.getString(R.string.remove_event_from_shortlist_message)
+            }, {
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on removing like for event ID ${event.id}")
             })
     }
 

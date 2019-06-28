@@ -9,7 +9,9 @@ import org.fossasia.openevent.general.auth.change.Password
 import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
+import org.fossasia.openevent.general.event.EventApi
 import org.fossasia.openevent.general.order.OrderDao
+import org.fossasia.openevent.general.event.EventDao
 import timber.log.Timber
 
 class AuthService(
@@ -17,7 +19,9 @@ class AuthService(
     private val authHolder: AuthHolder,
     private val userDao: UserDao,
     private val orderDao: OrderDao,
-    private val attendeeDao: AttendeeDao
+    private val attendeeDao: AttendeeDao,
+    private val eventDao: EventDao,
+    private val eventApi: EventApi
 ) {
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())
@@ -25,6 +29,7 @@ class AuthService(
 
         return authApi.login(Login(username, password))
                 .map {
+                    eventApi
                     authHolder.token = it.accessToken
                     it
                 }
@@ -61,6 +66,7 @@ class AuthService(
             userDao.deleteUser(authHolder.getId())
             orderDao.deleteAllOrders()
             attendeeDao.deleteAllAttendees()
+            eventDao.clearFavoriteEvents()
         }
     }
 

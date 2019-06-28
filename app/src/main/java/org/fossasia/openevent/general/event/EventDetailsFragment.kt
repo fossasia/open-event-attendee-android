@@ -89,7 +89,7 @@ import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTran
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
+const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
@@ -482,11 +482,22 @@ class EventDetailsFragment : Fragment() {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                redirectToLogin()
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                eventViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                similarEventsAdapter.notifyItemChanged(itemPosition)
+                if (eventViewModel.isLoggedIn()) {
+                    eventViewModel.setFavorite(event, !event.favorite)
+                    event.favorite = !event.favorite
+                    similarEventsAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 
@@ -521,7 +532,14 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.favorite_event -> {
-                currentEvent?.let { eventViewModel.setFavorite(it.id, !it.favorite) }
+                currentEvent?.let {
+                    if (eventViewModel.isLoggedIn())
+                        eventViewModel.setFavorite(it, !it.favorite)
+                    else {
+                        EventUtils.showLoginToLikeDialog(requireContext(), layoutInflater, object : RedirectToLogin {
+                            override fun goBackToLogin() { redirectToLogin() } }, it.originalImageUrl, it.name)
+                    }
+                }
                 true
             }
             R.id.call_for_speakers -> {

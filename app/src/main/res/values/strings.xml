@@ -458,5 +458,9 @@
     <string name="replace_image">Replace Image</string>
     <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
     <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
+    <string name="short_list_event_message">Shortlist your favorite events so you don\'t miss out</string>
+    <string name="out_bad_try_again">Our bad... let\'s try this again</string>
+    <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
+    <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
 
 </resources>

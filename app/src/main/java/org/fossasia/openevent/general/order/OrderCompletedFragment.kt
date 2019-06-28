@@ -35,6 +35,7 @@ import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.RedirectToLogin
 import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
@@ -45,6 +46,8 @@ import android.net.Uri
 import org.fossasia.openevent.general.BuildConfig
 
 private const val DISPLAY_RATING_DIALOG = "displayRatingDialog"
+
+const val ORDER_COMPLETED_FRAGMENT = "orderCompletedFragment"
 
 class OrderCompletedFragment : Fragment() {
 
@@ -155,11 +158,23 @@ class OrderCompletedFragment : Fragment() {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView).navigate(OrderCompletedFragmentDirections
+                    .actionOrderCompletedToAuth(redirectedFrom = ORDER_COMPLETED_FRAGMENT))
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                orderCompletedViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                similarEventsAdapter.notifyItemChanged(itemPosition)
+                if (orderCompletedViewModel.isLoggedIn()) {
+                    orderCompletedViewModel.setFavorite(event, !event.favorite)
+                    event.favorite = !event.favorite
+                    similarEventsAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 

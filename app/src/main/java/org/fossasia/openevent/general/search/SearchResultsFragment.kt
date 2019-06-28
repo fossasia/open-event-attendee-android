@@ -46,11 +46,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.event.RedirectToLogin
 import com.google.android.material.appbar.AppBarLayout
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+
+const val SEARCH_RESULTS_FRAGMENT = "searchResultsFragment"
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -126,7 +130,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 }
             })
 
-        searchViewModel.error
+        searchViewModel.message
             .nonNull()
             .observe(this, Observer {
                 rootView.longSnackbar(it)
@@ -229,11 +233,24 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                         FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
+
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView).navigate(SearchResultsFragmentDirections
+                    .actionSearchResultsToAuth(redirectedFrom = SEARCH_RESULTS_FRAGMENT))
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                searchViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                if (searchViewModel.isLoggedIn()) {
+                    searchViewModel.setFavorite(event, !event.favorite)
+                    event.favorite = !event.favorite
+                    favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 

@@ -36,10 +36,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.favorite.FAVORITE_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
 import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
+import org.fossasia.openevent.general.order.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -200,6 +203,9 @@ class SignUpFragment : Fragment() {
                 TICKETS_FRAGMENT -> R.id.ticketsFragment
                 NOTIFICATION_FRAGMENT -> R.id.notificationFragment
                 SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
+                FAVORITE_FRAGMENT -> R.id.favoriteFragment
+                SEARCH_RESULTS_FRAGMENT -> R.id.searchResultsFragment
+                ORDER_COMPLETED_FRAGMENT -> R.id.orderCompletedFragment
                 else -> R.id.eventsFragment
             }
         findNavController(rootView).popBackStack(destinationId, false)

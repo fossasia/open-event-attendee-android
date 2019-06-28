@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.notification.Notification
 import org.fossasia.openevent.general.notification.NotificationService
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 
@@ -35,8 +36,8 @@ class EventsViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableEvents = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> = mutableEvents
-    private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
     private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
     val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
     var lastSearch = ""
@@ -71,7 +72,7 @@ class EventsViewModel(
                 }, {
                     stopLoaders()
                     Timber.e(it, "Error fetching events")
-                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                    mutableMessage.value = resource.getString(R.string.error_fetching_events_message)
                 })
         } else {
             mutableProgress.value = false
@@ -93,29 +94,41 @@ class EventsViewModel(
         lastSearch = ""
     }
 
-    fun loadEvents() {
-        compositeDisposable += eventService.getEvents()
+    fun setFavorite(event: Event, favorite: Boolean) {
+        if (favorite) {
+            addFavorite(event)
+        } else {
+            removeFavorite(event)
+        }
+    }
+
+    private fun addFavorite(event: Event) {
+        val favoriteEvent = FavoriteEvent(authHolder.getId(), EventId(event.id))
+        compositeDisposable += eventService.addFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }.doFinally {
-                mutableProgress.value = false
-            }.subscribe({
-                mutableEvents.value = it
+            .subscribe({
+                mutableMessage.value = resource.getString(R.string.add_event_to_shortlist_message)
             }, {
-                Timber.e(it, "Error fetching events")
-                mutableError.value = resource.getString(R.string.error_fetching_events_message)
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on adding like for event ID ${event.id}")
             })
     }
 
-    fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable += eventService.setFavorite(eventId, favorite)
+    private fun removeFavorite(event: Event) {
+        Timber.d("DEBUGGING Removing favorites in EventsFragment 1")
+        val favoriteEventId = event.favoriteEventId ?: return
+
+        Timber.d("DEBUGGING Removing favorites in EventsFragment 2")
+        val favoriteEvent = FavoriteEvent(favoriteEventId, EventId(event.id))
+        compositeDisposable += eventService.removeFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
             .subscribe({
-                Timber.d("Success")
+                Timber.d("DEBUGGING Removing favorites in EventsFragment SUCCESS")
+                mutableMessage.value = resource.getString(R.string.remove_event_from_shortlist_message)
             }, {
-                Timber.e(it, "Error")
-                mutableError.value = resource.getString(R.string.error)
+                Timber.d("DEBUGGING Removing favorites in EventsFragment FAIL")
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on removing like for event ID ${event.id}")
             })
     }
 

@@ -1,10 +1,17 @@
 package org.fossasia.openevent.general.event
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.view.LayoutInflater
 import androidx.preference.PreferenceManager
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.getStartedButton
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.eventImage
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.eventName
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventGeneral
+import org.fossasia.openevent.general.R
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -181,7 +188,7 @@ object EventUtils {
     }
 
     fun getDayDifferenceFromToday(date: String): Long {
-        return (System.currentTimeMillis() - EventUtils.getTimeInMilliSeconds(date, null)) / (1000 * 60 * 60 * 24)
+        return (System.currentTimeMillis() - getTimeInMilliSeconds(date, null)) / (1000 * 60 * 60 * 24)
     }
 
     /**
@@ -205,4 +212,32 @@ object EventUtils {
         df.timeZone = tz
         return df.format(date)
     }
+
+    fun showLoginToLikeDialog(
+        context: Context,
+        inflater: LayoutInflater,
+        redirectToLogin: RedirectToLogin,
+        eventImage: String?,
+        eventName: String
+    ) {
+        val view = inflater.inflate(R.layout.dialog_login_to_like, null, false)
+        val dialog = AlertDialog.Builder(context)
+            .setView(view).create()
+
+        view.getStartedButton.setOnClickListener {
+            redirectToLogin.goBackToLogin()
+            dialog.cancel()
+        }
+        view.eventName.text = "Sign in to like $eventName"
+        Picasso.get()
+            .load(eventImage)
+            .placeholder(R.drawable.header)
+            .into(view.eventImage)
+
+        dialog.show()
+    }
+}
+
+interface RedirectToLogin {
+    fun goBackToLogin()
 }

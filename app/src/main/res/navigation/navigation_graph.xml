@@ -32,6 +32,13 @@
         android:label="EventsFragment"
         tools:layout="@layout/fragment_events" >
         <action
+            android:id="@+id/action_events_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
             android:id="@+id/action_events_to_search_location"
             app:destination="@id/searchLocationFragment"
             app:popEnterAnim="@anim/slide_in_left"
@@ -198,6 +205,14 @@
         tools:layout="@layout/fragment_search_results">
 
         <action
+            android:id="@+id/action_search_results_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
             android:id="@+id/action_search_results_to_event_detail"
             app:destination="@id/eventDetailsFragment"
             app:popEnterAnim="@anim/fade_in"
@@ -296,6 +311,14 @@
         android:name="org.fossasia.openevent.general.favorite.FavoriteFragment"
         android:label="FavoriteFragment"
         tools:layout="@layout/fragment_favorite" >
+
+        <action
+            android:id="@+id/action_favourite_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <action
             android:id="@+id/action_favourite_to_search"
@@ -720,6 +743,14 @@
         android:name="org.fossasia.openevent.general.order.OrderCompletedFragment"
         android:label="OrderCompletedFragment"
         tools:layout="@layout/fragment_order_completed">
+
+        <action
+            android:id="@+id/action_order_completed_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <action
             android:id="@+id/action_order_completed_to_order_user"

@@ -10,12 +10,15 @@ import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import timber.log.Timber
 
 class LoginViewModel(
     private val authService: AuthService,
     private val network: Network,
-    private val resource: Resource
+    private val resource: Resource,
+    private val eventService: EventService
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -44,9 +47,40 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableLoggedIn.value = true
+                loadFavoritesEvent()
             }, {
                 mutableError.value = resource.getString(R.string.login_fail_message)
+            })
+    }
+
+    private fun loadFavoritesEvent() {
+        compositeDisposable += eventService.loadFavoriteEvent()
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({ favList ->
+                val favIdsList = favList.filter { favEvent -> favEvent.event != null }
+                saveFavoriteEvents(favIdsList)
+            }, {
+                Timber.e(it, "Fail on fetching user favorite event")
+                mutableLoggedIn.value = true
+            })
+    }
+
+    private fun saveFavoriteEvents(idsList: List<FavoriteEvent>) {
+        compositeDisposable += eventService.saveFavoritesEventFromApi(idsList)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableLoggedIn.value = true
+            }, {
+                Timber.e(it, "Fail on fetching user favorite event")
+                mutableLoggedIn.value = true
             })
     }
 

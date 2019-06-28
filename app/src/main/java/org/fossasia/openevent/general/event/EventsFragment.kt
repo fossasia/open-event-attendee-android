@@ -46,6 +46,7 @@ import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
+const val EVENTS_FRAGMENT = "eventsFragment"
 
 class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
@@ -105,7 +106,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 rootView.swiperefresh.isRefreshing = it
             })
 
-        eventsViewModel.error
+        eventsViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.longSnackbar(it)
@@ -177,11 +178,23 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView)
+                    .navigate(EventsFragmentDirections.actionEventsToAuth(redirectedFrom = EVENTS_FRAGMENT))
+            }
+        }
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                eventsViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                eventsListAdapter.notifyItemChanged(itemPosition)
+                if (eventsViewModel.isLoggedIn()) {
+                    Timber.d("DEBUGGING EventsFragment current event like status: ${event.favorite}")
+                    eventsViewModel.setFavorite(event, !event.favorite)
+                    event.favorite = !event.favorite
+                    eventsListAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 
