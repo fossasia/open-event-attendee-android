@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
@@ -139,28 +140,17 @@ class EventDetailsViewModel(
     fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
+        var similarEventsFlowable = eventService.getEventsByLocation(location)
         if (topicId != -1L) {
-            compositeDisposable += eventService.getSimilarEvents(topicId)
-                .withDefaultSchedulers()
-                .distinctUntilChanged()
-                .subscribe({ events ->
-                    val list = events.filter { it.id != eventId }
-                    val oldList = mutableSimilarEvents.value
-
-                    val similarEventList = mutableSetOf<Event>()
-                    similarEventList.addAll(list)
-                    oldList?.let {
-                        similarEventList.addAll(it)
-                    }
-                    mutableSimilarEvents.value = similarEventList
-                }, {
-                    Timber.e(it, "Error fetching similar events")
-                    mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
-                        resource.getString(R.string.similar_events))
+            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
+                BiFunction { firstList: List<Event>, secondList: List<Event> ->
+                    val similarList = mutableListOf<Event>()
+                    similarList.addAll(firstList)
+                    similarList.addAll(secondList)
+                    similarList
                 })
         }
-
-        compositeDisposable += eventService.getEventsByLocation(location)
+        compositeDisposable += similarEventsFlowable
             .withDefaultSchedulers()
             .distinctUntilChanged()
             .subscribe({ events ->
