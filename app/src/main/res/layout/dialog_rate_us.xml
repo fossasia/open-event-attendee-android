@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/rate_eventyay"
+        android:textSize="@dimen/text_size_extra_large"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="@dimen/layout_margin_large"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rate_eventyay_dialog_message"
+        android:layout_margin="@dimen/layout_margin_medium"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_large"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/rateEventyayButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_medium"
+        android:layout_marginStart="@dimen/layout_margin_large"
+        android:layout_marginEnd="@dimen/layout_margin_large"
+        android:text="@string/rate_eventyay"
+        android:textAllCaps="false"/>
+
+</LinearLayout>
