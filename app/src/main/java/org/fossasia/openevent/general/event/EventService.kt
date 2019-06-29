@@ -60,10 +60,6 @@ class EventService(
             .toList()
     }
 
-    fun getEventTopics(): Flowable<List<EventTopic>> {
-        return eventTopicsDao.getAllEventTopics()
-    }
-
     fun getEventTypes(): Single<List<EventType>> {
         return eventTypesApi.getEventTypes()
     }
@@ -85,6 +81,9 @@ class EventService(
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
             "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
         return eventApi.searchEvents("name", query).flatMapPublisher { apiList ->
+            apiList.forEach {
+                it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
+            }
             updateFavorites(apiList)
         }
     }

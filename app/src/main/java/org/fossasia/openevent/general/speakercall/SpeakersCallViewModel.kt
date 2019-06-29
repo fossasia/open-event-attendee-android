@@ -31,13 +31,13 @@ class SpeakersCallViewModel(
     val speakersCall: LiveData<SpeakersCall> = mutableSpeakersCall
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
-    private val mutableProgress = MutableLiveData<Boolean>(true)
+    private val mutableProgress = MutableLiveData(true)
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableSpeaker = MutableLiveData<Speaker>()
     val speaker: LiveData<Speaker> = mutableSpeaker
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableEmptySpeakersCall = MutableLiveData<Boolean>(true)
+    private val mutableEmptySpeakersCall = MutableLiveData<Boolean>()
     val emptySpeakersCall: LiveData<Boolean> = mutableEmptySpeakersCall
 
     fun isLoggedIn(): Boolean = authHolder.isLoggedIn()

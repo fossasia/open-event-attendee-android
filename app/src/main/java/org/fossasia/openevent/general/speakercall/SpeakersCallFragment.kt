@@ -38,21 +38,6 @@ class SpeakersCallFragment : Fragment() {
     private val speakersCallViewModel by viewModel<SpeakersCallViewModel>()
     private val safeArgs: SpeakersCallFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (speakersCallViewModel.isLoggedIn()) {
-            val currentUser = speakersCallViewModel.user.value
-            if (currentUser == null) {
-                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
-            } else {
-                val currentSpeaker = speakersCallViewModel.speaker.value
-                if (currentSpeaker == null) {
-                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
-                }
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_speakers_call, container, false)
 
@@ -84,6 +69,18 @@ class SpeakersCallFragment : Fragment() {
                 loadSpeakersCallSection(it)
                 showEmptyView(false)
             })
+
+        if (speakersCallViewModel.isLoggedIn()) {
+            val currentUser = speakersCallViewModel.user.value
+            if (currentUser == null) {
+                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
+            } else {
+                val currentSpeaker = speakersCallViewModel.speaker.value
+                if (currentSpeaker == null) {
+                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
+                }
+            }
+        }
 
         speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
         return rootView
@@ -150,9 +147,9 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEmptyView(show: Boolean) {
-        rootView.speakersCallContainer.visibility = if (show) View.GONE else View.VISIBLE
-        rootView.speakersCallEmptyView.visibility = if (show) View.VISIBLE else View.GONE
-        if (show) rootView.submitProposalButton.visibility = View.GONE
+        rootView.speakersCallContainer.isVisible = !show
+        rootView.speakersCallEmptyView.isVisible = show
+        if (show) rootView.submitProposalButton.isVisible = false
     }
 
     private fun loadSpeakersCallSection(speakersCall: SpeakersCall) {

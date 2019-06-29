@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_search_results.view.eventsRecycle
 import kotlinx.android.synthetic.main.fragment_search_results.view.noSearchResults
 import kotlinx.android.synthetic.main.fragment_search_results.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_search_results.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search_results.view.toolbarLayout
 import kotlinx.android.synthetic.main.fragment_search_results.view.searchText
 import kotlinx.android.synthetic.main.fragment_search_results.view.filter
 import kotlinx.android.synthetic.main.fragment_search_results.view.clearSearchText
@@ -51,6 +52,7 @@ import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+import kotlin.math.abs
 
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -263,11 +265,13 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         })
 
         rootView.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
-            if (Math.abs(offset) == appBarLayout.totalScrollRange) {
+            if (abs(offset) == appBarLayout.totalScrollRange) {
                 rootView.toolbarTitle.text = if (rootView.searchText.text.isNullOrBlank())
                     getString(R.string.search_hint) else rootView.searchText.text.toString()
+                rootView.toolbarLayout.elevation = resources.getDimension(R.dimen.custom_toolbar_elevation)
             } else {
                 rootView.toolbarTitle.text = ""
+                rootView.toolbarLayout.elevation = 0F
             }
         })
 
