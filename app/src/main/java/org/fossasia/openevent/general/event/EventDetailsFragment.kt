@@ -589,8 +589,6 @@ class EventDetailsFragment : Fragment() {
                 menu.findItem(R.id.open_external_event_url).isVisible = false
             if (currentEvent.codeOfConduct.isNullOrBlank())
                 menu.findItem(R.id.code_of_conduct).isVisible = false
-            if (currentEvent.speakersCall == null)
-                menu.findItem(R.id.call_for_speakers).isVisible = false
             setFavoriteIconFilled(currentEvent.favorite)
         }
         super.onPrepareOptionsMenu(menu)
