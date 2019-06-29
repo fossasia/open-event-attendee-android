@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
@@ -14,8 +20,7 @@
         android:layout_width="match_parent"
         app:navigationIcon="@drawable/ic_arrow_back_black"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        app:layout_constraintTop_toTopOf="parent">
+        android:backgroundTint="@color/white">
         <TextView
             android:id="@+id/toolbarTitle"
             style = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
@@ -31,6 +36,7 @@
             android:tint="@color/black"
             android:src="@drawable/ic_filter"/>
     </androidx.appcompat.widget.Toolbar>
+    </androidx.cardview.widget.CardView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
