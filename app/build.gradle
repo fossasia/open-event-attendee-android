@@ -1,5 +1,5 @@
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.23.0"
+    id "com.diffplug.gradle.spotless" version "3.23.1"
 }
 
 apply plugin: 'com.android.application'
@@ -100,18 +100,18 @@ repositories {
 dependencies {
     def lifecycle_version = "2.2.0-alpha01"
     def koin_version = "2.0.1"
-    def roomVersion = "2.1.0-rc01"
+    def roomVersion = "2.1.0"
     def ktx_version = "1.0.0"
     def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-alpha04"
+    def nav_version = "2.1.0-alpha05"
     def anko_version = "0.10.8"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
@@ -122,7 +122,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
+    implementation 'androidx.preference:preference:1.1.0-beta01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -137,10 +137,10 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // Location Play Service
-    playStoreImplementation 'com.google.android.gms:play-services-location:16.0.0'
+    playStoreImplementation 'com.google.android.gms:play-services-location:17.0.0'
 
     //Smart Auth Play Service
-    playStoreImplementation 'com.google.android.gms:play-services-auth:16.0.1'
+    playStoreImplementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -148,9 +148,9 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.6.0'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
@@ -158,14 +158,14 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:9.1.1'
+    implementation 'com.stripe:stripe-android:9.3.5'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -180,6 +180,9 @@ dependencies {
 
     //Mapbox java sdk
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
+
+    // SimpleCropView
+    implementation 'com.isseiaoki:simplecropview:1.1.8'
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.1'

@@ -3,10 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/orderDetailCoordinatorLayout"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    android:backgroundTint="@color/greyMore">
+    android:id="@+id/orderDetailCoordinatorLayout">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/header"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderDetailsRecycler"
@@ -14,5 +18,4 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         tools:listitem="@layout/item_card_order_details" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

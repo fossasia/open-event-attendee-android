@@ -5,7 +5,7 @@ import okhttp3.Response
 
 class RequestAuthenticator(private val authHolder: AuthHolder) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain): Response? {
+    override fun intercept(chain: Interceptor.Chain): Response {
         val authorization = authHolder.getAuthorization()
         val original = chain.request()
         return if (authorization != null) {

@@ -60,20 +60,22 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         setHasOptionsMenu(true)
 
         // Set Email
-        preferenceScreen.findPreference(getString(R.string.key_account))
-            .summary = if (safeArgs.email.isNullOrEmpty()) getString(R.string.not_logged_in) else safeArgs.email
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_account))?.summary =
+            if (safeArgs.email.isNullOrEmpty()) getString(R.string.not_logged_in) else safeArgs.email
 
         // Set Build Version
-        preferenceScreen.findPreference(getString(R.string.key_version))
-            .title = "Version " + BuildConfig.VERSION_NAME
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_version))?.title =
+            "Version " + BuildConfig.VERSION_NAME
 
-        preferenceScreen.findPreference(getString(R.string.key_timezone_switch))
-            .setDefaultValue(timeZonePreference.getBoolean("useEventTimeZone", false))
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_timezone_switch))?.setDefaultValue(
+            timeZonePreference.getBoolean("useEventTimeZone", false)
+        )
 
-        preferenceScreen.findPreference(getString(R.string.key_profile)).isVisible = profileViewModel.isLoggedIn()
-        preferenceScreen.findPreference(getString(R.string.key_change_password)).isVisible =
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_profile))?.isVisible =
             profileViewModel.isLoggedIn()
-        preferenceScreen.findPreference(getString(R.string.key_timezone_switch)).isVisible =
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_change_password))?.isVisible =
+            profileViewModel.isLoggedIn()
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_timezone_switch))?.isVisible =
             profileViewModel.isLoggedIn()
     }
 

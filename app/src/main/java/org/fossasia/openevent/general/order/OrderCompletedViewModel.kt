@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
@@ -42,29 +43,37 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
                 })
     }
 
-    fun fetchSimilarEvents(eventId: Long, topicId: Long) {
+    fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
-        if (topicId != -1L) {
-            compositeDisposable += eventService.getSimilarEvents(topicId)
-                .withDefaultSchedulers()
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.subscribe({ events ->
-                    val list = events.filter { it.id != eventId }
-                    val oldList = mutableSimilarEvents.value
+        var similarEventsFlowable = eventService.getEventsByLocation(location)
 
-                    val similarEventList = mutableSetOf<Event>()
-                    similarEventList.addAll(list)
-                    oldList?.let {
-                        similarEventList.addAll(it)
-                    }
-                    mutableProgress.value = false
-                    mutableSimilarEvents.value = similarEventList
-                }, {
-                    Timber.e(it, "Error fetching similar events")
+        if (topicId != -1L) {
+            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
+                BiFunction { firstList: List<Event>, secondList: List<Event> ->
+                    val similarList = mutableListOf<Event>()
+                    similarList.addAll(firstList)
+                    similarList.addAll(secondList)
+                    similarList
                 })
         }
+
+        compositeDisposable += similarEventsFlowable
+            .withDefaultSchedulers()
+            .distinctUntilChanged()
+            .subscribe({ events ->
+                val list = events.filter { it.id != eventId }
+                val oldList = mutableSimilarEvents.value
+                val similarEventList = mutableSetOf<Event>()
+                similarEventList.addAll(list)
+                oldList?.let {
+                    similarEventList.addAll(it)
+                }
+                mutableProgress.value = false
+                mutableSimilarEvents.value = similarEventList
+            }, {
+                Timber.e(it, "Error fetching similar events")
+            })
     }
 
     fun setFavorite(eventId: Long, favorite: Boolean) {

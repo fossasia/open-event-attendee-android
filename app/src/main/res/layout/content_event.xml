@@ -21,6 +21,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:id="@+id/alreadyRegisteredLayout"
+                android:orientation="horizontal"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="@dimen/avatar_small"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_outline_ticket"
+                    app:tint="@android:color/white"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    android:text="@string/already_registered_message"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/layout_margin_large"
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@android:color/white"
+                    android:text="@string/see_your_ticket"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/eventImage"
@@ -32,7 +75,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/alreadyRegisteredLayout" />
 
             <TextView
                 android:id="@+id/eventName"
@@ -464,11 +507,27 @@
                     android:textSize="@dimen/heading_text_size"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/seeFeedbackTextView"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_all_feedback"
+                    android:padding="@dimen/padding_medium"
+                    android:background="?selectableItemBackground"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
                 <Button
                     android:id="@+id/feedbackBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/layout_margin_large"
+                    android:layout_marginTop="@dimen/layout_margin_small"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    android:layout_marginEnd="@dimen/layout_margin_large"
+                    android:layout_marginBottom="@dimen/layout_margin_large"
                     android:text="@string/write_feedback" />
             </LinearLayout>
 

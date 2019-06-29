@@ -6,19 +6,25 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.notification.NotificationService
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
+
+const val NEW_NOTIFICATIONS = "newNotifications"
 
 class EventsViewModel(
     private val eventService: EventService,
     private val preference: Preference,
     private val resource: Resource,
-    private val mutableConnectionLiveData: MutableConnectionLiveData
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
+    private val authHolder: AuthHolder,
+    private val notificationService: NotificationService
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -26,6 +32,8 @@ class EventsViewModel(
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
+    val mutableNewNotifications = MutableLiveData<Boolean>()
+    val newNotifications: LiveData<Boolean> = mutableNewNotifications
     private val mutableEvents = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> = mutableEvents
     private val mutableError = SingleLiveEvent<String>()
@@ -36,9 +44,13 @@ class EventsViewModel(
     private val mutableSavedLocation = MutableLiveData<String>()
     val savedLocation: LiveData<String> = mutableSavedLocation
 
+    fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun getId() = authHolder.getId()
+
     fun loadLocation() {
         mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
-            ?: resource.getString(R.string.choose_your_location)
+            ?: resource.getString(R.string.enter_location)
     }
 
     fun loadLocationEvents() {
@@ -104,6 +116,23 @@ class EventsViewModel(
             }, {
                 Timber.e(it, "Error")
                 mutableError.value = resource.getString(R.string.error)
+            })
+    }
+
+    fun syncNotifications() {
+        if (!isLoggedIn())
+            return
+        compositeDisposable += notificationService.syncNotifications(getId())
+            .withDefaultSchedulers()
+            .subscribe({ list ->
+                list?.forEach {
+                    if (!it.isRead) {
+                        preference.putBoolean(NEW_NOTIFICATIONS, true)
+                        mutableNewNotifications.value = true
+                    }
+                }
+            }, {
+                Timber.e(it, "Error fetching notifications")
             })
     }
 

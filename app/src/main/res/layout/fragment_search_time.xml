@@ -3,19 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
-    android:layout_marginTop="@dimen/layout_margin_large"
-    android:layout_marginLeft="@dimen/layout_margin_large"
-    android:layout_marginRight="@dimen/layout_margin_large"
     android:orientation="vertical"
-    tools:context="org.fossasia.openevent.general.search.SearchTimeFragment">
+    style="@style/AppTheme.NoActionBar"
+    tools:context="org.fossasia.openevent.general.search.time.SearchTimeFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back_black"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_extra_large"
+        android:layout_marginStart="@dimen/layout_margin_large"
         android:text="@string/what_time"
-        android:layout_gravity="center_horizontal"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_extra_large"
         android:textStyle="bold" />
@@ -24,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:padding="@dimen/padding_large">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

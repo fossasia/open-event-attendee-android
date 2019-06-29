@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import kotlinx.android.synthetic.main.fragment_favorite.noLikedLL
-import kotlinx.android.synthetic.main.fragment_favorite.favoriteCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_favorite.view.noLikedLL
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteEventsRecycler
 import kotlinx.android.synthetic.main.fragment_favorite.view.favoriteProgressBar
 import kotlinx.android.synthetic.main.fragment_favorite.view.findText
@@ -20,28 +20,32 @@ import kotlinx.android.synthetic.main.fragment_favorite.view.todayChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.tomorrowChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.weekendChip
 import kotlinx.android.synthetic.main.fragment_favorite.view.monthChip
+import kotlinx.android.synthetic.main.fragment_favorite.view.likesNumber
+import kotlinx.android.synthetic.main.fragment_favorite.view.scrollView
+import kotlinx.android.synthetic.main.fragment_favorite.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_favorite.view.likesTitle
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+import org.fossasia.openevent.general.utils.extensions.showWithFading
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val FAVORITE_EVENT_DATE_FORMAT: String = "favoriteEventDateFormat"
-
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), BottomIconDoubleClick {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter(EventsDiffCallback())
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +57,6 @@ class FavoriteFragment : Fragment() {
         rootView.favoriteEventsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.favoriteEventsRecycler.adapter = favoriteEventsRecyclerAdapter
         rootView.favoriteEventsRecycler.isNestedScrollingEnabled = false
-        setToolbar(activity, getString(R.string.likes), false)
         rootView.viewTreeObserver.addOnDrawListener {
             setStartPostponedEnterTransition()
         }
@@ -79,6 +82,7 @@ class FavoriteFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list)
+                rootView.likesNumber.text = "${list.size} likes"
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", list.size)
             })
@@ -86,7 +90,7 @@ class FavoriteFragment : Fragment() {
         favoriteEventViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                favoriteCoordinatorLayout.longSnackbar(it)
+                rootView.longSnackbar(it)
             })
 
         favoriteEventViewModel.progress
@@ -114,7 +118,7 @@ class FavoriteFragment : Fragment() {
             override fun onClick(event: Event, itemPosition: Int) {
                 favoriteEventViewModel.setFavorite(event.id, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
-                favoriteCoordinatorLayout.snackbar(getString(R.string.removed_from_liked, event.name),
+                rootView.snackbar(getString(R.string.removed_from_liked, event.name),
                     getString(R.string.undo)) {
                     favoriteEventViewModel.setFavorite(event.id, true)
                     favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
@@ -126,6 +130,13 @@ class FavoriteFragment : Fragment() {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
         }
+
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.likesTitle.y && !rootView.toolbarLayout.isVisible)
+                rootView.toolbarLayout.showWithFading()
+            else if (scrollY < rootView.likesTitle.y && rootView.toolbarLayout.isVisible)
+                rootView.toolbarLayout.hideWithFading()
+        }
     }
 
     override fun onDestroyView() {
@@ -136,8 +147,15 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setToolbar(activity, show = false)
+    }
+
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
+
     private fun showEmptyMessage(itemCount: Int) {
-        noLikedLL.isVisible = (itemCount == 0)
+        rootView.noLikedLL.isVisible = (itemCount == 0)
     }
 
     private fun openSearchResult(time: String) {

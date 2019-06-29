@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.ticket
 
+import android.graphics.Paint
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -8,16 +9,39 @@ import kotlinx.android.synthetic.main.item_ticket.view.order
 import kotlinx.android.synthetic.main.item_ticket.view.orderRange
 import kotlinx.android.synthetic.main.item_ticket.view.price
 import kotlinx.android.synthetic.main.item_ticket.view.ticketName
+import kotlinx.android.synthetic.main.item_ticket.view.discountPrice
+import org.fossasia.openevent.general.discount.DiscountCode
+
+const val AMOUNT = "amount"
 
 class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(ticket: Ticket, selectedListener: TicketSelectedListener?, eventCurrency: String?, ticketQuantity: Int) {
+    fun bind(
+        ticket: Ticket,
+        selectedListener: TicketSelectedListener?,
+        eventCurrency: String?,
+        ticketQuantity: Int,
+        discountCode: DiscountCode? = null
+    ) {
         itemView.ticketName.text = ticket.name
+        var minQty = ticket.minOrder
+        var maxQty = ticket.maxOrder
+        if (discountCode?.minQuantity != null)
+            minQty = discountCode.minQuantity
+        if (discountCode?.maxQuantity != null)
+            maxQty = discountCode.maxQuantity
 
-        if (ticket.minOrder > 0 && ticket.maxOrder > 0) {
+        if (discountCode == null) {
+            minQty = ticket.minOrder
+            maxQty = ticket.maxOrder
+            itemView.discountPrice.visibility = View.GONE
+            itemView.price.paintFlags = 0
+        }
+
+        if (minQty > 0 && maxQty > 0) {
             val spinnerList = ArrayList<String>()
             spinnerList.add("0")
-            for (i in ticket.minOrder..ticket.maxOrder) {
+            for (i in minQty..maxQty) {
                 spinnerList.add(Integer.toString(i))
             }
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -48,6 +72,14 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         if (ticket.price == 0.toFloat()) {
             itemView.price.text = "Free"
+        }
+
+        if (discountCode?.value != null && ticket.price != null && ticket.price != 0.toFloat()) {
+            itemView.discountPrice.visibility = View.VISIBLE
+            itemView.price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            itemView.discountPrice.text =
+                if (discountCode.type == AMOUNT) "$eventCurrency${ticket.price - discountCode.value}"
+                else "$eventCurrency${ticket.price - (ticket.price * discountCode.value / 100)}"
         }
     }
 }

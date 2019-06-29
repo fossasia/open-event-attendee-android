@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,47 +15,43 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
-import kotlinx.android.synthetic.main.fragment_events.eventsNestedScrollView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
-import kotlinx.android.synthetic.main.fragment_events.view.homeScreenLL
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
-import kotlinx.android.synthetic.main.fragment_events.view.eventsNestedScrollView
+import kotlinx.android.synthetic.main.fragment_events.view.scrollView
+import kotlinx.android.synthetic.main.fragment_events.view.notification
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
+import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDot
+import kotlinx.android.synthetic.main.fragment_events.view.toolbar
+import kotlinx.android.synthetic.main.fragment_events.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToolbar
+import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.search.SAVED_LOCATION
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
-/**
- * Enum class for different layout types in the adapter.
- * This class can expand as number of layout types grow.
- */
-enum class EventLayoutType {
-    EVENTS, SIMILAR_EVENTS
-}
-
-const val EVENT_DATE_FORMAT: String = "eventDateFormat"
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 
-class EventsFragment : Fragment(), ScrollToTop {
+class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
-    private val eventsListAdapter = EventsListAdapter(EventLayoutType.EVENTS, EventsDiffCallback())
+    private val eventsListAdapter = EventsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,13 +60,12 @@ class EventsFragment : Fragment(), ScrollToTop {
     ): View? {
         setPostponeSharedElementTransition()
         rootView = inflater.inflate(R.layout.fragment_events, container, false)
-        setHasOptionsMenu(true)
         if (preference.getString(SAVED_LOCATION).isNullOrEmpty() &&
             !preference.getBoolean(BEEN_TO_WELCOME_SCREEN, false)) {
             preference.putBoolean(BEEN_TO_WELCOME_SCREEN, true)
             findNavController(requireActivity(), R.id.frameContainer).navigate(R.id.welcomeFragment)
         }
-        setToolbar(activity, getString(R.string.events), false)
+        setToolbar(activity, show = false)
 
         rootView.progressBar.isIndeterminate = true
 
@@ -81,6 +74,15 @@ class EventsFragment : Fragment(), ScrollToTop {
 
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
+
+        eventsViewModel.syncNotifications()
+        handleNotificationDotVisibility(
+            preference.getBoolean(NEW_NOTIFICATIONS, false))
+        eventsViewModel.newNotifications
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                handleNotificationDotVisibility(it)
+            })
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -111,11 +113,12 @@ class EventsFragment : Fragment(), ScrollToTop {
         eventsViewModel.error
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                eventsNestedScrollView.longSnackbar(it)
+                rootView.longSnackbar(it)
             })
 
         eventsViewModel.loadLocation()
         rootView.locationTextView.text = eventsViewModel.savedLocation.value
+        rootView.toolbar.title = rootView.locationTextView.text
 
         eventsViewModel.savedLocation
             .nonNull()
@@ -160,10 +163,21 @@ class EventsFragment : Fragment(), ScrollToTop {
         return rootView
     }
 
+    private fun handleNotificationDotVisibility(isVisible: Boolean) {
+        rootView.newNotificationDot.isVisible = isVisible
+        rootView.newNotificationDotToolbar.isVisible = isVisible
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
             setStartPostponedEnterTransition()
+        }
+        rootView.notification.setOnClickListener {
+            moveToNotification()
+        }
+        rootView.notificationToolbar.setOnClickListener {
+            moveToNotification()
         }
 
         val eventClickListener: EventClickListener = object : EventClickListener {
@@ -192,15 +206,28 @@ class EventsFragment : Fragment(), ScrollToTop {
             onFavFabClick = favFabClickListener
             onHashtagClick = hashTagClickListener
         }
+
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.locationTextView.y + rootView.locationTextView.height &&
+                !rootView.toolbarLayout.isVisible) rootView.toolbarLayout.showWithFading()
+            else if (scrollY < rootView.locationTextView.y + rootView.locationTextView.height &&
+                rootView.toolbarLayout.isVisible) rootView.toolbarLayout.hideWithFading()
+        }
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        rootView.swiperefresh.setOnRefreshListener(null)
         eventsListAdapter.apply {
             onEventClick = null
             onFavFabClick = null
             onHashtagClick = null
         }
+        super.onDestroyView()
+    }
+
+    private fun moveToNotification() {
+        eventsViewModel.mutableNewNotifications.value = false
+        findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
     }
 
     private fun openSearch(hashTag: String) {
@@ -211,29 +238,19 @@ class EventsFragment : Fragment(), ScrollToTop {
                 type = hashTag))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.events, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.notifications -> {
-                findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun showNoInternetScreen(show: Boolean) {
-        rootView.homeScreenLL.visibility = if (!show) View.VISIBLE else View.GONE
-        rootView.noInternetCard.visibility = if (show) View.VISIBLE else View.GONE
+        if (show) {
+            rootView.shimmerEvents.isVisible = false
+            rootView.eventsEmptyView.isVisible = false
+            eventsListAdapter.clear()
+        }
+        rootView.noInternetCard.isVisible = show
     }
 
     private fun showEmptyMessage(itemCount: Int) {
         if (itemCount == 0) {
             rootView.eventsEmptyView.visibility = View.VISIBLE
-            if (rootView.locationTextView.text == getString(R.string.choose_your_location)) {
+            if (rootView.locationTextView.text == getString(R.string.enter_location)) {
                 rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
             } else {
                 rootView.emptyEventsText.text = getString(R.string.no_events_message)
@@ -243,10 +260,5 @@ class EventsFragment : Fragment(), ScrollToTop {
         }
     }
 
-    override fun onStop() {
-        rootView.swiperefresh?.setOnRefreshListener(null)
-        super.onStop()
-    }
-
-    override fun scrollToTop() = rootView.eventsNestedScrollView.smoothScrollTo(0, 0)
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
 }

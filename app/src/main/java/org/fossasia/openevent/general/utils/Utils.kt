@@ -4,11 +4,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -19,12 +22,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.fossasia.openevent.general.R
-import timber.log.Timber
 import java.util.regex.Pattern
 
 object Utils {
@@ -114,53 +113,8 @@ object Utils {
         }
     }
 
-    fun checkAndLoadFragment(
-        fragmentManager: FragmentManager,
-        fragment: Fragment,
-        frameLayout: Int,
-        addToBackStack: Boolean = true
-    ) {
-        val savedFragment = fragmentManager.findFragmentByTag(fragment::class.java.name)
-        if (savedFragment != null) {
-            loadFragment(fragmentManager, savedFragment, frameLayout, addToBackStack)
-            Timber.d("Loading fragment from stack ${fragment::class.java}")
-        } else {
-            loadFragment(fragmentManager, fragment, frameLayout, addToBackStack)
-        }
-    }
-
-    fun loadFragment(
-        fragmentManager: FragmentManager,
-        fragment: Fragment,
-        frameLayout: Int,
-        addToBackStack: Boolean = true
-    ) {
-        val fragmentTransaction = fragmentManager.beginTransaction()
-            .replace(frameLayout, fragment, fragment::class.java.name)
-        if (addToBackStack) fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-    }
-
     fun requireDrawable(@NonNull context: Context, @DrawableRes resId: Int) = AppCompatResources
         .getDrawable(context, resId) ?: throw IllegalStateException("Drawable should not be null")
-
-    fun getAnimFade(): NavOptions {
-        val builder = NavOptions.Builder()
-        builder.setEnterAnim(R.anim.fade_in)
-        builder.setExitAnim(R.anim.fade_out)
-        builder.setPopEnterAnim(R.anim.fade_in)
-        builder.setPopExitAnim(R.anim.fade_out)
-        return builder.build()
-    }
-
-    fun getAnimSlide(): NavOptions {
-        val builder = NavOptions.Builder()
-        builder.setEnterAnim(R.anim.slide_in_right)
-        builder.setExitAnim(R.anim.slide_out_left)
-        builder.setPopEnterAnim(R.anim.slide_in_left)
-        builder.setPopExitAnim(R.anim.slide_out_right)
-        return builder.build()
-    }
 
     fun navAnimVisible(navigation: BottomNavigationView?, context: Context) {
         if (navigation?.visibility == View.GONE) {
@@ -202,6 +156,19 @@ object Utils {
             dinersClubPattern.matcher(s).matches() -> cardType.DINERS_CLUB
             unionPayPattern.matcher(s).matches() -> cardType.UNIONPAY
             else -> cardType.NONE
+        }
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        val service = context.getSystemService(Context.LOCATION_SERVICE)
+        var locationEnabled = false
+        if (service is LocationManager) locationEnabled = service.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        return if (!locationEnabled) {
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            context.startActivity(intent)
+            false
+        } else {
+            true
         }
     }
 }

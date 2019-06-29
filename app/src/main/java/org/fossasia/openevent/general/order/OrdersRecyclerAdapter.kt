@@ -3,8 +3,8 @@ package org.fossasia.openevent.general.order
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.databinding.ItemCardOrderBinding
 
 class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
 
@@ -24,8 +24,8 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card_order, parent, false)
-        return OrdersViewHolder(view)
+        val binding = ItemCardOrderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OrdersViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {

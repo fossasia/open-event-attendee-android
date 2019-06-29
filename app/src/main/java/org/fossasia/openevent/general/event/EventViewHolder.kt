@@ -1,27 +1,18 @@
 package org.fossasia.openevent.general.event
 
 import android.content.res.ColorStateList
-import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_card_events.view.chipTags
-import kotlinx.android.synthetic.main.item_card_events.view.date
 import kotlinx.android.synthetic.main.item_card_events.view.eventImage
-import kotlinx.android.synthetic.main.item_card_events.view.eventName
 import kotlinx.android.synthetic.main.item_card_events.view.favoriteFab
-import kotlinx.android.synthetic.main.item_card_events.view.locationName
-import kotlinx.android.synthetic.main.item_card_events.view.month
 import kotlinx.android.synthetic.main.item_card_events.view.shareFab
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.favorite.FAVORITE_EVENT_DATE_FORMAT
-import timber.log.Timber
-import java.lang.Exception
+import org.fossasia.openevent.general.databinding.ItemCardEventsBinding
 
 /**
  * The [RecyclerView.ViewHolder] class for Event items list in [EventsFragment]
@@ -32,40 +23,30 @@ import java.lang.Exception
  * @property favFabClickListener The callback to be invoked when the favorite FAB is clicked
  * @property shareFabClickListener The callback to be invoked when the share FAB is clicked
  */
-class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
+class EventViewHolder(private val binding: ItemCardEventsBinding) : RecyclerView.ViewHolder(binding.root) {
     var eventClickListener: EventClickListener? = null
     var favFabClickListener: FavoriteFabClickListener? = null
     var hashTagClickListAdapter: EventHashTagClickListener? = null
-    /**
-     * The function to bind the given data on the items in this recycler view.
-     *
-     * @param event The [Event] object whose details are to be bound
-     * @param dateFormat The format in which to display the date on the events card
-     */
+
     fun bind(
         event: Event,
-        dateFormat: String,
         itemPosition: Int
     ) {
-        containerView.eventName.text = event.name
-        containerView.locationName.text = event.locationName
-        containerView.eventImage.transitionName = "cardItemEventImage$itemPosition"
+        val time = EventUtils.getEventDateTime(event.startsAt, event.timezone)
 
-        val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
-        val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
-
-        if (dateFormat == FAVORITE_EVENT_DATE_FORMAT) {
-            itemView.date.text = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
-        } else {
-            itemView.date.text = startsAt.dayOfMonth.toString()
-            itemView.month.text = startsAt.month.name.slice(0 until 3)
+        with(binding) {
+            this.event = event
+            this.position = position
+            position = itemPosition
+            monthTime = time.month.name.slice(0 until 3)
+            dateTime = time.dayOfMonth.toString()
+            executePendingBindings()
         }
 
-        setFabBackground(event.favorite)
-
-        if (containerView.chipTags != null) {
-            containerView.chipTags.removeAllViews()
+        itemView.shareFab.scaleType = ImageView.ScaleType.CENTER
+        itemView.favoriteFab.scaleType = ImageView.ScaleType.CENTER
+        if (itemView.chipTags != null) {
+            itemView.chipTags.removeAllViews()
             event.eventType?.let {
                 addChips(it.name)
             }
@@ -77,56 +58,31 @@ class EventViewHolder(override val containerView: View) : RecyclerView.ViewHolde
             }
         }
 
-        event.originalImageUrl?.let { url ->
-            Picasso.get()
-                .load(url)
-                .placeholder(R.drawable.header)
-                .into(containerView.eventImage, object : Callback {
-                    override fun onSuccess() {
-                        containerView.eventImage.tag = "image_loading_success"
-                    }
-
-                    override fun onError(e: Exception?) {
-                        Timber.e(e)
-                    }
-                })
+        itemView.setOnClickListener {
+            eventClickListener?.onClick(event.id, itemView.eventImage)
         }
 
-        containerView.setOnClickListener {
-            eventClickListener?.onClick(event.id, containerView.eventImage)
-                ?: Timber.e("Event Click listener on ${this::class.java.canonicalName} is null")
+        itemView.shareFab.setOnClickListener {
+            EventUtils.share(event, itemView.context)
         }
 
-        containerView.shareFab.setOnClickListener {
-            EventUtils.share(event, itemView.eventImage)
-        }
-
-        containerView.favoriteFab.setOnClickListener {
+        itemView.favoriteFab.setOnClickListener {
             favFabClickListener?.onClick(event, adapterPosition)
-                ?: Timber.e("Favorite Fab Click listener on ${this::class.java.canonicalName} is null")
         }
     }
 
     private fun addChips(name: String) {
-        val chip = Chip(containerView.context)
+        val chip = Chip(itemView.context)
         chip.text = name
         chip.isCheckable = false
         chip.chipStartPadding = 0f
         chip.chipEndPadding = 0f
         chip.chipStrokeWidth = 2f
         chip.chipStrokeColor =
-            ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.colorPrimary))
+            ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
         chip.setOnClickListener {
             hashTagClickListAdapter?.onClick(name)
         }
-        containerView.chipTags.addView(chip)
-    }
-
-    private fun setFabBackground(isFavorite: Boolean) {
-        if (isFavorite) {
-            containerView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite)
-        } else {
-            containerView.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border)
-        }
+        itemView.chipTags.addView(chip)
     }
 }

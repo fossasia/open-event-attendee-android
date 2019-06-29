@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,12 +30,8 @@ class LoginViewModel(
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
     val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
-    private val mutableIsCorrectEmail = MutableLiveData<Boolean>(false)
-    val isCorrectEmail: LiveData<Boolean> = mutableIsCorrectEmail
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
-    private val mutableAreFieldsCorrect = MutableLiveData<Boolean>(false)
-    val areFieldsCorrect: LiveData<Boolean> = mutableAreFieldsCorrect
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -98,14 +93,6 @@ class LoginViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
-    }
-
-    fun checkFields(email: String, password: String) {
-        val isEmailCorrect = email.isNotEmpty() &&
-            Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        mutableIsCorrectEmail.value = isEmailCorrect
-        mutableAreFieldsCorrect.value = isEmailCorrect &&
-            password.isNotEmpty()
     }
 
     private fun isConnected(): Boolean {

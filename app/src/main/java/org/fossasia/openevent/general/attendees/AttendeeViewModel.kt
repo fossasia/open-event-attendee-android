@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.attendees
 
 import android.util.Patterns
-import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -60,17 +59,17 @@ class AttendeeViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableTotalAmount = MutableLiveData<Float>(0F)
-    val totalAmount: LiveData<Float> = mutableTotalAmount
+    val orderCompleted = MutableLiveData<Boolean>()
+    val totalAmount = MutableLiveData<Float>(0F)
     val paymentCompleted = MutableLiveData<Boolean>()
     private val mutableTickets = MutableLiveData<List<Ticket>>()
     val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
     val forms: LiveData<List<CustomForm>> = mutableForms
-    private val mutableIsAttendeeCreated = MutableLiveData<Boolean>()
-    val isAttendeeCreated: LiveData<Boolean> = mutableIsAttendeeCreated
     private val mutablePendingOrder = MutableLiveData<Order>()
     val pendingOrder: LiveData<Order> = mutablePendingOrder
+    private val mutableStripeOrderMade = MutableLiveData<Boolean>()
+    val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -95,36 +94,55 @@ class AttendeeViewModel(
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0
-    var identifierList = ArrayList<String>()
-    var editTextList = ArrayList<EditText>()
     var paymentCurrency: String = ""
     var timeout: Long = -1L
     var orderCreatedSuccess = false
     var ticketDetailsVisible = false
     var billingEnabled = false
 
+    // Log in Information
+    private val mutableSignedIn = MutableLiveData(true)
+    val signedIn: LiveData<Boolean> = mutableSignedIn
+    var isShowingSignInText = true
+
     fun getId() = authHolder.getId()
+
+    fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun login(email: String, password: String) {
+
+        compositeDisposable += authService.login(email, password)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableSignedIn.value = true
+            }, {
+                mutableMessage.value = resource.getString(R.string.login_fail_message)
+            })
+    }
+
+    fun logOut() {
+        compositeDisposable += authService.logout()
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableSignedIn.value = false
+                mutableUser.value = null
+            }) {
+                Timber.e(it, "Failure Logging out!")
+            }
+    }
 
     fun getTickets() {
         val ticketIds = ArrayList<Int>()
-        val qty = ArrayList<Int>()
         ticketIdAndQty?.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
-                qty.add(it.second)
             }
         }
 
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
             .subscribe({ tickets ->
-                var prices = 0F
-                var index = 0
-                tickets.forEach {
-                    it.price?.let { price -> prices += price * qty[index++] }
-                }
                 mutableTickets.value = tickets
-                mutableTotalAmount.value = prices
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
@@ -168,11 +186,11 @@ class AttendeeViewModel(
                 attendeesForOrder.add(it)
                 if (attendeesForOrder.size == totalAttendee) {
                     loadTicketsAndCreateOrder()
-                    mutableIsAttendeeCreated.value = true
                     mutableMessage.value = resource.getString(R.string.create_attendee_success_message)
                 }
                 Timber.d("Success! %s", attendeesForOrder.toList().toString())
             }, {
+                mutableProgress.value = false
                 if (createAttendeeIterations + 1 == totalAttendee)
                     if (it.message.equals(HttpErrors.CONFLICT)) {
                         mutableTicketSoldOut.value = true
@@ -208,7 +226,6 @@ class AttendeeViewModel(
             if (it.email.isNullOrBlank() || it.firstname.isNullOrBlank() || it.lastname.isNullOrBlank()) {
                 if (isAllDetailsFilled)
                     mutableMessage.value = resource.getString(R.string.fill_all_fields_message)
-                mutableIsAttendeeCreated.value = false
                 isAllDetailsFilled = false
                 return
             }
@@ -276,11 +293,15 @@ class AttendeeViewModel(
                         confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PLACED)
                         confirmOrderStatus(it.identifier.toString(), confirmOrder)
                     }
+                    PAYMENT_MODE_STRIPE -> {
+                        mutableStripeOrderMade.value = true
+                    }
                     else -> mutableMessage.value = resource.getString(R.string.order_success_message)
                 }
             }, {
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed creating Order")
+                mutableProgress.value = false
                 deleteAttendees(order.attendees)
             })
     }
@@ -293,7 +314,7 @@ class AttendeeViewModel(
             }.subscribe({
                 mutableMessage.value = resource.getString(R.string.order_success_message)
                 Timber.d("Updated order status successfully !")
-                paymentCompleted.value = true
+                orderCompleted.value = true
             }, {
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed updating order status")
@@ -326,7 +347,7 @@ class AttendeeViewModel(
         }
     }
 
-    fun completeOrder(charge: Charge) {
+    fun chargeOrder(charge: Charge) {
         compositeDisposable += orderService.chargeOrder(orderIdentifier.toString(), charge)
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -336,6 +357,7 @@ class AttendeeViewModel(
             }.subscribe({
                 mutableMessage.value = it.message
                 if (it.status != null && it.status) {
+                    confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_COMPLETED)
                     confirmOrderStatus(orderIdentifier.toString(), confirmOrder)
                     Timber.d("Successfully  charged for the order!")
                 } else {
@@ -373,16 +395,6 @@ class AttendeeViewModel(
             }, {
                 Timber.e(it, "Error fetching user %d", id)
             })
-    }
-
-    fun logout() {
-        compositeDisposable += authService.logout()
-            .withDefaultSchedulers()
-            .subscribe({
-                Timber.d("Logged out!")
-            }) {
-                Timber.e(it, "Failure Logging out!")
-            }
     }
 
     fun areAttendeeEmailsValid(attendees: ArrayList<Attendee>): Boolean {

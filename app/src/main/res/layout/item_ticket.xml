@@ -19,13 +19,28 @@
         android:textSize="@dimen/text_size_large"
         tools:text="Google I/O" />
 
-    <TextView
-        android:id="@+id/price"
+    <LinearLayout
         android:layout_width="@dimen/layout_margin_none"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="@dimen/text_size_large"
-        tools:text="$25" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            tools:text="$25" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/discountPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            tools:text="$25" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="@dimen/layout_margin_none"

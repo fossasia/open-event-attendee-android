@@ -2,12 +2,10 @@ package org.fossasia.openevent.general.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,6 +18,10 @@ import kotlinx.android.synthetic.main.fragment_search_filter.view.radioGroup
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectCategory
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectDate
 import kotlinx.android.synthetic.main.fragment_search_filter.view.tvSelectLocation
+import kotlinx.android.synthetic.main.fragment_search_filter.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search_filter.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_search_filter.view.tick
+import kotlinx.android.synthetic.main.fragment_search_filter.view.scrollView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,9 +42,8 @@ class SearchFilterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setToolbar(activity)
-        setHasOptionsMenu(true)
         rootView = inflater.inflate(R.layout.fragment_search_filter, container, false)
+        setupToolbar()
         setFilterParams()
         setFilters()
         setSortByRadioGroup()
@@ -67,31 +68,28 @@ class SearchFilterFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_filter, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                true
-            }
-            R.id.filter_set -> {
-                findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchResults(
-                    date = selectedTime,
-                    freeEvents = rootView.freeStuffCheckBox.isChecked,
-                    location = selectedLocation,
-                    type = selectedCategory,
-                    query = safeArgs.query,
-                    sort = sortBy,
-                    sessionsAndSpeakers = rootView.sessionsAndSpeakerCheckBox.isChecked,
-                    callForSpeakers = rootView.callForSpeakerCheckBox.isChecked
-                ))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    private fun setupToolbar() {
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+        rootView.tick.setOnClickListener {
+            findNavController(rootView).navigate(SearchFilterFragmentDirections.actionSearchFilterToSearchResults(
+                date = selectedTime,
+                freeEvents = rootView.freeStuffCheckBox.isChecked,
+                location = selectedLocation,
+                type = selectedCategory,
+                query = safeArgs.query,
+                sort = sortBy,
+                sessionsAndSpeakers = rootView.sessionsAndSpeakerCheckBox.isChecked,
+                callForSpeakers = rootView.callForSpeakerCheckBox.isChecked
+            ))
+        }
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > 0)
+                rootView.toolbarLayout.elevation = resources.getDimension(R.dimen.custom_toolbar_elevation)
+            else
+                rootView.toolbarLayout.elevation = 0F
         }
     }
 

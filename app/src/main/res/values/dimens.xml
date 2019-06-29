@@ -4,7 +4,7 @@
     <dimen name="heading_text_size">20sp</dimen>
     <dimen name="text_size_expanded_title">22sp</dimen>
     <dimen name="text_size_expanded_title_medium">25sp</dimen>
-    <dimen name="text_size_expanded_title_large">27sp</dimen>
+    <dimen name="text_size_expanded_title_large">30sp</dimen>
     <dimen name="text_size_extra_large">32sp</dimen>
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="text_size_larger">18sp</dimen>
@@ -59,6 +59,8 @@
     <dimen name="view_height_25dp">25dp</dimen>
     <dimen name="placeholder_tickets_view_height">30dp</dimen>
     <dimen name="round_corners_button_radius">20dp</dimen>
+    <dimen name="custom_toolbar_elevation">8dp</dimen>
+    <dimen name="icon_edit_profile_height">80dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_small">24dp</dimen>

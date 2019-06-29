@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
@@ -14,7 +15,10 @@ import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.event.feedback.Feedback
+import org.fossasia.openevent.general.feedback.Feedback
+import org.fossasia.openevent.general.feedback.FeedbackService
+import org.fossasia.openevent.general.order.Order
+import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.social.SocialLinksService
@@ -33,7 +37,9 @@ class EventDetailsViewModel(
     private val sponsorService: SponsorService,
     private val sessionService: SessionService,
     private val socialLinksService: SocialLinksService,
+    private val feedbackService: FeedbackService,
     private val resource: Resource,
+    private val orderService: OrderService,
     private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
@@ -62,6 +68,8 @@ class EventDetailsViewModel(
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
     private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
     val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
+    private val mutableOrders = MutableLiveData<List<Order>>()
+    val orders: LiveData<List<Order>> = mutableOrders
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -70,7 +78,7 @@ class EventDetailsViewModel(
     fun fetchEventFeedback(id: Long) {
         if (id == -1L) return
 
-        compositeDisposable += eventService.getEventFeedback(id)
+        compositeDisposable += feedbackService.getEventFeedback(id)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEventFeedback.value = it
@@ -84,7 +92,7 @@ class EventDetailsViewModel(
     fun submitFeedback(comment: String, rating: Float?, eventId: Long) {
         val feedback = Feedback(rating = rating.toString(), comment = comment,
             event = EventId(eventId), user = UserId(getId()))
-        compositeDisposable += eventService.submitFeedback(feedback)
+        compositeDisposable += feedbackService.submitFeedback(feedback)
             .withDefaultSchedulers()
             .subscribe({
                 mutablePopMessage.value = resource.getString(R.string.feedback_submitted)
@@ -96,7 +104,15 @@ class EventDetailsViewModel(
     fun fetchEventSpeakers(id: Long) {
         if (id == -1L) return
 
-        compositeDisposable += speakerService.fetchSpeakersForEvent(id)
+        val query = """[{
+                |   'and':[{
+                |       'name':'is-featured',
+                |       'op':'eq',
+                |       'val':'true'
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+
+        compositeDisposable += speakerService.fetchSpeakersForEvent(id, query)
             .withDefaultSchedulers()
             .subscribe({
                 mutableEventSpeakers.value = it
@@ -124,28 +140,17 @@ class EventDetailsViewModel(
     fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
+        var similarEventsFlowable = eventService.getEventsByLocation(location)
         if (topicId != -1L) {
-            compositeDisposable += eventService.getSimilarEvents(topicId)
-                .withDefaultSchedulers()
-                .distinctUntilChanged()
-                .subscribe({ events ->
-                    val list = events.filter { it.id != eventId }
-                    val oldList = mutableSimilarEvents.value
-
-                    val similarEventList = mutableSetOf<Event>()
-                    similarEventList.addAll(list)
-                    oldList?.let {
-                        similarEventList.addAll(it)
-                    }
-                    mutableSimilarEvents.value = similarEventList
-                }, {
-                    Timber.e(it, "Error fetching similar events")
-                    mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
-                        resource.getString(R.string.similar_events))
+            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
+                BiFunction { firstList: List<Event>, secondList: List<Event> ->
+                    val similarList = mutableListOf<Event>()
+                    similarList.addAll(firstList)
+                    similarList.addAll(secondList)
+                    similarList
                 })
         }
-
-        compositeDisposable += eventService.getEventsByLocation(location)
+        compositeDisposable += similarEventsFlowable
             .withDefaultSchedulers()
             .distinctUntilChanged()
             .subscribe({ events ->
@@ -228,6 +233,18 @@ class EventDetailsViewModel(
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.sessions))
                 Timber.e(it, "Error fetching events sessions")
+            })
+    }
+
+    fun loadOrders() {
+        if (!isLoggedIn())
+            return
+        compositeDisposable += orderService.getOrdersOfUser(getId())
+            .withDefaultSchedulers()
+            .subscribe({
+                mutableOrders.value = it
+            }, {
+                Timber.e(it, "Error fetching orders")
             })
     }
 

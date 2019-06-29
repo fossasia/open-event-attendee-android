@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,137 +7,178 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/locationSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_medium"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:layout_marginEnd="@dimen/layout_margin_medium"
-        android:layout_marginRight="@dimen/layout_margin_medium"
-        android:inputType="textCapWords"
-        app:iconifiedByDefault="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:queryHint="@string/location_hint"
-        app:searchIcon="@null"
-        app:queryBackground="@null"/>
-
-    <TextView
-        android:id="@+id/currentLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_medium"
-        android:layout_marginTop="@dimen/layout_margin_large"
-        android:drawableStart="@drawable/ic_location_pin"
-        android:drawableLeft="@drawable/ic_location_pin"
-        android:drawablePadding="@dimen/padding_medium"
-        android:drawableTint="@color/colorPrimary"
-        android:text="@string/current_location"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationSearchView" />
-
-    <ProgressBar
-        android:id="@+id/locationProgressBar"
-        android:layout_width="@dimen/item_image_view_medium"
-        android:layout_height="@dimen/item_image_view_medium"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_medium"
-        android:layout_marginStart="@dimen/layout_margin_medium"
-        app:layout_constraintStart_toEndOf="@+id/currentLocation"
-        app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
-        android:visibility="gone"
-        tools:visibility="visible"/>
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/placeSuggestionsCard"
-        android:layout_marginStart="@dimen/layout_margin_medium"
-        android:layout_marginLeft="@dimen/layout_margin_medium"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:layout_marginEnd="@dimen/layout_margin_medium"
-        android:layout_marginRight="@dimen/layout_margin_medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+        android:id="@+id/toolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:cardElevation="@dimen/card_elevation"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        tools:visibility="visible">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAutoPlaces"
+        android:elevation="0dp">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </androidx.recyclerview.widget.RecyclerView>
-
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_black">
+            <TextView
+                android:id="@+id/toolbarTitle"
+                style = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:layout_width = "wrap_content"
+                android:gravity = "center_vertical"
+                android:layout_height = "match_parent" />
+        </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentLocation"
-        android:id="@+id/titleTv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_large"
-        android:layout_marginLeft="@dimen/layout_margin_large"
-        android:layout_marginTop="@dimen/layout_margin_extra_large"
-        android:text="@string/popular_locations"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/heading_text_size" />
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTv"
-        android:id="@+id/shimmerSearchEventTypes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/placeholder_item_event_location" />
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/locationSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:inputType="textCapWords"
+                app:iconifiedByDefault="false"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:queryHint="@string/location_hint"
+                app:searchIcon="@null"
+                app:queryBackground="@null"/>
+            <TextView
+                android:id="@+id/currentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_location_pin"
+                android:drawablePadding="@dimen/padding_medium"
+                android:drawableTint="@color/colorPrimary"
+                android:paddingStart="@dimen/padding_large"
+                android:text="@string/current_location"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:background="?selectableItemBackground"
+                android:textSize="@dimen/text_size_large" />
 
-            <include layout="@layout/placeholder_item_event_location" />
+            <ProgressBar
+                android:id="@+id/locationProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_image_view_medium"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
-            <include layout="@layout/placeholder_item_event_location" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/placeSuggestionsCard"
+                android:layout_marginStart="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                tools:visibility="visible">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAutoPlaces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible"/>
+            </androidx.cardview.widget.CardView>
 
-            <include layout="@layout/placeholder_item_event_location" />
+            <LinearLayout
+                android:id="@+id/recentSearchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_large"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-            <include layout="@layout/placeholder_item_event_location" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:text="@string/recent_locations"
+                    android:paddingStart="@dimen/padding_large"
+                    android:paddingEnd="@dimen/padding_large"
+                    android:paddingTop="@dimen/padding_large"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_expanded_title" />
 
-            <include layout="@layout/placeholder_item_event_location" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recentSearchRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium" />
 
-            <include layout="@layout/placeholder_item_event_location" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/event_details_divider"
+                    android:dividerHeight="0dp"
+                    android:divider="@null"
+                    android:layout_marginStart="@dimen/layout_margin_large"
+                    android:layout_marginEnd="@dimen/layout_margin_large"
+                    android:background="@color/grey" />
+            </LinearLayout>
 
-            <include layout="@layout/placeholder_item_event_location" />
+            <LinearLayout
+                android:id="@+id/popularLocationsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:paddingBottom="@dimen/padding_large">
 
-            <include layout="@layout/placeholder_item_event_location" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
+                    android:text="@string/popular_locations"
+                    android:paddingStart="@dimen/padding_large"
+                    android:paddingEnd="@dimen/padding_large"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_expanded_title" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popularLocationsRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dividerHeight="0dp"
+                    android:divider="@null"
+                    android:layout_marginBottom="@dimen/layout_margin_medium" />
+            </LinearLayout>
+
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerSearchEventTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:visibility="gone">
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                    <include layout="@layout/placeholder_item_event_location" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <ListView
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shimmerSearchEventTypes"
-        android:id="@+id/eventLocationLv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_large"
-        android:layout_marginLeft="@dimen/layout_margin_large"
-        android:layout_marginTop="@dimen/layout_margin_medium"
-        android:layout_marginEnd="@dimen/layout_margin_large"
-        android:layout_marginRight="@dimen/layout_margin_large"
-        android:layout_marginBottom="8dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

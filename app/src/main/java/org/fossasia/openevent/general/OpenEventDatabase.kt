@@ -21,6 +21,10 @@ import org.fossasia.openevent.general.event.topic.EventTopic
 import org.fossasia.openevent.general.event.topic.EventTopicConverter
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventTypeConverter
+import org.fossasia.openevent.general.feedback.Feedback
+import org.fossasia.openevent.general.feedback.FeedbackDao
+import org.fossasia.openevent.general.notification.Notification
+import org.fossasia.openevent.general.notification.NotificationDao
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderDao
 import org.fossasia.openevent.general.sessions.Session
@@ -45,7 +49,7 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
 
 @Database(entities = [Event::class, User::class, SocialLink::class, Ticket::class, Attendee::class,
     EventTopic::class, Order::class, CustomForm::class, Speaker::class, SpeakerWithEvent::class, Sponsor::class,
-    SponsorWithEvent::class, Session::class, SpeakersCall::class], version = 6)
+    SponsorWithEvent::class, Session::class, SpeakersCall::class, Feedback::class, Notification::class], version = 7)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
     EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class, UserIdConverter::class,
     AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class, TrackConverter::class,
@@ -77,4 +81,8 @@ abstract class OpenEventDatabase : RoomDatabase() {
     abstract fun sessionDao(): SessionDao
 
     abstract fun speakersCallDao(): SpeakersCallDao
+
+    abstract fun feedbackDao(): FeedbackDao
+
+    abstract fun notificationDao(): NotificationDao
 }

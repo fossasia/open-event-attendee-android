@@ -19,8 +19,12 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    private val mutableMessage = SingleLiveEvent<String>()
+    val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
+    private val mutableUpdatedUser = MutableLiveData<User>()
+    val updatedUser: LiveData<User> = mutableUpdatedUser
+    private val mutableUpdatedPassword = MutableLiveData<String>()
+    val updatedPassword: LiveData<String> = mutableUpdatedPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -34,7 +38,22 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }
     }
 
-    fun fetchProfile() {
+    fun changePassword(oldPassword: String, newPassword: String) {
+        compositeDisposable += authService.changePassword(oldPassword, newPassword)
+            .withDefaultSchedulers()
+            .subscribe({
+                if (it.passwordChanged) {
+                    mutableMessage.value = "Password changed successfully!"
+                    mutableUpdatedPassword.value = newPassword
+                }
+            }, {
+                if (it.message.toString() == "HTTP 400 BAD REQUEST")
+                    mutableMessage.value = "Incorrect Old Password provided!"
+                else mutableMessage.value = "Unable to change password!"
+            })
+    }
+
+    fun getProfile() {
         compositeDisposable += authService.getProfile()
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -47,6 +66,17 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }) {
                 Timber.e(it, "Failure")
                 mutableMessage.value = resource.getString(R.string.failure)
+            }
+    }
+
+    fun syncProfile() {
+        compositeDisposable += authService.syncProfile()
+            .withDefaultSchedulers()
+            .subscribe({ user ->
+                Timber.d("Response Success")
+                this.mutableUpdatedUser.value = user
+            }) {
+                Timber.e(it, "Failure")
             }
     }
 

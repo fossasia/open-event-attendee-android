@@ -1,38 +1,51 @@
 package org.fossasia.openevent.general.search
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_search.view.fabSearch
 import kotlinx.android.synthetic.main.fragment_search.view.locationTextView
 import kotlinx.android.synthetic.main.fragment_search.view.timeTextView
 import kotlinx.android.synthetic.main.fragment_search.view.eventTypeTextView
+import kotlinx.android.synthetic.main.fragment_search.view.searchText
+import kotlinx.android.synthetic.main.fragment_search.view.searchInfoContainer
+import kotlinx.android.synthetic.main.fragment_search.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search.view.backgroundImage
+import kotlinx.android.synthetic.main.fragment_search.view.recentSearch
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.Navigation.findNavController
-import org.fossasia.openevent.general.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
+import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDateWithoutYear
+import org.fossasia.openevent.general.search.recentsearch.RecentSearchAdapter
+import org.fossasia.openevent.general.search.recentsearch.RecentSearchListener
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
+import org.jetbrains.anko.design.snackbar
 
 const val SEARCH_FRAGMENT = "SearchFragment"
+const val RECENT_SEARCHES = "recentSearches"
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleClick {
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var rootView: View
-    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,9 +53,8 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_search, container, false)
-
-        setToolbar(activity, getString(R.string.search), false)
-        setHasOptionsMenu(true)
+        setToolbar()
+        setupRecentSearch()
 
         rootView.timeTextView.setOnClickListener {
             findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchTime(
@@ -84,68 +96,115 @@ class SearchFragment : Fragment() {
             ))
         }
 
+        if (searchViewModel.isQuerying)
+            startQuerying()
+        else
+            stopQuerying()
+
         return rootView
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.search_item -> {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        rootView.fabSearch.setOnClickListener {
+            makeSearch()
+        }
+        rootView.searchText.setOnClickListener {
+            if (!searchViewModel.isQuerying)
+                startQuerying()
+        }
+        rootView.searchText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_DONE ||
+                event.action == KeyEvent.ACTION_DOWN &&
+                event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                makeSearch()
+                true
+            } else {
                 false
             }
-
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun handleBackPress() {
+        if (searchViewModel.isQuerying)
+            stopQuerying()
+        else
+            findNavController(rootView).popBackStack()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val searchItem = menu.findItem(R.id.search_item)
-        val thisActivity = activity
-        if (thisActivity is MainActivity) searchView = SearchView(thisActivity.supportActionBar?.themedContext)
-        searchView.maxWidth = Int.MAX_VALUE
-        searchItem.actionView = searchView
-        val queryListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchResults(
-                    query = query,
-                    location = rootView.locationTextView.text.toString().nullToEmpty(),
-                    date = (searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty(),
-                    type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
-                ))
-                return false
+    override fun doubleClick() {
+        startQuerying()
+    }
+
+    private fun setupRecentSearch() {
+        val adapter = RecentSearchAdapter()
+        adapter.addAll(searchViewModel.getRecentSearches())
+        rootView.recentSearch.layoutManager = LinearLayoutManager(context)
+        rootView.recentSearch.adapter = adapter
+        adapter.setListener(object : RecentSearchListener {
+            override fun removeSearch(position: Int, recentSearch: Pair<String, String>) {
+                adapter.removeRecentSearchAt(position)
+                searchViewModel.removeRecentSearch(position)
+                rootView.snackbar("Removed recent search ${recentSearch.first}", getString(R.string.undo)) {
+                    adapter.addRecentSearch(position, recentSearch)
+                    searchViewModel.saveRecentSearch(recentSearch.first, recentSearch.second, position)
+                }
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
+            override fun clickSearch(searchText: String, searchLocation: String) {
+                makeSearch(searchText, searchLocation, false)
             }
-        }
-        searchView.setOnQueryTextListener(queryListener)
-        rootView.fabSearch.setOnClickListener {
-            queryListener.onQueryTextSubmit(searchView.query.toString())
-        }
-
-        if (searchViewModel.isQuerying) {
-            searchItem.expandActionView()
-            searchView.setQuery(searchViewModel.searchViewQuery, false)
-            searchView.clearFocus()
-        }
-        super.onPrepareOptionsMenu(menu)
+        })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        searchViewModel.isQuerying = !searchView.isIconified
-        searchViewModel.searchViewQuery = searchView.query.toString()
-        searchView.isSaveEnabled = false
+    private fun setToolbar() {
+        setToolbar(activity, show = false)
+        rootView.toolbar.setNavigationOnClickListener {
+            if (searchViewModel.isQuerying)
+                stopQuerying()
+            else
+                startQuerying()
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (this::searchView.isInitialized)
-            searchView.setOnQueryTextListener(null)
+    private fun makeSearch(query: String? = null, location: String? = null, saveQuery: Boolean = true) {
+        searchViewModel.isQuerying = false
+        val searchQuery = query ?: rootView.searchText.text.toString()
+        val searchLocation = location ?: rootView.locationTextView.text.toString().nullToEmpty()
+        findNavController(rootView).navigate(SearchFragmentDirections.actionSearchToSearchResults(
+            query = searchQuery,
+            location = searchLocation,
+            date = (searchViewModel.savedTime ?: getString(R.string.anytime)).nullToEmpty(),
+            type = (searchViewModel.savedType ?: getString(R.string.anything)).nullToEmpty()
+        ))
+        if (saveQuery) searchViewModel.saveRecentSearch(searchQuery, searchLocation)
+        rootView.searchText.setText("")
+    }
+
+    private fun startQuerying() {
+        searchViewModel.isQuerying = true
+        rootView.searchInfoContainer.isVisible = false
+        Picasso.get()
+            .load(R.color.colorPrimary)
+            .placeholder(R.color.colorPrimary)
+            .into(rootView.backgroundImage)
+        rootView.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back_white_cct)
+        rootView.searchText.requestFocus()
+        rootView.recentSearch.isVisible = true
+        showSoftKeyboard(context, rootView)
+    }
+
+    private fun stopQuerying() {
+        searchViewModel.isQuerying = false
+        rootView.searchInfoContainer.isVisible = true
+        val background = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            R.drawable.background_fragment else R.drawable.background_fragment_search
+        Picasso.get()
+            .load(background)
+            .placeholder(background)
+            .into(rootView.backgroundImage)
+        rootView.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_search_white)
+        rootView.recentSearch.isVisible = false
+        hideSoftKeyboard(context, rootView)
     }
 }

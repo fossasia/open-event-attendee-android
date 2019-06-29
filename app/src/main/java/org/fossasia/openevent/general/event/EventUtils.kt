@@ -1,67 +1,20 @@
 package org.fossasia.openevent.general.event
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import android.widget.ImageView
-import androidx.core.content.FileProvider
 import androidx.preference.PreferenceManager
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventGeneral
-import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.utils.nullToEmpty
-import org.fossasia.openevent.general.utils.stripHtml
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
 object EventUtils {
-
-    @JvmStatic
-    private val sharedResource by lazy {
-        Resource()
-    }
-
-    private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
-    private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-
-    fun getSharableInfo(event: Event, resource: Resource = sharedResource): String {
-        val description = event.description.nullToEmpty()
-        val identifier = event.identifier
-        val eventUrl = BuildConfig.FRONTEND_URL + "e/" + identifier
-
-        val message = StringBuilder()
-
-        val startsAt = getEventDateTime(event.startsAt, event.timezone)
-        val endsAt = getEventDateTime(event.endsAt, event.timezone)
-
-        message.append(resource.getString(R.string.event_name)).append(event.name).append("\n\n")
-        if (description.stripHtml().nullToEmpty().isNotEmpty())
-            message.append(resource.getString(R.string.event_description))
-                .append(event.description.nullToEmpty().stripHtml()).append("\n\n")
-        message.append(resource.getString(R.string.starts_on))
-                .append(startsAt.format(dateFormat)).append(" ")
-                .append(startsAt.format(timeFormat)).append("\n")
-        message.append(resource.getString(R.string.ends_on))
-                .append(endsAt.format(dateFormat)).append(" ")
-                .append(endsAt.format(timeFormat)).append("\n")
-        message.append(resource.getString(R.string.event_location))
-                .append(event.locationName)
-        if (eventUrl.isNotEmpty()) message.append("\n")
-                .append(resource.getString(R.string.event_link))
-                .append(eventUrl)
-
-        return message.toString()
-    }
 
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
@@ -235,39 +188,15 @@ object EventUtils {
      *  share event detail along with event image
      *  if image loading is successful then imageView tag will be set to String
      *  So if imageView tag is not null then share image else only event details
-     *  @param eventImage to extract the image and use context
      *
      */
-    fun share(event: Event, eventImage: ImageView) {
+    fun share(event: Event, context: Context) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.type = "text/plain"
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getSharableInfo(event))
-        eventImage.tag?.let {
-            val bmpUri = getLocalBitmapUri(eventImage)
-            if (bmpUri != null) {
-                sendIntent.type = "image/*"
-                sendIntent.putExtra(Intent.EXTRA_STREAM, bmpUri)
-            }
-        }
-        eventImage.context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
-    }
-
-    private fun getLocalBitmapUri(imageView: ImageView): Uri? {
-        val drawable = imageView.drawable
-        if (drawable as? BitmapDrawable == null || drawable.bitmap == null)
-            return null
-
-        val file = File(imageView.context.cacheDir, "share_image_" + System.currentTimeMillis() + ".png")
-        return FileOutputStream(file)
-            .use { fos ->
-                drawable.bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos)
-                Timber.d("file: %s", file.absolutePath)
-                val bmpUri =
-                    FileProvider.getUriForFile(imageView.context, BuildConfig.APPLICATION_ID + ".provider", file)
-                Timber.d("uri: %s", bmpUri)
-                bmpUri
-            }
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, event.name)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "${BuildConfig.FRONTEND_URL}e/${event.identifier}")
+        context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
     fun getTimeInISO8601(date: Date): String {

@@ -1,5 +1,7 @@
 package org.fossasia.openevent.general.order
 
+import android.content.ActivityNotFoundException
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -17,6 +19,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.dialog_rate_us.view.rateEventyayButton
 import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventLayout
 import kotlinx.android.synthetic.main.fragment_order_completed.view.shimmerSimilarEvents
@@ -28,17 +31,20 @@ import kotlinx.android.synthetic.main.fragment_order_completed.view.time
 import kotlinx.android.synthetic.main.fragment_order_completed.view.view
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventsListAdapter
-import org.fossasia.openevent.general.event.EventLayoutType
+import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
+import android.net.Uri
+import org.fossasia.openevent.general.BuildConfig
+
+private const val DISPLAY_RATING_DIALOG = "displayRatingDialog"
 
 class OrderCompletedFragment : Fragment() {
 
@@ -46,7 +52,8 @@ class OrderCompletedFragment : Fragment() {
     private lateinit var eventShare: Event
     private val safeArgs: OrderCompletedFragmentArgs by navArgs()
     private val orderCompletedViewModel by viewModel<OrderCompletedViewModel>()
-    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
+    private val similarEventsAdapter = SimilarEventsListAdapter()
+    private val preferences = Preference()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +69,8 @@ class OrderCompletedFragment : Fragment() {
         rootView.similarEventsRecycler.layoutManager = similarLinearLayoutManager
         rootView.similarEventsRecycler.adapter = similarEventsAdapter
 
+        displayRateEventyayAlertDialog()
+
         orderCompletedViewModel.loadEvent(safeArgs.eventId)
         orderCompletedViewModel.event
             .nonNull()
@@ -69,7 +78,8 @@ class OrderCompletedFragment : Fragment() {
                 loadEventDetails(it)
                 eventShare = it
                 val eventTopicId = it.eventTopic?.id ?: 0
-                orderCompletedViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId)
+                val location = it.searchableLocationName ?: it.locationName
+                orderCompletedViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId, location)
             })
 
         orderCompletedViewModel.similarEvents
@@ -105,10 +115,35 @@ class OrderCompletedFragment : Fragment() {
         }
 
         rootView.share.setOnClickListener {
-            shareEvent(eventShare)
+            EventUtils.share(eventShare, requireContext())
         }
 
         return rootView
+    }
+
+    private fun displayRateEventyayAlertDialog() {
+        if (!preferences.getBoolean(DISPLAY_RATING_DIALOG, true))
+            return
+        val layout = layoutInflater.inflate(R.layout.dialog_rate_us, null)
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(layout)
+            .setNeutralButton(getString(R.string.no_thanks)) { _, _ ->
+                preferences.putBoolean(DISPLAY_RATING_DIALOG, false)
+            }.setPositiveButton(getString(R.string.maybe_later)) { _, _ ->
+                preferences.putBoolean(DISPLAY_RATING_DIALOG, true)
+            }.show()
+        layout.rateEventyayButton.setOnClickListener {
+            alertDialog.dismiss()
+            val appPackageName = BuildConfig.APPLICATION_ID
+            preferences.putBoolean(DISPLAY_RATING_DIALOG, false)
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$appPackageName")))
+            } catch (e: ActivityNotFoundException) {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -159,14 +194,6 @@ class OrderCompletedFragment : Fragment() {
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
             EventUtils.getTimeInMilliSeconds(event.endsAt, event.timezone))
         startActivity(intent)
-    }
-
-    private fun shareEvent(event: Event) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, EventUtils.getSharableInfo(event))
-        sendIntent.type = "text/plain"
-        startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 
     private fun redirectToEventsFragment() {

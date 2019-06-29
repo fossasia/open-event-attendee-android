@@ -6,41 +6,40 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_main.navigation
-import kotlinx.android.synthetic.main.content_no_tickets.findMyTickets
-import kotlinx.android.synthetic.main.content_no_tickets.noTicketMessage
-import kotlinx.android.synthetic.main.fragment_orders_under_user.noTicketsScreen
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersUnderUserCoordinatorLayout
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.findMyTickets
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersNestedScrollView
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.expireFilter
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsTitle
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.ScrollToTop
+import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 
-class OrdersUnderUserFragment : Fragment(), ScrollToTop {
+class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private val safeArgs: OrdersUnderUserFragmentArgs by navArgs()
 
     override fun onStart() {
         super.onStart()
@@ -55,75 +54,75 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
-        when (safeArgs.showExpired) {
-            true -> {
-                setToolbar(activity, getString(R.string.past_tickets))
-                setHasOptionsMenu(true)
-                navAnimGone(activity?.navigation, requireContext())
-            }
-            false -> {
-                setToolbar(activity, getString(R.string.tickets), false)
-            }
-        }
+        setToolbar(activity, show = false)
 
-        rootView.ordersRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ordersRecycler.adapter = ordersRecyclerAdapter
         rootView.ordersRecycler.isNestedScrollingEnabled = false
 
-        linearLayoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
-        if (ordersUnderUserVM.isLoggedIn()) {
-            if (ordersRecyclerAdapter.itemCount == 0) ordersUnderUserVM.ordersUnderUser(safeArgs.showExpired)
-            if (safeArgs.showExpired) rootView.expireFilter.isVisible = false
+        if (ordersUnderUserVM.eventAndOrder.value == null)
+            ordersUnderUserVM.ordersUnderUser(false)
 
-            val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
-                override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
-                    findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-                        .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
+        ordersUnderUserVM.showShimmerResults
+            .nonNull()
+            .observe(this, Observer {
+                rootView.shimmerSearch.isVisible = it
+            })
+
+        ordersUnderUserVM.message
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.longSnackbar(it)
+            })
+
+        ordersUnderUserVM.noTickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                showNoTicketsScreen(it)
+            })
+
+        ordersUnderUserVM.eventAndOrder
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                val list = it.sortedByDescending {
+                    EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
                 }
-            }
-
-            rootView.expireFilter.setOnClickListener {
-                findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-                    .actionOrderUserToOrderUserExpire(showExpired = true)
-                    )
-            }
-
-            ordersRecyclerAdapter.setListener(recyclerViewClickListener)
-
-            ordersUnderUserVM.showShimmerResults
-                .nonNull()
-                .observe(this, Observer {
-                    rootView.shimmerSearch.isVisible = it
-                })
-
-            ordersUnderUserVM.message
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    rootView.ordersUnderUserCoordinatorLayout.longSnackbar(it)
-                })
-
-            ordersUnderUserVM.noTickets
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    showNoTicketsScreen(it)
-                })
-
-            ordersUnderUserVM.eventAndOrder
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    val list = it.sortedByDescending {
-                        EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
-                    }
-                    ordersRecyclerAdapter.addAllPairs(list, safeArgs.showExpired)
-                    ordersRecyclerAdapter.notifyDataSetChanged()
-                    Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
-                })
-        }
+                rootView.ticketsNumber.text = "${it.size} orders"
+                ordersRecyclerAdapter.addAllPairs(list, false)
+                ordersRecyclerAdapter.notifyDataSetChanged()
+                Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
+            })
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
+            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
+                findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                    .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
+            }
+        }
+        ordersRecyclerAdapter.setListener(recyclerViewClickListener)
+
+        rootView.pastEvent.setOnClickListener {
+            findNavController(rootView).navigate(OrdersUnderUserFragmentDirections.actionOrderUserToOrderExpired())
+        }
+        rootView.findMyTickets.setOnClickListener {
+            Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
+        }
+        rootView.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY > rootView.ticketsTitle.y && !rootView.toolbarLayout.isVisible) {
+                rootView.toolbarLayout.showWithFading()
+            } else if (scrollY < rootView.ticketsTitle.y && rootView.toolbarLayout.isVisible) {
+                rootView.toolbarLayout.hideWithFading()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -132,15 +131,8 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
     }
 
     private fun showNoTicketsScreen(show: Boolean) {
-        noTicketsScreen.isVisible = show
-        if (safeArgs.showExpired) {
-            findMyTickets.isVisible = false
-            noTicketMessage.text = getString(R.string.no_past_tickets)
-        } else {
-            findMyTickets.setOnClickListener {
-                Utils.openUrl(requireContext(), resources.getString(R.string.ticket_issues_url))
-            }
-        }
+        rootView.noTicketsScreen.isVisible = show
+        if (show) rootView.ticketsNumber.text = getString(R.string.no_tickets)
     }
 
     private fun redirectToLogin() {
@@ -148,7 +140,7 @@ class OrdersUnderUserFragment : Fragment(), ScrollToTop {
             .actionOrderUserToAuth(getString(R.string.log_in_first), ORDERS_FRAGMENT))
     }
 
-    override fun scrollToTop() = rootView.ordersNestedScrollView.smoothScrollTo(0, 0)
+    override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

@@ -17,6 +17,23 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_arrow_back_black">
+                <ImageView
+                    android:id="@+id/tick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:padding="@dimen/padding_large"
+                    android:background="?selectableItemBackground"
+                    android:tint="@color/black"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_check_black"/>
+            </androidx.appcompat.widget.Toolbar>
+
             <LinearLayout
                 android:id="@+id/loginLayout"
                 android:layout_width="match_parent"
@@ -45,9 +62,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
+                        android:transitionName="emailLoginTransition"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_email_black"
                         android:drawablePadding="@dimen/layout_margin_moderate"
                         android:inputType="textEmailAddress"
                         android:drawableStart="@drawable/ic_email_black" />
@@ -67,7 +84,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
-                        android:drawableLeft="@drawable/ic_lock_black"
                         android:drawablePadding="@dimen/layout_margin_moderate"
                         android:inputType="textPassword"
                         android:drawableStart="@drawable/ic_lock_black" />
@@ -87,7 +103,7 @@
                     android:id="@+id/forgotPassword"
                     android:layout_width="match_parent"
                     android:gravity="center"
-                    android:visibility="gone"
+                    android:background="?selectableItemBackground"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginTop="@dimen/padding_medium"
@@ -105,15 +121,6 @@
                 android:id="@+id/sentEmailLayout"
                 android:layout_margin="@dimen/layout_margin_medium"
                 android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/item_image_view_medium"
-                    android:layout_height="@dimen/layout_margin_none"
-                    android:layout_weight="0.2"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="@dimen/layout_margin_medium"
-                    android:id="@+id/tick"
-                    app:srcCompat="@drawable/ic_check_black"/>
 
                 <View
                     android:layout_width="@dimen/fab_width"

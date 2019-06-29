@@ -1,17 +1,22 @@
 package org.fossasia.openevent.general.order
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,12 +25,15 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_details.view.orderDetailsRecycler
+import kotlinx.android.synthetic.main.fragment_order_details.view.backgroundImage
 import kotlinx.android.synthetic.main.item_card_order_details.view.orderDetailCardView
 import kotlinx.android.synthetic.main.item_enlarged_qr.view.enlargedQrImage
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.order.invoice.DownloadInvoiceService
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -44,6 +52,10 @@ class OrderDetailsFragment : Fragment() {
     private val ordersRecyclerAdapter: OrderDetailsRecyclerAdapter = OrderDetailsRecyclerAdapter()
     private val safeArgs: OrderDetailsFragmentArgs by navArgs()
 
+    private var writePermissionGranted = false
+    private val WRITE_REQUEST_CODE = 1
+    private val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,11 +65,20 @@ class OrderDetailsFragment : Fragment() {
             .nonNull()
             .observe(this, Observer {
                 ordersRecyclerAdapter.setEvent(it)
+                Picasso.get()
+                    .load(it.originalImageUrl)
+                    .error(R.drawable.header)
+                    .placeholder(R.drawable.header)
+                    .into(rootView.backgroundImage)
             })
 
         orderDetailsViewModel.attendees
             .nonNull()
             .observe(this, Observer {
+                if (it.isEmpty()) {
+                    Toast.makeText(context, getString(R.string.error_fetching_attendees), Toast.LENGTH_SHORT).show()
+                    activity?.onBackPressed()
+                }
                 ordersRecyclerAdapter.addAll(it)
                 Timber.d("Fetched attendees of size %s", ordersRecyclerAdapter.itemCount)
             })
@@ -126,6 +147,9 @@ class OrderDetailsFragment : Fragment() {
         orderDetailsViewModel.loadEvent(safeArgs.eventId)
         orderDetailsViewModel.loadAttendeeDetails(safeArgs.orderId)
 
+        writePermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+
         return rootView
     }
 
@@ -144,7 +168,28 @@ class OrderDetailsFragment : Fragment() {
                 shareCurrentTicket()
                 true
             }
+
+            R.id.download_invoice -> {
+                if (writePermissionGranted) {
+                    downloadInvoice()
+                } else {
+                    requestPermissions(permission, WRITE_REQUEST_CODE)
+                }
+
+                true
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == WRITE_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                writePermissionGranted = true
+                rootView.snackbar(getString(R.string.storage_permission_granted_message))
+                downloadInvoice()
+            } else {
+                rootView.snackbar(getString(R.string.storage_permission_denied_message))
+            }
         }
     }
 
@@ -152,6 +197,14 @@ class OrderDetailsFragment : Fragment() {
         super.onDestroyView()
         ordersRecyclerAdapter.setQrImageClickListener(null)
         ordersRecyclerAdapter.setSeeEventListener(null)
+    }
+
+    private fun downloadInvoice() {
+        val downloadPath = "${BuildConfig.DEFAULT_BASE_URL}orders/invoices/${safeArgs.orderIdentifier}"
+        val destinationPath = "${Environment.getExternalStorageDirectory().absolutePath}/DownloadManager/"
+        val fileName = "Invoice - ${orderDetailsViewModel.event.value?.name} - ${safeArgs.orderIdentifier}"
+        activity?.startService(DownloadInvoiceService.getDownloadService(requireContext(), downloadPath,
+            destinationPath, fileName, orderDetailsViewModel.getToken()))
     }
 
     private fun showEnlargedQrImage(bitmap: Bitmap) {

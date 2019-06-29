@@ -16,6 +16,9 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.types.EventType
+import org.fossasia.openevent.general.search.location.SAVED_LOCATION
+import org.fossasia.openevent.general.search.time.SAVED_TIME
+import org.fossasia.openevent.general.search.type.SAVED_TYPE
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextDate
@@ -23,6 +26,7 @@ import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToNextMonth
 import org.fossasia.openevent.general.utils.DateTimeUtils.getNextToWeekendDate
 import org.fossasia.openevent.general.utils.DateTimeUtils.getWeekendDate
 import timber.log.Timber
+import java.lang.StringBuilder
 import java.util.Date
 
 class SearchViewModel(
@@ -53,8 +57,42 @@ class SearchViewModel(
     private val savedNextToNextMonth = getNextToNextMonth()
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
-    var searchViewQuery: String = ""
     var isQuerying = false
+    private val recentSearches = mutableListOf<Pair<String, String>>()
+
+    fun getRecentSearches(): List<Pair<String, String>> {
+        val searchesStrings = preference.getString(RECENT_SEARCHES, "")
+        if (recentSearches.isNotEmpty()) recentSearches.clear()
+        if (!searchesStrings.isNullOrEmpty()) {
+            val searches = searchesStrings.split(",")
+            searches.forEach {
+                val searchAndLocation = it.split("/")
+                recentSearches.add(Pair(searchAndLocation[0], searchAndLocation[1]))
+            }
+        }
+        return recentSearches
+    }
+
+    fun saveRecentSearch(query: String, location: String, position: Int = 0) {
+        if (query.isEmpty() || location.isEmpty() || location == resource.getString(R.string.enter_location)) return
+        recentSearches.add(position, Pair(query, location))
+        saveRecentSearchToPreference()
+    }
+
+    fun removeRecentSearch(position: Int) {
+        recentSearches.removeAt(position)
+        saveRecentSearchToPreference()
+    }
+
+    private fun saveRecentSearchToPreference() {
+        val builder = StringBuilder()
+        for ((index, pair) in recentSearches.withIndex()) {
+            builder.append(pair.first).append("/").append(pair.second)
+            if (index != recentSearches.size - 1) builder.append(",")
+        }
+        Timber.d("DEBUGGING SAVED: $builder")
+        preference.putString(RECENT_SEARCHES, builder.toString())
+    }
 
     fun loadEventTypes() {
         compositeDisposable += eventService.getEventTypes()
@@ -67,7 +105,7 @@ class SearchViewModel(
     }
 
     fun loadSavedLocation() {
-        savedLocation = preference.getString(SAVED_LOCATION) ?: resource.getString(R.string.choose_your_location)
+        savedLocation = preference.getString(SAVED_LOCATION) ?: resource.getString(R.string.enter_location)
     }
     fun loadSavedType() {
         savedType = preference.getString(SAVED_TYPE)

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.fossasia.openevent.general.BuildConfig
@@ -39,8 +38,6 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventsViewModel
-import org.fossasia.openevent.general.event.feedback.Feedback
-import org.fossasia.openevent.general.event.feedback.FeedbackApi
 import org.fossasia.openevent.general.event.faq.EventFAQ
 import org.fossasia.openevent.general.event.faq.EventFAQApi
 import org.fossasia.openevent.general.event.location.EventLocation
@@ -65,21 +62,27 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.order.OrdersUnderUserViewModel
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
-import org.fossasia.openevent.general.search.GeoLocationViewModel
-import org.fossasia.openevent.general.search.SearchLocationViewModel
+import org.fossasia.openevent.general.search.location.GeoLocationViewModel
+import org.fossasia.openevent.general.search.location.SearchLocationViewModel
 import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
 import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
-import org.fossasia.openevent.general.search.SearchTimeViewModel
+import org.fossasia.openevent.general.search.time.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
-import org.fossasia.openevent.general.search.LocationService
-import org.fossasia.openevent.general.search.SearchTypeViewModel
-import org.fossasia.openevent.general.search.LocationServiceImpl
+import org.fossasia.openevent.general.search.location.LocationService
+import org.fossasia.openevent.general.search.type.SearchTypeViewModel
+import org.fossasia.openevent.general.search.location.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
+import org.fossasia.openevent.general.discount.DiscountApi
+import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.feedback.FeedbackViewModel
+import org.fossasia.openevent.general.feedback.Feedback
+import org.fossasia.openevent.general.feedback.FeedbackService
+import org.fossasia.openevent.general.feedback.FeedbackApi
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.sessions.SessionViewModel
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
@@ -177,7 +180,6 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(SessionApi::class.java)
     }
-
     single {
         val retrofit: Retrofit = get()
         retrofit.create(SponsorApi::class.java)
@@ -186,27 +188,32 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(NotificationApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(DiscountApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
-    factory { TicketService(get(), get()) }
+    factory { TicketService(get(), get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
     factory { OrderService(get(), get(), get()) }
     factory { SessionService(get(), get()) }
-    factory { NotificationService(get()) }
+    factory { NotificationService(get(), get()) }
+    factory { FeedbackService(get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
@@ -220,7 +227,7 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { OrderCompletedViewModel(get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get()) }
-    viewModel { OrderDetailsViewModel(get(), get(), get()) }
+    viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
     viewModel { SmartAuthViewModel() }
@@ -231,6 +238,7 @@ val viewModelModule = module {
     viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
     viewModel { SpeakersCallProposalViewModel(get(), get()) }
     viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
+    viewModel { FeedbackViewModel(get(), get()) }
 }
 
 val networkModule = module {
@@ -241,8 +249,6 @@ val networkModule = module {
         objectMapper
     }
 
-    single { RequestAuthenticator(get()) as Interceptor }
-
     single {
         val connectTimeout = 15 // 15s
         val readTimeout = 15 // 15s
@@ -250,7 +256,7 @@ val networkModule = module {
         val builder = OkHttpClient().newBuilder()
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-            .addInterceptor(get())
+            .addInterceptor(RequestAuthenticator(get()))
             .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
@@ -272,7 +278,8 @@ val networkModule = module {
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
-            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java)
+            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
+            DiscountCode::class.java)
 
         Retrofit.Builder()
             .client(get())
@@ -353,6 +360,16 @@ val databaseModule = module {
 
     factory {
         val database: OpenEventDatabase = get()
+        database.feedbackDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
         database.speakersCallDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.notificationDao()
     }
 }

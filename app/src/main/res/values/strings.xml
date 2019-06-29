@@ -18,7 +18,7 @@
     <string name="location">Location</string>
     <string name="track">Track</string>
     <string name="whats_good">What\'s good in</string>
-    <string name="where">where?</string>
+    <string name="where">Where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
     <string name="error_fetching_events">We\'re having difficulty fetching event. Try again later.</string>
     <string name="tickets_sold_out">Sorry, All tickets for this event have been sold out!</string>
@@ -28,8 +28,10 @@
     <string name="refund_Policy">Refund Policy</string>
     <string name="no_events_message">Sorry, there are no events available</string>
     <string name="skip">Skip</string>
-    <string name="choose_your_location">Choose your location</string>
+    <string name="enter_location">Enter location</string>
     <string name="choose_preferred_location_message">Please choose your preferred location</string>
+    <string name="already_registered_message">You\'re in it to win it</string>
+    <string name="see_your_ticket">See your ticket</string>
 
     <!--Search event details-->
     <string name="search">Search</string>
@@ -71,15 +73,12 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="first_name_optional">First Name (Optional)</string>
     <string name="last_name_optional">Last Name (Optional)</string>
+    <string name="details_of_the_user">Details of the user</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="update">Update</string>
     <string name="profile_photo">Profile Photo</string>
-    <string name="edit_profile_photo_message">Edit your profile picture</string>
-    <string name="delete">Delete</string>
-    <string name="new_photo">New Photo</string>
     <string name="verified">Verified</string>
-    <string name="not_verified">Your account hasn\'t been verified</string>
-    <string name="resend_verification_email">Resend verification email</string>
+    <string name="not_verified">Account not verified. Click to verify</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
@@ -98,7 +97,7 @@
     <!--add to calendar-->
     <string name="add_to_calendar">Add to Calendar</string>
 
-    <!--ticket details-->
+    <!--tickets fragment-->
     <string name="tickets">Tickets</string>
     <string name="sales_dates">Sales Dates</string>
     <string name="order_range">Order Range</string>
@@ -107,6 +106,11 @@
     <string name="ticket_name">Ticket Name</string>
     <string name="price">Price</string>
     <string name="qty">Qty</string>
+    <string name="error_fetching_discount_code">Error fetching discount code</string>
+    <string name="apply_discount_code">Apply discount code</string>
+    <string name="apply">Apply</string>
+    <string name="invalid_discount_code">Invalid discount code</string>
+    <string name="discount_code_applied">Discount code applied</string>
 
     <!--ticket details-->
     <string name="your_info">Your Info</string>
@@ -123,6 +127,7 @@
     <string name="term_and_conditions">Please accept the terms and conditions!</string>
     <string name="invalid_email_address_message">Invalid email address!</string>
     <string name="invalid_card_data_message">Invalid card data</string>
+    <string name="invalid_card_number_message">Invalid card number</string>
     <string name="whoops">Whoops!</string>
     <string name="ok">ok</string>
     <string name="view_ticket">View</string>
@@ -134,7 +139,7 @@
     <string name="no_tickets_available">No tickets available!</string>
     <string name="ticket_details">Ticket Details</string>
     <string name="ticket_timeout_message">You have exceeded the time limit and your reservation has been released.\n\nThe purpose of this time limit is to ensure that registration is available to as many people as possible. We apologize for the inconvenience.</string>
-    <string name="ticket_timeout_info_message">After %1$s minutes, the reservation we are hodling will be released.</string>
+    <string name="ticket_timeout_info_message">After %1$s minutes, the reservation we are holding will be released.</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="cancel_order_message">Are you sure to cancel this order?</string>
     <string name="pending_order_cancelled_message">Pending order cancelled</string>
@@ -274,16 +279,33 @@
     <string name="error_fetching_attendee_details_message">Error fetching attendee details</string>
     <string name="share_ticket">Share Ticket</string>
     <string name="fail_sharing_ticket">Fail to share ticket</string>
+    <string name="state">State</string>
+    <string name="job_title">Job Title</string>
+    <string name="phone">Phone</string>
+    <string name="tax_business_info">Tax Business Info</string>
+    <string name="billing_address">Billing Address</string>
+    <string name="billing_information">Billing Information</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="home_address">Home Address</string>
+    <string name="work_address">Work Address</string>
+    <string name="work_phone">Work Phone</string>
+    <string name="blog">Blog</string>
+    <string name="gender">Gender</string>
     <string name="company">Company</string>
     <string name="tax_id">Tax ID or Business ID</string>
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="checkbox_message">Ticket holder is the same person as ticket buyer</string>
+    <string name="error_fetching_attendees">Error fetching attendees</string>
+    <string name="used_eventyay_before">Used Eventyay before?</string>
+    <string name="sign_in_order_text">for fast and easy ordering</string>
+    <string name="sign_in_to_order_ticket">Please sign in to order the ticket</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>
     <string name="log_in_first">You need to log in first!</string>
     <string name="sign_in_canceled">Sign In canceled!</string>
+    <string name="sign_in">Sign In</string>
     <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
     <string name="order_not_completed">Order not completed!</string>
@@ -299,6 +321,7 @@
     <string name="auth_title">Let\'s get started</string>
     <string name="auth_subtitle">Sign up or log in to see what\'s happening near you</string>
     <string name="get_started">Get Started</string>
+    <string name="skip_for_now">Skip for now</string>
 
     <!--sign up fragment-->
     <string name="invalid_email_message">Your email address is invalid!</string>
@@ -342,6 +365,9 @@
     <string name="error_fetching_event_section_message">"Error fetching %1$s for the event</string>
     <string name="error_submitting_feedback">Fail on submitting the feedback</string>
     <string name="success_submitting_feedback">Feedback submitted</string>
+    <string name="error_fetching_feedback_message">Error getting feedback for this event</string>
+    <string name="no_feedback_message">There are no feedback for this event.</string>
+    <string name="see_all_feedback">See all feedback</string>
     <string name="failure">Failure</string>
 
     <!--social link fragment-->
@@ -377,12 +403,18 @@
     <string name="sort_by">Sort By</string>
     <string name="category">Category</string>
     <string name="sessions_and_speakers">Sessions and speakers</string>
+    <string name="rate_eventyay">Rate Eventyay</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="rate_eventyay_dialog_message">If you enjoy using Eventyay, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks fot your support!</string>
 
     <!--Notification fragment-->
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
     <string name="color_code">Color Code:</string>
+    <string name="unread">Unread</string>
+    <string name="all">All</string>
 
     <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
@@ -398,6 +430,8 @@
     <string name="short_bio">Short Bio</string>
     <string name="website">Website</string>
     <string name="twitter">Twitter</string>
+    <string name="facebook">Facebook</string>
+    <string name="github">Github</string>
     <string name="proposal_speaker">My Proposal Speaker</string>
     <string name="no_speaker_info">You haven\'t had any speaker information</string>
     <string name="load_speaker_info">Loading current speaker information</string>
@@ -416,5 +450,15 @@
     <string name="update_speaker_fail_message">Fail on updating speaker profile</string>
     <string name="loading_message">Loading...</string>
     <string name="creating_order_message">Creating order...</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="loading_tickets">Loading tickets...</string>
+    <string name="download_invoice">Download Invoice</string>
+    <string name="invalid_url_message">This is not a valid URL</string>
+    <string name="recent_locations">Recent Locations</string>
+    <string name="edit_image">Edit Image</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="replace_image">Replace Image</string>
+    <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
+    <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
 
 </resources>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:navigationIcon="@drawable/ic_search_white"
+        android:focusable="true"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_fragment"
+            android:scaleType="fitXY"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:paddingStart="@dimen/padding_large"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/text_size_extra_large"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recentSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchText"
+                android:layout_marginTop="@dimen/layout_margin_medium"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchInfoContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_extra_large"
+                android:paddingStart="@dimen/padding_extra_large"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:gravity="center_horizontal"
+                    android:text="@string/go_out"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintBottom_toTopOf="@id/timeContainer"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <RelativeLayout
+                    android:id="@+id/timeContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/locationContainer">
+
+                    <TextView
+                        android:id="@+id/timeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/anytime"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_expanded_title_medium"
+                        tools:text="@string/anytime" />
+
+                    <View
+                        android:layout_width="@dimen/layout_margin_none"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_below="@id/timeTextView"
+                        android:layout_alignStart="@+id/timeTextView"
+                        android:layout_alignEnd="@id/timeTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:text="@string/in"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintBottom_toTopOf="@id/locationContainer"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <RelativeLayout
+                    android:id="@+id/locationContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:id="@+id/locationTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/where"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_expanded_title_medium"
+                        tools:text="@string/where" />
+
+                    <View
+                        android:layout_width="@dimen/layout_margin_none"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_below="@id/locationTextView"
+                        android:layout_alignStart="@+id/locationTextView"
+                        android:layout_alignEnd="@id/locationTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_large"
+                    android:text="@string/and_i_m_up_for"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintLeft_toRightOf="@id/timeContainer"
+                    app:layout_constraintBottom_toTopOf="@id/typeContainer"
+                    android:layout_marginStart="@dimen/layout_margin_extra_large"/>
+
+                <RelativeLayout
+                    android:id="@+id/typeContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@id/timeContainer"
+                    app:layout_constraintBottom_toTopOf="@id/locationContainer"
+                    android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                    android:layout_marginStart="@dimen/layout_margin_extra_large">
+
+                    <TextView
+                        android:id="@+id/eventTypeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/anything"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_expanded_title_medium"
+                        tools:text="@string/where" />
+
+                    <View
+                        android:layout_width="@dimen/layout_margin_none"
+                        android:layout_height="@dimen/event_name_divider_height"
+                        android:layout_below="@id/eventTypeTextView"
+                        android:layout_alignStart="@+id/eventTypeTextView"
+                        android:layout_alignEnd="@id/eventTypeTextView"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/grey" />
+                </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/layout_margin_large"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/colorAccent"
+                app:srcCompat="@drawable/ic_baseline_arrow_forward"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</LinearLayout>

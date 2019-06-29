@@ -18,10 +18,12 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
 
-        <action android:id="@+id/action_welcome_to_events"
-            app:destination="@id/eventsFragment"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/eventsFragment"/>
+        <action android:id="@+id/action_welcome_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
     </fragment>
     <fragment
@@ -67,35 +69,35 @@
         <action
             android:id="@+id/action_search_to_search_time"
             app:destination="@id/searchTimeFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_search_to_search_location"
             app:destination="@id/searchLocationFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_search_to_search_type"
             app:destination="@id/searchTypeFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_search_to_search_results"
             app:destination="@id/searchResultsFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
-        android:name="org.fossasia.openevent.general.search.SearchLocationFragment"
+        android:name="org.fossasia.openevent.general.search.location.SearchLocationFragment"
         android:label="SearchLocationFragment"
         tools:layout="@layout/fragment_search_location">
 
@@ -126,7 +128,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchTimeFragment"
-        android:name="org.fossasia.openevent.general.search.SearchTimeFragment"
+        android:name="org.fossasia.openevent.general.search.time.SearchTimeFragment"
         android:label="SearchTimeFragment"
         tools:layout="@layout/fragment_search_time">
 
@@ -158,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchTypeFragment"
-        android:name="org.fossasia.openevent.general.search.SearchTypeFragment"
+        android:name="org.fossasia.openevent.general.search.type.SearchTypeFragment"
         android:label="SearchTypeFragment"
         tools:layout="@layout/fragment_search_type">
 
@@ -319,10 +321,31 @@
 
     </fragment>
     <fragment
+        android:id="@+id/expiredOrderFragment"
+        android:name="org.fossasia.openevent.general.order.ExpiredOrderFragment"
+        android:label="expiredOrderFragment"
+        tools:layout="@layout/fragment_expired_order">
+        <action
+            android:id="@+id/action_order_expired_to_order_details"
+            app:destination="@id/orderDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
         android:id="@+id/orderUnderUserFragment"
         android:name="org.fossasia.openevent.general.order.OrdersUnderUserFragment"
         android:label="OrdersUnderUserFragment"
         tools:layout="@layout/fragment_orders_under_user">
+
+        <action
+            android:id="@+id/action_order_user_to_order_expired"
+            app:destination="@id/expiredOrderFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
         <action
             android:id="@+id/action_order_user_to_order_details"
@@ -347,11 +370,6 @@
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
-
-        <argument
-            android:name="showExpired"
-            app:argType="boolean"
-            android:defaultValue="false"/>
     </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
@@ -449,7 +467,34 @@
         android:id="@+id/editProfileFragment"
         android:name="org.fossasia.openevent.general.auth.EditProfileFragment"
         android:label="EditProfileFragment"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_edit_profile_to_crop_image"
+            app:destination="@id/cropImageFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <argument
+            android:name="croppedImage"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/cropImageFragment"
+        android:name="org.fossasia.openevent.general.auth.CropImageFragment"
+        android:label="CropImageFragment"
+        tools:layout="@layout/fragment_crop_image">
+        <action
+            android:id="@+id/action_crop_image_to_edit_profile_pop"
+            app:destination="@id/editProfileFragment"
+            app:popUpTo="@id/editProfileFragment"
+            app:popUpToInclusive="true"/>
+        <argument
+            android:name="imageToCrop"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.fossasia.openevent.general.settings.SettingsFragment"
@@ -458,7 +503,8 @@
         <argument
             android:name="email"
             app:argType="string"
-            app:nullable="true"/>
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/conductCodeFragment"
@@ -477,6 +523,13 @@
         <action
             android:id="@+id/action_event_details_to_speakers_call"
             app:destination="@id/speakersCallFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_feedback"
+            app:destination="@id/feedbackFragment"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
@@ -541,6 +594,13 @@
         <action
             android:id="@+id/action_event_details_to_speaker"
             app:destination="@id/speakerFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_event_details_to_order_detail"
+            app:destination="@id/orderDetailsFragment"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
@@ -648,6 +708,12 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+
+        <argument
+            android:name="amount"
+            app:argType="float"
+            app:nullable="false"
+            android:defaultValue="0.0"/>
     </fragment>
     <fragment
         android:id="@+id/orderCompletedFragment"
@@ -837,7 +903,6 @@
         android:name="org.fossasia.openevent.general.notification.NotificationFragment"
         android:label="NotificationFragment"
         tools:layout="@layout/fragment_notification">
-
         <action
             android:id="@+id/action_notification_to_auth"
             app:destination="@id/authFragment"
@@ -846,12 +911,29 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
     </fragment>
-
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="org.fossasia.openevent.general.feedback.FeedbackFragment"
+        android:label="FeedbackFragment"
+        tools:layout="@layout/fragment_feedback">
+        <argument
+            android:name="eventId"
+            app:argType="long"
+            android:defaultValue="-1L"/>
+    </fragment>
     <fragment
         android:id="@+id/authFragment"
         android:name="org.fossasia.openevent.general.auth.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
+        <action
+            android:id="@+id/action_auth_to_setting"
+            app:destination="@id/settingsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
         <action
             android:id="@+id/action_auth_to_events_pop"
             app:destination="@id/eventsFragment"

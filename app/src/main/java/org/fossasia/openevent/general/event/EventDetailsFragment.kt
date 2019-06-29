@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.content_event.view.feedbackBtn
 import kotlinx.android.synthetic.main.content_event.view.feedbackRv
 import kotlinx.android.synthetic.main.content_event.view.nestedContentEventScroll
 import kotlinx.android.synthetic.main.content_event.view.noFeedBackTv
+import kotlinx.android.synthetic.main.content_event.view.seeFeedbackTextView
 import kotlinx.android.synthetic.main.content_event.view.seeMore
 import kotlinx.android.synthetic.main.content_event.view.seeMoreOrganizer
 import kotlinx.android.synthetic.main.content_event.view.sessionContainer
@@ -50,6 +51,7 @@ import kotlinx.android.synthetic.main.content_event.view.socialLinksRecycler
 import kotlinx.android.synthetic.main.content_event.view.socialLinkContainer
 import kotlinx.android.synthetic.main.content_event.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.content_event.view.similarEventsContainer
+import kotlinx.android.synthetic.main.content_event.view.alreadyRegisteredLayout
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -63,10 +65,11 @@ import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
-import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.databinding.FragmentEventBinding
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
-import org.fossasia.openevent.general.event.feedback.FeedbackRecyclerAdapter
+import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
+import org.fossasia.openevent.general.feedback.FeedbackRecyclerAdapter
+import org.fossasia.openevent.general.feedback.LIMITED_FEEDBACK_NUMBER
 import org.fossasia.openevent.general.sessions.SessionRecyclerAdapter
 import org.fossasia.openevent.general.social.SocialLinksRecyclerAdapter
 import org.fossasia.openevent.general.speakers.SpeakerRecyclerAdapter
@@ -91,35 +94,37 @@ const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
     private val safeArgs: EventDetailsFragmentArgs by navArgs()
-    private val feedbackAdapter = FeedbackRecyclerAdapter()
+    private val feedbackAdapter = FeedbackRecyclerAdapter(true)
     private val speakersAdapter = SpeakerRecyclerAdapter()
     private val sponsorsAdapter = SponsorRecyclerAdapter()
     private val sessionsAdapter = SessionRecyclerAdapter()
     private val socialLinkAdapter = SocialLinksRecyclerAdapter()
-    private val similarEventsAdapter = EventsListAdapter(EventLayoutType.SIMILAR_EVENTS, EventsDiffCallback())
+    private val similarEventsAdapter = SimilarEventsListAdapter()
 
     private lateinit var rootView: View
     private lateinit var binding: FragmentEventBinding
     private val LINE_COUNT: Int = 3
     private val LINE_COUNT_ORGANIZER: Int = 2
     private var menuActionBar: Menu? = null
+    private var currentEvent: Event? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventViewModel.event
             .nonNull()
             .observe(this, Observer {
+                currentEvent = it
                 loadEvent(it)
                 if (eventViewModel.similarEvents.value == null) {
                     val eventTopicId = it.eventTopic?.id ?: 0
                     val eventLocation = it.searchableLocationName ?: it.locationName
-                    eventViewModel.fetchSimilarEvents(safeArgs.eventId, eventTopicId, eventLocation)
+                    eventViewModel.fetchSimilarEvents(it.id, eventTopicId, eventLocation)
                 }
 
                 // Update favorite icon and external event url menu option
                 activity?.invalidateOptionsMenu()
 
-                Timber.d("Fetched events of id ${safeArgs.eventId}")
+                Timber.d("Fetched events of id ${it.id}")
                 showEventErrorScreen(false)
                 setHasOptionsMenu(true)
             })
@@ -139,9 +144,12 @@ class EventDetailsFragment : Fragment() {
         setHasOptionsMenu(true)
         val eventIdentifier = arguments?.getString(EVENT_IDENTIFIER)
 
-        val currentEvent = eventViewModel.event.value
+        val event = eventViewModel.event.value
         when {
-            currentEvent != null -> loadEvent(currentEvent)
+            event != null -> {
+                currentEvent = event
+                loadEvent(event)
+            }
             !eventIdentifier.isNullOrEmpty() -> eventViewModel.loadEventByIdentifier(eventIdentifier)
             else -> eventViewModel.loadEvent(safeArgs.eventId)
         }
@@ -151,6 +159,30 @@ class EventDetailsFragment : Fragment() {
         rootView.buttonTickets.setOnClickListener {
             loadTicketFragment()
         }
+
+        if (eventViewModel.orders.value == null)
+            eventViewModel.loadOrders()
+        eventViewModel.orders
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                it.forEach { order ->
+                    if (order.event?.id == safeArgs.eventId) {
+                        rootView.alreadyRegisteredLayout.visibility = View.VISIBLE
+                        rootView.alreadyRegisteredLayout.setOnClickListener {
+                            order.identifier?.let { identifier ->
+                                EventDetailsFragmentDirections.actionEventDetailsToOrderDetail(
+                                    eventId = safeArgs.eventId,
+                                    orderId = order.id,
+                                    orderIdentifier = identifier
+                                )
+                            }?.let { navigation ->
+                                findNavController(rootView).navigate(navigation)
+                            }
+                        }
+                        return@forEach
+                    }
+                }
+            })
 
         eventViewModel.popMessage
             .nonNull()
@@ -170,9 +202,11 @@ class EventDetailsFragment : Fragment() {
             if (it.isEmpty()) {
                 rootView.feedbackRv.isVisible = false
                 rootView.noFeedBackTv.isVisible = true
+                rootView.seeFeedbackTextView.isVisible = false
             } else {
                 rootView.feedbackRv.isVisible = true
                 rootView.noFeedBackTv.isVisible = false
+                rootView.seeFeedbackTextView.isVisible = it.size >= LIMITED_FEEDBACK_NUMBER
             }
         })
 
@@ -199,7 +233,7 @@ class EventDetailsFragment : Fragment() {
         })
 
         rootView.retry.setOnClickListener {
-            eventViewModel.loadEvent(safeArgs.eventId)
+            currentEvent?.let { eventViewModel.loadEvent(it.id) }
         }
 
         val speakerClickListener: SpeakerClickListener = object : SpeakerClickListener {
@@ -338,8 +372,10 @@ class EventDetailsFragment : Fragment() {
         }
         // About event on-click
         val aboutEventOnClickListener = View.OnClickListener {
-            findNavController(rootView).navigate(EventDetailsFragmentDirections
-                .actionEventDetailsToAboutEvent(safeArgs.eventId))
+            currentEvent?.let {
+                findNavController(rootView).navigate(EventDetailsFragmentDirections
+                    .actionEventDetailsToAboutEvent(it.id))
+            }
         }
 
         // Event Description Section
@@ -388,7 +424,7 @@ class EventDetailsFragment : Fragment() {
                 if (isConnected) {
                     val currentFeedback = eventViewModel.eventFeedback.value
                     if (currentFeedback == null) {
-                        eventViewModel.fetchEventFeedback(safeArgs.eventId)
+                        currentEvent?.let { eventViewModel.fetchEventFeedback(it.id) }
                     } else {
                         feedbackAdapter.addAll(currentFeedback)
                         if (currentFeedback.isEmpty()) {
@@ -402,7 +438,7 @@ class EventDetailsFragment : Fragment() {
 
                     val currentSpeakers = eventViewModel.eventSpeakers.value
                     if (currentSpeakers == null) {
-                        eventViewModel.fetchEventSpeakers(safeArgs.eventId)
+                        currentEvent?.let { eventViewModel.fetchEventSpeakers(it.id) }
                     } else {
                         speakersAdapter.addAll(currentSpeakers)
                         rootView.speakersContainer.visibility =
@@ -411,7 +447,7 @@ class EventDetailsFragment : Fragment() {
 
                     val currentSessions = eventViewModel.eventSessions.value
                     if (currentSessions == null) {
-                        eventViewModel.fetchEventSessions(safeArgs.eventId)
+                        currentEvent?.let { eventViewModel.fetchEventSessions(it.id) }
                     } else {
                         sessionsAdapter.addAll(currentSessions)
                         rootView.sessionContainer.visibility =
@@ -420,7 +456,7 @@ class EventDetailsFragment : Fragment() {
 
                     val currentSponsors = eventViewModel.eventSponsors.value
                     if (currentSponsors == null) {
-                        eventViewModel.fetchEventSponsors(safeArgs.eventId)
+                        currentEvent?.let { eventViewModel.fetchEventSponsors(it.id) }
                     } else {
                         sponsorsAdapter.addAll(currentSponsors)
                         rootView.sponsorsSummaryContainer.visibility =
@@ -429,7 +465,7 @@ class EventDetailsFragment : Fragment() {
 
                     val currentSocialLinks = eventViewModel.socialLinks.value
                     if (currentSocialLinks == null) {
-                        eventViewModel.fetchSocialLink(safeArgs.eventId)
+                        currentEvent?.let { eventViewModel.fetchSocialLink(it.id) }
                     } else {
                         socialLinkAdapter.addAll(currentSocialLinks)
                         rootView.socialLinkContainer.visibility =
@@ -458,6 +494,11 @@ class EventDetailsFragment : Fragment() {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
         }
+        rootView.seeFeedbackTextView.setOnClickListener {
+            currentEvent?.let {
+                findNavController(rootView).navigate(EventDetailsFragmentDirections.actionEventDetailsToFeedback(it.id))
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -468,42 +509,44 @@ class EventDetailsFragment : Fragment() {
             }
             R.id.add_to_calendar -> {
                 // Add event to Calendar
-                eventViewModel.event.value?.let { startCalendar(it) }
+                currentEvent?.let { startCalendar(it) }
                 true
             }
             R.id.report_event -> {
-                eventViewModel.event.value?.let { reportEvent(it) }
+                currentEvent?.let { reportEvent(it) }
                 true
             }
             R.id.open_external_event_url -> {
-                eventViewModel.event.value?.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
+                currentEvent?.externalEventUrl?.let { Utils.openUrl(requireContext(), it) }
                 true
             }
             R.id.favorite_event -> {
-                eventViewModel.event.value?.let { eventViewModel.setFavorite(safeArgs.eventId, !it.favorite) }
+                currentEvent?.let { eventViewModel.setFavorite(it.id, !it.favorite) }
                 true
             }
             R.id.call_for_speakers -> {
-                eventViewModel.event.value?.let {
+                currentEvent?.let {
                     findNavController(rootView).navigate(EventDetailsFragmentDirections
                         .actionEventDetailsToSpeakersCall(it.identifier, it.id, it.timezone))
                 }
                 true
             }
             R.id.event_share -> {
-                eventViewModel.event.value?.let { EventUtils.share(it, rootView.eventImage) }
+                currentEvent?.let { EventUtils.share(it, requireContext()) }
                 return true
             }
             R.id.code_of_conduct -> {
-                eventViewModel.event.value?.let { event ->
+                currentEvent?.let { event ->
                         findNavController(rootView)
                             .navigate(EventDetailsFragmentDirections.actionEventDetailsToConductCode(event.id))
                 }
                 return true
             }
             R.id.open_faqs -> {
-                findNavController(rootView).navigate(EventDetailsFragmentDirections
-                    .actionEventDetailsToFaq(safeArgs.eventId))
+                currentEvent?.let {
+                    findNavController(rootView).navigate(EventDetailsFragmentDirections
+                        .actionEventDetailsToFaq(it.id))
+                }
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -541,7 +584,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        eventViewModel.event.value?.let { currentEvent ->
+        currentEvent?.let { currentEvent ->
             if (currentEvent.externalEventUrl.isNullOrBlank())
                 menu.findItem(R.id.open_external_event_url).isVisible = false
             if (currentEvent.codeOfConduct.isNullOrBlank())
@@ -566,9 +609,11 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadTicketFragment() {
-        val currency = Currency.getInstance(eventViewModel.event.value?.paymentCurrency ?: "USD").symbol
-        findNavController(rootView).navigate(EventDetailsFragmentDirections
-            .actionEventDetailsToTickets(safeArgs.eventId, currency))
+        val currency = Currency.getInstance(currentEvent?.paymentCurrency ?: "USD").symbol
+        currentEvent?.let {
+            findNavController(rootView).navigate(EventDetailsFragmentDirections
+                .actionEventDetailsToTickets(it.id, currency))
+        }
     }
 
     private fun startMap(event: Event) {
@@ -619,9 +664,11 @@ class EventDetailsFragment : Fragment() {
             .setTitle(getString(R.string.submit_feedback))
             .setView(layout)
             .setPositiveButton(getString(R.string.submit)) { _, _ ->
-                eventViewModel.submitFeedback(layout.feedback.text.toString(),
-                    layout.feedbackrating.rating,
-                    safeArgs.eventId)
+                currentEvent?.let {
+                    eventViewModel.submitFeedback(layout.feedback.text.toString(),
+                        layout.feedbackrating.rating,
+                        it.id)
+                }
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
@@ -648,7 +695,9 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun moveToSponsorSection() {
-        findNavController(rootView).navigate(EventDetailsFragmentDirections
-            .actionEventDetailsToSponsor(safeArgs.eventId))
+        currentEvent?.let {
+            findNavController(rootView).navigate(EventDetailsFragmentDirections
+                .actionEventDetailsToSponsor(it.id))
+        }
     }
 }
