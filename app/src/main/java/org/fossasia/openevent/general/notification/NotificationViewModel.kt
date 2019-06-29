@@ -37,25 +37,46 @@ class NotificationViewModel(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun getNotifications() {
+    fun getNotifications(showAll: Boolean) {
 
         if (!isConnected()) {
             return
         }
-
         compositeDisposable += notificationService.getNotifications(getId())
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
                 mutableProgress.value = false
-            }.subscribe({
-                mutableNotifications.value = it
+            }.subscribe({ list ->
+                if (!showAll) {
+                    mutableNotifications.value = list.filter {
+                        !it.isRead
+                    }
+                } else
+                    mutableNotifications.value = list
                 Timber.d("Notification retrieve successful")
             }, {
                 mutableError.value = resource.getString(R.string.msg_failed_to_load_notification)
                 Timber.d(it, resource.getString(R.string.msg_failed_to_load_notification))
             })
+    }
+
+    fun updateReadStatus(notifications: List<Notification>) {
+        if (!isConnected() || notifications.isEmpty())
+            return
+        notifications.forEach { notification ->
+            if (notification.isRead)
+                return@forEach
+            notification.isRead = true
+            compositeDisposable += notificationService.updateNotification(notification)
+                .withDefaultSchedulers()
+                .subscribe({
+                    Timber.d("Updated notification ${it.id}")
+                }, {
+                    Timber.d(it, "Failed to update notification ${notification.id}")
+                })
+        }
     }
 
     fun isConnected(): Boolean {
