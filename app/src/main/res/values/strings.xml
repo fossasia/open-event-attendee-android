@@ -413,6 +413,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
     <string name="color_code">Color Code:</string>
+    <string name="unread">Unread</string>
+    <string name="all">All</string>
 
     <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>

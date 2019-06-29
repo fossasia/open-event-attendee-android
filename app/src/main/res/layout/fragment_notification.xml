@@ -11,8 +11,14 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/notificationCoordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/filterChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_small"
+            android:layout_marginStart="@dimen/layout_margin_medium"/>
 
         <include
             layout="@layout/content_no_internet"
@@ -22,6 +28,7 @@
             android:id="@+id/shimmerNotifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/logo_icon_width"
             android:visibility="gone">
 
             <LinearLayout
@@ -70,7 +77,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notificationRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/logo_icon_width"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -75,9 +75,14 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        eventsViewModel.getNotifications()
-        rootView.newNotificationDot.isVisible = preference.getBoolean(NEW_NOTIFICATIONS, false)
-        rootView.newNotificationDotToolbar.isVisible = preference.getBoolean(NEW_NOTIFICATIONS, false)
+        eventsViewModel.syncNotifications()
+        handleNotificationDotVisibility(
+            preference.getBoolean(NEW_NOTIFICATIONS, false))
+        eventsViewModel.newNotifications
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                handleNotificationDotVisibility(it)
+            })
 
         eventsViewModel.showShimmerEvents
             .nonNull()
@@ -158,6 +163,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         return rootView
     }
 
+    private fun handleNotificationDotVisibility(isVisible: Boolean) {
+        rootView.newNotificationDot.isVisible = isVisible
+        rootView.newNotificationDotToolbar.isVisible = isVisible
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rootView.eventsRecycler.viewTreeObserver.addOnGlobalLayoutListener {
@@ -215,8 +225,10 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         super.onDestroyView()
     }
 
-    private fun moveToNotification() =
+    private fun moveToNotification() {
+        eventsViewModel.mutableNewNotifications.value = false
         findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
+    }
 
     private fun openSearch(hashTag: String) {
             findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
