@@ -11,6 +11,9 @@ interface NotificationDao {
     @Insert(onConflict = REPLACE)
     fun insertNotifications(notifications: List<Notification>)
 
+    @Insert(onConflict = REPLACE)
+    fun insertNotification(notification: Notification)
+
     @Query("SELECT * FROM Notification")
     fun getNotifications(): Single<List<Notification>>
 }

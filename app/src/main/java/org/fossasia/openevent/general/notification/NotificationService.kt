@@ -23,4 +23,11 @@ class NotificationService(
             it
         }
     }
+
+    fun updateNotification(notification: Notification): Single<Notification> {
+        return notificationApi.updateNotification(notification.id, notification).map {
+            notificationDao.insertNotification(it)
+            it
+        }
+    }
 }
