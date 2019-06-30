@@ -105,6 +105,7 @@ dependencies {
     def ktx2_version = "2.0.0"
     def nav_version = "2.1.0-alpha05"
     def anko_version = "0.10.8"
+    def paging_version = "2.1.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -192,6 +193,11 @@ dependencies {
 
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-rxjava2:$paging_version"
+
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"

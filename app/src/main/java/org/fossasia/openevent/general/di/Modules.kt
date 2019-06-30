@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.di
 
+import androidx.paging.PagedList
 import androidx.room.Room
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -210,7 +211,7 @@ val apiModule = module {
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -247,6 +248,16 @@ val networkModule = module {
         val objectMapper = jacksonObjectMapper()
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         objectMapper
+    }
+
+    single {
+        PagedList
+            .Config
+            .Builder()
+            .setPageSize(5)
+            .setInitialLoadSizeHint(5)
+            .setEnablePlaceholders(false)
+            .build()
     }
 
     single {

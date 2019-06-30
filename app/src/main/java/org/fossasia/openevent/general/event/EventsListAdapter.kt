@@ -2,7 +2,7 @@ package org.fossasia.openevent.general.event
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagedListAdapter
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
@@ -15,7 +15,7 @@ import org.fossasia.openevent.general.databinding.ItemCardEventsBinding
  * @property onEventClick The callback to be invoked when an event is clicked
  * @property onFavFabClick The callback to be invoked when the favorite FAB is clicked
  */
-class EventsListAdapter : ListAdapter<Event, EventViewHolder>(EventsDiffCallback()) {
+class EventsListAdapter : PagedListAdapter<Event, EventViewHolder>(EventsDiffCallback()) {
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null
@@ -28,19 +28,20 @@ class EventsListAdapter : ListAdapter<Event, EventViewHolder>(EventsDiffCallback
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
-        holder.apply {
-            bind(event, position)
-            eventClickListener = onEventClick
-            favFabClickListener = onFavFabClick
-            hashTagClickListAdapter = onHashtagClick
-        }
+        if (event != null)
+            holder.apply {
+                bind(event, position)
+                eventClickListener = onEventClick
+                favFabClickListener = onFavFabClick
+                hashTagClickListAdapter = onHashtagClick
+            }
     }
 
     /**
      * The function to call when the adapter has to be cleared of items
      */
     fun clear() {
-        this.submitList(emptyList())
+        this.submitList(null)
     }
 }
 
