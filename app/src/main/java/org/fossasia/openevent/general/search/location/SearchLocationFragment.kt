@@ -196,7 +196,7 @@ class SearchLocationFragment : Fragment() {
                 return false
             }
         })
-        rootView.locationSearchView.locationSearchView.setOnKeyListener { v, keyCode, event ->
+        rootView.locationSearchView.locationSearchView.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK)
                 rootView.locationSearchView.clearFocus()
             true
