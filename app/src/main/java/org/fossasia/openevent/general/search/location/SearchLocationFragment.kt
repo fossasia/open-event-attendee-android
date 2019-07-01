@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.search.location
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -195,6 +196,11 @@ class SearchLocationFragment : Fragment() {
                 return false
             }
         })
+        rootView.locationSearchView.locationSearchView.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK)
+                rootView.locationSearchView.clearFocus()
+            true
+        }
         searchLocationViewModel.handlePlaceSuggestions(subject)
     }
 
