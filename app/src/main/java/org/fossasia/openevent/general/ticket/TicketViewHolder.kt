@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.ticket
 import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.Html
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,7 +18,18 @@ import kotlinx.android.synthetic.main.item_ticket.view.donationInput
 import kotlinx.android.synthetic.main.item_ticket.view.orderQtySection
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
+import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
+import kotlinx.android.synthetic.main.item_ticket.view.moreInfoSection
+import kotlinx.android.synthetic.main.item_ticket.view.seeMoreInfoText
+import kotlinx.android.synthetic.main.item_ticket.view.ticketDateText
+import kotlinx.android.synthetic.main.item_ticket.view.saleInfo
+import kotlinx.android.synthetic.main.item_ticket.view.description
 import org.fossasia.openevent.general.discount.DiscountCode
+import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
+import org.threeten.bp.DateTimeUtils
+import java.util.Date
+import kotlin.collections.ArrayList
 
 const val AMOUNT = "amount"
 const val TICKET_TYPE_FREE = "free"
@@ -31,10 +43,19 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         ticket: Ticket,
         selectedListener: TicketSelectedListener?,
         eventCurrency: String?,
+        eventTimeZone: String?,
         ticketQuantity: Int,
         discountCode: DiscountCode? = null
     ) {
         itemView.ticketName.text = ticket.name
+        setupTicketSaleDate(ticket, eventTimeZone)
+
+        setMoreInfoText()
+        itemView.seeMoreInfoText.setOnClickListener {
+            itemView.moreInfoSection.isVisible = !itemView.moreInfoSection.isVisible
+            setMoreInfoText()
+        }
+
         var minQty = ticket.minOrder
         var maxQty = ticket.maxOrder
         if (discountCode?.minQuantity != null)
@@ -72,6 +93,16 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.donationInput.isVisible = false
                 setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
             }
+        }
+
+        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${itemView.price.text}"
+        itemView.priceInfo.text = Html.fromHtml(priceInfo)
+
+        if (ticket.description.isNullOrEmpty()) {
+            itemView.description.isVisible = false
+        } else {
+            itemView.description.isVisible = true
+            itemView.description.text = ticket.description
         }
 
         if (discountCode?.value != null && ticket.price != null && ticket.price != 0.toFloat()) {
@@ -131,6 +162,39 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.orderRange.setSelection(currentQuantityPosition)
                 itemView.order.text = ticketQuantity.toString()
             }
+        }
+    }
+
+    private fun setMoreInfoText() {
+        itemView.seeMoreInfoText.text = resource.getString(
+            if (itemView.moreInfoSection.isVisible) R.string.see_less else R.string.see_more)
+    }
+
+    private fun setupTicketSaleDate(ticket: Ticket, timeZone: String?) {
+        val startAt = ticket.salesStartsAt
+        val endAt = ticket.salesEndsAt
+        if (startAt != null && endAt != null && timeZone != null) {
+            val startsAt = EventUtils.getEventDateTime(startAt, timeZone)
+            val endsAt = EventUtils.getEventDateTime(endAt, timeZone)
+            val startDate = DateTimeUtils.toDate(startsAt.toInstant())
+            val endDate = DateTimeUtils.toDate(endsAt.toInstant())
+            val currentDate = Date()
+
+            if (currentDate < startDate) {
+                itemView.ticketDateText.isVisible = true
+                itemView.ticketDateText.text = resource.getString(R.string.not_open)
+                itemView.orderQtySection.isVisible = false
+            } else if (startDate < currentDate && currentDate < endDate) {
+                itemView.ticketDateText.isVisible = false
+                itemView.orderQtySection.isVisible = true
+            } else {
+                itemView.ticketDateText.text = resource.getString(R.string.ended)
+                itemView.ticketDateText.isVisible = true
+                itemView.orderQtySection.isVisible = false
+            }
+
+            val salesEnd = "<b>${resource.getString(R.string.sales_end)}</b> ${getFormattedDate(endsAt)}"
+            itemView.saleInfo.text = Html.fromHtml(salesEnd)
         }
     }
 }

@@ -462,5 +462,8 @@
     <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
     <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
     <string name="donation">Donation</string>
+    <string name="ended">Ended</string>
+    <string name="not_open">Not Open</string>
+    <string name="sales_end">Sales End:</string>
 
 </resources>
