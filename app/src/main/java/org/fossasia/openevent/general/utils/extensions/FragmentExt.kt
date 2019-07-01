@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.utils.extensions
 
 import android.os.Build
-import android.transition.TransitionInflater
+import androidx.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 
 const val SUPPORTED_TRANSITION_VERSION = Build.VERSION_CODES.O
