@@ -89,7 +89,7 @@ import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTran
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment;"
+const val EVENT_DETAIL_FRAGMENT = "eventDetailFragment"
 
 class EventDetailsFragment : Fragment() {
     private val eventViewModel by viewModel<EventDetailsViewModel>()
