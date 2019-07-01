@@ -5,11 +5,15 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_COMPLETED
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PENDING
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PLACED
 import timber.log.Timber
 
 /**
@@ -64,5 +68,29 @@ fun setExpired(imageView: ImageView, isExpired: Boolean) {
         val matrix = ColorMatrix()
         matrix.setSaturation(0F)
         imageView.colorFilter = ColorMatrixColorFilter(matrix)
+    }
+}
+
+@BindingAdapter("orderStatus")
+fun setOrderStatus(textView: TextView, orderStatus: String) {
+    when (orderStatus) {
+        ORDER_STATUS_PLACED -> {
+            textView.isVisible = true
+            textView.text = ORDER_STATUS_PLACED
+            textView.setBackgroundResource(R.color.orderStatusBlue)
+        }
+        ORDER_STATUS_COMPLETED -> {
+            textView.isVisible = true
+            textView.text = ORDER_STATUS_COMPLETED
+            textView.setBackgroundResource(R.color.orderStatusGreen)
+        }
+        ORDER_STATUS_PENDING -> {
+            textView.isVisible = true
+            textView.text = ORDER_STATUS_PENDING
+            textView.setBackgroundResource(R.color.orderStatusOrange)
+        }
+        else -> {
+            textView.isVisible = false
+        }
     }
 }

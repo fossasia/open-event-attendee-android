@@ -20,4 +20,8 @@
     <color name="colorPrimaryVariant">#311B92</color>
     <color name="colorSecondary">#03A9F4</color>
     <color name="colorSecondaryVariant">#01579B</color>
+
+    <color name="orderStatusBlue">#2889D2</color>
+    <color name="orderStatusGreen">#21BA45</color>
+    <color name="orderStatusOrange">#F2711C</color>
 </resources>
