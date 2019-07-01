@@ -281,6 +281,7 @@ class TicketsFragment : Fragment() {
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+        ticketsRecyclerAdapter.setTimeZone(event.timezone)
     }
 
     private fun handleNoTicketsSelected() {

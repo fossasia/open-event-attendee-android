@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import kotlinx.android.synthetic.main.fragment_auth.view.getStartedButton
 import kotlinx.android.synthetic.main.fragment_auth.view.email
 import kotlinx.android.synthetic.main.fragment_auth.view.emailLayout
@@ -33,6 +32,7 @@ import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.fossasia.openevent.general.welcome.WELCOME_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
@@ -62,7 +62,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_auth, container, false)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        setSharedElementEnterTransition()
         setupToolbar()
 
         val progressDialog = progressDialog(context)

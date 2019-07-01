@@ -2,21 +2,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:layout_marginLeft="@dimen/layout_margin_medium"
     android:layout_marginRight="@dimen/layout_margin_medium"
+    android:padding="@dimen/layout_margin_medium"
     android:elevation="@dimen/card_elevation"
-    android:background="@drawable/border"
+    android:background="@drawable/border">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="@dimen/layout_margin_medium"
-    android:weightSum="8">
-
-    <TextView
-        android:id="@+id/ticketName"
+    android:weightSum="8"
+    android:layout_marginBottom="@dimen/layout_margin_medium">
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        tools:text="Google I/O" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/ticketName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Google I/O" />
+        <TextView
+            android:id="@+id/seeMoreInfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:text="@string/see_more"
+            tools:text="@string/see_more"/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="0dp"
@@ -64,6 +83,17 @@
             android:textSize="@dimen/text_size_small" />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/ticketDateText"
+        android:layout_weight="2"
+        android:layout_width="@dimen/layout_margin_none"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_large"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="@string/ended"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/donationInput"
@@ -74,5 +104,32 @@
         android:inputType="number"
         android:visibility="gone"
         tools:visibility="visible"/>
-
+</LinearLayout>
+<LinearLayout
+    android:id="@+id/moreInfoSection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/layout_margin_medium"
+    android:padding="@dimen/padding_medium"
+    android:orientation="vertical"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:background="@drawable/filled_border">
+    <TextView
+        android:id="@+id/priceInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Price: $55.00"/>
+    <TextView
+        android:id="@+id/saleInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:text="Sales End: Jul 12, 2019" />
+</LinearLayout>
+<TextView
+    android:id="@+id/description"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:text="VIP Includes one hour early admission and free sample slices of pizza during VIP hour"
+    android:layout_marginBottom="@dimen/layout_margin_medium"/>
 </LinearLayout>

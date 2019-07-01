@@ -10,6 +10,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
     private val tickets = ArrayList<Ticket>()
     private var eventCurrency: String? = null
+    private var eventTimeZone: String? = null
     private var discountCode: DiscountCode? = null
     private var selectedListener: TicketSelectedListener? = null
     private lateinit var ticketAndQuantity: List<Triple<Int, Int, Float>>
@@ -26,6 +27,11 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
     fun setCurrency(currencyCode: String?) {
         eventCurrency = currencyCode
+    }
+
+    fun setTimeZone(timeZone: String?) {
+        eventTimeZone = timeZone
+        notifyDataSetChanged()
     }
 
     fun applyDiscount(discountCode: DiscountCode) {
@@ -49,7 +55,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
                 currentDiscountCode = discountCode
         }
         val qty = if ((this::ticketAndQuantity.isInitialized)) ticketAndQuantity[position].second else 0
-            holder.bind(ticket, selectedListener, eventCurrency, qty, currentDiscountCode)
+            holder.bind(ticket, selectedListener, eventCurrency, eventTimeZone, qty, currentDiscountCode)
     }
 
     override fun getItemCount(): Int {

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.loginButton
@@ -39,6 +38,7 @@ import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -73,7 +73,7 @@ class LoginFragment : Fragment() {
         }
 
         if (safeArgs.email.isNotEmpty()) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            setSharedElementEnterTransition()
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
             rootView.email.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
