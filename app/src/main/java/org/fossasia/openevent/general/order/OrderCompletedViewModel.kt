@@ -24,8 +24,8 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
     val event: LiveData<Event> = mutableEvent
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
-    val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
+    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
+    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
 
     fun loadEvent(id: Long) {
         if (id.equals(-1)) {
@@ -51,10 +51,9 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
         if (topicId != -1L) {
             similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
                 BiFunction { firstList: List<Event>, secondList: List<Event> ->
-                    val similarList = mutableListOf<Event>()
-                    similarList.addAll(firstList)
-                    similarList.addAll(secondList)
-                    similarList
+                    val similarList = mutableSetOf<Event>()
+                    similarList.addAll(firstList + secondList)
+                    similarList.toList()
                 })
         }
 
@@ -63,14 +62,7 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
             .distinctUntilChanged()
             .subscribe({ events ->
                 val list = events.filter { it.id != eventId }
-                val oldList = mutableSimilarEvents.value
-                val similarEventList = mutableSetOf<Event>()
-                similarEventList.addAll(list)
-                oldList?.let {
-                    similarEventList.addAll(it)
-                }
-                mutableProgress.value = false
-                mutableSimilarEvents.value = similarEventList
+                mutableSimilarEvents.value = list
             }, {
                 Timber.e(it, "Error fetching similar events")
             })
