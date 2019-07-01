@@ -30,6 +30,7 @@ const val ORDER_STATUS_PENDING = "pending"
 const val ORDER_STATUS_COMPLETED = "completed"
 const val ORDER_STATUS_PLACED = "placed"
 const val ORDER_STATUS_CANCELLED = "cancelled"
+const val ORDER_STATUS_INITIALIZING = "initializing"
 const val PAYMENT_MODE_FREE = "free"
 const val PAYMENT_MODE_BANK = "bank"
 const val PAYMENT_MODE_ONSITE = "onsite"
@@ -95,7 +96,6 @@ class AttendeeViewModel(
     var yearSelectedPosition: Int = 0
     var paymentCurrency: String = ""
     var timeout: Long = -1L
-    var orderCreatedSuccess = false
     var ticketDetailsVisible = false
     var billingEnabled = false
 
@@ -147,24 +147,8 @@ class AttendeeViewModel(
             })
     }
 
-    fun cancelPendingOrder() {
-        var order = mutablePendingOrder.value
-        val identifier: String? = orderIdentifier
-        if (order == null || identifier == null) return
-
-        order = order.copy(status = ORDER_STATUS_CANCELLED)
-        compositeDisposable += orderService.editOrder(identifier, order)
-            .withDefaultSchedulers()
-            .subscribe({
-                Timber.d("Pending order cancelled")
-                mutableMessage.value = resource.getString(R.string.pending_order_cancelled_message)
-            }, {
-                Timber.e("Fail on cancelling order")
-            })
-    }
-
-    fun createPendingOrder(eventId: Long) {
-        val emptyOrder = Order(id = getId(), status = ORDER_STATUS_PENDING, event = EventId(eventId))
+    fun initializeOrder(eventId: Long) {
+        val emptyOrder = Order(id = getId(), status = ORDER_STATUS_INITIALIZING, event = EventId(eventId))
 
         compositeDisposable += orderService.placeOrder(emptyOrder)
             .withDefaultSchedulers()

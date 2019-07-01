@@ -117,6 +117,8 @@ import java.util.Calendar
 import java.util.Currency
 import kotlin.collections.ArrayList
 
+private const val COUNT_DOWN_TIME = 15 // in minutes
+
 class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private lateinit var rootView: View
@@ -244,8 +246,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             .setTitle(getString(R.string.cancel_order))
             .setMessage(getString(R.string.cancel_order_message))
             .setPositiveButton(getString(R.string.continue_string)) { _, _ ->
-                if (!attendeeViewModel.orderCreatedSuccess)
-                    attendeeViewModel.cancelPendingOrder()
                 findNavController(rootView).popBackStack()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
@@ -288,7 +288,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
         val currentPendingOrder = attendeeViewModel.pendingOrder.value
         if (currentPendingOrder == null) {
-            attendeeViewModel.createPendingOrder(safeArgs.eventId)
+            attendeeViewModel.initializeOrder(safeArgs.eventId)
         }
     }
 
@@ -297,12 +297,10 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         rootView.timeoutInfoTextView.text =
             getString(R.string.ticket_timeout_info_message, event.orderExpiryTime.toString())
 
-        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) event.orderExpiryTime * 60 * 1000L
+        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) COUNT_DOWN_TIME * 60 * 1000L
                                 else attendeeViewModel.timeout
         timer = object : CountDownTimer(timeLeft, 1000) {
             override fun onFinish() {
-                if (!attendeeViewModel.orderCreatedSuccess)
-                    attendeeViewModel.cancelPendingOrder()
                 findNavController(rootView).navigate(AttendeeFragmentDirections
                     .actionAttendeeToTicketPop(safeArgs.eventId, safeArgs.currency, true))
             }
