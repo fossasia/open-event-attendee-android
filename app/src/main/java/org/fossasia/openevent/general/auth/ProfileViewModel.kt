@@ -95,6 +95,22 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }
     }
 
+    fun verifyProfile(token: String) {
+        compositeDisposable += authService.verifyEmail(token)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableMessage.value = it.message
+                syncProfile()
+            }) {
+                Timber.e(it, "Error in verifying email")
+                mutableMessage.value = resource.getString(R.string.verification_error_message)
+            }
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

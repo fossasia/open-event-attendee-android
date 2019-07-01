@@ -3,8 +3,9 @@ package org.fossasia.openevent.general.event
 import android.content.Context
 import android.content.Intent
 import androidx.preference.PreferenceManager
-import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.OpenEventGeneral
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Resource
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -192,10 +193,12 @@ object EventUtils {
      */
     fun share(event: Event, context: Context) {
         val sendIntent = Intent()
+        val resources = Resource()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.type = "text/plain"
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, event.name)
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "${BuildConfig.FRONTEND_URL}e/${event.identifier}")
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+            "https://${resources.getString(R.string.FRONTEND_HOST)}/e/${event.identifier}")
         context.startActivity(Intent.createChooser(sendIntent, "Share Event Details"))
     }
 

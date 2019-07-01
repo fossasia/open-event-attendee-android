@@ -39,5 +39,8 @@ interface AuthApi {
     fun checkEmail(@Body email: Email): Single<CheckEmailResponse>
 
     @POST("auth/resend-verification-email")
-    fun resendVerificationEmail(@Body requestToken: RequestToken): Single<ResendVerificationEmailResponse>
+    fun resendVerificationEmail(@Body requestToken: RequestToken): Single<EmailVerificationResponse>
+
+    @POST("auth/verify-email")
+    fun verifyEmail(@Body requestEmailVerification: RequestEmailVerification): Single<EmailVerificationResponse>
 }
