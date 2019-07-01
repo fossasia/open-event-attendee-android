@@ -9,27 +9,25 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="@dimen/layout_margin_medium"
-    android:weightSum="4">
+    android:weightSum="8">
 
     <TextView
         android:id="@+id/ticketName"
-        android:layout_width="@dimen/layout_margin_none"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textSize="@dimen/text_size_large"
+        android:layout_weight="3"
         tools:text="Google I/O" />
 
     <LinearLayout
-        android:layout_width="@dimen/layout_margin_none"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_large"
             tools:text="$25" />
 
         <TextView
@@ -37,23 +35,23 @@
             android:id="@+id/discountPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_large"
             tools:text="$25" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="@dimen/layout_margin_none"
+        android:id="@+id/orderQtySection"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:background="@drawable/filled_border"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/order"
-            android:layout_width="@dimen/layout_margin_none"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/card_tickets_text_height"
-            android:layout_weight="1"
             android:gravity="center"
             android:spinnerMode="dialog"
             android:textSize="@dimen/text_size_large" />
@@ -64,6 +62,17 @@
             android:layout_height="@dimen/spinner_height"
             android:spinnerMode="dialog"
             android:textSize="@dimen/text_size_small" />
+
     </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/donationInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="2"
+        android:inputType="number"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </LinearLayout>

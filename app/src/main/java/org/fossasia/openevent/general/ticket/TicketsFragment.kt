@@ -55,7 +55,7 @@ class TicketsFragment : Fragment() {
     private val safeArgs: TicketsFragmentArgs by navArgs()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Triple<Int, Int, Float>>()
     private var totalAmount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,6 +189,13 @@ class TicketsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val ticketSelectedListener = object : TicketSelectedListener {
+            override fun onDonationSelected(ticketId: Int, donation: Float) {
+                if (donation > 0F) {
+                    handleTicketDonationEntered(ticketId, donation)
+                    ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
+                }
+            }
+
             override fun onSelected(ticketId: Int, quantity: Int) {
                 handleTicketSelect(ticketId, quantity)
                 ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
@@ -243,9 +250,18 @@ class TicketsFragment : Fragment() {
     private fun handleTicketSelect(id: Int, quantity: Int) {
         val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            ticketIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Triple(id, quantity, 0F))
         } else {
-            ticketIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Triple(id, quantity, 0F)
+        }
+    }
+
+    private fun handleTicketDonationEntered(id: Int, donation: Float) {
+        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
+        if (pos == -1) {
+            ticketIdAndQty.add(Triple(id, 1, donation))
+        } else {
+            ticketIdAndQty[pos] = Triple(id, 1, donation)
         }
     }
 
@@ -287,7 +303,7 @@ class TicketsFragment : Fragment() {
             ticketsViewModel.loadTickets(safeArgs.eventId)
         }
 
-        val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+        val retainedTicketIdAndQty: List<Triple<Int, Int, Float>>? = ticketsViewModel.ticketIdAndQty.value
         if (retainedTicketIdAndQty != null) {
             for (idAndQty in retainedTicketIdAndQty) {
                 handleTicketSelect(idAndQty.first, idAndQty.second)

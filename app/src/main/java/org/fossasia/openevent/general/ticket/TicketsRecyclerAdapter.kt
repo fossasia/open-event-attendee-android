@@ -12,7 +12,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     private var eventCurrency: String? = null
     private var discountCode: DiscountCode? = null
     private var selectedListener: TicketSelectedListener? = null
-    private lateinit var ticketAndQuantity: List<Pair<Int, Int>>
+    private lateinit var ticketAndQuantity: List<Triple<Int, Int, Float>>
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
@@ -56,11 +56,12 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
         return tickets.size
     }
 
-    fun setTicketAndQty(ticketAndQty: List<Pair<Int, Int>>) {
+    fun setTicketAndQty(ticketAndQty: List<Triple<Int, Int, Float>>) {
         ticketAndQuantity = ticketAndQty
     }
 }
 
 interface TicketSelectedListener {
     fun onSelected(ticketId: Int, quantity: Int)
+    fun onDonationSelected(ticketId: Int, donation: Float)
 }

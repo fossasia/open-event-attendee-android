@@ -60,8 +60,7 @@ class AttendeeViewModel(
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
     val orderCompleted = MutableLiveData<Boolean>()
-    val totalAmount = MutableLiveData<Float>(0F)
-    val paymentCompleted = MutableLiveData<Boolean>()
+    val totalAmount = MutableLiveData(0F)
     private val mutableTickets = MutableLiveData<List<Ticket>>()
     val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -89,7 +88,7 @@ class AttendeeViewModel(
 
     // Retained information
     var countryPosition: Int = -1
-    var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    var ticketIdAndQty: List<Triple<Int, Int, Float>>? = null
     var selectedPaymentOption: Int = -1
     var singleTicket = false
     var monthSelectedPosition: Int = 0
