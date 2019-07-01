@@ -20,6 +20,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAY_STORE_BUILD_FLAVOR = "playStore"
 const val EVENT_IDENTIFIER = "eventIdentifier"
+const val VERIFICATION_TOKEN = "verificationToken"
+private const val VERIFY = "verify"
+private const val TOKEN = "token"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -52,8 +55,13 @@ class MainActivity : AppCompatActivity() {
         val appLinkData = intent?.data
         if (appLinkData != null) {
             val bundle = Bundle()
-            bundle.putString(EVENT_IDENTIFIER, appLinkData.lastPathSegment)
-            navController.navigate(R.id.eventDetailsFragment, bundle)
+            if (appLinkData.lastPathSegment == VERIFY) {
+                bundle.putString(VERIFICATION_TOKEN, appLinkData.getQueryParameter(TOKEN))
+                navController.navigate(R.id.profileFragment, bundle)
+            } else {
+                bundle.putString(EVENT_IDENTIFIER, appLinkData.lastPathSegment)
+                navController.navigate(R.id.eventDetailsFragment, bundle)
+            }
         }
     }
 

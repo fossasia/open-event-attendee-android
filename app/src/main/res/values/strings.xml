@@ -79,6 +79,7 @@
     <string name="profile_photo">Profile Photo</string>
     <string name="verified">Verified</string>
     <string name="not_verified">Account not verified. Click to verify</string>
+    <string name="verification_error_message">Error in verifying email</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>

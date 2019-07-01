@@ -98,7 +98,11 @@ class AuthService(
         return authApi.checkEmail(Email(email))
     }
 
-    fun resendVerificationEmail(email: String): Single<ResendVerificationEmailResponse> {
+    fun resendVerificationEmail(email: String): Single<EmailVerificationResponse> {
         return authApi.resendVerificationEmail(RequestToken(Email(email)))
+    }
+
+    fun verifyEmail(token: String): Single<EmailVerificationResponse> {
+        return authApi.verifyEmail(RequestEmailVerification(Token(token)))
     }
 }

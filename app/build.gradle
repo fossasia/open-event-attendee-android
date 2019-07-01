@@ -37,17 +37,15 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
-            buildConfigField "String", "FRONTEND_URL", '"https://eventyay.com/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
             resValue "string",  "FRONTEND_HOST", "eventyay.com"
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
-            buildConfigField "String", "FRONTEND_URL", '"https://fossasia.github.io/open-event-frontend/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
-            resValue "string", "FRONTEND_HOST", "fossasia.github.io/open-event-frontend"
+            resValue "string", "FRONTEND_HOST", "open-event-fe.netlify.com"
         }
     }
 

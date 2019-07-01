@@ -40,6 +40,7 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.VERIFICATION_TOKEN
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -91,6 +92,10 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             profileViewModel.getProfile()
             profileViewModel.syncProfile()
         }
+
+        val token = arguments?.getString(VERIFICATION_TOKEN)
+        if (token != null)
+            profileViewModel.verifyProfile(token)
 
         val progressDialog = progressDialog(context, getString(R.string.loading_message))
         profileViewModel.progress
