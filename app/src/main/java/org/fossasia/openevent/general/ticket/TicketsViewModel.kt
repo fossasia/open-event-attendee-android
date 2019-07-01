@@ -42,7 +42,7 @@ class TicketsViewModel(
     val amount: LiveData<Float> = mutableAmount
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
-    val ticketIdAndQty = MutableLiveData<List<Pair<Int, Int>>>()
+    val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -97,7 +97,7 @@ class TicketsViewModel(
             })
     }
 
-    fun getAmount(ticketIdAndQty: List<Pair<Int, Int>>) {
+    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
         ticketIdAndQty.forEach {
@@ -106,6 +106,7 @@ class TicketsViewModel(
                 qty.add(it.second)
             }
         }
+        val donation = ticketIdAndQty.map { it.third }.sum()
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -127,7 +128,7 @@ class TicketsViewModel(
                     }
                     price?.let { prices += price * qty[index++] }
                 }
-                mutableAmount.value = prices
+                mutableAmount.value = prices + donation
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
@@ -135,7 +136,7 @@ class TicketsViewModel(
 
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
-    fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
+    fun totalTicketsEmpty(ticketIdAndQty: List<Triple<Int, Int, Float>>): Boolean {
         return ticketIdAndQty.sumBy { it.second } == 0
     }
 

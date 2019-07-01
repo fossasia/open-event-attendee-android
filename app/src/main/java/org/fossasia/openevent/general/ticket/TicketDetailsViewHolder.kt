@@ -2,27 +2,36 @@ package org.fossasia.openevent.general.ticket
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
-import kotlinx.android.synthetic.main.item_ticket_details.view.*
+import kotlinx.android.synthetic.main.item_ticket_details.view.ticketName
+import kotlinx.android.synthetic.main.item_ticket_details.view.price
+import kotlinx.android.synthetic.main.item_ticket_details.view.qty
+import kotlinx.android.synthetic.main.item_ticket_details.view.subTotal
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Resource
 
 class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(ticket: Ticket, ticketQuantity: Int, eventCurrency: String?) {
+    private val resource = Resource()
+
+    fun bind(ticket: Ticket, ticketQuantity: Int, donationAmount: Float, eventCurrency: String?) {
         itemView.ticketName.text = ticket.name
 
-        if (ticket.price != null) {
-            itemView.price.visibility = View.VISIBLE
-            itemView.price.text = "$${ticket.price}"
+        when (ticket.type) {
+            TICKET_TYPE_DONATION -> {
+                itemView.price.text = resource.getString(R.string.donation)
+                itemView.subTotal.text = "$eventCurrency$donationAmount"
+            }
+            TICKET_TYPE_FREE -> {
+                itemView.price.text = resource.getString(R.string.free)
+            }
+            TICKET_TYPE_PAID -> {
+                if (ticket.price != null) {
+                    itemView.price.text = "$eventCurrency${ticket.price}"
+                }
+                val subTotal: Float? = ticket.price?.times(ticketQuantity)
+                itemView.subTotal.text = "$eventCurrency$subTotal"
+            }
         }
 
-        if (ticket.price != null) {
-            itemView.price.text = "$eventCurrency${ticket.price}"
-        }
-
-        if (ticket.price == 0.toFloat()) {
-            itemView.price.text = "Free"
-        }
-
-        val subTotal: Float? = ticket.price?.times(ticketQuantity)
         itemView.qty.text = ticketQuantity.toString()
-        itemView.subTotal.text = "$$subTotal"
     }
 }

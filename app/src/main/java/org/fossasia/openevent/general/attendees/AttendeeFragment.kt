@@ -142,7 +142,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
         safeArgs.ticketIdAndQty?.value?.let {
             val quantities = it.map { pair -> pair.second }.filter { it != 0 }
+            val donations = it.filter { it.second != 0 }.map { pair -> pair.third }
             ticketsRecyclerAdapter.setQuantity(quantities)
+            ticketsRecyclerAdapter.setDonations(donations)
             attendeeRecyclerAdapter.setQuantity(quantities)
         }
         attendeeViewModel.forms.value?.let { attendeeRecyclerAdapter.setCustomForm(it) }

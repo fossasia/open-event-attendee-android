@@ -272,7 +272,8 @@
     <string name="create_attendee_fail_message">Unable to create Attendee!</string>
     <string name="fill_all_fields_message">Please fill in all the fields</string>
     <string name="fill_required_fields_message">Please fill in all the required fields</string>
-    <string name="free">free</string>
+    <string name="free">Free</string>
+    <string name="enter_donation">Enter donation</string>
     <string name="order_success_message">Order created successfully!</string>
     <string name="order_fail_message">Unable to create Order!</string>
     <string name="payment_not_complete_message">Payment not completed!</string>
@@ -460,5 +461,6 @@
     <string name="replace_image">Replace Image</string>
     <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
     <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
+    <string name="donation">Donation</string>
 
 </resources>

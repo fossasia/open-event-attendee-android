@@ -8,4 +8,4 @@ import java.io.Serializable
  *
  * @param value The list of ids and quantities
  */
-data class TicketIdAndQtyWrapper(val value: List<Pair<Int, Int>>) : Serializable
+data class TicketIdAndQtyWrapper(val value: List<Triple<Int, Int, Float>>) : Serializable
