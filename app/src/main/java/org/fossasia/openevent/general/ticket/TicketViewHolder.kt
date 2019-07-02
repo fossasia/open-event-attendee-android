@@ -45,6 +45,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         eventCurrency: String?,
         eventTimeZone: String?,
         ticketQuantity: Int,
+        donationAmount: Float,
         discountCode: DiscountCode? = null
     ) {
         itemView.ticketName.text = ticket.name
@@ -79,6 +80,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.price.text = resource.getString(R.string.enter_donation)
                 itemView.orderQtySection.isVisible = false
                 itemView.donationInput.isVisible = true
+                if (donationAmount > 0F) itemView.donationInput.setText(donationAmount.toString())
                 setupDonationTicketPicker(selectedListener, ticket)
             }
             TICKET_TYPE_FREE -> {

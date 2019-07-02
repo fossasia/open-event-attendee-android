@@ -43,6 +43,7 @@ class TicketsViewModel(
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
     val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
+    var discountCodeCurrentLayout = APPLY_DISCOUNT_CODE
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
