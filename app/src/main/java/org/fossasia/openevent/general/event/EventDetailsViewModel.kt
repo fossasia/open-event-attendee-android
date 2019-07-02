@@ -66,8 +66,8 @@ class EventDetailsViewModel(
     val eventSponsors: LiveData<List<Sponsor>> = mutableEventSponsors
     private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
-    private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
-    val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
+    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
+    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
     private val mutableOrders = MutableLiveData<List<Order>>()
     val orders: LiveData<List<Order>> = mutableOrders
 
@@ -144,10 +144,9 @@ class EventDetailsViewModel(
         if (topicId != -1L) {
             similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
                 BiFunction { firstList: List<Event>, secondList: List<Event> ->
-                    val similarList = mutableListOf<Event>()
-                    similarList.addAll(firstList)
-                    similarList.addAll(secondList)
-                    similarList
+                    val similarList = mutableSetOf<Event>()
+                    similarList.addAll(firstList + secondList)
+                    similarList.toList()
                 })
         }
         compositeDisposable += similarEventsFlowable
@@ -155,13 +154,7 @@ class EventDetailsViewModel(
             .distinctUntilChanged()
             .subscribe({ events ->
                 val list = events.filter { it.id != eventId }
-                val oldList = mutableSimilarEvents.value
-                val similarEventList = mutableSetOf<Event>()
-                similarEventList.addAll(list)
-                oldList?.let {
-                    similarEventList.addAll(it)
-                }
-                mutableSimilarEvents.value = similarEventList
+                mutableSimilarEvents.value = list
             }, {
                 Timber.e(it, "Error fetching similar events")
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
