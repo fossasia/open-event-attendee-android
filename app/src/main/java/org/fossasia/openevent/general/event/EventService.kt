@@ -27,24 +27,6 @@ class EventService(
     private val speakersCallDao: SpeakersCallDao
 ) {
 
-    fun getEvents(): Flowable<List<Event>> {
-        val eventsFlowable = eventDao.getAllEvents()
-        return eventsFlowable.switchMap {
-            if (it.isNotEmpty())
-                eventsFlowable
-            else
-                eventApi.getEvents()
-                    .map {
-                        eventDao.insertEvents(it)
-                        eventTopicsDao.insertEventTopics(getEventTopicList(it))
-                    }
-                    .toFlowable()
-                    .flatMap {
-                        eventsFlowable
-                    }
-        }
-    }
-
     fun getEventLocations(): Single<List<EventLocation>> {
         return eventLocationApi.getEventLocation()
     }
@@ -84,6 +66,14 @@ class EventService(
             apiList.forEach {
                 it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
             }
+            updateFavorites(apiList)
+        }
+    }
+
+    fun getEventsByLocationPaged(locationName: String?, page: Int): Flowable<List<Event>> {
+        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
+            "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
+        return eventApi.searchEventsPaged("name", query, page).flatMapPublisher { apiList ->
             updateFavorites(apiList)
         }
     }

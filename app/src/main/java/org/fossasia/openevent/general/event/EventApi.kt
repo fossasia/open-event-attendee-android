@@ -25,4 +25,12 @@ interface EventApi {
 
     @GET("events/{eventId}/speakers-call")
     fun getSpeakerCallForEvent(@Path("eventId") id: Long): Single<SpeakersCall>
+
+    @GET("events?include=event-sub-topic,event-topic,event-type")
+    fun searchEventsPaged(
+        @Query("sort") sort: String,
+        @Query("filter") eventName: String,
+        @Query("page[number]") page: Int,
+        @Query("page[size]") pageSize: Int = 5
+    ): Single<List<Event>>
 }

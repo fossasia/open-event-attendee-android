@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
@@ -37,7 +36,6 @@ import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
@@ -67,8 +65,6 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         }
         setToolbar(activity, show = false)
 
-        rootView.progressBar.isIndeterminate = true
-
         rootView.eventsRecycler.layoutManager =
             GridLayoutManager(activity, resources.getInteger(R.integer.events_column_count))
 
@@ -84,30 +80,24 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 handleNotificationDotVisibility(it)
             })
 
-        eventsViewModel.showShimmerEvents
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
-                if (shouldShowShimmer) {
-                    rootView.shimmerEvents.startShimmer()
-                    eventsListAdapter.clear()
-                } else {
-                    rootView.shimmerEvents.stopShimmer()
-                }
-                rootView.shimmerEvents.isVisible = shouldShowShimmer
-            })
-
-        eventsViewModel.events
+        eventsViewModel.pagedEvents
             .nonNull()
             .observe(this, Observer { list ->
                 eventsListAdapter.submitList(list)
-                showEmptyMessage(list.size)
-                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
 
         eventsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.swiperefresh.isRefreshing = it
+                if (it) {
+                    rootView.shimmerEvents.startShimmer()
+                    showEmptyMessage(false)
+                } else {
+                    rootView.shimmerEvents.stopShimmer()
+                    rootView.swiperefresh.isRefreshing = false
+                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
+                }
+                rootView.shimmerEvents.isVisible = it
             })
 
         eventsViewModel.error
@@ -117,6 +107,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             })
 
         eventsViewModel.loadLocation()
+        if (rootView.locationTextView.text == getString(R.string.enter_location)) {
+            rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
+        } else {
+            rootView.emptyEventsText.text = getString(R.string.no_events_message)
+        }
         rootView.locationTextView.text = eventsViewModel.savedLocation.value
         rootView.toolbar.title = rootView.locationTextView.text
 
@@ -131,10 +126,10 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         eventsViewModel.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
-                if (isConnected && eventsViewModel.events.value == null) {
+                if (isConnected && eventsViewModel.pagedEvents.value == null) {
                     eventsViewModel.loadLocationEvents()
                 }
-                showNoInternetScreen(!isConnected && eventsViewModel.events.value == null)
+                showNoInternetScreen(!isConnected && eventsViewModel.pagedEvents.value == null)
             })
 
         rootView.locationTextView.setOnClickListener {
@@ -247,17 +242,8 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.noInternetCard.isVisible = show
     }
 
-    private fun showEmptyMessage(itemCount: Int) {
-        if (itemCount == 0) {
-            rootView.eventsEmptyView.visibility = View.VISIBLE
-            if (rootView.locationTextView.text == getString(R.string.enter_location)) {
-                rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
-            } else {
-                rootView.emptyEventsText.text = getString(R.string.no_events_message)
-            }
-        } else {
-            rootView.eventsEmptyView.visibility = View.GONE
-        }
+    private fun showEmptyMessage(show: Boolean) {
+        rootView.eventsEmptyView.isVisible = show
     }
 
     override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)
