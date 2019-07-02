@@ -54,8 +54,17 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
             if (it.id.toInt() == ticket.id)
                 currentDiscountCode = discountCode
         }
-        val qty = if ((this::ticketAndQuantity.isInitialized)) ticketAndQuantity[position].second else 0
-            holder.bind(ticket, selectedListener, eventCurrency, eventTimeZone, qty, currentDiscountCode)
+        var qty = 0
+        var donation = 0F
+        if (this::ticketAndQuantity.isInitialized) {
+            val ticketIndex = ticketAndQuantity.map { it.first }.indexOf(ticket.id)
+            if (ticketIndex != -1) {
+                qty = ticketAndQuantity[ticketIndex].second
+                donation = ticketAndQuantity[ticketIndex].third
+            }
+        }
+
+        holder.bind(ticket, selectedListener, eventCurrency, eventTimeZone, qty, donation, currentDiscountCode)
     }
 
     override fun getItemCount(): Int {

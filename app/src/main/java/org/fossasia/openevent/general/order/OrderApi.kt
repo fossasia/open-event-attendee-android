@@ -22,8 +22,8 @@ interface OrderApi {
     @POST("orders/{orderIdentifier}/charge")
     fun chargeOrder(@Path("orderIdentifier") orderIdentifier: String, @Body charge: Charge): Single<Charge>
 
-    @GET("/v1/users/{userId}/orders?filter=[{\"name\":\"status\",\"op\":\"in\",\"val\":\"[\"completed\"," +
-        "\"placed\",\"pending\"]\"}]&include=event,attendees&fields[attendees]=id")
+    @GET("/v1/users/{userId}/orders?filter=[{\"name\":\"status\",\"op\":\"in\",\"val\":[\"completed\"," +
+        "\"placed\",\"pending\"]}]&include=event,attendees&fields[attendees]=id")
         fun ordersUnderUser(@Path("userId") userId: Long): Single<List<Order>>
 
     @GET("/v1/orders/{orderIdentifier}/attendees")

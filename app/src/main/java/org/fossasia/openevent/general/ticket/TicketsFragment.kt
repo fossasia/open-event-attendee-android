@@ -45,7 +45,7 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
 const val TICKETS_FRAGMENT = "ticketsFragment"
-private const val APPLY_DISCOUNT_CODE = 1
+const val APPLY_DISCOUNT_CODE = 1
 private const val SHOW_DISCOUNT_CODE_LAYOUT = 2
 private const val DISCOUNT_CODE_APPLIED = 3
 
@@ -307,7 +307,10 @@ class TicketsFragment : Fragment() {
         val retainedTicketIdAndQty: List<Triple<Int, Int, Float>>? = ticketsViewModel.ticketIdAndQty.value
         if (retainedTicketIdAndQty != null) {
             for (idAndQty in retainedTicketIdAndQty) {
-                handleTicketSelect(idAndQty.first, idAndQty.second)
+                if (idAndQty.third != 0F)
+                    handleTicketDonationEntered(idAndQty.first, idAndQty.third)
+                else
+                    handleTicketSelect(idAndQty.first, idAndQty.second)
             }
             ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
             ticketsRecyclerAdapter.notifyDataSetChanged()
@@ -319,24 +322,32 @@ class TicketsFragment : Fragment() {
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
         rootView.register.isVisible = !show
+        if (show) {
+            rootView.discountCodeLayout.isVisible = false
+            rootView.discountCodeAppliedLayout.isVisible = false
+            rootView.applyDiscountCode.isVisible = false
+        } else {
+            handleDiscountCodeVisibility(ticketsViewModel.discountCodeCurrentLayout)
+        }
     }
 
     private fun handleDiscountCodeVisibility(code: Int = APPLY_DISCOUNT_CODE) {
+        ticketsViewModel.discountCodeCurrentLayout = code
         when (code) {
             APPLY_DISCOUNT_CODE -> {
-                rootView.applyDiscountCode.visibility = View.VISIBLE
-                rootView.discountCodeAppliedLayout.visibility = View.GONE
-                rootView.discountCodeLayout.visibility = View.GONE
+                rootView.applyDiscountCode.isVisible = true
+                rootView.discountCodeAppliedLayout.isVisible = false
+                rootView.discountCodeLayout.isVisible = false
             }
             SHOW_DISCOUNT_CODE_LAYOUT -> {
-                rootView.applyDiscountCode.visibility = View.GONE
-                rootView.discountCodeAppliedLayout.visibility = View.GONE
-                rootView.discountCodeLayout.visibility = View.VISIBLE
+                rootView.applyDiscountCode.isVisible = false
+                rootView.discountCodeAppliedLayout.isVisible = false
+                rootView.discountCodeLayout.isVisible = true
             }
             DISCOUNT_CODE_APPLIED -> {
-                rootView.applyDiscountCode.visibility = View.GONE
-                rootView.discountCodeAppliedLayout.visibility = View.VISIBLE
-                rootView.discountCodeLayout.visibility = View.GONE
+                rootView.applyDiscountCode.isVisible = false
+                rootView.discountCodeAppliedLayout.isVisible = true
+                rootView.discountCodeLayout.isVisible = false
             }
         }
     }
