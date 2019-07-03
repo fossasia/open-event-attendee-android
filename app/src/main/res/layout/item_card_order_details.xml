@@ -327,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
                 android:textSize="@dimen/text_size_medium"
-                app:hideIfEmpty="@{event.organizerName}"
+                app:hideIfEmpty="@{event.ownerName}"
                 tools:text="@string/organizer" />
 
             <TextView
@@ -336,7 +336,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
-                android:text="@{event.organizerName}"
+                android:text="@{event.ownerName}"
                 tools:text="@string/organizer_preview" />
 
             <Button
