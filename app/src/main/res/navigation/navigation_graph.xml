@@ -756,6 +756,11 @@
             app:destination="@id/authFragment"
             app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_login_to_events_pop"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -775,6 +780,11 @@
             android:id="@+id/action_signup_to_auth_pop"
             app:destination="@id/authFragment"
             app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_sign_up_to_events_pop"
+            app:destination="@id/eventsFragment"
+            app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="true"/>
         <argument
             android:name="email"
