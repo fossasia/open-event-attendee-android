@@ -491,6 +491,13 @@
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/event_details_headers" />
 
+                <ProgressBar
+                    android:id="@+id/feedbackProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feedbackRv"
                     android:layout_width="match_parent"
@@ -679,9 +686,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sponsorsSummaryContainer"
-                android:visibility="gone"
-                tools:visibility="visible">
+                app:layout_constraintTop_toBottomOf="@+id/sponsorsSummaryContainer">
 
                 <View
                     android:layout_width="match_parent"
@@ -707,6 +712,22 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
                     tools:listitem="@layout/item_card_similar_events" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerSimilarEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <include layout="@layout/placeholder_item_card_similar_events" />
+                        <include layout="@layout/placeholder_item_card_similar_events" />
+                        <include layout="@layout/placeholder_item_card_similar_events" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
