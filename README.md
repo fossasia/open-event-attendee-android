@@ -1,6 +1,6 @@
-# Open Event Android App
-[![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=development)](https://travis-ci.org/fossasia/open-event-android?branch=development)
-[![Build Status](https://travis-ci.org/fossasia/open-event-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-android?branch=master)
+# Open Event Attendee App
+[![Build Status](https://travis-ci.org/fossasia/open-event-attendee-android.svg?branch=development)](https://travis-ci.org/fossasia/open-event-attendee-android?branch=development)
+[![Build Status](https://travis-ci.org/fossasia/open-event-attendee-android.svg?branch=master)](https://travis-ci.org/fossasia/open-event-attendee-android?branch=master)
 [![Join the chat at https://gitter.im/fossasia/open-event-android](https://badges.gitter.im/fossasia/open-event-android.svg)](https://gitter.im/fossasia/open-event-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/open-event)
 [![Twitter Follow](https://img.shields.io/twitter/follow/eventyay.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/eventyay)
@@ -22,7 +22,7 @@ Planned features & enhancements are:
 
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
-Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-android)
+Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-attendee-android)
 
 ## Screenshots
 <table>
@@ -92,7 +92,7 @@ We have the following branches
 	 - _versionCode_ : **Integer** : To be monotonically incremented with each merge. Failure to do so will lead to 				publishing error, and thus is a crucial step before any merge
 	 - _versionName_ : **String** : User visible version of the app. To be changed following [semantic versioning](http://semver.org/)
  * **apk** This branch contains two apk's, that are automatically generated on the merged pull request a) debug apk and b) release apk.
-    - Please download and test the app that is using the code from the development and master branches [here](https://github.com/fossasia/open-event-android/tree/apk).
+    - Please download and test the app that is using the code from the development and master branches [here](https://github.com/fossasia/open-event-attendee-android/tree/apk).
 ### Code practices
 
 Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
@@ -112,7 +112,7 @@ Please help us follow the best practices to make it easy for the reviewer as wel
 If you are a tester and want to test the app, you have two ways to do that:
 1. **Installing APK on your device:** You can get debug APK as well as Release APK in apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
 
-## Open Event Android Suggestions
+## Open Event Attendee Android Suggestions
 
 - Suggestion form link: [Form](https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform)
 - Suggestion responses link: [Sheet](https://docs.google.com/spreadsheets/d/1SzR75MBEVrTY1sDM3KAMm9wltiulDAp0QT5hv9eJkKM/edit#gid=1676755229)

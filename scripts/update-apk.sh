@@ -7,53 +7,42 @@ git config --global user.email "noreply+travis@fossasia.org"
 export DEPLOY_BRANCH=${DEPLOY_BRANCH:-development}
 export PUBLISH_BRANCH=${PUBLISH_BRANCH:-master}
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-android" ] || ! [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" -o "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-attendee-android" ] || ! [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" -o "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	echo "We upload apk only for changes in development or master, and not PRs. So, let's skip this shall we ? :)"
 	exit 0
 fi
 
+./gradlew bundlePlayStoreRelease
 
-git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/open-event-android apk > /dev/null
+git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/open-event-attendee-android apk > /dev/null
 cd apk
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-	/bin/rm -f  open-event-master-app-playStore-release.apk open-event-master-app-fdroid-release.apk open-event-master-app-playStore-debug.apk open-event-master-app-fdroid-debug.apk
+	/bin/rm -f  open-event-attendee-master-*
 else
-	/bin/rm -f open-event-dev-app-fdroid-debug.apk open-event-dev-app-playStore-debug.apk open-event-dev-app-playStore-release.apk open-event-dev-app-fdroid-release.apk
+	/bin/rm -f open-event-attendee-dev-*
 fi
 
-\cp -r ../app/build/outputs/apk/playStore/*/**.apk .
-\cp -r ../app/build/outputs/apk/fdroid/*/**.apk .
-\cp -r ../app/build/outputs/apk/playStore/debug/output.json playStore-debug-output.json
-\cp -r ../app/build/outputs/apk/playStore/release/output.json playStore-release-output.json
-\cp -r ../app/build/outputs/apk/fdroid/debug/output.json fdroid-debug-output.json
-\cp -r ../app/build/outputs/apk/fdroid/release/output.json fdroid-release-output.json
+find ../app/build/outputs -type f -name '*.apk' -exec cp -v {} . \;
+find ../app/build/outputs -type f -name '*.aab' -exec cp -v {} . \;
+
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 	for file in app*; do
-		if [[ $file = "open-event"* ]]; then
+		if [[ $file = "eventyay-attendee"* ]]; then
 			continue
 		fi
-		mv $file open-event-master-${file%%}
+		mv $file eventyay-attendee-master-${file:4}
 	done
 fi
 
 if [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
 	for file in app*; do
-		if [[ $file = "open-event"* ]]; then
+		if [[ $file = "eventyay-attendee"* ]]; then
 			continue
 		fi
-		mv $file open-event-dev-${file%%}
+		mv $file eventyay-attendee-dev-${file:4}
 	done
-fi
-
-# Signing Apps
-
-if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-    echo "Push to master branch detected, signing the app..."
-    cp open-event-master-app-playStore-release-unsigned.apk open-event-master-app-playStore-release-unaligned.apk
-    jarsigner -verbose -tsa http://timestamp.comodoca.com/rfc3161 -sigalg SHA1withRSA -digestalg SHA1 -keystore ../scripts/key.jks -storepass $STORE_PASS -keypass $KEY_PASS open-event-master-app-playStore-release-unaligned.apk $ALIAS
-    ${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 open-event-master-app-playStore-release-unaligned.apk open-event-master-app-playStore-release.apk
 fi
 
 # Create a new branch that will contains only latest apk
@@ -78,4 +67,4 @@ if [ "$TRAVIS_BRANCH" != "$PUBLISH_BRANCH" ]; then
 fi
 
 gem install fastlane
-fastlane supply --apk open-event-master-app-playStore-release.apk --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
+fastlane supply --aab eventyay-attendee-master.aab --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
