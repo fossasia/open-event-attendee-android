@@ -349,7 +349,7 @@ class EventDetailsFragment : Fragment() {
             .into(rootView.eventImage)
 
         // Organizer Section
-        if (!event.organizerName.isNullOrEmpty()) {
+        if (!event.ownerName.isNullOrEmpty()) {
             val organizerDescriptionListener = View.OnClickListener {
                 if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
                     rootView.seeMoreOrganizer.text = getString(R.string.see_less)
