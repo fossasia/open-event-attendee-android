@@ -196,7 +196,11 @@ class LoginFragment : Fragment() {
             SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
             else -> R.id.eventsFragment
         }
-        findNavController(rootView).popBackStack(destinationId, false)
+        if (destinationId == R.id.eventsFragment) {
+            findNavController(rootView).navigate(LoginFragmentDirections.actionLoginToEventsPop())
+        } else {
+            findNavController(rootView).popBackStack(destinationId, false)
+        }
         rootView.snackbar(R.string.welcome_back)
     }
 }

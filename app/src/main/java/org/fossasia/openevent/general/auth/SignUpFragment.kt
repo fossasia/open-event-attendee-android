@@ -202,7 +202,11 @@ class SignUpFragment : Fragment() {
                 SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
                 else -> R.id.eventsFragment
             }
-        findNavController(rootView).popBackStack(destinationId, false)
+        if (destinationId == R.id.eventsFragment) {
+            findNavController(rootView).navigate(SignUpFragmentDirections.actionSignUpToEventsPop())
+        } else {
+            findNavController(rootView).popBackStack(destinationId, false)
+        }
         rootView.snackbar(R.string.logged_in_automatically)
     }
 
