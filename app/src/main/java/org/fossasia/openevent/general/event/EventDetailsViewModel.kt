@@ -56,6 +56,8 @@ class EventDetailsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+    private val mutableFeedbackProgress = MutableLiveData<Boolean>()
+    val feedbackProgress: LiveData<Boolean> = mutableFeedbackProgress
     private val mutableSubmittedFeedback = MutableLiveData<Feedback>()
     val submittedFeedback: LiveData<Feedback> = mutableSubmittedFeedback
     private val mutableEventSessions = MutableLiveData<List<Session>>()
@@ -68,6 +70,8 @@ class EventDetailsViewModel(
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
     private val mutableSimilarEvents = MutableLiveData<List<Event>>()
     val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
+    private val mutableSimilarEventsProgress = MutableLiveData<Boolean>()
+    val similarEventsProgress: LiveData<Boolean> = mutableSimilarEventsProgress
     private val mutableOrders = MutableLiveData<List<Order>>()
     val orders: LiveData<List<Order>> = mutableOrders
 
@@ -80,6 +84,11 @@ class EventDetailsViewModel(
 
         compositeDisposable += feedbackService.getEventFeedback(id)
             .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableFeedbackProgress.value = true
+            }.doFinally {
+                mutableFeedbackProgress.value = false
+            }
             .subscribe({
                 mutableEventFeedback.value = it
             }, {
@@ -152,10 +161,15 @@ class EventDetailsViewModel(
         compositeDisposable += similarEventsFlowable
             .withDefaultSchedulers()
             .distinctUntilChanged()
+            .doOnSubscribe {
+                mutableSimilarEventsProgress.value = true
+            }
             .subscribe({ events ->
+                mutableSimilarEventsProgress.value = false
                 val list = events.filter { it.id != eventId }
                 mutableSimilarEvents.value = list
             }, {
+                mutableSimilarEventsProgress.value = false
                 Timber.e(it, "Error fetching similar events")
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.similar_events))
