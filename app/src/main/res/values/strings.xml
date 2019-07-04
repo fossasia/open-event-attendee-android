@@ -357,8 +357,10 @@
     <string name="changes_not_saved">Your changes have not been saved</string>
     <string name="discard">Discard</string>
     <string name="save">Save</string>
-    <string name="storage_permission_granted_message">Permission to Access External Storage Granted !</string>
-    <string name="storage_permission_denied_message">Permission to Access External Storage Denied :(</string>
+    <string name="permission_granted_message">Permission to Access %1$s Granted !</string>
+    <string name="permission_denied_message">Permission to Access %1$s Denied :(</string>
+    <string name="external_storage">External Storage</string>
+    <string name="camera">Camera</string>
     <string name="image_upload_success_message">Image uploaded successfully!</string>
     <string name="image_upload_error_message">Error uploading image!</string>
     <string name="provide_name_message">Please provide first name and last name!</string>
@@ -460,6 +462,7 @@
     <string name="edit_image">Edit Image</string>
     <string name="remove_image">Remove Image</string>
     <string name="replace_image">Replace Image</string>
+    <string name="take_image">Take Image</string>
     <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
     <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
     <string name="donation">Donation</string>

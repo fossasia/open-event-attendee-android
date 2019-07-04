@@ -214,10 +214,10 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionGranted = true
-                rootView.snackbar(getString(R.string.storage_permission_granted_message))
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.external_storage)))
                 showFileChooser()
             } else {
-                rootView.snackbar(getString(R.string.storage_permission_denied_message))
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.external_storage)))
             }
         }
     }

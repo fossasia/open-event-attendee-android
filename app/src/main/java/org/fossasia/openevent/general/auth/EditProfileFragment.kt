@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import org.fossasia.openevent.general.utils.ImageUtils.decodeBitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.details
 import com.squareup.picasso.MemoryPolicy
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.editImage
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.takeImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.replaceImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.removeImage
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
@@ -58,10 +60,15 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
     private val safeArgs: EditProfileFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private var permissionGranted = false
+    private var storagePermissionGranted = false
     private val PICK_IMAGE_REQUEST = 100
     private val READ_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private val REQUEST_CODE = 1
+    private val READ_STORAGE_REQUEST_CODE = 1
+
+    private var cameraPermissionGranted = false
+    private val TAKE_IMAGE_REQUEST = 101
+    private val CAMERA_REQUEST = arrayOf(Manifest.permission.CAMERA)
+    private val CAMERA_REQUEST_CODE = 2
 
     private lateinit var userFirstName: String
     private lateinit var userLastName: String
@@ -108,8 +115,10 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                     .into(rootView.profilePhoto)
             })
 
-        permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+        storagePermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        cameraPermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
 
         rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
@@ -136,7 +145,9 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == PICK_IMAGE_REQUEST && intentData?.data != null) {
             val imageUri = intentData.data ?: return
 
             try {
@@ -145,6 +156,12 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                 editProfileViewModel.avatarUpdated = true
             } catch (e: FileNotFoundException) {
                 Timber.d(e, "File Not Found Exception")
+            }
+        } else if (requestCode == TAKE_IMAGE_REQUEST) {
+            val imageBitmap = intentData?.extras?.get("data")
+            if (imageBitmap is Bitmap) {
+                editProfileViewModel.encodedImage = imageBitmap.let { encodeImage(it) }
+                editProfileViewModel.avatarUpdated = true
             }
         }
     }
@@ -203,12 +220,21 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             clearAvatar()
         }
 
+        editImageView.takeImage.setOnClickListener {
+            dialog.cancel()
+            if (cameraPermissionGranted) {
+                takeImage()
+            } else {
+                requestPermissions(CAMERA_REQUEST, CAMERA_REQUEST_CODE)
+            }
+        }
+
         editImageView.replaceImage.setOnClickListener {
             dialog.cancel()
-            if (permissionGranted) {
+            if (storagePermissionGranted) {
                 showFileChooser()
             } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
+                requestPermissions(READ_STORAGE, READ_STORAGE_REQUEST_CODE)
             }
         }
         dialog.show()
@@ -250,6 +276,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         return "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
+    private fun takeImage() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, TAKE_IMAGE_REQUEST)
+    }
+
     private fun showFileChooser() {
         val intent = Intent()
         intent.type = "image/*"
@@ -262,13 +293,21 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == READ_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                permissionGranted = true
-                rootView.snackbar(getString(R.string.storage_permission_granted_message))
+                storagePermissionGranted = true
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.external_storage)))
                 showFileChooser()
             } else {
-                rootView.snackbar(getString(R.string.storage_permission_denied_message))
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.external_storage)))
+            }
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraPermissionGranted = true
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.camera)))
+                takeImage()
+            } else {
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.camera)))
             }
         }
     }
