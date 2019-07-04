@@ -7,9 +7,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: "com.github.b3er.local.properties"
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
+def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.file(SIGNING_KEY_FILE).exists()
 
 android {
     dataBinding {
@@ -31,6 +33,23 @@ android {
             }
         }
     }
+    signingConfigs {
+        if (TRAVIS_BUILD) {
+            release {
+                storeFile KEYSTORE_FILE
+                storePassword System.getenv("STORE_PASS")
+                keyAlias System.getenv("ALIAS")
+                keyPassword System.getenv("KEY_PASS")
+            }
+        } else if (LOCAL_KEY_PRESENT) {
+            release {
+                storeFile rootProject.file(SIGNING_KEY_FILE)
+                storePassword STORE_PASS
+                keyAlias ALIAS
+                keyPassword KEY_PASS
+            }
+        }
+    }
     buildTypes {
         release {
             shrinkResources true
@@ -40,6 +59,8 @@ android {
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
             resValue "string",  "FRONTEND_HOST", "eventyay.com"
+            if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
+                signingConfig signingConfigs.release
         }
         debug {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
