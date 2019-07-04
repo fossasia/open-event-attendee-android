@@ -40,6 +40,24 @@
             android:text="@string/replace_image"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/takeImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_edit_profile_height"
+            android:padding="@dimen/padding_large"
+            android:src="@drawable/ic_camera"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/take_image"/>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/removeImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

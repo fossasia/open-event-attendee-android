@@ -197,8 +197,6 @@
     <string name="changes_not_saved">Thay đổi của bạn chưa được lưu lại</string>
     <string name="discard">Hủy</string>
     <string name="save">Lưu</string>
-    <string name="storage_permission_granted_message">Yêu cầu truy cập bộ nhớ ngoài thành công!</string>
-    <string name="storage_permission_denied_message">Yêu cầu truy cập bộ nhớ ngoài thất bại!</string>
     <string name="image_upload_success_message">Ảnh được tải lên thành công!</string>
     <string name="image_upload_error_message">Ảnh được tải lên thất bại!</string>
     <string name="provide_name_message">Xin hãy nhập tên của bạn!</string>
