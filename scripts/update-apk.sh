@@ -18,7 +18,7 @@ git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossa
 cd apk
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-	/bin/rm -f  open-event-attendee-master-*
+	/bin/rm -f  *
 else
 	/bin/rm -f open-event-attendee-dev-*
 fi
@@ -27,23 +27,23 @@ find ../app/build/outputs -type f -name '*.apk' -exec cp -v {} . \;
 find ../app/build/outputs -type f -name '*.aab' -exec cp -v {} . \;
 
 
-if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-	for file in app*; do
-		if [[ $file = "eventyay-attendee"* ]]; then
-			continue
-		fi
-		mv $file eventyay-attendee-master-${file:4}
-	done
-fi
+for file in app*; do
+    if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+        if [[ ${file} =~ ".aab" ]]; then
+            mv $file eventyay-attendee-master-${file}
+        else
+            mv $file eventyay-attendee-master-${file:4}
+        fi
 
-if [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
-	for file in app*; do
-		if [[ $file = "eventyay-attendee"* ]]; then
-			continue
-		fi
-		mv $file eventyay-attendee-dev-${file:4}
-	done
-fi
+    elif [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
+        if [[ ${file} =~ ".aab" ]]; then
+                mv $file eventyay-attendee-dev-${file}
+        else
+                mv $file eventyay-attendee-dev-${file:4}
+        fi
+
+    fi
+done
 
 # Create a new branch that will contains only latest apk
 git checkout --orphan temporary
