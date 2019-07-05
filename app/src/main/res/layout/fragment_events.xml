@@ -108,6 +108,8 @@
                     android:layout_marginTop="@dimen/layout_margin_extra_large"
                     app:layout_constraintTop_toBottomOf="@id/eventIcon"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     layout="@layout/content_no_internet" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout

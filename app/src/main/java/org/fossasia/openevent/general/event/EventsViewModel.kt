@@ -62,33 +62,35 @@ class EventsViewModel(
     fun loadLocationEvents() {
         if (mutableSavedLocation.value == null) return
 
-        if (lastSearch != savedLocation.value) {
-            sourceFactory = EventsDataSourceFactory(
-                compositeDisposable,
-                eventService,
-                mutableSavedLocation.value,
-                mutableProgress
-            )
-            val eventPagedList = RxPagedListBuilder(sourceFactory, config)
-                .setFetchScheduler(Schedulers.io())
-                .buildObservable()
-                .cache()
+        sourceFactory = EventsDataSourceFactory(
+            compositeDisposable,
+            eventService,
+            mutableSavedLocation.value,
+            mutableProgress
+        )
+        val eventPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
 
-            compositeDisposable += eventPagedList
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .distinctUntilChanged()
-                .doOnSubscribe {
-                    mutableProgress.value = true
-                }.subscribe({
+        compositeDisposable += eventPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.subscribe({
+                val currentPagedEvents = mutablePagedEvents.value
+                if (currentPagedEvents == null) {
                     mutablePagedEvents.value = it
-                }, {
-                    Timber.e(it, "Error fetching events")
-                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
-                })
-        } else {
-            mutableProgress.value = false
-        }
+                } else {
+                    currentPagedEvents.addAll(it)
+                    mutablePagedEvents.value = currentPagedEvents
+                }
+            }, {
+                Timber.e(it, "Error fetching events")
+                mutableError.value = resource.getString(R.string.error_fetching_events_message)
+            })
     }
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
