@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    app:navigationIcon="@drawable/ic_arrow_back_white_cct"
+    app:title="@string/past_tickets"
+    app:titleTextColor="@color/white">
+    <ImageView
+        android:id="@+id/filterToolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="@dimen/padding_large"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_filter" />
+</androidx.appcompat.widget.Toolbar>
+<androidx.core.widget.NestedScrollView
     android:id="@+id/ordersNestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -96,3 +117,4 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+</LinearLayout>

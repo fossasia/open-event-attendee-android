@@ -19,6 +19,15 @@
             android:src="@drawable/background_fragment"
             android:scaleType="fitXY"/>
 
+        <ImageView
+            android:id="@+id/filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="@dimen/padding_large"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_filter" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -164,6 +173,15 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/white"
-        app:title="@string/tickets"/>
+        app:title="@string/tickets">
+        <ImageView
+            android:id="@+id/filterToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="@dimen/padding_large"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_filter" />
+    </androidx.appcompat.widget.Toolbar>
 </androidx.cardview.widget.CardView>
 </FrameLayout>
