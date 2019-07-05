@@ -92,6 +92,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 if (it) {
                     rootView.shimmerEvents.startShimmer()
                     showEmptyMessage(false)
+                    showNoInternetScreen(false)
                 } else {
                     rootView.shimmerEvents.stopShimmer()
                     rootView.swiperefresh.isRefreshing = false
@@ -119,6 +120,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 if (eventsViewModel.lastSearch != it) {
+                    eventsViewModel.lastSearch = it
                     eventsViewModel.clearEvents()
                 }
             })
@@ -126,10 +128,17 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         eventsViewModel.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
-                if (isConnected && eventsViewModel.pagedEvents.value == null) {
-                    eventsViewModel.loadLocationEvents()
+                val currentPagedEvents = eventsViewModel.pagedEvents.value
+                if (currentPagedEvents != null) {
+                    showNoInternetScreen(false)
+                    eventsListAdapter.submitList(currentPagedEvents)
+                } else {
+                    if (isConnected) {
+                        eventsViewModel.loadLocationEvents()
+                    } else {
+                        showNoInternetScreen(true)
+                    }
                 }
-                showNoInternetScreen(!isConnected && eventsViewModel.pagedEvents.value == null)
             })
 
         rootView.locationTextView.setOnClickListener {
