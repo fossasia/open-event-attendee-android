@@ -35,6 +35,12 @@ class OrdersUnderUserViewModel(
     private val mutableNoTickets = MutableLiveData<Boolean>()
     val noTickets: LiveData<Boolean> = mutableNoTickets
 
+    // Retain filter options
+    var isShowingCompletedOrders = true
+    var isShowingPendingOrders = true
+    var isShowingPlacedOrders = true
+    var isSortingOrdersByDate = true
+
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -12,6 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
+import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
+import kotlinx.android.synthetic.main.dialog_filter_order.view.completedOrdersCheckBox
+import kotlinx.android.synthetic.main.dialog_filter_order.view.pendingOrdersCheckBox
+import kotlinx.android.synthetic.main.dialog_filter_order.view.placedOrdersCheckBox
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
@@ -21,9 +27,10 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.toolbarLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsTitle
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filterToolbar
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filter
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
-import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,6 +63,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         setToolbar(activity, show = false)
 
+        ordersRecyclerAdapter.setShowExpired(false)
         rootView.ordersRecycler.adapter = ordersRecyclerAdapter
         rootView.ordersRecycler.isNestedScrollingEnabled = false
 
@@ -63,8 +71,13 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
-        if (ordersUnderUserVM.eventAndOrder.value == null)
+        val currentEventAndOrder = ordersUnderUserVM.eventAndOrder.value
+        if (currentEventAndOrder == null)
             ordersUnderUserVM.ordersUnderUser(false)
+        else {
+            ordersRecyclerAdapter.setSavedEventAndOrder(currentEventAndOrder)
+            applyFilter()
+        }
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
@@ -87,12 +100,9 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ordersUnderUserVM.eventAndOrder
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                val list = it.sortedByDescending {
-                    EventUtils.getTimeInMilliSeconds(it.first.startsAt, null)
-                }
                 rootView.ticketsNumber.text = "${it.size} orders"
-                ordersRecyclerAdapter.addAllPairs(list, false)
-                ordersRecyclerAdapter.notifyDataSetChanged()
+                ordersRecyclerAdapter.setSavedEventAndOrder(it)
+                applyFilter()
                 Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
             })
 
@@ -123,6 +133,46 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                 rootView.toolbarLayout.hideWithFading()
             }
         }
+        rootView.filter.setOnClickListener {
+            showFilterDialog()
+        }
+        rootView.filterToolbar.setOnClickListener {
+            showFilterDialog()
+        }
+    }
+
+    private fun showFilterDialog() {
+        val filterLayout = layoutInflater.inflate(R.layout.dialog_filter_order, null)
+        filterLayout.completedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingCompletedOrders
+        filterLayout.pendingOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPendingOrders
+        filterLayout.placedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPlacedOrders
+        if (ordersUnderUserVM.isSortingOrdersByDate)
+            filterLayout.dateRadioButton.isChecked = true
+        else
+            filterLayout.orderStatusRadioButton.isChecked = true
+
+        AlertDialog.Builder(requireContext())
+            .setView(filterLayout)
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }.setPositiveButton(getString(R.string.apply)) { _, _ ->
+                ordersUnderUserVM.isShowingCompletedOrders = filterLayout.completedOrdersCheckBox.isChecked
+                ordersUnderUserVM.isShowingPendingOrders = filterLayout.pendingOrdersCheckBox.isChecked
+                ordersUnderUserVM.isShowingPlacedOrders = filterLayout.placedOrdersCheckBox.isChecked
+                ordersUnderUserVM.isSortingOrdersByDate = filterLayout.dateRadioButton.isChecked
+                applyFilter()
+            }.create().show()
+    }
+
+    private fun applyFilter() {
+        ordersRecyclerAdapter.setFilter(
+            completed = ordersUnderUserVM.isShowingCompletedOrders,
+            placed = ordersUnderUserVM.isShowingPlacedOrders,
+            pending = ordersUnderUserVM.isShowingPendingOrders,
+            sortByDate = ordersUnderUserVM.isSortingOrdersByDate
+        )
+        rootView.ticketsNumber.text = "${ordersRecyclerAdapter.itemCount} orders"
+        showNoTicketsScreen(ordersRecyclerAdapter.itemCount == 0)
     }
 
     override fun onDestroyView() {
