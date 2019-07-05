@@ -101,6 +101,13 @@
         android:label="SearchLocationFragment"
         tools:layout="@layout/fragment_search_location">
 
+        <action android:id="@+id/action_search_location_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
         <action android:id="@+id/action_search_location_to_search_filter"
             app:destination="@id/searchFilterFragment"
             app:popUpToInclusive="false"
@@ -976,5 +983,9 @@
             android:name="email"
             app:argType="string"
             android:defaultValue=""/>
+        <argument
+            android:name="showSkipButton"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
 </navigation>
