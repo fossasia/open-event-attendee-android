@@ -36,14 +36,17 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
 import org.fossasia.openevent.general.search.SEARCH_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.welcome.WELCOME_FRAGMENT
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
+const val SEARCH_LOCATION_FRAGMENT = "searchLocationFragment"
 
 class SearchLocationFragment : Fragment() {
     private lateinit var rootView: View
@@ -71,7 +74,7 @@ class SearchLocationFragment : Fragment() {
             checkLocationPermission()
             if (isLocationEnabled(requireContext())) {
                 geoLocationViewModel.configure()
-                rootView.locationProgressBar.visibility = View.VISIBLE
+                rootView.locationProgressBar.isVisible = true
             }
         }
 
@@ -83,7 +86,7 @@ class SearchLocationFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
-                rootView.locationProgressBar.visibility = View.GONE
+                rootView.locationProgressBar.isVisible = false
             })
 
         searchLocationViewModel.placeSuggestions.observe(viewLifecycleOwner, Observer {
@@ -145,6 +148,8 @@ class SearchLocationFragment : Fragment() {
         val fragmentId = when (safeArgs.fromFragmentName) {
             SEARCH_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearch()
             SEARCH_FILTER_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearchFilter()
+            WELCOME_FRAGMENT -> SearchLocationFragmentDirections
+                .actionSearchLocationToAuth(redirectedFrom = SEARCH_LOCATION_FRAGMENT, showSkipButton = true)
             else -> SearchLocationFragmentDirections.actionSearchLocationToEvents()
         }
         Navigation.findNavController(rootView).navigate(fragmentId)
@@ -180,6 +185,7 @@ class SearchLocationFragment : Fragment() {
 
     private fun savePlaceAndRedirectToMain(place: String) {
         searchLocationViewModel.saveSearch(place)
+        hideSoftKeyboard(context, rootView)
         redirectToMain()
     }
 

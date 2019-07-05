@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.search.location
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -9,7 +8,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import java.lang.IllegalArgumentException
 
 class GeoLocationViewModel(private val locationService: LocationService) : ViewModel() {
-    private val mutableLocation = MutableLiveData<String>()
+    private val mutableLocation = SingleLiveEvent<String>()
     val location: LiveData<String> = mutableLocation
     private val mutableErrorMessage = SingleLiveEvent<String>()
     val errorMessage: LiveData<String> = mutableErrorMessage

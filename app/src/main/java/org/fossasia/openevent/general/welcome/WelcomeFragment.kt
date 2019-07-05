@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -45,7 +46,7 @@ class WelcomeFragment : Fragment() {
             checkLocationPermission()
             if (isLocationEnabled(requireContext())) {
                 geoLocationViewModel.configure()
-                rootView.locationProgressBar.visibility = View.VISIBLE
+                rootView.locationProgressBar.isVisible = true
             }
         }
 
@@ -59,7 +60,7 @@ class WelcomeFragment : Fragment() {
         })
 
         geoLocationViewModel.errorMessage.observe(this, Observer { message ->
-            rootView.locationProgressBar.visibility = View.GONE
+            rootView.locationProgressBar.isVisible = false
             Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
         })
 
@@ -73,7 +74,7 @@ class WelcomeFragment : Fragment() {
                     geoLocationViewModel.configure()
                 } else {
                     Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
-                    rootView.locationProgressBar.visibility = View.GONE
+                    rootView.locationProgressBar.isVisible = false
                 }
             }
         }
@@ -89,10 +90,8 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToAuth() {
-        Navigation.findNavController(rootView).navigate(
-            WelcomeFragmentDirections.actionWelcomeToAuth(
-                redirectedFrom = WELCOME_FRAGMENT
-            )
+        Navigation.findNavController(rootView).navigate(WelcomeFragmentDirections.actionWelcomeToAuth(
+                redirectedFrom = WELCOME_FRAGMENT, showSkipButton = true)
         )
     }
 }
