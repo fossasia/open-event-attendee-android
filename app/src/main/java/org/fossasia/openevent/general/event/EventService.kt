@@ -46,8 +46,8 @@ class EventService(
         return eventTypesApi.getEventTypes()
     }
 
-    fun getSearchEvents(eventName: String, sortBy: String): Flowable<List<Event>> {
-        return eventApi.searchEvents(sortBy, eventName).flatMapPublisher { eventsList ->
+    fun getSearchEventsPaged(filter: String, sortBy: String, page: Int): Flowable<List<Event>> {
+        return eventApi.searchEventsPaged(sortBy, filter, page).flatMapPublisher { eventsList ->
             eventsList.forEach {
                 it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
             }
