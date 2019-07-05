@@ -45,7 +45,7 @@ import org.jetbrains.anko.design.snackbar
 class FavoriteFragment : Fragment(), BottomIconDoubleClick {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

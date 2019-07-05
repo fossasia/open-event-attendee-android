@@ -84,6 +84,7 @@ import org.fossasia.openevent.general.feedback.FeedbackViewModel
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.feedback.FeedbackApi
+import org.fossasia.openevent.general.search.SearchResultsViewModel
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.sessions.SessionViewModel
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
@@ -120,7 +121,7 @@ val commonModule = module {
     single { Preference() }
     single { Network() }
     single { Resource() }
-    single { MutableConnectionLiveData() }
+    factory { MutableConnectionLiveData() }
     factory<LocationService> { LocationServiceImpl(androidContext()) }
 }
 
@@ -216,7 +217,8 @@ val viewModelModule = module {
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchResultsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }

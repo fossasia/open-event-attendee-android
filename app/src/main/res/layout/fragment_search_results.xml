@@ -116,6 +116,18 @@
                     android:layout_height="wrap_content" />
             </HorizontalScrollView>
 
+            <androidx.recyclerview.widget.RecyclerView
+                tools:visibility="gone"
+                android:id="@+id/eventsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_card_favorite_event" />
+
+            <include
+                layout="@layout/content_no_internet"
+                tools:visibility="gone" />
+
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerSearch"
                 android:layout_width="match_parent"
@@ -138,18 +150,6 @@
                     <include layout="@layout/placeholder_item_card_search" />
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <include
-                layout="@layout/content_no_internet"
-                tools:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                tools:visibility="gone"
-                android:id="@+id/eventsRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_card_favorite_event" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

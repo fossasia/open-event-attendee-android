@@ -17,7 +17,7 @@ import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
  * @property onFavFabClick The callback to be invoked when the favorite FAB is clicked
  * @property onShareFabClick The callback to be invoked when the share FAB is clicked
  */
-class FavoriteEventsRecyclerAdapter : ListAdapter<Event, FavoriteEventViewHolder>(EventsDiffCallback()) {
+class FavoriteEventsListAdapter : ListAdapter<Event, FavoriteEventViewHolder>(EventsDiffCallback()) {
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null

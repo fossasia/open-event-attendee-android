@@ -39,7 +39,6 @@ import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.types.EventType
-import org.fossasia.openevent.general.favorite.FavoriteEventsRecyclerAdapter
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
@@ -57,9 +56,9 @@ import kotlin.math.abs
 class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     private lateinit var rootView: View
-    private val searchViewModel by viewModel<SearchViewModel>()
+    private val searchResultsViewModel by viewModel<SearchResultsViewModel>()
     private val safeArgs: SearchResultsFragmentArgs by navArgs()
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
+    private val searchPagedListAdapter = SearchPagedListAdapter()
 
     private lateinit var days: Array<String>
     private lateinit var eventDate: String
@@ -69,11 +68,11 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         super.onCreate(savedInstanceState)
 
         days = resources.getStringArray(R.array.days)
-        eventDate = searchViewModel.savedTime ?: safeArgs.date
-        eventType = searchViewModel.savedType ?: safeArgs.type
+        eventDate = searchResultsViewModel.savedTime ?: safeArgs.date
+        eventType = searchResultsViewModel.savedType ?: safeArgs.type
 
-        searchViewModel.loadEventTypes()
-        searchViewModel.eventTypes
+        searchResultsViewModel.loadEventTypes()
+        searchResultsViewModel.eventTypes
             .nonNull()
             .observe(this, Observer { list ->
                 eventTypesList = list
@@ -88,7 +87,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
 
-        rootView.eventsRecycler.adapter = favoriteEventsRecyclerAdapter
+        rootView.eventsRecycler.adapter = searchPagedListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
         rootView.viewTreeObserver.addOnDrawListener {
             setStartPostponedEnterTransition()
@@ -97,44 +96,50 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         rootView.searchText.setText(safeArgs.query)
         rootView.clearSearchText.isVisible = !rootView.searchText.text.isNullOrBlank()
 
-        searchViewModel.events
+        searchResultsViewModel.pagedEvents
             .nonNull()
             .observe(this, Observer { list ->
-                favoriteEventsRecyclerAdapter.submitList(list)
-                showNoSearchResults(list)
-                Timber.d("Fetched events of size %s", favoriteEventsRecyclerAdapter.itemCount)
+                searchPagedListAdapter.submitList(list)
+                Timber.d("Fetched events of size %s", searchPagedListAdapter.itemCount)
             })
 
-        searchViewModel.showShimmerResults
+        searchResultsViewModel.showShimmerResults
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.shimmerSearch.startShimmer()
+                    showNoSearchResults(false)
+                    showNoInternetError(false)
                 } else {
                     rootView.shimmerSearch.stopShimmer()
+                    showNoSearchResults(searchPagedListAdapter.currentList?.isEmpty() ?: false)
                 }
                 rootView.shimmerSearch.isVisible = it
             })
 
-        searchViewModel.connection
+        searchResultsViewModel.connection
             .nonNull()
-            .observe(this, Observer { isConnected ->
-                if (isConnected) {
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                val currentPagedSearchEvents = searchResultsViewModel.pagedEvents.value
+                if (currentPagedSearchEvents != null) {
                     showNoInternetError(false)
-                    val currentEvents = searchViewModel.events.value
-                    if (currentEvents == null) performSearch()
+                    searchPagedListAdapter.submitList(currentPagedSearchEvents)
                 } else {
-                    showNoInternetError(searchViewModel.events.value == null)
+                    if (isConnected)
+                        performSearch()
+                    else
+                        showNoInternetError(true)
                 }
             })
 
-        searchViewModel.error
+        searchResultsViewModel.error
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.longSnackbar(it)
             })
 
         rootView.retry.setOnClickListener {
+            searchResultsViewModel.clearEvents()
             performSearch()
         }
 
@@ -144,7 +149,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onDestroyView() {
         super.onDestroyView()
         hideSoftKeyboard(context, rootView)
-        favoriteEventsRecyclerAdapter.apply {
+        searchPagedListAdapter.apply {
             onEventClick = null
             onFavFabClick = null
         }
@@ -161,7 +166,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
             }
             date != getString(R.string.anytime) && type == getString(R.string.anything) -> {
                 addChips(date, true)
-                searchViewModel.eventTypes
+                searchResultsViewModel.eventTypes
                     .nonNull()
                     .observe(this, Observer { list ->
                         list.forEach {
@@ -202,6 +207,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
 
         rootView.clearSearchText.setOnClickListener {
+            searchResultsViewModel.clearEvents()
             rootView.searchText.setText("")
             performSearch("")
         }
@@ -233,13 +239,13 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                searchViewModel.setFavorite(event.id, !event.favorite)
+                searchResultsViewModel.setFavorite(event.id, !event.favorite)
                 event.favorite = !event.favorite
-                favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
+                searchPagedListAdapter.notifyItemChanged(itemPosition)
             }
         }
 
-        favoriteEventsRecyclerAdapter.apply {
+        searchPagedListAdapter.apply {
             onEventClick = eventClickListener
             onFavFabClick = favFabClickListener
         }
@@ -249,6 +255,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event.action == KeyEvent.ACTION_DOWN &&
                 event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                searchResultsViewModel.clearEvents()
                 performSearch(rootView.searchText.text.toString())
                 true
             } else {
@@ -284,7 +291,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun performSearch(query: String = safeArgs.query) {
-        searchViewModel.clearEvents()
         val location = safeArgs.location
         val type = eventType
         val date = eventDate
@@ -293,13 +299,14 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         val callForSpeakers = safeArgs.callForSpeakers
 
         val sessionsAndSpeakers = safeArgs.sessionsAndSpeakers
-        searchViewModel.searchEvent = query
-        searchViewModel.loadEvents(location, date, type, freeEvents, sortBy, sessionsAndSpeakers, callForSpeakers)
+        searchResultsViewModel.searchEvent = query
+        searchResultsViewModel
+            .loadEvents(location, date, type, freeEvents, sortBy, sessionsAndSpeakers, callForSpeakers)
         hideSoftKeyboard(requireContext(), rootView)
     }
 
-    private fun showNoSearchResults(events: List<Event>) {
-        rootView.noSearchResults.isVisible = events.isEmpty()
+    private fun showNoSearchResults(show: Boolean) {
+        rootView.noSearchResults.isVisible = show
     }
 
     private fun showNoInternetError(show: Boolean) {
@@ -310,7 +317,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         days.forEach {
             if (it == buttonView?.text) {
-                searchViewModel.savedTime = if (isChecked) it else null
+                searchResultsViewModel.savedTime = if (isChecked) it else null
                 eventDate = if (isChecked) it else getString(R.string.anytime)
                 setChips(date = it)
                 refreshEvents()
@@ -319,7 +326,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
         eventTypesList?.forEach {
             if (it.name == buttonView?.text) {
-                searchViewModel.savedType = if (isChecked) it.name else null
+                searchResultsViewModel.savedType = if (isChecked) it.name else null
                 eventType = if (isChecked) it.name else getString(R.string.anything)
                 refreshEvents()
                 return@forEach
@@ -330,9 +337,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     private fun refreshEvents() {
         setChips()
         rootView.noSearchResults.isVisible = false
-        favoriteEventsRecyclerAdapter.submitList(null)
-        searchViewModel.clearEvents()
-        if (searchViewModel.isConnected()) performSearch()
-        else showNoInternetError(true)
+        searchPagedListAdapter.submitList(null)
+        searchResultsViewModel.clearEvents()
+        if (searchResultsViewModel.isConnected()) {
+            performSearch()
+        } else showNoInternetError(true)
     }
 }
