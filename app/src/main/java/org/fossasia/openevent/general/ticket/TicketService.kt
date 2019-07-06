@@ -29,6 +29,17 @@ class TicketService(
         }
     }
 
+    fun syncTickets(id: Long): Flowable<List<Ticket>> {
+        return ticketApi.getTickets(id).map {
+            ticketDao.insertTickets(it)
+            it
+        }
+    }
+
+    fun getTicketPriceRange(id: Long): Single<TicketPriceRange> {
+        return ticketDao.getTicketPriceRange(id)
+    }
+
     fun getTicketDetails(id: Long): Single<Ticket> {
         return ticketDao.getTicketDetails(id)
     }
