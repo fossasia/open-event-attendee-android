@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
@@ -23,6 +26,7 @@ const val EVENT_IDENTIFIER = "eventIdentifier"
 const val VERIFICATION_TOKEN = "verificationToken"
 private const val VERIFY = "verify"
 private const val TOKEN = "token"
+private const val UPDATE_REQUEST_CODE = 3
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -44,6 +48,22 @@ class MainActivity : AppCompatActivity() {
             handleNavigationVisibility(currentFragmentId)
         }
         handleAppLinkIntent(intent)
+        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR)
+            checkForUpdates()
+    }
+
+    private fun checkForUpdates() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    UPDATE_REQUEST_CODE)
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -126,6 +146,15 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.update_message))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
+            }
         }
     }
 }

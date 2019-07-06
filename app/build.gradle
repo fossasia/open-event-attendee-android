@@ -213,6 +213,9 @@ dependencies {
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
 
+    //Play core library
+    playStoreImplementation 'com.google.android.play:core:1.5.0'
+
     // Paging
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "androidx.paging:paging-rxjava2:$paging_version"

@@ -5,6 +5,7 @@
     <string name="likes">Likes</string>
     <string name="saved_date">savedDate</string>
     <string name="location_hint">Enter a location</string>
+    <string name="update_message">To apply new features and bug fixes please update the app</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>
