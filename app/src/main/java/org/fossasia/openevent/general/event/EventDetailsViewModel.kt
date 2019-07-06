@@ -27,11 +27,15 @@ import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.sponsor.Sponsor
 import org.fossasia.openevent.general.sponsor.SponsorService
+import org.fossasia.openevent.general.ticket.TicketPriceRange
+import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
+import java.lang.StringBuilder
 
 class EventDetailsViewModel(
     private val eventService: EventService,
+    private val ticketService: TicketService,
     private val authHolder: AuthHolder,
     private val speakerService: SpeakerService,
     private val sponsorService: SponsorService,
@@ -74,6 +78,8 @@ class EventDetailsViewModel(
     val similarEventsProgress: LiveData<Boolean> = mutableSimilarEventsProgress
     private val mutableOrders = MutableLiveData<List<Order>>()
     val orders: LiveData<List<Order>> = mutableOrders
+    private val mutablePriceRange = MutableLiveData<String>()
+    val priceRange: LiveData<String> = mutablePriceRange
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -253,6 +259,55 @@ class EventDetailsViewModel(
             }, {
                 Timber.e(it, "Error fetching orders")
             })
+    }
+
+    fun syncTickets(event: Event) {
+        compositeDisposable += ticketService.syncTickets(event.id)
+            .withDefaultSchedulers()
+            .subscribe({
+                if (!it.isNullOrEmpty())
+                    loadPriceRange(event)
+            }, {
+                Timber.e(it, "Error fetching tickets")
+            })
+    }
+
+    private fun loadPriceRange(event: Event) {
+        compositeDisposable += ticketService.getTicketPriceRange(event.id)
+            .withDefaultSchedulers()
+            .subscribe({
+                setRange(it, event.paymentCurrency.toString())
+            }, {
+                Timber.e(it, "Error fetching ticket price range")
+            })
+    }
+
+    private fun setRange(priceRange: TicketPriceRange, paymentCurrency: String) {
+        val maxPrice = priceRange.maxValue
+        val minPrice = priceRange.minValue
+        val range = StringBuilder()
+        if (maxPrice == minPrice) {
+            if (maxPrice == 0f)
+                range.append("Free")
+            else {
+                range.append(paymentCurrency)
+                range.append(" ")
+                range.append(minPrice)
+            }
+        } else {
+            if (minPrice == 0f)
+                range.append("Free")
+            else {
+                range.append(paymentCurrency)
+                range.append(" ")
+                range.append(minPrice)
+            }
+            range.append(" - ")
+            range.append(paymentCurrency)
+            range.append(" ")
+            range.append(maxPrice)
+        }
+        mutablePriceRange.value = range.toString()
     }
 
     fun loadMap(event: Event): String {

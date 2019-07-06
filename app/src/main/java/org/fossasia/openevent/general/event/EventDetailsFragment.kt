@@ -54,6 +54,8 @@ import kotlinx.android.synthetic.main.content_event.view.socialLinkContainer
 import kotlinx.android.synthetic.main.content_event.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.content_event.view.similarEventsContainer
 import kotlinx.android.synthetic.main.content_event.view.alreadyRegisteredLayout
+import kotlinx.android.synthetic.main.content_event.view.ticketPriceLinearLayout
+import kotlinx.android.synthetic.main.content_event.view.priceRangeTextView
 import kotlinx.android.synthetic.main.fragment_event.view.buttonTickets
 import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
@@ -203,6 +205,8 @@ class EventDetailsFragment : Fragment() {
                     eventViewModel.fetchEventSponsors(it.id)
                 if (eventViewModel.socialLinks.value == null)
                     eventViewModel.fetchSocialLink(it.id)
+                if (eventViewModel.priceRange.value == null)
+                    eventViewModel.syncTickets(it)
 
                 // Update favorite icon and external event url menu option
                 activity?.invalidateOptionsMenu()
@@ -210,6 +214,13 @@ class EventDetailsFragment : Fragment() {
                 Timber.d("Fetched events of id ${it.id}")
                 showEventErrorScreen(false)
                 setHasOptionsMenu(true)
+            })
+
+        eventViewModel.priceRange
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.ticketPriceLinearLayout.isVisible = true
+                rootView.priceRangeTextView.text = it
             })
 
         val eventIdentifier = arguments?.getString(EVENT_IDENTIFIER)
