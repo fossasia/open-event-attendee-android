@@ -70,10 +70,10 @@ class EventService(
         }
     }
 
-    fun getEventsByLocationPaged(locationName: String?, page: Int): Flowable<List<Event>> {
+    fun getEventsByLocationPaged(locationName: String?, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
             "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
-        return eventApi.searchEventsPaged("name", query, page).flatMapPublisher { apiList ->
+        return eventApi.searchEventsPaged("name", query, page, pageSize).flatMapPublisher { apiList ->
             updateFavorites(apiList)
         }
     }
@@ -127,6 +127,13 @@ class EventService(
 
     fun getSimilarEvents(id: Long): Flowable<List<Event>> {
         return eventTopicApi.getEventsUnderTopicId(id)
+            .flatMapPublisher {
+                updateFavorites(it)
+            }
+    }
+
+    fun getSimilarEventsPaged(id: Long, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
+        return eventTopicApi.getEventsUnderTopicIdPaged(id, page, pageSize)
             .flatMapPublisher {
                 updateFavorites(it)
             }

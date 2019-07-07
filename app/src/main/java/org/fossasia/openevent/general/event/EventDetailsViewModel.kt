@@ -1,12 +1,16 @@
 package org.fossasia.openevent.general.event
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
@@ -15,6 +19,7 @@ import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.paging.SimilarEventsDataSourceFactory
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.order.Order
@@ -44,7 +49,8 @@ class EventDetailsViewModel(
     private val feedbackService: FeedbackService,
     private val resource: Resource,
     private val orderService: OrderService,
-    private val mutableConnectionLiveData: MutableConnectionLiveData
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
+    private val config: PagedList.Config
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -72,10 +78,10 @@ class EventDetailsViewModel(
     val eventSponsors: LiveData<List<Sponsor>> = mutableEventSponsors
     private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
-    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
-    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
-    private val mutableSimilarEventsProgress = MutableLiveData<Boolean>()
-    val similarEventsProgress: LiveData<Boolean> = mutableSimilarEventsProgress
+    private val mutableSimilarEvents = MutableLiveData<PagedList<Event>>()
+    val similarEvents: LiveData<PagedList<Event>> = mutableSimilarEvents
+    private val mutableSimilarEventsProgress = MediatorLiveData<Boolean>()
+    val similarEventsProgress: MediatorLiveData<Boolean> = mutableSimilarEventsProgress
     private val mutableOrders = MutableLiveData<List<Order>>()
     val orders: LiveData<List<Order>> = mutableOrders
     private val mutablePriceRange = MutableLiveData<String>()
@@ -155,27 +161,35 @@ class EventDetailsViewModel(
     fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
-        var similarEventsFlowable = eventService.getEventsByLocation(location)
-        if (topicId != -1L) {
-            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
-                BiFunction { firstList: List<Event>, secondList: List<Event> ->
-                    val similarList = mutableSetOf<Event>()
-                    similarList.addAll(firstList + secondList)
-                    similarList.toList()
-                })
-        }
-        compositeDisposable += similarEventsFlowable
-            .withDefaultSchedulers()
+        val sourceFactory = SimilarEventsDataSourceFactory(
+            compositeDisposable,
+            topicId,
+            location,
+            eventId,
+            mutableSimilarEventsProgress,
+            eventService
+        )
+
+        val similarEventPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
+
+        compositeDisposable += similarEventPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .distinctUntilChanged()
             .doOnSubscribe {
                 mutableSimilarEventsProgress.value = true
-            }
-            .subscribe({ events ->
-                mutableSimilarEventsProgress.value = false
-                val list = events.filter { it.id != eventId }
-                mutableSimilarEvents.value = list
+            }.subscribe({ events ->
+                val currentPagedSimilarEvents = mutableSimilarEvents.value
+                if (currentPagedSimilarEvents == null) {
+                    mutableSimilarEvents.value = events
+                } else {
+                    currentPagedSimilarEvents.addAll(events)
+                    mutableSimilarEvents.value = currentPagedSimilarEvents
+                }
             }, {
-                mutableSimilarEventsProgress.value = false
                 Timber.e(it, "Error fetching similar events")
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
                     resource.getString(R.string.similar_events))

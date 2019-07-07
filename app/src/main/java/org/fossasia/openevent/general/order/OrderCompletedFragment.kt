@@ -85,8 +85,7 @@ class OrderCompletedFragment : Fragment() {
         orderCompletedViewModel.similarEvents
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                similarEventsAdapter.submitList(it.toList())
-                rootView.similarEventLayout.isVisible = it.isNotEmpty()
+                similarEventsAdapter.submitList(it)
             })
 
         orderCompletedViewModel.message
@@ -101,8 +100,10 @@ class OrderCompletedFragment : Fragment() {
                 rootView.shimmerSimilarEvents.isVisible = it
                 if (it) {
                     rootView.shimmerSimilarEvents.startShimmer()
+                    rootView.similarEventLayout.isVisible = true
                 } else {
                     rootView.shimmerSimilarEvents.stopShimmer()
+                    rootView.isVisible = similarEventsAdapter.currentList?.isEmpty() ?: true
                 }
             })
 
