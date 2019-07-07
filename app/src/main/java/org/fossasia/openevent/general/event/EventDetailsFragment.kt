@@ -372,8 +372,10 @@ class EventDetailsFragment : Fragment() {
                 rootView.shimmerSimilarEvents.isVisible = it
                 if (it) {
                     rootView.shimmerSimilarEvents.startShimmer()
+                    rootView.similarEventsContainer.isVisible = true
                 } else {
                     rootView.shimmerSimilarEvents.stopShimmer()
+                    rootView.similarEventsContainer.isVisible = similarEventsAdapter.currentList?.isEmpty() ?: true
                 }
             })
 
@@ -382,9 +384,10 @@ class EventDetailsFragment : Fragment() {
         rootView.similarEventsRecycler.layoutManager = similarLinearLayoutManager
         rootView.similarEventsRecycler.adapter = similarEventsAdapter
 
-        eventViewModel.similarEvents.observe(viewLifecycleOwner, Observer { similarEvents ->
-            similarEventsAdapter.submitList(similarEvents.toList())
-            rootView.similarEventsContainer.isVisible = similarEvents.isNotEmpty()
+        eventViewModel.similarEvents
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { similarEvents ->
+                similarEventsAdapter.submitList(similarEvents)
         })
     }
 

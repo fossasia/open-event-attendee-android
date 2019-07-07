@@ -1,20 +1,29 @@
 package org.fossasia.openevent.general.order
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.paging.SimilarEventsDataSourceFactory
 import timber.log.Timber
 
-class OrderCompletedViewModel(private val eventService: EventService, private val resource: Resource) : ViewModel() {
+class OrderCompletedViewModel(
+    private val eventService: EventService,
+    private val resource: Resource,
+    private val config: PagedList.Config
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -24,11 +33,11 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
     val event: LiveData<Event> = mutableEvent
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    private val mutableSimilarEvents = MutableLiveData<List<Event>>()
-    val similarEvents: LiveData<List<Event>> = mutableSimilarEvents
+    private val mutableSimilarEvents = MediatorLiveData<PagedList<Event>>()
+    val similarEvents: MediatorLiveData<PagedList<Event>> = mutableSimilarEvents
 
     fun loadEvent(id: Long) {
-        if (id.equals(-1)) {
+        if (id == -1L) {
             throw IllegalStateException("ID should never be -1")
         }
 
@@ -46,23 +55,34 @@ class OrderCompletedViewModel(private val eventService: EventService, private va
     fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
-        var similarEventsFlowable = eventService.getEventsByLocation(location)
+        val sourceFactory = SimilarEventsDataSourceFactory(
+            compositeDisposable,
+            topicId,
+            location,
+            eventId,
+            mutableProgress,
+            eventService
+        )
 
-        if (topicId != -1L) {
-            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
-                BiFunction { firstList: List<Event>, secondList: List<Event> ->
-                    val similarList = mutableSetOf<Event>()
-                    similarList.addAll(firstList + secondList)
-                    similarList.toList()
-                })
-        }
+        val similarEventPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
 
-        compositeDisposable += similarEventsFlowable
-            .withDefaultSchedulers()
+        compositeDisposable += similarEventPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .distinctUntilChanged()
-            .subscribe({ events ->
-                val list = events.filter { it.id != eventId }
-                mutableSimilarEvents.value = list
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.subscribe({ events ->
+                val currentPagedSimilarEvents = mutableSimilarEvents.value
+                if (currentPagedSimilarEvents == null) {
+                    mutableSimilarEvents.value = events
+                } else {
+                    currentPagedSimilarEvents.addAll(events)
+                    mutableSimilarEvents.value = currentPagedSimilarEvents
+                }
             }, {
                 Timber.e(it, "Error fetching similar events")
             })
