@@ -1,0 +1,12 @@
+🚀 Features
+
+- Sort tickets and grey out old tickets
+- add chips for search (#1518)  
+- add event types for search
+- add Event Location 
+- add Event Types Chips 
+- Add option to change password 
+- Add log out dialog in settings fragment 
+- reimplement google smart lock for login 
+
+🐛 Bug Fixes

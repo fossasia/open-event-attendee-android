@@ -1,0 +1,4 @@
+- Speakers, Sessions, Sponsors and Tracks for an Event
+- See Notifications about Events and Orders
+- Submit feedbacks on events
+- Several other enhancements and bug fixes
