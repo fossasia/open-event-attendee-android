@@ -43,7 +43,7 @@ import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTran
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-private const val MINIMUM_PASSWORD_LENGTH = 8
+const val MINIMUM_PASSWORD_LENGTH = 8
 
 class SignUpFragment : Fragment() {
 
