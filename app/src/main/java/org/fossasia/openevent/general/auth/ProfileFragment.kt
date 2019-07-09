@@ -205,7 +205,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                     layout.textInputLayoutNewPassword.isEndIconVisible = true
                 }
 
-                if (layout.newPassword.text.toString().length >= 6) {
+                if (layout.newPassword.text.toString().length >= MINIMUM_PASSWORD_LENGTH) {
                     layout.textInputLayoutNewPassword.error = null
                     layout.textInputLayoutNewPassword.isErrorEnabled = false
                 } else {
@@ -220,7 +220,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -245,7 +245,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -259,7 +259,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             override fun afterTextChanged(p0: Editable?) {
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }

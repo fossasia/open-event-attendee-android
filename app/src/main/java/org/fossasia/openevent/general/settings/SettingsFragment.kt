@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayou
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.auth.MINIMUM_PASSWORD_LENGTH
 import org.fossasia.openevent.general.auth.ProfileViewModel
 import org.fossasia.openevent.general.auth.SmartAuthUtil
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
@@ -189,7 +190,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                     layout.textInputLayoutNewPassword.isEndIconVisible = true
                 }
 
-                if (layout.newPassword.text.toString().length >= 6) {
+                if (layout.newPassword.text.toString().length >= MINIMUM_PASSWORD_LENGTH) {
                     layout.textInputLayoutNewPassword.error = null
                     layout.textInputLayoutNewPassword.isErrorEnabled = false
                 } else {
@@ -204,7 +205,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -234,7 +235,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -253,7 +254,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                  */
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
