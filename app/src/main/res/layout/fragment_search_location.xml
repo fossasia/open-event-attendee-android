@@ -36,17 +36,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.SearchView
+            <EditText
                 android:id="@+id/locationSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/layout_margin_medium"
+                android:background="@null"
+                android:paddingStart="@dimen/padding_large"
+                android:paddingEnd="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
                 android:inputType="textCapWords"
-                app:iconifiedByDefault="false"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:queryHint="@string/location_hint"
-                app:searchIcon="@null"
-                app:queryBackground="@null"/>
+                android:imeOptions="actionSearch"
+                android:hint="@string/enter_location"
+                android:layout_marginBottom="@dimen/layout_margin_medium"/>
             <TextView
                 android:id="@+id/currentLocation"
                 android:layout_width="match_parent"
