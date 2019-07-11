@@ -27,19 +27,19 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-atten
 ## Screenshots
 <table>
         <tr>
-<td><img src = "docs/images/screenshot_1.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_2.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_3.png" height = "480" width="270"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_1.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_2.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_3.png"></td>
         </tr>
         <tr>
-<td><img src = "docs/images/screenshot_4.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_5.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_6.png" height = "480" width="270"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_4.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_5.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_6.png"></td>
         </tr>
         <tr>
-<td><img src = "docs/images/screenshot_7.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_8.png" height = "480" width="270"></td>
-<td><img src = "docs/images/screenshot_9.png" height = "480" width="270"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_7.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_8.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/screenshot_9.png"></td>
         </tr>
 </table>        
 
