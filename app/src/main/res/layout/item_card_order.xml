@@ -113,8 +113,9 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/layout_margin_medium"
-                    android:text="@{`See ` + order.attendees.size() + ` tickets`}"
+                    android:text="@{`See ` + order.attendees.size() + ` ticket(s)`}"
                     android:textColor="@color/colorPrimary"
                     tools:text="See 5 tickets" />
 
@@ -122,13 +123,14 @@
                     android:id="@+id/orderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_extra_small"
+                    android:padding="@dimen/padding_order_status"
                     android:maxLines="1"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textAllCaps="true"
                     tools:text="PLACED"
-                    android:textSize="@dimen/text_size_small"
+                    android:background="@drawable/border_order_status"
+                    android:textSize="@dimen/text_size_small_extra"
                     android:ellipsize="end"
                     app:orderStatus="@{order.status}"/>
 

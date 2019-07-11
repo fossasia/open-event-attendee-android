@@ -434,5 +434,9 @@
     <string name="placed_orders">Placed Orders</string>
     <string name="pending_orders">Pending Orders</string>
     <string name="order_status">Order Status</string>
+    <plurals name="ordersQuantity">
+        <item quantity="one">%1$s ticket</item>
+        <item quantity="other">%1$s tickets</item>
+    </plurals>
 
 </resources>

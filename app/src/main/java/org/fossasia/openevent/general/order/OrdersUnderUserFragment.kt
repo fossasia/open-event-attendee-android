@@ -100,7 +100,6 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ordersUnderUserVM.eventAndOrder
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.ticketsNumber.text = "${it.size} orders"
                 ordersRecyclerAdapter.setSavedEventAndOrder(it)
                 applyFilter()
                 Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
@@ -171,7 +170,8 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             pending = ordersUnderUserVM.isShowingPendingOrders,
             sortByDate = ordersUnderUserVM.isSortingOrdersByDate
         )
-        rootView.ticketsNumber.text = "${ordersRecyclerAdapter.itemCount} orders"
+        val size = ordersRecyclerAdapter.itemCount
+        rootView.ticketsNumber.text = resources.getQuantityString(R.plurals.ordersQuantity, size, size)
         showNoTicketsScreen(ordersRecyclerAdapter.itemCount == 0)
     }
 

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.utils
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.graphics.PorterDuff
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +15,7 @@ import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.ORDER_STATUS_COMPLETED
 import org.fossasia.openevent.general.attendees.ORDER_STATUS_PENDING
 import org.fossasia.openevent.general.attendees.ORDER_STATUS_PLACED
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
 /**
@@ -73,21 +75,28 @@ fun setExpired(imageView: ImageView, isExpired: Boolean) {
 
 @BindingAdapter("orderStatus")
 fun setOrderStatus(textView: TextView, orderStatus: String) {
+    val resource = Resource()
     when (orderStatus) {
         ORDER_STATUS_PLACED -> {
             textView.isVisible = true
             textView.text = ORDER_STATUS_PLACED
-            textView.setBackgroundResource(R.color.orderStatusBlue)
+            resource.getColor(R.color.orderStatusBlue)?.let {
+                textView.background.setColorFilter(it, PorterDuff.Mode.SRC_ATOP)
+            }
         }
         ORDER_STATUS_COMPLETED -> {
             textView.isVisible = true
             textView.text = ORDER_STATUS_COMPLETED
-            textView.setBackgroundResource(R.color.orderStatusGreen)
+            resource.getColor(R.color.orderStatusGreen)?.let {
+                textView.background.setColorFilter(it, PorterDuff.Mode.SRC_ATOP)
+            }
         }
         ORDER_STATUS_PENDING -> {
             textView.isVisible = true
             textView.text = ORDER_STATUS_PENDING
-            textView.setBackgroundResource(R.color.orderStatusOrange)
+            resource.getColor(R.color.orderStatusOrange)?.let {
+                textView.background.setColorFilter(it, PorterDuff.Mode.SRC_ATOP)
+            }
         }
         else -> {
             textView.isVisible = false
