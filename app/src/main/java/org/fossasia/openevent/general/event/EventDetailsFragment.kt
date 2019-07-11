@@ -63,7 +63,7 @@ import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
-import org.fossasia.openevent.general.EVENT_IDENTIFIER
+import org.fossasia.openevent.general.utils.EVENT_IDENTIFIER
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.common.SpeakerClickListener

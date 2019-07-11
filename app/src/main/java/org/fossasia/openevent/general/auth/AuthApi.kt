@@ -43,4 +43,7 @@ interface AuthApi {
 
     @POST("auth/verify-email")
     fun verifyEmail(@Body requestEmailVerification: RequestEmailVerification): Single<EmailVerificationResponse>
+
+    @PATCH("auth/reset-password")
+    fun resetPassword(@Body requestPasswordReset: RequestPasswordReset): Single<ResetPasswordResponse>
 }

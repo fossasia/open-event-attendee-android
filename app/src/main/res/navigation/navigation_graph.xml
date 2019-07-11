@@ -59,6 +59,13 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_events_to_auth"
+            app:destination="@id/authFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
     </fragment>
     <fragment
@@ -400,7 +407,7 @@
         <argument
             android:name="orderIdentifier"
             app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue="''"/>
 
         <argument
             android:name="orderId"
@@ -485,7 +492,7 @@
         <argument
             android:name="croppedImage"
             app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/cropImageFragment"
@@ -500,7 +507,7 @@
         <argument
             android:name="imageToCrop"
             app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -982,7 +989,8 @@
         <argument
             android:name="email"
             app:argType="string"
-            android:defaultValue=""/>
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <argument
             android:name="showSkipButton"
             app:argType="boolean"

@@ -1,10 +1,5 @@
 package org.fossasia.openevent.general.event
 
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.data.Resource
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -15,9 +10,6 @@ import java.util.TimeZone
 
 class EventUtilsTest {
 
-    @MockK
-    lateinit var resource: Resource
-
     private var timeZone: TimeZone? = null
 
     @Before
@@ -25,7 +17,6 @@ class EventUtilsTest {
         // Set fixed local time zone for tests
         timeZone = TimeZone.getDefault()
         TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Asia/Kolkata")))
-        MockKAnnotations.init(this)
     }
 
     @After
@@ -49,17 +40,6 @@ class EventUtilsTest {
 
     private fun getEventDateTime(dateTime: String, timeZone: String): ZonedDateTime =
         EventUtils.getEventDateTime(dateTime, timeZone)
-
-    private fun setupStringMock() {
-        every { resource.getString(R.string.event_name) }.returns("Event Name : ")
-        every { resource.getString(R.string.event_description) }.returns("Event Description : ")
-        every { resource.getString(R.string.starts_on) }.returns("Starts On : ")
-        every { resource.getString(R.string.start_time) }.returns("Start Time : ")
-        every { resource.getString(R.string.ends_on) }.returns("Ends On : ")
-        every { resource.getString(R.string.end_time) }.returns("End Time : ")
-        every { resource.getString(R.string.event_location) }.returns("Event Location : ")
-        every { resource.getString(R.string.event_link) }.returns("Event Link : ")
-    }
 
     @Test
     fun `should get timezone name`() {

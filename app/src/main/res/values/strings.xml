@@ -5,6 +5,7 @@
     <string name="likes">Likes</string>
     <string name="saved_date">savedDate</string>
     <string name="location_hint">Enter a location</string>
+    <string name="reset_password_message">Reset password successfully, Please log in to continue</string>
 
     <!--event details-->
     <string name="event_card_date">Event Date :</string>

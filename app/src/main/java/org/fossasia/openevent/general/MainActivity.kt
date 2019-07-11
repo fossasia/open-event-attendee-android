@@ -13,16 +13,13 @@ import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.auth.SmartAuthUtil
 import org.fossasia.openevent.general.auth.AuthFragment
+import org.fossasia.openevent.general.utils.AppLinkUtils
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAY_STORE_BUILD_FLAVOR = "playStore"
-const val EVENT_IDENTIFIER = "eventIdentifier"
-const val VERIFICATION_TOKEN = "verificationToken"
-private const val VERIFY = "verify"
-private const val TOKEN = "token"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -43,26 +40,12 @@ class MainActivity : AppCompatActivity() {
             currentFragmentId = destination.id
             handleNavigationVisibility(currentFragmentId)
         }
-        handleAppLinkIntent(intent)
+        AppLinkUtils.handleIntent(intent, navController)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        handleAppLinkIntent(intent)
-    }
-
-    private fun handleAppLinkIntent(intent: Intent?) {
-        val appLinkData = intent?.data
-        if (appLinkData != null) {
-            val bundle = Bundle()
-            if (appLinkData.lastPathSegment == VERIFY) {
-                bundle.putString(VERIFICATION_TOKEN, appLinkData.getQueryParameter(TOKEN))
-                navController.navigate(R.id.profileFragment, bundle)
-            } else {
-                bundle.putString(EVENT_IDENTIFIER, appLinkData.lastPathSegment)
-                navController.navigate(R.id.eventDetailsFragment, bundle)
-            }
-        }
+        AppLinkUtils.handleIntent(intent, navController)
     }
 
     private fun setupBottomNavigationMenu(navController: NavController) {

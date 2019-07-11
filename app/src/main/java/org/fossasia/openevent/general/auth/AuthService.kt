@@ -105,4 +105,8 @@ class AuthService(
     fun verifyEmail(token: String): Single<EmailVerificationResponse> {
         return authApi.verifyEmail(RequestEmailVerification(Token(token)))
     }
+
+    fun resetPassword(requestPasswordReset: RequestPasswordReset): Single<ResetPasswordResponse> {
+        return authApi.resetPassword(requestPasswordReset)
+    }
 }
