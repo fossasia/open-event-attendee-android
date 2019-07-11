@@ -10,6 +10,7 @@
     <dimen name="text_size_larger">18sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_small_extra">8sp</dimen>
     <dimen name="text_size_very_large">42sp</dimen>
 
     <!-- margin specifics -->
@@ -57,6 +58,7 @@
     <dimen name="round_corners_button_radius">20dp</dimen>
     <dimen name="custom_toolbar_elevation">8dp</dimen>
     <dimen name="icon_edit_profile_height">80dp</dimen>
+    <dimen name="padding_order_status">4dp</dimen>
 
     <!--image view specifics -->
     <dimen name="item_image_view_medium">30dp</dimen>
