@@ -3,11 +3,9 @@
     <string name="events">ঘটনাবলী</string>
     <string name="profile">প্রোফাইল</string>
     <string name="likes">পছন্দ</string>
-    <string name="saved_date">সংরক্ষিত তারিখ</string>
     <string name="location_hint">অবস্থান লিখুন</string>
 
     <!--event details-->
-    <string name="event_card_date">তারিখ লিখুন :</string>
     <string name="report_event">রিপোর্ট ইভেন্ট</string>
     <string name="about">সম্পর্কিত</string>
     <string name="see_more">আরো দেখাও </string>
@@ -28,7 +26,6 @@
 
     <!--Search event details-->
     <string name="search">অনুসন্ধান</string>
-    <string name="search_results">অনুসন্ধান ফলাফল</string>
     <string name="search_hint">কি খুঁছেন . . .</string>
     <string name="go_out">আমি বাইরে যেতে চাই</string>
     <string name="anywhere">কোথাও</string>
@@ -39,15 +36,12 @@
     <string name="month">আগামী মাসে</string>
     <string name="what_time">কোন সময় চলবে?</string>
     <string name="pick_date">একটি তারিখ নিন...</string>
-    <string name="at">উপর</string>
     <string name="no_search_results">অনুসন্ধান পাওয়া যাইনি , আবার চেষ্টা করুন</string>
     <string name="event_details">ইভেন্ট ফলাফল</string>
     <string name="see_maps">ম্যাপ দেখো</string>
-    <string name="error_message">কিছু ভুল হয়েছে , আবার চেষ্টা করুন </string>
     <string name="in">মধ্যে</string>
 
     <!--profile details-->
-    <string name="user_name">ব্যবহারকারীর নাম</string>
     <string name="logout">লগ আউট</string>
     <string name="settings">সেটিংস</string>
     <string name="login">লগইন</string>
@@ -81,9 +75,6 @@
 
     <!--ticket details-->
     <string name="tickets">টিকেট গুলো</string>
-    <string name="sales_dates">বিক্রয় তারিখ</string>
-    <string name="order_range">অর্ডার পরিসীমা</string>
-    <string name="tickets_available">টিকেট পাওয়া যাচ্ছে</string>
     <string name="register">রেজিস্টার</string>
     <string name="ticket_name">টিকেটের নাম</string>
     <string name="price">দাম</string>
@@ -91,7 +82,6 @@
 
     <!--ticket details-->
     <string name="your_info">আপনার তথ্য</string>
-    <string name="other_information">বাকি তথ্য</string>
     <string name="first_name">প্রথম নাম</string>
     <string name="last_name">শেষ নাম</string>
     <string name="email">ইমেইল</string>
@@ -107,7 +97,6 @@
 
     <!--payment details-->
     <string name="card_number">কার্ড নম্বর</string>
-    <string name="card_type">কার্ড টাইপ</string>
     <string name="expiration_date">মেয়াদ শেষ হওয়ার তারিখ</string>
     <string name="not_you">আপনি না ? </string>
     <string name="sign_out">সিগণ আউট</string>
@@ -124,10 +113,6 @@
     <string name="event_summary">ইভেন্ট সারাংশ</string>
     <string name="event_summary_preview">খুব ভালো</string>
 
-    <!--suggestion mail details-->
-    <string name="emailInfo">বৈশিষ্ট ও সমস্যার তালিকা করুন</string>
-    <string name="emailSubject">ওপেন  ইভেন্ট  জেনারেল  আপ জন্য পরামর্শ দিন</string>
-
     <!--settings xml-->
     <string name="version_settings">সংস্করণ</string>
     <string name="key_version">সংস্করণ</string>
@@ -135,7 +120,6 @@
     <string name="key_rating">রেটিং </string>
     <string name="rating_settings">রেটিং দিন</string>
     <string name="suggestion_settings">পরামর্শ দিন</string>
-    <string name="acknowledgements_settings">স্বীকৃতি</string>
     <string name="key_suggestion">পরামর্শ</string>
     <string name="key_profile">প্রোফাইল</string>
     <string name="logged_in_account">একাউন্ট</string>
@@ -154,10 +138,8 @@
     <string name="no_tickets">টিকেট নেই</string>
 
     <!--liked events tab -->
-    <string name="nothing_planned_yet">কিছুই পরিকল্পিত নেই এখনো ?</string>
     <string name="find_something_to_do">কিছু কাজ খুজুন!!</string>
     <string name="current_location">আমার এখনকার অবস্থান ব্যবহার হোক</string>
-    <string name="error__fetching_location">পরামর্শ ছাড়া অবস্থান পাওয়া যাচ্ছে না</string>
 
     <!--attendee fragment-->
     <string name="attendee_details">এটেন্ডএ বিস্তারিত</string>
@@ -170,9 +152,7 @@
     <string name="logged_in_automatically">অটোমেটিক লগইন হয়েছে!</string>
     <string name="log_in_first">প্রথমে লগইন করতে হবে!</string>
     <string name="sign_in_canceled">সিগণ ইন ক্যানসেল!</string>
-    <string name="sign_up_success">সিগণ উপ সাফল্য!</string>
     <string name="cannot_fetch_location">অবস্থান আনা যাচ্ছে না!</string>
-    <string name="order_not_completed">অর্ডার কমপ্লিট হয়নি!</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">আপনি কোথায় যেতে চান?</string>

@@ -127,7 +127,7 @@ class TicketsViewModel(
                             }
                         }
                     }
-                    price?.let { prices += price * qty[index++] }
+                    price.let { prices += price * qty[index++] }
                 }
                 mutableAmount.value = prices + donation
             }, {

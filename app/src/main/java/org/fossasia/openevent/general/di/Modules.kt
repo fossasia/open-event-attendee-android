@@ -274,9 +274,8 @@ val networkModule = module {
             .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
+            val httpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+            builder.addInterceptor(httpLoggingInterceptor)
         }
         builder.build()
     }
