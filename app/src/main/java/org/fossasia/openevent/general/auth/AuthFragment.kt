@@ -67,6 +67,11 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
         val snackbarMessage = safeArgs.snackbarMessage
         if (!snackbarMessage.isNullOrEmpty()) rootView.snackbar(snackbarMessage)
 
+        val email = safeArgs.email
+        if (email != null) {
+            rootView.email.setText(email)
+        }
+
         rootView.skipTextView.isVisible = safeArgs.showSkipButton
         rootView.skipTextView.setOnClickListener {
             findNavController(rootView).navigate(
@@ -83,7 +88,6 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             authViewModel.checkUser(rootView.email.text.toString())
         }
 
-        rootView.email.setText(safeArgs.email)
         rootView.email.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }

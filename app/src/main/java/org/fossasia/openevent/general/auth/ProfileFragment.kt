@@ -40,7 +40,7 @@ import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
-import org.fossasia.openevent.general.VERIFICATION_TOKEN
+import org.fossasia.openevent.general.utils.VERIFICATION_TOKEN
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
