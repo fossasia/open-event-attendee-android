@@ -24,6 +24,7 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.HttpErrors
+import retrofit2.HttpException
 import timber.log.Timber
 
 const val ORDER_STATUS_PENDING = "pending"
@@ -175,8 +176,9 @@ class AttendeeViewModel(
             }, {
                 mutableProgress.value = false
                 if (createAttendeeIterations + 1 == totalAttendee)
-                    if (it.message.equals(HttpErrors.CONFLICT)) {
-                        mutableTicketSoldOut.value = true
+                    if (it is HttpException) {
+                        if (it.code() == HttpErrors.CONFLICT)
+                            mutableTicketSoldOut.value = true
                     } else {
                         mutableMessage.value = resource.getString(R.string.create_attendee_fail_message)
                         Timber.d(it, "Failed")

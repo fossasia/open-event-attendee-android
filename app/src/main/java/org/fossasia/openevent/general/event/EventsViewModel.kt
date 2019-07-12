@@ -22,7 +22,9 @@ import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.paging.EventsDataSourceFactory
 import org.fossasia.openevent.general.notification.NotificationService
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
+import org.fossasia.openevent.general.utils.HttpErrors
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
+import retrofit2.HttpException
 import timber.log.Timber
 
 const val NEW_NOTIFICATIONS = "newNotifications"
@@ -134,7 +136,25 @@ class EventsViewModel(
                     }
                 }
             }, {
+                if (it is HttpException) {
+                    if (authHolder.isLoggedIn() && it.code() == HttpErrors.UNAUTHORIZED) {
+                        logoutAndRefresh()
+                    }
+                }
                 Timber.e(it, "Error fetching notifications")
+            })
+    }
+
+    private fun logoutAndRefresh() {
+        compositeDisposable += authService.logout()
+            .withDefaultSchedulers()
+            .subscribe({
+                loadLocationEvents()
+                syncNotifications()
+            }, {
+                mutableProgress.value = false
+                Timber.e(it, "Error while logout")
+                mutableMessage.value = resource.getString(R.string.error)
             })
     }
 
