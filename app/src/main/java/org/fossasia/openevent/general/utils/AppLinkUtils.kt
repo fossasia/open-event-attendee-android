@@ -24,8 +24,8 @@ object AppLinkUtils {
     }
 
     fun handleIntent(intent: Intent?, navController: NavController) {
-        val uri = intent?.data.toString()
-        val data = getData(uri) ?: return
+        val uri = intent?.data ?: return
+        val data = getData(uri.toString()) ?: return
         val bundle = Bundle()
         bundle.putString(data.argumentKey, data.argumentValue)
         navController.navigate(data.destinationId, bundle)
