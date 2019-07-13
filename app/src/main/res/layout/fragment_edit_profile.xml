@@ -53,31 +53,33 @@
         android:weightSum="2">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstNameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="@dimen/layout_margin_none"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/first_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/first_name"
                 android:inputType="textPersonName|textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lastNameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="@dimen/layout_margin_none"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin_small"
-            android:layout_weight="1">
+            android:layout_marginStart="@dimen/layout_margin_small"
+            android:layout_weight="1"
+            android:hint="@string/last_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/last_name"
                 android:inputType="textPersonName|textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 

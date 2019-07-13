@@ -35,6 +35,8 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstNameLayout
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastNameLayout
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -52,6 +54,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.FileNotFoundException
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.setRequired
 import org.jetbrains.anko.design.snackbar
 
 class EditProfileFragment : Fragment(), ComplexBackPressFragment {
@@ -122,8 +125,12 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
         rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
-            editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
-                rootView.lastName.text.toString(), rootView.details.text.toString())
+            if (isValidUsername()) {
+                editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
+                    rootView.lastName.text.toString(), rootView.details.text.toString())
+            } else {
+                rootView.snackbar(getString(R.string.fill_required_fields_message))
+            }
         }
 
         editProfileViewModel.message
@@ -139,6 +146,9 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         rootView.profilePhotoFab.setOnClickListener {
             showEditPhotoDialog()
         }
+
+        rootView.firstNameLayout.setRequired()
+        rootView.lastNameLayout.setRequired()
 
         return rootView
     }
@@ -164,6 +174,19 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                 editProfileViewModel.avatarUpdated = true
             }
         }
+    }
+
+    private fun isValidUsername(): Boolean {
+        var valid = true
+        if (rootView.firstName.text.isNullOrBlank()) {
+            rootView.firstName.error = getString(R.string.empty_field_error_message)
+            valid = false
+        }
+        if (rootView.lastName.text.isNullOrBlank()) {
+            rootView.lastName.error = getString(R.string.empty_field_error_message)
+            valid = false
+        }
+        return valid
     }
 
     private fun loadUserUI(user: User) {
