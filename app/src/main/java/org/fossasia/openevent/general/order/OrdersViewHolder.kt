@@ -10,7 +10,7 @@ class OrdersViewHolder(private val binding: ItemCardOrderBinding) : RecyclerView
     fun bind(
         eventAndOrder: Pair<Event, Order>,
         showExpired: Boolean,
-        listener: OrdersRecyclerAdapter.OrderClickListener?
+        listener: OrdersPagedListAdapter.OrderClickListener?
     ) {
         val event = eventAndOrder.first
         val order = eventAndOrder.second

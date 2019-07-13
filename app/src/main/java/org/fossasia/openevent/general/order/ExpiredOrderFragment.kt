@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.dialog_filter_order.view.completedOrdersCheckBox
 import kotlinx.android.synthetic.main.dialog_filter_order.view.pendingOrdersCheckBox
 import kotlinx.android.synthetic.main.dialog_filter_order.view.placedOrdersCheckBox
@@ -26,12 +27,11 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class ExpiredOrderFragment : Fragment() {
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
-    private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
+    private val ordersPagedListAdapter: OrdersPagedListAdapter = OrdersPagedListAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_expired_order, container, false)
@@ -40,17 +40,25 @@ class ExpiredOrderFragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        ordersRecyclerAdapter.setShowExpired(true)
+        ordersPagedListAdapter.setShowExpired(true)
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
-        rootView.ordersRecycler.adapter = ordersRecyclerAdapter
+        rootView.ordersRecycler.adapter = ordersPagedListAdapter
         rootView.ordersRecycler.isNestedScrollingEnabled = false
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
             .observe(this, Observer {
                 rootView.shimmerSearch.isVisible = it
+                if (it) {
+                    rootView.shimmerSearch.startShimmer()
+                    showNoTicketsScreen(false)
+                    showNoInternetScreen(false)
+                } else {
+                    rootView.shimmerSearch.stopShimmer()
+                    showNoTicketsScreen(ordersPagedListAdapter.currentList?.isEmpty() ?: true)
+                }
             })
 
         ordersUnderUserVM.message
@@ -59,40 +67,41 @@ class ExpiredOrderFragment : Fragment() {
                 rootView.longSnackbar(it)
             })
 
-        ordersUnderUserVM.noTickets
+        ordersUnderUserVM.connection
             .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                showNoTicketsScreen(it)
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
+                if (currentItems != null) {
+                    showNoInternetScreen(false)
+                    showNoTicketsScreen(currentItems.size == 0)
+                    ordersPagedListAdapter.submitList(currentItems)
+                } else {
+                    if (isConnected) {
+                        ordersUnderUserVM.getOrdersAndEventsOfUser(true)
+                    } else {
+                        showNoInternetScreen(true)
+                    }
+                }
             })
 
-        ordersUnderUserVM.eventAndOrder
+        ordersUnderUserVM.eventAndOrderPaged
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                ordersRecyclerAdapter.setSavedEventAndOrder(it)
-                applyFilter()
-                Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
+                ordersPagedListAdapter.submitList(it)
             })
-
-        val currentOrdersAndEvent = ordersUnderUserVM.eventAndOrder.value
-        if (currentOrdersAndEvent == null) {
-            ordersUnderUserVM.ordersUnderUser(true)
-        } else {
-            ordersRecyclerAdapter.setSavedEventAndOrder(currentOrdersAndEvent)
-            applyFilter()
-        }
 
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
+        val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
             override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
                 findNavController(rootView).navigate(ExpiredOrderFragmentDirections
                     .actionOrderExpiredToOrderDetails(eventID, orderIdentifier, orderId))
             }
         }
-        ordersRecyclerAdapter.setListener(recyclerViewClickListener)
+        ordersPagedListAdapter.setListener(recyclerViewClickListener)
         rootView.filterToolbar.setOnClickListener {
             showFilterDialog()
         }
@@ -100,10 +109,10 @@ class ExpiredOrderFragment : Fragment() {
 
     private fun showFilterDialog() {
         val filterLayout = layoutInflater.inflate(R.layout.dialog_filter_order, null)
-        filterLayout.completedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingCompletedOrders
-        filterLayout.pendingOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPendingOrders
-        filterLayout.placedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPlacedOrders
-        if (ordersUnderUserVM.isSortingOrdersByDate)
+        filterLayout.completedOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingCompletedOrders
+        filterLayout.pendingOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingPendingOrders
+        filterLayout.placedOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingPlacedOrders
+        if (ordersUnderUserVM.filter.isSortingOrdersByDate)
             filterLayout.dateRadioButton.isChecked = true
         else
             filterLayout.orderStatusRadioButton.isChecked = true
@@ -113,22 +122,31 @@ class ExpiredOrderFragment : Fragment() {
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }.setPositiveButton(getString(R.string.apply)) { _, _ ->
-                ordersUnderUserVM.isShowingCompletedOrders = filterLayout.completedOrdersCheckBox.isChecked
-                ordersUnderUserVM.isShowingPendingOrders = filterLayout.pendingOrdersCheckBox.isChecked
-                ordersUnderUserVM.isShowingPlacedOrders = filterLayout.placedOrdersCheckBox.isChecked
-                ordersUnderUserVM.isSortingOrdersByDate = filterLayout.dateRadioButton.isChecked
+                ordersUnderUserVM.filter.isShowingCompletedOrders = filterLayout.completedOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isShowingPendingOrders = filterLayout.pendingOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isShowingPlacedOrders = filterLayout.placedOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isSortingOrdersByDate = filterLayout.dateRadioButton.isChecked
                 applyFilter()
             }.create().show()
     }
 
     private fun applyFilter() {
-        ordersRecyclerAdapter.setFilter(
-            completed = ordersUnderUserVM.isShowingCompletedOrders,
-            placed = ordersUnderUserVM.isShowingPlacedOrders,
-            pending = ordersUnderUserVM.isShowingPendingOrders,
-            sortByDate = ordersUnderUserVM.isSortingOrdersByDate
-        )
-        showNoTicketsScreen(ordersRecyclerAdapter.itemCount == 0)
+        ordersUnderUserVM.clearOrders()
+        ordersPagedListAdapter.clear()
+        if (ordersUnderUserVM.isConnected()) {
+            ordersUnderUserVM.getOrdersAndEventsOfUser(true)
+        } else {
+            showNoInternetScreen(true)
+        }
+    }
+
+    private fun showNoInternetScreen(show: Boolean) {
+        if (show) {
+            rootView.shimmerSearch.isVisible = false
+            showNoTicketsScreen(false)
+            ordersPagedListAdapter.clear()
+        }
+        rootView.noInternetCard.isVisible = show
     }
 
     private fun showNoTicketsScreen(show: Boolean) {
