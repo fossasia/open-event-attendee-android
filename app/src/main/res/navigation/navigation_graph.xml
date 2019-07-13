@@ -492,7 +492,7 @@
         <argument
             android:name="croppedImage"
             app:argType="string"
-            android:defaultValue="''"/>
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/cropImageFragment"
