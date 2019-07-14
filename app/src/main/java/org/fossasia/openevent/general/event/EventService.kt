@@ -59,17 +59,6 @@ class EventService(
         return eventDao.getFavoriteEvents()
     }
 
-    fun getEventsByLocation(locationName: String?): Flowable<List<Event>> {
-        val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
-            "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
-        return eventApi.searchEvents("name", query).flatMapPublisher { apiList ->
-            apiList.forEach {
-                it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
-            }
-            updateFavorites(apiList)
-        }
-    }
-
     fun getEventsByLocationPaged(locationName: String?, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
             "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
@@ -119,17 +108,17 @@ class EventService(
             .onErrorResumeNext(eventDao.getEventWithIds(eventIds))
     }
 
+    fun getEventsWithQuery(query: String): Single<List<Event>> {
+        return eventApi.eventsByQuery(query).map {
+            eventDao.insertEvents(it)
+            it
+        }
+    }
+
     fun setFavorite(eventId: Long, favorite: Boolean): Completable {
         return Completable.fromAction {
             eventDao.setFavorite(eventId, favorite)
         }
-    }
-
-    fun getSimilarEvents(id: Long): Flowable<List<Event>> {
-        return eventTopicApi.getEventsUnderTopicId(id)
-            .flatMapPublisher {
-                updateFavorites(it)
-            }
     }
 
     fun getSimilarEventsPaged(id: Long, page: Int, pageSize: Int = 5): Flowable<List<Event>> {

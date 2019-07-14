@@ -120,7 +120,7 @@ class TicketsViewModel(
                 val code = appliedDiscountCode
                 tickets.forEach { ticket ->
                     var price = ticket.price
-                    if (code?.value != null && price != null) {
+                    if (code?.value != null) {
                         appliedDiscountCode?.tickets?.forEach { ticketId ->
                             if (ticket.id == ticketId.id.toInt()) {
                                 price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)

@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
+import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.completedOrdersCheckBox
@@ -34,7 +35,6 @@ import org.fossasia.openevent.general.BottomIconDoubleClick
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.fossasia.openevent.general.utils.extensions.showWithFading
@@ -46,7 +46,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
-    private val ordersRecyclerAdapter: OrdersRecyclerAdapter = OrdersRecyclerAdapter()
+    private val ordersPagedListAdapter = OrdersPagedListAdapter()
 
     override fun onStart() {
         super.onStart()
@@ -63,25 +63,48 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         setToolbar(activity, show = false)
 
-        ordersRecyclerAdapter.setShowExpired(false)
-        rootView.ordersRecycler.adapter = ordersRecyclerAdapter
+        ordersPagedListAdapter.setShowExpired(false)
+        rootView.ordersRecycler.adapter = ordersPagedListAdapter
         rootView.ordersRecycler.isNestedScrollingEnabled = false
 
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rootView.ordersRecycler.layoutManager = linearLayoutManager
 
-        val currentEventAndOrder = ordersUnderUserVM.eventAndOrder.value
-        if (currentEventAndOrder == null)
-            ordersUnderUserVM.ordersUnderUser(false)
-        else {
-            ordersRecyclerAdapter.setSavedEventAndOrder(currentEventAndOrder)
-            applyFilter()
-        }
+        ordersUnderUserVM.connection
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { isConnected ->
+                val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
+                if (currentItems != null) {
+                    showNoInternetScreen(false)
+                    showNoTicketsScreen(currentItems.size == 0)
+                    ordersPagedListAdapter.submitList(currentItems)
+                } else {
+                    if (isConnected) {
+                        ordersUnderUserVM.getOrdersAndEventsOfUser(false)
+                    } else {
+                        showNoInternetScreen(true)
+                    }
+                }
+            })
+
+        ordersUnderUserVM.numOfTickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                rootView.ticketsNumber.text = resources.getQuantityString(R.plurals.numOfOrders, it, it)
+            })
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
             .observe(this, Observer {
+                if (it) {
+                    rootView.shimmerSearch.startShimmer()
+                    showNoTicketsScreen(false)
+                    showNoInternetScreen(false)
+                } else {
+                    rootView.shimmerSearch.stopShimmer()
+                    showNoTicketsScreen(ordersPagedListAdapter.currentList?.isEmpty() ?: true)
+                }
                 rootView.shimmerSearch.isVisible = it
             })
 
@@ -91,18 +114,10 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                 rootView.longSnackbar(it)
             })
 
-        ordersUnderUserVM.noTickets
+        ordersUnderUserVM.eventAndOrderPaged
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                showNoTicketsScreen(it)
-            })
-
-        ordersUnderUserVM.eventAndOrder
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                ordersRecyclerAdapter.setSavedEventAndOrder(it)
-                applyFilter()
-                Timber.d("Fetched events of size %s", ordersRecyclerAdapter.itemCount)
+                ordersPagedListAdapter.submitList(it)
             })
 
         return rootView
@@ -111,13 +126,13 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerViewClickListener = object : OrdersRecyclerAdapter.OrderClickListener {
+        val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
             override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
                 findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
                     .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
             }
         }
-        ordersRecyclerAdapter.setListener(recyclerViewClickListener)
+        ordersPagedListAdapter.setListener(recyclerViewClickListener)
 
         rootView.pastEvent.setOnClickListener {
             findNavController(rootView).navigate(OrdersUnderUserFragmentDirections.actionOrderUserToOrderExpired())
@@ -142,10 +157,10 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     private fun showFilterDialog() {
         val filterLayout = layoutInflater.inflate(R.layout.dialog_filter_order, null)
-        filterLayout.completedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingCompletedOrders
-        filterLayout.pendingOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPendingOrders
-        filterLayout.placedOrdersCheckBox.isChecked = ordersUnderUserVM.isShowingPlacedOrders
-        if (ordersUnderUserVM.isSortingOrdersByDate)
+        filterLayout.completedOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingCompletedOrders
+        filterLayout.pendingOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingPendingOrders
+        filterLayout.placedOrdersCheckBox.isChecked = ordersUnderUserVM.filter.isShowingPlacedOrders
+        if (ordersUnderUserVM.filter.isSortingOrdersByDate)
             filterLayout.dateRadioButton.isChecked = true
         else
             filterLayout.orderStatusRadioButton.isChecked = true
@@ -155,39 +170,45 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }.setPositiveButton(getString(R.string.apply)) { _, _ ->
-                ordersUnderUserVM.isShowingCompletedOrders = filterLayout.completedOrdersCheckBox.isChecked
-                ordersUnderUserVM.isShowingPendingOrders = filterLayout.pendingOrdersCheckBox.isChecked
-                ordersUnderUserVM.isShowingPlacedOrders = filterLayout.placedOrdersCheckBox.isChecked
-                ordersUnderUserVM.isSortingOrdersByDate = filterLayout.dateRadioButton.isChecked
+                ordersUnderUserVM.filter.isShowingCompletedOrders = filterLayout.completedOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isShowingPendingOrders = filterLayout.pendingOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isShowingPlacedOrders = filterLayout.placedOrdersCheckBox.isChecked
+                ordersUnderUserVM.filter.isSortingOrdersByDate = filterLayout.dateRadioButton.isChecked
                 applyFilter()
             }.create().show()
     }
 
     private fun applyFilter() {
-        ordersRecyclerAdapter.setFilter(
-            completed = ordersUnderUserVM.isShowingCompletedOrders,
-            placed = ordersUnderUserVM.isShowingPlacedOrders,
-            pending = ordersUnderUserVM.isShowingPendingOrders,
-            sortByDate = ordersUnderUserVM.isSortingOrdersByDate
-        )
-        val size = ordersRecyclerAdapter.itemCount
-        rootView.ticketsNumber.text = resources.getQuantityString(R.plurals.ordersQuantity, size, size)
-        showNoTicketsScreen(ordersRecyclerAdapter.itemCount == 0)
+        ordersUnderUserVM.clearOrders()
+        ordersPagedListAdapter.clear()
+        if (ordersUnderUserVM.isConnected()) {
+            ordersUnderUserVM.getOrdersAndEventsOfUser(false)
+        } else {
+            showNoInternetScreen(true)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        ordersRecyclerAdapter.setListener(null)
+        ordersPagedListAdapter.setListener(null)
     }
 
     private fun showNoTicketsScreen(show: Boolean) {
         rootView.noTicketsScreen.isVisible = show
-        if (show) rootView.ticketsNumber.text = getString(R.string.no_tickets)
     }
 
     private fun redirectToLogin() {
         findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
             .actionOrderUserToAuth(getString(R.string.log_in_first), ORDERS_FRAGMENT))
+    }
+
+    private fun showNoInternetScreen(show: Boolean) {
+        if (show) {
+            rootView.shimmerSearch.isVisible = false
+            showNoTicketsScreen(false)
+            ordersPagedListAdapter.clear()
+        }
+        rootView.noInternetCard.isVisible = show
     }
 
     override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)

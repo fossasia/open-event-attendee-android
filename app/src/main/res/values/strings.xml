@@ -208,7 +208,6 @@
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
-    <string name="no_tickets">No Tickets</string>
 
     <!--liked events tab -->
     <string name="find_something_to_do">Find something to do!!</string>
@@ -438,6 +437,11 @@
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>
+    </plurals>
+    <plurals name="numOfOrders">
+        <item quantity="zero">No orders</item>
+        <item quantity="one">One order</item>
+        <item quantity="other">%1$s orders</item>
     </plurals>
 
 </resources>

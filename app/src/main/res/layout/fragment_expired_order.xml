@@ -46,6 +46,14 @@
             tools:itemCount="6"
             tools:listitem="@layout/item_card_order" />
 
+        <include android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_extra_large"
+            android:visibility="gone"
+            tools:visibility="visible"
+            layout="@layout/content_no_internet" />
+
+
         <LinearLayout
             android:id="@+id/noTicketsScreen"
             android:layout_width="match_parent"
@@ -56,6 +64,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:orientation="vertical"
+            android:visibility="gone"
             tools:visibility="visible">
 
             <RelativeLayout

@@ -132,7 +132,6 @@
     <!--settings profile dialog-->
     <string name="message">क्या आप लॉग आउट करना चाहते हैं?</string>
     <string name="cancel">कैंसिल</string>
-    <string name="no_tickets">कोई टिकट नहीं</string>
 
     <!--liked events tab -->
     <string name="find_something_to_do">करने के लिए कुछ खोजें!!</string>

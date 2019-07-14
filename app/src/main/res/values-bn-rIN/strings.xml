@@ -135,7 +135,6 @@
     <!--settings profile dialog-->
     <string name="message">আপনি কি লগ আউট করতে চান?</string>
     <string name="cancel">না</string>
-    <string name="no_tickets">টিকেট নেই</string>
 
     <!--liked events tab -->
     <string name="find_something_to_do">কিছু কাজ খুজুন!!</string>

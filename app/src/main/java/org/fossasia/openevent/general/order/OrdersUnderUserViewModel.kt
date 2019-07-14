@@ -3,112 +3,100 @@ package org.fossasia.openevent.general.order
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
-import org.fossasia.openevent.general.R
+import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
-import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
-import org.fossasia.openevent.general.event.EventUtils
 import timber.log.Timber
 
 class OrdersUnderUserViewModel(
     private val orderService: OrderService,
     private val eventService: EventService,
     private val authHolder: AuthHolder,
-    private val resource: Resource
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
+    private val config: PagedList.Config
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private lateinit var order: List<Order>
-    private var eventIdMap = mutableMapOf<Long, Event>()
-    private val eventIdAndTimes = mutableMapOf<Long, Int>()
+
+    val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableMessage = SingleLiveEvent<String>()
     val message: LiveData<String> = mutableMessage
-    private val mutableEventAndOrder = MutableLiveData<List<Pair<Event, Order>>>()
-    val eventAndOrder: LiveData<List<Pair<Event, Order>>> = mutableEventAndOrder
+    private val mutableEventAndOrderPaged = MutableLiveData<PagedList<Pair<Event, Order>>>()
+    val eventAndOrderPaged: LiveData<PagedList<Pair<Event, Order>>> = mutableEventAndOrderPaged
     private val mutableShowShimmerResults = MutableLiveData<Boolean>()
     val showShimmerResults: LiveData<Boolean> = mutableShowShimmerResults
-    private val mutableNoTickets = MutableLiveData<Boolean>()
-    val noTickets: LiveData<Boolean> = mutableNoTickets
+    private val mutableNumOfTickets = MutableLiveData(0)
+    val numOfTickets: LiveData<Int> = mutableNumOfTickets
 
     // Retain filter options
-    var isShowingCompletedOrders = true
-    var isShowingPendingOrders = true
-    var isShowingPlacedOrders = true
-    var isSortingOrdersByDate = true
+    val filter = OrderFilter()
 
     fun getId() = authHolder.getId()
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun ordersUnderUser(showExpired: Boolean) {
-        compositeDisposable += orderService.getOrdersOfUser(getId())
-            .withDefaultSchedulers()
+    fun getOrdersAndEventsOfUser(showExpired: Boolean) {
+
+        val sourceFactory = OrderDataSourceFactory(
+            orderService,
+            eventService,
+            compositeDisposable,
+            showExpired,
+            mutableShowShimmerResults,
+            mutableNumOfTickets,
+            mutableMessage,
+            getId(),
+            filter
+        )
+
+        val ordersAndEventsPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
+
+        compositeDisposable += ordersAndEventsPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
             .doOnSubscribe {
                 mutableShowShimmerResults.value = true
-                mutableNoTickets.value = false
             }.subscribe({
-                order = it
-                val eventIds = it.mapNotNull { order -> order.event?.id }
-                if (eventIds.isNotEmpty()) {
-                    eventsUnderUser(eventIds, showExpired)
+                val currentPagedOrdersAndEvents = mutableEventAndOrderPaged.value
+                if (currentPagedOrdersAndEvents == null) {
+                    mutableEventAndOrderPaged.value = it
                 } else {
-                    mutableShowShimmerResults.value = false
-                    mutableNoTickets.value = true
+                    currentPagedOrdersAndEvents.addAll(it)
+                    mutableEventAndOrderPaged.value = currentPagedOrdersAndEvents
                 }
             }, {
-                mutableShowShimmerResults.value = false
-                mutableNoTickets.value = true
-                mutableMessage.value = resource.getString(R.string.list_orders_fail_message)
-                Timber.d(it, "Failed  to list Orders under a user ")
-            })
-    }
-
-    private fun eventsUnderUser(eventIds: List<Long>, showExpired: Boolean) {
-        compositeDisposable += eventService.getEventsUnderUser(eventIds)
-            .withDefaultSchedulers()
-            .distinctUntilChanged()
-            .doFinally {
-                mutableShowShimmerResults.value = false
-            }.subscribe({
-                mutableShowShimmerResults.value = false
-                val events = ArrayList<Event>()
-                it.map {
-                    val times = eventIdAndTimes[it.id]
-                    if (times != null) {
-                        for (i in 0..times) {
-                            events.add(it)
-                        }
-                    }
-                    eventIdMap[it.id] = it
-                }
-                val eventAndIdentifier = ArrayList<Pair<Event, Order>>()
-                order.forEach {
-                    val event = eventIdMap[it.event?.id]
-                    if (event != null)
-                        eventAndIdentifier.add(Pair(event, it))
-                }
-                val finalList = when (showExpired) {
-                    false -> eventAndIdentifier.filter {
-                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) > System.currentTimeMillis() }
-                    true -> eventAndIdentifier.filter {
-                        EventUtils.getTimeInMilliSeconds(it.first.endsAt, null) < System.currentTimeMillis() }
-                }
-                if (finalList.isEmpty()) mutableNoTickets.value = true
-                mutableEventAndOrder.value = finalList
-            }, {
-                mutableShowShimmerResults.value = false
-                mutableMessage.value = resource.getString(R.string.list_events_fail_message)
                 Timber.d(it, "Failed  to list events under a user ")
             })
     }
+
+    fun clearOrders() {
+        mutableEventAndOrderPaged.value = null
+        mutableNumOfTickets.value = 0
+    }
+
+    fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
     }
 }
+
+class OrderFilter(
+    var isShowingCompletedOrders: Boolean = true,
+    var isShowingPendingOrders: Boolean = true,
+    var isShowingPlacedOrders: Boolean = true,
+    var isSortingOrdersByDate: Boolean = true
+)
