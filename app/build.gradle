@@ -185,7 +185,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:9.3.6'
+    implementation 'com.stripe:stripe-android:9.3.7'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
