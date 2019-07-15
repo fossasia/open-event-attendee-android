@@ -476,7 +476,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_small"
                             android:text="@string/country"/>
-                        <androidx.appcompat.widget.AppCompatSpinner
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                             android:id="@+id/countryPicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -492,6 +492,7 @@
                     android:layout_marginTop="@dimen/layout_margin_small"
                     android:layout_marginBottom="@dimen/layout_margin_small">
                     <TextView
+                        android:id="@+id/paymentTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
