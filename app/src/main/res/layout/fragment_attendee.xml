@@ -398,7 +398,7 @@
                     android:visibility="gone"
                     tools:visibility="visible">
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/companyLayout"
+                        android:id="@+id/billingCompanyLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -407,7 +407,7 @@
                         android:hint="@string/company" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/company"
+                            android:id="@+id/billingCompany"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -425,7 +425,7 @@
                             android:hint="@string/tax_id" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/addressLayout"
+                        android:id="@+id/billingAddressLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -434,12 +434,12 @@
                         android:hint="@string/address" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/address"
+                            android:id="@+id/billingAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/cityLayout"
+                        android:id="@+id/billingCityLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -448,12 +448,12 @@
                         android:hint="@string/city" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/city"
+                            android:id="@+id/billingCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/postalCodeLayout"
+                        android:id="@+id/billingPostalCodeLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -462,7 +462,7 @@
                         android:hint="@string/postal_code" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/postalCode"
+                            android:id="@+id/billingPostalCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
