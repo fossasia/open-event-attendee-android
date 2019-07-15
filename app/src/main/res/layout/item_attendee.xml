@@ -184,7 +184,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:id="@+id/billingAddressLayout"
+            android:id="@+id/attendeeBillingAddressLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
@@ -194,7 +194,7 @@
             tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/billingAddress"
+                android:id="@+id/attendeeBillingAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{attendee.billingAddress}"/>

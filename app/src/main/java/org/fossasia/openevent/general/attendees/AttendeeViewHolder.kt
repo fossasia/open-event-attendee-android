@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.item_attendee.view.lastNameLayout
 import kotlinx.android.synthetic.main.item_attendee.view.lastName
 import kotlinx.android.synthetic.main.item_attendee.view.emailLayout
 import kotlinx.android.synthetic.main.item_attendee.view.email
-import kotlinx.android.synthetic.main.item_attendee.view.billingAddressLayout
-import kotlinx.android.synthetic.main.item_attendee.view.billingAddress
+import kotlinx.android.synthetic.main.item_attendee.view.attendeeBillingAddressLayout
+import kotlinx.android.synthetic.main.item_attendee.view.attendeeBillingAddress
 import kotlinx.android.synthetic.main.item_attendee.view.phoneLayout
 import kotlinx.android.synthetic.main.item_attendee.view.phone
 import kotlinx.android.synthetic.main.item_attendee.view.workPhoneLayout
@@ -113,7 +113,7 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
                     jobTitle = itemView.jobTitle.text.toString().emptyToNull(),
                     phone = itemView.phone.text.toString().emptyToNull(),
                     taxBusinessInfo = itemView.taxBusinessInfo.text.toString().emptyToNull(),
-                    billingAddress = itemView.billingAddress.text.toString().emptyToNull(),
+                    billingAddress = itemView.attendeeBillingAddress.text.toString().emptyToNull(),
                     homeAddress = itemView.homeAddress.text.toString().emptyToNull(),
                     shippingAddress = itemView.shippingAddress.text.toString().emptyToNull(),
                     company = itemView.company.text.toString().emptyToNull(),
@@ -161,7 +161,8 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
             FormIdentifier.TAX_INFO ->
                 setupField(itemView.taxBusinessInfoLayout, itemView.taxBusinessInfo, form.isRequired, textWatcher)
             FormIdentifier.BILLING_ADDRESS ->
-                setupField(itemView.billingAddressLayout, itemView.billingAddress, form.isRequired, textWatcher)
+                setupField(itemView.attendeeBillingAddressLayout, itemView.attendeeBillingAddress, form.isRequired,
+                    textWatcher)
             FormIdentifier.HOME_ADDRESS ->
                 setupField(itemView.homeAddressLayout, itemView.homeAddress, form.isRequired, textWatcher)
             FormIdentifier.SHIPPING_ADDRESS ->

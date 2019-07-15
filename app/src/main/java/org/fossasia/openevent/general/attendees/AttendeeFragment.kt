@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.email
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.view.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.view.lastName
-import kotlinx.android.synthetic.main.fragment_attendee.view.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingPostalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
@@ -62,18 +62,18 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContai
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
-import kotlinx.android.synthetic.main.fragment_attendee.view.city
-import kotlinx.android.synthetic.main.fragment_attendee.view.company
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCity
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCompany
 import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
-import kotlinx.android.synthetic.main.fragment_attendee.view.address
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingAddress
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstNameLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.lastNameLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.emailLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.companyLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.addressLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCompanyLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingAddressLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cvcLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCityLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingPostalCodeLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
 import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutTextView
@@ -503,10 +503,10 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupBillingInfo() {
-        rootView.companyLayout.setRequired()
-        rootView.addressLayout.setRequired()
-        rootView.cityLayout.setRequired()
-        rootView.postalCodeLayout.setRequired()
+        rootView.billingCompanyLayout.setRequired()
+        rootView.billingAddressLayout.setRequired()
+        rootView.billingCityLayout.setRequired()
+        rootView.billingPostalCodeLayout.setRequired()
         rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
         attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
         rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
@@ -698,12 +698,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun checkRequiredFields(): Boolean {
         val checkBasicInfo = rootView.firstName.checkEmpty() && rootView.lastName.checkEmpty() &&
-            rootView.email.checkEmpty() && rootView.email.checkEmpty() && rootView.email.checkValidEmail()
+            rootView.email.checkEmpty()
 
         var checkBillingInfo = true
         if (rootView.billingEnabledCheckbox.isChecked) {
-            checkBillingInfo = rootView.company.checkEmpty() && rootView.company.checkEmpty() &&
-                rootView.address.checkEmpty() && rootView.city.checkEmpty() && rootView.postalCode.checkEmpty()
+            checkBillingInfo = rootView.billingCompany.checkEmpty() && rootView.billingAddress.checkEmpty() &&
+                rootView.billingCity.checkEmpty() && rootView.billingPostalCode.checkEmpty()
         }
 
         var checkStripeInfo = true
@@ -755,11 +755,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 val paymentOption =
                     if (safeArgs.amount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
                     else PAYMENT_MODE_FREE
-                val company = rootView.company.text.toString()
-                val city = rootView.city.text.toString()
+                val company = rootView.billingCompany.text.toString()
+                val city = rootView.billingCity.text.toString()
                 val taxId = rootView.taxId.text.toString()
-                val address = rootView.address.text.toString()
-                val postalCode = rootView.postalCode.text.toString()
+                val address = rootView.billingAddress.text.toString()
+                val postalCode = rootView.billingPostalCode.text.toString()
                 attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
                     city, postalCode, paymentOption)
             } else {
