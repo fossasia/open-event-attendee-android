@@ -58,7 +58,6 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
-import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
@@ -90,6 +89,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.signInText
 import kotlinx.android.synthetic.main.fragment_attendee.view.signInTextLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signInLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signOutLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.paymentTitle
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.User
@@ -284,7 +284,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupCountDownTimer(orderExpiryTime: Int) {
-        rootView.timeoutCounterLayout.visibility = View.VISIBLE
+        rootView.timeoutCounterLayout.isVisible = true
         rootView.timeoutInfoTextView.text =
             getString(R.string.ticket_timeout_info_message, orderExpiryTime.toString())
 
@@ -320,7 +320,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
         attendeeViewModel.totalAmount.value = safeArgs.amount
         rootView.paymentSelectorContainer.isVisible = safeArgs.amount > 0
-        rootView.countryPickerContainer.isVisible = safeArgs.amount > 0
         rootView.billingInfoCheckboxSection.isVisible = safeArgs.amount > 0
         rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
 
@@ -334,7 +333,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         val currentTickets = attendeeViewModel.tickets.value
         val currentTotalPrice = safeArgs.amount
         if (currentTickets != null && currentTotalPrice != null) {
-            rootView.paymentSelector.visibility = if (currentTotalPrice > 0) View.VISIBLE else View.GONE
+            rootView.paymentSelector.isVisible = currentTotalPrice > 0
             rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$currentTotalPrice"
 
             ticketsRecyclerAdapter.addAll(currentTickets)
@@ -524,7 +523,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 attendeeViewModel.countryPosition = position
             }
         }
-        rootView.countryPickerContainer.visibility = if (attendeeViewModel.singleTicket) View.VISIBLE else View.GONE
     }
 
     private fun setupPaymentOptions(event: Event) {
@@ -549,33 +547,38 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 attendeeViewModel.selectedPaymentOption = position
                 when (position) {
                     paymentOptions.indexOf(getString(R.string.stripe)) -> {
-                        rootView.stripePayment.visibility = View.VISIBLE
-                        rootView.offlinePayment.visibility = View.GONE
+                        rootView.stripePayment.isVisible = true
+                        rootView.offlinePayment.isVisible = false
                     }
                     paymentOptions.indexOf(getString(R.string.on_site)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.onsiteDetails
                     }
                     paymentOptions.indexOf(getString(R.string.bank_transfer)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.bankDetails
                     }
                     paymentOptions.indexOf(getString(R.string.cheque)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.chequeDetails
                     }
                     else -> {
-                        rootView.stripePayment.visibility = View.GONE
-                        rootView.offlinePayment.visibility = View.GONE
+                        rootView.stripePayment.isVisible = false
+                        rootView.offlinePayment.isVisible = false
                     }
                 }
             }
         }
         if (attendeeViewModel.selectedPaymentOption != -1)
             rootView.paymentSelector.setSelection(attendeeViewModel.selectedPaymentOption)
+
+        if (paymentOptions.size == 1) {
+            rootView.paymentSelector.isVisible = false
+            rootView.paymentTitle.text = "${getString(R.string.payment)} ${paymentOptions[0]}"
+        }
     }
 
     private fun setupCardNumber() {
@@ -605,20 +608,21 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupMonthOptions() {
-        val month = ArrayList<String>()
-        month.add(getString(R.string.month_string))
-        month.add(getString(R.string.january))
-        month.add(getString(R.string.february))
-        month.add(getString(R.string.march))
-        month.add(getString(R.string.april))
-        month.add(getString(R.string.may))
-        month.add(getString(R.string.june))
-        month.add(getString(R.string.july))
-        month.add(getString(R.string.august))
-        month.add(getString(R.string.september))
-        month.add(getString(R.string.october))
-        month.add(getString(R.string.november))
-        month.add(getString(R.string.december))
+        val month = mutableListOf(
+            getString(R.string.month_string),
+            getString(R.string.january),
+            getString(R.string.february),
+            getString(R.string.march),
+            getString(R.string.april),
+            getString(R.string.may),
+            getString(R.string.june),
+            getString(R.string.july),
+            getString(R.string.august),
+            getString(R.string.september),
+            getString(R.string.october),
+            getString(R.string.november),
+            getString(R.string.december)
+        )
 
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             month)
@@ -844,10 +848,10 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun loadTicketDetailsTableUI(show: Boolean) {
         if (show) {
-            rootView.ticketDetails.visibility = View.VISIBLE
+            rootView.ticketDetails.isVisible = true
             rootView.ticketTableDetails.text = context?.getString(R.string.hide)
         } else {
-            rootView.ticketDetails.visibility = View.GONE
+            rootView.ticketDetails.isVisible = false
             rootView.ticketTableDetails.text = context?.getString(R.string.view)
         }
     }
