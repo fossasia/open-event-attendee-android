@@ -117,8 +117,6 @@ import java.util.Calendar
 import java.util.Currency
 import kotlin.collections.ArrayList
 
-private const val COUNT_DOWN_TIME = 15 // in minutes
-
 class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private lateinit var rootView: View
@@ -260,9 +258,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetailsUI(it)
                 setupPaymentOptions(it)
-                if (attendeeViewModel.pendingOrder.value != null) {
-                    setupCountDownTimer(it)
-                }
+            })
+
+        attendeeViewModel.getSettings()
+        attendeeViewModel.orderExpiryTime
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                setupCountDownTimer(it)
             })
 
         val currentEvent = attendeeViewModel.event.value
@@ -271,33 +273,22 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         else {
             setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
-            if (attendeeViewModel.pendingOrder.value != null) {
-                setupCountDownTimer(currentEvent)
-            }
         }
     }
 
     private fun setupPendingOrder() {
-        attendeeViewModel.pendingOrder
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                attendeeViewModel.event.value?.let {
-                    setupCountDownTimer(it)
-                }
-            })
-
         val currentPendingOrder = attendeeViewModel.pendingOrder.value
         if (currentPendingOrder == null) {
             attendeeViewModel.initializeOrder(safeArgs.eventId)
         }
     }
 
-    private fun setupCountDownTimer(event: Event) {
+    private fun setupCountDownTimer(orderExpiryTime: Int) {
         rootView.timeoutCounterLayout.visibility = View.VISIBLE
         rootView.timeoutInfoTextView.text =
-            getString(R.string.ticket_timeout_info_message, event.orderExpiryTime.toString())
+            getString(R.string.ticket_timeout_info_message, orderExpiryTime.toString())
 
-        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) COUNT_DOWN_TIME * 60 * 1000L
+        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) orderExpiryTime * 60 * 1000L
                                 else attendeeViewModel.timeout
         timer = object : CountDownTimer(timeLeft, 1000) {
             override fun onFinish() {

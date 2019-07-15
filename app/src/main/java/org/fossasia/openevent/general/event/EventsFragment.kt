@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToo
 import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.StartupViewModel
 import org.fossasia.openevent.general.utils.RESET_PASSWORD_TOKEN
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
@@ -58,6 +59,7 @@ private const val EVENTS_FRAGMENT = "eventsFragment"
 
 class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
+    private val startupViewModel by viewModel<StartupViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
     private val eventsListAdapter = EventsListAdapter()
@@ -82,7 +84,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         if (token != null)
             showResetPasswordAlertDialog(token)
 
-        eventsViewModel.resetPasswordEmail
+        startupViewModel.resetPasswordEmail
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 findNavController(rootView).navigate(
@@ -90,7 +92,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 )
             })
 
-        eventsViewModel.dialogProgress
+        startupViewModel.dialogProgress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 progressDialog.show(it)
@@ -102,10 +104,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        eventsViewModel.syncNotifications()
+        startupViewModel.syncNotifications()
+        startupViewModel.fetchSettings()
         handleNotificationDotVisibility(
             preference.getBoolean(NEW_NOTIFICATIONS, false))
-        eventsViewModel.newNotifications
+        startupViewModel.newNotifications
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 handleNotificationDotVisibility(it)
@@ -195,7 +198,19 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             }
         }
 
+        startupViewModel.isRefresh
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it) refreshData()
+            })
+
         return rootView
+    }
+
+    private fun refreshData() {
+        eventsViewModel.loadLocationEvents()
+        startupViewModel.fetchSettings()
+        startupViewModel.syncNotifications()
     }
 
     private fun handleNotificationDotVisibility(isVisible: Boolean) {
@@ -261,7 +276,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
     }
 
     private fun moveToNotification() {
-        eventsViewModel.mutableNewNotifications.value = false
+        startupViewModel.mutableNewNotifications.value = false
         findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
     }
 
@@ -293,7 +308,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             .setTitle(getString(R.string.title_change_password))
             .setView(layout)
             .setPositiveButton(getString(R.string.change)) { _, _ ->
-                eventsViewModel.checkAndReset(token, layout.newPassword.text.toString())
+                startupViewModel.checkAndReset(token, layout.newPassword.text.toString())
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()

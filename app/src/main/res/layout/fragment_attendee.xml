@@ -50,7 +50,7 @@
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/text_size_expanded_title_large"
+                    android:textSize="@dimen/text_size_expanded_title_medium"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:gravity="center_vertical"

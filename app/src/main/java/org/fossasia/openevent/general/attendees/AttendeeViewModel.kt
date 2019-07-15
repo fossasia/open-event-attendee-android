@@ -21,6 +21,7 @@ import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.ConfirmOrder
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.settings.SettingsService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.HttpErrors
@@ -38,6 +39,7 @@ const val PAYMENT_MODE_ONSITE = "onsite"
 const val PAYMENT_MODE_CHEQUE = "cheque"
 const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
+private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
@@ -46,6 +48,7 @@ class AttendeeViewModel(
     private val orderService: OrderService,
     private val ticketService: TicketService,
     private val authService: AuthService,
+    private val settingsService: SettingsService,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -71,6 +74,8 @@ class AttendeeViewModel(
     val pendingOrder: LiveData<Order> = mutablePendingOrder
     private val mutableStripeOrderMade = MutableLiveData<Boolean>()
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
+    private val mutableOrderExpiryTime = MutableLiveData<Int>()
+    val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -389,6 +394,21 @@ class AttendeeViewModel(
             else if (!Patterns.EMAIL_ADDRESS.matcher(it.email).matches()) return false
         }
         return true
+    }
+
+    fun getSettings() {
+        compositeDisposable += settingsService.fetchSettings()
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableOrderExpiryTime.value = it.orderExpiryTime
+            }, {
+                mutableOrderExpiryTime.value = ORDER_EXPIRY_TIME
+                Timber.e(it, "Error fetching settings")
+            })
     }
 
     override fun onCleared() {
