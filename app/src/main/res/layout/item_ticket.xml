@@ -38,6 +38,7 @@
 
 
     <LinearLayout
+        android:id="@+id/priceSection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
@@ -57,6 +58,18 @@
             tools:text="$25" />
 
     </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/donationInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_medium"
+        android:ellipsize="end"
+        android:layout_weight="3"
+        android:inputType="number"
+        android:layout_marginEnd="@dimen/details_margin_small"
+        android:hint="@string/enter_donation"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/orderQtySection"
@@ -94,16 +107,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         tools:text="@string/ended"/>
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/donationInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="2"
-        android:inputType="number"
-        android:visibility="gone"
-        tools:visibility="visible"/>
 </LinearLayout>
 <LinearLayout
     android:id="@+id/moreInfoSection"

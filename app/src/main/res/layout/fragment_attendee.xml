@@ -50,11 +50,11 @@
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/text_size_expanded_title_medium"
+                    android:textSize="@dimen/text_size_expanded_title"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    tools:text="8:00"/>
+                    tools:text="15:00"/>
                 <TextView
                     android:id="@+id/timeoutInfoTextView"
                     android:layout_weight="8"

@@ -107,7 +107,7 @@ class TicketsViewModel(
                 qty.add(it.second)
             }
         }
-        val donation = ticketIdAndQty.map { it.third }.sum()
+        val donation = ticketIdAndQty.map { it.third*it.second }.sum()
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
             .doOnSubscribe {

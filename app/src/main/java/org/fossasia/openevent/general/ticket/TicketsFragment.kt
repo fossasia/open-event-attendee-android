@@ -124,7 +124,7 @@ class TicketsFragment : Fragment() {
             if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
                 ticketsViewModel.getAmount(ticketIdAndQty)
             } else {
-                handleNoTicketsSelected()
+                showErrorMessage(resources.getString(R.string.no_tickets_message))
             }
         }
 
@@ -188,21 +188,14 @@ class TicketsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onDonationSelected(ticketId: Int, donation: Float) {
-                if (donation > 0F) {
-                    handleTicketDonationEntered(ticketId, donation)
-                    ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
-                }
-            }
-
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
+            override fun onSelected(ticketId: Int, quantity: Int, donation: Float) {
+                handleTicketSelect(ticketId, quantity, donation)
                 ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
 
-        if (safeArgs.timeout) showTicketTimeoutDialog()
+        if (safeArgs.timeout) showErrorMessage(getString(R.string.ticket_timeout_message))
     }
 
     override fun onDestroyView() {
@@ -231,36 +224,18 @@ class TicketsFragment : Fragment() {
         ))
     }
 
-    private fun showTicketTimeoutDialog() {
-        AlertDialog.Builder(requireContext())
-            .setPositiveButton(getString(R.string.ok)) { _, _ -> /*Do Nothing*/ }
-            .setTitle(getString(R.string.whoops))
-            .setMessage(getString(R.string.ticket_timeout_message))
-            .create()
-            .show()
-    }
-
     private fun redirectToLogin() {
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAuth(
             getString(R.string.log_in_first), TICKETS_FRAGMENT
         ))
     }
 
-    private fun handleTicketSelect(id: Int, quantity: Int) {
+    private fun handleTicketSelect(id: Int, quantity: Int, donation: Float = 0F) {
         val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            ticketIdAndQty.add(Triple(id, quantity, 0F))
+            ticketIdAndQty.add(Triple(id, quantity, donation))
         } else {
-            ticketIdAndQty[pos] = Triple(id, quantity, 0F)
-        }
-    }
-
-    private fun handleTicketDonationEntered(id: Int, donation: Float) {
-        val pos = ticketIdAndQty.map { it.first }.indexOf(id)
-        if (pos == -1) {
-            ticketIdAndQty.add(Triple(id, 1, donation))
-        } else {
-            ticketIdAndQty[pos] = Triple(id, 1, donation)
+            ticketIdAndQty[pos] = Triple(id, quantity, donation)
         }
     }
 
@@ -289,13 +264,13 @@ class TicketsFragment : Fragment() {
         ticketsRecyclerAdapter.setTimeZone(event.timezone)
     }
 
-    private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage(resources.getString(R.string.no_tickets_message))
-                .setTitle(resources.getString(R.string.whoops))
-                .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
+    private fun showErrorMessage(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setTitle(resources.getString(R.string.whoops))
+            .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+            .create()
+            .show()
     }
 
     private fun loadTickets() {
@@ -312,10 +287,7 @@ class TicketsFragment : Fragment() {
         val retainedTicketIdAndQty: List<Triple<Int, Int, Float>>? = ticketsViewModel.ticketIdAndQty.value
         if (retainedTicketIdAndQty != null) {
             for (idAndQty in retainedTicketIdAndQty) {
-                if (idAndQty.third != 0F)
-                    handleTicketDonationEntered(idAndQty.first, idAndQty.third)
-                else
-                    handleTicketSelect(idAndQty.first, idAndQty.second)
+                handleTicketSelect(idAndQty.first, idAndQty.second, idAndQty.third)
             }
             ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
             ticketsRecyclerAdapter.notifyDataSetChanged()
