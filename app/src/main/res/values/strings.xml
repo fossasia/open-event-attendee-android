@@ -434,6 +434,12 @@
     <string name="placed_orders">Placed Orders</string>
     <string name="pending_orders">Pending Orders</string>
     <string name="order_status">Order Status</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="cancel_order_button">Yes, cancel this order</string>
+    <string name="continue_order_button">No, continue</string>
+    <string name="others">Others</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>

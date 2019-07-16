@@ -127,15 +127,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var timer: CountDownTimer
     private lateinit var card: Card
 
-    private lateinit var API_KEY: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (attendeeViewModel.ticketIdAndQty == null) {
             attendeeViewModel.ticketIdAndQty = safeArgs.ticketIdAndQty?.value
             attendeeViewModel.singleTicket = safeArgs.ticketIdAndQty?.value?.map { it.second }?.sum() == 1
         }
-        API_KEY = BuildConfig.STRIPE_API_KEY
 
         attendeeRecyclerAdapter.setEventId(safeArgs.eventId)
         if (attendeeViewModel.paymentCurrency.isNotBlank())
@@ -243,10 +240,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.cancel_order))
             .setMessage(getString(R.string.cancel_order_message))
-            .setPositiveButton(getString(R.string.continue_string)) { _, _ ->
+            .setPositiveButton(getString(R.string.cancel_order_button)) { _, _ ->
                 findNavController(rootView).popBackStack()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            }.setNeutralButton(getString(R.string.continue_order_button)) { dialog, _ ->
                 dialog.cancel()
             }.create()
             .show()
@@ -274,6 +270,8 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
         }
+
+        rootView.register.text = if (safeArgs.amount > 0) getString(R.string.pay_now) else getString(R.string.register)
     }
 
     private fun setupPendingOrder() {
@@ -321,7 +319,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         attendeeViewModel.totalAmount.value = safeArgs.amount
         rootView.paymentSelectorContainer.isVisible = safeArgs.amount > 0
         rootView.billingInfoCheckboxSection.isVisible = safeArgs.amount > 0
-        rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
 
         attendeeViewModel.tickets
             .nonNull()
@@ -331,10 +328,8 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             })
 
         val currentTickets = attendeeViewModel.tickets.value
-        val currentTotalPrice = safeArgs.amount
-        if (currentTickets != null && currentTotalPrice != null) {
-            rootView.paymentSelector.isVisible = currentTotalPrice > 0
-            rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$currentTotalPrice"
+        if (currentTickets != null) {
+            rootView.paymentSelector.isVisible = safeArgs.amount > 0
 
             ticketsRecyclerAdapter.addAll(currentTickets)
             attendeeRecyclerAdapter.addAllTickets(currentTickets)
@@ -797,7 +792,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun sendToken(card: Card) {
         Stripe(requireContext())
-            .createToken(card, API_KEY, object : TokenCallback {
+            .createToken(card, BuildConfig.STRIPE_API_KEY, object : TokenCallback {
                 override fun onSuccess(token: Token) {
                     val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
                     attendeeViewModel.chargeOrder(charge)
@@ -812,10 +807,14 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         val dateString = StringBuilder()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
+
         attendeeViewModel.paymentCurrency = Currency.getInstance(event.paymentCurrency).symbol
         ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
 
         rootView.eventName.text = event.name
+        val total = if (safeArgs.amount > 0) "${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
+                else getString(R.string.free)
+        rootView.amount.text = "Total: $total"
 
         val startDate = EventUtils.getFormattedDate(startsAt)
         val endDate = EventUtils.getFormattedDate(endsAt)
