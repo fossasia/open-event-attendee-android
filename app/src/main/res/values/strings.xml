@@ -186,8 +186,8 @@
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
-    <string name="timeZone_title">Use event\'s timezone</string>
-    <string name="timeZone_summary">Your timezone is used when disabled.</string>
+    <string name="timeZone_title">Use local timezone</string>
+    <string name="timeZone_summary">Event\'s timezone is used when disabled.</string>
     <string name="key_change_password">changePassword</string>
     <string name="title_change_password">Change Password</string>
     <string name="change">Change</string>
