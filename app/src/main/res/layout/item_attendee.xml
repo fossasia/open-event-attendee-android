@@ -392,22 +392,28 @@
                 android:text="@{attendee.github}"
                 android:inputType="textUri"/>
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+        <LinearLayout
             android:id="@+id/genderLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/gender"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_medium"
             android:visibility="gone"
             tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/gender"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/genderText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{attendee.gender}"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginEnd="@dimen/layout_margin_large"
+                android:textSize="@dimen/text_size_large"
+                android:text="@string/gender"/>
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/genderSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 </layout>

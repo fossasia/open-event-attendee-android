@@ -28,7 +28,17 @@ class AttendeeService(
     }
 
     fun getCustomFormsForAttendees(id: Long): Single<List<CustomForm>> {
-        val filter = "[{\"name\":\"form\",\"op\":\"eq\",\"val\":\"attendee\"}]"
+        val filter = """[{
+                |   'and':[{
+                |       'name':'form',
+                |       'op':'eq',
+                |       'val':'attendee'
+                |    },{
+                |       'name':'is-included',
+                |       'op':'eq',
+                |       'val':true
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
         return attendeeApi.getCustomFormsForAttendees(id, filter)
     }
 }

@@ -22,6 +22,7 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
             }
             TICKET_TYPE_FREE -> {
                 itemView.price.text = resource.getString(R.string.free)
+                itemView.subTotal.text = "${eventCurrency}0.00"
             }
             TICKET_TYPE_PAID -> {
                 itemView.price.text = "$eventCurrency${ticket.price}"

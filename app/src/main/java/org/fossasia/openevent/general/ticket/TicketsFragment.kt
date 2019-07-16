@@ -39,7 +39,6 @@ import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
@@ -277,7 +276,13 @@ class TicketsFragment : Fragment() {
 
     private fun loadEventDetails(event: Event) {
         rootView.eventName.text = event.name
-        rootView.organizerName.text = "by ${event.ownerName.nullToEmpty()}"
+        val organizerName = event.ownerName
+        if (organizerName == null) {
+            rootView.organizerName.isVisible = false
+        } else {
+            rootView.organizerName.isVisible = true
+            rootView.organizerName.text = "by $organizerName"
+        }
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
