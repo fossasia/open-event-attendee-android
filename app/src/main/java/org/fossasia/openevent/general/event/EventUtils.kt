@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.settings.LOCAL_TIMEZONE
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -23,14 +24,14 @@ object EventUtils {
     fun getEventDateTime(dateString: String, timeZone: String?): ZonedDateTime {
         try {
             return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
-                .getBoolean("useEventTimeZone", false) && !timeZone.isNullOrBlank()) {
+                .getBoolean(LOCAL_TIMEZONE, false) && !timeZone.isNullOrBlank()) {
 
                 true -> ZonedDateTime.parse(dateString)
                     .toOffsetDateTime()
-                    .atZoneSameInstant(ZoneId.of(timeZone))
+                    .atZoneSameInstant(ZoneId.systemDefault())
                 false -> ZonedDateTime.parse(dateString)
                     .toOffsetDateTime()
-                    .atZoneSameInstant(ZoneId.systemDefault())
+                    .atZoneSameInstant(ZoneId.of(timeZone))
             }
         } catch (e: NullPointerException) {
             return ZonedDateTime.parse(dateString)

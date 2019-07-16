@@ -36,6 +36,8 @@ import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 
+const val LOCAL_TIMEZONE = "localTimeZone"
+
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
         "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
@@ -69,7 +71,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             "Version " + BuildConfig.VERSION_NAME
 
         preferenceScreen.findPreference<Preference>(getString(R.string.key_timezone_switch))?.setDefaultValue(
-            timeZonePreference.getBoolean("useEventTimeZone", false)
+            timeZonePreference.getBoolean(LOCAL_TIMEZONE, false)
         )
 
         preferenceScreen.findPreference<Preference>(getString(R.string.key_profile))?.isVisible =
@@ -122,10 +124,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
         if (preference?.key == getString(R.string.key_timezone_switch)) {
             val timeZonePreference = PreferenceManager.getDefaultSharedPreferences(context)
-            val timeZonePreferenceKey = "useEventTimeZone"
-            when (timeZonePreference.getBoolean(timeZonePreferenceKey, false)) {
-                true -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, false).apply()
-                false -> timeZonePreference.edit().putBoolean(timeZonePreferenceKey, true).apply()
+            when (timeZonePreference.getBoolean(LOCAL_TIMEZONE, false)) {
+                true -> timeZonePreference.edit().putBoolean(LOCAL_TIMEZONE, false).apply()
+                false -> timeZonePreference.edit().putBoolean(LOCAL_TIMEZONE, true).apply()
             }
             return true
         }
