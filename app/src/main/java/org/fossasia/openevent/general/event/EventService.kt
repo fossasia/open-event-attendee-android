@@ -122,7 +122,8 @@ class EventService(
     }
 
     fun getSimilarEventsPaged(id: Long, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
-        return eventTopicApi.getEventsUnderTopicIdPaged(id, page, pageSize)
+        val filter = "[{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
+        return eventTopicApi.getEventsUnderTopicIdPaged(id, filter, page, pageSize)
             .flatMapPublisher {
                 updateFavorites(it)
             }
