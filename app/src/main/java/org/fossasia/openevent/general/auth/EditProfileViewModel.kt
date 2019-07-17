@@ -30,15 +30,13 @@ class EditProfileViewModel(
     var avatarUpdated = false
     var encodedImage: String? = null
 
+    fun getId() = authHolder.getId()
+
     fun isLoggedIn() = authService.isLoggedIn()
 
-    /**
-     *  @param firstName updated firstName
-     *  @param lastName updated lastName
-     */
-    fun updateProfile(firstName: String, lastName: String, details: String) {
+    fun updateProfile(user: User) {
         if (encodedImage.isNullOrEmpty()) {
-            updateUser(null, firstName, lastName, details)
+            updateUser(user)
             return
         }
         compositeDisposable += authService.uploadImage(UploadImage(encodedImage))
@@ -50,7 +48,7 @@ class EditProfileViewModel(
                 mutableProgress.value = false
             }
             .subscribe({
-                updateUser(it.url, firstName, lastName, details)
+                updateUser(user.copy(avatarUrl = it.url))
                 mutableMessage.value = resource.getString(R.string.image_upload_success_message)
                 Timber.d("Image uploaded ${it.url}")
             }) {
@@ -59,21 +57,8 @@ class EditProfileViewModel(
             }
     }
 
-    private fun updateUser(url: String?, firstName: String, lastName: String, details: String) {
-        val id = authHolder.getId()
-        if (firstName.isEmpty() || lastName.isEmpty()) {
-            mutableMessage.value = resource.getString(R.string.provide_name_message)
-            return
-        }
-        compositeDisposable += authService.updateUser(
-            User(
-                id = id,
-                firstName = firstName,
-                lastName = lastName,
-                avatarUrl = url,
-                details = details
-            ), id
-        )
+    private fun updateUser(user: User) {
+        compositeDisposable += authService.updateUser(user)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
