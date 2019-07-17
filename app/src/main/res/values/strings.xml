@@ -440,6 +440,7 @@
     <string name="others">Others</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
+    <string name="instagram">Instagram</string>
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>

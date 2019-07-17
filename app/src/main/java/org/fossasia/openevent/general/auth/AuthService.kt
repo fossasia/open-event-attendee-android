@@ -42,8 +42,8 @@ class AuthService(
         }
     }
 
-    fun updateUser(user: User, id: Long): Single<User> {
-        return authApi.updateUser(user, id).map {
+    fun updateUser(user: User): Single<User> {
+        return authApi.updateUser(user, user.id).map {
             userDao.insertUser(it)
             it
         }
