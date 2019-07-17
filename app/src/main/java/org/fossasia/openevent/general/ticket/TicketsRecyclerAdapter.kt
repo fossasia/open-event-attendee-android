@@ -77,6 +77,5 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 }
 
 interface TicketSelectedListener {
-    fun onSelected(ticketId: Int, quantity: Int)
-    fun onDonationSelected(ticketId: Int, donation: Float)
+    fun onSelected(ticketId: Int, quantity: Int, donation: Float = 0F)
 }

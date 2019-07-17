@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 import kotlinx.android.synthetic.main.item_ticket.view.discountPrice
 import kotlinx.android.synthetic.main.item_ticket.view.donationInput
 import kotlinx.android.synthetic.main.item_ticket.view.orderQtySection
+import kotlinx.android.synthetic.main.item_ticket.view.priceSection
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
@@ -77,25 +78,24 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         when (ticket.type) {
             TICKET_TYPE_DONATION -> {
-                itemView.price.text = resource.getString(R.string.enter_donation)
-                itemView.orderQtySection.isVisible = false
+                itemView.price.text = resource.getString(R.string.donation)
+                itemView.priceSection.isVisible = false
                 itemView.donationInput.isVisible = true
                 if (donationAmount > 0F) itemView.donationInput.setText(donationAmount.toString())
-                setupDonationTicketPicker(selectedListener, ticket)
+                setupDonationTicketPicker()
             }
             TICKET_TYPE_FREE -> {
                 itemView.price.text = resource.getString(R.string.free)
-                itemView.orderQtySection.isVisible = true
+                itemView.priceSection.isVisible = true
                 itemView.donationInput.isVisible = false
-                setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
             }
             TICKET_TYPE_PAID -> {
                 itemView.price.text = "$eventCurrency${ticket.price}"
-                itemView.orderQtySection.isVisible = true
+                itemView.priceSection.isVisible = true
                 itemView.donationInput.isVisible = false
-                setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
             }
         }
+        setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
 
         val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${itemView.price.text}"
         itemView.priceInfo.text = Html.fromHtml(priceInfo)
@@ -116,20 +116,17 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    private fun setupDonationTicketPicker(
-        selectedListener: TicketSelectedListener?,
-        ticket: Ticket
-    ) {
+    private fun setupDonationTicketPicker() {
         itemView.donationInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
             override fun afterTextChanged(s: Editable?) {
                 val donationEntered = s.toString()
-                if (donationEntered.isNotBlank()) {
-                    val donation = donationEntered.toFloat()
-                    if (donation > 0F) {
-                        selectedListener?.onDonationSelected(ticket.id, donation)
-                    }
+                if (donationEntered.isNotBlank() && donationEntered.toFloat() > 0) {
+                    if (itemView.orderRange.selectedItemPosition == 0)
+                        itemView.orderRange.setSelection(1)
+                } else {
+                    itemView.orderRange.setSelection(0)
                 }
             }
         })
@@ -150,8 +147,10 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             itemView.orderRange.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+                    val donationEntered = itemView.donationInput.text.toString()
+                    val donation = if (donationEntered.isEmpty()) 0F else donationEntered.toFloat()
                     itemView.order.text = spinnerList[pos]
-                    selectedListener?.onSelected(ticket.id, spinnerList[pos].toInt())
+                    selectedListener?.onSelected(ticket.id, spinnerList[pos].toInt(), donation)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
