@@ -213,15 +213,16 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
-
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
         ticketsViewModel.mutableAmount.value = null
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
             eventId = safeArgs.eventId,
             ticketIdAndQty = wrappedTicketAndQty,
             currency = safeArgs.currency,
-            amount = totalAmount
+            amount = totalAmount,
+            hasPaidTickets = ticketsViewModel.hasPaidTickets
         ))
+        ticketsViewModel.hasPaidTickets = false
     }
 
     private fun redirectToLogin() {
