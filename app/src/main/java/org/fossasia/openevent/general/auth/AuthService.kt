@@ -30,6 +30,9 @@ class AuthService(
                 }
     }
 
+    fun checkPasswordValid(email: String, password: String): Single<LoginResponse> =
+        authApi.login(Login(email, password))
+
     fun signUp(signUp: SignUp): Single<User> {
         val email = signUp.email
         val password = signUp.password
@@ -55,6 +58,8 @@ class AuthService(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
+    fun getId() = authHolder.getId()
+
     fun logout(): Completable {
         return Completable.fromAction {
             authHolder.token = null
@@ -63,6 +68,9 @@ class AuthService(
             attendeeDao.deleteAllAttendees()
         }
     }
+
+    fun deleteProfile(userId: Long = authHolder.getId()) =
+        authApi.deleteAccount(userId)
 
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
         return userDao.getUser(id)

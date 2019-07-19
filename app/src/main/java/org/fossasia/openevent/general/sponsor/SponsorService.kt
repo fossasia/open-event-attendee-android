@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.sponsor
 
-import androidx.lifecycle.LiveData
 import io.reactivex.Single
 
 class SponsorService(
@@ -16,7 +15,4 @@ class SponsorService(
             }
         }
     }
-
-    fun fetchSponsorsFromDb(id: Long): LiveData<List<Sponsor>> =
-        sponsorWithEventDao.getSponsorWithEventId(id)
 }
