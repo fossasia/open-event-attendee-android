@@ -450,5 +450,9 @@
         <item quantity="one">One order</item>
         <item quantity="other">%1$s orders</item>
     </plurals>
+    <string name="short_list_event_message">Shortlist your favorite events so you don\'t miss out</string>
+    <string name="out_bad_try_again">Our bad... let\'s try this again</string>
+    <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
+    <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
 
 </resources>

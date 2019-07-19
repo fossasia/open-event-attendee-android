@@ -81,6 +81,8 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.favorite.FavoriteEvent
+import org.fossasia.openevent.general.favorite.FavoriteEventApi
 import org.fossasia.openevent.general.feedback.FeedbackViewModel
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
@@ -144,6 +146,10 @@ val apiModule = module {
     }
     single {
         val retrofit: Retrofit = get()
+        retrofit.create(FavoriteEventApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
         retrofit.create(SocialLinkApi::class.java)
     }
     single {
@@ -204,9 +210,9 @@ val apiModule = module {
     }
 
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get(), get(), get(), get()) }
+    factory { AuthService(get(), get(), get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get(), get()) }
@@ -220,8 +226,8 @@ val apiModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { StartupViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
@@ -229,7 +235,7 @@ val viewModelModule = module {
         EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { SearchResultsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SearchResultsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
@@ -237,9 +243,9 @@ val viewModelModule = module {
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
-    viewModel { FavoriteEventsViewModel(get(), get()) }
+    viewModel { FavoriteEventsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { OrderCompletedViewModel(get(), get(), get()) }
+    viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
@@ -299,7 +305,7 @@ val networkModule = module {
             EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
+            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
             Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
             DiscountCode::class.java, Settings::class.java)

@@ -43,6 +43,8 @@ import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 import android.net.Uri
 import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.event.RedirectToLogin
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
 
 private const val DISPLAY_RATING_DIALOG = "displayRatingDialog"
 
@@ -157,11 +159,23 @@ class OrderCompletedFragment : Fragment() {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView).navigate(OrderCompletedFragmentDirections
+                    .actionOrderCompletedToAuth(redirectedFrom = ORDER_COMPLETED_FRAGMENT))
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                orderCompletedViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                similarEventsAdapter.notifyItemChanged(itemPosition)
+                if (orderCompletedViewModel.isLoggedIn()) {
+                    orderCompletedViewModel.setFavorite(event, !event.favorite)
+                    event.favorite = !event.favorite
+                    similarEventsAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 

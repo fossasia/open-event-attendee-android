@@ -70,6 +70,7 @@ data class Event(
     val isTaxEnabled: Boolean = false,
     val isMapShown: Boolean = false,
     var favorite: Boolean = false,
+    var favoriteEventId: Long? = null,
     @ColumnInfo(index = true)
     @Relationship("event-topic", resolve = true)
     val eventTopic: EventTopic? = null,
