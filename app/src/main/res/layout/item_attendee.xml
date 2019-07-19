@@ -274,7 +274,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_medium"
-            android:hint="@string/work_address"
+            android:hint="@string/address"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -282,7 +282,7 @@
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{attendee.workAddress}"/>
+                android:text="@{attendee.address}"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
