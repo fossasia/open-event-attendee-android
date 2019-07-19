@@ -31,7 +31,7 @@
         <item>Bouvet Island</item>
         <item>Brazil</item>
         <item>British Indian Ocean Territory</item>
-        <item>Virgin Islands</item>
+        <item>British Virgin Islands</item>
         <item>Brunei Darussalam</item>
         <item>Bulgaria</item>
         <item>Burkina Faso</item>
@@ -40,7 +40,7 @@
         <item>Cameroon</item>
         <item>Canada</item>
         <item>Cabo Verde</item>
-        <item>Bonaire, Sint Eustatius and Saba</item>
+        <item>Caribbean Netherlands</item>
         <item>Cayman Islands</item>
         <item>Central African Republic</item>
         <item>Chad</item>
@@ -48,11 +48,11 @@
         <item>China</item>
         <item>Christmas Island</item>
         <item>Cocos Islands</item>
-        <item>Saint Martin</item>
         <item>Colombia</item>
         <item>Comoros</item>
         <item>Cook Islands</item>
         <item>Costa Rica</item>
+        <item>Côte d\'Ivoire</item>
         <item>Croatia</item>
         <item>Cuba</item>
         <item>Curaçao</item>
@@ -63,7 +63,6 @@
         <item>Djibouti</item>
         <item>Dominica</item>
         <item>Dominican Republic</item>
-        <item>Timor-Leste</item>
         <item>Ecuador</item>
         <item>Egypt</item>
         <item>El Salvador</item>
@@ -74,7 +73,7 @@
         <item>Ethiopia</item>
         <item>Falkland Islands</item>
         <item>Faroe Islands</item>
-        <item>Micronesia</item>
+        <item>Federated States of Micronesia</item>
         <item>Fiji</item>
         <item>Finland</item>
         <item>France</item>
@@ -109,7 +108,6 @@
         <item>Isle of Man</item>
         <item>Israel</item>
         <item>Italy</item>
-        <item>Côte d\'Ivoire</item>
         <item>Jamaica</item>
         <item>Japan</item>
         <item>Jersey</item>
@@ -160,7 +158,7 @@
         <item>Nigeria</item>
         <item>Niue</item>
         <item>Norfolk Island</item>
-        <item>Korea</item>
+        <item>North Korea</item>
         <item>Northern Mariana Islands</item>
         <item>Norway</item>
         <item>Oman</item>
@@ -176,9 +174,9 @@
         <item>Portugal</item>
         <item>Puerto Rico</item>
         <item>Qatar</item>
-        <item>Ireland</item>
-        <item>North Macedonia</item>
-        <item>Congo</item>
+        <item>Republic of Ireland</item>
+        <item>Republic of North Macedonia</item>
+        <item>Republic of Congo</item>
         <item>Romania</item>
         <item>Russian Federation</item>
         <item>Rwanda</item>
@@ -204,11 +202,12 @@
         <item>Somalia</item>
         <item>South Africa</item>
         <item>South Georgia and the South Sandwich Islands</item>
-        <item>Korea</item>
+        <item>South Korea</item>
         <item>South Sudan</item>
         <item>Spain</item>
         <item>Sri Lanka</item>
         <item>Palestine, State of</item>
+        <item>Saint Martin</item>
         <item>Sudan</item>
         <item>Suriname</item>
         <item>Svalbard and Jan Mayen</item>
@@ -222,6 +221,7 @@
         <item>Thailand</item>
         <item>Bahamas</item>
         <item>Gambia</item>
+        <item>Timor-Leste</item>
         <item>Togo</item>
         <item>Tokelau</item>
         <item>Tonga</item>
@@ -237,13 +237,13 @@
         <item>United Kingdom of Great Britain and Northern Ireland</item>
         <item>United States Minor Outlying Islands</item>
         <item>United States of America</item>
-        <item>Virgin Islands (U.S.)</item>
         <item>Uruguay</item>
         <item>Uzbekistan</item>
         <item>Vanuatu</item>
-        <item>Holy See</item>
+        <item>Vatican City</item>
         <item>Venezuela</item>
         <item>Viet Nam</item>
+        <item>Virgin Islands (U.S.)</item>
         <item>Wallis and Futuna</item>
         <item>Western Sahara</item>
         <item>Yemen</item>
@@ -300,11 +300,11 @@
         <item>CN</item>
         <item>CX</item>
         <item>CC</item>
-        <item>MF</item>
         <item>CO</item>
         <item>KM</item>
         <item>CK</item>
         <item>CR</item>
+        <item>CI</item>
         <item>HR</item>
         <item>CU</item>
         <item>CW</item>
@@ -315,7 +315,6 @@
         <item>DJ</item>
         <item>DM</item>
         <item>DO</item>
-        <item>TL</item>
         <item>EC</item>
         <item>EG</item>
         <item>SV</item>
@@ -361,7 +360,6 @@
         <item>IM</item>
         <item>IL</item>
         <item>IT</item>
-        <item>CI</item>
         <item>JM</item>
         <item>JP</item>
         <item>JE</item>
@@ -461,6 +459,7 @@
         <item>ES</item>
         <item>LK</item>
         <item>PS</item>
+        <item>MF</item>
         <item>SD</item>
         <item>SR</item>
         <item>SJ</item>
@@ -474,6 +473,7 @@
         <item>TH</item>
         <item>BS</item>
         <item>GM</item>
+        <item>TL</item>
         <item>TG</item>
         <item>TK</item>
         <item>TO</item>
@@ -489,13 +489,13 @@
         <item>GB</item>
         <item>UM</item>
         <item>US</item>
-        <item>VI</item>
         <item>UY</item>
         <item>UZ</item>
         <item>VU</item>
         <item>VA</item>
         <item>VE</item>
         <item>VN</item>
+        <item>VI</item>
         <item>WF</item>
         <item>EH</item>
         <item>YE</item>
