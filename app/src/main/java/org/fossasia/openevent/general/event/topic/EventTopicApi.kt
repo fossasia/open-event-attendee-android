@@ -9,9 +9,6 @@ import retrofit2.http.Query
 interface EventTopicApi {
 
     @GET("event-topics/{id}/events?include=event-topic")
-    fun getEventsUnderTopicId(@Path("id") id: Long): Single<List<Event>>
-
-    @GET("event-topics/{id}/events?include=event-topic")
     fun getEventsUnderTopicIdPaged(
         @Path("id") id: Long,
         @Query("filter") filter: String,

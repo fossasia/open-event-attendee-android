@@ -15,7 +15,7 @@ interface EventApi {
     fun getEventFromApi(@Path("eventIdentifier") eventIdentifier: String): Single<Event>
 
     @GET("events")
-    fun eventsUnderUser(@Query("filter") eventId: String): Single<List<Event>>
+    fun eventsWithQuery(@Query("filter") filter: String): Single<List<Event>>
 
     @GET("events/{eventId}/speakers-call")
     fun getSpeakerCallForEvent(@Path("eventId") id: Long): Single<SpeakersCall>

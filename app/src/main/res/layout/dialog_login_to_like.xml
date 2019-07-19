@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_large">
+    <ImageView
+        android:id="@+id/eventImage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_logo_width"
+        android:padding="@dimen/padding_extra_large"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/header"
+        android:layout_marginBottom="@dimen/layout_margin_medium"/>
+    <TextView
+        android:id="@+id/eventName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_expanded_title_medium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxLines="2"
+        tools:text="Sign in to like The New Event"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/short_list_event_message"
+        android:layout_marginBottom="@dimen/layout_margin_medium"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/getStartedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/get_started"/>
+</LinearLayout>
