@@ -38,6 +38,21 @@ class SpeakersCallFragment : Fragment() {
     private val speakersCallViewModel by viewModel<SpeakersCallViewModel>()
     private val safeArgs: SpeakersCallFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (speakersCallViewModel.isLoggedIn()) {
+            val currentUser = speakersCallViewModel.user.value
+            if (currentUser == null) {
+                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
+            } else {
+                val currentSpeaker = speakersCallViewModel.speaker.value
+                if (currentSpeaker == null) {
+                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
+                }
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_speakers_call, container, false)
 
@@ -70,18 +85,6 @@ class SpeakersCallFragment : Fragment() {
                 showEmptyView(false)
             })
 
-        if (speakersCallViewModel.isLoggedIn()) {
-            val currentUser = speakersCallViewModel.user.value
-            if (currentUser == null) {
-                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
-            } else {
-                val currentSpeaker = speakersCallViewModel.speaker.value
-                if (currentSpeaker == null) {
-                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
-                }
-            }
-        }
-
         speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
         return rootView
     }
@@ -112,9 +115,8 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEditSpeakerOrCreateProposalDialog(speakerId: Long) {
-        AlertDialog.Builder(requireContext())
+        val dialogBuilder = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.create_edit_speaker))
-            .setMessage(getString(R.string.create_proposal_message))
             .setPositiveButton(getString(R.string.create_proposal)) { _, _ ->
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToProposal(safeArgs.eventId, speakerId))
@@ -123,8 +125,15 @@ class SpeakersCallFragment : Fragment() {
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToAddSpeaker(safeArgs.eventId, speakerId))
             }
-            .create()
-            .show()
+        speakersCallViewModel.sessions.value?.let { sessions ->
+            if (sessions.isEmpty()) return@let
+
+            dialogBuilder.setItems(sessions.map { "Edit Session - ${it.title}" }.toTypedArray()) { _, position ->
+                findNavController(rootView).navigate(SpeakersCallFragmentDirections
+                    .actionSpeakersCallToProposal(safeArgs.eventId, speakerId, sessions[position].id))
+            }
+        }
+        dialogBuilder.create().show()
     }
 
     private fun showCreateSpeakerDialog() {
@@ -147,9 +156,9 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEmptyView(show: Boolean) {
-        rootView.speakersCallContainer.isVisible = !show
-        rootView.speakersCallEmptyView.isVisible = show
-        if (show) rootView.submitProposalButton.isVisible = false
+        rootView.speakersCallContainer.visibility = if (show) View.GONE else View.VISIBLE
+        rootView.speakersCallEmptyView.visibility = if (show) View.VISIBLE else View.GONE
+        if (show) rootView.submitProposalButton.visibility = View.GONE
     }
 
     private fun loadSpeakersCallSection(speakersCall: SpeakersCall) {

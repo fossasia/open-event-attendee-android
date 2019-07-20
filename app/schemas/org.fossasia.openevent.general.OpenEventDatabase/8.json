@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "220a5a8960fa7289b6b6f4a9fe11c92d",
+    "identityHash": "c65ffea75fee1faf6cd199cbbc5c25ee",
     "entities": [
       {
         "tableName": "Event",
@@ -1576,7 +1576,7 @@
       },
       {
         "tableName": "Session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, `event` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1715,6 +1715,12 @@
             "columnName": "track",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1747,6 +1753,14 @@
               "track"
             ],
             "createSql": "CREATE  INDEX `index_Session_track` ON `${TABLE_NAME}` (`track`)"
+          },
+          {
+            "name": "index_Session_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Session_event` ON `${TABLE_NAME}` (`event`)"
           }
         ],
         "foreignKeys": []
@@ -1968,12 +1982,111 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Proposal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT, `language` TEXT, `shortAbstract` TEXT, `comments` TEXT, `startsAt` TEXT, `endsAt` TEXT, `track` TEXT, `event` INTEGER, `speakers` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shortAbstract",
+            "columnName": "shortAbstract",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comments",
+            "columnName": "comments",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startsAt",
+            "columnName": "startsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endsAt",
+            "columnName": "endsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "track",
+            "columnName": "track",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakers",
+            "columnName": "speakers",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Proposal_track",
+            "unique": false,
+            "columnNames": [
+              "track"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_track` ON `${TABLE_NAME}` (`track`)"
+          },
+          {
+            "name": "index_Proposal_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_event` ON `${TABLE_NAME}` (`event`)"
+          },
+          {
+            "name": "index_Proposal_speakers",
+            "unique": false,
+            "columnNames": [
+              "speakers"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_speakers` ON `${TABLE_NAME}` (`speakers`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '220a5a8960fa7289b6b6f4a9fe11c92d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c65ffea75fee1faf6cd199cbbc5c25ee')"
     ]
   }
 }

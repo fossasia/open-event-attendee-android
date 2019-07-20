@@ -14,6 +14,7 @@ import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
 import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.favorite.FavoriteEventApi
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.speakercall.SpeakersCallDao
 import org.jetbrains.anko.collections.forEachWithIndex
@@ -167,4 +168,6 @@ class EventService(
                 speakersCallDao.insertSpeakerCall(it)
             }
         }
+
+    fun fetchTracksUnderEvent(eventId: Long): Single<List<Track>> = eventApi.fetchTracksUnderEvent(eventId)
 }

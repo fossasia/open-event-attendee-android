@@ -66,8 +66,6 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.location.GeoLocationViewModel
 import org.fossasia.openevent.general.search.location.SearchLocationViewModel
-import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
-import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
 import org.fossasia.openevent.general.search.time.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.location.LocationService
@@ -101,6 +99,9 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.speakercall.SpeakersCallViewModel
+import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
+import org.fossasia.openevent.general.speakercall.Proposal
+import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
@@ -255,8 +256,8 @@ val viewModelModule = module {
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SpeakersCallProposalViewModel(get(), get()) }
+    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SpeakersCallProposalViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
     viewModel { FeedbackViewModel(get(), get()) }
 }
@@ -308,7 +309,7 @@ val networkModule = module {
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
             Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
-            DiscountCode::class.java, Settings::class.java)
+            DiscountCode::class.java, Settings::class.java, Proposal::class.java)
 
         Retrofit.Builder()
             .client(get())
