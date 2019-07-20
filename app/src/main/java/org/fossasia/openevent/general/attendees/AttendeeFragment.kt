@@ -800,7 +800,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun loadEventDetailsUI(event: Event) {
-        val dateString = StringBuilder()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
 
@@ -808,27 +807,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
 
         rootView.eventName.text = event.name
-        val total = if (safeArgs.amount > 0) "${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
+        val total = if (safeArgs.amount > 0) "${attendeeViewModel.paymentCurrency} ${"%.2f".format(safeArgs.amount)}"
                 else getString(R.string.free)
         rootView.amount.text = "Total: $total"
 
-        val startDate = EventUtils.getFormattedDate(startsAt)
-        val endDate = EventUtils.getFormattedDate(endsAt)
-        dateString.append(startDate)
-        if (startDate == endDate) {
-            dateString.append(" • ")
-                .append(EventUtils.getFormattedTime(startsAt))
-                .append(" - ")
-                .append(EventUtils.getFormattedTime(endsAt))
-        } else {
-            dateString.append(" - ")
-                .append(EventUtils.getFormattedTime(startsAt))
-                .append(" • ")
-                .append(endDate)
-                .append(" - ")
-                .append(EventUtils.getFormattedTime(endsAt))
-        }
-        rootView.time.text = dateString
+        rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 
     private fun loadUserUI(user: User) {
