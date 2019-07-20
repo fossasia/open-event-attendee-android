@@ -90,7 +90,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.donationInput.isVisible = false
             }
             TICKET_TYPE_PAID -> {
-                itemView.price.text = "$eventCurrency${ticket.price}"
+                itemView.price.text = "$eventCurrency${"%.2f".format(ticket.price)}"
                 itemView.priceSection.isVisible = true
                 itemView.donationInput.isVisible = false
             }
@@ -107,12 +107,12 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.description.text = ticket.description
         }
 
-        if (discountCode?.value != null && ticket.price != null && ticket.price != 0.toFloat()) {
+        if (discountCode?.value != null && ticket.price != 0.toFloat()) {
             itemView.discountPrice.visibility = View.VISIBLE
             itemView.price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.discountPrice.text =
                 if (discountCode.type == AMOUNT) "$eventCurrency${ticket.price - discountCode.value}"
-                else "$eventCurrency${ticket.price - (ticket.price * discountCode.value / 100)}"
+                else "$eventCurrency${"%.2f".format(ticket.price - (ticket.price * discountCode.value / 100))}"
         }
     }
 

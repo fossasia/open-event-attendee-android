@@ -307,7 +307,7 @@ class EventDetailsViewModel(
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
-                range.append(minPrice)
+                range.append("%.2f".format(minPrice))
             }
         } else {
             if (minPrice == 0f)
@@ -315,12 +315,12 @@ class EventDetailsViewModel(
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
-                range.append(minPrice)
+                range.append("%.2f".format(minPrice))
             }
             range.append(" - ")
             range.append(paymentCurrency)
             range.append(" ")
-            range.append(maxPrice)
+            range.append("%.2f".format(maxPrice))
         }
         mutablePriceRange.value = range.toString()
     }
