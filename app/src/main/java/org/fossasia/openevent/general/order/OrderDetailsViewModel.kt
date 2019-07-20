@@ -54,31 +54,20 @@ class OrderDetailsViewModel(
     fun loadAttendeeDetails(orderId: Long) {
         if (orderId == -1L) return
 
-        compositeDisposable += orderService.getOrderById(orderId)
+        compositeDisposable += orderService
+            .getOrderById(orderId)
+            .flatMap { order ->
+                orderService.getAttendeesUnderOrder(order.identifier ?: "", order.attendees.map { it.id })
+            }
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
             }.subscribe({
-                loadAttendeeUnderOrder(it)
-            }, {
-                Timber.e(it, "Error fetching attendee details")
-                mutableProgress.value = false
-                message.value = resource.getString(R.string.error_fetching_attendee_details_message)
-            })
-    }
-
-    private fun loadAttendeeUnderOrder(order: Order) {
-        val orderIdentifier = order.identifier ?: return
-
-        compositeDisposable += orderService
-            .getAttendeesUnderOrder(orderIdentifier, order.attendees.map { it.id })
-            .withDefaultSchedulers()
-            .subscribe({
                 mutableAttendees.value = it
-                mutableProgress.value = false
             }, {
                 Timber.e(it, "Error fetching attendee details")
-                mutableProgress.value = false
                 message.value = resource.getString(R.string.error_fetching_attendee_details_message)
             })
     }

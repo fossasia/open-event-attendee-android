@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
@@ -35,30 +36,15 @@ class EditProfileViewModel(
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun updateProfile(user: User) {
-        if (encodedImage.isNullOrEmpty()) {
-            updateUser(user)
-            return
-        }
-        compositeDisposable += authService.uploadImage(UploadImage(encodedImage))
-            .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }
-            .doFinally {
-                mutableProgress.value = false
-            }
-            .subscribe({
-                updateUser(user.copy(avatarUrl = it.url))
-                mutableMessage.value = resource.getString(R.string.image_upload_success_message)
-                Timber.d("Image uploaded ${it.url}")
-            }) {
-                mutableMessage.value = resource.getString(R.string.image_upload_error_message)
-                Timber.e(it, "Error uploading user!")
-            }
-    }
+        val updateProfileObservable: Single<User> =
+            if (encodedImage.isNullOrEmpty())
+                authService.updateUser(user)
+            else
+                authService.uploadImage(UploadImage(encodedImage)).flatMap {
+                    authService.updateUser(user.copy(avatarUrl = it.url))
+                }
 
-    private fun updateUser(user: User) {
-        compositeDisposable += authService.updateUser(user)
+        compositeDisposable += updateProfileObservable
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
