@@ -204,6 +204,12 @@
     <string name="visit_website">Visit Website</string>
     <string name="key_visit_website">Visit_Website</string>
     <string name="not_logged_in">No account logged in</string>
+    <string name="server_configuration">Server configuration</string>
+    <string name="key_server_configuration">server_configuration</string>
+    <string name="api_url">Api url</string>
+    <string name="key_api_url">api_url</string>
+    <string name="other_url">Other url</string>
+    <string name="invalid_url">Invalid url</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>

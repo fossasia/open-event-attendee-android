@@ -7,14 +7,20 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.webkit.URLUtil
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlTextInputLayout
+import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlEditText
+import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlCheckBox
 import org.jetbrains.anko.design.snackbar
 import kotlinx.android.synthetic.main.dialog_change_password.view.oldPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
@@ -22,6 +28,7 @@ import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPass
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
 import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.FDROID_BUILD_FLAVOR
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.MINIMUM_PASSWORD_LENGTH
@@ -80,6 +87,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             profileViewModel.isLoggedIn()
         preferenceScreen.findPreference<Preference>(getString(R.string.key_timezone_switch))?.isVisible =
             profileViewModel.isLoggedIn()
+
+        preferenceScreen.findPreference<PreferenceCategory>(getString(R.string.key_server_configuration))
+            ?.isVisible = BuildConfig.FLAVOR == FDROID_BUILD_FLAVOR
+
+        preferenceScreen.findPreference<Preference>(getString(R.string.key_api_url))?.title =
+            settingsViewModel.getApiUrl()
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -99,6 +112,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
                 }
             })
 
+        if (preference?.key == getString(R.string.key_api_url)) {
+            showChangeApiDialog()
+        }
         if (preference?.key == getString(R.string.key_visit_website)) {
             // Goes to website
             Utils.openUrl(requireContext(), WEBSITE_LINK)
@@ -144,6 +160,46 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
         }
 
         return false
+    }
+
+    private fun showChangeApiDialog() {
+        val layout = layoutInflater.inflate(R.layout.dialog_api_configuration, null)
+        layout.urlCheckBox.text = BuildConfig.DEFAULT_BASE_URL
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(layout)
+            .setPositiveButton(getString(R.string.change)) { _, _ ->
+                val url = if (layout.urlCheckBox.isChecked) BuildConfig.DEFAULT_BASE_URL
+                                else layout.urlEditText.text.toString()
+                if (url === settingsViewModel.getApiUrl()) return@setPositiveButton
+                settingsViewModel.changeApiUrl(url)
+                view?.snackbar("API URL changed to $url")
+                findNavController().popBackStack(R.id.eventsFragment, false)
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            .setCancelable(false)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+
+        layout.urlCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            layout.urlTextInputLayout.isVisible = !isChecked
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = isChecked
+        }
+
+        layout.urlEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val url = s.toString()
+                val isValidUrl = (URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) &&
+                    URLUtil.isValidUrl(url)
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = isValidUrl ||
+                    layout.urlCheckBox.isChecked
+                if (!isValidUrl) layout.urlEditText.error = getString(R.string.invalid_url)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Implement here*/ }
+        })
     }
 
     private fun startAppPlayStore(packageName: String) {
