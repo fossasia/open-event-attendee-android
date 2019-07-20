@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium"
-        app:passwordToggleEnabled="true">
+        android:layout_marginTop="@dimen/padding_medium">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/feedback"
