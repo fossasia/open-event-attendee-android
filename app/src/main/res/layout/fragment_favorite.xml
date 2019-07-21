@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/layout_margin_large"
-                android:layout_marginTop="@dimen/layout_margin_large"
+                android:layout_marginTop="@dimen/layout_margin_extreme_large"
                 android:layout_marginStart="@dimen/layout_margin_medium"
                 android:layout_marginEnd="@dimen/layout_margin_medium"
                 app:layout_constraintTop_toBottomOf="@id/likesNumber"
