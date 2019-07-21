@@ -25,7 +25,7 @@ class SearchPagedListAdapter : PagedListAdapter<Event, FavoriteEventViewHolder>(
         val event = getItem(position)
         if (event != null) {
             holder.apply {
-                bind(event, position)
+                bind(event, position, "")
                 eventClickListener = onEventClick
                 favFabClickListener = onFavFabClick
             }

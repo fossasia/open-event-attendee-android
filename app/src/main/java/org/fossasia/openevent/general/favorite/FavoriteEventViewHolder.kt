@@ -18,12 +18,13 @@ class FavoriteEventViewHolder(
     var eventClickListener: EventClickListener? = null
     var favFabClickListener: FavoriteFabClickListener? = null
 
-    fun bind(event: Event, itemPosition: Int) {
+    fun bind(event: Event, itemPosition: Int, headerDate: String) {
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
 
         with(binding) {
             this.event = event
+            this.headerDate = headerDate
             position = itemPosition
             dateTime = EventUtils.getFormattedDateTimeRangeBulleted(startsAt, endsAt)
             executePendingBindings()
