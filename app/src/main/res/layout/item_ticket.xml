@@ -23,6 +23,7 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/ticketName"
+            android:paddingEnd="@dimen/padding_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Google I/O" />

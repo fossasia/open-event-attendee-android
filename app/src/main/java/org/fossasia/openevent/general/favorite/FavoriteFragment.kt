@@ -30,6 +30,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.event.EventUtils.getEventDateTime
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -89,7 +90,7 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
         favoriteEventViewModel.events
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
-                favoriteEventsRecyclerAdapter.submitList(list)
+                favoriteEventsRecyclerAdapter.submitList(list.sortedBy { getEventDateTime(it.startsAt, it.timezone) })
                 rootView.likesNumber.text = "${list.size} likes"
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", list.size)

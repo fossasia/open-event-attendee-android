@@ -204,6 +204,12 @@
     <string name="visit_website">Visit Website</string>
     <string name="key_visit_website">Visit_Website</string>
     <string name="not_logged_in">No account logged in</string>
+    <string name="server_configuration">Server configuration</string>
+    <string name="key_server_configuration">server_configuration</string>
+    <string name="api_url">Api url</string>
+    <string name="key_api_url">api_url</string>
+    <string name="other_url">Other url</string>
+    <string name="invalid_url">Invalid url</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
@@ -307,6 +313,7 @@
     <string name="login_fail_message">Unable to Login. Please check your credentials</string>
     <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
     <string name="email_sent">Email Sent</string>
+    <string name="invalid_password_to_delete_account_message">Cannot delete your account as the password is incorrect</string>
 
     <!--about event fragment-->
     <string name="error_fetching_event_message">Error fetching event</string>
@@ -441,6 +448,18 @@
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string name="instagram">Instagram</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_fail_message">Your account currently cannot be deleted as active events and/or orders are associated with it. Before you can delete your account you must transfer the ownership of your event(s) to another organizer or cancel your event(s). If you have ticket orders stored in the system, please cancel your orders first too.</string>
+    <string name="confirm_email_message">Please enter your Email ID to confirm that you want to delete the account</string>
+    <string name="enter_email_hint">Enter your email ID</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_delete_checkbox_message">Please tick the box to agree and press DELETE</string>
+    <string name="delete">Delete</string>
+    <string name="enter_password_confirm_account">Please enter your password to confirm deleting your account</string>
+    <string name="error_deleting_account_message">Oops. There is a problem. Account not deleted</string>
+    <string name="success_deleting_account_message">Account deleted successfully</string>
+    <string name="enter_account_password_message">Enter Your Account Password</string>
+    <string name="deleting_account">Deleting Account...</string>
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>

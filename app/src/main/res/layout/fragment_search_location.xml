@@ -49,20 +49,32 @@
                 android:imeOptions="actionSearch"
                 android:hint="@string/enter_location"
                 android:layout_marginBottom="@dimen/layout_margin_medium"/>
-            <TextView
-                android:id="@+id/currentLocation"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_location_pin"
-                android:drawablePadding="@dimen/padding_medium"
-                android:drawableTint="@color/colorPrimary"
-                android:paddingStart="@dimen/padding_large"
-                android:text="@string/current_location"
-                android:textColor="@color/colorPrimary"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?selectableItemBackground"
-                android:textSize="@dimen/text_size_large" />
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/layout_margin_large"
+                android:layout_marginTop="@dimen/layout_margin_small"
+                android:layout_marginBottom="@dimen/layout_margin_small"
+                android:background="?selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_location_pin"
+                    app:tint="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentLocation"
+                    android:layout_marginStart="@dimen/layout_margin_medium"
+                    android:text="@string/current_location"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_large" />
+
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/locationProgressBar"

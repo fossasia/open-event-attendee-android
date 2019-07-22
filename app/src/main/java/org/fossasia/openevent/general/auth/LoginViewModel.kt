@@ -35,6 +35,8 @@ class LoginViewModel(
     val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableValidPassword = MutableLiveData<Boolean>()
+    val validPassword: LiveData<Boolean> = mutableValidPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -60,6 +62,20 @@ class LoginViewModel(
                 mutableLoggedIn.value = true
             }, {
                 mutableError.value = resource.getString(R.string.login_fail_message)
+            })
+    }
+
+    fun checkValidPassword(email: String, password: String) {
+        compositeDisposable += authService.checkPasswordValid(email, password)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableValidPassword.value = true
+            }, {
+                mutableValidPassword.value = false
             })
     }
 

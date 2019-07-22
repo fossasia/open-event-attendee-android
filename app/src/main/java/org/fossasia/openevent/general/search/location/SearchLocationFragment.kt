@@ -192,12 +192,17 @@ class SearchLocationFragment : Fragment() {
 
     private fun setUpLocationSearchView() {
         val subject = PublishSubject.create<String>()
-        rootView.locationSearchView.setOnEditorActionListener { v, actionId, event ->
+        rootView.locationSearchView.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event.action == KeyEvent.ACTION_DOWN &&
                 event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                savePlaceAndRedirectToMain(rootView.locationSearchView.text.toString())
+                val location = rootView.locationSearchView.text.toString()
+                if (location.isEmpty()) {
+                    rootView.locationSearchView.error = getString(R.string.empty_field_error_message)
+                } else {
+                    savePlaceAndRedirectToMain(location)
+                }
                 true
             } else {
                 false

@@ -1,8 +1,6 @@
 package org.fossasia.openevent.general.notification
 
-import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.DELETE
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -18,7 +16,4 @@ interface NotificationApi {
         @Path("notification_id") notificationId: Int,
         @Body notification: Notification
     ): Single<Notification>
-
-    @DELETE("notifications/{notification_id}")
-    fun deleteNotification(@Path("notification_id") notificationId: Long): Completable
 }
