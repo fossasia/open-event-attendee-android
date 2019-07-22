@@ -15,7 +15,7 @@
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
-    <string name="track">Track</string>
+    <string name="track_required">Track *</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">Where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
@@ -397,7 +397,7 @@
     <string name="empty_field_error_message">This field must not be empty</string>
     <string name="proposal">Proposal</string>
     <string name="speaker_details">My Speaker Details</string>
-    <string name="session_proposal_detail">Session Proposal Detail</string>
+    <string name="session_proposal_detail">Session Proposal Details</string>
     <string name="organization">Organization</string>
     <string name="position">Position</string>
     <string name="short_bio">Short Bio</string>
@@ -473,5 +473,22 @@
     <string name="out_bad_try_again">Our bad... let\'s try this again</string>
     <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
     <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
+    <string name="title">Title</string>
+    <string name="session_type">Session Type</string>
+    <string name="short_abstract">Short Abstract</string>
+    <string name="error_fetching_tracks_message">Error on fetching tracks for this event</string>
+    <string name="error_fetching_session_types_message">Error fetching session types for this event</string>
+    <string name="comment">Comment</string>
+    <string name="fail_create_proposal_message">Fail on creating new session</string>
+    <string name="fail_update_proposal_message">Fail on updating this session</string>
+    <string name="loading">Loading...</string>
+    <string name="creating_session_message">Creating new session...</string>
+    <string name="updating_session_message">Updating current session...</string>
+    <string name="fail_getting_current_proposal_message">Fail on getting your session</string>
+    <string name="update_session">Update Session</string>
+    <string name="create_session">Create Session</string>
+    <string name="language">Language</string>
+    <string name="no_sessions_created_message">You haven\'t created any sessions for this speaker</string>
+    <string name="proposal_creaed_updated_message">Proposal created/updated successfully</string>
 
 </resources>

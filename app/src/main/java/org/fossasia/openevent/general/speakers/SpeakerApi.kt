@@ -25,7 +25,7 @@ interface SpeakerApi {
         @Query("filter") query: String
     ): Single<List<Speaker>>
 
-    @POST("/speakers")
+    @POST("speakers")
     fun addSpeaker(@Body speaker: Speaker): Single<Speaker>
 
     @PATCH("speakers/{speakerId}")
