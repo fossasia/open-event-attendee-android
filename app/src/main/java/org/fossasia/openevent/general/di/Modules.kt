@@ -66,8 +66,6 @@ import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.search.location.GeoLocationViewModel
 import org.fossasia.openevent.general.search.location.SearchLocationViewModel
-import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
-import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
 import org.fossasia.openevent.general.search.time.SearchTimeViewModel
 import org.fossasia.openevent.general.search.SearchViewModel
 import org.fossasia.openevent.general.search.location.LocationService
@@ -81,6 +79,8 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.favorite.FavoriteEvent
+import org.fossasia.openevent.general.favorite.FavoriteEventApi
 import org.fossasia.openevent.general.feedback.FeedbackViewModel
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
@@ -99,6 +99,9 @@ import org.fossasia.openevent.general.social.SocialLink
 import org.fossasia.openevent.general.social.SocialLinkApi
 import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.speakercall.SpeakersCallViewModel
+import org.fossasia.openevent.general.speakercall.SpeakersCallProposalViewModel
+import org.fossasia.openevent.general.speakercall.Proposal
+import org.fossasia.openevent.general.speakercall.EditSpeakerViewModel
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerApi
 import org.fossasia.openevent.general.speakers.SpeakerService
@@ -141,6 +144,10 @@ val apiModule = module {
     single {
         val retrofit: Retrofit = get()
         retrofit.create(TicketApi::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(FavoriteEventApi::class.java)
     }
     single {
         val retrofit: Retrofit = get()
@@ -204,9 +211,9 @@ val apiModule = module {
     }
 
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get(), get(), get(), get()) }
+    factory { AuthService(get(), get(), get(), get(), get(), get(), get()) }
 
-    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
     factory { SponsorService(get(), get(), get()) }
     factory { TicketService(get(), get(), get()) }
@@ -220,16 +227,16 @@ val apiModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { EventsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
+    viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { StartupViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel {
         EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SessionViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { SearchResultsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SearchResultsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchLocationViewModel(get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
@@ -237,9 +244,9 @@ val viewModelModule = module {
     viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
-    viewModel { FavoriteEventsViewModel(get(), get()) }
-    viewModel { SettingsViewModel(get()) }
-    viewModel { OrderCompletedViewModel(get(), get(), get()) }
+    viewModel { FavoriteEventsViewModel(get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
@@ -249,8 +256,8 @@ val viewModelModule = module {
     viewModel { SponsorsViewModel(get(), get()) }
     viewModel { NotificationViewModel(get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SpeakersCallProposalViewModel(get(), get()) }
+    viewModel { SpeakersCallViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SpeakersCallProposalViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditSpeakerViewModel(get(), get(), get(), get()) }
     viewModel { FeedbackViewModel(get(), get()) }
 }
@@ -280,6 +287,7 @@ val networkModule = module {
         val builder = OkHttpClient().newBuilder()
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
+            .addInterceptor(HostSelectionInterceptor(get()))
             .addInterceptor(RequestAuthenticator(get()))
             .addNetworkInterceptor(StethoInterceptor())
 
@@ -299,10 +307,10 @@ val networkModule = module {
             EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
             AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java,
+            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
             Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
-            DiscountCode::class.java, Settings::class.java)
+            DiscountCode::class.java, Settings::class.java, Proposal::class.java)
 
         Retrofit.Builder()
             .client(get())

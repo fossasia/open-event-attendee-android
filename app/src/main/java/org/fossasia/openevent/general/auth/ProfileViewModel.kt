@@ -9,9 +9,14 @@ import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
-class ProfileViewModel(private val authService: AuthService, private val resource: Resource) : ViewModel() {
+class ProfileViewModel(
+    private val authService: AuthService,
+    private val resource: Resource,
+    private val eventService: EventService
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -25,6 +30,8 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
     val updatedUser: LiveData<User> = mutableUpdatedUser
     private val mutableUpdatedPassword = MutableLiveData<String>()
     val updatedPassword: LiveData<String> = mutableUpdatedPassword
+    private val mutableAccountDeleted = MutableLiveData<Boolean>()
+    val accountDeleted: LiveData<Boolean> = mutableAccountDeleted
 
     fun isLoggedIn() = authService.isLoggedIn()
 
@@ -36,6 +43,23 @@ class ProfileViewModel(private val authService: AuthService, private val resourc
             }) {
                 Timber.e(it, "Failure Logging out!")
             }
+    }
+
+    fun deleteProfile() {
+        compositeDisposable += authService.deleteProfile()
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableAccountDeleted.value = true
+                mutableMessage.value = resource.getString(R.string.success_deleting_account_message)
+                logout()
+            }, {
+                mutableAccountDeleted.value = false
+                mutableMessage.value = resource.getString(R.string.error_deleting_account_message)
+            })
     }
 
     fun changePassword(oldPassword: String, newPassword: String) {

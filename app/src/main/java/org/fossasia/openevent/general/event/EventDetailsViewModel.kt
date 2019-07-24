@@ -20,6 +20,7 @@ import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.paging.SimilarEventsDataSourceFactory
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.order.Order
@@ -306,7 +307,7 @@ class EventDetailsViewModel(
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
-                range.append(minPrice)
+                range.append("%.2f".format(minPrice))
             }
         } else {
             if (minPrice == 0f)
@@ -314,12 +315,12 @@ class EventDetailsViewModel(
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
-                range.append(minPrice)
+                range.append("%.2f".format(minPrice))
             }
             range.append(" - ")
             range.append(paymentCurrency)
             range.append(" ")
-            range.append(maxPrice)
+            range.append("%.2f".format(maxPrice))
         }
         mutablePriceRange.value = range.toString()
     }
@@ -331,14 +332,37 @@ class EventDetailsViewModel(
         return "$BASE_URL$LOCATION,15/900x500.png?access_token=$MAPBOX_KEY"
     }
 
-    fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable += eventService.setFavorite(eventId, favorite)
+    fun setFavorite(event: Event, favorite: Boolean) {
+        if (favorite) {
+            addFavorite(event)
+        } else {
+            removeFavorite(event)
+        }
+    }
+
+    private fun addFavorite(event: Event) {
+        val favoriteEvent = FavoriteEvent(authHolder.getId(), EventId(event.id))
+        compositeDisposable += eventService.addFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
             .subscribe({
-                Timber.d("Success")
+                mutablePopMessage.value = resource.getString(R.string.add_event_to_shortlist_message)
             }, {
-                Timber.e(it, "Error")
-                mutablePopMessage.value = resource.getString(R.string.error)
+                mutablePopMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on adding like for event ID ${event.id}")
+            })
+    }
+
+    private fun removeFavorite(event: Event) {
+        val favoriteEventId = event.favoriteEventId ?: return
+
+        val favoriteEvent = FavoriteEvent(favoriteEventId, EventId(event.id))
+        compositeDisposable += eventService.removeFavorite(favoriteEvent, event)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutablePopMessage.value = resource.getString(R.string.remove_event_from_shortlist_message)
+            }, {
+                mutablePopMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on removing like for event ID ${event.id}")
             })
     }
 

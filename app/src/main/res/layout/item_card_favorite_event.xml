@@ -10,10 +10,41 @@
     <variable
         name="dateTime"
         type="String" />
+    <variable
+        name="headerDate"
+        type="String" />
 </data>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+<LinearLayout
+    android:id="@+id/headerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/layout_margin_medium"
+    app:hideIfEmpty="@{headerDate}"
+    tools:visibility="visible">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/event_details_divider"
+        android:background="@color/grey" />
+    <TextView
+        android:id="@+id/dateHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_large"
+        android:paddingTop="@dimen/padding_small"
+        android:paddingStart="@dimen/padding_large"
+        android:paddingEnd="@dimen/padding_large"
+        android:textColor="@color/black"
+        android:text="@{headerDate}"
+        tools:text="Jan 11, 2019" />
+</LinearLayout>
+<androidx.cardview.widget.CardView
     android:id="@+id/allEventsCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -72,6 +103,8 @@
             android:src="@drawable/header"
             android:background="@drawable/round_image"
             android:layout_marginBottom="@dimen/layout_margin_moderate"
+            android:paddingTop="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_small"
             android:layout_marginStart="@dimen/layout_margin_large"
             android:layout_marginTop="@dimen/layout_margin_moderate"
             app:eventImage="@{event.originalImageUrl}"
@@ -127,4 +160,5 @@
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+</LinearLayout>
 </layout>

@@ -19,16 +19,13 @@ interface SpeakerApi {
     @GET("sessions/{sessionId}/speakers")
     fun getSpeakersForSession(@Path("sessionId") id: Long): Single<List<Speaker>>
 
-    @GET("speakers/{speaker_id}")
-    fun getSpeakerWithId(@Path("speaker_id") id: Long): Single<Speaker>
-
     @GET("users/{user_id}/speakers?include=event,user")
     fun getSpeakerForUser(
         @Path("user_id") userId: Long,
         @Query("filter") query: String
     ): Single<List<Speaker>>
 
-    @POST("/speakers")
+    @POST("speakers")
     fun addSpeaker(@Body speaker: Speaker): Single<Speaker>
 
     @PATCH("speakers/{speakerId}")

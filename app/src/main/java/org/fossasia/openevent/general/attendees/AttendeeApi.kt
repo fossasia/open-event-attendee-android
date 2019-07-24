@@ -21,6 +21,7 @@ interface AttendeeApi {
     @GET("events/{id}/custom-forms")
     fun getCustomFormsForAttendees(
         @Path("id") id: Long,
-        @Query("filter") filter: String
+        @Query("filter") filter: String,
+        @Query("page[size]") pageSize: Int = 22
     ): Single<List<CustomForm>>
 }

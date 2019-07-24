@@ -70,19 +70,23 @@ class SpeakersCallFragment : Fragment() {
                 showEmptyView(false)
             })
 
+        val currentSpeakersCall = speakersCallViewModel.speakersCall.value
+        if (currentSpeakersCall == null) {
+            speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
+        } else {
+            loadSpeakersCallSection(currentSpeakersCall)
+            showEmptyView(false)
+        }
+
         if (speakersCallViewModel.isLoggedIn()) {
             val currentUser = speakersCallViewModel.user.value
             if (currentUser == null) {
                 speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
             } else {
-                val currentSpeaker = speakersCallViewModel.speaker.value
-                if (currentSpeaker == null) {
-                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
-                }
+                speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
             }
         }
 
-        speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
         return rootView
     }
 
@@ -112,9 +116,8 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEditSpeakerOrCreateProposalDialog(speakerId: Long) {
-        AlertDialog.Builder(requireContext())
+        val dialogBuilder = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.create_edit_speaker))
-            .setMessage(getString(R.string.create_proposal_message))
             .setPositiveButton(getString(R.string.create_proposal)) { _, _ ->
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToProposal(safeArgs.eventId, speakerId))
@@ -123,8 +126,16 @@ class SpeakersCallFragment : Fragment() {
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToAddSpeaker(safeArgs.eventId, speakerId))
             }
-            .create()
-            .show()
+        speakersCallViewModel.sessions.value?.let { sessions ->
+            if (sessions.isEmpty()) return@let
+
+            dialogBuilder.setItems(sessions.map { getString(R.string.edit_session_name, it.title) }
+                .toTypedArray()) { _, position ->
+                findNavController(rootView).navigate(SpeakersCallFragmentDirections
+                    .actionSpeakersCallToProposal(safeArgs.eventId, speakerId, sessions[position].id))
+            }
+        }
+        dialogBuilder.create().show()
     }
 
     private fun showCreateSpeakerDialog() {
@@ -161,17 +172,17 @@ class SpeakersCallFragment : Fragment() {
 
         rootView.speakersCallDescription.text = speakersCall.announcement.stripHtml()
         if (currentTime < startTime) {
-            rootView.timeStatus.visibility = View.GONE
-            rootView.speakersCallTimeDetail.text = "Call for speakers will open at ${getFormattedDate(startAt)}"
-            rootView.submitProposalButton.visibility = View.GONE
+            rootView.timeStatus.isVisible = false
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_open_at, getFormattedDate(startAt))
+            rootView.submitProposalButton.isVisible = false
         } else if (startTime < currentTime && currentTime < endTime) {
             rootView.timeStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_speakers_call_open))
-            rootView.speakersCallTimeDetail.text = "Call for speakers will open until ${getFormattedDate(endAt)}"
-            rootView.submitProposalButton.visibility = View.VISIBLE
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_open_until, getFormattedDate(endAt))
+            rootView.submitProposalButton.isVisible = true
         } else {
             rootView.timeStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_speakers_call_closed))
-            rootView.speakersCallTimeDetail.text = "Call for speakers has closed at ${getFormattedDate(endAt)}"
-            rootView.submitProposalButton.visibility = View.GONE
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_closed, getFormattedDate(endAt))
+            rootView.submitProposalButton.isVisible = false
         }
     }
 }

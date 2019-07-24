@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.sessions
 
-import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.speakercall.Proposal
 
 class SessionService(
     private val sessionApi: SessionApi,
@@ -15,7 +15,19 @@ class SessionService(
             }
         }
 
-    fun fetchSession(id: Long): Flowable<Session> {
-        return sessionDao.getSessionById(id)
-    }
+    fun fetchSession(id: Long): Single<Session> =
+        sessionApi.getSessionById(id)
+
+    fun createSession(proposal: Proposal): Single<Session> =
+        sessionApi.createSession(proposal).doOnSuccess {
+            sessionDao.insertSession(it)
+        }
+
+    fun updateSession(sessionId: Long, proposal: Proposal): Single<Session> =
+        sessionApi.updateSession(sessionId, proposal).doOnSuccess {
+            sessionDao.insertSession(it)
+        }
+
+    fun getSessionsUnderSpeakerAndEvent(speakerId: Long, query: String): Single<List<Session>> =
+        sessionApi.getSessionsUnderSpeaker(speakerId, filter = query)
 }

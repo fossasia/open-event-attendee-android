@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "bf7cbd2b19683a13c4f43725b790ccd4",
+    "identityHash": "c65ffea75fee1faf6cd199cbbc5c25ee",
     "entities": [
       {
         "tableName": "Event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `identifier` TEXT NOT NULL, `startsAt` TEXT NOT NULL, `endsAt` TEXT NOT NULL, `timezone` TEXT NOT NULL, `privacy` TEXT NOT NULL, `paymentCountry` TEXT, `paypalEmail` TEXT, `thumbnailImageUrl` TEXT, `schedulePublishedOn` TEXT, `paymentCurrency` TEXT, `ownerDescription` TEXT, `originalImageUrl` TEXT, `onsiteDetails` TEXT, `ownerName` TEXT, `largeImageUrl` TEXT, `deletedAt` TEXT, `ticketUrl` TEXT, `locationName` TEXT, `codeOfConduct` TEXT, `state` TEXT, `searchableLocationName` TEXT, `description` TEXT, `pentabarfUrl` TEXT, `xcalUrl` TEXT, `logoUrl` TEXT, `externalEventUrl` TEXT, `iconImageUrl` TEXT, `icalUrl` TEXT, `createdAt` TEXT, `bankDetails` TEXT, `chequeDetails` TEXT, `isComplete` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `refundPolicy` TEXT, `canPayByStripe` INTEGER NOT NULL, `canPayByCheque` INTEGER NOT NULL, `canPayByBank` INTEGER NOT NULL, `canPayByPaypal` INTEGER NOT NULL, `canPayOnsite` INTEGER NOT NULL, `isSponsorsEnabled` INTEGER NOT NULL, `hasOwnerInfo` INTEGER NOT NULL, `isSessionsSpeakersEnabled` INTEGER NOT NULL, `isTicketingEnabled` INTEGER NOT NULL, `isTaxEnabled` INTEGER NOT NULL, `isMapShown` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, `eventTopic` TEXT, `eventType` TEXT, `eventSubTopic` TEXT, `speakersCall` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `identifier` TEXT NOT NULL, `startsAt` TEXT NOT NULL, `endsAt` TEXT NOT NULL, `timezone` TEXT NOT NULL, `privacy` TEXT NOT NULL, `paymentCountry` TEXT, `paypalEmail` TEXT, `thumbnailImageUrl` TEXT, `schedulePublishedOn` TEXT, `paymentCurrency` TEXT, `ownerDescription` TEXT, `originalImageUrl` TEXT, `onsiteDetails` TEXT, `ownerName` TEXT, `largeImageUrl` TEXT, `deletedAt` TEXT, `ticketUrl` TEXT, `locationName` TEXT, `codeOfConduct` TEXT, `state` TEXT, `searchableLocationName` TEXT, `description` TEXT, `pentabarfUrl` TEXT, `xcalUrl` TEXT, `logoUrl` TEXT, `externalEventUrl` TEXT, `iconImageUrl` TEXT, `icalUrl` TEXT, `createdAt` TEXT, `bankDetails` TEXT, `chequeDetails` TEXT, `isComplete` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `refundPolicy` TEXT, `canPayByStripe` INTEGER NOT NULL, `canPayByCheque` INTEGER NOT NULL, `canPayByBank` INTEGER NOT NULL, `canPayByPaypal` INTEGER NOT NULL, `canPayOnsite` INTEGER NOT NULL, `isSponsorsEnabled` INTEGER NOT NULL, `hasOwnerInfo` INTEGER NOT NULL, `isSessionsSpeakersEnabled` INTEGER NOT NULL, `isTicketingEnabled` INTEGER NOT NULL, `isTaxEnabled` INTEGER NOT NULL, `isMapShown` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, `favoriteEventId` INTEGER, `eventTopic` TEXT, `eventType` TEXT, `eventSubTopic` TEXT, `speakersCall` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -301,6 +301,12 @@
             "columnName": "favorite",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "favoriteEventId",
+            "columnName": "favoriteEventId",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "eventTopic",
@@ -1570,7 +1576,7 @@
       },
       {
         "tableName": "Session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `shortAbstract` TEXT, `comments` TEXT, `longAbstract` TEXT, `level` TEXT, `signupUrl` TEXT, `endsAt` TEXT, `language` TEXT, `title` TEXT, `startsAt` TEXT, `slidesUrl` TEXT, `averageRating` REAL, `submittedAt` TEXT, `deletedAt` TEXT, `subtitle` TEXT, `createdAt` TEXT, `state` TEXT, `lastModifiedAt` TEXT, `videoUrl` TEXT, `audioUrl` TEXT, `sessionType` TEXT, `microlocation` TEXT, `track` TEXT, `event` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1709,6 +1715,12 @@
             "columnName": "track",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1741,6 +1753,14 @@
               "track"
             ],
             "createSql": "CREATE  INDEX `index_Session_track` ON `${TABLE_NAME}` (`track`)"
+          },
+          {
+            "name": "index_Session_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Session_event` ON `${TABLE_NAME}` (`event`)"
           }
         ],
         "foreignKeys": []
@@ -1962,12 +1982,111 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Proposal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT, `language` TEXT, `shortAbstract` TEXT, `comments` TEXT, `startsAt` TEXT, `endsAt` TEXT, `track` TEXT, `event` INTEGER, `speakers` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shortAbstract",
+            "columnName": "shortAbstract",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comments",
+            "columnName": "comments",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startsAt",
+            "columnName": "startsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endsAt",
+            "columnName": "endsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "track",
+            "columnName": "track",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakers",
+            "columnName": "speakers",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Proposal_track",
+            "unique": false,
+            "columnNames": [
+              "track"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_track` ON `${TABLE_NAME}` (`track`)"
+          },
+          {
+            "name": "index_Proposal_event",
+            "unique": false,
+            "columnNames": [
+              "event"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_event` ON `${TABLE_NAME}` (`event`)"
+          },
+          {
+            "name": "index_Proposal_speakers",
+            "unique": false,
+            "columnNames": [
+              "speakers"
+            ],
+            "createSql": "CREATE  INDEX `index_Proposal_speakers` ON `${TABLE_NAME}` (`speakers`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bf7cbd2b19683a13c4f43725b790ccd4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c65ffea75fee1faf6cd199cbbc5c25ee')"
     ]
   }
 }

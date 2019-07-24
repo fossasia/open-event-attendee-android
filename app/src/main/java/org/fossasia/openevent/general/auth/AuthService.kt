@@ -9,6 +9,8 @@ import org.fossasia.openevent.general.auth.change.Password
 import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
+import org.fossasia.openevent.general.event.EventApi
+import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.order.OrderDao
 import timber.log.Timber
 
@@ -17,7 +19,9 @@ class AuthService(
     private val authHolder: AuthHolder,
     private val userDao: UserDao,
     private val orderDao: OrderDao,
-    private val attendeeDao: AttendeeDao
+    private val attendeeDao: AttendeeDao,
+    private val eventDao: EventDao,
+    private val eventApi: EventApi
 ) {
     fun login(username: String, password: String): Single<LoginResponse> {
         if (username.isEmpty() || password.isEmpty())
@@ -29,6 +33,9 @@ class AuthService(
                     it
                 }
     }
+
+    fun checkPasswordValid(email: String, password: String): Single<LoginResponse> =
+        authApi.login(Login(email, password))
 
     fun signUp(signUp: SignUp): Single<User> {
         val email = signUp.email
@@ -55,14 +62,20 @@ class AuthService(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
+    fun getId() = authHolder.getId()
+
     fun logout(): Completable {
         return Completable.fromAction {
             authHolder.token = null
             userDao.deleteUser(authHolder.getId())
             orderDao.deleteAllOrders()
             attendeeDao.deleteAllAttendees()
+            eventDao.clearFavoriteEvents()
         }
     }
+
+    fun deleteProfile(userId: Long = authHolder.getId()) =
+        authApi.deleteAccount(userId)
 
     fun getProfile(id: Long = authHolder.getId()): Single<User> {
         return userDao.getUser(id)

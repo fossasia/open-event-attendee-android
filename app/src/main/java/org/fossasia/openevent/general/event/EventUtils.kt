@@ -2,7 +2,13 @@ package org.fossasia.openevent.general.event
 
 import android.content.Context
 import android.content.Intent
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.getStartedButton
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.eventImage
+import kotlinx.android.synthetic.main.dialog_login_to_like.view.eventName
 import org.fossasia.openevent.general.OpenEventGeneral
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
@@ -46,89 +52,89 @@ object EventUtils {
 
     fun getFormattedDate(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
-        try {
-            return dateFormat.format(date)
+        return try {
+            dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting Date")
-            return ""
+            ""
         }
     }
 
     fun getSimpleFormattedDate(date: Date): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        try {
-            return dateFormat.format(date)
+        return try {
+            dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting Date")
-            return ""
+            ""
         }
     }
 
     fun getFormattedDateShort(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d")
-        try {
-            return dateFormat.format(date)
+        return try {
+            dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting Date")
-            return ""
+            ""
         }
     }
 
     fun getFormattedDateWithoutYear(date: ZonedDateTime): String {
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d")
-        try {
-            return dateFormat.format(date)
+        return try {
+            dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting Date")
-            return ""
+            ""
         }
     }
 
     fun getFormattedTime(date: ZonedDateTime): String {
         val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
-        try {
-            return timeFormat.format(date)
+        return try {
+            timeFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 
     fun getFormattedTimeZone(date: ZonedDateTime): String {
         val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("z")
-        try {
-            return timeFormat.format(date)
+        return try {
+            timeFormat.format(date)
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 
     fun getFormattedEventDateTimeRange(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         val startingDate = getFormattedDate(startsAt)
         val endingDate = getFormattedDate(endsAt)
-        try {
+        return try {
             if (startingDate != endingDate)
-                return "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
+                "${getFormattedDateShort(startsAt)}, ${getFormattedTime(startsAt)}"
             else
-                return "${getFormattedDateWithoutYear(startsAt)}"
+                "${getFormattedDateWithoutYear(startsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 
     fun getFormattedEventDateTimeRangeSecond(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         val startingDate = getFormattedDate(startsAt)
         val endingDate = getFormattedDate(endsAt)
-        try {
+        return try {
             if (startingDate != endingDate)
-                return "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+                "- ${getFormattedDateShort(endsAt)}, ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
             else
-                return "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
+                "${getFormattedTime(startsAt)} - ${getFormattedTime(endsAt)} ${getFormattedTimeZone(endsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 
@@ -151,14 +157,14 @@ object EventUtils {
     fun getFormattedDateTimeRangeBulleted(startsAt: ZonedDateTime, endsAt: ZonedDateTime): String {
         val startingDate = getFormattedDateShort(startsAt)
         val endingDate = getFormattedDateShort(endsAt)
-        try {
+        return try {
             if (startingDate != endingDate)
-                return "$startingDate - $endingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
+                "$startingDate - $endingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
             else
-                return "$startingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
+                "$startingDate • ${getFormattedTime(startsAt)} ${getFormattedTimeZone(startsAt)}"
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Error formatting time")
-            return ""
+            ""
         }
     }
 
@@ -183,7 +189,7 @@ object EventUtils {
     }
 
     fun getDayDifferenceFromToday(date: String): Long {
-        return (System.currentTimeMillis() - EventUtils.getTimeInMilliSeconds(date, null)) / (1000 * 60 * 60 * 24)
+        return (System.currentTimeMillis() - getTimeInMilliSeconds(date, null)) / (1000 * 60 * 60 * 24)
     }
 
     /**
@@ -209,4 +215,32 @@ object EventUtils {
         df.timeZone = tz
         return df.format(date)
     }
+
+    fun showLoginToLikeDialog(
+        context: Context,
+        inflater: LayoutInflater,
+        redirectToLogin: RedirectToLogin,
+        eventImage: String?,
+        eventName: String
+    ) {
+        val view = inflater.inflate(R.layout.dialog_login_to_like, null, false)
+        val dialog = AlertDialog.Builder(context)
+            .setView(view).create()
+
+        view.getStartedButton.setOnClickListener {
+            redirectToLogin.goBackToLogin()
+            dialog.cancel()
+        }
+        view.eventName.text = "Sign in to like $eventName"
+        Picasso.get()
+            .load(eventImage)
+            .placeholder(R.drawable.header)
+            .into(view.eventImage)
+
+        dialog.show()
+    }
+}
+
+interface RedirectToLogin {
+    fun goBackToLogin()
 }

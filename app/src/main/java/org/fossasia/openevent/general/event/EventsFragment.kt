@@ -55,7 +55,7 @@ import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
-private const val EVENTS_FRAGMENT = "eventsFragment"
+const val EVENTS_FRAGMENT = "eventsFragment"
 
 class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
@@ -237,11 +237,23 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView)
+                    .navigate(EventsFragmentDirections.actionEventsToAuth(redirectedFrom = EVENTS_FRAGMENT))
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                eventsViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                eventsListAdapter.notifyItemChanged(itemPosition)
+                if (eventsViewModel.isLoggedIn()) {
+                    event.favorite = !event.favorite
+                    eventsViewModel.setFavorite(event, event.favorite)
+                    eventsListAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 

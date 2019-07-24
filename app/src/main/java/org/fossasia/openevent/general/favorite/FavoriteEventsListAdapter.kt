@@ -8,6 +8,8 @@ import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
+import org.fossasia.openevent.general.event.EventUtils.getEventDateTime
+import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 
 /**
  * The RecyclerView adapter class for displaying favorite events list
@@ -30,9 +32,21 @@ class FavoriteEventsListAdapter : ListAdapter<Event, FavoriteEventViewHolder>(Ev
     override fun onBindViewHolder(holder: FavoriteEventViewHolder, position: Int) {
         val event = getItem(position)
         holder.apply {
-            bind(event, position)
+            val eventDate = getDateFormat(event.startsAt, event.timezone)
+            var showEventDate = true
+            if (position != 0) {
+                val previousEvent = getItem(position - 1)
+                if (previousEvent != null && eventDate == getDateFormat(previousEvent.startsAt, previousEvent.timezone))
+                    showEventDate = false
+            }
+            bind(event, position, if (showEventDate) eventDate else "")
             eventClickListener = onEventClick
             favFabClickListener = onFavFabClick
         }
+    }
+
+    private fun getDateFormat(eventDate: String, timeZone: String): String {
+        val date = getEventDateTime(eventDate, timeZone)
+        return getFormattedDate(date)
     }
 }

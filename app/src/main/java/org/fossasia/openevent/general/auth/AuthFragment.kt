@@ -25,7 +25,10 @@ import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.fossasia.openevent.general.search.location.SEARCH_LOCATION_FRAGMENT
+import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.show
@@ -161,6 +164,9 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             WELCOME_FRAGMENT -> findNavController(rootView).popBackStack(R.id.welcomeFragment, false)
             SEARCH_LOCATION_FRAGMENT -> findNavController(rootView).popBackStack(R.id.searchLocationFragment, false)
             PROFILE_FRAGMENT -> findNavController(rootView).popBackStack(R.id.profileFragment, false)
+            SEARCH_RESULTS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.searchResultsFragment, false)
+            ORDER_COMPLETED_FRAGMENT -> findNavController(rootView).popBackStack(R.id.orderCompletedFragment, false)
+            SPEAKERS_CALL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.speakersCallFragment, false)
             else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
         }
     }

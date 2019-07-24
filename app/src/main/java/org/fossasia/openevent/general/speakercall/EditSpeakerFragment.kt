@@ -37,12 +37,13 @@ import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.speakers.Speaker
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.checkEmpty
+import org.fossasia.openevent.general.utils.emptyToNull
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
 import org.fossasia.openevent.general.utils.setRequired
@@ -99,7 +100,7 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
                 loadSpeakerUI(it)
             })
 
-        val progressDialog = Utils.progressDialog(context)
+        val progressDialog = progressDialog(context)
         editSpeakerViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
@@ -158,8 +159,8 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
                 organisation = rootView.speakerOrganization.text.toString(),
                 position = rootView.speakerPosition.text.toString(),
                 shortBiography = rootView.speakerShortBio.text.toString(),
-                website = rootView.speakerWebsite.text.toString(),
-                twitter = rootView.speakerTwitter.text.toString(),
+                website = rootView.speakerWebsite.text.toString().emptyToNull(),
+                twitter = rootView.speakerTwitter.text.toString().emptyToNull(),
                 event = EventId(safeArgs.eventId),
                 user = UserId(editSpeakerViewModel.getId())
             )

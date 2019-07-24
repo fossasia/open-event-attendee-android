@@ -1,6 +1,5 @@
 package org.fossasia.openevent.general.speakers
 
-import androidx.lifecycle.LiveData
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.fossasia.openevent.general.auth.User
@@ -39,10 +38,6 @@ class SpeakerService(
         speakerApi.updateSpeaker(speaker.id, speaker).doOnSuccess {
             speakerDao.insertSpeaker(it)
         }
-
-    fun fetchSpeakersFromDb(id: Long): LiveData<List<Speaker>> {
-        return speakerWithEventDao.getSpeakerWithEventId(id)
-    }
 
     fun fetchSpeakerForSession(sessionId: Long): Single<List<Speaker>> =
         speakerApi.getSpeakersForSession(sessionId)

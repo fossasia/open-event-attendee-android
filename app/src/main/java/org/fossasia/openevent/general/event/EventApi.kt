@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.event
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +16,7 @@ interface EventApi {
     fun getEventFromApi(@Path("eventIdentifier") eventIdentifier: String): Single<Event>
 
     @GET("events")
-    fun eventsUnderUser(@Query("filter") eventId: String): Single<List<Event>>
+    fun eventsWithQuery(@Query("filter") filter: String): Single<List<Event>>
 
     @GET("events/{eventId}/speakers-call")
     fun getSpeakerCallForEvent(@Path("eventId") id: Long): Single<SpeakersCall>
@@ -30,4 +31,7 @@ interface EventApi {
 
     @GET("events")
     fun eventsByQuery(@Query("filter") filter: String): Single<List<Event>>
+
+    @GET("events/{eventId}/tracks")
+    fun fetchTracksUnderEvent(@Path("eventId") eventId: Long): Single<List<Track>>
 }

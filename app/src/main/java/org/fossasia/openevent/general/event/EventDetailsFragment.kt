@@ -533,11 +533,22 @@ class EventDetailsFragment : Fragment() {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                redirectToLogin()
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                eventViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                similarEventsAdapter.notifyItemChanged(itemPosition)
+                if (eventViewModel.isLoggedIn()) {
+                    event.favorite = !event.favorite
+                    eventViewModel.setFavorite(event, event.favorite)
+                    similarEventsAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 
@@ -572,7 +583,16 @@ class EventDetailsFragment : Fragment() {
                 true
             }
             R.id.favorite_event -> {
-                currentEvent?.let { eventViewModel.setFavorite(it.id, !it.favorite) }
+                currentEvent?.let {
+                    if (eventViewModel.isLoggedIn()) {
+                        it.favorite = !it.favorite
+                        eventViewModel.setFavorite(it, it.favorite)
+                        currentEvent = it
+                    } else {
+                        EventUtils.showLoginToLikeDialog(requireContext(), layoutInflater, object : RedirectToLogin {
+                            override fun goBackToLogin() { redirectToLogin() } }, it.originalImageUrl, it.name)
+                    }
+                }
                 true
             }
             R.id.call_for_speakers -> {

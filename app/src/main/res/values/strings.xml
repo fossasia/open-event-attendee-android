@@ -15,7 +15,7 @@
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
-    <string name="track">Track</string>
+    <string name="track_required">Track *</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">Where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
@@ -204,6 +204,12 @@
     <string name="visit_website">Visit Website</string>
     <string name="key_visit_website">Visit_Website</string>
     <string name="not_logged_in">No account logged in</string>
+    <string name="server_configuration">Server configuration</string>
+    <string name="key_server_configuration">server_configuration</string>
+    <string name="api_url">Api url</string>
+    <string name="key_api_url">api_url</string>
+    <string name="other_url">Other url</string>
+    <string name="invalid_url">Invalid url</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
@@ -307,6 +313,7 @@
     <string name="login_fail_message">Unable to Login. Please check your credentials</string>
     <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
     <string name="email_sent">Email Sent</string>
+    <string name="invalid_password_to_delete_account_message">Cannot delete your account as the password is incorrect</string>
 
     <!--about event fragment-->
     <string name="error_fetching_event_message">Error fetching event</string>
@@ -385,12 +392,16 @@
     <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
     <string name="call_for_speakers">Call For Speakers</string>
+    <string name="speakers_call_open_at">Call for speakers will open at %1$s</string>
+    <string name="speakers_call_open_until">Call for speakers will open until %1$s</string>
+    <string name="speakers_call_closed">Call for speakers has closed at %1$s</string>
+    <string name="edit_session_name">Edit Session - %1$s</string>
     <string name="submit_proposal">Submit Proposal</string>
     <string name="code_of_conduct">Code Of Conduct</string>
     <string name="empty_field_error_message">This field must not be empty</string>
     <string name="proposal">Proposal</string>
     <string name="speaker_details">My Speaker Details</string>
-    <string name="session_proposal_detail">Session Proposal Detail</string>
+    <string name="session_proposal_detail">Session Proposal Details</string>
     <string name="organization">Organization</string>
     <string name="position">Position</string>
     <string name="short_bio">Short Bio</string>
@@ -441,8 +452,19 @@
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string name="instagram">Instagram</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_fail_message">Your account currently cannot be deleted as active events and/or orders are associated with it. Before you can delete your account you must transfer the ownership of your event(s) to another organizer or cancel your event(s). If you have ticket orders stored in the system, please cancel your orders first too.</string>
+    <string name="confirm_email_message">Please enter your Email ID to confirm that you want to delete the account</string>
+    <string name="enter_email_hint">Enter your email ID</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_delete_checkbox_message">Please tick the box to agree and press DELETE</string>
+    <string name="delete">Delete</string>
+    <string name="enter_password_confirm_account">Please enter your password to confirm deleting your account</string>
+    <string name="error_deleting_account_message">Oops. There is a problem. Account not deleted</string>
+    <string name="success_deleting_account_message">Account deleted successfully</string>
+    <string name="enter_account_password_message">Enter Your Account Password</string>
+    <string name="deleting_account">Deleting Account...</string>
     <string name="image_not_found">Image not found</string>
-
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>
@@ -452,5 +474,26 @@
         <item quantity="one">One order</item>
         <item quantity="other">%1$s orders</item>
     </plurals>
+    <string name="short_list_event_message">Shortlist your favorite events so you don\'t miss out</string>
+    <string name="out_bad_try_again">Our bad... let\'s try this again</string>
+    <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
+    <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
+    <string name="title">Title</string>
+    <string name="session_type">Session Type</string>
+    <string name="short_abstract">Short Abstract</string>
+    <string name="error_fetching_tracks_message">Error on fetching tracks for this event</string>
+    <string name="error_fetching_session_types_message">Error fetching session types for this event</string>
+    <string name="comment">Comment</string>
+    <string name="fail_create_proposal_message">Fail on creating new session</string>
+    <string name="fail_update_proposal_message">Fail on updating this session</string>
+    <string name="loading">Loading...</string>
+    <string name="creating_session_message">Creating new session...</string>
+    <string name="updating_session_message">Updating current session...</string>
+    <string name="fail_getting_current_proposal_message">Fail on getting your session</string>
+    <string name="update_session">Update Session</string>
+    <string name="create_session">Create Session</string>
+    <string name="language">Language</string>
+    <string name="no_sessions_created_message">You haven\'t created any sessions for this speaker</string>
+    <string name="proposal_creaed_updated_message">Proposal created/updated successfully</string>
 
 </resources>
