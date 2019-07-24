@@ -257,11 +257,15 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
         editImageView.editImage.setOnClickListener {
 
-            if (this::userAvatar.isInitialized) {
-                findNavController(rootView).navigate(
-                    EditProfileFragmentDirections.actionEditProfileToCropImage(userAvatar))
+            if (!userAvatar.isNullOrEmpty()) {
+                if (this::userAvatar.isInitialized) {
+                    findNavController(rootView).navigate(
+                        EditProfileFragmentDirections.actionEditProfileToCropImage(userAvatar))
+                } else {
+                    rootView.snackbar(getString(R.string.error_editting_image_message))
+                }
             } else {
-                rootView.snackbar(getString(R.string.error_editting_image_message))
+                rootView.snackbar(getString(R.string.image_not_found))
             }
 
             dialog.cancel()

@@ -441,6 +441,8 @@
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string name="instagram">Instagram</string>
+    <string name="image_not_found">Image not found</string>
+
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>
