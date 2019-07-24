@@ -464,6 +464,7 @@
     <string name="success_deleting_account_message">Account deleted successfully</string>
     <string name="enter_account_password_message">Enter Your Account Password</string>
     <string name="deleting_account">Deleting Account...</string>
+    <string name="image_not_found">Image not found</string>
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>
