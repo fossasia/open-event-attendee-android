@@ -62,6 +62,7 @@ class TicketsViewModel(
                 mutableTicketTableVisibility.value = ticketList.isNotEmpty()
                 tickets.value = ticketList
             }, {
+                mutableProgress.value = false
                 mutableError.value = resource.getString(R.string.error_fetching_tickets_message)
                 Timber.e(it, "Error fetching tickets %d", id)
             })
