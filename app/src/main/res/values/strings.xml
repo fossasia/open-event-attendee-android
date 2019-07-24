@@ -392,6 +392,10 @@
     <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
     <string name="call_for_speakers">Call For Speakers</string>
+    <string name="speakers_call_open_at">Call for speakers will open at %1$s</string>
+    <string name="speakers_call_open_until">Call for speakers will open until %1$s</string>
+    <string name="speakers_call_closed">Call for speakers has closed at %1$s</string>
+    <string name="edit_session_name">Edit Session - %1$s</string>
     <string name="submit_proposal">Submit Proposal</string>
     <string name="code_of_conduct">Code Of Conduct</string>
     <string name="empty_field_error_message">This field must not be empty</string>
