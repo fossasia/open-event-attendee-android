@@ -105,7 +105,7 @@ class OrderCompletedFragment : Fragment() {
                     rootView.similarEventLayout.isVisible = true
                 } else {
                     rootView.shimmerSimilarEvents.stopShimmer()
-                    rootView.isVisible = similarEventsAdapter.currentList?.isEmpty() ?: true
+                    rootView.similarEventLayout.isVisible = similarEventsAdapter.currentList?.isEmpty() ?: true
                 }
             })
 
