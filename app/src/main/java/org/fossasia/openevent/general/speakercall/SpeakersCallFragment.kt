@@ -38,21 +38,6 @@ class SpeakersCallFragment : Fragment() {
     private val speakersCallViewModel by viewModel<SpeakersCallViewModel>()
     private val safeArgs: SpeakersCallFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (speakersCallViewModel.isLoggedIn()) {
-            val currentUser = speakersCallViewModel.user.value
-            if (currentUser == null) {
-                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
-            } else {
-                val currentSpeaker = speakersCallViewModel.speaker.value
-                if (currentSpeaker == null) {
-                    speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
-                }
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_speakers_call, container, false)
 
@@ -85,7 +70,23 @@ class SpeakersCallFragment : Fragment() {
                 showEmptyView(false)
             })
 
-        speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
+        val currentSpeakersCall = speakersCallViewModel.speakersCall.value
+        if (currentSpeakersCall == null) {
+            speakersCallViewModel.loadSpeakersCall(safeArgs.eventId)
+        } else {
+            loadSpeakersCallSection(currentSpeakersCall)
+            showEmptyView(false)
+        }
+
+        if (speakersCallViewModel.isLoggedIn()) {
+            val currentUser = speakersCallViewModel.user.value
+            if (currentUser == null) {
+                speakersCallViewModel.loadMyUserAndSpeaker(safeArgs.eventId, safeArgs.eventIdentifier)
+            } else {
+                speakersCallViewModel.loadMySpeaker(currentUser, safeArgs.eventId, safeArgs.eventIdentifier)
+            }
+        }
+
         return rootView
     }
 
@@ -128,7 +129,8 @@ class SpeakersCallFragment : Fragment() {
         speakersCallViewModel.sessions.value?.let { sessions ->
             if (sessions.isEmpty()) return@let
 
-            dialogBuilder.setItems(sessions.map { "Edit Session - ${it.title}" }.toTypedArray()) { _, position ->
+            dialogBuilder.setItems(sessions.map { getString(R.string.edit_session_name, it.title) }
+                .toTypedArray()) { _, position ->
                 findNavController(rootView).navigate(SpeakersCallFragmentDirections
                     .actionSpeakersCallToProposal(safeArgs.eventId, speakerId, sessions[position].id))
             }
@@ -156,9 +158,9 @@ class SpeakersCallFragment : Fragment() {
     }
 
     private fun showEmptyView(show: Boolean) {
-        rootView.speakersCallContainer.visibility = if (show) View.GONE else View.VISIBLE
-        rootView.speakersCallEmptyView.visibility = if (show) View.VISIBLE else View.GONE
-        if (show) rootView.submitProposalButton.visibility = View.GONE
+        rootView.speakersCallContainer.isVisible = !show
+        rootView.speakersCallEmptyView.isVisible = show
+        if (show) rootView.submitProposalButton.isVisible = false
     }
 
     private fun loadSpeakersCallSection(speakersCall: SpeakersCall) {
@@ -170,17 +172,17 @@ class SpeakersCallFragment : Fragment() {
 
         rootView.speakersCallDescription.text = speakersCall.announcement.stripHtml()
         if (currentTime < startTime) {
-            rootView.timeStatus.visibility = View.GONE
-            rootView.speakersCallTimeDetail.text = "Call for speakers will open at ${getFormattedDate(startAt)}"
-            rootView.submitProposalButton.visibility = View.GONE
+            rootView.timeStatus.isVisible = false
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_open_at, getFormattedDate(startAt))
+            rootView.submitProposalButton.isVisible = false
         } else if (startTime < currentTime && currentTime < endTime) {
             rootView.timeStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_speakers_call_open))
-            rootView.speakersCallTimeDetail.text = "Call for speakers will open until ${getFormattedDate(endAt)}"
-            rootView.submitProposalButton.visibility = View.VISIBLE
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_open_until, getFormattedDate(endAt))
+            rootView.submitProposalButton.isVisible = true
         } else {
             rootView.timeStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_speakers_call_closed))
-            rootView.speakersCallTimeDetail.text = "Call for speakers has closed at ${getFormattedDate(endAt)}"
-            rootView.submitProposalButton.visibility = View.GONE
+            rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_closed, getFormattedDate(endAt))
+            rootView.submitProposalButton.isVisible = false
         }
     }
 }
