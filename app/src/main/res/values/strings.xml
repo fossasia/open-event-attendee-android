@@ -495,5 +495,24 @@
     <string name="language">Language</string>
     <string name="no_sessions_created_message">You haven\'t created any sessions for this speaker</string>
     <string name="proposal_creaed_updated_message">Proposal created/updated successfully</string>
+    <string name="total_amount">Total: %1$s</string>
+    <plurals name="order_quantity_item">
+        <item quantity="one"> — %1$s item</item>
+        <item quantity="other"> — %1$s items</item>
+    </plurals>
+    <string name="hello_user">Hello %1$s</string>
+    <string name="cant_be_empty">Can\'t be Empty</string>
+    <plurals name="likes_number">
+        <item quantity="zero">No likes</item>
+        <item quantity="one">%1$s like</item>
+        <item quantity="other">%1$s likes</item>
+    </plurals>
+    <string name="removed_recent_search">Removed recent search %1$s</string>
+    <string name="type_name">Type: %1$s</string>
+    <string name="email_name">Email: %1$s</string>
+    <string name="phone_number_name">Phone Number: %1$s</string>
+    <string name="from_place">From: %1$s</string>
+    <string name="from_places">From: %1$s, %2$s</string>
+    <string name="by_organizer_name">by %1$s</string>
 
 </resources>

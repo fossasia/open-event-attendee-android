@@ -83,19 +83,19 @@ class SpeakerFragment : Fragment() {
         else {
             when (speaker.email.isNullOrBlank()) {
                 true -> rootView.email.isVisible = false
-                false -> rootView.email.text = "Email: ${speaker.email}"
+                false -> rootView.email.text = getString(R.string.email_name, speaker.email)
             }
 
             when (speaker.mobile.isNullOrBlank()) {
                 true -> rootView.mobile.isVisible = false
-                false -> rootView.mobile.text = "Phone Number: ${speaker.mobile}"
+                false -> rootView.mobile.text = getString(R.string.phone_number_name, speaker.mobile)
             }
 
             when {
                 speaker.country.isNullOrBlank() && speaker.country.isNullOrBlank() -> rootView.from.isVisible = false
-                speaker.country.isNullOrBlank() -> rootView.from.text = "From: ${speaker.city}"
-                speaker.city.isNullOrBlank() -> rootView.from.text = "From: ${speaker.country}"
-                else -> rootView.from.text = "From: ${speaker.city}, ${speaker.country}"
+                speaker.country.isNullOrBlank() -> rootView.from.text = getString(R.string.from_place, speaker.city)
+                speaker.city.isNullOrBlank() -> rootView.from.text = getString(R.string.from_place, speaker.country)
+                else -> rootView.from.text = getString(R.string.from_places, speaker.city, speaker.country)
             }
 
             when (speaker.website.isNullOrBlank()) {

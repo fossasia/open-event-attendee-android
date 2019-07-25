@@ -257,7 +257,7 @@ class TicketsFragment : Fragment() {
             rootView.organizerName.isVisible = false
         } else {
             rootView.organizerName.isVisible = true
-            rootView.organizerName.text = "by $organizerName"
+            rootView.organizerName.text = getString(R.string.by_organizer_name, organizerName)
         }
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
