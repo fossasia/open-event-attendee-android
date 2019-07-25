@@ -753,7 +753,7 @@ class EventDetailsFragment : Fragment() {
                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                         layout.feedbackTextInputLayout.isErrorEnabled = false
                     } else {
-                        layout.feedbackTextInputLayout.error = "Can't be Empty"
+                        layout.feedbackTextInputLayout.error = getString(R.string.cant_be_empty)
                     }
                 }
 

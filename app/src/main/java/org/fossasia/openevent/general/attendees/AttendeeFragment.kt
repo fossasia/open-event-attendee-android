@@ -306,7 +306,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupTicketDetailTable() {
-        rootView.qty.text = " — ${attendeeViewModel.ticketIdAndQty?.map { it.second }?.sum()} items"
+        attendeeViewModel.ticketIdAndQty?.map { it.second }?.sum()?.let {
+            rootView.qty.text = resources.getQuantityString(R.plurals.order_quantity_item, it, it)
+        }
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
@@ -809,13 +811,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         rootView.eventName.text = event.name
         val total = if (safeArgs.amount > 0) "${attendeeViewModel.paymentCurrency} ${"%.2f".format(safeArgs.amount)}"
                 else getString(R.string.free)
-        rootView.amount.text = "Total: $total"
+        rootView.amount.text = getString(R.string.total_amount, total)
 
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 
     private fun loadUserUI(user: User) {
-        rootView.helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
+        rootView.helloUser.text = getString(R.string.hello_user, user.firstName.nullToEmpty())
         rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
         rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
         rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())

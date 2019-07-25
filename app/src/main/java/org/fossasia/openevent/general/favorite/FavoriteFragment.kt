@@ -91,7 +91,7 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
                 favoriteEventsRecyclerAdapter.submitList(list.sortedBy { getEventDateTime(it.startsAt, it.timezone) })
-                rootView.likesNumber.text = "${list.size} likes"
+                rootView.likesNumber.text = resources.getQuantityString(R.plurals.likes_number, list.size, list.size)
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", list.size)
             })
