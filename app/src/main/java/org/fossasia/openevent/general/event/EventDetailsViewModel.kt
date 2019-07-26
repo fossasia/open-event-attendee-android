@@ -303,7 +303,7 @@ class EventDetailsViewModel(
         val range = StringBuilder()
         if (maxPrice == minPrice) {
             if (maxPrice == 0f)
-                range.append("Free")
+                range.append(resource.getString(R.string.free))
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
@@ -311,7 +311,7 @@ class EventDetailsViewModel(
             }
         } else {
             if (minPrice == 0f)
-                range.append("Free")
+                range.append(resource.getString(R.string.free))
             else {
                 range.append(paymentCurrency)
                 range.append(" ")
