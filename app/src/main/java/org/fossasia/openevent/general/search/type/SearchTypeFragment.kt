@@ -28,7 +28,7 @@ class SearchTypeFragment : Fragment() {
     private val searchTypeViewModel by viewModel<SearchTypeViewModel>()
     private val safeArgs: SearchTypeFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private val eventTypesList: MutableList<String> = arrayListOf(getString(R.string.anything))
+    private val eventTypesList =  ArrayList<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +41,7 @@ class SearchTypeFragment : Fragment() {
         rootView.eventTypesRecyclerView.layoutManager = LinearLayoutManager(activity)
         rootView.eventTypesRecyclerView.adapter = typesAdapter
         searchTypeViewModel.loadEventTypes()
+        eventTypesList.add(getString(R.string.anything))
 
         searchTypeViewModel.connection
             .nonNull()
