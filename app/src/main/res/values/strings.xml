@@ -356,11 +356,11 @@
     <string name="and_i_m_up_for">And I\'m up for</string>
     <string name="what_type">What Sounds good?</string>
     <string name="feedback">Feedback</string>
-    <string name="write_feedback">Write Feedback</string>
+    <string name="write_feedback">Write a feedback</string>
     <string name="submit">Submit</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="feedback_submitted">Feedback submitted Successfully</string>
-    <string name="be_the_first_to_write_a_review">Be the first to write a review</string>
+    <string name="be_the_first_to_write_a_review">Be the first to write a feedback</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="no_faq_message">There are no frequenly asked questions for this event.</string>
 

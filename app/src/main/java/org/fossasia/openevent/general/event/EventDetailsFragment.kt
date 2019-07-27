@@ -267,7 +267,7 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.feedbackProgress.isVisible = it
-                rootView.feedbackBtn.isEnabled = !it
+                rootView.feedbackBtn.isVisible = !it
             })
 
         eventViewModel.eventFeedback.observe(viewLifecycleOwner, Observer {
@@ -286,7 +286,10 @@ class EventDetailsFragment : Fragment() {
         eventViewModel.submittedFeedback
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                feedbackAdapter.add(it)
+                if (feedbackAdapter.itemCount < LIMITED_FEEDBACK_NUMBER)
+                    feedbackAdapter.add(it)
+                else
+                    rootView.seeFeedbackTextView.isVisible = true
                 rootView.feedbackRv.isVisible = true
                 rootView.noFeedBackTv.isVisible = false
             })
