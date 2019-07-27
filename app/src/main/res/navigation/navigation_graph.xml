@@ -460,6 +460,13 @@
         android:name="org.fossasia.openevent.general.speakercall.EditSpeakerFragment"
         android:label="EditSpeakerFragment"
         tools:layout="@layout/fragment_proposal_speaker">
+        <action
+            android:id="@+id/action_edit_speaker_to_crop_image"
+            app:destination="@id/cropImageFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <argument
             android:name="eventId"
             app:argType="long"
