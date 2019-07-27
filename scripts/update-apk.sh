@@ -66,5 +66,6 @@ if [ "$TRAVIS_BRANCH" != "$PUBLISH_BRANCH" ]; then
     exit 0
 fi
 
+cd ..
 gem install fastlane
-fastlane supply --aab eventyay-attendee-master-app.aab --skip_upload_apk true --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
+fastlane supply --aab ./apk/eventyay-attendee-master-app.aab --skip_upload_apk true --track alpha --json_key ./scripts/fastlane.json --package_name $PACKAGE_NAME
