@@ -557,12 +557,13 @@
 
                 <Button
                     android:id="@+id/feedbackBtn"
+                    style="@style/ThreeDS2TextButtonStyle"
+                    android:textAllCaps="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_small"
-                    android:layout_marginStart="@dimen/layout_margin_large"
-                    android:layout_marginEnd="@dimen/layout_margin_large"
+                    android:layout_marginTop="@dimen/layout_margin_medium"
                     android:layout_marginBottom="@dimen/layout_margin_large"
+                    android:textColor="@color/colorAccent"
                     android:text="@string/write_feedback" />
             </LinearLayout>
 

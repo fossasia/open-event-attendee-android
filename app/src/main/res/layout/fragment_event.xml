@@ -40,7 +40,7 @@
                 layout="@layout/content_event"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/event_details_divider_margin"
+                android:layout_marginBottom="@dimen/layout_margin_extreme_large"
                 bind:event="@{event}" />
 
             <View

@@ -1,0 +1,21 @@
+**v0.6.1:**
+HOTFIX: Fix search filter crashing
+
+**v0.6.0:**
+🚀 Features and Enhancements
+
+- Update tickets section and display ticket status
+- Add donation tickets
+- Verify email and reset password with the app
+- Edit profile image
+- Improve filtering and sorting
+- Add pagination in different sections
+- Several UI enhancement
+
+🐛 Bug Fixes
+
+- Multiple crashes
+- Fixes for API < 24
+- Error handling
+- Billing information for paid tickets
+- Event's time and timezone
