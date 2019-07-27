@@ -101,8 +101,8 @@
                 android:fontFamily="sans-serif-thin"
                 android:textColor="@color/dark_grey"
                 android:textStyle="bold"
-                android:text="@{`by ` +event.organizerName}"
-                app:hideIfEmpty="@{event.organizerName}"
+                android:text="@{`by ` +event.ownerName}"
+                app:hideIfEmpty="@{event.ownerName}"
                 app:layout_constraintEnd_toEndOf="@+id/eventName"
                 app:layout_constraintStart_toStartOf="@+id/eventName"
                 app:layout_constraintTop_toBottomOf="@+id/eventName"
@@ -185,6 +185,34 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ticketPriceLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_large"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:visibility="gone"
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/refundPolicyLinearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/refundPolicyLinearLayout">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_medium"
+                    app:srcCompat="@drawable/ic_outline_ticket"
+                    app:tint="@color/eventDetailsFragmentIcon"/>
+
+                <TextView
+                    android:id="@+id/priceRangeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_margin_medium"
+                    android:textColor="@color/dark_grey"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/refundPolicyLinearLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -237,7 +265,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/refundPolicyLinearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/ticketPriceLinearLayout"
                 tools:visibility="visible">
 
                 <View
@@ -347,7 +375,7 @@
                 android:layout_marginTop="@dimen/layout_margin_large"
                 android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical"
-                app:hideIfEmpty="@{event.organizerName}"
+                app:hideIfEmpty="@{event.ownerName}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -400,7 +428,7 @@
                             android:id="@+id/organizerName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{event.organizerName}"
+                            android:text="@{event.ownerName}"
                             android:layout_marginBottom="@dimen/layout_margin_medium"
                             android:textColor="@color/light_grey"
                             android:textSize="@dimen/event_details_headers" />
@@ -409,8 +437,8 @@
                             android:id="@+id/eventOrganiserDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:strippedHtml="@{event.organizerDescription}"
-                            app:hideIfEmpty="@{event.organizerDescription}"
+                            app:strippedHtml="@{event.ownerDescription}"
+                            app:hideIfEmpty="@{event.ownerDescription}"
                             android:layout_marginBottom="@dimen/layout_margin_small"
                             android:ellipsize="end"
                             android:lines="3"
@@ -490,6 +518,13 @@
                     android:text="@string/feedback"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/event_details_headers" />
+
+                <ProgressBar
+                    android:id="@+id/feedbackProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feedbackRv"
@@ -679,9 +714,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sponsorsSummaryContainer"
-                android:visibility="gone"
-                tools:visibility="visible">
+                app:layout_constraintTop_toBottomOf="@+id/sponsorsSummaryContainer">
 
                 <View
                     android:layout_width="match_parent"
@@ -701,12 +734,32 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/event_details_headers" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/similarEventsRecycler"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical"
-                    tools:listitem="@layout/item_card_similar_events" />
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/similarEventsRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="horizontal"
+                        tools:listitem="@layout/item_card_similar_events" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerSimilarEvents"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <include layout="@layout/placeholder_item_card_similar_events" />
+                            <include layout="@layout/placeholder_item_card_similar_events" />
+                            <include layout="@layout/placeholder_item_card_similar_events" />
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

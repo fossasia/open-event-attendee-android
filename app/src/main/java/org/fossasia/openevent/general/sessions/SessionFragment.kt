@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -70,7 +71,7 @@ class SessionFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
                 if (it == getString(R.string.error_fetching_speakers_for_session)) {
-                    rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+                    rootView.sessionDetailSpeakersContainer.isVisible = false
                 }
             })
 
@@ -83,8 +84,8 @@ class SessionFragment : Fragment() {
         sessionViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-                rootView.sessionDetailContainer.visibility = if (it) View.GONE else View.VISIBLE
+                rootView.progressBar.isVisible = it
+                rootView.sessionDetailContainer.isVisible = !it
             })
 
         sessionViewModel.speakersUnderSession
@@ -92,9 +93,9 @@ class SessionFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 speakersAdapter.addAll(it)
                 if (it.isEmpty())
-                    rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+                    rootView.sessionDetailSpeakersContainer.isVisible = false
                 else
-                    rootView.speakersProgressBar.visibility = View.GONE
+                    rootView.speakersProgressBar.isVisible = false
             })
 
         sessionViewModel.loadSession(safeArgs.sessionId)
@@ -104,9 +105,9 @@ class SessionFragment : Fragment() {
         else {
             speakersAdapter.addAll(currentSpeakers)
             if (currentSpeakers.isEmpty())
-                rootView.sessionDetailSpeakersContainer.visibility = View.GONE
+                rootView.sessionDetailSpeakersContainer.isVisible = false
             else
-                rootView.speakersProgressBar.visibility = View.GONE
+                rootView.speakersProgressBar.isVisible = false
         }
 
         val layoutManager = LinearLayoutManager(context)
@@ -152,7 +153,7 @@ class SessionFragment : Fragment() {
 
     private fun makeSessionView(session: Session) {
         when (session.title.isNullOrBlank()) {
-            true -> rootView.sessionDetailName.visibility = View.GONE
+            true -> rootView.sessionDetailName.isVisible = false
             false -> {
                 rootView.sessionDetailName.text = session.title
                 setToolbar(activity, session.title)
@@ -161,20 +162,20 @@ class SessionFragment : Fragment() {
 
         val type = session.sessionType
         if (type == null) {
-            rootView.sessionDetailType.visibility = View.GONE
+            rootView.sessionDetailType.isVisible = false
         } else {
-            rootView.sessionDetailType.text = "Type: ${type.name}"
+            rootView.sessionDetailType.text = getString(R.string.type_name, type.name)
         }
 
         val locationInfo = session.microlocation
         if (locationInfo == null) {
-            rootView.sessionDetailLocationInfoContainer.visibility = View.GONE
-            rootView.sessionDetailLocationContainer.visibility = View.GONE
+            rootView.sessionDetailLocationInfoContainer.isVisible = false
+            rootView.sessionDetailLocationContainer.isVisible = false
         } else {
             rootView.sessionDetailInfoLocation.text = locationInfo.name
             rootView.sessionDetailLocation.text = locationInfo.name
             if (locationInfo.latitude.isNullOrBlank() || locationInfo.longitude.isNullOrBlank()) {
-                rootView.sessionDetailLocationImageMap.visibility = View.GONE
+                rootView.sessionDetailLocationImageMap.isVisible = false
             } else {
                 rootView.sessionDetailLocationContainer.setOnClickListener {
                     startMap(locationInfo.latitude, locationInfo.longitude)
@@ -191,12 +192,12 @@ class SessionFragment : Fragment() {
         }
 
         when (session.language.isNullOrBlank()) {
-            true -> rootView.sessionDetailLanguageContainer.visibility = View.GONE
+            true -> rootView.sessionDetailLanguageContainer.isVisible = false
             false -> rootView.sessionDetailLanguage.text = session.language
         }
 
         when (session.startsAt.isNullOrBlank()) {
-            true -> rootView.sessionDetailStartTime.visibility = View.GONE
+            true -> rootView.sessionDetailStartTime.isVisible = false
             false -> {
                 val formattedStartTime = EventUtils.getEventDateTime(session.startsAt, "")
                 val formattedTime = EventUtils.getFormattedTime(formattedStartTime)
@@ -206,7 +207,7 @@ class SessionFragment : Fragment() {
             }
         }
         when (session.endsAt.isNullOrBlank()) {
-            true -> rootView.sessionDetailEndTime.visibility = View.GONE
+            true -> rootView.sessionDetailEndTime.isVisible = false
             false -> {
                 val formattedEndTime = EventUtils.getEventDateTime(session.endsAt, "")
                 val formattedTime = EventUtils.getFormattedTime(formattedEndTime)
@@ -216,7 +217,7 @@ class SessionFragment : Fragment() {
             }
         }
         if (session.startsAt.isNullOrBlank() && session.endsAt.isNullOrBlank())
-            rootView.sessionDetailTimeContainer.visibility = View.GONE
+            rootView.sessionDetailTimeContainer.isVisible = false
         else
             rootView.sessionDetailTimeContainer.setOnClickListener {
                 saveSessionToCalendar(session)
@@ -224,7 +225,7 @@ class SessionFragment : Fragment() {
 
         val description = session.longAbstract ?: session.shortAbstract
         when (description.isNullOrBlank()) {
-            true -> rootView.sessionDetailAbstractContainer.visibility = View.GONE
+            true -> rootView.sessionDetailAbstractContainer.isVisible = false
             false -> {
                 rootView.sessionDetailAbstract.text = description.stripHtml()
                 val sessionAbstractClickListener = View.OnClickListener {
@@ -240,7 +241,7 @@ class SessionFragment : Fragment() {
 
                 rootView.sessionDetailAbstract.post {
                     if (rootView.sessionDetailAbstract.lineCount > LINE_COUNT_ABSTRACT) {
-                        rootView.sessionDetailAbstractSeeMore.visibility = View.VISIBLE
+                        rootView.sessionDetailAbstractSeeMore.isVisible = true
                         rootView.sessionDetailAbstractContainer.setOnClickListener(sessionAbstractClickListener)
                     }
                 }
@@ -249,7 +250,7 @@ class SessionFragment : Fragment() {
 
         val track = session.track
         when (track == null) {
-            true -> rootView.sessionDetailTrackContainer.visibility = View.GONE
+            true -> rootView.sessionDetailTrackContainer.isVisible = false
             false -> {
                 rootView.sessionDetailTrack.text = track.name
                 val trackColor = Color.parseColor(track.color)
@@ -259,7 +260,7 @@ class SessionFragment : Fragment() {
         }
 
         when (session.signupUrl.isNullOrBlank()) {
-            true -> rootView.sessionDetailSignUpButton.visibility = View.GONE
+            true -> rootView.sessionDetailSignUpButton.isVisible = false
             false -> rootView.sessionDetailSignUpButton.setOnClickListener {
                 context?.let { Utils.openUrl(it, session.signupUrl) }
             }

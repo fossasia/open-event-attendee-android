@@ -23,4 +23,7 @@ interface TicketDao {
 
     @Query("SELECT * from Ticket WHERE id in (:ids)")
     fun getTicketsWithIds(ids: List<Int>): Single<List<Ticket>>
+
+    @Query("SELECT MAX(price) as maxValue, MIN(price) as minValue from Ticket WHERE event = :eventId")
+    fun getTicketPriceRange(eventId: Long): Single<TicketPriceRange>
 }

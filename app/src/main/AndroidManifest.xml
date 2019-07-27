@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
     <application
         android:name=".OpenEventGeneral"
         android:allowBackup="true"
@@ -34,8 +36,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="@string/FRONTEND_HOST"
-                    android:pathPrefix="/e/" />
+                    android:host="@string/FRONTEND_HOST"/>
             </intent-filter>
         </activity>
         <provider
@@ -45,7 +46,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_provider"/>
+                android:resource="@xml/file_provider" />
         </provider>
         <service
             android:name="org.fossasia.openevent.general.order.invoice.DownloadInvoiceService"

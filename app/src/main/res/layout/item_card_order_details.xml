@@ -296,16 +296,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/event_summary"
                 android:textSize="@dimen/text_size_medium"
-                tools:text="@string/event_summary" />
+                app:hideIfEmpty="@{event.description}"/>
 
             <TextView
                 android:id="@+id/eventSummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
+                android:maxLines="2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
+                app:hideIfEmpty="@{event.description}"
                 app:strippedHtml="@{event.description}"
                 tools:text="@string/event_summary_preview" />
 
@@ -327,7 +328,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/organizer"
                 android:textSize="@dimen/text_size_medium"
-                app:hideIfEmpty="@{event.organizerName}"
+                app:hideIfEmpty="@{event.ownerName}"
                 tools:text="@string/organizer" />
 
             <TextView
@@ -336,7 +337,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
-                android:text="@{event.organizerName}"
+                android:text="@{event.ownerName}"
+                app:hideIfEmpty="@{event.ownerName}"
                 tools:text="@string/organizer_preview" />
 
             <Button

@@ -22,9 +22,6 @@ class OrderService(
                 }
     }
 
-    fun editOrder(orderIdentifier: String, order: Order): Single<Order> =
-        orderApi.editOrder(orderIdentifier, order)
-
     fun chargeOrder(identifier: String, charge: Charge): Single<Charge> {
         return orderApi.chargeOrder(identifier, charge)
     }
@@ -41,6 +38,13 @@ class OrderService(
             }.onErrorResumeNext {
                 orderDao.getAllOrders().map { it }
             }
+    }
+
+    fun getOrdersOfUserPaged(userId: Long, query: String, page: Int): Single<List<Order>> {
+        return orderApi.ordersUnderUserPaged(userId, query, page).map {
+            orderDao.insertOrders(it)
+            it
+        }
     }
 
     fun getOrderById(orderId: Long): Single<Order> {

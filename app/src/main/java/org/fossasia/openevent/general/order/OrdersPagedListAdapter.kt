@@ -2,13 +2,13 @@ package org.fossasia.openevent.general.order
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.databinding.ItemCardOrderBinding
 
-class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
+class OrdersPagedListAdapter : PagedListAdapter<Pair<Event, Order>, OrdersViewHolder>(OrdersDiffCallback()) {
 
-    private val eventAndOrderIdentifier = ArrayList<Pair<Event, Order>>()
     private var showExpired = false
     private var clickListener: OrderClickListener? = null
 
@@ -16,11 +16,8 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
         clickListener = listener
     }
 
-    fun addAllPairs(list: List<Pair<Event, Order>>, showExpired: Boolean) {
-        if (eventAndOrderIdentifier.isNotEmpty())
-            this.eventAndOrderIdentifier.clear()
-        eventAndOrderIdentifier.addAll(list)
-        this.showExpired = showExpired
+    fun setShowExpired(expired: Boolean) {
+        showExpired = expired
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
@@ -29,14 +26,27 @@ class OrdersRecyclerAdapter : RecyclerView.Adapter<OrdersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        holder.bind(eventAndOrderIdentifier[position], showExpired, clickListener)
+        val item = getItem(position)
+        if (item != null) {
+            holder.bind(item, showExpired, clickListener)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return eventAndOrderIdentifier.size
+    fun clear() {
+        this.submitList(null)
     }
 
     interface OrderClickListener {
         fun onClick(eventID: Long, orderIdentifier: String, orderId: Long)
+    }
+}
+
+class OrdersDiffCallback : DiffUtil.ItemCallback<Pair<Event, Order>>() {
+    override fun areItemsTheSame(oldItem: Pair<Event, Order>, newItem: Pair<Event, Order>): Boolean {
+        return oldItem.second.id == newItem.second.id
+    }
+
+    override fun areContentsTheSame(oldItem: Pair<Event, Order>, newItem: Pair<Event, Order>): Boolean {
+        return oldItem == newItem
     }
 }

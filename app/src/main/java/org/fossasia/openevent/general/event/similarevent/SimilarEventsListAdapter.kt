@@ -2,14 +2,14 @@ package org.fossasia.openevent.general.event.similarevent
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagedListAdapter
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.databinding.ItemCardSimilarEventsBinding
 import org.fossasia.openevent.general.event.Event
 
-class SimilarEventsListAdapter : ListAdapter<Event, SimilarEventViewHolder>(EventsDiffCallback()) {
+class SimilarEventsListAdapter : PagedListAdapter<Event, SimilarEventViewHolder>(EventsDiffCallback()) {
 
     var onEventClick: EventClickListener? = null
     var onFavFabClick: FavoriteFabClickListener? = null
@@ -21,18 +21,16 @@ class SimilarEventsListAdapter : ListAdapter<Event, SimilarEventViewHolder>(Even
 
     override fun onBindViewHolder(holder: SimilarEventViewHolder, position: Int) {
         val event = getItem(position)
-        holder.apply {
-            bind(event, position)
-            eventClickListener = onEventClick
-            favFabClickListener = onFavFabClick
+        if (event != null) {
+            holder.apply {
+                bind(event, position)
+                eventClickListener = onEventClick
+                favFabClickListener = onFavFabClick
+            }
         }
     }
 
     fun clear() {
-        this.submitList(emptyList())
+        this.submitList(null)
     }
-}
-
-interface EventHashTagClickListener {
-    fun onClick(hashTagValue: String)
 }

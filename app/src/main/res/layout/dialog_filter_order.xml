@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_large">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_medium"
+        android:paddingTop="@dimen/padding_medium"
+        android:text="@string/filter_orders"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_expanded_title" />
+    <CheckBox
+        android:id="@+id/completedOrdersCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/completed_orders"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_size_large" />
+    <CheckBox
+        android:id="@+id/placedOrdersCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/placed_orders"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_size_large" />
+    <CheckBox
+        android:id="@+id/pendingOrdersCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pending_orders"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_size_large" />
+    <TextView
+        android:id="@+id/sortLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingBottom="@dimen/padding_medium"
+        android:text="@string/sort_by"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_expanded_title" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/dateRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/date"
+            android:textColor="@color/light_grey"
+            android:textSize="@dimen/text_size_large" />
+
+        <RadioButton
+            android:id="@+id/orderStatusRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:text="@string/order_status"
+            android:textColor="@color/light_grey"
+            android:textSize="@dimen/text_size_large" />
+    </RadioGroup>
+</LinearLayout>

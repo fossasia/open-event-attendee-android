@@ -21,21 +21,25 @@ import org.fossasia.openevent.general.order.Charge
 import org.fossasia.openevent.general.order.ConfirmOrder
 import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
+import org.fossasia.openevent.general.settings.SettingsService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.HttpErrors
+import retrofit2.HttpException
 import timber.log.Timber
 
 const val ORDER_STATUS_PENDING = "pending"
 const val ORDER_STATUS_COMPLETED = "completed"
 const val ORDER_STATUS_PLACED = "placed"
 const val ORDER_STATUS_CANCELLED = "cancelled"
+const val ORDER_STATUS_INITIALIZING = "initializing"
 const val PAYMENT_MODE_FREE = "free"
 const val PAYMENT_MODE_BANK = "bank"
 const val PAYMENT_MODE_ONSITE = "onsite"
 const val PAYMENT_MODE_CHEQUE = "cheque"
 const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
+private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
     private val attendeeService: AttendeeService,
@@ -44,6 +48,7 @@ class AttendeeViewModel(
     private val orderService: OrderService,
     private val ticketService: TicketService,
     private val authService: AuthService,
+    private val settingsService: SettingsService,
     private val resource: Resource
 ) : ViewModel() {
 
@@ -60,8 +65,7 @@ class AttendeeViewModel(
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
     val orderCompleted = MutableLiveData<Boolean>()
-    val totalAmount = MutableLiveData<Float>(0F)
-    val paymentCompleted = MutableLiveData<Boolean>()
+    val totalAmount = MutableLiveData(0F)
     private val mutableTickets = MutableLiveData<List<Ticket>>()
     val tickets: LiveData<List<Ticket>> = mutableTickets
     private val mutableForms = MutableLiveData<List<CustomForm>>()
@@ -70,6 +74,8 @@ class AttendeeViewModel(
     val pendingOrder: LiveData<Order> = mutablePendingOrder
     private val mutableStripeOrderMade = MutableLiveData<Boolean>()
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
+    private val mutableOrderExpiryTime = MutableLiveData<Int>()
+    val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -89,14 +95,13 @@ class AttendeeViewModel(
 
     // Retained information
     var countryPosition: Int = -1
-    var ticketIdAndQty: List<Pair<Int, Int>>? = null
+    var ticketIdAndQty: List<Triple<Int, Int, Float>>? = null
     var selectedPaymentOption: Int = -1
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0
     var paymentCurrency: String = ""
     var timeout: Long = -1L
-    var orderCreatedSuccess = false
     var ticketDetailsVisible = false
     var billingEnabled = false
 
@@ -148,24 +153,8 @@ class AttendeeViewModel(
             })
     }
 
-    fun cancelPendingOrder() {
-        var order = mutablePendingOrder.value
-        val identifier: String? = orderIdentifier
-        if (order == null || identifier == null) return
-
-        order = order.copy(status = ORDER_STATUS_CANCELLED)
-        compositeDisposable += orderService.editOrder(identifier, order)
-            .withDefaultSchedulers()
-            .subscribe({
-                Timber.d("Pending order cancelled")
-                mutableMessage.value = resource.getString(R.string.pending_order_cancelled_message)
-            }, {
-                Timber.e("Fail on cancelling order")
-            })
-    }
-
-    fun createPendingOrder(eventId: Long) {
-        val emptyOrder = Order(id = getId(), status = ORDER_STATUS_PENDING, event = EventId(eventId))
+    fun initializeOrder(eventId: Long) {
+        val emptyOrder = Order(id = getId(), status = ORDER_STATUS_INITIALIZING, event = EventId(eventId))
 
         compositeDisposable += orderService.placeOrder(emptyOrder)
             .withDefaultSchedulers()
@@ -192,8 +181,9 @@ class AttendeeViewModel(
             }, {
                 mutableProgress.value = false
                 if (createAttendeeIterations + 1 == totalAttendee)
-                    if (it.message.equals(HttpErrors.CONFLICT)) {
-                        mutableTicketSoldOut.value = true
+                    if (it is HttpException) {
+                        if (it.code() == HttpErrors.CONFLICT)
+                            mutableTicketSoldOut.value = true
                     } else {
                         mutableMessage.value = resource.getString(R.string.create_attendee_fail_message)
                         Timber.d(it, "Failed")
@@ -404,6 +394,21 @@ class AttendeeViewModel(
             else if (!Patterns.EMAIL_ADDRESS.matcher(it.email).matches()) return false
         }
         return true
+    }
+
+    fun getSettings() {
+        compositeDisposable += settingsService.fetchSettings()
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableOrderExpiryTime.value = it.orderExpiryTime
+            }, {
+                mutableOrderExpiryTime.value = ORDER_EXPIRY_TIME
+                Timber.e(it, "Error fetching settings")
+            })
     }
 
     override fun onCleared() {

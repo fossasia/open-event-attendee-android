@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.fossasia.openevent.general.R
 import io.reactivex.rxkotlin.plusAssign
@@ -10,12 +11,14 @@ import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
 class LoginViewModel(
     private val authService: AuthService,
     private val network: Network,
-    private val resource: Resource
+    private val resource: Resource,
+    private val eventService: EventService
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -32,12 +35,24 @@ class LoginViewModel(
     val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    private val mutableValidPassword = MutableLiveData<Boolean>()
+    val validPassword: LiveData<Boolean> = mutableValidPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
-        compositeDisposable += authService.login(email, password)
+
+        val loginObservable: Single<LoginResponse> = authService.login(email, password).flatMap { loginResponse ->
+            eventService.loadFavoriteEvent().flatMap { favsList ->
+                val favIds = favsList.filter { favEvent -> favEvent.event != null }
+                eventService.saveFavoritesEventFromApi(favIds).flatMap {
+                    Single.just(loginResponse)
+                }
+            }
+        }
+
+        compositeDisposable += loginObservable
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
@@ -47,6 +62,20 @@ class LoginViewModel(
                 mutableLoggedIn.value = true
             }, {
                 mutableError.value = resource.getString(R.string.login_fail_message)
+            })
+    }
+
+    fun checkValidPassword(email: String, password: String) {
+        compositeDisposable += authService.checkPasswordValid(email, password)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableValidPassword.value = true
+            }, {
+                mutableValidPassword.value = false
             })
     }
 

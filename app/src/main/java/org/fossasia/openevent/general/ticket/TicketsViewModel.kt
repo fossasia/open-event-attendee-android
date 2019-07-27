@@ -42,7 +42,9 @@ class TicketsViewModel(
     val amount: LiveData<Float> = mutableAmount
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
-    val ticketIdAndQty = MutableLiveData<List<Pair<Int, Int>>>()
+    val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
+    var discountCodeCurrentLayout = APPLY_DISCOUNT_CODE
+    var hasPaidTickets = false
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -60,6 +62,7 @@ class TicketsViewModel(
                 mutableTicketTableVisibility.value = ticketList.isNotEmpty()
                 tickets.value = ticketList
             }, {
+                mutableProgress.value = false
                 mutableError.value = resource.getString(R.string.error_fetching_tickets_message)
                 Timber.e(it, "Error fetching tickets %d", id)
             })
@@ -97,7 +100,7 @@ class TicketsViewModel(
             })
     }
 
-    fun getAmount(ticketIdAndQty: List<Pair<Int, Int>>) {
+    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
         ticketIdAndQty.forEach {
@@ -106,6 +109,7 @@ class TicketsViewModel(
                 qty.add(it.second)
             }
         }
+        val donation = ticketIdAndQty.map { it.third*it.second }.sum()
         compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -118,16 +122,18 @@ class TicketsViewModel(
                 val code = appliedDiscountCode
                 tickets.forEach { ticket ->
                     var price = ticket.price
-                    if (code?.value != null && price != null) {
+                    if (code?.value != null) {
                         appliedDiscountCode?.tickets?.forEach { ticketId ->
                             if (ticket.id == ticketId.id.toInt()) {
                                 price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
                             }
                         }
                     }
-                    price?.let { prices += price * qty[index++] }
+                    price.let { prices += price * qty[index++] }
+                    if (ticket.type == TICKET_TYPE_PAID)
+                        hasPaidTickets = true
                 }
-                mutableAmount.value = prices
+                mutableAmount.value = prices + donation
             }, {
                 Timber.e(it, "Error Loading tickets!")
             })
@@ -135,7 +141,7 @@ class TicketsViewModel(
 
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
-    fun totalTicketsEmpty(ticketIdAndQty: List<Pair<Int, Int>>): Boolean {
+    fun totalTicketsEmpty(ticketIdAndQty: List<Triple<Int, Int, Float>>): Boolean {
         return ticketIdAndQty.sumBy { it.second } == 0
     }
 

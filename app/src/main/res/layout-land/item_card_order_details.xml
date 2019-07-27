@@ -307,7 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/organizer"
-                        app:hideIfEmpty="@{event.organizerName}"
+                        app:hideIfEmpty="@{event.ownerName}"
                         android:textSize="@dimen/text_size_large"
                         tools:text="@string/organizer" />
 
@@ -318,7 +318,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
-                        android:text="@{event.organizerName}"
+                        android:text="@{event.ownerName}"
                         tools:text="@string/organizer_preview" />
                 </LinearLayout>
             </LinearLayout>

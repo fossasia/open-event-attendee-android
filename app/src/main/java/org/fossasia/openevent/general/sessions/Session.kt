@@ -10,6 +10,7 @@ import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.sessions.microlocation.MicroLocation
 import org.fossasia.openevent.general.sessions.sessiontype.SessionType
 import org.fossasia.openevent.general.sessions.track.Track
@@ -43,11 +44,14 @@ data class Session(
     val audioUrl: String? = null,
     @ColumnInfo(index = true)
     @Relationship("session-type", resolve = true)
-    var sessionType: SessionType? = null,
+    val sessionType: SessionType? = null,
     @ColumnInfo(index = true)
     @Relationship("microlocation", resolve = true)
-    var microlocation: MicroLocation? = null,
+    val microlocation: MicroLocation? = null,
     @ColumnInfo(index = true)
     @Relationship("track", resolve = true)
-    var track: Track? = null
+    val track: Track? = null,
+    @ColumnInfo(index = true)
+    @Relationship("event", resolve = true)
+    val event: EventId? = null
 )

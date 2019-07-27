@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import kotlinx.android.synthetic.main.fragment_auth.view.getStartedButton
 import kotlinx.android.synthetic.main.fragment_auth.view.email
 import kotlinx.android.synthetic.main.fragment_auth.view.emailLayout
@@ -25,28 +24,29 @@ import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
+import org.fossasia.openevent.general.search.location.SEARCH_LOCATION_FRAGMENT
+import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.fossasia.openevent.general.welcome.WELCOME_FRAGMENT
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val FIRST_TIME_LOGIN = "firstTimeLogin"
-
 class AuthFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var rootView: View
     private val authViewModel by viewModel<AuthViewModel>()
     private val safeArgs: AuthFragmentArgs by navArgs()
     private val smartAuthViewModel by sharedViewModel<SmartAuthViewModel>()
-    private val preference = Preference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_auth, container, false)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        setSharedElementEnterTransition()
         setupToolbar()
 
         val progressDialog = progressDialog(context)
@@ -70,9 +70,13 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
         val snackbarMessage = safeArgs.snackbarMessage
         if (!snackbarMessage.isNullOrEmpty()) rootView.snackbar(snackbarMessage)
 
-        rootView.skipTextView.isVisible = preference.getBoolean(FIRST_TIME_LOGIN, true)
+        val email = safeArgs.email
+        if (email != null) {
+            rootView.email.setText(email)
+        }
+
+        rootView.skipTextView.isVisible = safeArgs.showSkipButton
         rootView.skipTextView.setOnClickListener {
-            preference.putBoolean(FIRST_TIME_LOGIN, false)
             findNavController(rootView).navigate(
                 AuthFragmentDirections.actionAuthToEventsPop()
             )
@@ -87,7 +91,6 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             authViewModel.checkUser(rootView.email.text.toString())
         }
 
-        rootView.email.setText(safeArgs.email)
         rootView.email.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
@@ -159,7 +162,11 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             TICKETS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.ticketsFragment, false)
             EVENT_DETAIL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.eventDetailsFragment, false)
             WELCOME_FRAGMENT -> findNavController(rootView).popBackStack(R.id.welcomeFragment, false)
+            SEARCH_LOCATION_FRAGMENT -> findNavController(rootView).popBackStack(R.id.searchLocationFragment, false)
             PROFILE_FRAGMENT -> findNavController(rootView).popBackStack(R.id.profileFragment, false)
+            SEARCH_RESULTS_FRAGMENT -> findNavController(rootView).popBackStack(R.id.searchResultsFragment, false)
+            ORDER_COMPLETED_FRAGMENT -> findNavController(rootView).popBackStack(R.id.orderCompletedFragment, false)
+            SPEAKERS_CALL_FRAGMENT -> findNavController(rootView).popBackStack(R.id.speakersCallFragment, false)
             else -> findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToEventsPop())
         }
     }

@@ -1,17 +1,23 @@
 package org.fossasia.openevent.general.event
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.notification.NotificationService
+import org.fossasia.openevent.general.event.paging.EventsDataSourceFactory
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
@@ -23,30 +29,23 @@ class EventsViewModel(
     private val preference: Preference,
     private val resource: Resource,
     private val mutableConnectionLiveData: MutableConnectionLiveData,
-    private val authHolder: AuthHolder,
-    private val notificationService: NotificationService
+    private val config: PagedList.Config,
+    private val authHolder: AuthHolder
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     val connection: LiveData<Boolean> = mutableConnectionLiveData
-    private val mutableProgress = MutableLiveData<Boolean>()
-    val progress: LiveData<Boolean> = mutableProgress
-    val mutableNewNotifications = MutableLiveData<Boolean>()
-    val newNotifications: LiveData<Boolean> = mutableNewNotifications
-    private val mutableEvents = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>> = mutableEvents
-    private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
-    private val mutableShowShimmerEvents = MutableLiveData<Boolean>()
-    val showShimmerEvents: LiveData<Boolean> = mutableShowShimmerEvents
+    private val mutableProgress = MediatorLiveData<Boolean>()
+    val progress: MediatorLiveData<Boolean> = mutableProgress
+    private val mutablePagedEvents = MutableLiveData<PagedList<Event>>()
+    val pagedEvents: LiveData<PagedList<Event>> = mutablePagedEvents
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: LiveData<String> = mutableMessage
     var lastSearch = ""
     private val mutableSavedLocation = MutableLiveData<String>()
     val savedLocation: LiveData<String> = mutableSavedLocation
-
-    fun isLoggedIn() = authHolder.isLoggedIn()
-
-    fun getId() = authHolder.getId()
+    private lateinit var sourceFactory: EventsDataSourceFactory
 
     fun loadLocation() {
         mutableSavedLocation.value = preference.getString(SAVED_LOCATION)
@@ -56,83 +55,79 @@ class EventsViewModel(
     fun loadLocationEvents() {
         if (mutableSavedLocation.value == null) return
 
-        if (lastSearch != savedLocation.value) {
-            compositeDisposable += eventService.getEventsByLocation(mutableSavedLocation.value)
-                .withDefaultSchedulers()
-                .distinctUntilChanged()
-                .doOnSubscribe {
-                    mutableShowShimmerEvents.value = true
-                }
-                .doFinally {
-                    stopLoaders()
-                }.subscribe({
-                    stopLoaders()
-                    mutableEvents.value = it
-                }, {
-                    stopLoaders()
-                    Timber.e(it, "Error fetching events")
-                    mutableError.value = resource.getString(R.string.error_fetching_events_message)
-                })
-        } else {
-            mutableProgress.value = false
-        }
-    }
+        sourceFactory = EventsDataSourceFactory(
+            compositeDisposable,
+            eventService,
+            mutableSavedLocation.value,
+            mutableProgress
+        )
+        val eventPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
 
-    private fun stopLoaders() {
-        mutableProgress.value = false
-        mutableShowShimmerEvents.value = false
-        lastSearch = mutableSavedLocation.value ?: ""
+        compositeDisposable += eventPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.subscribe({
+                val currentPagedEvents = mutablePagedEvents.value
+                if (currentPagedEvents == null) {
+                    mutablePagedEvents.value = it
+                } else {
+                    currentPagedEvents.addAll(it)
+                    mutablePagedEvents.value = currentPagedEvents
+                }
+            }, {
+                Timber.e(it, "Error fetching events")
+                mutableMessage.value = resource.getString(R.string.error_fetching_events_message)
+            })
     }
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 
     fun clearEvents() {
-        mutableEvents.value = null
+        mutablePagedEvents.value = null
     }
 
     fun clearLastSearch() {
         lastSearch = ""
     }
 
-    fun loadEvents() {
-        compositeDisposable += eventService.getEvents()
-            .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }.doFinally {
-                mutableProgress.value = false
-            }.subscribe({
-                mutableEvents.value = it
-            }, {
-                Timber.e(it, "Error fetching events")
-                mutableError.value = resource.getString(R.string.error_fetching_events_message)
-            })
+    fun isLoggedIn() = authHolder.isLoggedIn()
+
+    fun setFavorite(event: Event, favorite: Boolean) {
+        if (favorite) {
+            addFavorite(event)
+        } else {
+            removeFavorite(event)
+        }
     }
 
-    fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable += eventService.setFavorite(eventId, favorite)
+    private fun addFavorite(event: Event) {
+        val favoriteEvent = FavoriteEvent(authHolder.getId(), EventId(event.id))
+        compositeDisposable += eventService.addFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
             .subscribe({
-                Timber.d("Success")
+                mutableMessage.value = resource.getString(R.string.add_event_to_shortlist_message)
             }, {
-                Timber.e(it, "Error")
-                mutableError.value = resource.getString(R.string.error)
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on adding like for event ID ${event.id}")
             })
     }
 
-    fun syncNotifications() {
-        if (!isLoggedIn())
-            return
-        compositeDisposable += notificationService.syncNotifications(getId())
+    private fun removeFavorite(event: Event) {
+        val favoriteEventId = event.favoriteEventId ?: return
+
+        val favoriteEvent = FavoriteEvent(favoriteEventId, EventId(event.id))
+        compositeDisposable += eventService.removeFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
-            .subscribe({ list ->
-                list?.forEach {
-                    if (!it.isRead) {
-                        preference.putBoolean(NEW_NOTIFICATIONS, true)
-                        mutableNewNotifications.value = true
-                    }
-                }
+            .subscribe({
+                mutableMessage.value = resource.getString(R.string.remove_event_from_shortlist_message)
             }, {
-                Timber.e(it, "Error fetching notifications")
+                mutableMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on removing like for event ID ${event.id}")
             })
     }
 

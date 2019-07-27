@@ -39,13 +39,12 @@ import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.fossasia.openevent.general.utils.nullToEmpty
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
 
 const val TICKETS_FRAGMENT = "ticketsFragment"
-private const val APPLY_DISCOUNT_CODE = 1
+const val APPLY_DISCOUNT_CODE = 1
 private const val SHOW_DISCOUNT_CODE_LAYOUT = 2
 private const val DISCOUNT_CODE_APPLIED = 3
 
@@ -55,7 +54,7 @@ class TicketsFragment : Fragment() {
     private val safeArgs: TicketsFragmentArgs by navArgs()
     private lateinit var rootView: View
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var ticketIdAndQty = ArrayList<Pair<Int, Int>>()
+    private var ticketIdAndQty = ArrayList<Triple<Int, Int, Float>>()
     private var totalAmount: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,7 +124,7 @@ class TicketsFragment : Fragment() {
             if (!ticketsViewModel.totalTicketsEmpty(ticketIdAndQty)) {
                 ticketsViewModel.getAmount(ticketIdAndQty)
             } else {
-                handleNoTicketsSelected()
+                showErrorMessage(resources.getString(R.string.no_tickets_message))
             }
         }
 
@@ -189,14 +188,14 @@ class TicketsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val ticketSelectedListener = object : TicketSelectedListener {
-            override fun onSelected(ticketId: Int, quantity: Int) {
-                handleTicketSelect(ticketId, quantity)
+            override fun onSelected(ticketId: Int, quantity: Int, donation: Float) {
+                handleTicketSelect(ticketId, quantity, donation)
                 ticketsViewModel.ticketIdAndQty.value = ticketIdAndQty
             }
         }
         ticketsRecyclerAdapter.setSelectListener(ticketSelectedListener)
 
-        if (safeArgs.timeout) showTicketTimeoutDialog()
+        if (safeArgs.timeout) showErrorMessage(getString(R.string.ticket_timeout_message))
     }
 
     override fun onDestroyView() {
@@ -214,24 +213,16 @@ class TicketsFragment : Fragment() {
     }
 
     private fun redirectToAttendee() {
-
         val wrappedTicketAndQty = TicketIdAndQtyWrapper(ticketIdAndQty)
         ticketsViewModel.mutableAmount.value = null
         findNavController(rootView).navigate(TicketsFragmentDirections.actionTicketsToAttendee(
             eventId = safeArgs.eventId,
             ticketIdAndQty = wrappedTicketAndQty,
             currency = safeArgs.currency,
-            amount = totalAmount
+            amount = totalAmount,
+            hasPaidTickets = ticketsViewModel.hasPaidTickets
         ))
-    }
-
-    private fun showTicketTimeoutDialog() {
-        AlertDialog.Builder(requireContext())
-            .setPositiveButton(getString(R.string.ok)) { _, _ -> /*Do Nothing*/ }
-            .setTitle(getString(R.string.whoops))
-            .setMessage(getString(R.string.ticket_timeout_message))
-            .create()
-            .show()
+        ticketsViewModel.hasPaidTickets = false
     }
 
     private fun redirectToLogin() {
@@ -240,12 +231,12 @@ class TicketsFragment : Fragment() {
         ))
     }
 
-    private fun handleTicketSelect(id: Int, quantity: Int) {
+    private fun handleTicketSelect(id: Int, quantity: Int, donation: Float = 0F) {
         val pos = ticketIdAndQty.map { it.first }.indexOf(id)
         if (pos == -1) {
-            ticketIdAndQty.add(Pair(id, quantity))
+            ticketIdAndQty.add(Triple(id, quantity, donation))
         } else {
-            ticketIdAndQty[pos] = Pair(id, quantity)
+            ticketIdAndQty[pos] = Triple(id, quantity, donation)
         }
     }
 
@@ -261,19 +252,26 @@ class TicketsFragment : Fragment() {
 
     private fun loadEventDetails(event: Event) {
         rootView.eventName.text = event.name
-        rootView.organizerName.text = "by ${event.organizerName.nullToEmpty()}"
+        val organizerName = event.ownerName
+        if (organizerName == null) {
+            rootView.organizerName.isVisible = false
+        } else {
+            rootView.organizerName.isVisible = true
+            rootView.organizerName.text = getString(R.string.by_organizer_name, organizerName)
+        }
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
         rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
+        ticketsRecyclerAdapter.setTimeZone(event.timezone)
     }
 
-    private fun handleNoTicketsSelected() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage(resources.getString(R.string.no_tickets_message))
-                .setTitle(resources.getString(R.string.whoops))
-                .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
-        val alert = builder.create()
-        alert.show()
+    private fun showErrorMessage(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setTitle(resources.getString(R.string.whoops))
+            .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ -> dialog.cancel() }
+            .create()
+            .show()
     }
 
     private fun loadTickets() {
@@ -287,10 +285,10 @@ class TicketsFragment : Fragment() {
             ticketsViewModel.loadTickets(safeArgs.eventId)
         }
 
-        val retainedTicketIdAndQty: List<Pair<Int, Int>>? = ticketsViewModel.ticketIdAndQty.value
+        val retainedTicketIdAndQty: List<Triple<Int, Int, Float>>? = ticketsViewModel.ticketIdAndQty.value
         if (retainedTicketIdAndQty != null) {
             for (idAndQty in retainedTicketIdAndQty) {
-                handleTicketSelect(idAndQty.first, idAndQty.second)
+                handleTicketSelect(idAndQty.first, idAndQty.second, idAndQty.third)
             }
             ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
             ticketsRecyclerAdapter.notifyDataSetChanged()
@@ -302,24 +300,32 @@ class TicketsFragment : Fragment() {
         rootView.ticketTableHeader.isVisible = !show
         rootView.ticketsRecycler.isVisible = !show
         rootView.register.isVisible = !show
+        if (show) {
+            rootView.discountCodeLayout.isVisible = false
+            rootView.discountCodeAppliedLayout.isVisible = false
+            rootView.applyDiscountCode.isVisible = false
+        } else {
+            handleDiscountCodeVisibility(ticketsViewModel.discountCodeCurrentLayout)
+        }
     }
 
     private fun handleDiscountCodeVisibility(code: Int = APPLY_DISCOUNT_CODE) {
+        ticketsViewModel.discountCodeCurrentLayout = code
         when (code) {
             APPLY_DISCOUNT_CODE -> {
-                rootView.applyDiscountCode.visibility = View.VISIBLE
-                rootView.discountCodeAppliedLayout.visibility = View.GONE
-                rootView.discountCodeLayout.visibility = View.GONE
+                rootView.applyDiscountCode.isVisible = true
+                rootView.discountCodeAppliedLayout.isVisible = false
+                rootView.discountCodeLayout.isVisible = false
             }
             SHOW_DISCOUNT_CODE_LAYOUT -> {
-                rootView.applyDiscountCode.visibility = View.GONE
-                rootView.discountCodeAppliedLayout.visibility = View.GONE
-                rootView.discountCodeLayout.visibility = View.VISIBLE
+                rootView.applyDiscountCode.isVisible = false
+                rootView.discountCodeAppliedLayout.isVisible = false
+                rootView.discountCodeLayout.isVisible = true
             }
             DISCOUNT_CODE_APPLIED -> {
-                rootView.applyDiscountCode.visibility = View.GONE
-                rootView.discountCodeAppliedLayout.visibility = View.VISIBLE
-                rootView.discountCodeLayout.visibility = View.GONE
+                rootView.applyDiscountCode.isVisible = false
+                rootView.discountCodeAppliedLayout.isVisible = true
+                rootView.discountCodeLayout.isVisible = false
             }
         }
     }

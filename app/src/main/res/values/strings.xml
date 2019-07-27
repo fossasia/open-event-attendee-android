@@ -3,11 +3,10 @@
     <string name="events">Events</string>
     <string name="profile">Profile</string>
     <string name="likes">Likes</string>
-    <string name="saved_date">savedDate</string>
     <string name="location_hint">Enter a location</string>
+    <string name="reset_password_message">Reset password successfully, Please log in to continue</string>
 
     <!--event details-->
-    <string name="event_card_date">Event Date :</string>
     <string name="report_event">Report Event</string>
     <string name="open_external_event_url">Open External Event URL</string>
     <string name="about">About</string>
@@ -16,7 +15,7 @@
     <string name="event_host_details">Event host details</string>
     <string name="organizer">Organizer</string>
     <string name="location">Location</string>
-    <string name="track">Track</string>
+    <string name="track_required">Track *</string>
     <string name="whats_good">What\'s good in</string>
     <string name="where">Where?</string>
     <string name="no_internet_message">We\'re having difficulty connecting to the server. Check your connection or try again later.</string>
@@ -35,7 +34,6 @@
 
     <!--Search event details-->
     <string name="search">Search</string>
-    <string name="search_results">Search results</string>
     <string name="search_hint">Search for. . .</string>
     <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
@@ -46,17 +44,13 @@
     <string name="month">In the next month</string>
     <string name="what_time">What time works?</string>
     <string name="pick_date">Pick a date...</string>
-    <string name="at">at</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
     <string name="event_details">Event details</string>
     <string name="download_ticket">Download Ticket</string>
     <string name="see_maps">See maps</string>
-    <string name="error_message">There was an error. Tap here to try again.</string>
     <string name="in">In</string>
-    <string name="clear_all">Clear All</string>
 
     <!--profile details-->
-    <string name="user_name">Username</string>
     <string name="logout">Log out</string>
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
@@ -64,7 +58,6 @@
     <string name="email_sent_message">We just sent you an email with a link to reset\nyour password </string>
     <string name="email_sent_alert">Check your email!</string>
     <string name="sign_up">Sign Up</string>
-    <string name="email_id" translatable="false">example@gmail.com</string>
     <string name="password">Password</string>
     <string name="manage_events">Manage Events</string>
     <string name="edit_profile">Edit Profile</string>
@@ -79,6 +72,7 @@
     <string name="profile_photo">Profile Photo</string>
     <string name="verified">Verified</string>
     <string name="not_verified">Account not verified. Click to verify</string>
+    <string name="verification_error_message">Error in verifying email</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
@@ -99,9 +93,6 @@
 
     <!--tickets fragment-->
     <string name="tickets">Tickets</string>
-    <string name="sales_dates">Sales Dates</string>
-    <string name="order_range">Order Range</string>
-    <string name="tickets_available">Tickets Available</string>
     <string name="register">Register</string>
     <string name="ticket_name">Ticket Name</string>
     <string name="price">Price</string>
@@ -114,7 +105,6 @@
 
     <!--ticket details-->
     <string name="your_info">Your Info</string>
-    <string name="other_information">Other Information</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
@@ -142,11 +132,9 @@
     <string name="ticket_timeout_info_message">After %1$s minutes, the reservation we are holding will be released.</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="cancel_order_message">Are you sure to cancel this order?</string>
-    <string name="pending_order_cancelled_message">Pending order cancelled</string>
 
     <!--payment details-->
     <string name="card_number">Card Number</string>
-    <string name="card_type">Card Type</string>
     <string name="expiration_date">Expiration Date</string>
     <string name="cvc" translatable="false">CVC</string>
     <string name="postal_code">Postal Code</string>
@@ -159,7 +147,6 @@
     <string name="bank_transfer">Telegraphic Transfer/Bank Transfer</string>
     <string name="cheque">Cheque</string>
     <string name="paypal_payment_not_available">Paypal payment is not available in the app yet!</string>
-    <string name="offline_payment_message">This is offline payment method. Please follow payment instructions.</string>
 
     <!--order details-->
     <string name="order_completed">ORDER COMPLETED</string>
@@ -185,11 +172,6 @@
     <string name="check_in_times">Check-in times</string>
     <string name="checked_out">Checked out</string>
 
-    <!--suggestion mail details-->
-    <string name="emailInfo">List out your proposed Bug(s)/Feature(s)</string>
-    <string name="emailSubject">Improvement Suggestion for Open Event General App</string>
-    <string name="supportEmailId" translatable="false">support@eventyay.com</string>
-
     <!--settings xml-->
     <string name="version_settings">Version</string>
     <string name="key_version">version</string>
@@ -200,13 +182,12 @@
     <string name="app_name_capital" translatable="false">Open Event Android</string>
     <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
-    <string name="acknowledgements_settings">Acknowledgements</string>
     <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
-    <string name="timeZone_title">Use event\'s timezone</string>
-    <string name="timeZone_summary">Your timezone is used when disabled.</string>
+    <string name="timeZone_title">Use local timezone</string>
+    <string name="timeZone_summary">Event\'s timezone is used when disabled.</string>
     <string name="key_change_password">changePassword</string>
     <string name="title_change_password">Change Password</string>
     <string name="change">Change</string>
@@ -223,18 +204,21 @@
     <string name="visit_website">Visit Website</string>
     <string name="key_visit_website">Visit_Website</string>
     <string name="not_logged_in">No account logged in</string>
+    <string name="server_configuration">Server configuration</string>
+    <string name="key_server_configuration">server_configuration</string>
+    <string name="api_url">Api url</string>
+    <string name="key_api_url">api_url</string>
+    <string name="other_url">Other url</string>
+    <string name="invalid_url">Invalid url</string>
 
     <!--settings profile dialog-->
     <string name="message">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
-    <string name="no_tickets">No Tickets</string>
 
     <!--liked events tab -->
-    <string name="nothing_planned_yet">Nothing Planned ..yet?</string>
     <string name="find_something_to_do">Find something to do!!</string>
     <string name="remember_like">Remember to shortlist the events you like so you don\'t miss out!</string>
     <string name="current_location">Use my current location</string>
-    <string name="error__fetching_location">Cannot fetch location without permission</string>
 
     <!--attendee fragment-->
     <string name="attendee_details">Attendee Details</string>
@@ -244,7 +228,7 @@
     <string name="privacy_text">privacy policy</string>
     <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
     <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
-    <string name="stripe">Stripe</string>
+    <string name="stripe" translatable="false">Stripe</string>
     <string name="paypal" translatable="false">PayPal</string>
     <string name="country">Country</string>
     <string name="month_string">Month</string>
@@ -260,19 +244,12 @@
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
-    <string name="year_string">Year</string>
-    <string name="select_card">Select a card type</string>
-    <string name="american_express_pay_message">Pay by American Express</string>
-    <string name="mastercard_pay_message">Pay by MasterCard</string>
-    <string name="visa_pay_message">Pay by Visa</string>
-    <string name="discover_pay_message">Pay by Discover</string>
-    <string name="diners_pay_message">Pay by Diners Club</string>
-    <string name="unionpay_pay_message">Pay by UnionPay</string>
     <string name="create_attendee_success_message">Attendees created successfully!</string>
     <string name="create_attendee_fail_message">Unable to create Attendee!</string>
     <string name="fill_all_fields_message">Please fill in all the fields</string>
     <string name="fill_required_fields_message">Please fill in all the required fields</string>
-    <string name="free">free</string>
+    <string name="free">Free</string>
+    <string name="enter_donation">Enter donation</string>
     <string name="order_success_message">Order created successfully!</string>
     <string name="order_fail_message">Unable to create Order!</string>
     <string name="payment_not_complete_message">Payment not completed!</string>
@@ -306,9 +283,7 @@
     <string name="log_in_first">You need to log in first!</string>
     <string name="sign_in_canceled">Sign In canceled!</string>
     <string name="sign_in">Sign In</string>
-    <string name="sign_up_success">Sign Up Success!</string>
     <string name="cannot_fetch_location">Cannot fetch location!</string>
-    <string name="order_not_completed">Order not completed!</string>
     <string name="removed_from_liked">Removed %1$s from liked events</string>
     <string name="undo">Undo</string>
 
@@ -338,6 +313,7 @@
     <string name="login_fail_message">Unable to Login. Please check your credentials</string>
     <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
     <string name="email_sent">Email Sent</string>
+    <string name="invalid_password_to_delete_account_message">Cannot delete your account as the password is incorrect</string>
 
     <!--about event fragment-->
     <string name="error_fetching_event_message">Error fetching event</string>
@@ -355,8 +331,10 @@
     <string name="changes_not_saved">Your changes have not been saved</string>
     <string name="discard">Discard</string>
     <string name="save">Save</string>
-    <string name="storage_permission_granted_message">Permission to Access External Storage Granted !</string>
-    <string name="storage_permission_denied_message">Permission to Access External Storage Denied :(</string>
+    <string name="permission_granted_message">Permission to Access %1$s Granted !</string>
+    <string name="permission_denied_message">Permission to Access %1$s Denied :(</string>
+    <string name="external_storage">External Storage</string>
+    <string name="camera">Camera</string>
     <string name="image_upload_success_message">Image uploaded successfully!</string>
     <string name="image_upload_error_message">Error uploading image!</string>
     <string name="provide_name_message">Please provide first name and last name!</string>
@@ -364,21 +342,18 @@
     <string name="user_update_success_message">User updated successfully!</string>
     <string name="error_fetching_event_section_message">"Error fetching %1$s for the event</string>
     <string name="error_submitting_feedback">Fail on submitting the feedback</string>
-    <string name="success_submitting_feedback">Feedback submitted</string>
     <string name="error_fetching_feedback_message">Error getting feedback for this event</string>
     <string name="no_feedback_message">There are no feedback for this event.</string>
     <string name="see_all_feedback">See all feedback</string>
     <string name="failure">Failure</string>
 
     <!--social link fragment-->
-    <string name="social_link_check_internet_message">Information is not loaded! Please check your internet connection</string>
     <string name="popular_locations">Popular Locations</string>
     <string name="social_links">Social Link</string>
     <string name="similar_events">Similar Events</string>
 
     <string name="anything">Anything</string>
     <string name="and_i_m_up_for">And I\'m up for</string>
-    <string name="savedType">savedType</string>
     <string name="what_type">What Sounds good?</string>
     <string name="feedback">Feedback</string>
     <string name="write_feedback">Write Feedback</string>
@@ -389,7 +364,6 @@
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="no_faq_message">There are no frequenly asked questions for this event.</string>
 
-    <string name="filter_set">Filter Done</string>
     <string name="filter">Filter Search</string>
     <string name="free_stuff">Free stuff only</string>
     <string name="speakers">Speakers</string>
@@ -412,31 +386,32 @@
     <string name="msg_failed_to_load_notification">Failed to load notifications</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_notification_result">You don\'t have any notification..</string>
-    <string name="color_code">Color Code:</string>
     <string name="unread">Unread</string>
     <string name="all">All</string>
 
     <!--Speaker Call Fragment-->
     <string name="no_speakers_call_message">Sorry, there is no speakers call for this event</string>
     <string name="call_for_speakers">Call For Speakers</string>
+    <string name="speakers_call_open_at">Call for speakers will open at %1$s</string>
+    <string name="speakers_call_open_until">Call for speakers will open until %1$s</string>
+    <string name="speakers_call_closed">Call for speakers has closed at %1$s</string>
+    <string name="edit_session_name">Edit Session - %1$s</string>
     <string name="submit_proposal">Submit Proposal</string>
     <string name="code_of_conduct">Code Of Conduct</string>
     <string name="empty_field_error_message">This field must not be empty</string>
     <string name="proposal">Proposal</string>
     <string name="speaker_details">My Speaker Details</string>
-    <string name="session_proposal_detail">Session Proposal Detail</string>
+    <string name="session_proposal_detail">Session Proposal Details</string>
     <string name="organization">Organization</string>
     <string name="position">Position</string>
     <string name="short_bio">Short Bio</string>
     <string name="website">Website</string>
-    <string name="twitter">Twitter</string>
-    <string name="facebook">Facebook</string>
-    <string name="github">Github</string>
+    <string name="twitter" translatable="false">Twitter</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="github" translatable="false">Github</string>
     <string name="proposal_speaker">My Proposal Speaker</string>
     <string name="no_speaker_info">You haven\'t had any speaker information</string>
-    <string name="load_speaker_info">Loading current speaker information</string>
     <string name="add_speaker">Add Speaker</string>
-    <string name="fail_creating_speaker">Fail on creating speaker. Please try again.</string>
     <string name="create_speaker">Create Speaker</string>
     <string name="create_edit_speaker">Create/Edit Proposal</string>
     <string name="create_proposal_message">Create proposal for this event or edit your speaker profile</string>
@@ -458,7 +433,86 @@
     <string name="edit_image">Edit Image</string>
     <string name="remove_image">Remove Image</string>
     <string name="replace_image">Replace Image</string>
+    <string name="take_image">Take Image</string>
     <string name="error_cropping_image_message">Oops. There is an error on cropping image</string>
     <string name="error_editting_image_message">Oops, there is an error. Current image can\'t be edited</string>
+    <string name="donation">Donation</string>
+    <string name="ended">Ended</string>
+    <string name="not_open">Not Open</string>
+    <string name="sales_end">Sales End:</string>
+    <string name="filter_orders">Filter Orders</string>
+    <string name="completed_orders">Completed Orders</string>
+    <string name="placed_orders">Placed Orders</string>
+    <string name="pending_orders">Pending Orders</string>
+    <string name="order_status">Order Status</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="cancel_order_button">Yes, cancel this order</string>
+    <string name="continue_order_button">No, continue</string>
+    <string name="others">Others</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="instagram">Instagram</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_fail_message">Your account currently cannot be deleted as active events and/or orders are associated with it. Before you can delete your account you must transfer the ownership of your event(s) to another organizer or cancel your event(s). If you have ticket orders stored in the system, please cancel your orders first too.</string>
+    <string name="confirm_email_message">Please enter your Email ID to confirm that you want to delete the account</string>
+    <string name="enter_email_hint">Enter your email ID</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_delete_checkbox_message">Please tick the box to agree and press DELETE</string>
+    <string name="delete">Delete</string>
+    <string name="enter_password_confirm_account">Please enter your password to confirm deleting your account</string>
+    <string name="error_deleting_account_message">Oops. There is a problem. Account not deleted</string>
+    <string name="success_deleting_account_message">Account deleted successfully</string>
+    <string name="enter_account_password_message">Enter Your Account Password</string>
+    <string name="deleting_account">Deleting Account...</string>
+    <string name="image_not_found">Image not found</string>
+    <plurals name="ordersQuantity">
+        <item quantity="one">%1$s ticket</item>
+        <item quantity="other">%1$s tickets</item>
+    </plurals>
+    <plurals name="numOfOrders">
+        <item quantity="zero">No orders</item>
+        <item quantity="one">One order</item>
+        <item quantity="other">%1$s orders</item>
+    </plurals>
+    <string name="short_list_event_message">Shortlist your favorite events so you don\'t miss out</string>
+    <string name="out_bad_try_again">Our bad... let\'s try this again</string>
+    <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
+    <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
+    <string name="title">Title</string>
+    <string name="session_type">Session Type</string>
+    <string name="short_abstract">Short Abstract</string>
+    <string name="error_fetching_tracks_message">Error on fetching tracks for this event</string>
+    <string name="error_fetching_session_types_message">Error fetching session types for this event</string>
+    <string name="comment">Comment</string>
+    <string name="fail_create_proposal_message">Fail on creating new session</string>
+    <string name="fail_update_proposal_message">Fail on updating this session</string>
+    <string name="loading">Loading...</string>
+    <string name="creating_session_message">Creating new session...</string>
+    <string name="updating_session_message">Updating current session...</string>
+    <string name="fail_getting_current_proposal_message">Fail on getting your session</string>
+    <string name="update_session">Update Session</string>
+    <string name="create_session">Create Session</string>
+    <string name="language">Language</string>
+    <string name="no_sessions_created_message">You haven\'t created any sessions for this speaker</string>
+    <string name="proposal_creaed_updated_message">Proposal created/updated successfully</string>
+    <string name="total_amount">Total: %1$s</string>
+    <plurals name="order_quantity_item">
+        <item quantity="one"> — %1$s item</item>
+        <item quantity="other"> — %1$s items</item>
+    </plurals>
+    <string name="hello_user">Hello %1$s</string>
+    <string name="cant_be_empty">Can\'t be Empty</string>
+    <plurals name="likes_number">
+        <item quantity="zero">No likes</item>
+        <item quantity="one">%1$s like</item>
+        <item quantity="other">%1$s likes</item>
+    </plurals>
+    <string name="removed_recent_search">Removed recent search %1$s</string>
+    <string name="type_name">Type: %1$s</string>
+    <string name="email_name">Email: %1$s</string>
+    <string name="phone_number_name">Phone Number: %1$s</string>
+    <string name="from_place">From: %1$s</string>
+    <string name="from_places">From: %1$s, %2$s</string>
+    <string name="by_organizer_name">by %1$s</string>
 
 </resources>

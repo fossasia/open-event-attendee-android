@@ -20,6 +20,14 @@ import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
+import kotlinx.android.synthetic.main.dialog_confirm_delete_account.view.password
+import kotlinx.android.synthetic.main.dialog_delete_account.view.confirmEmailButton
+import kotlinx.android.synthetic.main.dialog_delete_account.view.confirmEmailLayout
+import kotlinx.android.synthetic.main.dialog_delete_account.view.confirmDeleteCheckbox
+import kotlinx.android.synthetic.main.dialog_delete_account.view.confirmDeleteLayout
+import kotlinx.android.synthetic.main.dialog_delete_account.view.deleteButton
+import kotlinx.android.synthetic.main.dialog_delete_account.view.cancelButton
+import kotlinx.android.synthetic.main.dialog_delete_account.view.email
 import kotlinx.android.synthetic.main.fragment_profile.view.login
 import kotlinx.android.synthetic.main.fragment_profile.view.logout
 import kotlinx.android.synthetic.main.fragment_profile.view.accountInfoContainer
@@ -35,11 +43,13 @@ import kotlinx.android.synthetic.main.fragment_profile.view.manageEvents
 import kotlinx.android.synthetic.main.fragment_profile.view.settings
 import kotlinx.android.synthetic.main.fragment_profile.view.ticketIssues
 import kotlinx.android.synthetic.main.fragment_profile.view.changePassword
+import kotlinx.android.synthetic.main.fragment_profile.view.deleteAccount
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.utils.VERIFICATION_TOKEN
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -55,6 +65,7 @@ const val PROFILE_FRAGMENT = "profileFragment"
 class ProfileFragment : Fragment(), BottomIconDoubleClick {
     private val profileViewModel by viewModel<ProfileViewModel>()
     private val smartAuthViewModel by viewModel<SmartAuthViewModel>()
+    private val loginViewModel by viewModel<LoginViewModel>()
 
     private lateinit var rootView: View
     private var emailSettings: String = ""
@@ -92,6 +103,10 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             profileViewModel.syncProfile()
         }
 
+        val token = arguments?.getString(VERIFICATION_TOKEN)
+        if (token != null)
+            profileViewModel.verifyProfile(token)
+
         val progressDialog = progressDialog(context, getString(R.string.loading_message))
         profileViewModel.progress
             .nonNull()
@@ -104,6 +119,18 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
                 profileViewModel.mutableMessage.postValue(null)
+            })
+
+        profileViewModel.accountDeleted
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { accountDeleted ->
+                if (accountDeleted) {
+                    rootView.snackbar(getString(R.string.success_deleting_account_message))
+                    profileViewModel.logout()
+                    redirectToEventsFragment()
+                } else {
+                    openDeleteAccountFailDialog()
+                }
             })
 
         profileViewModel.user
@@ -177,6 +204,92 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
         rootView.changePassword.setOnClickListener {
             handleChangePassword()
         }
+
+        rootView.deleteAccount.setOnClickListener {
+            openDeleteAccountDialog()
+        }
+    }
+
+    private fun openDeleteAccountFailDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.delete_account))
+            .setMessage(getString(R.string.delete_account_fail_message))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.cancel()
+            }.create()
+            .show()
+    }
+
+    private fun openDeleteAccountDialog() {
+        val deleteLayout = layoutInflater.inflate(R.layout.dialog_delete_account, null)
+        deleteLayout.confirmEmailLayout.isVisible = true
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.delete_account))
+            .setView(deleteLayout)
+            .create()
+
+        deleteLayout.cancelButton.setOnClickListener {
+            dialog.cancel()
+        }
+
+        deleteLayout.confirmEmailButton.setOnClickListener {
+            deleteLayout.confirmDeleteLayout.isVisible = true
+            deleteLayout.confirmEmailLayout.isVisible = false
+        }
+
+        deleteLayout.deleteButton.setOnClickListener {
+            dialog.cancel()
+            confirmDeleteAccount()
+        }
+
+        deleteLayout.confirmDeleteCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            deleteLayout.deleteButton.isEnabled = isChecked
+        }
+
+        deleteLayout.email.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                deleteLayout.confirmEmailButton.isEnabled = user?.email == s.toString()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /* Do Nothing */ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /* Do Nothing */ }
+        })
+
+        dialog.show()
+    }
+
+    private fun confirmDeleteAccount() {
+        val progressDialog = progressDialog(context, getString(R.string.deleting_account))
+
+        loginViewModel.progress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
+            })
+
+        loginViewModel.validPassword
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it)
+                    profileViewModel.deleteProfile()
+                else
+                    rootView.snackbar(getString(R.string.invalid_password_to_delete_account_message))
+            })
+
+        val layout = layoutInflater.inflate(R.layout.dialog_confirm_delete_account, null)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.delete_account))
+            .setView(layout)
+            .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                user?.email?.let {
+                    loginViewModel.checkValidPassword(it, layout.password.text.toString())
+                }
+            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }.create()
+            .show()
     }
 
     private fun handleChangePassword() {
@@ -200,7 +313,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                     layout.textInputLayoutNewPassword.isEndIconVisible = true
                 }
 
-                if (layout.newPassword.text.toString().length >= 6) {
+                if (layout.newPassword.text.toString().length >= MINIMUM_PASSWORD_LENGTH) {
                     layout.textInputLayoutNewPassword.error = null
                     layout.textInputLayoutNewPassword.isErrorEnabled = false
                 } else {
@@ -215,7 +328,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -240,7 +353,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
                 }
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }
@@ -254,7 +367,7 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             override fun afterTextChanged(p0: Editable?) {
                 when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
                     layout.textInputLayoutNewPassword.isErrorEnabled ||
-                    layout.oldPassword.text.toString().length < 6) {
+                    layout.oldPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH) {
                     true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                 }

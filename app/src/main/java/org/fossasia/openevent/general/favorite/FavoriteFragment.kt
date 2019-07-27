@@ -30,6 +30,7 @@ import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.event.EventUtils.getEventDateTime
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,10 +43,18 @@ import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
+const val FAVORITE_FRAGMENT = "favoriteFragment"
+
 class FavoriteFragment : Fragment(), BottomIconDoubleClick {
     private val favoriteEventViewModel by viewModel<FavoriteEventsViewModel>()
     private lateinit var rootView: View
-    private val favoriteEventsRecyclerAdapter = FavoriteEventsRecyclerAdapter()
+    private val favoriteEventsRecyclerAdapter = FavoriteEventsListAdapter()
+
+    override fun onStart() {
+        super.onStart()
+        if (!favoriteEventViewModel.isLoggedIn())
+            redirectToLogin()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,13 +90,13 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
         favoriteEventViewModel.events
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
-                favoriteEventsRecyclerAdapter.submitList(list)
-                rootView.likesNumber.text = "${list.size} likes"
+                favoriteEventsRecyclerAdapter.submitList(list.sortedBy { getEventDateTime(it.startsAt, it.timezone) })
+                rootView.likesNumber.text = resources.getQuantityString(R.plurals.likes_number, list.size, list.size)
                 showEmptyMessage(list.size)
                 Timber.d("Fetched events of size %s", list.size)
             })
 
-        favoriteEventViewModel.error
+        favoriteEventViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.longSnackbar(it)
@@ -116,11 +125,11 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
 
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                favoriteEventViewModel.setFavorite(event.id, false)
+                favoriteEventViewModel.setFavorite(event, false)
                 favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
                 rootView.snackbar(getString(R.string.removed_from_liked, event.name),
                     getString(R.string.undo)) {
-                    favoriteEventViewModel.setFavorite(event.id, true)
+                    favoriteEventViewModel.setFavorite(event, true)
                     favoriteEventsRecyclerAdapter.notifyItemChanged(itemPosition)
                 }
             }
@@ -156,6 +165,11 @@ class FavoriteFragment : Fragment(), BottomIconDoubleClick {
 
     private fun showEmptyMessage(itemCount: Int) {
         rootView.noLikedLL.isVisible = (itemCount == 0)
+    }
+
+    private fun redirectToLogin() {
+        findNavController(rootView).navigate(FavoriteFragmentDirections
+            .actionFavouriteToAuth(getString(R.string.log_in_first), FAVORITE_FRAGMENT))
     }
 
     private fun openSearchResult(time: String) {

@@ -8,7 +8,9 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import org.fossasia.openevent.general.utils.ImageUtils.decodeBitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,19 +22,27 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.toolbar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.details
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.facebook
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.twitter
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.instagram
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.phone
 import com.squareup.picasso.MemoryPolicy
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.editImage
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.takeImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.replaceImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.removeImage
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstNameLayout
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastNameLayout
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
@@ -50,6 +60,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.FileNotFoundException
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.emptyToNull
+import org.fossasia.openevent.general.utils.setRequired
 import org.jetbrains.anko.design.snackbar
 
 class EditProfileFragment : Fragment(), ComplexBackPressFragment {
@@ -58,15 +70,24 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
     private val editProfileViewModel by viewModel<EditProfileViewModel>()
     private val safeArgs: EditProfileFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private var permissionGranted = false
+    private var storagePermissionGranted = false
     private val PICK_IMAGE_REQUEST = 100
     private val READ_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private val REQUEST_CODE = 1
+    private val READ_STORAGE_REQUEST_CODE = 1
+
+    private var cameraPermissionGranted = false
+    private val TAKE_IMAGE_REQUEST = 101
+    private val CAMERA_REQUEST = arrayOf(Manifest.permission.CAMERA)
+    private val CAMERA_REQUEST_CODE = 2
 
     private lateinit var userFirstName: String
     private lateinit var userLastName: String
     private lateinit var userDetails: String
     private lateinit var userAvatar: String
+    private lateinit var userPhone: String
+    private lateinit var userFacebook: String
+    private lateinit var userTwitter: String
+    private lateinit var userInstagram: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,13 +129,18 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                     .into(rootView.profilePhoto)
             })
 
-        permissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+        storagePermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        cameraPermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
 
         rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
-            editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
-                rootView.lastName.text.toString(), rootView.details.text.toString())
+            if (isValidInput()) {
+                updateUser()
+            } else {
+                rootView.snackbar(getString(R.string.fill_required_fields_message))
+            }
         }
 
         editProfileViewModel.message
@@ -131,12 +157,17 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             showEditPhotoDialog()
         }
 
+        rootView.firstNameLayout.setRequired()
+        rootView.lastNameLayout.setRequired()
+
         return rootView
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == PICK_IMAGE_REQUEST && intentData?.data != null) {
             val imageUri = intentData.data ?: return
 
             try {
@@ -146,7 +177,38 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             } catch (e: FileNotFoundException) {
                 Timber.d(e, "File Not Found Exception")
             }
+        } else if (requestCode == TAKE_IMAGE_REQUEST) {
+            val imageBitmap = intentData?.extras?.get("data")
+            if (imageBitmap is Bitmap) {
+                editProfileViewModel.encodedImage = imageBitmap.let { encodeImage(it) }
+                editProfileViewModel.avatarUpdated = true
+            }
         }
+    }
+
+    private fun isValidInput(): Boolean {
+        var valid = true
+        if (rootView.firstName.text.isNullOrBlank()) {
+            rootView.firstName.error = getString(R.string.empty_field_error_message)
+            valid = false
+        }
+        if (rootView.lastName.text.isNullOrBlank()) {
+            rootView.lastName.error = getString(R.string.empty_field_error_message)
+            valid = false
+        }
+        if (!rootView.instagram.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.instagram.text).matches()) {
+            rootView.instagram.error = getString(R.string.invalid_url_message)
+            valid = false
+        }
+        if (!rootView.facebook.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.facebook.text).matches()) {
+            rootView.facebook.error = getString(R.string.invalid_url_message)
+            valid = false
+        }
+        if (!rootView.twitter.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.twitter.text).matches()) {
+            rootView.twitter.error = getString(R.string.invalid_url_message)
+            valid = false
+        }
+        return valid
     }
 
     private fun loadUserUI(user: User) {
@@ -154,6 +216,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         userLastName = user.lastName.nullToEmpty()
         userDetails = user.details.nullToEmpty()
         userAvatar = user.avatarUrl.nullToEmpty()
+        userPhone = user.contact.nullToEmpty()
+        userFacebook = user.facebookUrl.nullToEmpty()
+        userTwitter = user.twitterUrl.nullToEmpty()
+        userInstagram = user.instagramUrl.nullToEmpty()
+
         if (safeArgs.croppedImage.isEmpty()) {
             if (userAvatar.isNotEmpty() && !editProfileViewModel.avatarUpdated) {
                 val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
@@ -168,15 +235,17 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             editProfileViewModel.encodedImage = encodeImage(croppedImage)
             editProfileViewModel.avatarUpdated = true
         }
-        if (rootView.firstName.text.isNullOrBlank()) {
-            rootView.firstName.setText(userFirstName)
-        }
-        if (rootView.lastName.text.isNullOrBlank()) {
-            rootView.lastName.setText(userLastName)
-        }
-        if (rootView.details.text.isNullOrBlank()) {
-            rootView.details.setText(userDetails)
-        }
+        setTextIfNull(rootView.firstName, userFirstName)
+        setTextIfNull(rootView.lastName, userLastName)
+        setTextIfNull(rootView.details, userDetails)
+        setTextIfNull(rootView.phone, userPhone)
+        setTextIfNull(rootView.facebook, userFacebook)
+        setTextIfNull(rootView.twitter, userTwitter)
+        setTextIfNull(rootView.instagram, userInstagram)
+    }
+
+    private fun setTextIfNull(input: TextInputEditText, text: String) {
+        if (input.text.isNullOrBlank()) input.setText(text)
     }
 
     private fun showEditPhotoDialog() {
@@ -188,11 +257,15 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
         editImageView.editImage.setOnClickListener {
 
-            if (this::userAvatar.isInitialized) {
-                findNavController(rootView).navigate(
-                    EditProfileFragmentDirections.actionEditProfileToCropImage(userAvatar))
+            if (!userAvatar.isNullOrEmpty()) {
+                if (this::userAvatar.isInitialized) {
+                    findNavController(rootView).navigate(
+                        EditProfileFragmentDirections.actionEditProfileToCropImage(userAvatar))
+                } else {
+                    rootView.snackbar(getString(R.string.error_editting_image_message))
+                }
             } else {
-                rootView.snackbar(getString(R.string.error_editting_image_message))
+                rootView.snackbar(getString(R.string.image_not_found))
             }
 
             dialog.cancel()
@@ -203,12 +276,21 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             clearAvatar()
         }
 
+        editImageView.takeImage.setOnClickListener {
+            dialog.cancel()
+            if (cameraPermissionGranted) {
+                takeImage()
+            } else {
+                requestPermissions(CAMERA_REQUEST, CAMERA_REQUEST_CODE)
+            }
+        }
+
         editImageView.replaceImage.setOnClickListener {
             dialog.cancel()
-            if (permissionGranted) {
+            if (storagePermissionGranted) {
                 showFileChooser()
             } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
+                requestPermissions(READ_STORAGE, READ_STORAGE_REQUEST_CODE)
             }
         }
         dialog.show()
@@ -250,6 +332,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         return "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
+    private fun takeImage() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, TAKE_IMAGE_REQUEST)
+    }
+
     private fun showFileChooser() {
         val intent = Intent()
         intent.type = "image/*"
@@ -262,13 +349,21 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == READ_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                permissionGranted = true
-                rootView.snackbar(getString(R.string.storage_permission_granted_message))
+                storagePermissionGranted = true
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.external_storage)))
                 showFileChooser()
             } else {
-                rootView.snackbar(getString(R.string.storage_permission_denied_message))
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.external_storage)))
+            }
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraPermissionGranted = true
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.camera)))
+                takeImage()
+            } else {
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.camera)))
             }
         }
     }
@@ -278,8 +373,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
      */
     override fun handleBackPress() {
         val thisActivity = activity
-        if (!editProfileViewModel.avatarUpdated && rootView.lastName.text.toString() == userLastName &&
-            rootView.firstName.text.toString() == userFirstName && rootView.details.text.toString() == userDetails) {
+        if (noDataChanged()) {
             findNavController(rootView).popBackStack()
         } else {
             hideSoftKeyboard(context, rootView)
@@ -289,12 +383,36 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
                 if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
             }
             dialog.setPositiveButton(getString(R.string.save)) { _, _ ->
-                editProfileViewModel.updateProfile(rootView.firstName.text.toString(),
-                    rootView.lastName.text.toString(), rootView.details.text.toString())
-            }
+                if (isValidInput()) {
+                    updateUser()
+                } else {
+                    rootView.snackbar(getString(R.string.fill_required_fields_message))
+                } }
             dialog.create().show()
         }
     }
+
+    private fun updateUser() {
+        val newUser = User(
+            id = editProfileViewModel.getId(),
+            firstName = rootView.firstName.text.toString(),
+            lastName = rootView.lastName.text.toString(),
+            details = rootView.details.text.toString(),
+            facebookUrl = rootView.facebook.text.toString().emptyToNull(),
+            twitterUrl = rootView.twitter.text.toString().emptyToNull(),
+            contact = rootView.phone.text.toString().emptyToNull()
+        )
+        editProfileViewModel.updateProfile(newUser)
+    }
+
+    private fun noDataChanged() = !editProfileViewModel.avatarUpdated &&
+        rootView.lastName.text.toString() == userLastName &&
+        rootView.firstName.text.toString() == userFirstName &&
+        rootView.details.text.toString() == userDetails &&
+        rootView.facebook.text.toString() == userFacebook &&
+        rootView.twitter.text.toString() == userTwitter &&
+        rootView.instagram.text.toString() == userInstagram &&
+        rootView.phone.text.toString() == userPhone
 
     override fun onDestroyView() {
         val activity = activity as? AppCompatActivity

@@ -3,10 +3,13 @@ package org.fossasia.openevent.general.search.location
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -34,15 +37,17 @@ import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearc
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
 import org.fossasia.openevent.general.search.SEARCH_FRAGMENT
-import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.isLocationEnabled
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.showSoftKeyboard
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.welcome.WELCOME_FRAGMENT
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
+const val SEARCH_LOCATION_FRAGMENT = "searchLocationFragment"
 
 class SearchLocationFragment : Fragment() {
     private lateinit var rootView: View
@@ -70,7 +75,7 @@ class SearchLocationFragment : Fragment() {
             checkLocationPermission()
             if (isLocationEnabled(requireContext())) {
                 geoLocationViewModel.configure()
-                rootView.locationProgressBar.visibility = View.VISIBLE
+                rootView.locationProgressBar.isVisible = true
             }
         }
 
@@ -82,17 +87,17 @@ class SearchLocationFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
-                rootView.locationProgressBar.visibility = View.GONE
+                rootView.locationProgressBar.isVisible = false
             })
 
         searchLocationViewModel.placeSuggestions.observe(viewLifecycleOwner, Observer {
             placeSuggestionsAdapter.submitList(it)
             // To handle the case : search result comes after query is empty
-            toggleSuggestionVisibility(it.isNotEmpty() && rootView.locationSearchView.query.isNotEmpty())
+            toggleSuggestionVisibility(it.isNotEmpty() && rootView.locationSearchView.text.isNotEmpty())
         })
 
         rootView.toolbar.setNavigationOnClickListener {
-            Utils.hideSoftKeyboard(context, rootView)
+            hideSoftKeyboard(context, rootView)
             activity?.onBackPressed()
         }
 
@@ -144,6 +149,8 @@ class SearchLocationFragment : Fragment() {
         val fragmentId = when (safeArgs.fromFragmentName) {
             SEARCH_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearch()
             SEARCH_FILTER_FRAGMENT -> SearchLocationFragmentDirections.actionSearchLocationToSearchFilter()
+            WELCOME_FRAGMENT -> SearchLocationFragmentDirections
+                .actionSearchLocationToAuth(redirectedFrom = SEARCH_LOCATION_FRAGMENT, showSkipButton = true)
             else -> SearchLocationFragmentDirections.actionSearchLocationToEvents()
         }
         Navigation.findNavController(rootView).navigate(fragmentId)
@@ -179,22 +186,38 @@ class SearchLocationFragment : Fragment() {
 
     private fun savePlaceAndRedirectToMain(place: String) {
         searchLocationViewModel.saveSearch(place)
+        hideSoftKeyboard(context, rootView)
         redirectToMain()
     }
 
     private fun setUpLocationSearchView() {
         val subject = PublishSubject.create<String>()
-        rootView.locationSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                savePlaceAndRedirectToMain(query)
-                return false
+        rootView.locationSearchView.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_DONE ||
+                event.action == KeyEvent.ACTION_DOWN &&
+                event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                val location = rootView.locationSearchView.text.toString()
+                if (location.isEmpty()) {
+                    rootView.locationSearchView.error = getString(R.string.empty_field_error_message)
+                } else {
+                    savePlaceAndRedirectToMain(location)
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        rootView.locationSearchView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                handleDisplayPlaceSuggestions(s.toString(), subject)
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                handleDisplayPlaceSuggestions(newText, subject)
-                return false
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
         })
+
         searchLocationViewModel.handlePlaceSuggestions(subject)
     }
 

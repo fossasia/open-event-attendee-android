@@ -145,7 +145,8 @@ class SearchFragment : Fragment(), ComplexBackPressFragment, BottomIconDoubleCli
             override fun removeSearch(position: Int, recentSearch: Pair<String, String>) {
                 adapter.removeRecentSearchAt(position)
                 searchViewModel.removeRecentSearch(position)
-                rootView.snackbar("Removed recent search ${recentSearch.first}", getString(R.string.undo)) {
+                rootView.snackbar(getString(R.string.removed_recent_search, recentSearch.first),
+                    getString(R.string.undo)) {
                     adapter.addRecentSearch(position, recentSearch)
                     searchViewModel.saveRecentSearch(recentSearch.first, recentSearch.second, position)
                 }

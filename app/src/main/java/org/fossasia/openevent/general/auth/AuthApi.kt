@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.auth
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.fossasia.openevent.general.auth.change.ChangeRequestToken
 import org.fossasia.openevent.general.auth.change.ChangeRequestTokenResponse
@@ -11,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.DELETE
 
 interface AuthApi {
 
@@ -39,5 +41,14 @@ interface AuthApi {
     fun checkEmail(@Body email: Email): Single<CheckEmailResponse>
 
     @POST("auth/resend-verification-email")
-    fun resendVerificationEmail(@Body requestToken: RequestToken): Single<ResendVerificationEmailResponse>
+    fun resendVerificationEmail(@Body requestToken: RequestToken): Single<EmailVerificationResponse>
+
+    @POST("auth/verify-email")
+    fun verifyEmail(@Body requestEmailVerification: RequestEmailVerification): Single<EmailVerificationResponse>
+
+    @PATCH("auth/reset-password")
+    fun resetPassword(@Body requestPasswordReset: RequestPasswordReset): Single<ResetPasswordResponse>
+
+    @DELETE("users/{id}")
+    fun deleteAccount(@Path("id") userId: Long): Completable
 }

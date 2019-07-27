@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.email
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.view.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.view.lastName
-import kotlinx.android.synthetic.main.fragment_attendee.view.postalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingPostalCode
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
@@ -58,22 +58,19 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.yearText
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumber
 import kotlinx.android.synthetic.main.fragment_attendee.view.acceptCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
-import kotlinx.android.synthetic.main.fragment_attendee.view.countryPickerContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
-import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
-import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
-import kotlinx.android.synthetic.main.fragment_attendee.view.city
-import kotlinx.android.synthetic.main.fragment_attendee.view.company
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCity
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCompany
 import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
-import kotlinx.android.synthetic.main.fragment_attendee.view.address
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingAddress
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstNameLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.lastNameLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.emailLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.companyLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.addressLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCompanyLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingAddressLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cvcLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.cityLayout
-import kotlinx.android.synthetic.main.fragment_attendee.view.postalCodeLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingCityLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingPostalCodeLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.cardNumberLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.sameBuyerCheckBox
 import kotlinx.android.synthetic.main.fragment_attendee.view.timeoutTextView
@@ -90,6 +87,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.signInText
 import kotlinx.android.synthetic.main.fragment_attendee.view.signInTextLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signInLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signOutLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.paymentTitle
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.User
@@ -126,8 +124,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private val safeArgs: AttendeeFragmentArgs by navArgs()
     private lateinit var timer: CountDownTimer
     private lateinit var card: Card
-
-    private lateinit var API_KEY: String
+    private var showBillingInfoLayout = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,14 +132,17 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             attendeeViewModel.ticketIdAndQty = safeArgs.ticketIdAndQty?.value
             attendeeViewModel.singleTicket = safeArgs.ticketIdAndQty?.value?.map { it.second }?.sum() == 1
         }
-        API_KEY = BuildConfig.STRIPE_API_KEY
+
+        showBillingInfoLayout = safeArgs.hasPaidTickets || safeArgs.amount > 0
 
         attendeeRecyclerAdapter.setEventId(safeArgs.eventId)
         if (attendeeViewModel.paymentCurrency.isNotBlank())
             ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
         safeArgs.ticketIdAndQty?.value?.let {
             val quantities = it.map { pair -> pair.second }.filter { it != 0 }
+            val donations = it.filter { it.second != 0 }.map { pair -> pair.third * pair.second }
             ticketsRecyclerAdapter.setQuantity(quantities)
+            ticketsRecyclerAdapter.setDonations(donations)
             attendeeRecyclerAdapter.setQuantity(quantities)
         }
         attendeeViewModel.forms.value?.let { attendeeRecyclerAdapter.setCustomForm(it) }
@@ -241,12 +241,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.cancel_order))
             .setMessage(getString(R.string.cancel_order_message))
-            .setPositiveButton(getString(R.string.continue_string)) { _, _ ->
-                if (!attendeeViewModel.orderCreatedSuccess)
-                    attendeeViewModel.cancelPendingOrder()
+            .setPositiveButton(getString(R.string.cancel_order_button)) { _, _ ->
                 findNavController(rootView).popBackStack()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            }.setNeutralButton(getString(R.string.continue_order_button)) { dialog, _ ->
                 dialog.cancel()
             }.create()
             .show()
@@ -258,9 +255,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             .observe(viewLifecycleOwner, Observer {
                 loadEventDetailsUI(it)
                 setupPaymentOptions(it)
-                if (attendeeViewModel.pendingOrder.value != null) {
-                    setupCountDownTimer(it)
-                }
+            })
+
+        attendeeViewModel.getSettings()
+        attendeeViewModel.orderExpiryTime
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                setupCountDownTimer(it)
             })
 
         val currentEvent = attendeeViewModel.event.value
@@ -269,38 +270,27 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         else {
             setupPaymentOptions(currentEvent)
             loadEventDetailsUI(currentEvent)
-            if (attendeeViewModel.pendingOrder.value != null) {
-                setupCountDownTimer(currentEvent)
-            }
         }
+
+        rootView.register.text = if (safeArgs.amount > 0) getString(R.string.pay_now) else getString(R.string.register)
     }
 
     private fun setupPendingOrder() {
-        attendeeViewModel.pendingOrder
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer {
-                attendeeViewModel.event.value?.let {
-                    setupCountDownTimer(it)
-                }
-            })
-
         val currentPendingOrder = attendeeViewModel.pendingOrder.value
         if (currentPendingOrder == null) {
-            attendeeViewModel.createPendingOrder(safeArgs.eventId)
+            attendeeViewModel.initializeOrder(safeArgs.eventId)
         }
     }
 
-    private fun setupCountDownTimer(event: Event) {
-        rootView.timeoutCounterLayout.visibility = View.VISIBLE
+    private fun setupCountDownTimer(orderExpiryTime: Int) {
+        rootView.timeoutCounterLayout.isVisible = true
         rootView.timeoutInfoTextView.text =
-            getString(R.string.ticket_timeout_info_message, event.orderExpiryTime.toString())
+            getString(R.string.ticket_timeout_info_message, orderExpiryTime.toString())
 
-        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) event.orderExpiryTime * 60 * 1000L
+        val timeLeft: Long = if (attendeeViewModel.timeout == -1L) orderExpiryTime * 60 * 1000L
                                 else attendeeViewModel.timeout
         timer = object : CountDownTimer(timeLeft, 1000) {
             override fun onFinish() {
-                if (!attendeeViewModel.orderCreatedSuccess)
-                    attendeeViewModel.cancelPendingOrder()
                 findNavController(rootView).navigate(AttendeeFragmentDirections
                     .actionAttendeeToTicketPop(safeArgs.eventId, safeArgs.currency, true))
             }
@@ -316,7 +306,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupTicketDetailTable() {
-        rootView.qty.text = " — ${attendeeViewModel.ticketIdAndQty?.map { it.second }?.sum()} items"
+        attendeeViewModel.ticketIdAndQty?.map { it.second }?.sum()?.let {
+            rootView.qty.text = resources.getQuantityString(R.plurals.order_quantity_item, it, it)
+        }
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
@@ -329,9 +321,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
         attendeeViewModel.totalAmount.value = safeArgs.amount
         rootView.paymentSelectorContainer.isVisible = safeArgs.amount > 0
-        rootView.countryPickerContainer.isVisible = safeArgs.amount > 0
-        rootView.billingInfoCheckboxSection.isVisible = safeArgs.amount > 0
-        rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}${safeArgs.amount}"
 
         attendeeViewModel.tickets
             .nonNull()
@@ -341,10 +330,8 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             })
 
         val currentTickets = attendeeViewModel.tickets.value
-        val currentTotalPrice = safeArgs.amount
-        if (currentTickets != null && currentTotalPrice != null) {
-            rootView.paymentSelector.visibility = if (currentTotalPrice > 0) View.VISIBLE else View.GONE
-            rootView.amount.text = "Total: ${attendeeViewModel.paymentCurrency}$currentTotalPrice"
+        if (currentTickets != null) {
+            rootView.paymentSelector.isVisible = safeArgs.amount > 0
 
             ticketsRecyclerAdapter.addAll(currentTickets)
             attendeeRecyclerAdapter.addAllTickets(currentTickets)
@@ -503,16 +490,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupBillingInfo() {
-        rootView.companyLayout.setRequired()
-        rootView.addressLayout.setRequired()
-        rootView.cityLayout.setRequired()
-        rootView.postalCodeLayout.setRequired()
-        rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
-        attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
-        rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            attendeeViewModel.billingEnabled = isChecked
-            rootView.billingInfoContainer.isVisible = isChecked
-        }
+        rootView.billingInfoContainer.isVisible = showBillingInfoLayout
+        attendeeViewModel.billingEnabled = showBillingInfoLayout
+        rootView.billingCompanyLayout.setRequired()
+        rootView.billingAddressLayout.setRequired()
+        rootView.billingCityLayout.setRequired()
+        rootView.billingPostalCodeLayout.setRequired()
     }
 
     private fun setupCountryOptions() {
@@ -533,7 +516,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 attendeeViewModel.countryPosition = position
             }
         }
-        rootView.countryPickerContainer.visibility = if (attendeeViewModel.singleTicket) View.VISIBLE else View.GONE
     }
 
     private fun setupPaymentOptions(event: Event) {
@@ -558,33 +540,38 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 attendeeViewModel.selectedPaymentOption = position
                 when (position) {
                     paymentOptions.indexOf(getString(R.string.stripe)) -> {
-                        rootView.stripePayment.visibility = View.VISIBLE
-                        rootView.offlinePayment.visibility = View.GONE
+                        rootView.stripePayment.isVisible = true
+                        rootView.offlinePayment.isVisible = false
                     }
                     paymentOptions.indexOf(getString(R.string.on_site)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.onsiteDetails
                     }
                     paymentOptions.indexOf(getString(R.string.bank_transfer)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.bankDetails
                     }
                     paymentOptions.indexOf(getString(R.string.cheque)) -> {
-                        rootView.offlinePayment.visibility = View.VISIBLE
-                        rootView.stripePayment.visibility = View.GONE
+                        rootView.offlinePayment.isVisible = true
+                        rootView.stripePayment.isVisible = false
                         rootView.offlinePaymentDescription.text = event.chequeDetails
                     }
                     else -> {
-                        rootView.stripePayment.visibility = View.GONE
-                        rootView.offlinePayment.visibility = View.GONE
+                        rootView.stripePayment.isVisible = false
+                        rootView.offlinePayment.isVisible = false
                     }
                 }
             }
         }
         if (attendeeViewModel.selectedPaymentOption != -1)
             rootView.paymentSelector.setSelection(attendeeViewModel.selectedPaymentOption)
+
+        if (paymentOptions.size == 1) {
+            rootView.paymentSelector.isVisible = false
+            rootView.paymentTitle.text = "${getString(R.string.payment)} ${paymentOptions[0]}"
+        }
     }
 
     private fun setupCardNumber() {
@@ -614,20 +601,21 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupMonthOptions() {
-        val month = ArrayList<String>()
-        month.add(getString(R.string.month_string))
-        month.add(getString(R.string.january))
-        month.add(getString(R.string.february))
-        month.add(getString(R.string.march))
-        month.add(getString(R.string.april))
-        month.add(getString(R.string.may))
-        month.add(getString(R.string.june))
-        month.add(getString(R.string.july))
-        month.add(getString(R.string.august))
-        month.add(getString(R.string.september))
-        month.add(getString(R.string.october))
-        month.add(getString(R.string.november))
-        month.add(getString(R.string.december))
+        val month = mutableListOf(
+            getString(R.string.month_string),
+            getString(R.string.january),
+            getString(R.string.february),
+            getString(R.string.march),
+            getString(R.string.april),
+            getString(R.string.may),
+            getString(R.string.june),
+            getString(R.string.july),
+            getString(R.string.august),
+            getString(R.string.september),
+            getString(R.string.october),
+            getString(R.string.november),
+            getString(R.string.december)
+        )
 
         rootView.month.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             month)
@@ -698,12 +686,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun checkRequiredFields(): Boolean {
         val checkBasicInfo = rootView.firstName.checkEmpty() && rootView.lastName.checkEmpty() &&
-            rootView.email.checkEmpty() && rootView.email.checkEmpty() && rootView.email.checkValidEmail()
+            rootView.email.checkEmpty()
 
         var checkBillingInfo = true
-        if (rootView.billingEnabledCheckbox.isChecked) {
-            checkBillingInfo = rootView.company.checkEmpty() && rootView.company.checkEmpty() &&
-                rootView.address.checkEmpty() && rootView.city.checkEmpty() && rootView.postalCode.checkEmpty()
+        if (showBillingInfoLayout) {
+            checkBillingInfo = rootView.billingCompany.checkEmpty() && rootView.billingAddress.checkEmpty() &&
+                rootView.billingCity.checkEmpty() && rootView.billingPostalCode.checkEmpty()
         }
 
         var checkStripeInfo = true
@@ -755,11 +743,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 val paymentOption =
                     if (safeArgs.amount != 0F) getPaymentMode(rootView.paymentSelector.selectedItem.toString())
                     else PAYMENT_MODE_FREE
-                val company = rootView.company.text.toString()
-                val city = rootView.city.text.toString()
+                val company = rootView.billingCompany.text.toString()
+                val city = rootView.billingCity.text.toString()
                 val taxId = rootView.taxId.text.toString()
-                val address = rootView.address.text.toString()
-                val postalCode = rootView.postalCode.text.toString()
+                val address = rootView.billingAddress.text.toString()
+                val postalCode = rootView.billingPostalCode.text.toString()
                 attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
                     city, postalCode, paymentOption)
             } else {
@@ -802,7 +790,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun sendToken(card: Card) {
         Stripe(requireContext())
-            .createToken(card, API_KEY, object : TokenCallback {
+            .createToken(card, BuildConfig.STRIPE_API_KEY, object : TokenCallback {
                 override fun onSuccess(token: Token) {
                     val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
                     attendeeViewModel.chargeOrder(charge)
@@ -814,35 +802,22 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun loadEventDetailsUI(event: Event) {
-        val dateString = StringBuilder()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)
+
         attendeeViewModel.paymentCurrency = Currency.getInstance(event.paymentCurrency).symbol
         ticketsRecyclerAdapter.setCurrency(attendeeViewModel.paymentCurrency)
 
         rootView.eventName.text = event.name
+        val total = if (safeArgs.amount > 0) "${attendeeViewModel.paymentCurrency} ${"%.2f".format(safeArgs.amount)}"
+                else getString(R.string.free)
+        rootView.amount.text = getString(R.string.total_amount, total)
 
-        val startDate = EventUtils.getFormattedDate(startsAt)
-        val endDate = EventUtils.getFormattedDate(endsAt)
-        dateString.append(startDate)
-        if (startDate == endDate) {
-            dateString.append(" • ")
-                .append(EventUtils.getFormattedTime(startsAt))
-                .append(" - ")
-                .append(EventUtils.getFormattedTime(endsAt))
-        } else {
-            dateString.append(" - ")
-                .append(EventUtils.getFormattedTime(startsAt))
-                .append(" • ")
-                .append(endDate)
-                .append(" - ")
-                .append(EventUtils.getFormattedTime(endsAt))
-        }
-        rootView.time.text = dateString
+        rootView.time.text = EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt)
     }
 
     private fun loadUserUI(user: User) {
-        rootView.helloUser.text = "Hello ${user.firstName.nullToEmpty()}"
+        rootView.helloUser.text = getString(R.string.hello_user, user.firstName.nullToEmpty())
         rootView.firstName.text = SpannableStringBuilder(user.firstName.nullToEmpty())
         rootView.lastName.text = SpannableStringBuilder(user.lastName.nullToEmpty())
         rootView.email.text = SpannableStringBuilder(user.email.nullToEmpty())
@@ -853,10 +828,10 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun loadTicketDetailsTableUI(show: Boolean) {
         if (show) {
-            rootView.ticketDetails.visibility = View.VISIBLE
+            rootView.ticketDetails.isVisible = true
             rootView.ticketTableDetails.text = context?.getString(R.string.hide)
         } else {
-            rootView.ticketDetails.visibility = View.GONE
+            rootView.ticketDetails.isVisible = false
             rootView.ticketTableDetails.text = context?.getString(R.string.view)
         }
     }

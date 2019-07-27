@@ -2,10 +2,13 @@ package org.fossasia.openevent.general.event
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -15,9 +18,12 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
+import kotlinx.android.synthetic.main.dialog_reset_password.view.confirmNewPassword
+import kotlinx.android.synthetic.main.dialog_reset_password.view.newPassword
+import kotlinx.android.synthetic.main.dialog_reset_password.view.textInputLayoutConfirmNewPassword
+import kotlinx.android.synthetic.main.dialog_reset_password.view.textInputLayoutNewPassword
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.progressBar
 import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
 import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
@@ -31,14 +37,17 @@ import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToo
 import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.StartupViewModel
+import org.fossasia.openevent.general.utils.RESET_PASSWORD_TOKEN
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
 import org.fossasia.openevent.general.utils.extensions.hideWithFading
@@ -46,9 +55,11 @@ import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
+const val EVENTS_FRAGMENT = "eventsFragment"
 
 class EventsFragment : Fragment(), BottomIconDoubleClick {
     private val eventsViewModel by viewModel<EventsViewModel>()
+    private val startupViewModel by viewModel<StartupViewModel>()
     private lateinit var rootView: View
     private val preference = Preference()
     private val eventsListAdapter = EventsListAdapter()
@@ -67,7 +78,25 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         }
         setToolbar(activity, show = false)
 
-        rootView.progressBar.isIndeterminate = true
+        val progressDialog = progressDialog(context, getString(R.string.loading_message))
+
+        val token = arguments?.getString(RESET_PASSWORD_TOKEN)
+        if (token != null)
+            showResetPasswordAlertDialog(token)
+
+        startupViewModel.resetPasswordEmail
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                findNavController(rootView).navigate(
+                    EventsFragmentDirections.actionEventsToAuth(email = it, redirectedFrom = EVENTS_FRAGMENT)
+                )
+            })
+
+        startupViewModel.dialogProgress
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                progressDialog.show(it)
+            })
 
         rootView.eventsRecycler.layoutManager =
             GridLayoutManager(activity, resources.getInteger(R.integer.events_column_count))
@@ -75,48 +104,49 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.eventsRecycler.adapter = eventsListAdapter
         rootView.eventsRecycler.isNestedScrollingEnabled = false
 
-        eventsViewModel.syncNotifications()
+        startupViewModel.syncNotifications()
+        startupViewModel.fetchSettings()
         handleNotificationDotVisibility(
             preference.getBoolean(NEW_NOTIFICATIONS, false))
-        eventsViewModel.newNotifications
+        startupViewModel.newNotifications
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 handleNotificationDotVisibility(it)
             })
 
-        eventsViewModel.showShimmerEvents
-            .nonNull()
-            .observe(viewLifecycleOwner, Observer { shouldShowShimmer ->
-                if (shouldShowShimmer) {
-                    rootView.shimmerEvents.startShimmer()
-                    eventsListAdapter.clear()
-                } else {
-                    rootView.shimmerEvents.stopShimmer()
-                }
-                rootView.shimmerEvents.isVisible = shouldShowShimmer
-            })
-
-        eventsViewModel.events
+        eventsViewModel.pagedEvents
             .nonNull()
             .observe(this, Observer { list ->
                 eventsListAdapter.submitList(list)
-                showEmptyMessage(list.size)
-                Timber.d("Fetched events of size %s", eventsListAdapter.itemCount)
             })
 
         eventsViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.swiperefresh.isRefreshing = it
+                if (it) {
+                    rootView.shimmerEvents.startShimmer()
+                    showEmptyMessage(false)
+                    showNoInternetScreen(false)
+                } else {
+                    rootView.shimmerEvents.stopShimmer()
+                    rootView.swiperefresh.isRefreshing = false
+                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
+                }
+                rootView.shimmerEvents.isVisible = it
             })
 
-        eventsViewModel.error
+        eventsViewModel.message
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.longSnackbar(it)
             })
 
         eventsViewModel.loadLocation()
+        if (rootView.locationTextView.text == getString(R.string.enter_location)) {
+            rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
+        } else {
+            rootView.emptyEventsText.text = getString(R.string.no_events_message)
+        }
         rootView.locationTextView.text = eventsViewModel.savedLocation.value
         rootView.toolbar.title = rootView.locationTextView.text
 
@@ -124,6 +154,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 if (eventsViewModel.lastSearch != it) {
+                    eventsViewModel.lastSearch = it
                     eventsViewModel.clearEvents()
                 }
             })
@@ -131,10 +162,17 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         eventsViewModel.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
-                if (isConnected && eventsViewModel.events.value == null) {
-                    eventsViewModel.loadLocationEvents()
+                val currentPagedEvents = eventsViewModel.pagedEvents.value
+                if (currentPagedEvents != null) {
+                    showNoInternetScreen(false)
+                    eventsListAdapter.submitList(currentPagedEvents)
+                } else {
+                    if (isConnected) {
+                        eventsViewModel.loadLocationEvents()
+                    } else {
+                        showNoInternetScreen(true)
+                    }
                 }
-                showNoInternetScreen(!isConnected && eventsViewModel.events.value == null)
             })
 
         rootView.locationTextView.setOnClickListener {
@@ -160,7 +198,19 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             }
         }
 
+        startupViewModel.isRefresh
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                if (it) refreshData()
+            })
+
         return rootView
+    }
+
+    private fun refreshData() {
+        eventsViewModel.loadLocationEvents()
+        startupViewModel.fetchSettings()
+        startupViewModel.syncNotifications()
     }
 
     private fun handleNotificationDotVisibility(isVisible: Boolean) {
@@ -187,11 +237,23 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             }
         }
 
+        val redirectToLogin = object : RedirectToLogin {
+            override fun goBackToLogin() {
+                findNavController(rootView)
+                    .navigate(EventsFragmentDirections.actionEventsToAuth(redirectedFrom = EVENTS_FRAGMENT))
+            }
+        }
+
         val favFabClickListener: FavoriteFabClickListener = object : FavoriteFabClickListener {
             override fun onClick(event: Event, itemPosition: Int) {
-                eventsViewModel.setFavorite(event.id, !event.favorite)
-                event.favorite = !event.favorite
-                eventsListAdapter.notifyItemChanged(itemPosition)
+                if (eventsViewModel.isLoggedIn()) {
+                    event.favorite = !event.favorite
+                    eventsViewModel.setFavorite(event, event.favorite)
+                    eventsListAdapter.notifyItemChanged(itemPosition)
+                } else {
+                    EventUtils.showLoginToLikeDialog(requireContext(),
+                        layoutInflater, redirectToLogin, event.originalImageUrl, event.name)
+                }
             }
         }
 
@@ -226,7 +288,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
     }
 
     private fun moveToNotification() {
-        eventsViewModel.mutableNewNotifications.value = false
+        startupViewModel.mutableNewNotifications.value = false
         findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToNotification())
     }
 
@@ -247,17 +309,89 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.noInternetCard.isVisible = show
     }
 
-    private fun showEmptyMessage(itemCount: Int) {
-        if (itemCount == 0) {
-            rootView.eventsEmptyView.visibility = View.VISIBLE
-            if (rootView.locationTextView.text == getString(R.string.enter_location)) {
-                rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
-            } else {
-                rootView.emptyEventsText.text = getString(R.string.no_events_message)
+    private fun showEmptyMessage(show: Boolean) {
+        rootView.eventsEmptyView.isVisible = show
+    }
+
+    private fun showResetPasswordAlertDialog(token: String) {
+        val layout = layoutInflater.inflate(R.layout.dialog_reset_password, null)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.title_change_password))
+            .setView(layout)
+            .setPositiveButton(getString(R.string.change)) { _, _ ->
+                startupViewModel.checkAndReset(token, layout.newPassword.text.toString())
             }
-        } else {
-            rootView.eventsEmptyView.visibility = View.GONE
-        }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setCancelable(false)
+            .show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+
+        layout.newPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                */
+                if (!layout.textInputLayoutNewPassword.isEndIconVisible) {
+                    layout.textInputLayoutNewPassword.isEndIconVisible = true
+                }
+
+                if (layout.newPassword.text.toString().length >= 8) {
+                    layout.textInputLayoutNewPassword.error = null
+                    layout.textInputLayoutNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutNewPassword.error = getString(R.string.invalid_password_message)
+                }
+                if (layout.confirmNewPassword.text.toString() == layout.newPassword.text.toString()) {
+                    layout.textInputLayoutConfirmNewPassword.error = null
+                    layout.textInputLayoutConfirmNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutConfirmNewPassword.error =
+                        getString(R.string.invalid_confirm_password_message)
+                }
+                when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
+                    layout.textInputLayoutNewPassword.isErrorEnabled) {
+                    true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                    false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+        })
+
+        layout.confirmNewPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+                /* to make PasswordToggle visible again, if made invisible
+                   after empty field error
+                 */
+                if (!layout.textInputLayoutConfirmNewPassword.isEndIconVisible) {
+                    layout.textInputLayoutConfirmNewPassword.isEndIconVisible = true
+                }
+
+                if (layout.confirmNewPassword.text.toString() == layout.newPassword.text.toString()) {
+                    layout.textInputLayoutConfirmNewPassword.error = null
+                    layout.textInputLayoutConfirmNewPassword.isErrorEnabled = false
+                } else {
+                    layout.textInputLayoutConfirmNewPassword.error =
+                        getString(R.string.invalid_confirm_password_message)
+                }
+                when (layout.textInputLayoutConfirmNewPassword.isErrorEnabled ||
+                    layout.textInputLayoutNewPassword.isErrorEnabled) {
+                    true -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                    false -> alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+        })
     }
 
     override fun doubleClick() = rootView.scrollView.smoothScrollTo(0, 0)

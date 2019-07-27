@@ -101,15 +101,40 @@
                 android:text="@{eventTime}"
                 tools:text="Starts at 05:29 AM IST" />
 
-            <TextView
-                android:id="@+id/ticketsNumber"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:text="@{`See ` + order.attendees.size() + ` tickets`}"
-                android:textColor="@color/colorPrimary"
-                tools:text="See 5 tickets" />
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/ticketsNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/layout_margin_medium"
+                    android:text="@{`See ` + order.attendees.size() + ` ticket(s)`}"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="See 5 tickets" />
+
+                <TextView
+                    android:id="@+id/orderStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_order_status"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    tools:text="PLACED"
+                    android:background="@drawable/border_order_status"
+                    android:textSize="@dimen/text_size_small_extra"
+                    android:ellipsize="end"
+                    app:orderStatus="@{order.status}"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

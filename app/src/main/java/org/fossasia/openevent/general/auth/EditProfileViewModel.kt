@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
@@ -30,50 +31,20 @@ class EditProfileViewModel(
     var avatarUpdated = false
     var encodedImage: String? = null
 
+    fun getId() = authHolder.getId()
+
     fun isLoggedIn() = authService.isLoggedIn()
 
-    /**
-     *  @param firstName updated firstName
-     *  @param lastName updated lastName
-     */
-    fun updateProfile(firstName: String, lastName: String, details: String) {
-        if (encodedImage.isNullOrEmpty()) {
-            updateUser(null, firstName, lastName, details)
-            return
-        }
-        compositeDisposable += authService.uploadImage(UploadImage(encodedImage))
-            .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }
-            .doFinally {
-                mutableProgress.value = false
-            }
-            .subscribe({
-                updateUser(it.url, firstName, lastName, details)
-                mutableMessage.value = resource.getString(R.string.image_upload_success_message)
-                Timber.d("Image uploaded ${it.url}")
-            }) {
-                mutableMessage.value = resource.getString(R.string.image_upload_error_message)
-                Timber.e(it, "Error uploading user!")
-            }
-    }
+    fun updateProfile(user: User) {
+        val updateProfileObservable: Single<User> =
+            if (encodedImage.isNullOrEmpty())
+                authService.updateUser(user)
+            else
+                authService.uploadImage(UploadImage(encodedImage)).flatMap {
+                    authService.updateUser(user.copy(avatarUrl = it.url))
+                }
 
-    private fun updateUser(url: String?, firstName: String, lastName: String, details: String) {
-        val id = authHolder.getId()
-        if (firstName.isEmpty() || lastName.isEmpty()) {
-            mutableMessage.value = resource.getString(R.string.provide_name_message)
-            return
-        }
-        compositeDisposable += authService.updateUser(
-            User(
-                id = id,
-                firstName = firstName,
-                lastName = lastName,
-                avatarUrl = url,
-                details = details
-            ), id
-        )
+        compositeDisposable += updateProfileObservable
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true

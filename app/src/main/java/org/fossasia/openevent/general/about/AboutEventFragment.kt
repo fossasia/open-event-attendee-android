@@ -76,7 +76,7 @@ class AboutEventFragment : Fragment() {
             .into(rootView.aboutEventImage)
 
         rootView.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
-            if (Math.abs(offset) == appBarLayout.getTotalScrollRange()) {
+            if (Math.abs(offset) == appBarLayout.totalScrollRange) {
                 rootView.detailsHeader.isVisible = false
                 setToolbar(activity, event.name)
             } else {

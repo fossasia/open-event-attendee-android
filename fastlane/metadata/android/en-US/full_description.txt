@@ -1,0 +1,13 @@
+With EventYay Attendee, you can browse through different events happening nearby or all over the world. You can get detailed information about the events and can even buy event tickets.
+The app also offers other cool features such as similar events and easy check-in using QR code. If that’s not enough, the app also allows you to favorite different events and all of them can be accessed from favorite section.
+
+Eventyay Attendee App provides features for users like:-
+
+- All events by the organizers can be viewed
+- Functionality to filter out events by date,time,location and event name is present.
+- Users can buy tickets and register as attendees for any event in the app.
+- All possible event details like location, date and timing of the event can be viewed
+- Users will be able to view all the tickets bought for an event
+- Ticket details contains an exclusive QR code 
+- Users can view similar events in the app
+- Users have also the privilege to favourite events in the app

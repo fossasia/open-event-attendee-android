@@ -5,6 +5,9 @@ import android.text.Editable
 import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -14,8 +17,8 @@ import kotlinx.android.synthetic.main.item_attendee.view.lastNameLayout
 import kotlinx.android.synthetic.main.item_attendee.view.lastName
 import kotlinx.android.synthetic.main.item_attendee.view.emailLayout
 import kotlinx.android.synthetic.main.item_attendee.view.email
-import kotlinx.android.synthetic.main.item_attendee.view.billingAddressLayout
-import kotlinx.android.synthetic.main.item_attendee.view.billingAddress
+import kotlinx.android.synthetic.main.item_attendee.view.attendeeBillingAddressLayout
+import kotlinx.android.synthetic.main.item_attendee.view.attendeeBillingAddress
 import kotlinx.android.synthetic.main.item_attendee.view.phoneLayout
 import kotlinx.android.synthetic.main.item_attendee.view.phone
 import kotlinx.android.synthetic.main.item_attendee.view.workPhoneLayout
@@ -45,15 +48,18 @@ import kotlinx.android.synthetic.main.item_attendee.view.homeAddress
 import kotlinx.android.synthetic.main.item_attendee.view.cityLayout
 import kotlinx.android.synthetic.main.item_attendee.view.city
 import kotlinx.android.synthetic.main.item_attendee.view.genderLayout
-import kotlinx.android.synthetic.main.item_attendee.view.gender
+import kotlinx.android.synthetic.main.item_attendee.view.genderText
+import kotlinx.android.synthetic.main.item_attendee.view.genderSpinner
 import kotlinx.android.synthetic.main.item_attendee.view.company
 import kotlinx.android.synthetic.main.item_attendee.view.companyLayout
 import kotlinx.android.synthetic.main.item_attendee.view.countryLayout
 import kotlinx.android.synthetic.main.item_attendee.view.country
 import kotlinx.android.synthetic.main.item_attendee.view.jobTitleLayout
 import kotlinx.android.synthetic.main.item_attendee.view.jobTitle
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.attendees.forms.FormIdentifier
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.databinding.ItemAttendeeBinding
 import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.ticket.Ticket
@@ -66,6 +72,7 @@ import org.fossasia.openevent.general.utils.setRequired
 import org.fossasia.openevent.general.utils.nullToEmpty
 
 class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val resource = Resource()
     private val requiredList = mutableListOf<TextInputEditText>()
     var onAttendeeDetailChanged: AttendeeDetailChangeListener? = null
 
@@ -101,32 +108,7 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
         }
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val newAttendee = Attendee(
-                    id = attendee.id,
-                    firstname = itemView.firstName.text.toString(),
-                    lastname = itemView.lastName.text.toString(),
-                    email = itemView.email.text.toString(),
-                    address = itemView.address.text.toString().emptyToNull(),
-                    city = itemView.city.text.toString().emptyToNull(),
-                    state = itemView.state.text.toString().emptyToNull(),
-                    country = itemView.country.text.toString().emptyToNull(),
-                    jobTitle = itemView.jobTitle.text.toString().emptyToNull(),
-                    phone = itemView.phone.text.toString().emptyToNull(),
-                    taxBusinessInfo = itemView.taxBusinessInfo.text.toString().emptyToNull(),
-                    billingAddress = itemView.billingAddress.text.toString().emptyToNull(),
-                    homeAddress = itemView.homeAddress.text.toString().emptyToNull(),
-                    shippingAddress = itemView.shippingAddress.text.toString().emptyToNull(),
-                    company = itemView.company.text.toString().emptyToNull(),
-                    workAddress = itemView.workAddress.text.toString().emptyToNull(),
-                    workPhone = itemView.workPhone.text.toString().emptyToNull(),
-                    website = itemView.website.text.toString().emptyToNull(),
-                    blog = itemView.blog.text.toString().emptyToNull(),
-                    twitter = itemView.twitter.text.toString().emptyToNull(),
-                    facebook = itemView.facebook.text.toString().emptyToNull(),
-                    github = itemView.github.text.toString().emptyToNull(),
-                    gender = itemView.gender.text.toString().emptyToNull(),
-                    ticket = TicketId(ticket.id.toLong()),
-                    event = EventId(eventId))
+                val newAttendee = getAttendeeInformation(attendee.id, ticket, eventId)
                 onAttendeeDetailChanged?.onAttendeeDetailChanged(newAttendee, position)
             }
 
@@ -134,6 +116,7 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do nothing*/ }
         }
         requiredList.clear()
+        setupGendersSpinner(attendee, ticket, eventId, position)
         customForm.forEach { form ->
             setupCustomFormWithFields(form, textWatcher)
         }
@@ -161,7 +144,8 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
             FormIdentifier.TAX_INFO ->
                 setupField(itemView.taxBusinessInfoLayout, itemView.taxBusinessInfo, form.isRequired, textWatcher)
             FormIdentifier.BILLING_ADDRESS ->
-                setupField(itemView.billingAddressLayout, itemView.billingAddress, form.isRequired, textWatcher)
+                setupField(itemView.attendeeBillingAddressLayout, itemView.attendeeBillingAddress, form.isRequired,
+                    textWatcher)
             FormIdentifier.HOME_ADDRESS ->
                 setupField(itemView.homeAddressLayout, itemView.homeAddress, form.isRequired, textWatcher)
             FormIdentifier.SHIPPING_ADDRESS ->
@@ -182,9 +166,33 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
                 setupField(itemView.companyLayout, itemView.company, form.isRequired, textWatcher)
             FormIdentifier.GITHUB ->
                 setupField(itemView.githubLayout, itemView.github, form.isRequired, textWatcher)
-            FormIdentifier.GENDER ->
-                setupField(itemView.genderLayout, itemView.gender, form.isRequired, textWatcher)
+            FormIdentifier.GENDER -> {
+                itemView.genderLayout.isVisible = true
+                if (form.isRequired) {
+                    itemView.genderText.text = "${resource.getString(R.string.gender)}*"
+                }
+            }
             else -> return
+        }
+    }
+
+    private fun setupGendersSpinner(attendee: Attendee, ticket: Ticket, eventId: Long, position: Int) {
+        val genders = mutableListOf(resource.getString(R.string.male),
+            resource.getString(R.string.female), resource.getString(R.string.others))
+        itemView.genderSpinner.adapter =
+            ArrayAdapter(itemView.context, android.R.layout.simple_spinner_dropdown_item, genders)
+
+        val genderSelected = genders.indexOf(attendee.gender)
+        if (genderSelected != -1)
+            itemView.genderSpinner.setSelection(genderSelected)
+
+        itemView.genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) { /* Do Nothing */ }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, p: Int, id: Long) {
+                val newAttendee = getAttendeeInformation(attendee.id, ticket, eventId)
+                onAttendeeDetailChanged?.onAttendeeDetailChanged(newAttendee, position)
+            }
         }
     }
 
@@ -215,5 +223,34 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
                 (it.inputType == InputType.TYPE_TEXT_VARIATION_URI && !it.checkValidURI())) return false
         }
         return true
+    }
+
+    private fun getAttendeeInformation(id: Long, ticket: Ticket, eventId: Long): Attendee {
+        return Attendee(
+            id = id,
+            firstname = itemView.firstName.text.toString(),
+            lastname = itemView.lastName.text.toString(),
+            email = itemView.email.text.toString(),
+            address = itemView.address.text.toString().emptyToNull(),
+            city = itemView.city.text.toString().emptyToNull(),
+            state = itemView.state.text.toString().emptyToNull(),
+            country = itemView.country.text.toString().emptyToNull(),
+            jobTitle = itemView.jobTitle.text.toString().emptyToNull(),
+            phone = itemView.phone.text.toString().emptyToNull(),
+            taxBusinessInfo = itemView.taxBusinessInfo.text.toString().emptyToNull(),
+            billingAddress = itemView.attendeeBillingAddress.text.toString().emptyToNull(),
+            homeAddress = itemView.homeAddress.text.toString().emptyToNull(),
+            shippingAddress = itemView.shippingAddress.text.toString().emptyToNull(),
+            company = itemView.company.text.toString().emptyToNull(),
+            workAddress = itemView.workAddress.text.toString().emptyToNull(),
+            workPhone = itemView.workPhone.text.toString().emptyToNull(),
+            website = itemView.website.text.toString().emptyToNull(),
+            blog = itemView.blog.text.toString().emptyToNull(),
+            twitter = itemView.twitter.text.toString().emptyToNull(),
+            facebook = itemView.facebook.text.toString().emptyToNull(),
+            github = itemView.github.text.toString().emptyToNull(),
+            gender = itemView.genderSpinner.selectedItem.toString(),
+            ticket = TicketId(ticket.id.toLong()),
+            event = EventId(eventId))
     }
 }

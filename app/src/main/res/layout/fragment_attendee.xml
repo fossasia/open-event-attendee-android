@@ -50,11 +50,11 @@
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/text_size_expanded_title_large"
+                    android:textSize="@dimen/text_size_expanded_title"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    tools:text="8:00"/>
+                    tools:text="15:00"/>
                 <TextView
                     android:id="@+id/timeoutInfoTextView"
                     android:layout_weight="8"
@@ -370,25 +370,6 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/item_attendee" />
 
-                <RelativeLayout
-                    android:id="@+id/billingInfoCheckboxSection"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/billing_information"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/heading_text_size"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"/>
-                    <CheckBox
-                        android:id="@+id/billingEnabledCheckbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"/>
-                </RelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/billingInfoContainer"
                     android:layout_width="match_parent"
@@ -397,8 +378,16 @@
                     android:orientation="vertical"
                     android:visibility="gone"
                     tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/billing_information"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size"/>
+
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/companyLayout"
+                        android:id="@+id/billingCompanyLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -407,7 +396,7 @@
                         android:hint="@string/company" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/company"
+                            android:id="@+id/billingCompany"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -425,7 +414,7 @@
                             android:hint="@string/tax_id" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/addressLayout"
+                        android:id="@+id/billingAddressLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -434,12 +423,12 @@
                         android:hint="@string/address" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/address"
+                            android:id="@+id/billingAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/cityLayout"
+                        android:id="@+id/billingCityLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -448,12 +437,12 @@
                         android:hint="@string/city" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/city"
+                            android:id="@+id/billingCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/postalCodeLayout"
+                        android:id="@+id/billingPostalCodeLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -462,7 +451,7 @@
                         android:hint="@string/postal_code" >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/postalCode"
+                            android:id="@+id/billingPostalCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -476,7 +465,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_small"
                             android:text="@string/country"/>
-                        <androidx.appcompat.widget.AppCompatSpinner
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                             android:id="@+id/countryPicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -492,6 +481,7 @@
                     android:layout_marginTop="@dimen/layout_margin_small"
                     android:layout_marginBottom="@dimen/layout_margin_small">
                     <TextView
+                        android:id="@+id/paymentTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"

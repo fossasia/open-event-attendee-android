@@ -5,12 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.common.SingleLiveEvent
+import org.fossasia.openevent.general.data.Preference
 import timber.log.Timber
 
-class SettingsViewModel(private val authService: AuthService) : ViewModel() {
+const val API_URL = "apiUrl"
+
+class SettingsViewModel(
+    private val authService: AuthService,
+    private val preference: Preference
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val mutableSnackBar = SingleLiveEvent<String>()
@@ -51,6 +58,15 @@ class SettingsViewModel(private val authService: AuthService) : ViewModel() {
                     mutableSnackBar.value = "Incorrect Old Password provided!"
                 else mutableSnackBar.value = "Unable to change password!"
             })
+    }
+
+    fun getApiUrl(): String {
+        return preference.getString(API_URL) ?: BuildConfig.DEFAULT_BASE_URL
+    }
+
+    fun changeApiUrl(url: String) {
+        preference.putString(API_URL, url)
+        logout()
     }
 
     override fun onCleared() {

@@ -33,17 +33,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.favorite.FAVORITE_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 
-private const val MINIMUM_PASSWORD_LENGTH = 8
+const val MINIMUM_PASSWORD_LENGTH = 8
 
 class SignUpFragment : Fragment() {
 
@@ -57,7 +60,7 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        setSharedElementEnterTransition()
 
         val progressDialog = progressDialog(context)
         setToolbar(activity, show = false)
@@ -200,9 +203,16 @@ class SignUpFragment : Fragment() {
                 TICKETS_FRAGMENT -> R.id.ticketsFragment
                 NOTIFICATION_FRAGMENT -> R.id.notificationFragment
                 SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
+                FAVORITE_FRAGMENT -> R.id.favoriteFragment
+                SEARCH_RESULTS_FRAGMENT -> R.id.searchResultsFragment
+                ORDER_COMPLETED_FRAGMENT -> R.id.orderCompletedFragment
                 else -> R.id.eventsFragment
             }
-        findNavController(rootView).popBackStack(destinationId, false)
+        if (destinationId == R.id.eventsFragment) {
+            findNavController(rootView).navigate(SignUpFragmentDirections.actionSignUpToEventsPop())
+        } else {
+            findNavController(rootView).popBackStack(destinationId, false)
+        }
         rootView.snackbar(R.string.logged_in_automatically)
     }
 

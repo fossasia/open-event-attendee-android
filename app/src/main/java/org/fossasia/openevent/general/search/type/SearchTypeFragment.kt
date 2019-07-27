@@ -28,7 +28,7 @@ class SearchTypeFragment : Fragment() {
     private val searchTypeViewModel by viewModel<SearchTypeViewModel>()
     private val safeArgs: SearchTypeFragmentArgs by navArgs()
     private lateinit var rootView: View
-    private val eventTypesList: MutableList<String> = arrayListOf("Anything")
+    private val eventTypesList: MutableList<String> = arrayListOf(getString(R.string.anything))
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -1,5 +1,5 @@
 package org.fossasia.openevent.general.auth
 
-class ResendVerificationEmailResponse(
+class EmailVerificationResponse(
     val message: String? = null
 )

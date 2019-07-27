@@ -1,12 +1,16 @@
 package org.fossasia.openevent.general.event
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
@@ -15,6 +19,8 @@ import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.event.paging.SimilarEventsDataSourceFactory
+import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.order.Order
@@ -27,11 +33,15 @@ import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.sponsor.Sponsor
 import org.fossasia.openevent.general.sponsor.SponsorService
+import org.fossasia.openevent.general.ticket.TicketPriceRange
+import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
+import java.lang.StringBuilder
 
 class EventDetailsViewModel(
     private val eventService: EventService,
+    private val ticketService: TicketService,
     private val authHolder: AuthHolder,
     private val speakerService: SpeakerService,
     private val sponsorService: SponsorService,
@@ -40,7 +50,8 @@ class EventDetailsViewModel(
     private val feedbackService: FeedbackService,
     private val resource: Resource,
     private val orderService: OrderService,
-    private val mutableConnectionLiveData: MutableConnectionLiveData
+    private val mutableConnectionLiveData: MutableConnectionLiveData,
+    private val config: PagedList.Config
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -56,6 +67,8 @@ class EventDetailsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()
     val eventFeedback: LiveData<List<Feedback>> = mutableEventFeedback
+    private val mutableFeedbackProgress = MutableLiveData<Boolean>()
+    val feedbackProgress: LiveData<Boolean> = mutableFeedbackProgress
     private val mutableSubmittedFeedback = MutableLiveData<Feedback>()
     val submittedFeedback: LiveData<Feedback> = mutableSubmittedFeedback
     private val mutableEventSessions = MutableLiveData<List<Session>>()
@@ -66,10 +79,14 @@ class EventDetailsViewModel(
     val eventSponsors: LiveData<List<Sponsor>> = mutableEventSponsors
     private val mutableSocialLinks = MutableLiveData<List<SocialLink>>()
     val socialLinks: LiveData<List<SocialLink>> = mutableSocialLinks
-    private val mutableSimilarEvents = MutableLiveData<Set<Event>>()
-    val similarEvents: LiveData<Set<Event>> = mutableSimilarEvents
+    private val mutableSimilarEvents = MutableLiveData<PagedList<Event>>()
+    val similarEvents: LiveData<PagedList<Event>> = mutableSimilarEvents
+    private val mutableSimilarEventsProgress = MediatorLiveData<Boolean>()
+    val similarEventsProgress: MediatorLiveData<Boolean> = mutableSimilarEventsProgress
     private val mutableOrders = MutableLiveData<List<Order>>()
     val orders: LiveData<List<Order>> = mutableOrders
+    private val mutablePriceRange = MutableLiveData<String>()
+    val priceRange: LiveData<String> = mutablePriceRange
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -80,6 +97,11 @@ class EventDetailsViewModel(
 
         compositeDisposable += feedbackService.getEventFeedback(id)
             .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableFeedbackProgress.value = true
+            }.doFinally {
+                mutableFeedbackProgress.value = false
+            }
             .subscribe({
                 mutableEventFeedback.value = it
             }, {
@@ -140,28 +162,34 @@ class EventDetailsViewModel(
     fun fetchSimilarEvents(eventId: Long, topicId: Long, location: String?) {
         if (eventId == -1L) return
 
-        var similarEventsFlowable = eventService.getEventsByLocation(location)
-        if (topicId != -1L) {
-            similarEventsFlowable = similarEventsFlowable.zipWith(eventService.getSimilarEvents(topicId),
-                BiFunction { firstList: List<Event>, secondList: List<Event> ->
-                    val similarList = mutableListOf<Event>()
-                    similarList.addAll(firstList)
-                    similarList.addAll(secondList)
-                    similarList
-                })
-        }
-        compositeDisposable += similarEventsFlowable
-            .withDefaultSchedulers()
+        val sourceFactory = SimilarEventsDataSourceFactory(
+            compositeDisposable,
+            topicId,
+            location,
+            eventId,
+            mutableSimilarEventsProgress,
+            eventService
+        )
+
+        val similarEventPagedList = RxPagedListBuilder(sourceFactory, config)
+            .setFetchScheduler(Schedulers.io())
+            .buildObservable()
+            .cache()
+
+        compositeDisposable += similarEventPagedList
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .distinctUntilChanged()
-            .subscribe({ events ->
-                val list = events.filter { it.id != eventId }
-                val oldList = mutableSimilarEvents.value
-                val similarEventList = mutableSetOf<Event>()
-                similarEventList.addAll(list)
-                oldList?.let {
-                    similarEventList.addAll(it)
+            .doOnSubscribe {
+                mutableSimilarEventsProgress.value = true
+            }.subscribe({ events ->
+                val currentPagedSimilarEvents = mutableSimilarEvents.value
+                if (currentPagedSimilarEvents == null) {
+                    mutableSimilarEvents.value = events
+                } else {
+                    currentPagedSimilarEvents.addAll(events)
+                    mutableSimilarEvents.value = currentPagedSimilarEvents
                 }
-                mutableSimilarEvents.value = similarEventList
             }, {
                 Timber.e(it, "Error fetching similar events")
                 mutablePopMessage.value = resource.getString(R.string.error_fetching_event_section_message,
@@ -248,6 +276,55 @@ class EventDetailsViewModel(
             })
     }
 
+    fun syncTickets(event: Event) {
+        compositeDisposable += ticketService.syncTickets(event.id)
+            .withDefaultSchedulers()
+            .subscribe({
+                if (!it.isNullOrEmpty())
+                    loadPriceRange(event)
+            }, {
+                Timber.e(it, "Error fetching tickets")
+            })
+    }
+
+    private fun loadPriceRange(event: Event) {
+        compositeDisposable += ticketService.getTicketPriceRange(event.id)
+            .withDefaultSchedulers()
+            .subscribe({
+                setRange(it, event.paymentCurrency.toString())
+            }, {
+                Timber.e(it, "Error fetching ticket price range")
+            })
+    }
+
+    private fun setRange(priceRange: TicketPriceRange, paymentCurrency: String) {
+        val maxPrice = priceRange.maxValue
+        val minPrice = priceRange.minValue
+        val range = StringBuilder()
+        if (maxPrice == minPrice) {
+            if (maxPrice == 0f)
+                range.append(resource.getString(R.string.free))
+            else {
+                range.append(paymentCurrency)
+                range.append(" ")
+                range.append("%.2f".format(minPrice))
+            }
+        } else {
+            if (minPrice == 0f)
+                range.append(resource.getString(R.string.free))
+            else {
+                range.append(paymentCurrency)
+                range.append(" ")
+                range.append("%.2f".format(minPrice))
+            }
+            range.append(" - ")
+            range.append(paymentCurrency)
+            range.append(" ")
+            range.append("%.2f".format(maxPrice))
+        }
+        mutablePriceRange.value = range.toString()
+    }
+
     fun loadMap(event: Event): String {
         // location handling
         val BASE_URL = "https://api.mapbox.com/v4/mapbox.emerald/pin-l-marker+673ab7"
@@ -255,14 +332,37 @@ class EventDetailsViewModel(
         return "$BASE_URL$LOCATION,15/900x500.png?access_token=$MAPBOX_KEY"
     }
 
-    fun setFavorite(eventId: Long, favorite: Boolean) {
-        compositeDisposable += eventService.setFavorite(eventId, favorite)
+    fun setFavorite(event: Event, favorite: Boolean) {
+        if (favorite) {
+            addFavorite(event)
+        } else {
+            removeFavorite(event)
+        }
+    }
+
+    private fun addFavorite(event: Event) {
+        val favoriteEvent = FavoriteEvent(authHolder.getId(), EventId(event.id))
+        compositeDisposable += eventService.addFavorite(favoriteEvent, event)
             .withDefaultSchedulers()
             .subscribe({
-                Timber.d("Success")
+                mutablePopMessage.value = resource.getString(R.string.add_event_to_shortlist_message)
             }, {
-                Timber.e(it, "Error")
-                mutablePopMessage.value = resource.getString(R.string.error)
+                mutablePopMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on adding like for event ID ${event.id}")
+            })
+    }
+
+    private fun removeFavorite(event: Event) {
+        val favoriteEventId = event.favoriteEventId ?: return
+
+        val favoriteEvent = FavoriteEvent(favoriteEventId, EventId(event.id))
+        compositeDisposable += eventService.removeFavorite(favoriteEvent, event)
+            .withDefaultSchedulers()
+            .subscribe({
+                mutablePopMessage.value = resource.getString(R.string.remove_event_from_shortlist_message)
+            }, {
+                mutablePopMessage.value = resource.getString(R.string.out_bad_try_again)
+                Timber.d(it, "Fail on removing like for event ID ${event.id}")
             })
     }
 

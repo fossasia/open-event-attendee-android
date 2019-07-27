@@ -10,6 +10,7 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
     private val tickets = ArrayList<Ticket>()
     private var eventCurrency: String? = null
     private var qty = ArrayList<Int>()
+    private var donationsList = ArrayList<Float>()
 
     fun addAll(ticketList: List<Ticket>) {
         if (tickets.isNotEmpty())
@@ -20,6 +21,12 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
 
     fun setCurrency(currencyCode: String?) {
         eventCurrency = currencyCode
+    }
+
+    fun setDonations(donations: List<Float>) {
+        if (donationsList.isNotEmpty()) donationsList.clear()
+        donationsList.addAll(donations)
+        notifyDataSetChanged()
     }
 
     fun setQuantity(ticketQuantities: List<Int>) {
@@ -34,7 +41,7 @@ class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolde
     }
 
     override fun onBindViewHolder(holder: TicketDetailsViewHolder, position: Int) {
-        holder.bind(tickets[position], qty[position], eventCurrency)
+        holder.bind(tickets[position], qty[position], donationsList[position], eventCurrency)
     }
 
     override fun getItemCount(): Int {

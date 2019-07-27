@@ -12,8 +12,12 @@ import org.fossasia.openevent.general.event.topic.EventTopicApi
 import org.fossasia.openevent.general.event.topic.EventTopicsDao
 import org.fossasia.openevent.general.event.types.EventType
 import org.fossasia.openevent.general.event.types.EventTypesApi
+import org.fossasia.openevent.general.favorite.FavoriteEvent
+import org.fossasia.openevent.general.favorite.FavoriteEventApi
+import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.speakercall.SpeakersCallDao
+import org.jetbrains.anko.collections.forEachWithIndex
 import java.util.Date
 
 class EventService(
@@ -24,26 +28,9 @@ class EventService(
     private val eventTypesApi: EventTypesApi,
     private val eventLocationApi: EventLocationApi,
     private val eventFAQApi: EventFAQApi,
-    private val speakersCallDao: SpeakersCallDao
+    private val speakersCallDao: SpeakersCallDao,
+    private val favoriteEventApi: FavoriteEventApi
 ) {
-
-    fun getEvents(): Flowable<List<Event>> {
-        val eventsFlowable = eventDao.getAllEvents()
-        return eventsFlowable.switchMap {
-            if (it.isNotEmpty())
-                eventsFlowable
-            else
-                eventApi.getEvents()
-                    .map {
-                        eventDao.insertEvents(it)
-                        eventTopicsDao.insertEventTopics(getEventTopicList(it))
-                    }
-                    .toFlowable()
-                    .flatMap {
-                        eventsFlowable
-                    }
-        }
-    }
 
     fun getEventLocations(): Single<List<EventLocation>> {
         return eventLocationApi.getEventLocation()
@@ -64,8 +51,8 @@ class EventService(
         return eventTypesApi.getEventTypes()
     }
 
-    fun getSearchEvents(eventName: String, sortBy: String): Flowable<List<Event>> {
-        return eventApi.searchEvents(sortBy, eventName).flatMapPublisher { eventsList ->
+    fun getSearchEventsPaged(filter: String, sortBy: String, page: Int): Flowable<List<Event>> {
+        return eventApi.searchEventsPaged(sortBy, filter, page).flatMapPublisher { eventsList ->
             eventsList.forEach {
                 it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
             }
@@ -77,13 +64,10 @@ class EventService(
         return eventDao.getFavoriteEvents()
     }
 
-    fun getEventsByLocation(locationName: String?): Flowable<List<Event>> {
+    fun getEventsByLocationPaged(locationName: String?, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
         val query = "[{\"name\":\"location-name\",\"op\":\"ilike\",\"val\":\"%$locationName%\"}," +
             "{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
-        return eventApi.searchEvents("name", query).flatMapPublisher { apiList ->
-            apiList.forEach {
-                it.speakersCall?.let { sc -> speakersCallDao.insertSpeakerCall(sc) }
-            }
+        return eventApi.searchEventsPaged("name", query, page, pageSize).flatMapPublisher { apiList ->
             updateFavorites(apiList)
         }
     }
@@ -93,8 +77,16 @@ class EventService(
         val ids = apiList.map { it.id }.toList()
         eventTopicsDao.insertEventTopics(getEventTopicList(apiList))
         return eventDao.getFavoriteEventWithinIds(ids)
-            .flatMapPublisher { favIds ->
-                apiList.map { if (favIds.contains(it.id)) it.favorite = true }
+            .flatMapPublisher { favEvents ->
+                val favEventIdsList = favEvents.map { it.id }
+                val favEventFavIdsList = favEvents.map { it.favoriteEventId }
+                apiList.map {
+                    val index = favEventIdsList.indexOf(it.id)
+                    if (index != -1) {
+                        it.favorite = true
+                        it.favoriteEventId = favEventFavIdsList[index]
+                    }
+                }
                 eventDao.insertEvents(apiList)
                 val eventIds = apiList.map { it.id }.toList()
                 eventDao.getEventWithIds(eventIds)
@@ -119,24 +111,52 @@ class EventService(
             }
     }
 
-    fun getEventsUnderUser(eventIds: List<Long>): Flowable<List<Event>> {
-        val query = buildQuery(eventIds)
-        return eventApi.eventsUnderUser(query)
-            .flatMapPublisher {
-                eventDao.insertEvents(it)
-                eventDao.getEventWithIds(eventIds)
-            }
-            .onErrorResumeNext(eventDao.getEventWithIds(eventIds))
-    }
-
-    fun setFavorite(eventId: Long, favorite: Boolean): Completable {
-        return Completable.fromAction {
-            eventDao.setFavorite(eventId, favorite)
+    fun getEventsWithQuery(query: String): Single<List<Event>> {
+        return eventApi.eventsByQuery(query).map {
+            eventDao.insertEvents(it)
+            it
         }
     }
 
-    fun getSimilarEvents(id: Long): Flowable<List<Event>> {
-        return eventTopicApi.getEventsUnderTopicId(id)
+    fun loadFavoriteEvent(): Single<List<FavoriteEvent>> = favoriteEventApi.getFavorites()
+
+    fun saveFavoritesEventFromApi(favIdsList: List<FavoriteEvent>): Single<List<Event>> {
+        val idsList = favIdsList.filter { it.event != null }.map { it.event!!.id }
+        val query = """[{
+                |   'and':[{
+                |       'name':'id',
+                |       'op':'in',
+                |       'val': $idsList
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+        return eventApi.eventsWithQuery(query).map {
+            it.forEachWithIndex { index, event ->
+                event.favoriteEventId = favIdsList[index].id
+                event.favorite = true
+                eventDao.insertEvent(event)
+            }
+            it
+        }
+    }
+
+    fun addFavorite(favoriteEvent: FavoriteEvent, event: Event) =
+        favoriteEventApi.addFavorite(favoriteEvent).map {
+            event.favoriteEventId = it.id
+            event.favorite = true
+            eventDao.insertEvent(event)
+            it
+        }
+
+    fun removeFavorite(favoriteEvent: FavoriteEvent, event: Event): Completable =
+        favoriteEventApi.removeFavorite(favoriteEvent.id).andThen {
+            event.favorite = false
+            event.favoriteEventId = null
+            eventDao.insertEvent(event)
+        }
+
+    fun getSimilarEventsPaged(id: Long, page: Int, pageSize: Int = 5): Flowable<List<Event>> {
+        val filter = "[{\"name\":\"ends-at\",\"op\":\"ge\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
+        return eventTopicApi.getEventsUnderTopicIdPaged(id, filter, page, pageSize)
             .flatMapPublisher {
                 updateFavorites(it)
             }
@@ -149,32 +169,5 @@ class EventService(
             }
         }
 
-    private fun buildQuery(eventIds: List<Long>): String {
-        var subQuery = ""
-
-        var eventId = -1L
-        val idList = ArrayList<Long>()
-        val eventIdAndTimes = mutableMapOf<Long, Int>()
-        eventIds.forEach { id ->
-            val times = eventIdAndTimes[id]
-            if (eventIdAndTimes.containsKey(id) && times != null) {
-                eventIdAndTimes[id] = times + 1
-            } else {
-                eventIdAndTimes[id] = 1
-            }
-            idList.add(id)
-            eventId = id
-            subQuery += ",{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}"
-        }
-
-        val formattedSubQuery = if (subQuery != "")
-            subQuery.substring(1) // remove "," from the beginning
-        else
-            "" // if there are no orders
-
-        return if (idList.size == 1)
-            "[{\"name\":\"id\",\"op\":\"eq\",\"val\":\"$eventId\"}]"
-        else
-            "[{\"or\":[$formattedSubQuery]}]"
-    }
+    fun fetchTracksUnderEvent(eventId: Long): Single<List<Track>> = eventApi.fetchTracksUnderEvent(eventId)
 }

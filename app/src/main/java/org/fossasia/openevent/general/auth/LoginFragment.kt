@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.loginButton
@@ -29,8 +28,11 @@ import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
+import org.fossasia.openevent.general.favorite.FAVORITE_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
 import org.fossasia.openevent.general.order.ORDERS_FRAGMENT
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
 import org.fossasia.openevent.general.utils.Utils.setToolbar
@@ -39,6 +41,7 @@ import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -73,7 +76,7 @@ class LoginFragment : Fragment() {
         }
 
         if (safeArgs.email.isNotEmpty()) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            setSharedElementEnterTransition()
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
             rootView.email.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
@@ -194,9 +197,16 @@ class LoginFragment : Fragment() {
             TICKETS_FRAGMENT -> R.id.ticketsFragment
             NOTIFICATION_FRAGMENT -> R.id.notificationFragment
             SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
+            FAVORITE_FRAGMENT -> R.id.favoriteFragment
+            SEARCH_RESULTS_FRAGMENT -> R.id.searchResultsFragment
+            ORDER_COMPLETED_FRAGMENT -> R.id.orderCompletedFragment
             else -> R.id.eventsFragment
         }
-        findNavController(rootView).popBackStack(destinationId, false)
+        if (destinationId == R.id.eventsFragment) {
+            findNavController(rootView).navigate(LoginFragmentDirections.actionLoginToEventsPop())
+        } else {
+            findNavController(rootView).popBackStack(destinationId, false)
+        }
         rootView.snackbar(R.string.welcome_back)
     }
 }
