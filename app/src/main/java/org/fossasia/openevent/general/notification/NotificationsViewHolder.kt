@@ -1,11 +1,11 @@
 package org.fossasia.openevent.general.notification
 
+import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_card_notification.view.*
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.utils.stripHtml
 
 class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -14,8 +14,8 @@ class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     ) {
         itemView.title.text = notification.title
-        itemView.message.text = notification.message.stripHtml()
         itemView.message.movementMethod = LinkMovementMethod.getInstance()
+        itemView.message.text = Html.fromHtml(notification.message)
         notification.receivedAt?.let {
             val dayDiff = EventUtils.getDayDifferenceFromToday(it)
             val formattedDateTime = EventUtils.getEventDateTime(it, null)

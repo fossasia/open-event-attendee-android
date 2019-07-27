@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -114,6 +115,7 @@ class SessionFragment : Fragment() {
         layoutManager.orientation = HORIZONTAL
         rootView.speakersUnderSessionRecycler.layoutManager = layoutManager
         rootView.speakersUnderSessionRecycler.adapter = speakersAdapter
+        rootView.sessionDetailAbstract.movementMethod = LinkMovementMethod.getInstance()
 
         return rootView
     }

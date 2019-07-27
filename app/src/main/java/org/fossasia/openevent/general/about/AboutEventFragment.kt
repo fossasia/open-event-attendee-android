@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.about
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -64,6 +65,7 @@ class AboutEventFragment : Fragment() {
 
     private fun loadEvent(event: Event) {
         eventExtra = event
+        rootView.aboutEventContent.movementMethod = LinkMovementMethod.getInstance()
         rootView.aboutEventContent.text = event.description?.stripHtml()
         val startsAt = EventUtils.getEventDateTime(event.startsAt, event.timezone)
         val endsAt = EventUtils.getEventDateTime(event.endsAt, event.timezone)

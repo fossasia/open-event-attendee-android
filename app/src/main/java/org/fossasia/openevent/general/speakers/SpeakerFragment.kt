@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.speakers
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -45,6 +46,9 @@ class SpeakerFragment : Fragment() {
             })
 
         speakerViewModel.loadSpeaker(safeArgs.speakerId)
+
+        rootView.email.movementMethod = LinkMovementMethod.getInstance()
+        rootView.mobile.movementMethod = LinkMovementMethod.getInstance()
 
         return rootView
     }

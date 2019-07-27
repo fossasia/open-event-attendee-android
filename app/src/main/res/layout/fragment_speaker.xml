@@ -117,6 +117,7 @@
             android:layout_marginRight="@dimen/layout_margin_large"
             android:layout_marginBottom="@dimen/layout_margin_large"
             android:textColor="@color/light_grey"
+            android:autoLink="email"
             tools:text="abc@pqr.xyz" />
         <TextView
             android:id="@+id/mobile"
@@ -126,6 +127,7 @@
             android:layout_marginRight="@dimen/layout_margin_large"
             android:layout_marginBottom="@dimen/layout_margin_large"
             android:textColor="@color/light_grey"
+            android:autoLink="phone"
             tools:text="+919876543210" />
 
         <LinearLayout
