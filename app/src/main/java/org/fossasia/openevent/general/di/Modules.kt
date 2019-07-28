@@ -85,6 +85,7 @@ import org.fossasia.openevent.general.feedback.FeedbackViewModel
 import org.fossasia.openevent.general.feedback.Feedback
 import org.fossasia.openevent.general.feedback.FeedbackService
 import org.fossasia.openevent.general.feedback.FeedbackApi
+import org.fossasia.openevent.general.paypal.PaypalWebViewModel
 import org.fossasia.openevent.general.search.SearchResultsViewModel
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.sessions.SessionViewModel
@@ -247,6 +248,7 @@ val viewModelModule = module {
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
+    viewModel { PaypalWebViewModel(get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }

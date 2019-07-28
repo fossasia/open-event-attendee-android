@@ -666,10 +666,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun checkPaymentOptions(): Boolean =
         when (rootView.paymentSelector.selectedItem.toString()) {
-            getString(R.string.paypal) -> {
-                rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
-                false
-            }
             getString(R.string.stripe) -> {
                 card = Card.create(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
                     rootView.year.selectedItem.toString().toInt(), rootView.cvc.text.toString())
@@ -766,6 +762,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             .observe(viewLifecycleOwner, Observer {
                 if (it)
                     openOrderCompletedFragment()
+            })
+
+        attendeeViewModel.orderIdentifierForPaypal
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                findNavController(rootView).navigate(AttendeeFragmentDirections.actionAttendeeToPaypal(it))
             })
     }
 

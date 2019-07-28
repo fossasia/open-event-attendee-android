@@ -32,13 +32,18 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filterTool
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filter
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_COMPLETED
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PENDING
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PLACED
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.fossasia.openevent.general.utils.extensions.showWithFading
+import org.fossasia.openevent.general.utils.nullToEmpty
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 
@@ -127,9 +132,18 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
-            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
-                findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
-                    .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
+            override fun onClick(eventID: Long, orderIdentifier: String, order: Order) {
+                when (order.status) {
+                    ORDER_STATUS_PENDING -> {
+                        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                            .actionOrderUserToPaypalPayment(order.identifier.nullToEmpty()))
+                    }
+                    ORDER_STATUS_COMPLETED, ORDER_STATUS_PLACED -> {
+                        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
+                            .actionOrderUserToOrderDetails(eventID, orderIdentifier, order.id))
+                    }
+                    else -> rootView.snackbar(getString(R.string.no_information_order_status, order.status))
+                }
             }
         }
         ordersPagedListAdapter.setListener(recyclerViewClickListener)

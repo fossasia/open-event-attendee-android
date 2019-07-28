@@ -76,6 +76,8 @@ class AttendeeViewModel(
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
     private val mutableOrderExpiryTime = MutableLiveData<Int>()
     val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
+    private val mutableOrderIdentifierForPaypal = MutableLiveData<String>()
+    val orderIdentifierForPaypal: LiveData<String> = mutableOrderIdentifierForPaypal
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -286,6 +288,10 @@ class AttendeeViewModel(
                     PAYMENT_MODE_STRIPE -> {
                         mutableStripeOrderMade.value = true
                     }
+                    PAYMENT_MODE_PAYPAL -> {
+                        confirmOrder = ConfirmOrder(it.id.toString(), ORDER_STATUS_PENDING)
+                        confirmOrderStatus(it.identifier.toString(), confirmOrder)
+                    }
                     else -> mutableMessage.value = resource.getString(R.string.order_success_message)
                 }
             }, {
@@ -303,8 +309,12 @@ class AttendeeViewModel(
                 mutableProgress.value = false
             }.subscribe({
                 mutableMessage.value = resource.getString(R.string.order_success_message)
+                if (paymentModeForOrder == PAYMENT_MODE_PAYPAL)
+                    mutableOrderIdentifierForPaypal.value = it.identifier
+                else
+                    orderCompleted.value = true
+
                 Timber.d("Updated order status successfully !")
-                orderCompleted.value = true
             }, {
                 mutableMessage.value = resource.getString(R.string.order_fail_message)
                 Timber.d(it, "Failed updating order status")

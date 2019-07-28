@@ -370,6 +370,14 @@
         tools:layout="@layout/fragment_orders_under_user">
 
         <action
+            android:id="@+id/action_order_user_to_paypal_payment"
+            app:destination="@+id/paypalPaymentFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
             android:id="@+id/action_order_user_to_order_expired"
             app:destination="@id/expiredOrderFragment"
             app:popEnterAnim="@anim/slide_in_left"
@@ -496,6 +504,17 @@
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/paypalPaymentFragment"
+        android:name="org.fossasia.openevent.general.paypal.PaypalPaymentFragment"
+        android:label="PaypalPaymentFragment">
+
+        <argument
+            android:name="orderIdentifier"
+            app:argType="string"
+            android:defaultValue=""/>
+
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -711,6 +730,16 @@
         android:name="org.fossasia.openevent.general.attendees.AttendeeFragment"
         android:label="AttendeeFragment"
         tools:layout="@layout/fragment_attendee">
+
+        <action
+            android:id="@+id/action_attendee_to_paypal"
+            app:destination="@+id/paypalPaymentFragment"
+            app:popUpTo="@id/eventsFragment"
+            app:popUpToInclusive="false"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
 
         <action
             android:id="@+id/action_attendee_to_order_completed"

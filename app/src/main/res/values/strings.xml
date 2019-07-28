@@ -465,6 +465,10 @@
     <string name="enter_account_password_message">Enter Your Account Password</string>
     <string name="deleting_account">Deleting Account...</string>
     <string name="image_not_found">Image not found</string>
+    <string name="paypal_payment">Paypal Payment</string>
+    <string name="final_payment_paypal_message">Finalizing your payment with Paypal</string>
+    <string name="pay_later">Pay Later</string>
+    <string name="no_information_order_status">There is no information displayed for this order with status: %1$s</string>
     <plurals name="ordersQuantity">
         <item quantity="one">%1$s ticket</item>
         <item quantity="other">%1$s tickets</item>
