@@ -277,6 +277,8 @@
     <string name="used_eventyay_before">Used Eventyay before?</string>
     <string name="sign_in_order_text">for fast and easy ordering</string>
     <string name="sign_in_to_order_ticket">Please sign in to order the ticket</string>
+    <string name="total_column">Total:</string>
+    <string name="tax_column">Tax:</string>
 
     <!--snackbar messages-->
     <string name="logged_in_automatically">Logged in Automatically!</string>

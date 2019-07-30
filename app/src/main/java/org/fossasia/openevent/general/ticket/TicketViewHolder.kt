@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.discountPrice
 import kotlinx.android.synthetic.main.item_ticket.view.donationInput
 import kotlinx.android.synthetic.main.item_ticket.view.orderQtySection
 import kotlinx.android.synthetic.main.item_ticket.view.priceSection
+import kotlinx.android.synthetic.main.item_ticket.view.taxInfo
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.description
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
+import org.fossasia.openevent.general.event.tax.Tax
 import org.threeten.bp.DateTimeUtils
 import java.util.Date
 import kotlin.collections.ArrayList
@@ -47,7 +49,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         eventTimeZone: String?,
         ticketQuantity: Int,
         donationAmount: Float,
-        discountCode: DiscountCode? = null
+        discountCode: DiscountCode? = null,
+        tax: Tax?
     ) {
         itemView.ticketName.text = ticket.name
         setupTicketSaleDate(ticket, eventTimeZone)
@@ -76,6 +79,13 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.performClick()
         }
 
+        var ticketPrice = ticket.price
+        if (tax?.rate != null) {
+            val taxPrice = (ticketPrice * tax.rate / 100)
+            ticketPrice += taxPrice
+            itemView.taxInfo.text = "(+ $eventCurrency$taxPrice ${tax.name})"
+        }
+
         when (ticket.type) {
             TICKET_TYPE_DONATION -> {
                 itemView.price.text = resource.getString(R.string.donation)
@@ -90,14 +100,14 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.donationInput.isVisible = false
             }
             TICKET_TYPE_PAID -> {
-                itemView.price.text = "$eventCurrency${"%.2f".format(ticket.price)}"
+                itemView.price.text = "$eventCurrency${"%.2f".format(ticketPrice)}"
                 itemView.priceSection.isVisible = true
                 itemView.donationInput.isVisible = false
             }
         }
         setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
 
-        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${itemView.price.text}"
+        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${ticket.price}"
         itemView.priceInfo.text = Html.fromHtml(priceInfo)
 
         if (ticket.description.isNullOrEmpty()) {
@@ -111,8 +121,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.discountPrice.visibility = View.VISIBLE
             itemView.price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.discountPrice.text =
-                if (discountCode.type == AMOUNT) "$eventCurrency${ticket.price - discountCode.value}"
-                else "$eventCurrency${"%.2f".format(ticket.price - (ticket.price * discountCode.value / 100))}"
+                if (discountCode.type == AMOUNT) "$eventCurrency${ticketPrice - discountCode.value}"
+                else "$eventCurrency${"%.2f".format(ticketPrice - (ticketPrice * discountCode.value / 100))}"
         }
     }
 

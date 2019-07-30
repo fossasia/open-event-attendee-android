@@ -109,27 +109,45 @@
         tools:visibility="visible"
         tools:text="@string/ended"/>
 </LinearLayout>
-<LinearLayout
-    android:id="@+id/moreInfoSection"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/layout_margin_medium"
-    android:padding="@dimen/padding_medium"
-    android:orientation="vertical"
-    android:visibility="gone"
-    tools:visibility="visible"
-    android:background="@drawable/filled_border">
-    <TextView
-        android:id="@+id/priceInfo"
+
+    <LinearLayout
+        android:id="@+id/moreInfoSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Price: $55.00"/>
-    <TextView
-        android:id="@+id/saleInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        tools:text="Sales End: Jul 12, 2019" />
-</LinearLayout>
+        android:layout_marginBottom="@dimen/layout_margin_medium"
+        android:background="@drawable/filled_border"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/priceInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                tools:text="Price: $55.00" />
+
+            <TextView
+                android:id="@+id/taxInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                tools:text="(+ SGD 4.97 GST)" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/saleInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:text="Sales End: Jul 12, 2019" />
+    </LinearLayout>
 <TextView
     android:id="@+id/description"
     android:layout_width="match_parent"

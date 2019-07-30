@@ -750,6 +750,12 @@
             android:defaultValue="0.0"/>
 
         <argument
+            android:name="taxAmount"
+            app:argType="float"
+            app:nullable="false"
+            android:defaultValue="0.0"/>
+
+        <argument
             android:name="hasPaidTickets"
             app:argType="boolean"
             android:defaultValue="false"/>

@@ -14,6 +14,9 @@ import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.tax.Tax
+import org.fossasia.openevent.general.event.tax.TaxService
+import org.fossasia.openevent.general.utils.HttpErrors
 import retrofit2.HttpException
 import timber.log.Timber
 
@@ -22,6 +25,7 @@ class TicketsViewModel(
     private val eventService: EventService,
     private val authHolder: AuthHolder,
     private val resource: Resource,
+    private val taxService: TaxService,
     private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
@@ -37,7 +41,10 @@ class TicketsViewModel(
     val event: LiveData<Event> = mutableEvent
     private val mutableDiscountCodes = MutableLiveData<DiscountCode>()
     val discountCode: LiveData<DiscountCode> = mutableDiscountCodes
+    private val mutableTaxInfo = MutableLiveData<Tax>()
+    val taxInfo: LiveData<Tax> = mutableTaxInfo
     var appliedDiscountCode: DiscountCode? = null
+    var totalTaxAmount = 0f
     val mutableAmount = MutableLiveData<Float>()
     val amount: LiveData<Float> = mutableAmount
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
@@ -103,6 +110,7 @@ class TicketsViewModel(
     fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
+        val taxRate = taxInfo.value?.rate ?: 0f
         ticketIdAndQty.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
@@ -122,6 +130,7 @@ class TicketsViewModel(
                 val code = appliedDiscountCode
                 tickets.forEach { ticket ->
                     var price = ticket.price
+                    totalTaxAmount += (ticket.price * taxRate / 100) * qty[index]
                     if (code?.value != null) {
                         appliedDiscountCode?.tickets?.forEach { ticketId ->
                             if (ticket.id == ticketId.id.toInt()) {
@@ -129,13 +138,33 @@ class TicketsViewModel(
                             }
                         }
                     }
-                    price.let { prices += price * qty[index++] }
+                    price.let { prices += price * qty[index] }
                     if (ticket.type == TICKET_TYPE_PAID)
                         hasPaidTickets = true
+                    index++
                 }
+                prices += totalTaxAmount
                 mutableAmount.value = prices + donation
             }, {
                 Timber.e(it, "Error Loading tickets!")
+            })
+    }
+
+    fun getTaxDetails(eventId: Long) {
+        compositeDisposable += taxService.getTax(eventId)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableTaxInfo.value = it
+            }, {
+                if (it is HttpException)
+                    if (it.code() == HttpErrors.NOT_FOUND)
+                        Timber.e(it, "No tax for this event")
+                else
+                    Timber.e(it, "Error fetching tax details")
             })
     }
 

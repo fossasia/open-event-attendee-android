@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.discount.DiscountCode
+import org.fossasia.openevent.general.event.tax.Tax
 
 class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
@@ -12,6 +13,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
     private var eventCurrency: String? = null
     private var eventTimeZone: String? = null
     private var discountCode: DiscountCode? = null
+    private var tax: Tax? = null
     private var selectedListener: TicketSelectedListener? = null
     private lateinit var ticketAndQuantity: List<Triple<Int, Int, Float>>
 
@@ -36,6 +38,10 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
 
     fun applyDiscount(discountCode: DiscountCode) {
         this.discountCode = discountCode
+    }
+
+    fun applyTax(tax: Tax) {
+        this.tax = tax
     }
 
     fun cancelDiscountCode() {
@@ -64,7 +70,7 @@ class TicketsRecyclerAdapter : RecyclerView.Adapter<TicketViewHolder>() {
             }
         }
 
-        holder.bind(ticket, selectedListener, eventCurrency, eventTimeZone, qty, donation, currentDiscountCode)
+        holder.bind(ticket, selectedListener, eventCurrency, eventTimeZone, qty, donation, currentDiscountCode, tax)
     }
 
     override fun getItemCount(): Int {
