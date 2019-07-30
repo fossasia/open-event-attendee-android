@@ -135,7 +135,13 @@ class EventDetailsFragment : Fragment() {
         setupSimilarEvents()
 
         rootView.buttonTickets.setOnClickListener {
-            loadTicketFragment()
+            val ticketUrl = currentEvent?.ticketUrl
+            if (Uri.parse(ticketUrl).host != getString(R.string.FRONTEND_HOST) &&
+                !ticketUrl.isNullOrEmpty()) {
+                Utils.openUrl(requireContext(), ticketUrl)
+            } else {
+                loadTicketFragment()
+            }
         }
 
         eventViewModel.popMessage
