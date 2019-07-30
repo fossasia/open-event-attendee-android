@@ -51,7 +51,7 @@ object EventUtils {
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {
-        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, y")
         return try {
             dateFormat.format(date)
         } catch (e: IllegalArgumentException) {
