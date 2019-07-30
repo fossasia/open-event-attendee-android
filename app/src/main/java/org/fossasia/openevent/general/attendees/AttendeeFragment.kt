@@ -88,6 +88,10 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.signInTextLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signInLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.signOutLayout
 import kotlinx.android.synthetic.main.fragment_attendee.view.paymentTitle
+import kotlinx.android.synthetic.main.fragment_attendee.view.taxLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.taxPrice
+import kotlinx.android.synthetic.main.fragment_attendee.view.totalAmountLayout
+import kotlinx.android.synthetic.main.fragment_attendee.view.totalPrice
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.User
@@ -312,6 +316,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         rootView.ticketsRecycler.layoutManager = LinearLayoutManager(activity)
         rootView.ticketsRecycler.adapter = ticketsRecyclerAdapter
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
+
+        rootView.taxLayout.isVisible = safeArgs.taxAmount > 0f
+        rootView.taxPrice.text = "${safeArgs.currency}${"%.2f".format(safeArgs.taxAmount)}"
+        rootView.totalAmountLayout.isVisible = safeArgs.amount > 0f
+        rootView.totalPrice.text = "${safeArgs.currency}${"%.2f".format(safeArgs.amount)}"
 
         rootView.ticketTableDetails.setOnClickListener {
             attendeeViewModel.ticketDetailsVisible = !attendeeViewModel.ticketDetailsVisible
