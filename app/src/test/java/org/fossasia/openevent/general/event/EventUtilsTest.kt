@@ -82,7 +82,7 @@ class EventUtilsTest {
         val event = getEvent()
         val localizedDateTime = getEventDateTime(event.startsAt, event.timezone)
         assertEquals("""
-          Monday, Sep 15, 2008
+          Monday, September 15, 2008
             """.trimIndent(), EventUtils.getFormattedDate(localizedDateTime))
     }
 
@@ -132,7 +132,7 @@ class EventUtilsTest {
         val startsAt = getEventDateTime(event.startsAt, event.timezone)
         val endsAt = getEventDateTime(event.endsAt, event.timezone)
         assertEquals("""
-          Monday, Sep 15, 2008 at 04:23 PM - Friday, Sep 19, 2008 at 07:55 PM (IST)
+          Monday, September 15, 2008 at 04:23 PM - Friday, September 19, 2008 at 07:55 PM (IST)
             """.trimIndent(), EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt))
     }
 
@@ -142,7 +142,7 @@ class EventUtilsTest {
         val startsAt = getEventDateTime(event.startsAt, event.timezone)
         val endsAt = getEventDateTime(event.endsAt, event.timezone)
         assertEquals("""
-          Monday, Sep 15, 2008 from 04:23 PM to 04:23 PM (IST)
+          Monday, September 15, 2008 from 04:23 PM to 04:23 PM (IST)
             """.trimIndent(), EventUtils.getFormattedDateTimeRangeDetailed(startsAt, endsAt))
     }
 
