@@ -137,6 +137,7 @@ class TicketsFragment : Fragment() {
 
         rootView.retry.setOnClickListener {
             loadTickets()
+            loadTaxDetails()
         }
 
         rootView.applyDiscountCode.setOnClickListener {
@@ -177,7 +178,10 @@ class TicketsFragment : Fragment() {
         ticketsViewModel.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
-                loadTickets()
+                if (isConnected) {
+                    loadTickets()
+                    loadTaxDetails()
+                }
                 showNoInternetScreen(!isConnected && ticketsViewModel.tickets.value == null)
             })
 
@@ -220,6 +224,7 @@ class TicketsFragment : Fragment() {
             ticketIdAndQty = wrappedTicketAndQty,
             currency = safeArgs.currency,
             amount = totalAmount,
+            taxAmount = ticketsViewModel.totalTaxAmount,
             hasPaidTickets = ticketsViewModel.hasPaidTickets
         ))
         ticketsViewModel.hasPaidTickets = false
@@ -293,6 +298,16 @@ class TicketsFragment : Fragment() {
             ticketsRecyclerAdapter.setTicketAndQty(retainedTicketIdAndQty)
             ticketsRecyclerAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun loadTaxDetails() {
+        ticketsViewModel.getTaxDetails(safeArgs.eventId)
+        ticketsViewModel.taxInfo
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                ticketsRecyclerAdapter.applyTax(it)
+                ticketsRecyclerAdapter.notifyDataSetChanged()
+            })
     }
 
     private fun showNoInternetScreen(show: Boolean) {
