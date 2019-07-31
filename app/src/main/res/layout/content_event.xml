@@ -557,8 +557,7 @@
 
                 <Button
                     android:id="@+id/feedbackBtn"
-                    style="@style/ThreeDS2TextButtonStyle"
-                    android:textAllCaps="true"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_margin_medium"
