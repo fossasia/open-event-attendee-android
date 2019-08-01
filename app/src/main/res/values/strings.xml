@@ -516,5 +516,7 @@
     <string name="from_place">From: %1$s</string>
     <string name="from_places">From: %1$s, %2$s</string>
     <string name="by_organizer_name">by %1$s</string>
+    <string name="credit_debit_card">Debit/Credit Card</string>
+    <string name="select_payment_option_message">Please select a payment option for this order</string>
 
 </resources>
