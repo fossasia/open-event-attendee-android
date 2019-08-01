@@ -96,7 +96,7 @@ class AttendeeViewModel(
     // Retained information
     var countryPosition: Int = -1
     var ticketIdAndQty: List<Triple<Int, Int, Float>>? = null
-    var selectedPaymentOption: Int = -1
+    var selectedPaymentMode: String = ""
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0

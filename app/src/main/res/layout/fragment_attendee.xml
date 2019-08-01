@@ -542,10 +542,51 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/heading_text_size"
                         android:text="@string/payment"/>
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/paymentSelector"
+                    <RadioGroup
+                        android:id="@+id/paymentOptionsGroup"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/stripeRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_credit_card"
+                            android:layoutDirection="rtl"
+                            android:text="@string/credit_debit_card"/>
+                        <RadioButton
+                            android:id="@+id/paypalRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_paypal"
+                            android:layoutDirection="rtl"
+                            android:text="@string/paypal"/>
+                        <RadioButton
+                            android:id="@+id/bankRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_bank"
+                            android:layoutDirection="rtl"
+                            android:text="@string/bank_transfer"/>
+                        <RadioButton
+                            android:id="@+id/onSiteRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_cash"
+                            android:layoutDirection="rtl"
+                            android:text="@string/on_site"/>
+                        <RadioButton
+                            android:id="@+id/chequeRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_cheque"
+                            android:layoutDirection="rtl"
+                            android:text="@string/cheque"/>
+                    </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout
