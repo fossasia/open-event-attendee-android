@@ -7,6 +7,10 @@ import retrofit2.http.Query
 
 interface DiscountApi {
 
-    @GET("discount-codes/{code}?include=event,tickets")
-    fun getDiscountCodes(@Path("code") code: String, @Query("filter") filter: String): Single<DiscountCode>
+    @GET("events/{eventId}/discount-codes/{code}?include=event,tickets")
+    fun getDiscountCodes(
+        @Path("eventId") eventId: Long,
+        @Path("code") code: String,
+        @Query("filter") filter: String
+    ): Single<DiscountCode>
 }

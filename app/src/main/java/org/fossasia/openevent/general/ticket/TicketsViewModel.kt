@@ -89,8 +89,8 @@ class TicketsViewModel(
             })
     }
 
-    fun fetchDiscountCode(code: String) {
-        compositeDisposable += ticketService.getDiscountCode(code)
+    fun fetchDiscountCode(eventId: Long, code: String) {
+        compositeDisposable += ticketService.getDiscountCode(eventId, code)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true

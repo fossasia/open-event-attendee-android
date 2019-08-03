@@ -150,7 +150,7 @@ class TicketsFragment : Fragment() {
                 return@setOnClickListener
             }
             hideSoftKeyboard(context, rootView)
-            ticketsViewModel.fetchDiscountCode(rootView.discountCodeEditText.text.toString().trim())
+            ticketsViewModel.fetchDiscountCode(safeArgs.eventId, rootView.discountCodeEditText.text.toString().trim())
         }
 
         ticketsViewModel.discountCode
