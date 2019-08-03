@@ -6,18 +6,26 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.editImage
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.takeImage
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.replaceImage
+import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.removeImage
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerName
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerImage
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerOrganization
@@ -61,10 +69,17 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
     private val editSpeakerViewModel by viewModel<EditSpeakerViewModel>()
     private val safeArgs: EditSpeakerFragmentArgs by navArgs()
     private var isCreatingNewSpeaker = true
-    private var permissionGranted = false
+    private var storagePermissionGranted = false
     private val PICK_IMAGE_REQUEST = 100
     private val READ_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private val REQUEST_CODE = 1
+    private val READ_STORAGE_REQUEST_CODE = 1
+
+    private var cameraPermissionGranted = false
+    private val TAKE_IMAGE_REQUEST = 101
+    private val CAMERA_REQUEST = arrayOf(Manifest.permission.CAMERA)
+    private val CAMERA_REQUEST_CODE = 2
+
+    private lateinit var speakerAvatar: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +91,11 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
 
         setToolbar(activity, getString(R.string.proposal_speaker))
         setHasOptionsMenu(true)
+
+        storagePermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        cameraPermissionGranted = (ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
 
         editSpeakerViewModel.user
             .nonNull()
@@ -143,11 +163,7 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
             })
 
         rootView.speakerImage.setOnClickListener {
-            if (permissionGranted) {
-                showFileChooser()
-            } else {
-                requestPermissions(READ_STORAGE, REQUEST_CODE)
-            }
+            showEditPhotoDialog()
         }
 
         rootView.submitButton.setOnClickListener {
@@ -195,7 +211,9 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && intentData?.data != null) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == PICK_IMAGE_REQUEST && intentData?.data != null) {
             val imageUri = intentData.data ?: return
 
             try {
@@ -203,6 +221,11 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
                 editSpeakerViewModel.encodedImage = selectedImage?.let { encodeImage(it) }
             } catch (e: FileNotFoundException) {
                 Timber.d(e, "File Not Found Exception")
+            }
+        } else if (requestCode == TAKE_IMAGE_REQUEST) {
+            val imageBitmap = intentData?.extras?.get("data")
+            if (imageBitmap is Bitmap) {
+                editSpeakerViewModel.encodedImage = imageBitmap.let { encodeImage(it) }
             }
         }
     }
@@ -212,13 +235,21 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == READ_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                permissionGranted = true
+                storagePermissionGranted = true
                 rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.external_storage)))
                 showFileChooser()
             } else {
                 rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.external_storage)))
+            }
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraPermissionGranted = true
+                rootView.snackbar(getString(R.string.permission_granted_message, getString(R.string.camera)))
+                takeImage()
+            } else {
+                rootView.snackbar(getString(R.string.permission_denied_message, getString(R.string.camera)))
             }
         }
     }
@@ -239,6 +270,60 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
             .placeholder(R.drawable.ic_account_circle_grey)
             .transform(CircleTransform())
             .into(rootView.speakerImage)
+        speakerAvatar = user.avatarUrl ?: ""
+    }
+
+    private fun showEditPhotoDialog() {
+        val editImageView = layoutInflater.inflate(R.layout.dialog_edit_profile_image, null)
+
+        editImageView.removeImage.isVisible = this::speakerAvatar.isInitialized && speakerAvatar.isNotEmpty()
+        editImageView.editImage.isVisible = false
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(editImageView)
+            .create()
+
+        editImageView.editImage.isVisible = false
+
+        editImageView.removeImage.setOnClickListener {
+            dialog.cancel()
+            clearAvatar()
+        }
+
+        editImageView.takeImage.setOnClickListener {
+            dialog.cancel()
+            if (cameraPermissionGranted) {
+                takeImage()
+            } else {
+                requestPermissions(CAMERA_REQUEST, CAMERA_REQUEST_CODE)
+            }
+        }
+
+        editImageView.replaceImage.setOnClickListener {
+            dialog.cancel()
+            if (storagePermissionGranted) {
+                showFileChooser()
+            } else {
+                requestPermissions(READ_STORAGE, READ_STORAGE_REQUEST_CODE)
+            }
+        }
+        dialog.show()
+    }
+
+    private fun clearAvatar() {
+        val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
+        Picasso.get()
+            .load(R.drawable.ic_account_circle_grey)
+            .placeholder(drawable)
+            .transform(CircleTransform())
+            .into(rootView.speakerImage)
+        val newSpeakerImage = encodeImage(drawable.toBitmap(120, 120))
+        editSpeakerViewModel.encodedImage = newSpeakerImage
+    }
+
+    private fun takeImage() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, TAKE_IMAGE_REQUEST)
     }
 
     private fun encodeImage(bitmap: Bitmap): String {
@@ -275,6 +360,7 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
             .placeholder(R.drawable.ic_account_circle_grey)
             .transform(CircleTransform())
             .into(rootView.speakerImage)
+        speakerAvatar = speaker.photoUrl ?: ""
         rootView.speakerName.setText(speaker.name)
         rootView.speakerEmail.setText(speaker.email)
         rootView.speakerOrganization.setText(speaker.organisation)
