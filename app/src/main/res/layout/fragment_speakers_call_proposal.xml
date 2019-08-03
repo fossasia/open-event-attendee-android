@@ -233,52 +233,98 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium"
-                        android:hint="@string/title" >
+                        android:hint="@string/title"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/title"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/subTitleLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium"
-                        android:hint="@string/language" >
+                        android:hint="@string/sub_title"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/subTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/languageLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/language"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/language"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/shortAbstractLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium"
-                        android:hint="@string/short_abstract" >
-
-
+                        android:hint="@string/short_abstract"
+                        android:visibility="gone"
+                        tools:visibility="visible">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/shortAbstract"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/longAbstractLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         android:layout_marginTop="@dimen/padding_medium"
-                        android:hint="@string/comment" >
+                        android:hint="@string/long_abstract"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/longAbstract"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="3"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/commentsLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:hint="@string/comments"
+                        android:visibility="gone"
+                        tools:visibility="visible" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/comment"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"/>
                     </com.google.android.material.textfield.TextInputLayout>
                     <LinearLayout
                         android:id="@+id/trackContainer"
@@ -291,7 +337,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_large"
-
                             android:text="@string/track_required"
                             android:padding="@dimen/padding_extra_small"/>
                         <androidx.appcompat.widget.AppCompatSpinner
@@ -303,7 +348,6 @@
                             android:background="@drawable/filled_border"
                             android:padding="@dimen/padding_extra_small"/>
                     </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
