@@ -32,12 +32,11 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-atten
 <td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_3.png"></td>
         </tr>
         <tr>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_4.png"></td>
 <td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_5.png"></td>
 <td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_6.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_7.png"></td>
         </tr>
         <tr>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_7.png"></td>
 <td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_8.png"></td>
 <td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_9.png"></td>
         </tr>
