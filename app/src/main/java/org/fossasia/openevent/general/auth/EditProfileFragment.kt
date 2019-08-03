@@ -83,7 +83,6 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
     private lateinit var userFirstName: String
     private lateinit var userLastName: String
     private lateinit var userDetails: String
-    private lateinit var userAvatar: String
     private lateinit var userPhone: String
     private lateinit var userFacebook: String
     private lateinit var userTwitter: String
@@ -215,17 +214,18 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         userFirstName = user.firstName.nullToEmpty()
         userLastName = user.lastName.nullToEmpty()
         userDetails = user.details.nullToEmpty()
-        userAvatar = user.avatarUrl.nullToEmpty()
+        if (editProfileViewModel.userAvatar == null)
+            editProfileViewModel.userAvatar = user.avatarUrl.nullToEmpty()
         userPhone = user.contact.nullToEmpty()
         userFacebook = user.facebookUrl.nullToEmpty()
         userTwitter = user.twitterUrl.nullToEmpty()
         userInstagram = user.instagramUrl.nullToEmpty()
 
         if (safeArgs.croppedImage.isEmpty()) {
-            if (userAvatar.isNotEmpty() && !editProfileViewModel.avatarUpdated) {
+            if (!editProfileViewModel.userAvatar.isNullOrEmpty() && !editProfileViewModel.avatarUpdated) {
                 val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
                 Picasso.get()
-                    .load(userAvatar)
+                    .load(editProfileViewModel.userAvatar)
                     .placeholder(drawable)
                     .transform(CircleTransform())
                     .into(rootView.profilePhoto)
@@ -257,10 +257,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
         editImageView.editImage.setOnClickListener {
 
-            if (!userAvatar.isNullOrEmpty()) {
-                if (this::userAvatar.isInitialized) {
+            if (!editProfileViewModel.userAvatar.isNullOrEmpty()) {
+                val currentUserAvatar = editProfileViewModel.userAvatar
+                if (currentUserAvatar != null) {
                     findNavController(rootView).navigate(
-                        EditProfileFragmentDirections.actionEditProfileToCropImage(userAvatar))
+                        EditProfileFragmentDirections.actionEditProfileToCropImage(currentUserAvatar))
                 } else {
                     rootView.snackbar(getString(R.string.error_editting_image_message))
                 }
@@ -325,6 +326,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             fos.close()
 
             editProfileViewModel.setUpdatedTempFile(tempAvatar)
+            editProfileViewModel.userAvatar = tempAvatar.toURI().toString()
         } catch (e: IOException) {
             e.printStackTrace()
         }
