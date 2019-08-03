@@ -170,6 +170,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="4"
+            android:autoLink="web|email|phone"
             tools:text="@string/description_preview"/>
         <TextView
             android:id="@+id/sessionDetailAbstractSeeMore"

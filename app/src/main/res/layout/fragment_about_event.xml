@@ -94,6 +94,7 @@
                 android:padding="@dimen/padding_medium"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_medium"
+                android:autoLink="web|email|phone"
                 tools:text="Lorem ipsum ipsum ipsum " />
 
         </androidx.cardview.widget.CardView>
