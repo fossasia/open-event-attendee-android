@@ -224,10 +224,8 @@ class TicketsFragment : Fragment() {
             ticketIdAndQty = wrappedTicketAndQty,
             currency = safeArgs.currency,
             amount = totalAmount,
-            taxAmount = ticketsViewModel.totalTaxAmount,
-            hasPaidTickets = ticketsViewModel.hasPaidTickets
+            taxAmount = ticketsViewModel.totalTaxAmount
         ))
-        ticketsViewModel.hasPaidTickets = false
     }
 
     private fun redirectToLogin() {
