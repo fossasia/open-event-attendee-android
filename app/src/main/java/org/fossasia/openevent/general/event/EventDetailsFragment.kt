@@ -136,8 +136,8 @@ class EventDetailsFragment : Fragment() {
 
         rootView.buttonTickets.setOnClickListener {
             val ticketUrl = currentEvent?.ticketUrl
-            if (Uri.parse(ticketUrl).host != getString(R.string.FRONTEND_HOST) &&
-                !ticketUrl.isNullOrEmpty()) {
+            if (!ticketUrl.isNullOrEmpty() &&
+                Uri.parse(ticketUrl).host != getString(R.string.FRONTEND_HOST)) {
                 Utils.openUrl(requireContext(), ticketUrl)
             } else {
                 loadTicketFragment()
