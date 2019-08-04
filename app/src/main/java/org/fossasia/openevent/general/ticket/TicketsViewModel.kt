@@ -51,7 +51,6 @@ class TicketsViewModel(
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
     val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
     var discountCodeCurrentLayout = APPLY_DISCOUNT_CODE
-    var hasPaidTickets = false
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -139,8 +138,6 @@ class TicketsViewModel(
                         }
                     }
                     price.let { prices += price * qty[index] }
-                    if (ticket.type == TICKET_TYPE_PAID)
-                        hasPaidTickets = true
                     index++
                 }
                 prices += totalTaxAmount
