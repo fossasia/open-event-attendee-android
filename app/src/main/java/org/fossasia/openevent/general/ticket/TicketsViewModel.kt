@@ -109,7 +109,11 @@ class TicketsViewModel(
     fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
-        val taxRate = taxInfo.value?.rate ?: 0f
+        val tax = taxInfo.value
+        var taxRate = 0f
+        if (tax != null && !tax.isTaxIncludedInPrice) {
+            taxRate = tax.rate ?: 0f
+        }
         ticketIdAndQty.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)

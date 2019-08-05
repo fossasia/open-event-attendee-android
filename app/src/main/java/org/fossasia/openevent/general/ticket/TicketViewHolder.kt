@@ -81,9 +81,14 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var ticketPrice = ticket.price
         if (tax?.rate != null) {
-            val taxPrice = (ticketPrice * tax.rate / 100)
-            ticketPrice += taxPrice
-            itemView.taxInfo.text = "(+ $eventCurrency$taxPrice ${tax.name})"
+            if (!tax.isTaxIncludedInPrice) {
+                val taxPrice = (ticketPrice * tax.rate / 100)
+                ticketPrice += taxPrice
+                itemView.taxInfo.text = "(+ $eventCurrency${"%.2f".format(taxPrice)} ${tax.name})"
+            } else {
+                val taxPrice = (ticket.price * tax.rate) / (100 + tax.rate)
+                itemView.taxInfo.text = "( $eventCurrency${"%.2f".format(taxPrice)} ${tax.name} included)"
+            }
         }
 
         when (ticket.type) {
@@ -107,7 +112,9 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
 
-        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${ticket.price}"
+        val price = if (tax?.rate != null && tax.isTaxIncludedInPrice) (ticket.price * 100) / (100 + tax.rate)
+        else ticket.price
+        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${"%.2f".format(price)}"
         itemView.priceInfo.text = Html.fromHtml(priceInfo)
 
         if (ticket.description.isNullOrEmpty()) {
