@@ -45,12 +45,11 @@ class TicketsViewModel(
     val taxInfo: LiveData<Tax> = mutableTaxInfo
     var appliedDiscountCode: DiscountCode? = null
     var totalTaxAmount = 0f
-    val mutableAmount = MutableLiveData<Float>()
-    val amount: LiveData<Float> = mutableAmount
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
     val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
     var discountCodeCurrentLayout = APPLY_DISCOUNT_CODE
+    var totalAmount: Float = 0.0f
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -106,7 +105,7 @@ class TicketsViewModel(
             })
     }
 
-    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
+    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>): Float {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
         val tax = taxInfo.value
@@ -121,34 +120,27 @@ class TicketsViewModel(
             }
         }
         val donation = ticketIdAndQty.map { it.third*it.second }.sum()
-        compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
-            .withDefaultSchedulers()
-            .doOnSubscribe {
-                mutableProgress.value = true
-            }.doFinally {
-                mutableProgress.value = false
-            }.subscribe({ tickets ->
-                var prices = 0F
-                var index = 0
-                val code = appliedDiscountCode
-                tickets.forEach { ticket ->
-                    var price = ticket.price
-                    totalTaxAmount += (ticket.price * taxRate / 100) * qty[index]
-                    if (code?.value != null) {
-                        appliedDiscountCode?.tickets?.forEach { ticketId ->
-                            if (ticket.id == ticketId.id.toInt()) {
-                                price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
-                            }
+        tickets.value?.filter { ticketIds.contains(it.id) }?.let { tickets ->
+            var prices = 0F
+            var index = 0
+            val code = appliedDiscountCode
+            tickets.forEach { ticket ->
+                var price = ticket.price
+                totalTaxAmount += (ticket.price * taxRate / 100) * qty[index]
+                if (code?.value != null) {
+                    appliedDiscountCode?.tickets?.forEach { ticketId ->
+                        if (ticket.id == ticketId.id.toInt()) {
+                            price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
                         }
                     }
-                    price.let { prices += price * qty[index] }
-                    index++
                 }
-                prices += totalTaxAmount
-                mutableAmount.value = prices + donation
-            }, {
-                Timber.e(it, "Error Loading tickets!")
-            })
+                price.let { prices += price * qty[index] }
+                index++
+            }
+            prices += totalTaxAmount
+            return prices + donation
+        }
+        return -1F
     }
 
     fun getTaxDetails(eventId: Long) {
