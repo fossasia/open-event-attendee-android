@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.speakers
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -30,4 +31,10 @@ interface SpeakerApi {
 
     @PATCH("speakers/{speakerId}")
     fun updateSpeaker(@Path("speakerId") speakerId: Long, @Body speaker: Speaker): Single<Speaker>
+
+    @GET("events/{id}/custom-forms")
+    fun getCustomForms(
+        @Path("id") eventId: Long,
+        @Query("filter") filter: String
+    ): Single<List<CustomForm>>
 }

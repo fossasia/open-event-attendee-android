@@ -37,6 +37,7 @@ data class Speaker(
     val facebook: String? = null,
     val linkedin: String? = null,
     val github: String? = null,
+    val heardFrom: String? = null,
     val isFeatured: Boolean = false,
     @ColumnInfo(index = true)
     @Relationship("event")

@@ -2,6 +2,7 @@ package org.fossasia.openevent.general.speakers
 
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 
 class SpeakerService(
@@ -47,5 +48,20 @@ class SpeakerService(
 
     fun fetchSpeaker(id: Long): Flowable<Speaker> {
         return speakerDao.getSpeaker(id)
+    }
+
+    fun getCustomFormsForSpeakers(id: Long): Single<List<CustomForm>> {
+        val filter = """[{
+                |   'and':[{
+                |       'name':'form',
+                |       'op':'eq',
+                |       'val':'speaker'
+                |    },{
+                |       'name':'is-included',
+                |       'op':'eq',
+                |       'val':true
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+        return speakerApi.getCustomForms(id, filter)
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.auth.UploadImage
@@ -38,6 +39,8 @@ class EditSpeakerViewModel(
     private val mutableSubmitSuccess = MutableLiveData<Boolean>()
     val submitSuccess: LiveData<Boolean> = mutableSubmitSuccess
     private var updatedImageTemp = MutableLiveData<File>()
+    private val mutableForms = MutableLiveData<List<CustomForm>>()
+    val forms: LiveData<List<CustomForm>> = mutableForms
 
     var encodedImage: String? = null
 
@@ -55,6 +58,20 @@ class EditSpeakerViewModel(
             mutableProgress.value = false
             Timber.e(it, "Fail on fetching speaker id $userId")
         })
+    }
+
+    fun getFormsForSpeaker(eventId: Long) {
+        compositeDisposable += speakerService.getCustomFormsForSpeakers(eventId)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableForms.value = it
+            }, {
+                Timber.e(it, "Fail on fetching custom forms for event $eventId")
+            })
     }
 
     fun loadSpeaker(speakerId: Long) {

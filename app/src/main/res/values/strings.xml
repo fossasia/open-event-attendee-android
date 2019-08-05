@@ -407,6 +407,7 @@
     <string name="organization">Organization</string>
     <string name="position">Position</string>
     <string name="short_bio">Short Bio</string>
+    <string name="long_bio">Long Bio</string>
     <string name="website">Website</string>
     <string name="twitter" translatable="false">Twitter</string>
     <string name="facebook" translatable="false">Facebook</string>
@@ -481,11 +482,13 @@
     <string name="add_event_to_shortlist_message">We added the event to your shortlist</string>
     <string name="remove_event_from_shortlist_message">We removed the event from your shortlist</string>
     <string name="title">Title</string>
+    <string name="sub_title">Sub Title</string>
     <string name="session_type">Session Type</string>
     <string name="short_abstract">Short Abstract</string>
+    <string name="long_abstract">Long Abstract</string>
     <string name="error_fetching_tracks_message">Error on fetching tracks for this event</string>
     <string name="error_fetching_session_types_message">Error fetching session types for this event</string>
-    <string name="comment">Comment</string>
+    <string name="comments">Comments</string>
     <string name="fail_create_proposal_message">Fail on creating new session</string>
     <string name="fail_update_proposal_message">Fail on updating this session</string>
     <string name="loading">Loading...</string>
@@ -518,6 +521,9 @@
     <string name="by_organizer_name">by %1$s</string>
     <string name="credit_debit_card">Debit/Credit Card</string>
     <string name="select_payment_option_message">Please select a payment option for this order</string>
+    <string name="heard_from">Heard From</string>
+    <string name="speaker_experience">Speaking Experience</string>
+    <string name="linkedin">LinkedIn</string>
     <string name="order_now">Order Now</string>
 
 </resources>

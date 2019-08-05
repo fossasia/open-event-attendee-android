@@ -33,7 +33,10 @@
                 android:layout_height="@dimen/avatar_large"
                 android:padding="@dimen/padding_large"
                 android:foreground="?selectableItemBackground"
-                app:srcCompat="@drawable/ic_account_circle_grey" />
+                app:srcCompat="@drawable/ic_account_circle_grey"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/speakerNameLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -41,12 +44,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:hint="@string/name">
+                android:hint="@string/name"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,83 +63,251 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:hint="@string/email">
+                android:hint="@string/email"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerOrgLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/organization"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerOrganization"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/organization"
+                    android:singleLine="true"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerPositionLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/position"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerPosition"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/position"
+                    android:singleLine="true"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerCountryLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/country"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerShortBioLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/short_bio"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerShortBio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/short_bio"
+                    android:singleLine="true"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerLongBioLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/long_bio"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerLongBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:lines="3"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerSpeakingExpLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/speaker_experience"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerSpeakingExp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerMobileLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/phone"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerWebsiteLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/website"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerWebsite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/website"
-                    android:inputType="text" />
+                    android:singleLine="true"
+                    android:inputType="textUri" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerFacebookLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/facebook"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerGithubLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/github"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerGithub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerLinkedInLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/linkedin"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerLinkedIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerTwitterLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/twitter"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/speakerTwitter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/twitter"
-                    android:inputType="text" />
+                    android:singleLine="true"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/speakerHeardFromLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:hint="@string/heard_from"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/speakerHeardFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textUri" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton

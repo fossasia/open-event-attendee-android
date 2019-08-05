@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.editImage
@@ -37,13 +38,35 @@ import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerTwit
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.submitButton
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerEmailLayout
 import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerNameLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerOrgLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerPositionLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerShortBioLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerWebsiteLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerTwitterLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerLongBio
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerLongBioLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerFacebook
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerGithub
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerGithubLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerLinkedIn
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerLinkedInLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerMobile
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerMobileLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerCountry
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerCountryLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerHeardFrom
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerHeardFromLayout
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerSpeakingExp
+import kotlinx.android.synthetic.main.fragment_proposal_speaker.view.speakerSpeakingExpLayout
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.RotateBitmap
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserId
 import org.fossasia.openevent.general.event.EventId
+import org.fossasia.openevent.general.speakercall.form.SpeakerIdentifier
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
@@ -140,6 +163,8 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
                     findNavController(rootView).popBackStack()
             })
 
+        setupCustomForms()
+
         rootView.speakerNameLayout.setRequired()
         rootView.speakerEmailLayout.setRequired()
         rootView.submitButton.text = getString(if (isCreatingNewSpeaker)
@@ -175,6 +200,14 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
                 organisation = rootView.speakerOrganization.text.toString(),
                 position = rootView.speakerPosition.text.toString(),
                 shortBiography = rootView.speakerShortBio.text.toString(),
+                longBiography = rootView.speakerLongBio.text.toString(),
+                country = rootView.speakerCountry.text.toString(),
+                mobile = rootView.speakerMobile.text.toString(),
+                speakingExperience = rootView.speakerSpeakingExp.text.toString(),
+                heardFrom = rootView.speakerHeardFrom.text.toString(),
+                facebook = rootView.speakerFacebook.text.toString().emptyToNull(),
+                github = rootView.speakerGithub.text.toString().emptyToNull(),
+                linkedin = rootView.speakerLinkedIn.text.toString().emptyToNull(),
                 website = rootView.speakerWebsite.text.toString().emptyToNull(),
                 twitter = rootView.speakerTwitter.text.toString().emptyToNull(),
                 event = EventId(safeArgs.eventId),
@@ -368,5 +401,54 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
         rootView.speakerShortBio.setText(speaker.shortBiography)
         rootView.speakerWebsite.setText(speaker.website)
         rootView.speakerTwitter.setText(speaker.twitter)
+        rootView.speakerHeardFrom.setText(speaker.heardFrom)
+        rootView.speakerSpeakingExp.setText(speaker.speakingExperience)
+    }
+
+    private fun setupCustomForms() {
+        editSpeakerViewModel.forms
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                it.forEach { form ->
+                    setupFormWithSpeakerFields(form)
+                }
+            })
+
+        val currentForms = editSpeakerViewModel.forms.value
+        if (currentForms != null)
+            currentForms.forEach {
+                setupFormWithSpeakerFields(it)
+            }
+        else
+            editSpeakerViewModel.getFormsForSpeaker(safeArgs.eventId)
+    }
+
+    private fun setupFormWithSpeakerFields(form: CustomForm) {
+        when (form.fieldIdentifier) {
+            SpeakerIdentifier.NAME -> setupField(rootView.speakerNameLayout, form.isRequired)
+            SpeakerIdentifier.EMAIL -> setupField(rootView.speakerEmailLayout, form.isRequired)
+            SpeakerIdentifier.PHOTO -> rootView.speakerImage.isVisible = true
+            SpeakerIdentifier.ORGANIZATION -> setupField(rootView.speakerOrgLayout, form.isRequired)
+            SpeakerIdentifier.POSITION -> setupField(rootView.speakerPositionLayout, form.isRequired)
+            SpeakerIdentifier.SHORT_BIO -> setupField(rootView.speakerShortBioLayout, form.isRequired)
+            SpeakerIdentifier.LONG_BIO -> setupField(rootView.speakerLongBioLayout, form.isRequired)
+            SpeakerIdentifier.COUNTRY -> setupField(rootView.speakerCountryLayout, form.isRequired)
+            SpeakerIdentifier.MOBILE -> setupField(rootView.speakerMobileLayout, form.isRequired)
+            SpeakerIdentifier.WEBSITE -> setupField(rootView.speakerWebsiteLayout, form.isRequired)
+            SpeakerIdentifier.FACEBOOK -> setupField(rootView.speakerWebsiteLayout, form.isRequired)
+            SpeakerIdentifier.GITHUB -> setupField(rootView.speakerGithubLayout, form.isRequired)
+            SpeakerIdentifier.TWITTER -> setupField(rootView.speakerTwitterLayout, form.isRequired)
+            SpeakerIdentifier.LINKEDIN -> setupField(rootView.speakerLinkedInLayout, form.isRequired)
+            SpeakerIdentifier.HEARD_FROM -> setupField(rootView.speakerHeardFromLayout, form.isRequired)
+            SpeakerIdentifier.SPEAKING_EXPERIENCE -> setupField(rootView.speakerSpeakingExpLayout, form.isRequired)
+            else -> return
+        }
+    }
+
+    private fun setupField(layout: TextInputLayout, isRequired: Boolean) {
+        layout.isVisible = true
+        if (isRequired) {
+            layout.setRequired()
+        }
     }
 }

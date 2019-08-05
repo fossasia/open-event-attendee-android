@@ -25,6 +25,8 @@ data class Proposal(
     val comments: String? = null,
     val startsAt: String? = null,
     val endsAt: String? = null,
+    val subTitle: String? = null,
+    val longAbstract: String? = null,
     @ColumnInfo(index = true)
     @Relationship("track", resolve = true)
     val track: Track? = null,
