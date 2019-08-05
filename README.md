@@ -27,19 +27,18 @@ Our chat channel is on gitter [here](https://gitter.im/fossasia/open-event-atten
 ## Screenshots
 <table>
         <tr>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_1.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_2.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_3.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_1.jpg"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_2.jpg"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_3.jpg"></td>
         </tr>
         <tr>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_4.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_5.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_6.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_5.jpg"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_6.jpg"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_7.jpg"></td>
         </tr>
         <tr>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_7.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_8.png"></td>
-<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_9.png"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_8.jpg"></td>
+<td><img src = "fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot_9.jpg"></td>
         </tr>
 </table>        
 

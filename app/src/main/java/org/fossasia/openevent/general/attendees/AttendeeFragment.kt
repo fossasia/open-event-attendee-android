@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.firstName
 import kotlinx.android.synthetic.main.fragment_attendee.view.helloUser
 import kotlinx.android.synthetic.main.fragment_attendee.view.lastName
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingPostalCode
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoCheckboxSection
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingEnabledCheckbox
 import kotlinx.android.synthetic.main.fragment_attendee.view.attendeeScrollView
 import kotlinx.android.synthetic.main.fragment_attendee.view.accept
 import kotlinx.android.synthetic.main.fragment_attendee.view.amount
@@ -132,7 +134,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private val safeArgs: AttendeeFragmentArgs by navArgs()
     private lateinit var timer: CountDownTimer
     private lateinit var card: Card
-    private var showBillingInfoLayout = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,8 +141,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             attendeeViewModel.ticketIdAndQty = safeArgs.ticketIdAndQty?.value
             attendeeViewModel.singleTicket = safeArgs.ticketIdAndQty?.value?.map { it.second }?.sum() == 1
         }
-
-        showBillingInfoLayout = safeArgs.hasPaidTickets || safeArgs.amount > 0
 
         attendeeRecyclerAdapter.setEventId(safeArgs.eventId)
         if (attendeeViewModel.paymentCurrency.isNotBlank())
@@ -503,12 +502,17 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun setupBillingInfo() {
-        rootView.billingInfoContainer.isVisible = showBillingInfoLayout
-        attendeeViewModel.billingEnabled = showBillingInfoLayout
+        rootView.billingInfoCheckboxSection.isVisible = safeArgs.amount > 0
         rootView.billingCompanyLayout.setRequired()
         rootView.billingAddressLayout.setRequired()
         rootView.billingCityLayout.setRequired()
         rootView.billingPostalCodeLayout.setRequired()
+        rootView.billingInfoContainer.isVisible = rootView.billingEnabledCheckbox.isChecked
+        attendeeViewModel.billingEnabled = rootView.billingEnabledCheckbox.isChecked
+        rootView.billingEnabledCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            attendeeViewModel.billingEnabled = isChecked
+            rootView.billingInfoContainer.isVisible = isChecked
+        }
     }
 
     private fun setupCountryOptions() {
@@ -691,7 +695,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             rootView.email.checkEmpty()
 
         var checkBillingInfo = true
-        if (showBillingInfoLayout) {
+        if (rootView.billingEnabledCheckbox.isChecked) {
             checkBillingInfo = rootView.billingCompany.checkEmpty() && rootView.billingAddress.checkEmpty() &&
                 rootView.billingCity.checkEmpty() && rootView.billingPostalCode.checkEmpty()
         }
