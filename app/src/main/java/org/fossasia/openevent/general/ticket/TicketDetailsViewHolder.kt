@@ -18,7 +18,7 @@ class TicketDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         when (ticket.type) {
             TICKET_TYPE_DONATION -> {
                 itemView.price.text = resource.getString(R.string.donation)
-                itemView.subTotal.text = "$eventCurrency${"%2.f".format(donationAmount)}"
+                itemView.subTotal.text = "$eventCurrency${"%.2f".format(donationAmount)}"
             }
             TICKET_TYPE_FREE -> {
                 itemView.price.text = resource.getString(R.string.free)
