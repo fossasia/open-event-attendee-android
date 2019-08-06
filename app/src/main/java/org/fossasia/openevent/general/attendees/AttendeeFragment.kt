@@ -279,7 +279,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
             loadEventDetailsUI(currentEvent)
         }
 
-        rootView.register.text = if (safeArgs.amount > 0) getString(R.string.pay_now) else getString(R.string.register)
+        rootView.register.text =
+            if (rootView.stripeRadioButton.isSelected || rootView.paypalRadioButton.isSelected)
+                getString(R.string.pay_now)
+            else
+                getString(R.string.register)
     }
 
     private fun setupPendingOrder() {
