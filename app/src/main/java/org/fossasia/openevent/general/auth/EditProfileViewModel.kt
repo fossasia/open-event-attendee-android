@@ -30,6 +30,7 @@ class EditProfileViewModel(
     private var updatedImageTemp = MutableLiveData<File>()
     var avatarUpdated = false
     var encodedImage: String? = null
+    var userAvatar: String? = null
 
     fun getId() = authHolder.getId()
 
