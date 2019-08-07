@@ -384,8 +384,11 @@ class EditSpeakerFragment : Fragment(), ComplexBackPressFragment {
         return "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
-    private fun checkSpeakerSuccess(): Boolean =
-        rootView.speakerEmail.checkEmpty() && rootView.speakerName.checkEmpty()
+    private fun checkSpeakerSuccess(): Boolean {
+        var valid = rootView.speakerEmail.checkEmpty(rootView.speakerEmailLayout)
+        valid = rootView.speakerName.checkEmpty(rootView.speakerNameLayout) && valid
+        return valid
+    }
 
     private fun loadSpeakerUI(speaker: Speaker) {
         Picasso.get()
