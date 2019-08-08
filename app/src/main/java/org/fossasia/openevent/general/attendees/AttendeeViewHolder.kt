@@ -2,7 +2,6 @@ package org.fossasia.openevent.general.attendees
 
 import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
-import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.View
@@ -73,7 +72,7 @@ import org.fossasia.openevent.general.utils.nullToEmpty
 
 class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerView.ViewHolder(binding.root) {
     private val resource = Resource()
-    private val requiredList = mutableListOf<TextInputEditText>()
+    private val requiredList = mutableListOf<Pair<TextInputEditText, TextInputLayout>>()
     var onAttendeeDetailChanged: AttendeeDetailChangeListener? = null
 
     fun bind(
@@ -206,7 +205,7 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
         editText.addTextChangedListener(textWatcher)
         if (isRequired) {
             layout.setRequired()
-            requiredList.add(editText)
+            requiredList.add(Pair(editText, layout))
         }
     }
 
@@ -217,12 +216,12 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
     }
 
     fun checkValidFields(): Boolean {
+        var valid = true
         requiredList.forEach {
-            if (!it.checkEmpty() ||
-                (it.inputType == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS && !it.checkValidEmail()) ||
-                (it.inputType == InputType.TYPE_TEXT_VARIATION_URI && !it.checkValidURI())) return false
+            valid = it.first.checkEmpty(it.second) && it.first.checkValidEmail(it.second) &&
+                it.first.checkValidURI(it.second) && valid
         }
-        return true
+        return valid
     }
 
     private fun getAttendeeInformation(id: Long, ticket: Ticket, eventId: Long): Attendee {

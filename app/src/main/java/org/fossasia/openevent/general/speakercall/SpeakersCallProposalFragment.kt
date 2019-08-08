@@ -163,7 +163,7 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
         }
 
         rootView.submitProposalButton.setOnClickListener {
-            if (rootView.title.checkEmpty()) {
+            if (rootView.title.checkEmpty(rootView.titleLayout)) {
                 val proposal = Proposal(
                     title = rootView.title.text.toString(),
                     subTitle = rootView.subTitle.text.toString(),

@@ -436,8 +436,11 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
 
         rootView.loginButton.setOnClickListener {
-            if (rootView.signInEmail.checkEmpty() && rootView.signInEmail.checkValidEmail() &&
-                rootView.signInPassword.checkEmpty())
+            var validForLogin = true
+            validForLogin = rootView.signInEmail.checkEmpty(rootView.signInEmailLayout) && validForLogin
+            validForLogin = rootView.signInEmail.checkValidEmail(rootView.signInEmailLayout) && validForLogin
+            validForLogin = rootView.signInPassword.checkEmpty(rootView.signInEmailLayout) && validForLogin
+            if (validForLogin)
                 attendeeViewModel.login(rootView.signInEmail.text.toString(), rootView.signInPassword.text.toString())
         }
 
@@ -591,7 +594,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 if (s != null) {
                     val cardType = Utils.getCardType(s.toString())
                     if (cardType == Utils.cardType.NONE) {
-                        rootView.cardNumber.error = getString(R.string.invalid_card_number_message)
+                        rootView.cardNumberLayout.error = getString(R.string.invalid_card_number_message)
                         return
                     }
                 }
@@ -695,21 +698,26 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         }
 
     private fun checkRequiredFields(): Boolean {
-        val checkBasicInfo = rootView.firstName.checkEmpty() && rootView.lastName.checkEmpty() &&
-            rootView.email.checkEmpty()
+        val checkBasicInfo = rootView.firstName.checkEmpty(rootView.firstNameLayout) &&
+            rootView.lastName.checkEmpty(rootView.lastNameLayout) &&
+            rootView.email.checkEmpty(rootView.emailLayout)
 
         var checkBillingInfo = true
         if (rootView.billingEnabledCheckbox.isChecked) {
-            checkBillingInfo = rootView.billingCompany.checkEmpty() && rootView.billingAddress.checkEmpty() &&
-                rootView.billingCity.checkEmpty() && rootView.billingPostalCode.checkEmpty()
+            checkBillingInfo = rootView.billingCompany.checkEmpty(rootView.billingCompanyLayout) && checkBillingInfo
+            checkBillingInfo = rootView.billingAddress.checkEmpty(rootView.billingAddressLayout) && checkBillingInfo
+            checkBillingInfo = rootView.billingCity.checkEmpty(rootView.billingCityLayout) && checkBillingInfo
+            checkBillingInfo = rootView.billingPostalCode.checkEmpty(rootView.billingPostalCodeLayout) &&
+                checkBillingInfo
         }
 
         var checkStripeInfo = true
         if (safeArgs.amount != 0F && attendeeViewModel.selectedPaymentMode == PAYMENT_MODE_STRIPE) {
-            checkStripeInfo = rootView.cardNumber.checkEmpty() && rootView.cvc.checkEmpty()
+            checkStripeInfo = rootView.cardNumber.checkEmpty(rootView.cardNumberLayout) &&
+                rootView.cvc.checkEmpty(rootView.cvcLayout)
         }
 
-        return checkBasicInfo && checkBillingInfo && checkAttendeesInfo() && checkStripeInfo
+        return checkAttendeesInfo() && checkBasicInfo && checkBillingInfo && checkStripeInfo
     }
 
     private fun checkAttendeesInfo(): Boolean {

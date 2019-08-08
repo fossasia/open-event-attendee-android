@@ -7,6 +7,9 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.ClickableSpan
+import android.text.TextWatcher
+import android.text.Editable
+import android.text.InputType
 import android.util.Patterns
 import android.view.View
 import com.google.android.material.textfield.TextInputEditText
@@ -30,18 +33,36 @@ fun String?.stripHtml(): String? {
     }
 }
 
-fun TextInputEditText.checkEmpty(): Boolean {
+fun TextInputEditText.checkEmpty(layout: TextInputLayout): Boolean {
     if (text.isNullOrBlank()) {
-        error = resources.getString(R.string.empty_field_error_message)
+        layout.error = resources.getString(R.string.empty_field_error_message)
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                layout.error = null
+                layout.isErrorEnabled = false
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /* Do Nothing */ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /* Do Nothing */ }
+        })
         return false
     }
     return true
 }
 
-fun TextInputEditText.checkValidEmail(): Boolean {
-    if (text.isNullOrBlank()) return false
+fun TextInputEditText.checkValidEmail(layout: TextInputLayout): Boolean {
+    if (text.isNullOrBlank() && inputType != InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) return false
     if (!Patterns.EMAIL_ADDRESS.matcher(text.toString()).matches()) {
-        error = resources.getString(R.string.invalid_email_message)
+        layout.error = resources.getString(R.string.invalid_email_message)
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                layout.error = null
+                layout.isErrorEnabled = false
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /* Do Nothing */ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /* Do Nothing */ }
+        })
         return false
     }
     return true
@@ -52,10 +73,19 @@ fun TextInputLayout.setRequired() {
         hint = "$hint *"
 }
 
-fun TextInputEditText.checkValidURI(): Boolean {
-    if (text.isNullOrBlank()) return false
+fun TextInputEditText.checkValidURI(layout: TextInputLayout): Boolean {
+    if (text.isNullOrBlank() && inputType != InputType.TYPE_TEXT_VARIATION_URI) return false
     if (!Patterns.WEB_URL.matcher(text.toString()).matches()) {
-        error = resources.getString(R.string.invalid_url_message)
+        layout.error = resources.getString(R.string.invalid_url_message)
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                layout.error = null
+                layout.isErrorEnabled = false
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /* Do Nothing */ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /* Do Nothing */ }
+        })
         return false
     }
 
