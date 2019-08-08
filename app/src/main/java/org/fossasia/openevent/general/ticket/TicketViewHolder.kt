@@ -1,12 +1,15 @@
 package org.fossasia.openevent.general.ticket
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.Html
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_ticket.view.order
@@ -110,7 +113,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.donationInput.isVisible = false
             }
         }
-        setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
+        setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity, ticket.type)
 
         val price = if (tax?.rate != null && tax.isTaxIncludedInPrice) (ticket.price * 100) / (100 + tax.rate)
         else ticket.price
@@ -154,7 +157,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         maxQty: Int,
         selectedListener: TicketSelectedListener?,
         ticket: Ticket,
-        ticketQuantity: Int
+        ticketQuantity: Int,
+        ticketType: String?
     ) {
         if (minQty > 0 && maxQty > 0) {
             val spinnerList = ArrayList<String>()
@@ -173,8 +177,37 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
-                spinnerList)
+
+            val arrayAdapter = object : ArrayAdapter<String>(itemView.context,
+                android.R.layout.select_dialog_singlechoice, spinnerList) {
+                override fun isEnabled(position: Int): Boolean {
+                    if (TICKET_TYPE_DONATION == ticketType) {
+                        val donationEntered = itemView.donationInput.text.toString()
+                        val donation = if (donationEntered.isEmpty()) 0F else donationEntered.toFloat()
+                        return if (donation > 0F)
+                            position != 0
+                        else
+                            position == 0
+                    }
+                    return super.isEnabled(position)
+                }
+
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getDropDownView(position, convertView, parent)
+                    if (TICKET_TYPE_DONATION == ticketType) {
+                        if (view is TextView) {
+                            val donationEntered = itemView.donationInput.text.toString()
+                            val donation = if (donationEntered.isEmpty()) 0F else donationEntered.toFloat()
+                            if (donation > 0F)
+                                view.setTextColor(if (position == 0) Color.GRAY else Color.BLACK)
+                            else
+                                view.setTextColor(if (position == 0) Color.BLACK else Color.GRAY)
+                        }
+                    }
+                    return view
+                }
+            }
+            itemView.orderRange.adapter = arrayAdapter
             val currentQuantityPosition = spinnerList.indexOf(ticketQuantity.toString())
             if (currentQuantityPosition != -1) {
                 itemView.orderRange.setSelection(currentQuantityPosition)
