@@ -218,8 +218,15 @@ class AttendeeViewHolder(private val binding: ItemAttendeeBinding) : RecyclerVie
     fun checkValidFields(): Boolean {
         var valid = true
         requiredList.forEach {
-            valid = it.first.checkEmpty(it.second) && it.first.checkValidEmail(it.second) &&
-                it.first.checkValidURI(it.second) && valid
+            valid = it.first.checkEmpty(it.second) &&
+                when (it.second) {
+                    itemView.emailLayout -> it.first.checkValidEmail(it.second)
+                    itemView.websiteLayout,
+                    itemView.facebookLayout,
+                    itemView.twitterLayout,
+                    itemView.facebookLayout -> it.first.checkValidURI(it.second)
+                    else -> true
+                }
         }
         return valid
     }
