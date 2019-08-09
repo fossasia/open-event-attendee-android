@@ -132,7 +132,7 @@ val commonModule = module {
     single { Network() }
     single { Resource() }
     factory { MutableConnectionLiveData() }
-    factory<LocationService> { LocationServiceImpl(androidContext()) }
+    factory<LocationService> { LocationServiceImpl(androidContext(), get()) }
 }
 
 val apiModule = module {
@@ -246,7 +246,7 @@ val viewModelModule = module {
     viewModel { SearchViewModel(get(), get()) }
     viewModel { SearchResultsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { SearchLocationViewModel(get(), get()) }
+    viewModel { SearchLocationViewModel(get(), get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
     viewModel { SearchTypeViewModel(get(), get(), get()) }
     viewModel { TicketsViewModel(get(), get(), get(), get(), get(), get()) }

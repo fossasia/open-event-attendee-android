@@ -12,7 +12,9 @@ import org.fossasia.openevent.general.BuildConfig
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.location.EventLocation
 import org.jetbrains.anko.doAsync
@@ -28,7 +30,8 @@ const val SEARCH_INTERVAL = 250L
 
 class SearchLocationViewModel(
     private val eventService: EventService,
-    private val preference: Preference
+    private val preference: Preference,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -43,6 +46,8 @@ class SearchLocationViewModel(
 
     fun saveSearch(query: String) {
         preference.putString(SAVED_LOCATION, query)
+
+        if (query == resource.getString(R.string.no_location)) return
 
         if (savedLocationList.size == SAVED_LOCATION_LIST_SIZE)
             savedLocationList.removeAt(SAVED_LOCATION_LIST_SIZE - 1)

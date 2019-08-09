@@ -8,10 +8,16 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import io.reactivex.Single
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Resource
+import org.fossasia.openevent.general.utils.nullToEmpty
 import java.lang.IllegalArgumentException
 import java.util.Locale
 
-class LocationServiceImpl(private val context: Context) : LocationService {
+class LocationServiceImpl(
+    private val context: Context,
+    private val resource: Resource
+) : LocationService {
 
     @SuppressLint("MissingPermission")
     override fun getAdministrativeArea(): Single<String> {
@@ -30,7 +36,8 @@ class LocationServiceImpl(private val context: Context) : LocationService {
                         }
                         val addresses = geoCoder.getFromLocation(location.latitude, location.longitude, 1)
                         try {
-                            val adminArea = addresses[0].adminArea
+                            val adminArea = if (addresses.isNotEmpty()) addresses[0].adminArea
+                                else resource.getString(R.string.no_location).nullToEmpty()
                             emitter.onSuccess(adminArea)
                         } catch (e: IllegalArgumentException) {
                             emitter.onError(e)

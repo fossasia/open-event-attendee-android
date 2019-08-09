@@ -53,7 +53,12 @@ class EventsViewModel(
     }
 
     fun loadLocationEvents() {
-        if (mutableSavedLocation.value == null) return
+        val location = mutableSavedLocation.value
+        if (location == null || location == resource.getString(R.string.enter_location) ||
+            location == resource.getString(R.string.no_location)) {
+            mutableProgress.value = false
+            return
+        }
 
         sourceFactory = EventsDataSourceFactory(
             compositeDisposable,

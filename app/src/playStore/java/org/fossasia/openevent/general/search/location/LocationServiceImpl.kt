@@ -8,13 +8,20 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import io.reactivex.Single
+import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.location.LocationPermissionException
 import org.fossasia.openevent.general.location.NoLocationSourceException
+import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
 import java.io.IOException
+import java.lang.Exception
 import java.util.Locale
 
-class LocationServiceImpl(private val context: Context) : LocationService {
+class LocationServiceImpl(
+    private val context: Context,
+    private val resource: Resource
+) : LocationService {
 
     override fun getAdministrativeArea(): Single<String> {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE)
@@ -44,8 +51,9 @@ class LocationServiceImpl(private val context: Context) : LocationService {
                             try {
                                 val adminArea = locationResult.getAdminArea()
                                 emitter.onSuccess(adminArea)
-                            } catch (e: IllegalArgumentException) {
-                                emitter.onError(e)
+                            } catch (e: Exception) {
+                                Timber.e(e, "Error finding user current location")
+                                emitter.onSuccess(resource.getString(R.string.no_location).nullToEmpty())
                             }
                         }
                     }, null)

@@ -525,5 +525,6 @@
     <string name="speaker_experience">Speaking Experience</string>
     <string name="linkedin">LinkedIn</string>
     <string name="order_now">Order Now</string>
+    <string name="no_location">No Location</string>
 
 </resources>
