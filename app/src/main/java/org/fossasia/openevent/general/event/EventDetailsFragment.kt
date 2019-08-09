@@ -459,8 +459,7 @@ class EventDetailsFragment : Fragment() {
         // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
 
-        val locationNameIsEmpty = event.locationName.isNullOrEmpty()
-        if (!locationNameIsEmpty) {
+        if (!event.locationName.isNullOrEmpty() && event.longitude != null && event.latitude != null) {
             rootView.imageMap.setOnClickListener(mapClickListener)
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
@@ -469,6 +468,8 @@ class EventDetailsFragment : Fragment() {
                     .placeholder(R.drawable.ic_map_black)
                     .error(R.drawable.ic_map_black)
                     .into(rootView.imageMap)
+        } else {
+            rootView.imageMap.isVisible = false
         }
 
         // Date and Time section
