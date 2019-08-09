@@ -218,7 +218,7 @@ val apiModule = module {
     }
 
     factory { AuthHolder(get()) }
-    factory { AuthService(get(), get(), get(), get(), get(), get(), get()) }
+    factory { AuthService(get(), get(), get(), get(), get(), get()) }
 
     factory { EventService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { SpeakerService(get(), get(), get()) }
@@ -296,7 +296,7 @@ val networkModule = module {
             .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
             .addInterceptor(HostSelectionInterceptor(get()))
-            .addInterceptor(RequestAuthenticator(get()))
+            .addInterceptor(RequestAuthenticator(get(), get()))
             .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
