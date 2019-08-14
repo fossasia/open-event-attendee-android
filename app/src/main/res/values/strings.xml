@@ -196,8 +196,8 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="privacy">Privacy</string>
     <string name="key_privacy">privacy</string>
-    <string name="cookie_policy">Cookie Policy</string>
-    <string name="key_cookie_policy" translatable="false">cookie_policy</string>
+    <string name="refund_policy">Refund Policy</string>
+    <string name="key_refund_policy" translatable="false">refund_policy</string>
     <string name="title_terms_of_service">Terms of Service</string>
     <string name="key_terms_of_service" translatable="false">terms_of_service</string>
     <string name="legal">Legal</string>
@@ -226,8 +226,8 @@
     <string name="terms_text">terms of service</string>
     <string name="middle_text">and have read the</string>
     <string name="privacy_text">privacy policy</string>
-    <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy/</string>
-    <string name="terms_of_service" translatable="false">https://eventyay.com/terms/</string>
+    <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy</string>
+    <string name="terms_of_service" translatable="false">https://eventyay.com/terms</string>
     <string name="stripe" translatable="false">Stripe</string>
     <string name="paypal" translatable="false">PayPal</string>
     <string name="country">Country</string>
