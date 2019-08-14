@@ -133,4 +133,8 @@ object StringUtils {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // -1 so that we don't include "." in the link
         return paragraph
     }
+
+    fun isEmpty(str: CharSequence?): Boolean {
+        return str.isNullOrEmpty()
+    }
 }

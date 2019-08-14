@@ -24,6 +24,7 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.settings.SettingsService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.utils.ErrorUtils
 import org.fossasia.openevent.general.utils.HttpErrors
 import retrofit2.HttpException
 import timber.log.Timber
@@ -39,6 +40,8 @@ const val PAYMENT_MODE_ONSITE = "onsite"
 const val PAYMENT_MODE_CHEQUE = "cheque"
 const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
+private const val ERRORS = "errors"
+private const val DETAIL = "detail"
 private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
@@ -354,7 +357,7 @@ class AttendeeViewModel(
                     Timber.d("Failed charging the user")
                 }
             }, {
-                mutableMessage.value = resource.getString(R.string.payment_not_complete_message)
+                mutableMessage.value = ErrorUtils.getErrorDetails(it).detail
                 Timber.d(it, "Failed charging the user")
             })
     }
