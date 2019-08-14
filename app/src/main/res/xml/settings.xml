@@ -73,8 +73,8 @@
             app:iconSpaceReserved="false" />
 
         <Preference
-            android:key="@string/key_cookie_policy"
-            android:title="@string/cookie_policy"
+            android:key="@string/key_refund_policy"
+            android:title="@string/refund_policy"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
