@@ -415,14 +415,9 @@ class EventDetailsFragment : Fragment() {
         // Organizer Section
         if (!event.ownerName.isNullOrEmpty()) {
             val organizerDescriptionListener = View.OnClickListener {
-                if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
-                    rootView.seeMoreOrganizer.text = getString(R.string.see_less)
-                    rootView.eventOrganiserDescription.minLines = 0
-                    rootView.eventOrganiserDescription.maxLines = Int.MAX_VALUE
-                } else {
-                    rootView.seeMoreOrganizer.text = getString(R.string.see_more)
-                    rootView.eventOrganiserDescription.setLines(3)
-                }
+                rootView.eventOrganiserDescription.toggle()
+                rootView.seeMoreOrganizer.text = if (rootView.eventOrganiserDescription.isExpanded)
+                    getString(R.string.see_less) else getString(R.string.see_more)
             }
 
             rootView.eventOrganiserDescription.post {

@@ -433,16 +433,18 @@
                             android:textColor="@color/light_grey"
                             android:textSize="@dimen/event_details_headers" />
 
-                        <TextView
+                        <at.blogc.android.views.ExpandableTextView
                             android:id="@+id/eventOrganiserDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:strippedHtml="@{event.ownerDescription}"
                             app:hideIfEmpty="@{event.ownerDescription}"
                             android:layout_marginBottom="@dimen/layout_margin_small"
+                            android:background="?selectableItemBackground"
                             android:ellipsize="end"
                             android:lines="3"
                             android:textColor="@color/light_grey"
+                            app:animation_duration="300"
                             tools:text="Description" />
 
                         <TextView

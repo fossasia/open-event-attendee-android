@@ -138,7 +138,7 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
             .observe(viewLifecycleOwner, Observer {
                 rootView.speakerProgressBar.isVisible = it
             })
-        rootView.speakerInfoContainer.isVisible = speakersCallProposalViewModel.isSpeakerInfoShown
+        rootView.speakerInfoContainer.isExpanded = speakersCallProposalViewModel.isSpeakerInfoShown
 
         rootView.titleLayout.setRequired()
         setupTrack()
@@ -159,7 +159,7 @@ class SpeakersCallProposalFragment : Fragment(), ComplexBackPressFragment {
 
         rootView.expandSpeakerDetailButton.setOnClickListener {
             speakersCallProposalViewModel.isSpeakerInfoShown = !speakersCallProposalViewModel.isSpeakerInfoShown
-            rootView.speakerInfoContainer.isVisible = speakersCallProposalViewModel.isSpeakerInfoShown
+            rootView.speakerInfoContainer.toggle()
         }
 
         rootView.submitProposalButton.setOnClickListener {
