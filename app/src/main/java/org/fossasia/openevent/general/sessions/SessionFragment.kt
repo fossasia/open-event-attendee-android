@@ -231,14 +231,9 @@ class SessionFragment : Fragment() {
             false -> {
                 rootView.sessionDetailAbstract.text = description.stripHtml()
                 val sessionAbstractClickListener = View.OnClickListener {
-                    if (rootView.sessionDetailAbstractSeeMore.text == getString(R.string.see_more)) {
-                        rootView.sessionDetailAbstractSeeMore.text = getString(R.string.see_less)
-                        rootView.sessionDetailAbstract.minLines = 0
-                        rootView.sessionDetailAbstract.maxLines = Int.MAX_VALUE
-                    } else {
-                        rootView.sessionDetailAbstractSeeMore.text = getString(R.string.see_more)
-                        rootView.sessionDetailAbstract.setLines(LINE_COUNT_ABSTRACT + 1)
-                    }
+                    rootView.sessionDetailAbstract.toggle()
+                    rootView.sessionDetailAbstractSeeMore.text = if (rootView.sessionDetailAbstract.isExpanded)
+                        getString(R.string.see_less) else getString(R.string.see_more)
                 }
 
                 rootView.sessionDetailAbstract.post {

@@ -224,6 +224,13 @@ dependencies {
     // Searchable Spinner
     implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 
+    //ExpandableTextView
+    implementation 'at.blogc:expandabletextview:1.0.5'
+
+    //ExpandableView
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+
+
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.threeten:threetenbp:1.4.0'
