@@ -177,6 +177,14 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 progressDialog.show(it)
             })
 
+        attendeeViewModel.redirectToProfile
+            .observe(viewLifecycleOwner, Observer {
+                rootView.longSnackbar(getString(R.string.verify_your_profile))
+                findNavController(rootView).navigate(
+                    AttendeeFragmentDirections.actionTicketsToProfile()
+                )
+            })
+
         rootView.sameBuyerCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val firstName = rootView.firstName.text.toString()

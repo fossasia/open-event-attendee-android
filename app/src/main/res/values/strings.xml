@@ -73,6 +73,7 @@
     <string name="verified">Verified</string>
     <string name="not_verified">Account not verified. Click to verify</string>
     <string name="verification_error_message">Error in verifying email</string>
+    <string name="verify_your_profile">Please verify your email to buy free tickets</string>
 
     <!--eventyay-->
     <string name="eventyay_logo" translatable="false">eventyay</string>
