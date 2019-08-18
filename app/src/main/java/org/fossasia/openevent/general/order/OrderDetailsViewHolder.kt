@@ -81,7 +81,7 @@ class OrderDetailsViewHolder(private val binding: ItemCardOrderDetailsBinding) :
             val checkInTime = attendee.checkinTimes.split(",").toTypedArray()
             val times = StringBuilder()
             for (i in checkInTime.indices) {
-                val dateTime = EventUtils.getEventDateTime(checkInTime[i], null)
+                val dateTime = EventUtils.getEventDateTime(checkInTime[i])
                 times.append(EventUtils.getFormattedDate(dateTime) + "\n")
                 times.append(EventUtils.getFormattedTime(dateTime) + "\n\n")
             }

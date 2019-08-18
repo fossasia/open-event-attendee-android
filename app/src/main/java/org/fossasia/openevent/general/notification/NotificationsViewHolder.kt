@@ -18,7 +18,7 @@ class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         itemView.message.text = Html.fromHtml(notification.message)
         notification.receivedAt?.let {
             val dayDiff = EventUtils.getDayDifferenceFromToday(it)
-            val formattedDateTime = EventUtils.getEventDateTime(it, null)
+            val formattedDateTime = EventUtils.getEventDateTime(it)
             itemView.time.text = when (dayDiff) {
                 0L -> EventUtils.getFormattedTime(formattedDateTime)
                 in 1..6 -> EventUtils.getFormattedWeekDay(formattedDateTime)
