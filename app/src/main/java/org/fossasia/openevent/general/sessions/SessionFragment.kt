@@ -201,7 +201,7 @@ class SessionFragment : Fragment() {
         when (session.startsAt.isNullOrBlank()) {
             true -> rootView.sessionDetailStartTime.isVisible = false
             false -> {
-                val formattedStartTime = EventUtils.getEventDateTime(session.startsAt, "")
+                val formattedStartTime = EventUtils.getEventDateTime(session.startsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedStartTime)
                 val formattedDate = EventUtils.getFormattedDate(formattedStartTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedStartTime)
@@ -211,7 +211,7 @@ class SessionFragment : Fragment() {
         when (session.endsAt.isNullOrBlank()) {
             true -> rootView.sessionDetailEndTime.isVisible = false
             false -> {
-                val formattedEndTime = EventUtils.getEventDateTime(session.endsAt, "")
+                val formattedEndTime = EventUtils.getEventDateTime(session.endsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedEndTime)
                 val formattedDate = EventUtils.getFormattedDate(formattedEndTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedEndTime)
@@ -272,7 +272,7 @@ class SessionFragment : Fragment() {
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, session.microlocation?.name)
 
         if (session.startsAt != null && session.endsAt != null) {
-            val formattedStartTime = EventUtils.getEventDateTime(session.startsAt, "")
+            val formattedStartTime = EventUtils.getEventDateTime(session.startsAt)
             val timezone = EventUtils.getFormattedTimeZone(formattedStartTime)
             intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, timezone)
             intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,

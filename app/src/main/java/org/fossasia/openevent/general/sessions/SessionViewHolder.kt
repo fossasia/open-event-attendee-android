@@ -41,7 +41,7 @@ class SessionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         when (session.startsAt.isNullOrBlank()) {
             true -> itemView.sessiontime.isVisible = false
             false -> {
-                val formattedDateTime = EventUtils.getEventDateTime(session.startsAt, "")
+                val formattedDateTime = EventUtils.getEventDateTime(session.startsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
                 val formattedDate = EventUtils.getFormattedDateShort(formattedDateTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)
