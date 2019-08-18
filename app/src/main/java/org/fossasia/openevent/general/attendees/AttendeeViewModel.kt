@@ -42,6 +42,7 @@ const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
 private const val ERRORS = "errors"
 private const val DETAIL = "detail"
+private const val UNVERIFIED_USER = "unverified user"
 private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
@@ -79,6 +80,8 @@ class AttendeeViewModel(
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
     private val mutableOrderExpiryTime = MutableLiveData<Int>()
     val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
+    private val mutableRedirectToProfile = SingleLiveEvent<Boolean>()
+    val redirectToProfile = mutableRedirectToProfile
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -165,6 +168,11 @@ class AttendeeViewModel(
                 mutablePendingOrder.value = it
                 orderIdentifier = it.identifier.toString()
             }, {
+                if (it is HttpException) {
+                    if (ErrorUtils.getErrorDetails(it).detail?.contains(UNVERIFIED_USER, true) == true) {
+                        mutableRedirectToProfile.value = true
+                    }
+                }
                 Timber.e(it, "Fail on creating pending order")
             })
     }
