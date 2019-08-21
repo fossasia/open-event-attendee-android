@@ -3,15 +3,17 @@ package org.fossasia.openevent.general.sponsor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailURL
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailLogo
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailDescription
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailType
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailName
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.Utils
+import org.fossasia.openevent.general.utils.stripHtml
 
 class SponsorsDetailAdapter : RecyclerView.Adapter<SponsorsDetailViewHolder>() {
 
@@ -41,6 +43,7 @@ class SponsorsDetailAdapter : RecyclerView.Adapter<SponsorsDetailViewHolder>() {
 
 class SponsorsDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     lateinit var sponsorURLClickListener: SponsorURLClickListener
+    private val resource = Resource()
 
     fun bind(sponsor: Sponsor) {
         Picasso.get()
@@ -51,19 +54,19 @@ class SponsorsDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
         itemView.sponsorDetailName.text = sponsor.name
         if (sponsor.type.isNullOrBlank()) {
-            itemView.sponsorDetailType.visibility = View.GONE
+            itemView.sponsorDetailType.isVisible = false
         } else {
-            itemView.sponsorDetailType.text = "Type: ${sponsor.type}"
-            itemView.sponsorDetailType.visibility = View.VISIBLE
+            itemView.sponsorDetailType.text = resource.getString(R.string.sponsor_type, sponsor.type)
+            itemView.sponsorDetailType.isVisible = true
         }
         if (sponsor.description.isNullOrBlank()) {
-            itemView.sponsorDetailDescription.visibility = View.GONE
+            itemView.sponsorDetailDescription.isVisible = false
         } else {
-            itemView.sponsorDetailDescription.text = sponsor.description
-            itemView.sponsorDetailDescription.visibility = View.VISIBLE
+            itemView.sponsorDetailDescription.text = sponsor.description.stripHtml()
+            itemView.sponsorDetailDescription.isVisible = true
         }
 
-        itemView.sponsorDetailURL.setOnClickListener {
+        itemView.setOnClickListener {
             sponsorURLClickListener.onClick(sponsor.url)
         }
     }

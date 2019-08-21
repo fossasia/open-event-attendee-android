@@ -99,7 +99,12 @@ class SessionFragment : Fragment() {
                     rootView.speakersProgressBar.isVisible = false
             })
 
-        sessionViewModel.loadSession(safeArgs.sessionId)
+        val currentSession = sessionViewModel.session.value
+        if (currentSession == null)
+            sessionViewModel.loadSession(safeArgs.sessionId)
+        else
+            makeSessionView(currentSession)
+
         val currentSpeakers = sessionViewModel.speakersUnderSession.value
         if (currentSpeakers == null)
             sessionViewModel.loadSpeakersUnderSession(safeArgs.sessionId)
@@ -239,7 +244,8 @@ class SessionFragment : Fragment() {
                 rootView.sessionDetailAbstract.post {
                     if (rootView.sessionDetailAbstract.lineCount > LINE_COUNT_ABSTRACT) {
                         rootView.sessionDetailAbstractSeeMore.isVisible = true
-                        rootView.sessionDetailAbstractContainer.setOnClickListener(sessionAbstractClickListener)
+                        rootView.sessionDetailAbstract.setOnClickListener(sessionAbstractClickListener)
+                        rootView.sessionDetailAbstractSeeMore.setOnClickListener(sessionAbstractClickListener)
                     }
                 }
             }

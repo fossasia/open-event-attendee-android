@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?selectableItemBackground"
     android:layout_margin="@dimen/layout_margin_medium">
 
     <LinearLayout
@@ -43,14 +44,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/layout_margin_small"
                 tools:text="@string/description_preview"/>
-
-            <ImageView
-                android:id="@+id/sponsorDetailURL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_link_black"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -110,6 +110,7 @@
                 android:id="@+id/speakersCallDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autoLink="web|email|phone"
                 android:layout_marginBottom="@dimen/layout_margin_large"
                 tools:text="@string/description_preview"/>
         </LinearLayout>

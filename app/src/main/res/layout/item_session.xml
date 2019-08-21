@@ -37,7 +37,7 @@
             android:textSize="@dimen/text_size_large" />
 
         <TextView
-            android:id="@+id/mircolocation"
+            android:id="@+id/microLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_large"
