@@ -238,7 +238,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { StartupViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel {
         EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -253,7 +253,7 @@ val viewModelModule = module {
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }

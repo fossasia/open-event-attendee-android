@@ -26,7 +26,7 @@ class SessionViewModel(
     private val mutableProgress = MutableLiveData<Boolean>(true)
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableSpeakers = MutableLiveData<List<Speaker>>()
     val speakersUnderSession: LiveData<List<Speaker>> = mutableSpeakers
 

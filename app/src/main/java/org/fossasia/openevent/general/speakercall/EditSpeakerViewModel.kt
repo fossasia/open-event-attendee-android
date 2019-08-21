@@ -29,7 +29,7 @@ class EditSpeakerViewModel(
     private val compositeDisposable = CompositeDisposable()
 
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableProgress = MutableLiveData<Boolean>(false)
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableSpeaker = MutableLiveData<Speaker>()

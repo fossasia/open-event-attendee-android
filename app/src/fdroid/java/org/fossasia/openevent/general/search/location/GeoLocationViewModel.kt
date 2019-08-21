@@ -11,7 +11,7 @@ class GeoLocationViewModel(private val locationService: LocationService) : ViewM
     private val mutableLocation = SingleLiveEvent<String>()
     val location: LiveData<String> = mutableLocation
     private val mutableErrorMessage = SingleLiveEvent<String>()
-    val errorMessage: LiveData<String> = mutableErrorMessage
+    val errorMessage: SingleLiveEvent<String> = mutableErrorMessage
     private val compositeDisposable = CompositeDisposable()
 
     fun configure() {

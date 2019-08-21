@@ -118,7 +118,6 @@ class ProfileFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.snackbar(it)
-                profileViewModel.mutableMessage.postValue(null)
             })
 
         profileViewModel.accountDeleted

@@ -63,7 +63,7 @@ class AttendeeViewModel(
     private val mutableTicketSoldOut = MutableLiveData<Boolean>()
     val ticketSoldOut: LiveData<Boolean> = mutableTicketSoldOut
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableUser = MutableLiveData<User>()
