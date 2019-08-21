@@ -527,5 +527,7 @@
     <string name="linkedin">LinkedIn</string>
     <string name="order_now">Order Now</string>
     <string name="no_location">No Location</string>
+    <string name="sponsor_type">Type: %1$s</string>
+    <string name="contact">Contact</string>
 
 </resources>
