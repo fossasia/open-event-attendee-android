@@ -6,22 +6,25 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.BuildConfig
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.auth.AuthService
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Preference
+import org.fossasia.openevent.general.data.Resource
 import timber.log.Timber
 
 const val API_URL = "apiUrl"
 
 class SettingsViewModel(
     private val authService: AuthService,
-    private val preference: Preference
+    private val preference: Preference,
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val mutableSnackBar = SingleLiveEvent<String>()
-    val snackBar: LiveData<String> = mutableSnackBar
+    val snackBar: SingleLiveEvent<String> = mutableSnackBar
     private val mutableUpdatedPassword = MutableLiveData<String>()
     val updatedPassword: LiveData<String> = mutableUpdatedPassword
 
@@ -50,13 +53,13 @@ class SettingsViewModel(
             .withDefaultSchedulers()
             .subscribe({
                 if (it.passwordChanged) {
-                    mutableSnackBar.value = "Password changed successfully!"
+                    mutableSnackBar.value = resource.getString(R.string.change_password_success_message)
                     mutableUpdatedPassword.value = newPassword
                 }
             }, {
                 if (it.message.toString() == "HTTP 400 BAD REQUEST")
-                    mutableSnackBar.value = "Incorrect Old Password provided!"
-                else mutableSnackBar.value = "Unable to change password!"
+                    mutableSnackBar.value = resource.getString(R.string.incorrect_old_password_message)
+                else mutableSnackBar.value = resource.getString(R.string.change_password_fail_message)
             })
     }
 

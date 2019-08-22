@@ -30,7 +30,7 @@ class SpeakersCallProposalViewModel(
     private val compositeDisposable = CompositeDisposable()
 
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableSpeakerProgress = MutableLiveData(false)
     private val mutableProgress = MutableLiveData(false)
     val progress: LiveData<Boolean> = mutableProgress

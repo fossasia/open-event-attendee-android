@@ -31,7 +31,7 @@ class NotificationViewModel(
     val noInternet: LiveData<Boolean> = mutableNoInternet
 
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
 
     fun getId() = authHolder.getId()
 

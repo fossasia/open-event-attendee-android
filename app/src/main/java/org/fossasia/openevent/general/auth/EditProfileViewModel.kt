@@ -26,7 +26,7 @@ class EditProfileViewModel(
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private var updatedImageTemp = MutableLiveData<File>()
     var avatarUpdated = false
     var encodedImage: String? = null

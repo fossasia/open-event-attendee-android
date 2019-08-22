@@ -28,7 +28,7 @@ class OrdersUnderUserViewModel(
 
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEventAndOrderPaged = MutableLiveData<PagedList<Pair<Event, Order>>>()
     val eventAndOrderPaged: LiveData<PagedList<Pair<Event, Order>>> = mutableEventAndOrderPaged
     private val mutableShowShimmerResults = MutableLiveData<Boolean>()

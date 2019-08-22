@@ -62,7 +62,7 @@ class EventDetailsViewModel(
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
     private val mutablePopMessage = SingleLiveEvent<String>()
-    val popMessage: LiveData<String> = mutablePopMessage
+    val popMessage: SingleLiveEvent<String> = mutablePopMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableEventFeedback = MutableLiveData<List<Feedback>>()

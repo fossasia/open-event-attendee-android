@@ -309,10 +309,10 @@
     <string name="empty_password_message">Password cannot be empty</string>
     <string name="empty_confirm_password_message">Please confirm your password</string>
     <string name="accept_terms_and_conditions">Please accept the terms and conditions!</string>
-    <string name="sign_up_fail_email_exist_message">Unable to SignUp: Email already exists!</string>
-    <string name="sign_up_fail_email_invalid_message">Unable to SignUp: Not a valid email address!</string>
-    <string name="sign_up_fail_message">Unable to SignUp!</string>
-    <string name="login_automatically_fail_message">Unable to Login automatically</string>
+    <string name="sign_up_fail_email_exist_message">Unable to sign up: Email already exists!</string>
+    <string name="sign_up_fail_email_invalid_message">Unable to sign up: Not a valid email address!</string>
+    <string name="sign_up_fail_message">Unable to sign up!</string>
+    <string name="login_automatically_fail_message">Unable to log in automatically</string>
     <string name="login_fail_message">Unable to Login. Please check your credentials</string>
     <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
     <string name="email_sent">Email Sent</string>
@@ -529,5 +529,8 @@
     <string name="no_location">No Location</string>
     <string name="sponsor_type">Type: %1$s</string>
     <string name="contact">Contact</string>
+    <string name="incorrect_old_password_message">Incorrect old password provided!</string>
+    <string name="change_password_fail_message">Unable to change password!</string>
+    <string name="change_password_success_message">Password changed successfully!</string>
 
 </resources>

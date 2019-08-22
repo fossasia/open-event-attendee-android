@@ -41,7 +41,7 @@ class EventsViewModel(
     private val mutablePagedEvents = MutableLiveData<PagedList<Event>>()
     val pagedEvents: LiveData<PagedList<Event>> = mutablePagedEvents
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     var lastSearch = ""
     private val mutableSavedLocation = MutableLiveData<String>()
     val savedLocation: LiveData<String> = mutableSavedLocation

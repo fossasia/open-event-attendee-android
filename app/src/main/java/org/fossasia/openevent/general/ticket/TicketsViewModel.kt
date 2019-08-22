@@ -36,7 +36,7 @@ class TicketsViewModel(
     val tickets = MutableLiveData<List<Ticket>>()
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableDiscountCodes = MutableLiveData<DiscountCode>()

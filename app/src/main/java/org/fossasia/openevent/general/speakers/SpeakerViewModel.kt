@@ -22,11 +22,11 @@ class SpeakerViewModel(
     private val mutableSpeaker = MutableLiveData<Speaker>()
     val speaker: LiveData<Speaker> = mutableSpeaker
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
 
     fun loadSpeaker(id: Long) {
         if (id.equals(-1)) {
-            mutableError.value = Resource().getString(R.string.error_fetching_event_message)
+            mutableError.value = resource.getString(R.string.error_fetching_event_message)
             return
         }
         compositeDisposable += speakerService.fetchSpeaker(id)
