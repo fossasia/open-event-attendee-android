@@ -1,0 +1,16 @@
+**v0.7.0:**
+🚀 Features and Enhancements
+
+- Handle external ticket URL
+- Add tax information for tickets
+- Add autolink
+- Custom form for speakers and sessions
+- Improve animations
+
+🐛 Bug Fixes
+
+- Event's timezone for sessions
+- Improve error handling for stripe and orders
+- Donation tickets
+- Multiple crashes
+- Date format
