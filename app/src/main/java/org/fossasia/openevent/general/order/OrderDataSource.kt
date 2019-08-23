@@ -100,7 +100,7 @@ class OrderDataSource(
                 |       'name':'event',
                 |       'op':'has',
                 |       'val': {
-                |           'name':'starts-at',
+                |           'name':'ends-at',
                 |           'op':'$operator',
                 |           'val':'%${EventUtils.getTimeInISO8601(Date())}%'
                 |       }
