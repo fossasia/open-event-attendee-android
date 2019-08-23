@@ -1,0 +1,15 @@
+{
+    "errors": [
+        {
+            "status": "403",
+            "source": {
+                "pointer": "/data/attributes/order_id"
+            },
+            "detail": "Co-Organizer access required",
+            "title": "Access Forbidden"
+        }
+    ],
+    "jsonapi": {
+        "version": "1.0"
+    }
+}

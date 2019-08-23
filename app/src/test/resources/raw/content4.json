@@ -1,0 +1,15 @@
+{
+    "errors": [
+        {
+            "status": "400",
+            "source": {
+
+            },
+            "detail": "The URL does not exist",
+            "title": "Bad Request"
+        }
+    ],
+    "jsonapi": {
+        "version": "1.0"
+    }
+}
