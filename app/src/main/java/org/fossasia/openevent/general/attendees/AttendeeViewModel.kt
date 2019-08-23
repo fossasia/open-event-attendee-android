@@ -82,6 +82,8 @@ class AttendeeViewModel(
     val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
     private val mutableRedirectToProfile = SingleLiveEvent<Boolean>()
     val redirectToProfile = mutableRedirectToProfile
+    private val mutablePaypalOrderMade = MutableLiveData<Boolean>()
+    val paypalOrderMade: LiveData<Boolean> = mutablePaypalOrderMade
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -297,6 +299,11 @@ class AttendeeViewModel(
                     PAYMENT_MODE_STRIPE -> {
                         mutableStripeOrderMade.value = true
                     }
+                    PAYMENT_MODE_PAYPAL -> {
+                        mutablePendingOrder.value = it
+                        mutablePaypalOrderMade.value = true
+                        mutableProgress.value = false
+                    }
                     else -> mutableMessage.value = resource.getString(R.string.order_success_message)
                 }
             }, {
@@ -305,6 +312,28 @@ class AttendeeViewModel(
                 mutableProgress.value = false
                 deleteAttendees(order.attendees)
             })
+    }
+
+    fun sendPaypalConfirm(paymentId: String) {
+        pendingOrder.value?.let { order ->
+            compositeDisposable += orderService.verifyPaypalPayment(order.identifier.toString(), paymentId)
+                .withDefaultSchedulers()
+                .doOnSubscribe {
+                    mutableProgress.value = true
+                }.subscribe({
+                    if (it.status) {
+                        confirmOrder = ConfirmOrder(order.id.toString(), ORDER_STATUS_COMPLETED)
+                        confirmOrderStatus(order.identifier.toString(), confirmOrder)
+                    } else {
+                        mutableMessage.value = it.error
+                        mutableProgress.value = false
+                    }
+                }, {
+                    Timber.e(it, "Error verifying paypal payment")
+                    mutableMessage.value = resource.getString(R.string.error_making_paypal_payment_message)
+                    mutableProgress.value = false
+                })
+        }
     }
 
     private fun confirmOrderStatus(identifier: String, order: ConfirmOrder) {

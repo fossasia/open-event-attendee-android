@@ -1,7 +1,9 @@
 package org.fossasia.openevent.general.attendees
 
 import androidx.appcompat.app.AlertDialog
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.telephony.TelephonyManager
@@ -28,6 +30,13 @@ import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
+import com.paypal.android.sdk.payments.PayPalService
+import com.paypal.android.sdk.payments.PayPalConfiguration
+import com.paypal.android.sdk.payments.PayPalPayment
+import com.paypal.android.sdk.payments.ShippingAddress
+import com.paypal.android.sdk.payments.PaymentActivity
+import com.paypal.android.sdk.payments.PaymentConfirmation
+import java.math.BigDecimal
 import kotlinx.android.synthetic.main.fragment_attendee.view.cvc
 import kotlinx.android.synthetic.main.fragment_attendee.view.email
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstName
@@ -124,6 +133,8 @@ import org.jetbrains.anko.design.snackbar
 import java.util.Calendar
 import java.util.Currency
 import kotlin.collections.ArrayList
+
+private const val PAYPAL_REQUEST_CODE = 101
 
 class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
@@ -250,6 +261,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         super.onDestroy()
         if (this::timer.isInitialized)
             timer.cancel()
+        activity?.stopService(Intent(activity, PayPalService::class.java))
     }
 
     override fun handleBackPress() {
@@ -328,9 +340,9 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         rootView.ticketsRecycler.isNestedScrollingEnabled = false
 
         rootView.taxLayout.isVisible = safeArgs.taxAmount > 0f
-        rootView.taxPrice.text = "${safeArgs.currency}${"%.2f".format(safeArgs.taxAmount)}"
+        rootView.taxPrice.text = "${Currency.getInstance(safeArgs.currency).symbol}${"%.2f".format(safeArgs.taxAmount)}"
         rootView.totalAmountLayout.isVisible = safeArgs.amount > 0f
-        rootView.totalPrice.text = "${safeArgs.currency}${"%.2f".format(safeArgs.amount)}"
+        rootView.totalPrice.text = "${Currency.getInstance(safeArgs.currency).symbol}${"%.2f".format(safeArgs.amount)}"
 
         rootView.ticketTableDetails.setOnClickListener {
             attendeeViewModel.ticketDetailsVisible = !attendeeViewModel.ticketDetailsVisible
@@ -615,6 +627,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 if (it && this::card.isInitialized)
                     sendToken(card)
             })
+
+        attendeeViewModel.paypalOrderMade
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                startPaypalPayment()
+            })
     }
 
     private fun setupMonthOptions() {
@@ -683,10 +701,6 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
     private fun checkPaymentOptions(): Boolean =
         when (attendeeViewModel.selectedPaymentMode) {
-            PAYMENT_MODE_PAYPAL -> {
-                rootView.attendeeScrollView.longSnackbar(getString(R.string.paypal_payment_not_available))
-                false
-            }
             PAYMENT_MODE_STRIPE -> {
                 card = Card.create(rootView.cardNumber.text.toString(), attendeeViewModel.monthSelectedPosition,
                     rootView.year.selectedItem.toString().toInt(), rootView.cvc.text.toString())
@@ -698,12 +712,61 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                     true
                 }
             }
-            PAYMENT_MODE_CHEQUE, PAYMENT_MODE_ONSITE, PAYMENT_MODE_FREE, PAYMENT_MODE_BANK -> true
+            PAYMENT_MODE_CHEQUE, PAYMENT_MODE_ONSITE, PAYMENT_MODE_FREE, PAYMENT_MODE_BANK, PAYMENT_MODE_PAYPAL -> true
             else -> {
                 rootView.snackbar(getString(R.string.select_payment_option_message))
                 false
             }
         }
+
+    private fun startPaypalPayment() {
+        val paypalEnvironment = if (BuildConfig.DEBUG) PayPalConfiguration.ENVIRONMENT_SANDBOX
+            else PayPalConfiguration.ENVIRONMENT_PRODUCTION
+        val paypalConfig = PayPalConfiguration()
+            .environment(paypalEnvironment)
+            .clientId(BuildConfig.PAYPAL_CLIENT_ID)
+        val paypalIntent = Intent(activity, PaymentActivity::class.java)
+        paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
+        activity?.startService(paypalIntent)
+
+        val paypalPayment = paypalThingsToBuy(PayPalPayment.PAYMENT_INTENT_SALE)
+        val payeeEmail = attendeeViewModel.event.value?.paypalEmail ?: ""
+        paypalPayment.payeeEmail(payeeEmail)
+        addShippingAddress(paypalPayment)
+        val intent = Intent(activity, PaymentActivity::class.java)
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
+        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, paypalPayment)
+        startActivityForResult(intent, PAYPAL_REQUEST_CODE)
+    }
+
+    private fun addShippingAddress(paypalPayment: PayPalPayment) {
+        if (rootView.billingEnabledCheckbox.isChecked) {
+            val shippingAddress = ShippingAddress()
+                .recipientName("${rootView.firstName.text} ${rootView.lastName.text}")
+                .line1(rootView.billingAddress.text.toString())
+                .city(rootView.billingCity.text.toString())
+                .postalCode(rootView.billingPostalCode.text.toString())
+                .countryCode(getCountryCodes(rootView.countryPicker.selectedItem.toString()))
+            paypalPayment.providedShippingAddress(shippingAddress)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PAYPAL_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val paymentConfirm =
+                data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
+            if (paymentConfirm != null) {
+                val paymentId = paymentConfirm.proofOfPayment.paymentId
+                attendeeViewModel.sendPaypalConfirm(paymentId)
+            }
+        }
+    }
+
+    private fun paypalThingsToBuy(paymentIntent: String): PayPalPayment =
+        PayPalPayment(BigDecimal(safeArgs.amount.toString()),
+            Currency.getInstance(safeArgs.currency).currencyCode,
+            getString(R.string.tickets_for, attendeeViewModel.event.value?.name), paymentIntent)
 
     private fun checkRequiredFields(): Boolean {
         val checkBasicInfo = rootView.firstName.checkEmpty(rootView.firstNameLayout) &&
@@ -875,5 +938,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
         val countryCodes = resources.getStringArray(R.array.country_code_arrays)
         val countryIndex = countryCodes.indexOf(currentCountryCode.toUpperCase())
         if (countryIndex != -1) rootView.countryPicker.setSelection(countryIndex)
+    }
+
+    private fun getCountryCodes(countryName: String): String {
+        val countryCodes = resources.getStringArray(R.array.country_code_arrays)
+        val countryList = resources.getStringArray(R.array.country_arrays)
+        val index = countryList.indexOf(countryName)
+        return countryCodes[index]
     }
 }

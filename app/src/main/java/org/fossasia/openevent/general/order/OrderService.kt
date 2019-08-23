@@ -3,12 +3,19 @@ package org.fossasia.openevent.general.order
 import io.reactivex.Single
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeDao
+import org.fossasia.openevent.general.paypal.Paypal
+import org.fossasia.openevent.general.paypal.PaypalApi
+import org.fossasia.openevent.general.paypal.PaypalPaymentResponse
 
 class OrderService(
     private val orderApi: OrderApi,
     private val orderDao: OrderDao,
-    private val attendeeDao: AttendeeDao
+    private val attendeeDao: AttendeeDao,
+    private val paypalApi: PaypalApi
 ) {
+    fun verifyPaypalPayment(orderIdentifier: String, paymentId: String): Single<PaypalPaymentResponse> =
+        paypalApi.verifyPaypalPayment(orderIdentifier, Paypal(paymentId = paymentId))
+
     fun placeOrder(order: Order): Single<Order> {
         return orderApi.placeOrder(order)
                 .map { order ->
