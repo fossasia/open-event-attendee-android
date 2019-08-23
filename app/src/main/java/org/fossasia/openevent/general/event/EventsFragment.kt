@@ -141,6 +141,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 rootView.longSnackbar(it)
             })
 
+        rootView.notification.isVisible = eventsViewModel.isLoggedIn()
+        rootView.notificationToolbar.isVisible = eventsViewModel.isLoggedIn()
+        rootView.newNotificationDot.isVisible = eventsViewModel.isLoggedIn()
+        rootView.newNotificationDotToolbar.isVisible = eventsViewModel.isLoggedIn()
+
         eventsViewModel.loadLocation()
         if (rootView.locationTextView.text == getString(R.string.enter_location)) {
             rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)

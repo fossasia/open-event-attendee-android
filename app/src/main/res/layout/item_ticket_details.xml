@@ -2,7 +2,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/border"
     android:orientation="horizontal"
     android:padding="@dimen/layout_margin_medium"
     android:elevation="@dimen/card_elevation"

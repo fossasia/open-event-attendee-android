@@ -28,7 +28,7 @@ class LoginViewModel(
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()

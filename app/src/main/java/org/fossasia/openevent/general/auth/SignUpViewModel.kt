@@ -24,11 +24,11 @@ class SignUpViewModel(
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
-    var loggedIn: LiveData<Boolean> = mutableLoggedIn
+    var loggedIn: SingleLiveEvent<Boolean> = mutableLoggedIn
 
     var email: String? = null
     var password: String? = null

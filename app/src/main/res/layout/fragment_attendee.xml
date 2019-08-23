@@ -159,10 +159,65 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ticketsRecycler"
+                    android:background="@drawable/border"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <LinearLayout
+                    android:id="@+id/taxLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_margin_medium">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="@string/tax_column"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <TextView
+                        android:id="@+id/taxPrice"
+                        android:layout_marginEnd="@dimen/layout_margin_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="@string/all_fees"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_margin_medium">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="@string/total_column"
+                        android:textSize="@dimen/text_size_large" />
+
+                    <TextView
+                        android:id="@+id/totalPrice"
+                        android:layout_marginEnd="@dimen/layout_margin_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_fees"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_large" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/totalAmountLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
@@ -258,7 +313,7 @@
                             android:id="@+id/signInEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text" />
+                            android:inputType="textEmailAddress" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/signInPasswordLayout"
@@ -370,6 +425,25 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/item_attendee" />
 
+                <RelativeLayout
+                    android:id="@+id/billingInfoCheckboxSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/billing_information"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/heading_text_size"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"/>
+                    <CheckBox
+                        android:id="@+id/billingEnabledCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"/>
+                </RelativeLayout>
+
                 <LinearLayout
                     android:id="@+id/billingInfoContainer"
                     android:layout_width="match_parent"
@@ -378,13 +452,6 @@
                     android:orientation="vertical"
                     android:visibility="gone"
                     tools:visibility="visible">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/billing_information"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/heading_text_size"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/billingCompanyLayout"
@@ -487,10 +554,51 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/heading_text_size"
                         android:text="@string/payment"/>
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/paymentSelector"
+                    <RadioGroup
+                        android:id="@+id/paymentOptionsGroup"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/stripeRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_credit_card"
+                            android:layoutDirection="rtl"
+                            android:text="@string/credit_debit_card"/>
+                        <RadioButton
+                            android:id="@+id/paypalRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_paypal"
+                            android:layoutDirection="rtl"
+                            android:text="@string/paypal"/>
+                        <RadioButton
+                            android:id="@+id/bankRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_bank"
+                            android:layoutDirection="rtl"
+                            android:text="@string/bank_transfer"/>
+                        <RadioButton
+                            android:id="@+id/onSiteRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_cash"
+                            android:layoutDirection="rtl"
+                            android:text="@string/on_site"/>
+                        <RadioButton
+                            android:id="@+id/chequeRadioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:drawableEnd="@drawable/ic_cheque"
+                            android:layoutDirection="rtl"
+                            android:text="@string/cheque"/>
+                    </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout

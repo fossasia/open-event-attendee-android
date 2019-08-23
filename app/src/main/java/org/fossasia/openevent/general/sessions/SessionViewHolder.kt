@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_session.view.mircolocation
+import kotlinx.android.synthetic.main.item_session.view.microLocation
 import kotlinx.android.synthetic.main.item_session.view.sessionType
 import kotlinx.android.synthetic.main.item_session.view.sessiontime
 import kotlinx.android.synthetic.main.item_session.view.shortAbstract
@@ -23,16 +23,22 @@ class SessionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(session: Session) {
         itemView.title.text = session.title
-        session.sessionType.let {
-            itemView.sessionType.text = it?.name
-        }
-        session.microlocation.let {
-            itemView.mircolocation.text = it?.name
-        }
+
+        val sessionType = session.sessionType
+        if (sessionType == null)
+            itemView.sessionType.isVisible = false
+        else
+            itemView.sessionType.text = sessionType.name
+
+        val microLocation = session.microlocation
+        if (microLocation == null)
+            itemView.microLocation.isVisible = false
+        else
+            itemView.microLocation.text = microLocation.name
 
         session.track.let {
             if (it == null)
-                itemView.trackDetail.visibility = View.GONE
+                itemView.trackDetail.isVisible = false
             else {
                 itemView.trackText.text = it.name
                 itemView.trackIcon.setColorFilter(Color.parseColor(it.color))
@@ -41,7 +47,7 @@ class SessionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         when (session.startsAt.isNullOrBlank()) {
             true -> itemView.sessiontime.isVisible = false
             false -> {
-                val formattedDateTime = EventUtils.getEventDateTime(session.startsAt, "")
+                val formattedDateTime = EventUtils.getEventDateTime(session.startsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedDateTime)
                 val formattedDate = EventUtils.getFormattedDateShort(formattedDateTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedDateTime)

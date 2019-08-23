@@ -14,6 +14,9 @@ import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventService
+import org.fossasia.openevent.general.event.tax.Tax
+import org.fossasia.openevent.general.event.tax.TaxService
+import org.fossasia.openevent.general.utils.HttpErrors
 import retrofit2.HttpException
 import timber.log.Timber
 
@@ -22,6 +25,7 @@ class TicketsViewModel(
     private val eventService: EventService,
     private val authHolder: AuthHolder,
     private val resource: Resource,
+    private val taxService: TaxService,
     private val mutableConnectionLiveData: MutableConnectionLiveData
 ) : ViewModel() {
 
@@ -32,19 +36,20 @@ class TicketsViewModel(
     val tickets = MutableLiveData<List<Ticket>>()
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableDiscountCodes = MutableLiveData<DiscountCode>()
     val discountCode: LiveData<DiscountCode> = mutableDiscountCodes
+    private val mutableTaxInfo = MutableLiveData<Tax>()
+    val taxInfo: LiveData<Tax> = mutableTaxInfo
     var appliedDiscountCode: DiscountCode? = null
-    val mutableAmount = MutableLiveData<Float>()
-    val amount: LiveData<Float> = mutableAmount
+    var totalTaxAmount = 0f
     private val mutableTicketTableVisibility = MutableLiveData<Boolean>()
     val ticketTableVisibility: LiveData<Boolean> = mutableTicketTableVisibility
     val ticketIdAndQty = MutableLiveData<List<Triple<Int, Int, Float>>>()
     var discountCodeCurrentLayout = APPLY_DISCOUNT_CODE
-    var hasPaidTickets = false
+    var totalAmount: Float = 0.0f
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
@@ -82,8 +87,8 @@ class TicketsViewModel(
             })
     }
 
-    fun fetchDiscountCode(code: String) {
-        compositeDisposable += ticketService.getDiscountCode(code)
+    fun fetchDiscountCode(eventId: Long, code: String) {
+        compositeDisposable += ticketService.getDiscountCode(eventId, code)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
@@ -100,9 +105,14 @@ class TicketsViewModel(
             })
     }
 
-    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>) {
+    fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>): Float {
         val ticketIds = ArrayList<Int>()
         val qty = ArrayList<Int>()
+        val tax = taxInfo.value
+        var taxRate = 0f
+        if (tax != null && !tax.isTaxIncludedInPrice) {
+            taxRate = tax.rate ?: 0f
+        }
         ticketIdAndQty.forEach {
             if (it.second > 0) {
                 ticketIds.add(it.first)
@@ -110,32 +120,44 @@ class TicketsViewModel(
             }
         }
         val donation = ticketIdAndQty.map { it.third*it.second }.sum()
-        compositeDisposable += ticketService.getTicketsWithIds(ticketIds)
+        tickets.value?.filter { ticketIds.contains(it.id) }?.let { tickets ->
+            var prices = 0F
+            var index = 0
+            val code = appliedDiscountCode
+            tickets.forEach { ticket ->
+                var price = ticket.price
+                totalTaxAmount += (ticket.price * taxRate / 100) * qty[index]
+                if (code?.value != null) {
+                    appliedDiscountCode?.tickets?.forEach { ticketId ->
+                        if (ticket.id == ticketId.id.toInt()) {
+                            price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
+                        }
+                    }
+                }
+                price.let { prices += price * qty[index] }
+                index++
+            }
+            prices += totalTaxAmount
+            return prices + donation
+        }
+        return -1F
+    }
+
+    fun getTaxDetails(eventId: Long) {
+        compositeDisposable += taxService.getTax(eventId)
             .withDefaultSchedulers()
             .doOnSubscribe {
                 mutableProgress.value = true
             }.doFinally {
                 mutableProgress.value = false
-            }.subscribe({ tickets ->
-                var prices = 0F
-                var index = 0
-                val code = appliedDiscountCode
-                tickets.forEach { ticket ->
-                    var price = ticket.price
-                    if (code?.value != null) {
-                        appliedDiscountCode?.tickets?.forEach { ticketId ->
-                            if (ticket.id == ticketId.id.toInt()) {
-                                price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
-                            }
-                        }
-                    }
-                    price.let { prices += price * qty[index++] }
-                    if (ticket.type == TICKET_TYPE_PAID)
-                        hasPaidTickets = true
-                }
-                mutableAmount.value = prices + donation
+            }.subscribe({
+                mutableTaxInfo.value = it
             }, {
-                Timber.e(it, "Error Loading tickets!")
+                if (it is HttpException)
+                    if (it.code() == HttpErrors.NOT_FOUND)
+                        Timber.e(it, "No tax for this event")
+                else
+                    Timber.e(it, "Error fetching tax details")
             })
     }
 

@@ -41,7 +41,7 @@ class EventsViewModel(
     private val mutablePagedEvents = MutableLiveData<PagedList<Event>>()
     val pagedEvents: LiveData<PagedList<Event>> = mutablePagedEvents
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     var lastSearch = ""
     private val mutableSavedLocation = MutableLiveData<String>()
     val savedLocation: LiveData<String> = mutableSavedLocation
@@ -53,7 +53,12 @@ class EventsViewModel(
     }
 
     fun loadLocationEvents() {
-        if (mutableSavedLocation.value == null) return
+        val location = mutableSavedLocation.value
+        if (location == null || location == resource.getString(R.string.enter_location) ||
+            location == resource.getString(R.string.no_location)) {
+            mutableProgress.value = false
+            return
+        }
 
         sourceFactory = EventsDataSourceFactory(
             compositeDisposable,

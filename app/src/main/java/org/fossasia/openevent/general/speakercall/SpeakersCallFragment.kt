@@ -2,6 +2,8 @@ package org.fossasia.openevent.general.speakercall
 
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -25,7 +27,6 @@ import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.fossasia.openevent.general.utils.stripHtml
 import org.jetbrains.anko.design.snackbar
 import org.threeten.bp.DateTimeUtils
 import java.util.Date
@@ -170,7 +171,8 @@ class SpeakersCallFragment : Fragment() {
         val endTime: Date = DateTimeUtils.toDate(endAt.toInstant())
         val currentTime = Date()
 
-        rootView.speakersCallDescription.text = speakersCall.announcement.stripHtml()
+        rootView.speakersCallDescription.movementMethod = LinkMovementMethod.getInstance()
+        rootView.speakersCallDescription.text = Html.fromHtml(speakersCall.announcement)
         if (currentTime < startTime) {
             rootView.timeStatus.isVisible = false
             rootView.speakersCallTimeDetail.text = getString(R.string.speakers_call_open_at, getFormattedDate(startAt))

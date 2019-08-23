@@ -26,7 +26,7 @@ class FavoriteEventsViewModel(
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEvents = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> = mutableEvents
 

@@ -1,6 +1,7 @@
 package org.fossasia.openevent.general.sessions
 
 import io.reactivex.Single
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.speakercall.Proposal
 
 class SessionService(
@@ -30,4 +31,19 @@ class SessionService(
 
     fun getSessionsUnderSpeakerAndEvent(speakerId: Long, query: String): Single<List<Session>> =
         sessionApi.getSessionsUnderSpeaker(speakerId, filter = query)
+
+    fun getCustomFormsForSessions(id: Long): Single<List<CustomForm>> {
+        val filter = """[{
+                |   'and':[{
+                |       'name':'form',
+                |       'op':'eq',
+                |       'val':'session'
+                |    },{
+                |       'name':'is-included',
+                |       'op':'eq',
+                |       'val':true
+                |    }]
+                |}]""".trimMargin().replace("'", "\"")
+        return sessionApi.getCustomForms(id, filter)
+    }
 }

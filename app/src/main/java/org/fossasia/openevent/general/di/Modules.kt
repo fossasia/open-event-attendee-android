@@ -79,6 +79,9 @@ import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionApi
 import org.fossasia.openevent.general.sessions.SessionService
 import org.fossasia.openevent.general.event.faq.EventFAQViewModel
+import org.fossasia.openevent.general.event.tax.Tax
+import org.fossasia.openevent.general.event.tax.TaxApi
+import org.fossasia.openevent.general.event.tax.TaxService
 import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.favorite.FavoriteEventApi
 import org.fossasia.openevent.general.feedback.FeedbackViewModel
@@ -129,7 +132,7 @@ val commonModule = module {
     single { Network() }
     single { Resource() }
     factory { MutableConnectionLiveData() }
-    factory<LocationService> { LocationServiceImpl(androidContext()) }
+    factory<LocationService> { LocationServiceImpl(androidContext(), get()) }
 }
 
 val apiModule = module {
@@ -209,6 +212,10 @@ val apiModule = module {
         val retrofit: Retrofit = get()
         retrofit.create(SettingsApi::class.java)
     }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(TaxApi::class.java)
+    }
 
     factory { AuthHolder(get()) }
     factory { AuthService(get(), get(), get(), get(), get(), get(), get()) }
@@ -224,13 +231,14 @@ val apiModule = module {
     factory { NotificationService(get(), get()) }
     factory { FeedbackService(get(), get()) }
     factory { SettingsService(get(), get()) }
+    factory { TaxService(get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { StartupViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel {
         EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -238,14 +246,14 @@ val viewModelModule = module {
     viewModel { SearchViewModel(get(), get()) }
     viewModel { SearchResultsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AttendeeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { SearchLocationViewModel(get(), get()) }
+    viewModel { SearchLocationViewModel(get(), get(), get()) }
     viewModel { SearchTimeViewModel(get()) }
     viewModel { SearchTypeViewModel(get(), get(), get()) }
-    viewModel { TicketsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { TicketsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
@@ -310,7 +318,7 @@ val networkModule = module {
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
             Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
-            DiscountCode::class.java, Settings::class.java, Proposal::class.java)
+            DiscountCode::class.java, Settings::class.java, Proposal::class.java, Tax::class.java)
 
         Retrofit.Builder()
             .client(get())
@@ -407,5 +415,10 @@ val databaseModule = module {
     factory {
         val database: OpenEventDatabase = get()
         database.settingsDao()
+    }
+
+    factory {
+        val database: OpenEventDatabase = get()
+        database.taxDao()
     }
 }

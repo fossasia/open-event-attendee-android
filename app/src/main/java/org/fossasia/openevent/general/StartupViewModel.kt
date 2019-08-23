@@ -38,7 +38,7 @@ class StartupViewModel(
     private val mutableResetPasswordEmail = MutableLiveData<String>()
     val resetPasswordEmail: LiveData<String> = mutableResetPasswordEmail
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 

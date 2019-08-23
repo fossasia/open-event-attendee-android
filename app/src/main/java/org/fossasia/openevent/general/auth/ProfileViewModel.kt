@@ -9,13 +9,11 @@ import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
-import org.fossasia.openevent.general.event.EventService
 import timber.log.Timber
 
 class ProfileViewModel(
     private val authService: AuthService,
-    private val resource: Resource,
-    private val eventService: EventService
+    private val resource: Resource
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -24,8 +22,8 @@ class ProfileViewModel(
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableUser = MutableLiveData<User>()
     val user: LiveData<User> = mutableUser
-    val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    private val mutableMessage = SingleLiveEvent<String>()
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableUpdatedUser = MutableLiveData<User>()
     val updatedUser: LiveData<User> = mutableUpdatedUser
     private val mutableUpdatedPassword = MutableLiveData<String>()
@@ -67,13 +65,13 @@ class ProfileViewModel(
             .withDefaultSchedulers()
             .subscribe({
                 if (it.passwordChanged) {
-                    mutableMessage.value = "Password changed successfully!"
+                    mutableMessage.value = resource.getString(R.string.change_password_success_message)
                     mutableUpdatedPassword.value = newPassword
                 }
             }, {
                 if (it.message.toString() == "HTTP 400 BAD REQUEST")
-                    mutableMessage.value = "Incorrect Old Password provided!"
-                else mutableMessage.value = "Unable to change password!"
+                    mutableMessage.value = resource.getString(R.string.incorrect_old_password_message)
+                else mutableMessage.value = resource.getString(R.string.change_password_fail_message)
             })
     }
 

@@ -43,10 +43,9 @@ class WelcomeFragment : Fragment() {
         }
 
         rootView.currentLocation.setOnClickListener {
-            checkLocationPermission()
             if (isLocationEnabled(requireContext())) {
-                geoLocationViewModel.configure()
                 rootView.locationProgressBar.isVisible = true
+                checkLocationPermission()
             }
         }
 
@@ -86,6 +85,8 @@ class WelcomeFragment : Fragment() {
         if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+        } else {
+            geoLocationViewModel.configure()
         }
     }
 

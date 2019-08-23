@@ -24,6 +24,7 @@ import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.settings.SettingsService
 import org.fossasia.openevent.general.ticket.Ticket
 import org.fossasia.openevent.general.ticket.TicketService
+import org.fossasia.openevent.general.utils.ErrorUtils
 import org.fossasia.openevent.general.utils.HttpErrors
 import retrofit2.HttpException
 import timber.log.Timber
@@ -39,6 +40,9 @@ const val PAYMENT_MODE_ONSITE = "onsite"
 const val PAYMENT_MODE_CHEQUE = "cheque"
 const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
+private const val ERRORS = "errors"
+private const val DETAIL = "detail"
+private const val UNVERIFIED_USER = "unverified user"
 private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
@@ -59,7 +63,7 @@ class AttendeeViewModel(
     private val mutableTicketSoldOut = MutableLiveData<Boolean>()
     val ticketSoldOut: LiveData<Boolean> = mutableTicketSoldOut
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableUser = MutableLiveData<User>()
@@ -76,6 +80,8 @@ class AttendeeViewModel(
     val stripeOrderMade: LiveData<Boolean> = mutableStripeOrderMade
     private val mutableOrderExpiryTime = MutableLiveData<Int>()
     val orderExpiryTime: LiveData<Int> = mutableOrderExpiryTime
+    private val mutableRedirectToProfile = SingleLiveEvent<Boolean>()
+    val redirectToProfile = mutableRedirectToProfile
 
     val attendees = ArrayList<Attendee>()
     private val attendeesForOrder = ArrayList<Attendee>()
@@ -96,7 +102,7 @@ class AttendeeViewModel(
     // Retained information
     var countryPosition: Int = -1
     var ticketIdAndQty: List<Triple<Int, Int, Float>>? = null
-    var selectedPaymentOption: Int = -1
+    var selectedPaymentMode: String = ""
     var singleTicket = false
     var monthSelectedPosition: Int = 0
     var yearSelectedPosition: Int = 0
@@ -162,6 +168,11 @@ class AttendeeViewModel(
                 mutablePendingOrder.value = it
                 orderIdentifier = it.identifier.toString()
             }, {
+                if (it is HttpException) {
+                    if (ErrorUtils.getErrorDetails(it).detail?.contains(UNVERIFIED_USER, true) == true) {
+                        mutableRedirectToProfile.value = true
+                    }
+                }
                 Timber.e(it, "Fail on creating pending order")
             })
     }
@@ -354,7 +365,7 @@ class AttendeeViewModel(
                     Timber.d("Failed charging the user")
                 }
             }, {
-                mutableMessage.value = resource.getString(R.string.payment_not_complete_message)
+                mutableMessage.value = ErrorUtils.getErrorDetails(it).detail
                 Timber.d(it, "Failed charging the user")
             })
     }

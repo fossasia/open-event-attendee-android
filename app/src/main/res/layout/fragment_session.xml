@@ -164,12 +164,14 @@
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/event_details_headers"
             android:layout_marginBottom="@dimen/layout_margin_medium"/>
-        <TextView
+        <at.blogc.android.views.ExpandableTextView
             android:id="@+id/sessionDetailAbstract"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="4"
+            android:autoLink="web|email|phone"
+            android:background="?selectableItemBackground"
             tools:text="@string/description_preview"/>
         <TextView
             android:id="@+id/sessionDetailAbstractSeeMore"

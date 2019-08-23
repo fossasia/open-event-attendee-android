@@ -26,7 +26,7 @@ class SessionViewModel(
     private val mutableProgress = MutableLiveData<Boolean>(true)
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
     private val mutableSpeakers = MutableLiveData<List<Speaker>>()
     val speakersUnderSession: LiveData<List<Speaker>> = mutableSpeakers
 
@@ -39,9 +39,9 @@ class SessionViewModel(
         compositeDisposable += sessionService.fetchSession(id)
             .withDefaultSchedulers()
             .doOnSubscribe { mutableProgress.value = true }
+            .doFinally { mutableProgress.value = false }
             .subscribe({
                 mutableSession.value = it
-                mutableProgress.value = false
             }, {
                 Timber.e(it, "Error fetching session id $id")
                 mutableError.value = resource.getString(R.string.error_fetching_event_section_message,

@@ -1,12 +1,15 @@
 package org.fossasia.openevent.general.ticket
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.Html
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_ticket.view.order
@@ -17,6 +20,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.discountPrice
 import kotlinx.android.synthetic.main.item_ticket.view.donationInput
 import kotlinx.android.synthetic.main.item_ticket.view.orderQtySection
 import kotlinx.android.synthetic.main.item_ticket.view.priceSection
+import kotlinx.android.synthetic.main.item_ticket.view.taxInfo
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
@@ -28,6 +32,7 @@ import kotlinx.android.synthetic.main.item_ticket.view.description
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
+import org.fossasia.openevent.general.event.tax.Tax
 import org.threeten.bp.DateTimeUtils
 import java.util.Date
 import kotlin.collections.ArrayList
@@ -47,7 +52,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         eventTimeZone: String?,
         ticketQuantity: Int,
         donationAmount: Float,
-        discountCode: DiscountCode? = null
+        discountCode: DiscountCode? = null,
+        tax: Tax?
     ) {
         itemView.ticketName.text = ticket.name
         setupTicketSaleDate(ticket, eventTimeZone)
@@ -76,6 +82,18 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.orderRange.performClick()
         }
 
+        var ticketPrice = ticket.price
+        if (tax?.rate != null) {
+            if (!tax.isTaxIncludedInPrice) {
+                val taxPrice = (ticketPrice * tax.rate / 100)
+                ticketPrice += taxPrice
+                itemView.taxInfo.text = "(+ $eventCurrency${"%.2f".format(taxPrice)} ${tax.name})"
+            } else {
+                val taxPrice = (ticket.price * tax.rate) / (100 + tax.rate)
+                itemView.taxInfo.text = "( $eventCurrency${"%.2f".format(taxPrice)} ${tax.name} included)"
+            }
+        }
+
         when (ticket.type) {
             TICKET_TYPE_DONATION -> {
                 itemView.price.text = resource.getString(R.string.donation)
@@ -90,14 +108,18 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.donationInput.isVisible = false
             }
             TICKET_TYPE_PAID -> {
-                itemView.price.text = "$eventCurrency${"%.2f".format(ticket.price)}"
+                itemView.price.text = "$eventCurrency${"%.2f".format(ticketPrice)}"
                 itemView.priceSection.isVisible = true
                 itemView.donationInput.isVisible = false
             }
         }
-        setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity)
+        setupQtyPicker(minQty, maxQty, selectedListener, ticket, ticketQuantity, ticket.type)
 
-        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> ${itemView.price.text}"
+        val price = if (tax?.rate != null && tax.isTaxIncludedInPrice) (ticket.price * 100) / (100 + tax.rate)
+        else ticket.price
+        val priceDetail = if (price > 0) "$eventCurrency${"%.2f".format(price)}"
+                                    else resource.getString(R.string.free)
+        val priceInfo = "<b>${resource.getString(R.string.price)}:</b> $priceDetail"
         itemView.priceInfo.text = Html.fromHtml(priceInfo)
 
         if (ticket.description.isNullOrEmpty()) {
@@ -111,8 +133,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.discountPrice.visibility = View.VISIBLE
             itemView.price.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.discountPrice.text =
-                if (discountCode.type == AMOUNT) "$eventCurrency${ticket.price - discountCode.value}"
-                else "$eventCurrency${"%.2f".format(ticket.price - (ticket.price * discountCode.value / 100))}"
+                if (discountCode.type == AMOUNT) "$eventCurrency${ticketPrice - discountCode.value}"
+                else "$eventCurrency${"%.2f".format(ticketPrice - (ticketPrice * discountCode.value / 100))}"
         }
     }
 
@@ -137,7 +159,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         maxQty: Int,
         selectedListener: TicketSelectedListener?,
         ticket: Ticket,
-        ticketQuantity: Int
+        ticketQuantity: Int,
+        ticketType: String?
     ) {
         if (minQty > 0 && maxQty > 0) {
             val spinnerList = ArrayList<String>()
@@ -156,8 +179,37 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            itemView.orderRange.adapter = ArrayAdapter(itemView.context, android.R.layout.select_dialog_singlechoice,
-                spinnerList)
+
+            val arrayAdapter = object : ArrayAdapter<String>(itemView.context,
+                android.R.layout.select_dialog_singlechoice, spinnerList) {
+                override fun isEnabled(position: Int): Boolean {
+                    if (TICKET_TYPE_DONATION == ticketType) {
+                        val donationEntered = itemView.donationInput.text.toString()
+                        val donation = if (donationEntered.isEmpty()) 0F else donationEntered.toFloat()
+                        return if (donation > 0F)
+                            position != 0
+                        else
+                            position == 0
+                    }
+                    return super.isEnabled(position)
+                }
+
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getDropDownView(position, convertView, parent)
+                    if (TICKET_TYPE_DONATION == ticketType) {
+                        if (view is TextView) {
+                            val donationEntered = itemView.donationInput.text.toString()
+                            val donation = if (donationEntered.isEmpty()) 0F else donationEntered.toFloat()
+                            if (donation > 0F)
+                                view.setTextColor(if (position == 0) Color.GRAY else Color.BLACK)
+                            else
+                                view.setTextColor(if (position == 0) Color.BLACK else Color.GRAY)
+                        }
+                    }
+                    return view
+                }
+            }
+            itemView.orderRange.adapter = arrayAdapter
             val currentQuantityPosition = spinnerList.indexOf(ticketQuantity.toString())
             if (currentQuantityPosition != -1) {
                 itemView.orderRange.setSelection(currentQuantityPosition)

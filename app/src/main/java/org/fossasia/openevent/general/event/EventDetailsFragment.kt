@@ -135,7 +135,13 @@ class EventDetailsFragment : Fragment() {
         setupSimilarEvents()
 
         rootView.buttonTickets.setOnClickListener {
-            loadTicketFragment()
+            val ticketUrl = currentEvent?.ticketUrl
+            if (!ticketUrl.isNullOrEmpty() &&
+                Uri.parse(ticketUrl).host != getString(R.string.FRONTEND_HOST)) {
+                Utils.openUrl(requireContext(), ticketUrl)
+            } else {
+                loadTicketFragment()
+            }
         }
 
         eventViewModel.popMessage
@@ -409,14 +415,9 @@ class EventDetailsFragment : Fragment() {
         // Organizer Section
         if (!event.ownerName.isNullOrEmpty()) {
             val organizerDescriptionListener = View.OnClickListener {
-                if (rootView.seeMoreOrganizer.text == getString(R.string.see_more)) {
-                    rootView.seeMoreOrganizer.text = getString(R.string.see_less)
-                    rootView.eventOrganiserDescription.minLines = 0
-                    rootView.eventOrganiserDescription.maxLines = Int.MAX_VALUE
-                } else {
-                    rootView.seeMoreOrganizer.text = getString(R.string.see_more)
-                    rootView.eventOrganiserDescription.setLines(3)
-                }
+                rootView.eventOrganiserDescription.toggle()
+                rootView.seeMoreOrganizer.text = if (rootView.eventOrganiserDescription.isExpanded)
+                    getString(R.string.see_less) else getString(R.string.see_more)
             }
 
             rootView.eventOrganiserDescription.post {
@@ -453,8 +454,7 @@ class EventDetailsFragment : Fragment() {
         // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
 
-        val locationNameIsEmpty = event.locationName.isNullOrEmpty()
-        if (!locationNameIsEmpty) {
+        if (!event.locationName.isNullOrEmpty() && event.longitude != null && event.latitude != null) {
             rootView.imageMap.setOnClickListener(mapClickListener)
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
@@ -463,6 +463,8 @@ class EventDetailsFragment : Fragment() {
                     .placeholder(R.drawable.ic_map_black)
                     .error(R.drawable.ic_map_black)
                     .into(rootView.imageMap)
+        } else {
+            rootView.imageMap.isVisible = false
         }
 
         // Date and Time section

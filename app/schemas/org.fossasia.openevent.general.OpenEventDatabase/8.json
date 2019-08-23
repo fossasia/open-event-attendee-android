@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "c65ffea75fee1faf6cd199cbbc5c25ee",
+    "identityHash": "35acee6b8147d48c581bb8f884508c79",
     "entities": [
       {
         "tableName": "Event",
@@ -1223,7 +1223,7 @@
       },
       {
         "tableName": "Speaker",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `position` TEXT, `mobile` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `isFeatured` INTEGER NOT NULL, `event` INTEGER, `user` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `photoUrl` TEXT, `shortBiography` TEXT, `longBiography` TEXT, `speakingExperience` TEXT, `position` TEXT, `mobile` TEXT, `location` TEXT, `country` TEXT, `city` TEXT, `organisation` TEXT, `gender` TEXT, `website` TEXT, `twitter` TEXT, `facebook` TEXT, `linkedin` TEXT, `github` TEXT, `heardFrom` TEXT, `isFeatured` INTEGER NOT NULL, `event` INTEGER, `user` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1336,6 +1336,12 @@
           {
             "fieldPath": "github",
             "columnName": "github",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "heardFrom",
+            "columnName": "heardFrom",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1985,7 +1991,7 @@
       },
       {
         "tableName": "Proposal",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT, `language` TEXT, `shortAbstract` TEXT, `comments` TEXT, `startsAt` TEXT, `endsAt` TEXT, `track` TEXT, `event` INTEGER, `speakers` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT, `language` TEXT, `shortAbstract` TEXT, `comments` TEXT, `startsAt` TEXT, `endsAt` TEXT, `subTitle` TEXT, `longAbstract` TEXT, `track` TEXT, `event` INTEGER, `speakers` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -2026,6 +2032,18 @@
           {
             "fieldPath": "endsAt",
             "columnName": "endsAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subTitle",
+            "columnName": "subTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longAbstract",
+            "columnName": "longAbstract",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -2086,7 +2104,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c65ffea75fee1faf6cd199cbbc5c25ee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '35acee6b8147d48c581bb8f884508c79')"
     ]
   }
 }

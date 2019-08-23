@@ -460,6 +460,13 @@
         android:name="org.fossasia.openevent.general.speakercall.EditSpeakerFragment"
         android:label="EditSpeakerFragment"
         tools:layout="@layout/fragment_proposal_speaker">
+        <action
+            android:id="@+id/action_edit_speaker_to_crop_image"
+            app:destination="@id/cropImageFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <argument
             android:name="eventId"
             app:argType="long"
@@ -721,6 +728,15 @@
             app:exitAnim="@anim/fade_out"/>
 
         <action
+            android:id="@+id/action_tickets_to_profile"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/eventDetailsFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+
+        <action
             android:id="@+id/action_attendee_to_ticket_pop"
             app:popUpToInclusive="true"
             app:popUpTo="@id/ticketsFragment"
@@ -750,9 +766,10 @@
             android:defaultValue="0.0"/>
 
         <argument
-            android:name="hasPaidTickets"
-            app:argType="boolean"
-            android:defaultValue="false"/>
+            android:name="taxAmount"
+            app:argType="float"
+            app:nullable="false"
+            android:defaultValue="0.0"/>
     </fragment>
     <fragment
         android:id="@+id/orderCompletedFragment"

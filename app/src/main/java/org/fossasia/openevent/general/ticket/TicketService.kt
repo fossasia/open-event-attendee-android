@@ -48,10 +48,10 @@ class TicketService(
         return ticketDao.getTicketsWithIds(ids)
     }
 
-    fun getDiscountCode(code: String): Single<DiscountCode> {
+    fun getDiscountCode(eventId: Long, code: String): Single<DiscountCode> {
         val filter = "[{\"name\":\"is-active\",\"op\":\"like\",\"val\":\"true\"}," +
             "{\"name\":\"valid-from\",\"op\":\"<\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}," +
             "{\"name\":\"valid-till\",\"op\":\">\",\"val\":\"%${EventUtils.getTimeInISO8601(Date())}%\"}]"
-        return discountApi.getDiscountCodes(code, filter)
+        return discountApi.getDiscountCodes(eventId, code, filter)
     }
 }

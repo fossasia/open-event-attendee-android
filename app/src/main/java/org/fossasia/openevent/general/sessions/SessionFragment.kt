@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -98,7 +99,12 @@ class SessionFragment : Fragment() {
                     rootView.speakersProgressBar.isVisible = false
             })
 
-        sessionViewModel.loadSession(safeArgs.sessionId)
+        val currentSession = sessionViewModel.session.value
+        if (currentSession == null)
+            sessionViewModel.loadSession(safeArgs.sessionId)
+        else
+            makeSessionView(currentSession)
+
         val currentSpeakers = sessionViewModel.speakersUnderSession.value
         if (currentSpeakers == null)
             sessionViewModel.loadSpeakersUnderSession(safeArgs.sessionId)
@@ -114,6 +120,7 @@ class SessionFragment : Fragment() {
         layoutManager.orientation = HORIZONTAL
         rootView.speakersUnderSessionRecycler.layoutManager = layoutManager
         rootView.speakersUnderSessionRecycler.adapter = speakersAdapter
+        rootView.sessionDetailAbstract.movementMethod = LinkMovementMethod.getInstance()
 
         return rootView
     }
@@ -199,7 +206,7 @@ class SessionFragment : Fragment() {
         when (session.startsAt.isNullOrBlank()) {
             true -> rootView.sessionDetailStartTime.isVisible = false
             false -> {
-                val formattedStartTime = EventUtils.getEventDateTime(session.startsAt, "")
+                val formattedStartTime = EventUtils.getEventDateTime(session.startsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedStartTime)
                 val formattedDate = EventUtils.getFormattedDate(formattedStartTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedStartTime)
@@ -209,7 +216,7 @@ class SessionFragment : Fragment() {
         when (session.endsAt.isNullOrBlank()) {
             true -> rootView.sessionDetailEndTime.isVisible = false
             false -> {
-                val formattedEndTime = EventUtils.getEventDateTime(session.endsAt, "")
+                val formattedEndTime = EventUtils.getEventDateTime(session.endsAt)
                 val formattedTime = EventUtils.getFormattedTime(formattedEndTime)
                 val formattedDate = EventUtils.getFormattedDate(formattedEndTime)
                 val timezone = EventUtils.getFormattedTimeZone(formattedEndTime)
@@ -229,20 +236,16 @@ class SessionFragment : Fragment() {
             false -> {
                 rootView.sessionDetailAbstract.text = description.stripHtml()
                 val sessionAbstractClickListener = View.OnClickListener {
-                    if (rootView.sessionDetailAbstractSeeMore.text == getString(R.string.see_more)) {
-                        rootView.sessionDetailAbstractSeeMore.text = getString(R.string.see_less)
-                        rootView.sessionDetailAbstract.minLines = 0
-                        rootView.sessionDetailAbstract.maxLines = Int.MAX_VALUE
-                    } else {
-                        rootView.sessionDetailAbstractSeeMore.text = getString(R.string.see_more)
-                        rootView.sessionDetailAbstract.setLines(LINE_COUNT_ABSTRACT + 1)
-                    }
+                    rootView.sessionDetailAbstract.toggle()
+                    rootView.sessionDetailAbstractSeeMore.text = if (rootView.sessionDetailAbstract.isExpanded)
+                        getString(R.string.see_less) else getString(R.string.see_more)
                 }
 
                 rootView.sessionDetailAbstract.post {
                     if (rootView.sessionDetailAbstract.lineCount > LINE_COUNT_ABSTRACT) {
                         rootView.sessionDetailAbstractSeeMore.isVisible = true
-                        rootView.sessionDetailAbstractContainer.setOnClickListener(sessionAbstractClickListener)
+                        rootView.sessionDetailAbstract.setOnClickListener(sessionAbstractClickListener)
+                        rootView.sessionDetailAbstractSeeMore.setOnClickListener(sessionAbstractClickListener)
                     }
                 }
             }
@@ -275,7 +278,7 @@ class SessionFragment : Fragment() {
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, session.microlocation?.name)
 
         if (session.startsAt != null && session.endsAt != null) {
-            val formattedStartTime = EventUtils.getEventDateTime(session.startsAt, "")
+            val formattedStartTime = EventUtils.getEventDateTime(session.startsAt)
             val timezone = EventUtils.getFormattedTimeZone(formattedStartTime)
             intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, timezone)
             intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,

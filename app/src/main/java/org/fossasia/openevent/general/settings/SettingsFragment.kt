@@ -48,9 +48,9 @@ const val LOCAL_TIMEZONE = "localTimeZone"
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
     private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
         "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
-    private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy/"
-    private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms/"
-    private val COOKIE_POLICY_LINK: String = "https://eventyay.com/cookie-policy/"
+    private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy"
+    private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms"
+    private val REFUND_POLICY_LINK: String = "https://eventyay.com/refunds"
     private val WEBSITE_LINK: String = "https://eventyay.com/"
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val profileViewModel by viewModel<ProfileViewModel>()
@@ -154,8 +154,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             Utils.openUrl(requireContext(), TERMS_OF_SERVICE_LINK)
             return true
         }
-        if (preference?.key == getString(R.string.key_cookie_policy)) {
-            Utils.openUrl(requireContext(), COOKIE_POLICY_LINK)
+        if (preference?.key == getString(R.string.key_refund_policy)) {
+            Utils.openUrl(requireContext(), REFUND_POLICY_LINK)
             return true
         }
 

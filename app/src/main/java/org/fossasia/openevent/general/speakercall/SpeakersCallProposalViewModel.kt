@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
@@ -29,7 +30,7 @@ class SpeakersCallProposalViewModel(
     private val compositeDisposable = CompositeDisposable()
 
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableSpeakerProgress = MutableLiveData(false)
     private val mutableProgress = MutableLiveData(false)
     val progress: LiveData<Boolean> = mutableProgress
@@ -41,6 +42,8 @@ class SpeakersCallProposalViewModel(
     private val mutableSession = MutableLiveData<Session>()
     val session: LiveData<Session> = mutableSession
     private val mutableTracks = MutableLiveData<List<Track>>()
+    private val mutableForms = MutableLiveData<List<CustomForm>>()
+    val forms: LiveData<List<CustomForm>> = mutableForms
     val tracks: LiveData<List<Track>> = mutableTracks
     var trackPosition = 0
 
@@ -56,6 +59,22 @@ class SpeakersCallProposalViewModel(
                 mutableProgress.value = false
                 mutableMessage.value = resource.getString(R.string.fail_create_proposal_message)
                 Timber.e(it, "Fail on creating new session")
+            })
+    }
+
+    fun getFormsForProposal(eventId: Long) {
+        if (eventId == -1L) return
+
+        compositeDisposable += sessionService.getCustomFormsForSessions(eventId)
+            .withDefaultSchedulers()
+            .doOnSubscribe {
+                mutableProgress.value = true
+            }.doFinally {
+                mutableProgress.value = false
+            }.subscribe({
+                mutableForms.value = it
+            }, {
+                Timber.e(it, "Fail on fetching custom forms for event $eventId")
             })
     }
 

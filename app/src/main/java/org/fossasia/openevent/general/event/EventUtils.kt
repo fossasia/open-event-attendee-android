@@ -27,7 +27,7 @@ object EventUtils {
     fun loadMapUrl(event: Event) = "geo:<${event.latitude}>,<${event.longitude}>" +
         "?q=<${event.latitude}>,<${event.longitude}>"
 
-    fun getEventDateTime(dateString: String, timeZone: String?): ZonedDateTime {
+    fun getEventDateTime(dateString: String, timeZone: String? = null): ZonedDateTime {
         try {
             return when (PreferenceManager.getDefaultSharedPreferences(OpenEventGeneral.appContext)
                 .getBoolean(LOCAL_TIMEZONE, false) && !timeZone.isNullOrBlank()) {
@@ -51,7 +51,7 @@ object EventUtils {
     }
 
     fun getFormattedDate(date: ZonedDateTime): String {
-        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMM d, y")
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, y")
         return try {
             dateFormat.format(date)
         } catch (e: IllegalArgumentException) {

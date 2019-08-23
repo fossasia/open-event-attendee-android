@@ -32,7 +32,7 @@ class OrderCompletedViewModel(
     private val compositeDisposable = CompositeDisposable()
 
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEvent = MutableLiveData<Event>()
     val event: LiveData<Event> = mutableEvent
     private val mutableProgress = MutableLiveData<Boolean>()
