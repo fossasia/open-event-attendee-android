@@ -532,5 +532,7 @@
     <string name="incorrect_old_password_message">Incorrect old password provided!</string>
     <string name="change_password_fail_message">Unable to change password!</string>
     <string name="change_password_success_message">Password changed successfully!</string>
+    <string name="tickets_for">Ticket(s) for %1$s</string>
+    <string name="error_making_paypal_payment_message">Fail on making Paypal payment</string>
 
 </resources>
