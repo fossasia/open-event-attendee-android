@@ -157,6 +157,17 @@
                             android:background="@drawable/circle_shape"/>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/notAvailableTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin_large"
+                        android:text="@string/not_available"
+                        android:textSize="@dimen/text_size_large"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
