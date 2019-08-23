@@ -18,6 +18,7 @@ const val SOURCE = "source"
 const val POINTER = "pointer"
 const val DETAIL = "detail"
 const val TITLE = "title"
+const val CODE = "code"
 
 const val POINTER_LENGTH = 3
 
@@ -62,6 +63,7 @@ object ErrorUtils {
                     } else {
                         error.pointer = pointedField
                         error.detail = jsonArray.get(DETAIL).toString().replace(".", "")
+                        error.code = errorSource.get(CODE).toString()
                     }
                 } catch (e: Exception) {
                     error.detail = jsonArray.get(DETAIL).toString()
@@ -91,6 +93,7 @@ object ErrorUtils {
                     } else {
                         error.pointer = pointedField
                         error.detail = jsonArray.get(DETAIL).toString().replace(".", "")
+                        error.code = errorSource.get(CODE).toString()
                     }
                     error.title = jsonArray.get(TITLE).toString()
                 } catch (e: Exception) {

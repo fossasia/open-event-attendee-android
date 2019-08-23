@@ -42,7 +42,7 @@ const val PAYMENT_MODE_PAYPAL = "paypal"
 const val PAYMENT_MODE_STRIPE = "stripe"
 private const val ERRORS = "errors"
 private const val DETAIL = "detail"
-private const val UNVERIFIED_USER = "unverified user"
+private const val UNVERIFIED_USER = "unverified-user"
 private const val ORDER_EXPIRY_TIME = 15
 
 class AttendeeViewModel(
@@ -169,7 +169,7 @@ class AttendeeViewModel(
                 orderIdentifier = it.identifier.toString()
             }, {
                 if (it is HttpException) {
-                    if (ErrorUtils.getErrorDetails(it).detail?.contains(UNVERIFIED_USER, true) == true) {
+                    if (ErrorUtils.getErrorDetails(it).code == UNVERIFIED_USER) {
                         mutableRedirectToProfile.value = true
                     }
                 }
