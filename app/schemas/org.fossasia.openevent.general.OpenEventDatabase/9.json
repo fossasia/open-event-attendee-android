@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "f80d968b56ae562772564e44b0a13917",
+    "identityHash": "997d673a0b588ec7cad9c2df504aae05",
     "entities": [
       {
         "tableName": "Event",
@@ -701,7 +701,7 @@
       },
       {
         "tableName": "Attendee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `jobTitle` TEXT, `phone` TEXT, `taxBusinessInfo` TEXT, `billingAddress` TEXT, `homeAddress` TEXT, `shippingAddress` TEXT, `company` TEXT, `workAddress` TEXT, `workPhone` TEXT, `website` TEXT, `blog` TEXT, `github` TEXT, `facebook` TEXT, `twitter` TEXT, `gender` TEXT, `isCheckedIn` INTEGER, `checkinTimes` TEXT, `isCheckedOut` INTEGER NOT NULL, `pdfUrl` TEXT, `ticketId` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstname` TEXT, `lastname` TEXT, `email` TEXT, `address` TEXT, `city` TEXT, `state` TEXT, `country` TEXT, `jobTitle` TEXT, `phone` TEXT, `taxBusinessInfo` TEXT, `billingAddress` TEXT, `homeAddress` TEXT, `shippingAddress` TEXT, `company` TEXT, `workAddress` TEXT, `workPhone` TEXT, `website` TEXT, `blog` TEXT, `github` TEXT, `facebook` TEXT, `twitter` TEXT, `gender` TEXT, `isCheckedIn` INTEGER, `checkinTimes` TEXT, `isCheckedOut` INTEGER NOT NULL, `pdfUrl` TEXT, `ticketId` TEXT, `checkedIn` TEXT, `checkedOut` TEXT, `event` INTEGER, `ticket` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`event`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`ticket`) REFERENCES `Ticket`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -868,6 +868,18 @@
           {
             "fieldPath": "ticketId",
             "columnName": "ticketId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "checkedIn",
+            "columnName": "checkedIn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "checkedOut",
+            "columnName": "checkedOut",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -2217,7 +2229,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f80d968b56ae562772564e44b0a13917')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '997d673a0b588ec7cad9c2df504aae05')"
     ]
   }
 }

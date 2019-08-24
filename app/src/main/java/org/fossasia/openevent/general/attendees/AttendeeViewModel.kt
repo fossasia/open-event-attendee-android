@@ -272,12 +272,11 @@ class AttendeeViewModel(
             mutableMessage.value = resource.getString(R.string.order_fail_message)
             return
         }
-        val attendeeList = attendeesForOrder.map { AttendeeId(it.id) }.toList()
         val amount: Float = totalAmount.value ?: 0F
         if (amount <= 0) {
             paymentModeForOrder = PAYMENT_MODE_FREE
         }
-        order = order.copy(attendees = attendeeList, paymentMode = paymentModeForOrder, amount = amount)
+        order = order.copy(attendees = attendeesForOrder, paymentMode = paymentModeForOrder, amount = amount)
         if (billingEnabled) {
             order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
                 address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder)
@@ -365,12 +364,12 @@ class AttendeeViewModel(
             })
     }
 
-    private fun deleteAttendees(attendeeIds: List<AttendeeId>?) {
-        attendeeIds?.forEach { attendeeId ->
-            compositeDisposable += attendeeService.deleteAttendee(attendeeId.id)
+    private fun deleteAttendees(attendees: List<Attendee>?) {
+        attendees?.forEach { attendee ->
+            compositeDisposable += attendeeService.deleteAttendee(attendee.id)
                 .withDefaultSchedulers()
                 .subscribe({
-                    Timber.d("Deleted attendee $attendeeId.id")
+                    Timber.d("Deleted attendee ${attendee.id}")
                 }, {
                     Timber.d("Failed to delete attendee $it.id")
                 })

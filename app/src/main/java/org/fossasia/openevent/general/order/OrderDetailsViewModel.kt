@@ -57,7 +57,7 @@ class OrderDetailsViewModel(
         compositeDisposable += orderService
             .getOrderById(orderId)
             .flatMap { order ->
-                orderService.getAttendeesUnderOrder(order.identifier ?: "", order.attendees.map { it.id })
+                orderService.getAttendeesUnderOrder(order.attendees.map { it.id })
             }
             .withDefaultSchedulers()
             .doOnSubscribe {
@@ -66,6 +66,7 @@ class OrderDetailsViewModel(
                 mutableProgress.value = false
             }.subscribe({
                 mutableAttendees.value = it
+                Timber.d("Fetched attendees of size %s", it)
             }, {
                 Timber.e(it, "Error fetching attendee details")
                 message.value = resource.getString(R.string.error_fetching_attendee_details_message)
