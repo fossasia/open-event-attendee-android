@@ -10,7 +10,7 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 import io.reactivex.annotations.NonNull
-import org.fossasia.openevent.general.attendees.AttendeeId
+import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.EventId
 
 @Type("order")
@@ -44,5 +44,5 @@ data class Order(
     @Relationship("event")
     var event: EventId? = null,
     @Relationship("attendees")
-    var attendees: List<AttendeeId> = emptyList()
+    var attendees: List<Attendee> = emptyList()
 )

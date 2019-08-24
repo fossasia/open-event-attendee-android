@@ -69,6 +69,7 @@ class OrderService(
                 it
             }
             orderDao.insertOrders(updatedOrdersList)
+            attendeeDao.insertAttendees(updatedOrdersList.map { it.attendees }.flatten())
             updatedOrdersList
         }
     }
@@ -77,13 +78,7 @@ class OrderService(
         return orderDao.getOrderById(orderId)
     }
 
-    fun getAttendeesUnderOrder(orderIdentifier: String, attendeesIds: List<Long>): Single<List<Attendee>> {
-        return orderApi.attendeesUnderOrder(orderIdentifier)
-            .map {
-                attendeeDao.insertAttendees(it)
-                it
-            }.onErrorResumeNext {
-                attendeeDao.getAttendeesWithIds(attendeesIds)
-            }
+    fun getAttendeesUnderOrder(attendeesIds: List<Long>): Single<List<Attendee>> {
+        return attendeeDao.getAttendeesWithIds(attendeesIds)
     }
 }
