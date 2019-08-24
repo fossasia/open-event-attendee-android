@@ -39,6 +39,7 @@ data class Order(
     val isBillingEnabled: Boolean = false,
     val taxBusinessInfo: String? = null,
     val company: String? = null,
+    var isExpired: Boolean? = null,
     @ColumnInfo(index = true)
     @Relationship("event")
     var event: EventId? = null,

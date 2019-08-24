@@ -43,7 +43,7 @@ class OrdersUnderUserViewModel(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun getOrdersAndEventsOfUser(showExpired: Boolean) {
+    fun getOrdersAndEventsOfUser(showExpired: Boolean, fromDb: Boolean) {
 
         val sourceFactory = OrderDataSourceFactory(
             orderService,
@@ -54,7 +54,8 @@ class OrdersUnderUserViewModel(
             mutableNumOfTickets,
             mutableMessage,
             getId(),
-            filter
+            filter,
+            fromDb
         )
 
         val ordersAndEventsPagedList = RxPagedListBuilder(sourceFactory, config)

@@ -6,6 +6,9 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_COMPLETED
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PENDING
+import org.fossasia.openevent.general.attendees.ORDER_STATUS_PLACED
 import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.Event
@@ -25,12 +28,16 @@ class OrderDataSource(
     private val mutableProgress: MutableLiveData<Boolean>,
     private val mutableNumOfTickets: MutableLiveData<Int>,
     private val mutableMessage: SingleLiveEvent<String>,
-    private val filter: OrderFilter
+    private val filter: OrderFilter,
+    private val fromDb: Boolean
 ) : PageKeyedDataSource<Int, Pair<Event, Order>>() {
     private val resource = Resource()
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Pair<Event, Order>>) {
-        createObservable(1, 2, callback, null)
+        if (fromDb)
+            getOrdersFromDb(callback)
+        else
+            createObservable(1, 2, callback, null)
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Pair<Event, Order>>) {
@@ -41,6 +48,31 @@ class OrderDataSource(
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Pair<Event, Order>>) {
         val page = params.key
         createObservable(page, page - 1, null, callback)
+    }
+
+    private fun getOrdersFromDb(callback: LoadInitialCallback<Int, Pair<Event, Order>>) {
+        compositeDisposable += orderService.getOrderAndEventSourceFactoryFromDb(showExpired)
+            .withDefaultSchedulers()
+            .subscribe({
+                val filteredList = it.filterNotNull().filter {
+                    if (filter.isShowingCompletedOrders) true else it.second.status != ORDER_STATUS_COMPLETED
+                }.filter {
+                    if (filter.isShowingPendingOrders) true else it.second.status != ORDER_STATUS_PENDING
+                }.filter {
+                    if (filter.isShowingPlacedOrders) true else it.second.status != ORDER_STATUS_PLACED
+                }
+                if (filteredList.isEmpty()) {
+                    createObservable(1, 2, callback, null)
+                } else {
+                    mutableNumOfTickets.value = filteredList.size
+                    callback.onResult(filteredList, null, null)
+                    mutableProgress.value = false
+                }
+            }, {
+                mutableMessage.value = resource.getString(R.string.list_events_fail_message)
+                Timber.e(it, "Fail on fetching orders ")
+                mutableProgress.value = false
+            })
     }
 
     private fun createObservable(
@@ -106,7 +138,7 @@ class OrderDataSource(
                 |       }
                 |    }]
                 |}]""".trimMargin().replace("'", "\"")
-        val ordersList = orderService.getOrdersOfUserPaged(userId, ordersQuery, page)
+        val ordersList = orderService.getOrdersOfUserPaged(userId, ordersQuery, page, showExpired)
         return ordersList.flatMap { orders ->
             val ids = orders.map { it.event?.id }.distinct()
             val eventsQuery = """[{
