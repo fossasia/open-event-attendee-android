@@ -16,7 +16,8 @@ class OrderDataSourceFactory(
     private val mutableNumOfTicket: MutableLiveData<Int>,
     private val mutableMessage: SingleLiveEvent<String>,
     private val userId: Long,
-    private val orderFilter: OrderFilter
+    private val orderFilter: OrderFilter,
+    private val fromDb: Boolean
 ) : DataSource.Factory<Int, Pair<Event, Order>>() {
     override fun create(): DataSource<Int, Pair<Event, Order>> {
         return OrderDataSource(
@@ -28,7 +29,8 @@ class OrderDataSourceFactory(
             mutableProgress,
             mutableNumOfTicket,
             mutableMessage,
-            orderFilter
+            orderFilter,
+            fromDb
         )
     }
 }

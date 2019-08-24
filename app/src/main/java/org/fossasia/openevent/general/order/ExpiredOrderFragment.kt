@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_expired_order.view.noTicketsScree
 import kotlinx.android.synthetic.main.fragment_expired_order.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_expired_order.view.filterToolbar
 import kotlinx.android.synthetic.main.fragment_expired_order.view.toolbar
+import kotlinx.android.synthetic.main.fragment_expired_order.view.swipeRefresh
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -57,7 +59,7 @@ class ExpiredOrderFragment : Fragment() {
                     showNoInternetScreen(false)
                 } else {
                     rootView.shimmerSearch.stopShimmer()
-                    showNoTicketsScreen(ordersPagedListAdapter.currentList?.isEmpty() ?: true)
+                    rootView.swipeRefresh.isRefreshing = false
                 }
             })
 
@@ -76,12 +78,14 @@ class ExpiredOrderFragment : Fragment() {
                     showNoTicketsScreen(currentItems.size == 0)
                     ordersPagedListAdapter.submitList(currentItems)
                 } else {
-                    if (isConnected) {
-                        ordersUnderUserVM.getOrdersAndEventsOfUser(true)
-                    } else {
-                        showNoInternetScreen(true)
-                    }
+                    ordersUnderUserVM.getOrdersAndEventsOfUser(true, true)
                 }
+            })
+
+        ordersUnderUserVM.numOfTickets
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer {
+                showNoTicketsScreen(it == 0 && !rootView.shimmerSearch.isVisible)
             })
 
         ordersUnderUserVM.eventAndOrderPaged
@@ -89,6 +93,16 @@ class ExpiredOrderFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 ordersPagedListAdapter.submitList(it)
             })
+
+        rootView.swipeRefresh.setColorSchemeColors(Color.BLUE)
+        rootView.swipeRefresh.setOnRefreshListener {
+            if (ordersUnderUserVM.isConnected()) {
+                ordersUnderUserVM.clearOrders()
+                ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = true, fromDb = false)
+            } else {
+                rootView.swipeRefresh.isRefreshing = false
+            }
+        }
 
         return rootView
     }
@@ -134,7 +148,7 @@ class ExpiredOrderFragment : Fragment() {
         ordersUnderUserVM.clearOrders()
         ordersPagedListAdapter.clear()
         if (ordersUnderUserVM.isConnected()) {
-            ordersUnderUserVM.getOrdersAndEventsOfUser(true)
+            ordersUnderUserVM.getOrdersAndEventsOfUser(true, true)
         } else {
             showNoInternetScreen(true)
         }

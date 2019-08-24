@@ -6,15 +6,30 @@ import org.fossasia.openevent.general.attendees.AttendeeDao
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.paypal.PaypalPaymentResponse
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDao
 
 class OrderService(
     private val orderApi: OrderApi,
     private val orderDao: OrderDao,
     private val attendeeDao: AttendeeDao,
-    private val paypalApi: PaypalApi
+    private val paypalApi: PaypalApi,
+    private val eventDao: EventDao
 ) {
     fun verifyPaypalPayment(orderIdentifier: String, paymentId: String): Single<PaypalPaymentResponse> =
         paypalApi.verifyPaypalPayment(orderIdentifier, Paypal(paymentId = paymentId))
+
+    fun getOrderAndEventSourceFactoryFromDb(showExpired: Boolean): Single<List<Pair<Event, Order>?>> {
+        return orderDao.getOrders(showExpired)
+            .map {
+                it.map { order ->
+                    order.event?.id?.let { eventId ->
+                        val event = eventDao.getEventObjectById(eventId)
+                        Pair(event, order)
+                    }
+                }
+            }
+    }
 
     fun placeOrder(order: Order): Single<Order> {
         return orderApi.placeOrder(order)
@@ -47,10 +62,14 @@ class OrderService(
             }
     }
 
-    fun getOrdersOfUserPaged(userId: Long, query: String, page: Int): Single<List<Order>> {
+    fun getOrdersOfUserPaged(userId: Long, query: String, page: Int, isExpired: Boolean): Single<List<Order>> {
         return orderApi.ordersUnderUserPaged(userId, query, page).map {
-            orderDao.insertOrders(it)
-            it
+            val updatedOrdersList = it.map {
+                it.isExpired = isExpired
+                it
+            }
+            orderDao.insertOrders(updatedOrdersList)
+            updatedOrdersList
         }
     }
 

@@ -226,7 +226,7 @@ val apiModule = module {
     factory { TicketService(get(), get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
-    factory { OrderService(get(), get(), get(), get()) }
+    factory { OrderService(get(), get(), get(), get(), get()) }
     factory { SessionService(get(), get()) }
     factory { NotificationService(get(), get()) }
     factory { FeedbackService(get(), get()) }
