@@ -118,8 +118,6 @@
     <string name="key_about">अबाउट</string>
     <string name="key_rating">रेटिंग </string>
     <string name="rating_settings">रेट उस </string>
-    <string name="suggestion_settings">सुझाव में सुधार</string>
-    <string name="key_suggestion">सुझाव</string>
     <string name="key_profile">प्रोफ़ाइल</string>
     <string name="logged_in_account">अकाउंट</string>
     <string name="timeZone_title">ईवेंट के समय-क्षेत्र का उपयोग करें</string>
