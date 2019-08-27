@@ -119,8 +119,6 @@
     <string name="key_about">এবাউট</string>
     <string name="key_rating">রেটিং </string>
     <string name="rating_settings">রেটিং দিন</string>
-    <string name="suggestion_settings">পরামর্শ দিন</string>
-    <string name="key_suggestion">পরামর্শ</string>
     <string name="key_profile">প্রোফাইল</string>
     <string name="logged_in_account">একাউন্ট</string>
     <string name="timeZone_title">ইভেন্টের সময় অঞ্চল ব্যবহার করুন</string>
