@@ -46,8 +46,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 const val LOCAL_TIMEZONE = "localTimeZone"
 
 class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
-    private val FORM_LINK: String = "https://docs.google.com/forms/d/e/" +
-        "1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform"
+
     private val PRIVACY_LINK: String = "https://eventyay.com/privacy-policy"
     private val TERMS_OF_SERVICE_LINK: String = "https://eventyay.com/terms"
     private val REFUND_POLICY_LINK: String = "https://eventyay.com/refunds"
@@ -125,11 +124,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             startAppPlayStore(activity?.packageName.nullToEmpty())
             return true
         }
-        if (preference?.key == getString(R.string.key_suggestion)) {
-            // Links to suggestion form
-            Utils.openUrl(requireContext(), FORM_LINK)
-            return true
-        }
+
         if (preference?.key == getString(R.string.key_profile)) {
             showLogoutDialog()
             return true

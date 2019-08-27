@@ -181,9 +181,7 @@
     <string name="key_account">account</string>
     <string name="rating_settings">Rate Us</string>
     <string name="app_name_capital" translatable="false">Open Event Android</string>
-    <string name="suggestion_settings">Suggest Improvement</string>
     <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
-    <string name="key_suggestion">suggestion</string>
     <string name="key_profile">profile</string>
     <string name="logged_in_account">Account</string>
     <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>

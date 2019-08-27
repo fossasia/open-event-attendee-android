@@ -51,11 +51,6 @@
             android:title="@string/rating_settings"
             app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="@string/key_suggestion"
-            android:title="@string/suggestion_settings"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
