@@ -113,7 +113,6 @@ If you are a tester and want to test the app, you have two ways to do that:
 
 ## Open Event Attendee Android Suggestions
 
-- Suggestion form link: [Form](https://docs.google.com/forms/d/e/1FAIpQLSd7Y1T1xoXeYaAG_b6Tu1YYK-jZssoC5ltmQbkUX0kmDZaKYw/viewform)
 - Suggestion responses link: [Sheet](https://docs.google.com/spreadsheets/d/1SzR75MBEVrTY1sDM3KAMm9wltiulDAp0QT5hv9eJkKM/edit#gid=1676755229)
 
 ## License
