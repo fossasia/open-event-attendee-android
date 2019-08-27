@@ -17,6 +17,9 @@ interface OrderDao {
     @Query("SELECT * FROM `order`")
     fun getAllOrders(): Single<List<Order>>
 
+    @Query("SELECT * FROM `order` WHERE isExpired = :expired")
+    fun getOrders(expired: Boolean): Single<List<Order>>
+
     @Query("DELETE FROM `order`")
     fun deleteAllOrders()
 

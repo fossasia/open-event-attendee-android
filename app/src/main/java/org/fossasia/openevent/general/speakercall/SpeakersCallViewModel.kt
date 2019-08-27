@@ -35,7 +35,7 @@ class SpeakersCallViewModel(
     private val mutableSessions = MutableLiveData<List<Session>>()
     val sessions: LiveData<List<Session>> = mutableSessions
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableProgress = MutableLiveData(true)
     val progress: LiveData<Boolean> = mutableProgress
     private val mutableSpeaker = MutableLiveData<Speaker>()

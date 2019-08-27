@@ -42,6 +42,8 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
+import java.util.Currency
+import kotlin.collections.ArrayList
 
 const val TICKETS_FRAGMENT = "ticketsFragment"
 const val APPLY_DISCOUNT_CODE = 1
@@ -58,7 +60,7 @@ class TicketsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ticketsRecyclerAdapter.setCurrency(safeArgs.currency)
+        ticketsRecyclerAdapter.setCurrency(Currency.getInstance(safeArgs.currency).symbol)
     }
 
     override fun onCreateView(

@@ -28,7 +28,7 @@ class OrdersUnderUserViewModel(
 
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableEventAndOrderPaged = MutableLiveData<PagedList<Pair<Event, Order>>>()
     val eventAndOrderPaged: LiveData<PagedList<Pair<Event, Order>>> = mutableEventAndOrderPaged
     private val mutableShowShimmerResults = MutableLiveData<Boolean>()
@@ -43,7 +43,7 @@ class OrdersUnderUserViewModel(
 
     fun isLoggedIn() = authHolder.isLoggedIn()
 
-    fun getOrdersAndEventsOfUser(showExpired: Boolean) {
+    fun getOrdersAndEventsOfUser(showExpired: Boolean, fromDb: Boolean) {
 
         val sourceFactory = OrderDataSourceFactory(
             orderService,
@@ -54,7 +54,8 @@ class OrdersUnderUserViewModel(
             mutableNumOfTickets,
             mutableMessage,
             getId(),
-            filter
+            filter,
+            fromDb
         )
 
         val ordersAndEventsPagedList = RxPagedListBuilder(sourceFactory, config)

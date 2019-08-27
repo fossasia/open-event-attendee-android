@@ -19,7 +19,7 @@ class FeedbackViewModel(
     private val mutableFeedback = MutableLiveData<List<Feedback>>()
     val feedback: LiveData<List<Feedback>> = mutableFeedback
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     private val mutableProgress = MutableLiveData<Boolean>(false)
     val progress: LiveData<Boolean> = mutableProgress
 

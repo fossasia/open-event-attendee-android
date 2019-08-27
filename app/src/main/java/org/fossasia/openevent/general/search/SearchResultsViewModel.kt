@@ -47,7 +47,7 @@ class SearchResultsViewModel(
     val pagedEvents: LiveData<PagedList<Event>> = mutablePagedEvents
     private val mutableEventTypes = MutableLiveData<List<EventType>>()
     private val mutableMessage = SingleLiveEvent<String>()
-    val message: LiveData<String> = mutableMessage
+    val message: SingleLiveEvent<String> = mutableMessage
     val eventTypes: LiveData<List<EventType>> = mutableEventTypes
     val connection: LiveData<Boolean> = mutableConnectionLiveData
 

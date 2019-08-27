@@ -5,8 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeDao
-import org.fossasia.openevent.general.attendees.AttendeeIdConverter
-import org.fossasia.openevent.general.attendees.ListAttendeeIdConverter
+import org.fossasia.openevent.general.attendees.AttendeeConverter
+import org.fossasia.openevent.general.attendees.ListAttendeeConverter
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.UserDao
@@ -59,7 +59,7 @@ import org.fossasia.openevent.general.ticket.TicketIdConverter
     Settings::class, Proposal::class, Tax::class], version = 9)
 @TypeConverters(EventIdConverter::class, EventTopicConverter::class, EventTypeConverter::class,
     EventSubTopicConverter::class, TicketIdConverter::class, MicroLocationConverter::class, UserIdConverter::class,
-    AttendeeIdConverter::class, ListAttendeeIdConverter::class, SessionTypeConverter::class, TrackConverter::class,
+    AttendeeConverter::class, ListAttendeeConverter::class, SessionTypeConverter::class, TrackConverter::class,
     SpeakersCallConverter::class, ListSpeakerIdConverter::class)
 abstract class OpenEventDatabase : RoomDatabase() {
 

@@ -16,7 +16,6 @@ import org.fossasia.openevent.general.StartupViewModel
 import org.fossasia.openevent.general.about.AboutEventViewModel
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeApi
-import org.fossasia.openevent.general.attendees.AttendeeId
 import org.fossasia.openevent.general.attendees.AttendeeService
 import org.fossasia.openevent.general.attendees.AttendeeViewModel
 import org.fossasia.openevent.general.attendees.forms.CustomForm
@@ -226,7 +225,7 @@ val apiModule = module {
     factory { TicketService(get(), get(), get()) }
     factory { SocialLinksService(get(), get()) }
     factory { AttendeeService(get(), get(), get()) }
-    factory { OrderService(get(), get(), get()) }
+    factory { OrderService(get(), get(), get(), get(), get()) }
     factory { SessionService(get(), get()) }
     factory { NotificationService(get(), get()) }
     factory { FeedbackService(get(), get()) }
@@ -238,7 +237,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { EventsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { StartupViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel {
         EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -253,7 +252,7 @@ val viewModelModule = module {
     viewModel { AboutEventViewModel(get(), get()) }
     viewModel { EventFAQViewModel(get(), get()) }
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
     viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
@@ -313,7 +312,7 @@ val networkModule = module {
             objectMapper, Event::class.java, User::class.java,
             SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
             EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
-            AttendeeId::class.java, Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+            Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
             CustomForm::class.java, EventLocation::class.java, EventType::class.java,
             EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
             Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,

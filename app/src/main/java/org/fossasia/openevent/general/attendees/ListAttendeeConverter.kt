@@ -5,18 +5,18 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-class ListAttendeeIdConverter {
+class ListAttendeeConverter {
 
     @TypeConverter
-    fun fromListAttendeeId(attendeeIdList: List<AttendeeId>): String {
+    fun fromListAttendee(attendees: List<Attendee>): String {
         val objectMapper = ObjectMapper()
-        return objectMapper.writeValueAsString(attendeeIdList)
+        return objectMapper.writeValueAsString(attendees)
     }
 
     @TypeConverter
-    fun toListAttendeeId(attendeeList: String): List<AttendeeId> {
+    fun toListAttendee(attendees: String): List<Attendee> {
         val objectMapper = jacksonObjectMapper()
-        val mapType = object : TypeReference<List<AttendeeId>>() {}
-        return objectMapper.readValue(attendeeList, mapType)
+        val mapType = object : TypeReference<List<Attendee>>() {}
+        return objectMapper.readValue(attendees, mapType)
     }
 }

@@ -18,7 +18,7 @@ class EventFAQViewModel(private val eventService: EventService, private val reso
     private val mutableEventFAQ = MutableLiveData<List<EventFAQ>>()
     val eventFAQ: LiveData<List<EventFAQ>> = mutableEventFAQ
     private val mutableError = SingleLiveEvent<String>()
-    val error: LiveData<String> = mutableError
+    val error: SingleLiveEvent<String> = mutableError
 
     fun loadEventFaq(id: Long) {
         if (id == -1L) {

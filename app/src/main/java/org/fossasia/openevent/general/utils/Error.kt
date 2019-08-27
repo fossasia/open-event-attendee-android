@@ -7,6 +7,7 @@ class Error {
     var title: String? = null
     var detail: String? = null
     var pointer: String? = null
+    var code: String? = null
 
     override fun toString(): String {
 

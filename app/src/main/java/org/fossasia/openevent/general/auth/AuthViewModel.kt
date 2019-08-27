@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import org.fossasia.openevent.general.R
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import org.fossasia.openevent.general.common.SingleLiveEvent
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
@@ -20,10 +21,10 @@ class AuthViewModel(
     private val compositeDisposable = CompositeDisposable()
     private val mutableProgress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> = mutableProgress
-    val mutableStatus = MutableLiveData<Boolean>()
+    val mutableStatus = SingleLiveEvent<Boolean>()
     val isUserExists: LiveData<Boolean> = mutableStatus
-    private val mutableError = MutableLiveData<String>()
-    val error: LiveData<String> = mutableError
+    private val mutableError = SingleLiveEvent<String>()
+    val error: SingleLiveEvent<String> = mutableError
 
     fun checkUser(email: String) {
         if (!network.isNetworkConnected()) {

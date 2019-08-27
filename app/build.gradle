@@ -11,6 +11,7 @@ apply plugin: "com.github.b3er.local.properties"
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
+def PAYPAL_CLIENT_ID= System.getenv('PAYPAL_CLIENT_ID') ?: "YOUR_API_KEY"
 def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.file(SIGNING_KEY_FILE).exists()
 
 android {
@@ -22,8 +23,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 13
-        versionName "0.6.1"
+        versionCode 14
+        versionName "0.7.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -58,6 +59,7 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
             resValue "string",  "FRONTEND_HOST", "eventyay.com"
             if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
                 signingConfig signingConfigs.release
@@ -66,6 +68,7 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
             resValue "string", "FRONTEND_HOST", "open-event-fe.netlify.com"
         }
     }
@@ -182,14 +185,14 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:10.3.0'
+    implementation 'com.stripe:stripe-android:10.3.1'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -215,7 +218,7 @@ dependencies {
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
 
     //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 
     // Paging
     implementation "androidx.paging:paging-runtime:$paging_version"
@@ -231,6 +234,8 @@ dependencies {
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
 
+    //PayPal
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.threeten:threetenbp:1.4.0'

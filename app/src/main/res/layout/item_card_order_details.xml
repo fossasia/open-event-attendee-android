@@ -24,13 +24,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/ticket_width"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:id="@+id/orderDetailCardView"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/ticket_width"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_medium"
+        android:layout_gravity="center_horizontal"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation"
@@ -51,7 +52,7 @@
                 android:layout_height="@dimen/event_details_image"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/layout_margin_medium"
-                android:foreground="?selectableItemBackground"
+                android:background="?selectableItemBackground"
                 android:padding="@dimen/padding_large"
                 android:scaleType="centerCrop" />
 

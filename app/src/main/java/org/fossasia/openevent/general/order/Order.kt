@@ -10,7 +10,7 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 import io.reactivex.annotations.NonNull
-import org.fossasia.openevent.general.attendees.AttendeeId
+import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.event.EventId
 
 @Type("order")
@@ -39,9 +39,10 @@ data class Order(
     val isBillingEnabled: Boolean = false,
     val taxBusinessInfo: String? = null,
     val company: String? = null,
+    var isExpired: Boolean? = null,
     @ColumnInfo(index = true)
     @Relationship("event")
     var event: EventId? = null,
     @Relationship("attendees")
-    var attendees: List<AttendeeId> = emptyList()
+    var attendees: List<Attendee> = emptyList()
 )
