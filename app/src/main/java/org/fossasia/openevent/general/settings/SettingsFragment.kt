@@ -142,6 +142,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PreferenceChangeListener {
             return true
         }
         if (preference?.key == getString(R.string.key_privacy)) {
+
             Utils.openUrl(requireContext(), PRIVACY_LINK)
             return true
         }

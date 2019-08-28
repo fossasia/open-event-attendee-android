@@ -61,6 +61,7 @@ class EventUtilsTest {
 
     @Test
     fun `should get formatted date and time without year`() {
+
         val event = getEvent()
         val localizedDateTime = getEventDateTime(event.startsAt, event.timezone)
         assertEquals("""
