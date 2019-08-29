@@ -77,6 +77,7 @@ import kotlinx.android.synthetic.main.fragment_attendee.view.countryPicker
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingInfoContainer
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingCity
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingCompany
+import kotlinx.android.synthetic.main.fragment_attendee.view.billingState
 import kotlinx.android.synthetic.main.fragment_attendee.view.taxId
 import kotlinx.android.synthetic.main.fragment_attendee.view.billingAddress
 import kotlinx.android.synthetic.main.fragment_attendee.view.firstNameLayout
@@ -745,6 +746,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                 .recipientName("${rootView.firstName.text} ${rootView.lastName.text}")
                 .line1(rootView.billingAddress.text.toString())
                 .city(rootView.billingCity.text.toString())
+                .state(rootView.billingState.text.toString())
                 .postalCode(rootView.billingPostalCode.text.toString())
                 .countryCode(getCountryCodes(rootView.countryPicker.selectedItem.toString()))
             paypalPayment.providedShippingAddress(shippingAddress)
@@ -834,11 +836,12 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
                     else PAYMENT_MODE_FREE
                 val company = rootView.billingCompany.text.toString()
                 val city = rootView.billingCity.text.toString()
+                val state = rootView.billingState.text.toString()
                 val taxId = rootView.taxId.text.toString()
                 val address = rootView.billingAddress.text.toString()
                 val postalCode = rootView.billingPostalCode.text.toString()
                 attendeeViewModel.createAttendees(attendees, country, company, taxId, address,
-                    city, postalCode, paymentOption)
+                    city, postalCode, state, paymentOption)
             } else {
                 rootView.attendeeScrollView.longSnackbar(getString(R.string.invalid_email_address_message))
             }

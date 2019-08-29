@@ -95,6 +95,7 @@ class AttendeeViewModel(
     private var addressForOrder: String = ""
     private var cityForOrder: String = ""
     private var postalCodeForOrder: String = ""
+    private var stateForOrder: String = ""
 
     private var createAttendeeIterations = 0
     var orderIdentifier: String? = null
@@ -213,6 +214,7 @@ class AttendeeViewModel(
         address: String,
         city: String,
         postalCode: String,
+        state: String,
         paymentMode: String
     ) {
         attendeesForOrder.clear()
@@ -222,6 +224,7 @@ class AttendeeViewModel(
         addressForOrder = address
         cityForOrder = city
         postalCodeForOrder = postalCode
+        stateForOrder = state
         paymentModeForOrder = paymentMode
         var isAllDetailsFilled = true
         createAttendeeIterations = 0
@@ -279,7 +282,8 @@ class AttendeeViewModel(
         order = order.copy(attendees = attendeesForOrder, paymentMode = paymentModeForOrder, amount = amount)
         if (billingEnabled) {
             order = order.copy(isBillingEnabled = true, company = companyForOrder, taxBusinessInfo = taxIdForOrder,
-                address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder)
+                address = addressForOrder, city = cityForOrder, zipcode = postalCodeForOrder, country = countryForOrder,
+                state = stateForOrder)
         }
         compositeDisposable += orderService.placeOrder(order)
             .withDefaultSchedulers()
