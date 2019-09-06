@@ -175,7 +175,7 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
 
