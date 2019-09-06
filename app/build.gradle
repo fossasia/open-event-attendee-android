@@ -124,22 +124,22 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.2.0-alpha03"
+    def lifecycle_version = "2.2.0-alpha04"
     def koin_version = "2.0.1"
     def roomVersion = "2.1.0"
-    def ktx_version = "1.0.0"
-    def ktx2_version = "2.0.0"
+    def ktx_version = "1.1.0"
+    def ktx2_version = "2.1.0"
     def nav_version = "2.1.0"
     def anko_version = "0.10.8"
     def paging_version = "2.1.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -149,7 +149,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation 'androidx.preference:preference:1.1.0-rc01'
+    implementation 'androidx.preference:preference:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -175,7 +175,7 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
 
@@ -240,7 +240,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.threeten:threetenbp:1.4.0'
     testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
