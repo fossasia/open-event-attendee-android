@@ -135,7 +135,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
