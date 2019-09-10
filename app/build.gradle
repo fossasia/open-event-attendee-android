@@ -195,7 +195,7 @@ dependencies {
     implementation 'com.stripe:stripe-android:10.4.3'
 
     // QR Code
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.0.2'
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version" // For Kotlin use navigation-fragment-ktx
