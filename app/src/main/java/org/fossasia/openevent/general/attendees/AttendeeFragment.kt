@@ -873,13 +873,13 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     private fun sendToken(card: Card) {
         Stripe(requireContext(), BuildConfig.STRIPE_API_KEY)
             .createToken(card, object : ApiResultCallback<Token> {
-                override fun onSuccess(result: Token) {
-                    val charge = Charge(attendeeViewModel.getId().toInt(), result.id, null)
+                override fun onSuccess(token: Token) {
+                    val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
                     attendeeViewModel.chargeOrder(charge)
                 }
 
-                override fun onError(e: Exception) {
-                    rootView.snackbar(e.localizedMessage.toString())
+                override fun onError(error: Exception) {
+                    rootView.snackbar(error.localizedMessage.toString())
                 }
             })
     }
