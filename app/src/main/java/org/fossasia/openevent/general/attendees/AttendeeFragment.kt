@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.stripe.android.Stripe
-import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
 import com.paypal.android.sdk.payments.PayPalService
@@ -36,6 +35,7 @@ import com.paypal.android.sdk.payments.PayPalPayment
 import com.paypal.android.sdk.payments.ShippingAddress
 import com.paypal.android.sdk.payments.PaymentActivity
 import com.paypal.android.sdk.payments.PaymentConfirmation
+import com.stripe.android.ApiResultCallback
 import java.math.BigDecimal
 import kotlinx.android.synthetic.main.fragment_attendee.view.cvc
 import kotlinx.android.synthetic.main.fragment_attendee.view.email
@@ -871,14 +871,15 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun sendToken(card: Card) {
-        Stripe(requireContext())
-            .createToken(card, BuildConfig.STRIPE_API_KEY, object : TokenCallback {
-                override fun onSuccess(token: Token) {
-                    val charge = Charge(attendeeViewModel.getId().toInt(), token.id, null)
+        Stripe(requireContext(), BuildConfig.STRIPE_API_KEY)
+            .createToken(card, object : ApiResultCallback<Token> {
+                override fun onSuccess(result: Token) {
+                    val charge = Charge(attendeeViewModel.getId().toInt(), result.id, null)
                     attendeeViewModel.chargeOrder(charge)
                 }
-                override fun onError(error: Exception) {
-                    rootView.snackbar(error.localizedMessage.toString())
+
+                override fun onError(e: Exception) {
+                    rootView.snackbar(e.localizedMessage.toString())
                 }
             })
     }
