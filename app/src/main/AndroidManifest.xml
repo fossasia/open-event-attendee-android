@@ -37,6 +37,13 @@
                 <data
                     android:scheme="https"
                     android:host="@string/FRONTEND_HOST"/>
+                <data
+                    android:pathPrefix="/e"/>
+                <data
+                    android:pathPrefix="/reset-password"/>
+                <data
+                    android:pathPrefix="/email"/>
+
             </intent-filter>
         </activity>
         <provider
