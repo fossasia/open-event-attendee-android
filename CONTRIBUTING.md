@@ -51,7 +51,7 @@ Click the “New pull request” button at the top.
 
 Note that FOSSASIA’s repository will be on the left and your repository will be on the right.
 
-Click the green button “Create pull request”. Give a succinct and informative title, in the comment field give a short explanation of the changes and click the green button “Create pull request” again.
+Click the green button “Create pull request”. Give a succinct and informative title. In addition to that in the comment field, give a short explanation of the changes and then click the green button “Create pull request” again.
 
 #### Pulling others’ changes
 Before you make further changes to the repository, you should check that your version is up to date relative to FOSSASIA’s version.
