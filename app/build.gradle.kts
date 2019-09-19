@@ -78,7 +78,7 @@ android {
                 signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
-            buildConfigField("String", "DEFAULT_BASE_URL", "https://open-event-api-dev.herokuapp.com/v1/")
+            buildConfigField("String", "DEFAULT_BASE_URL", "\"https://open-event-api-dev.herokuapp.com/v1/\"")
             buildConfigField("String", "MAPBOX_KEY", "\"$MAPBOX_KEY\"")
             buildConfigField("String", "STRIPE_API_KEY", "\"$STRIPE_API_TOKEN\"")
             buildConfigField("String", "PAYPAL_CLIENT_ID", "\"$PAYPAL_CLIENT_ID\"")
