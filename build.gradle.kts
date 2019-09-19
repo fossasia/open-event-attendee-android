@@ -12,14 +12,17 @@ buildscript {
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${extra.get("KOTLIN_VERSION")}")
-        classpath("android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0")
-        classpath("gradle.plugin.com.github.b3er.local.properties:local-properties-plugin:1.1")
+        classpath(Libs.com_android_tools_build_gradle)
+        classpath(Libs.kotlin_gradle_plugin)
+        classpath(Libs.navigation_safe_args_gradle_plugin)
+        classpath(Libs.local_properties_plugin)
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle.kts files
     }
+}
+plugins {
+    id("de.fayard.buildSrcVersions") version "0.6.1"
 }
 
 allprojects {

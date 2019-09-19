@@ -25,7 +25,7 @@ val kotlin_version = rootProject.extra.get("KOTLIN_VERSION") as String
 
 val STRIPE_API_TOKEN = System.getenv("STRIPE_API_TOKEN") ?: "YOUR_API_KEY"
 val MAPBOX_KEY = System.getenv("MAPBOX_KEY") ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
-val PAYPAL_CLIENT_ID= System.getenv("PAYPAL_CLIENT_ID") ?: "YOUR_API_KEY"
+val PAYPAL_CLIENT_ID = System.getenv("PAYPAL_CLIENT_ID") ?: "YOUR_API_KEY"
 val LOCAL_KEY_PRESENT = project.hasProperty("SIGNING_KEY_FILE") && rootProject.file(local["SIGNING_KEY_FILE"]!!).exists()
 
 
@@ -137,113 +137,113 @@ repositories {
 dependencies {
 
     implementation(fileTree("dir" to "libs", "include" to listOf("*.jar")))
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.1.0-beta04")
-    implementation("com.google.android.material:material:1.1.0-alpha10")
-    implementation("androidx.browser:browser:1.0.0")
-    implementation("androidx.exifinterface:exifinterface:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0-alpha04")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha04")
-    implementation("androidx.lifecycle:lifecycle-reactivestreams:2.2.0-alpha04")
-    implementation("androidx.room:room-runtime:2.1.0")
-    implementation("androidx.room:room-rxjava2:2.1.0")
-    kapt("androidx.room:room-compiler:2.1.0")
-    testImplementation("androidx.room:room-testing:2.1.0")
-    implementation("androidx.preference:preference:1.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
+    implementation(Libs.multidex)
+    implementation(Libs.appcompat)
+    implementation(Libs.constraintlayout)
+    implementation(Libs.cardview)
+    implementation(Libs.recyclerview)
+    implementation(Libs.material)
+    implementation(Libs.browser)
+    implementation(Libs.exifinterface)
+    implementation(Libs.lifecycle_extensions)
+    implementation(Libs.lifecycle_common_java8)
+    implementation(Libs.lifecycle_reactivestreams)
+    implementation(Libs.room_runtime)
+    implementation(Libs.room_rxjava2)
+    kapt(Libs.room_compiler)
+    testImplementation(Libs.room_testing)
+    implementation(Libs.preference)
+    implementation(Libs.kotlin_stdlib_jdk7)
 
     // KTX
-    implementation("androidx.core:core-ktx:1.1.0")
-    implementation("androidx.fragment:fragment-ktx:1.1.0")
-    implementation("androidx.collection:collection-ktx:1.1.0")
-    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:2.1.0")
+    implementation(Libs.core_ktx)
+    implementation(Libs.fragment_ktx)
+    implementation(Libs.collection_ktx)
+    implementation(Libs.lifecycle_reactivestreams_ktx)
 
     // Koin
-    implementation("org.koin:koin-android:2.0.1")
-    implementation("org.koin:koin-androidx-scope:2.0.1")
-    implementation("org.koin:koin-androidx-viewmodel:2.0.1")
+    implementation(Libs.koin_android)
+    implementation(Libs.koin_androidx_scope)
+    implementation(Libs.koin_androidx_viewmodel)
 
     // Location Play Service
-    "playStoreImplementation"("com.google.android.gms:play-services-location:17.0.0")
+    "playStoreImplementation"(Libs.play_services_location)
 
     //Smart Auth Play Service
-    "playStoreImplementation"("com.google.android.gms:play-services-auth:17.0.0")
+    "playStoreImplementation"(Libs.play_services_auth)
 
     // Timber
-    implementation("com.jakewharton.timber:timber:4.7.1")
-    implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
+    implementation(Libs.timber)
+    implementation(Libs.threetenabp)
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6")
-    implementation("com.github.jasminb:jsonapi-converter:0.9")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.2.0")
-    implementation("com.squareup.retrofit2:retrofit:2.6.1")
-    implementation("com.squareup.retrofit2:converter-jackson:2.6.1")
+    implementation(Libs.jackson_module_kotlin)
+    implementation(Libs.jsonapi_converter)
+    implementation(Libs.logging_interceptor)
+    implementation(Libs.retrofit)
+    implementation(Libs.converter_jackson)
 
     // Cards Shimmer Animation
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation(Libs.shimmer)
 
     // RxJava
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
-    implementation("io.reactivex.rxjava2:rxjava:2.2.12")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.6.1")
+    implementation(Libs.rxandroid)
+    implementation(Libs.rxkotlin)
+    implementation(Libs.rxjava)
+    implementation(Libs.adapter_rxjava2)
 
     // Picasso
-    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation(Libs.picasso)
 
     // Stripe
-    implementation("com.stripe:stripe-android:11.1.1")
+    implementation(Libs.stripe_android)
 
     // QR Code
-    implementation("com.journeyapps:zxing-android-embedded:3.6.0")
+    implementation(Libs.zxing_android_embedded)
 
     //Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.1.0") // For Kotlin use navigation-fragment-ktx
-    implementation("androidx.navigation:navigation-ui-ktx:2.1.0") // For Kotlin use navigation-ui-ktx
+    implementation(Libs.navigation_fragment_ktx) // For Kotlin use navigation-fragment-ktx
+    implementation(Libs.navigation_ui_ktx) // For Kotlin use navigation-ui-ktx
 
     //Anko
-    implementation("org.jetbrains.anko:anko-commons:0.10.8")
-    implementation("org.jetbrains.anko:anko-design:0.10.8")
+    implementation(Libs.anko_commons)
+    implementation(Libs.anko_design)
 
     //Mapbox java sdk
-    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0")
+    implementation(Libs.mapbox_sdk_services)
 
     // SimpleCropView
-    implementation("com.isseiaoki:simplecropview:1.1.8")
+    implementation(Libs.simplecropview)
 
     // Stetho
-    debugImplementation("com.facebook.stetho:stetho:1.5.1")
-    debugImplementation("com.facebook.stetho:stetho-okhttp3:1.5.1")
-    releaseImplementation("com.github.iamareebjamal:stetho-noop:1.2.1")
-    testImplementation("com.github.iamareebjamal:stetho-noop:1.2.1")
+    debugImplementation(Libs.stetho)
+    debugImplementation(Libs.stetho_okhttp3)
+    releaseImplementation(Libs.stetho_noop)
+    testImplementation(Libs.stetho_noop)
 
     //LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-beta-3")
+    debugImplementation(Libs.leakcanary_android)
 
     // Paging
-    implementation("androidx.paging:paging-runtime:2.1.0")
-    implementation("androidx.paging:paging-rxjava2:2.1.0")
+    implementation(Libs.paging_runtime)
+    implementation(Libs.paging_rxjava2)
 
     // Searchable Spinner
-    implementation("com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1")
+    implementation(Libs.searchablespinnerlibrary)
 
     //ExpandableTextView
-    implementation("at.blogc:expandabletextview:1.0.5")
+    implementation(Libs.expandabletextview)
 
     //ExpandableView
-    implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")
+    implementation(Libs.expandablelayout)
 
 
     //PayPal
-    implementation("com.paypal.sdk:paypal-android-sdk:2.16.0")
+    implementation(Libs.paypal_android_sdk)
 
-    testImplementation("junit:junit:4.12")
-    testImplementation("org.threeten:threetenbp:1.4.0")
-    testImplementation("org.koin:koin-test:2.0.1")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    testImplementation(Libs.junit)
+    testImplementation(Libs.threetenbp)
+    testImplementation(Libs.koin_test)
+    testImplementation(Libs.core_testing)
+    androidTestImplementation(Libs.androidx_test_runner)
+    androidTestImplementation(Libs.espresso_core)
 }
