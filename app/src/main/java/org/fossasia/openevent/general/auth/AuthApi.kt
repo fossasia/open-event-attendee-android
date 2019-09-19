@@ -7,17 +7,21 @@ import org.fossasia.openevent.general.auth.change.ChangeRequestTokenResponse
 import org.fossasia.openevent.general.auth.forgot.Email
 import org.fossasia.openevent.general.auth.forgot.RequestToken
 import org.fossasia.openevent.general.auth.forgot.RequestTokenResponse
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.DELETE
 
 interface AuthApi {
 
-    @POST("../auth/session")
+    @POST("auth/login")
     fun login(@Body login: Login): Single<LoginResponse>
+
+    @POST("/auth/token/refresh")
+    fun refreshToken(): Response<LoginResponse>
 
     @GET("users/{id}")
     fun getProfile(@Path("id") id: Long): Single<User>

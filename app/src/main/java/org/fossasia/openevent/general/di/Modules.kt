@@ -30,6 +30,7 @@ import org.fossasia.openevent.general.auth.SignUp
 import org.fossasia.openevent.general.auth.SignUpViewModel
 import org.fossasia.openevent.general.auth.User
 import org.fossasia.openevent.general.auth.AuthViewModel
+import org.fossasia.openevent.general.auth.RefreshTokenService
 import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.event.Event
@@ -71,6 +72,7 @@ import org.fossasia.openevent.general.search.location.LocationService
 import org.fossasia.openevent.general.search.type.SearchTypeViewModel
 import org.fossasia.openevent.general.search.location.LocationServiceImpl
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
+import org.fossasia.openevent.general.auth.TokenAuthenticator
 import org.fossasia.openevent.general.connectivity.MutableConnectionLiveData
 import org.fossasia.openevent.general.discount.DiscountApi
 import org.fossasia.openevent.general.discount.DiscountCode
@@ -231,6 +233,7 @@ val apiModule = module {
     factory { FeedbackService(get(), get()) }
     factory { SettingsService(get(), get()) }
     factory { TaxService(get(), get()) }
+    factory { RefreshTokenService() }
 }
 
 val viewModelModule = module {
@@ -296,6 +299,7 @@ val networkModule = module {
             .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
             .addInterceptor(HostSelectionInterceptor(get()))
             .addInterceptor(RequestAuthenticator(get()))
+            .authenticator(TokenAuthenticator())
             .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
