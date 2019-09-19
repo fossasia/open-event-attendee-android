@@ -20,13 +20,7 @@ if (localProperties.exists()) {
 
 val KEYSTORE_FILE = rootProject.extra.get("KEYSTORE_FILE") as File
 val TRAVIS_BUILD = rootProject.extra.get("TRAVIS_BUILD") as Boolean
-
-val kotlin_version = rootProject.extra.get("KOTLIN_VERSION") as String
-
-val STRIPE_API_TOKEN = System.getenv("STRIPE_API_TOKEN") ?: "YOUR_API_KEY"
-val MAPBOX_KEY = System.getenv("MAPBOX_KEY") ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
-val PAYPAL_CLIENT_ID = System.getenv("PAYPAL_CLIENT_ID") ?: "YOUR_API_KEY"
-val LOCAL_KEY_PRESENT = project.hasProperty("SIGNING_KEY_FILE") && rootProject.file(local["SIGNING_KEY_FILE"]!!).exists()
+val LOCAL_KEY_PRESENT = project.hasProperty(Strings.SIGNING_KEY_FILE) && rootProject.file(local[Strings.SIGNING_KEY_FILE]!!).exists()
 
 
 android {
@@ -51,16 +45,16 @@ android {
         if (TRAVIS_BUILD) {
             create("release") {
                 storeFile = KEYSTORE_FILE
-                storePassword = System.getenv("STORE_PASS")
-                keyAlias = System.getenv("ALIAS")
-                keyPassword = System.getenv("KEY_PASS")
+                storePassword = System.getenv(Strings.STORE_PASS)
+                keyAlias = System.getenv(Strings.ALIAS)
+                keyPassword = System.getenv(Strings.KEY_PASS)
             }
         } else if (LOCAL_KEY_PRESENT) {
             create("release") {
-                storeFile = rootProject.file(local.getProperty("SIGNING_KEY_FILE"))
-                storePassword = local.getProperty("STORE_PASS")
-                keyAlias = local.getProperty("ALIAS")
-                keyPassword = local.getProperty("KEY_PASS")
+                storeFile = rootProject.file(local.getProperty(Strings.SIGNING_KEY_FILE))
+                storePassword = local.getProperty(Strings.STORE_PASS)
+                keyAlias = local.getProperty(Strings.ALIAS)
+                keyPassword = local.getProperty(Strings.KEY_PASS)
             }
         }
     }
@@ -69,20 +63,20 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            buildConfigField("String", "DEFAULT_BASE_URL", "\"https://api.eventyay.com/v1/\"")
-            buildConfigField("String", "MAPBOX_KEY", "\"$MAPBOX_KEY\"")
-            buildConfigField("String", "STRIPE_API_KEY", "\"$STRIPE_API_TOKEN\"")
-            buildConfigField("String", "PAYPAL_CLIENT_ID", "\"$PAYPAL_CLIENT_ID\"")
-            resValue("string",  "FRONTEND_HOST", "eventyay.com")
+            buildConfigField("String", Strings.DEFAULT_BASE_URL, Constants.RELEASE_DEFAULT_BASE_URL)
+            buildConfigField("String", Strings.MAPBOX_KEY, Constants.MAPBOX_KEY)
+            buildConfigField("String", Strings.STRIPE_API_KEY, Constants.STRIPE_API_TOKEN)
+            buildConfigField("String", Strings.PAYPAL_CLIENT_ID, Constants.PAYPAL_CLIENT_ID)
+            resValue("string",  Strings.FRONTEND_HOST, Constants.RELEASE_FRONTEND_HOST)
             if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
                 signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
-            buildConfigField("String", "DEFAULT_BASE_URL", "\"https://open-event-api-dev.herokuapp.com/v1/\"")
-            buildConfigField("String", "MAPBOX_KEY", "\"$MAPBOX_KEY\"")
-            buildConfigField("String", "STRIPE_API_KEY", "\"$STRIPE_API_TOKEN\"")
-            buildConfigField("String", "PAYPAL_CLIENT_ID", "\"$PAYPAL_CLIENT_ID\"")
-            resValue("string", "FRONTEND_HOST", "open-event-fe.netlify.com")
+            buildConfigField("String", Strings.DEFAULT_BASE_URL, Constants.DEBUG_DEFAULT_BASE_URL)
+            buildConfigField("String", Strings.MAPBOX_KEY, Constants.MAPBOX_KEY)
+            buildConfigField("String", Strings.STRIPE_API_KEY, Constants.STRIPE_API_TOKEN)
+            buildConfigField("String", Strings.PAYPAL_CLIENT_ID, Constants.PAYPAL_CLIENT_ID)
+            resValue("string", Strings.FRONTEND_HOST, Constants.DEBUG_FRONTEND_HOST)
         }
     }
 
