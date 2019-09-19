@@ -128,6 +128,8 @@ repositories {
     mavenCentral()
 }
 
+val playStoreImplementation by configurations
+
 dependencies {
 
     implementation(fileTree("dir" to "libs", "include" to listOf("*.jar")))
@@ -161,10 +163,10 @@ dependencies {
     implementation(Libs.koin_androidx_viewmodel)
 
     // Location Play Service
-    "playStoreImplementation"(Libs.play_services_location)
+    playStoreImplementation(Libs.play_services_location)
 
     //Smart Auth Play Service
-    "playStoreImplementation"(Libs.play_services_auth)
+    playStoreImplementation(Libs.play_services_auth)
 
     // Timber
     implementation(Libs.timber)
