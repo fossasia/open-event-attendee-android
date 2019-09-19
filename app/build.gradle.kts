@@ -3,9 +3,7 @@ import java.util.Properties
 
 plugins {
     id("com.diffplug.gradle.spotless") version "3.24.2"
-
     id("com.android.application")
-    id("com.github.b3er.local.properties")
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-android-extensions")
