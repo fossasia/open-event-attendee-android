@@ -111,7 +111,7 @@ class ExpiredOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
-            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, status: String?, event: Event, order: Order) {
+            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, event: Event, order: Order) {
                 findNavController(rootView).navigate(ExpiredOrderFragmentDirections
                     .actionOrderExpiredToOrderDetails(eventID, orderIdentifier, orderId))
             }

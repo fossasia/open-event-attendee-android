@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -159,15 +158,15 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
-            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, status: String?, event: Event, order: Order) {
-                if (status.equals("completed") || status.equals("placed")) {
+            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, event: Event, order: Order) {
+                if (order.status.equals("completed") || order.status.equals("placed")) {
                     findNavController(rootView).navigate(OrdersUnderUserFragmentDirections
                             .actionOrderUserToOrderDetails(eventID, orderIdentifier, orderId))
-                } else if (status.equals("cancelled")) {
+                } else if (order.status.equals("cancelled")) {
                     rootView.snackbar("Event is Cancelled")
-                } else if (status.equals("expired")) {
+                } else if (order.status.equals("expired")) {
                     rootView.snackbar("Event is Expired")
-                } else if (status.equals("pending")) {
+                } else if (order.status.equals("pending")) {
                     if (event.canPayByPaypal)
                     {
                         pendingOrder = order
@@ -218,7 +217,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ticketIdAndQty.let { ticketIdAndQty->
             order.attendees.forEach {
 
-                ticketIdAndQty.add(Triple(it.ticketId!!.toInt(),order.attendees.size,fl))
+                ticketIdAndQty.add(Triple(it.id.toInt(),order.attendees.size,fl))
 
             }
         }

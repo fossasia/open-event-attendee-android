@@ -37,7 +37,7 @@ class OrdersPagedListAdapter : PagedListAdapter<Pair<Event, Order>, OrdersViewHo
     }
 
     interface OrderClickListener {
-        fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, status: String?, event: Event, order: Order)
+        fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, event: Event, order: Order)
     }
 }
 
