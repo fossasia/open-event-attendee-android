@@ -317,7 +317,7 @@ class AttendeeViewModel(
             })
     }
 
-    fun sendPaypalConfirm(paymentId: String) {
+    fun sendPaypalConfirm(paymentId: String) { 
         pendingOrder.value?.let { order ->
             compositeDisposable += orderService.verifyPaypalPayment(order.identifier.toString(), paymentId)
                 .withDefaultSchedulers()

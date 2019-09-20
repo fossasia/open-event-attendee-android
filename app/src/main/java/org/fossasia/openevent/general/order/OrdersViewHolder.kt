@@ -29,7 +29,7 @@ class OrdersViewHolder(private val binding: ItemCardOrderBinding) : RecyclerView
         }
 
         itemView.setOnClickListener {
-            listener?.onClick(event.id, order.identifier ?: "", order.id)
+            listener?.onClick(event.id, order.identifier ?: "", order.id,order.status,event,order)
         }
     }
 }

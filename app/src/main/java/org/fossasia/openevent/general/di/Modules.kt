@@ -254,7 +254,7 @@ val viewModelModule = module {
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
-    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get(),get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
