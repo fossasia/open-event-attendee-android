@@ -1,8 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    extra.set("KEYSTORE_FILE", rootProject.file("scripts/key.jks"))
-    extra.set("TRAVIS_BUILD", System.getenv("TRAVIS") == "true" && (extra.get("KEYSTORE_FILE") as File).exists())
+    extra.set(Strings.KEYSTORE_FILE , rootProject.file("scripts/key.jks"))
+    val keystoreFile = extra.get(Strings.KEYSTORE_FILE)
+    if (keystoreFile is File) {
+        extra.set(Strings.TRAVIS_BUILD, keystoreFile.exists() && System.getenv("TRAVIS") == "true")
+    }
 
     repositories {
         google()

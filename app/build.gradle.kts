@@ -16,10 +16,22 @@ if (localProperties.exists()) {
     localProperties.inputStream().use { local.load(it) }
 }
 
-val KEYSTORE_FILE = rootProject.extra.get("KEYSTORE_FILE") as File
-val TRAVIS_BUILD = rootProject.extra.get("TRAVIS_BUILD") as Boolean
-val LOCAL_KEY_PRESENT = project.hasProperty(Strings.SIGNING_KEY_FILE) && rootProject.file(local[Strings.SIGNING_KEY_FILE]!!).exists()
+lateinit var KEYSTORE_FILE: File
+var TRAVIS_BUILD: Boolean = false
+val LOCAL_KEY_PRESENT = project.hasProperty(Strings.SIGNING_KEY_FILE)
+    && rootProject.file(local.getProperty(Strings.SIGNING_KEY_FILE)).exists()
 
+rootProject.extra.get(Strings.KEYSTORE_FILE).let {
+    if (it is File) {
+        KEYSTORE_FILE = it
+    }
+}
+
+rootProject.extra.get(Strings.TRAVIS_BUILD).let {
+    if (it is Boolean) {
+        TRAVIS_BUILD = it
+    }
+}
 
 android {
     dataBinding.isEnabled = true
@@ -109,8 +121,9 @@ android {
         cruncherEnabled = false
     }
     kotlinOptions {
-        val options = this as KotlinJvmOptions
-        options.jvmTarget = "1.8"
+        if (this is KotlinJvmOptions) {
+            this.jvmTarget = "1.8"
+        }
     }
 }
 

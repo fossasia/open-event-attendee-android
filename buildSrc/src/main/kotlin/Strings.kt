@@ -8,4 +8,6 @@ object Strings {
     const val STORE_PASS = "STORE_PASS"
     const val ALIAS = "ALIAS"
     const val KEY_PASS = "KEY_PASS"
+    const val KEYSTORE_FILE = "KEYSTORE_FILE"
+    const val TRAVIS_BUILD = "TRAVIS_BUILD"
 }
