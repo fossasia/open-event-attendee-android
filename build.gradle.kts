@@ -25,7 +25,6 @@ buildscript {
 plugins {
     id("de.fayard.buildSrcVersions") version "0.6.1"
 }
-
 allprojects {
     repositories {
         google()

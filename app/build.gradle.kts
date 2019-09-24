@@ -243,7 +243,6 @@ dependencies {
     //ExpandableView
     implementation(Libs.expandablelayout)
 
-
     //PayPal
     implementation(Libs.paypal_android_sdk)
 
