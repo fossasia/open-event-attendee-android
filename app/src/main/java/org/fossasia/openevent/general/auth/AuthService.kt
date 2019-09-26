@@ -24,12 +24,12 @@ class AuthService(
     private val eventApi: EventApi
 ) {
     fun login(username: String, password: String): Single<LoginResponse> {
-        if (username.isEmpty() || password.isEmpty())
-            throw IllegalArgumentException("Username or password cannot be empty")
+        require(!(username.isEmpty() || password.isEmpty())) { "Username or password cannot be empty" }
 
         return authApi.login(Login(username, password))
                 .map {
-                    authHolder.token = it.accessToken
+                    authHolder.accessToken = it.accessToken
+                    authHolder.refreshToken = it.refreshToken
                     it
                 }
     }
@@ -66,7 +66,8 @@ class AuthService(
 
     fun logout(): Completable {
         return Completable.fromAction {
-            authHolder.token = null
+            authHolder.accessToken = null
+            authHolder.refreshToken = null
             userDao.deleteUser(authHolder.getId())
             orderDao.deleteAllOrders()
             attendeeDao.deleteAllAttendees()
