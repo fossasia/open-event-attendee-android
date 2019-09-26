@@ -61,9 +61,7 @@ import java.util.Currency
 const val ORDERS_FRAGMENT = "ordersFragment"
 private const val PAYPAL_REQUEST_CODE = 401
 
-
 class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
-
 
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
@@ -73,7 +71,6 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
     private lateinit var pendingOrder: Order
     private var ticketIdAndQty = ArrayList<Triple<Int, Int, Float>>()
 
-
     override fun onStart() {
         super.onStart()
         if (!ordersUnderUserVM.isLoggedIn()) {
@@ -82,9 +79,9 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_orders_under_user, container, false)
         setToolbar(activity, show = false)
@@ -179,7 +176,6 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                     }
                 }
             }
-
         }
         ordersPagedListAdapter.setListener(recyclerViewClickListener)
 
@@ -207,11 +203,14 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
     private fun navigateToAttendeeFragment(event: Event, order: Order) {
 
         getTicketIdAndQty(event, order, 0F)
-        val ticketIdAndQtyWrapper = TicketIdAndQtyWrapper(ticketIdAndQty)
-        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections.actionOrderUserToAttendee(event.id, ticketIdAndQtyWrapper, event.paymentCurrency, order.amount, 0F))
-
+        val ticketAndQtyWrapper = TicketIdAndQtyWrapper(ticketIdAndQty)
+        findNavController(rootView)
+                .navigate(OrdersUnderUserFragmentDirections
+                        .actionOrderUserToAttendee(event.id,
+                                ticketAndQtyWrapper,
+                                event.paymentCurrency, order.amount,
+                                0F))
     }
-
 
     private fun getTicketIdAndQty(event: Event, order: Order, fl: Float) {
 
@@ -219,11 +218,8 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             order.attendees.forEach {
 
                 ticketIdAndQty.add(Triple(it.id.toInt(), order.attendees.size, fl))
-
             }
         }
-
-
     }
 
     private fun startPaypalPayment(event: Event, order: Order) {
@@ -245,8 +241,6 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, paypalPayment)
         startActivityForResult(intent, PAYPAL_REQUEST_CODE)
-
-
     }
 
     private fun addShippingAddress(paypalPayment: PayPalPayment, event: Event, order: Order) {
