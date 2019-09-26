@@ -148,7 +148,7 @@ class EventService(
         }
 
     fun removeFavorite(favoriteEvent: FavoriteEvent, event: Event): Completable =
-        favoriteEventApi.removeFavorite(favoriteEvent.id).andThen {
+        favoriteEventApi.removeFavorite(event.id).andThen {
             event.favorite = false
             event.favoriteEventId = null
             eventDao.insertEvent(event)
