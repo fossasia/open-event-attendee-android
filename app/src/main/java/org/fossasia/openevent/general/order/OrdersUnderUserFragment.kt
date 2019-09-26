@@ -17,7 +17,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.Navigation.findNavController
-import com.paypal.android.sdk.payments.*
+import com.paypal.android.sdk.payments.PayPalService
+import com.paypal.android.sdk.payments.PayPalConfiguration
+import com.paypal.android.sdk.payments.PayPalPayment
+import com.paypal.android.sdk.payments.ShippingAddress
+import com.paypal.android.sdk.payments.PaymentActivity
+import com.paypal.android.sdk.payments.PaymentConfirmation
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
@@ -60,13 +65,12 @@ private const val PAYPAL_REQUEST_CODE = 401
 class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
 
-
     private lateinit var rootView: View
     private val ordersUnderUserVM by viewModel<OrdersUnderUserViewModel>()
     private val ordersPagedListAdapter = OrdersPagedListAdapter()
     private val mutableMessage = SingleLiveEvent<String>()
-    val paypalMessage:LiveData<String> = mutableMessage
-    private lateinit var pendingOrder:Order
+    val paypalMessage: LiveData<String> = mutableMessage
+    private lateinit var pendingOrder: Order
     private var ticketIdAndQty = ArrayList<Triple<Int, Int, Float>>()
 
 
@@ -167,14 +171,11 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                 } else if (order.status.equals("expired")) {
                     rootView.snackbar("Event is Expired")
                 } else if (order.status.equals("pending")) {
-                    if (event.canPayByPaypal)
-                    {
+                    if (event.canPayByPaypal) {
                         pendingOrder = order
-                        startPaypalPayment(event,order)
-                    }
-                    else if(event.canPayByStripe)
-                    {
-                        navigateToAttendeeFragment(event,order)
+                        startPaypalPayment(event, order)
+                    } else if (event.canPayByStripe) {
+                        navigateToAttendeeFragment(event, order)
                     }
                 }
             }
@@ -205,19 +206,19 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     private fun navigateToAttendeeFragment(event: Event, order: Order) {
 
-         getTicketIdAndQty(event,order,0F)
+        getTicketIdAndQty(event, order, 0F)
         val ticketIdAndQtyWrapper = TicketIdAndQtyWrapper(ticketIdAndQty)
-        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections.actionOrderUserToAttendee(event.id,ticketIdAndQtyWrapper,event.paymentCurrency,order.amount,0F))
+        findNavController(rootView).navigate(OrdersUnderUserFragmentDirections.actionOrderUserToAttendee(event.id, ticketIdAndQtyWrapper, event.paymentCurrency, order.amount, 0F))
 
     }
 
 
     private fun getTicketIdAndQty(event: Event, order: Order, fl: Float) {
 
-        ticketIdAndQty.let { ticketIdAndQty->
+        ticketIdAndQty.let { ticketIdAndQty ->
             order.attendees.forEach {
 
-                ticketIdAndQty.add(Triple(it.id.toInt(),order.attendees.size,fl))
+                ticketIdAndQty.add(Triple(it.id.toInt(), order.attendees.size, fl))
 
             }
         }
@@ -236,10 +237,10 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         paypalIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
         activity?.startService(paypalIntent)
 
-        val paypalPayment = paypalThingsToBuy(PayPalPayment.PAYMENT_INTENT_SALE,order,event)
-        val payeeEmail = event.paypalEmail?:" "
+        val paypalPayment = paypalThingsToBuy(PayPalPayment.PAYMENT_INTENT_SALE, order, event)
+        val payeeEmail = event.paypalEmail ?: " "
         paypalPayment.payeeEmail(payeeEmail)
-        addShippingAddress(paypalPayment,event,order)
+        addShippingAddress(paypalPayment, event, order)
         val intent = Intent(activity, PaymentActivity::class.java)
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, paypalPayment)
@@ -281,7 +282,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                     data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
             if (paymentConfirm != null) {
                 val paymentId = paymentConfirm.proofOfPayment.paymentId
-                ordersUnderUserVM.sendPaypalConfirm(paymentId,pendingOrder)
+                ordersUnderUserVM.sendPaypalConfirm(paymentId, pendingOrder)
             }
         }
     }
