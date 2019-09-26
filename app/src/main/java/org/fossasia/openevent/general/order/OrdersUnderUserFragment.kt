@@ -56,7 +56,7 @@ import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import java.math.BigDecimal
-import java.util.*
+import java.util.Currency
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 private const val PAYPAL_REQUEST_CODE = 401
