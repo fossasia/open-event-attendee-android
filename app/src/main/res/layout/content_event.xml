@@ -565,7 +565,7 @@
                     android:layout_marginTop="@dimen/layout_margin_medium"
                     android:layout_marginBottom="@dimen/layout_margin_large"
                     android:textColor="@color/colorAccent"
-                    android:text="@string/write_feedback" />
+                    android:text="@string/submit_feedback" />
             </LinearLayout>
 
 

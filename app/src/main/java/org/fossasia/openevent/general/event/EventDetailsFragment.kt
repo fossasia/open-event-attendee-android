@@ -61,7 +61,6 @@ import kotlinx.android.synthetic.main.fragment_event.view.eventErrorCard
 import kotlinx.android.synthetic.main.fragment_event.view.container
 import kotlinx.android.synthetic.main.content_fetching_event_error.view.retry
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedback
-import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackTextInputLayout
 import kotlinx.android.synthetic.main.dialog_feedback.view.feedbackrating
 import org.fossasia.openevent.general.utils.EVENT_IDENTIFIER
 import org.fossasia.openevent.general.R
@@ -748,17 +747,9 @@ class EventDetailsFragment : Fragment() {
             }
 
             .show()
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
         layout.feedback.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
-
-                    if (layout.feedback.text.toString().isNotEmpty()) {
-                        layout.feedbackTextInputLayout.error = null
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-                        layout.feedbackTextInputLayout.isErrorEnabled = false
-                    } else {
-                        layout.feedbackTextInputLayout.error = getString(R.string.cant_be_empty)
-                    }
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }

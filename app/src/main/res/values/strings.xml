@@ -357,7 +357,7 @@
     <string name="and_i_m_up_for">And I\'m up for</string>
     <string name="what_type">What Sounds good?</string>
     <string name="feedback">Feedback</string>
-    <string name="write_feedback">Write a feedback</string>
+    <string name="write_feedback">Write a feedback (optional)</string>
     <string name="submit">Submit</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="feedback_submitted">Feedback submitted Successfully</string>
