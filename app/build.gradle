@@ -1,5 +1,5 @@
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.24.2"
+    id "com.diffplug.gradle.spotless" version "3.24.3"
 }
 
 apply plugin: 'com.android.application'
@@ -124,7 +124,7 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.2.0-alpha04"
+    def lifecycle_version = "2.2.0-alpha05"
     def koin_version = "2.0.1"
     def roomVersion = "2.1.0"
     def ktx_version = "1.1.0"
@@ -176,8 +176,8 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.6.2'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
@@ -186,13 +186,13 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:11.1.1'
+    implementation 'com.stripe:stripe-android:11.1.4'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -206,7 +206,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //Mapbox java sdk
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.9.0'
 
     // SimpleCropView
     implementation 'com.isseiaoki:simplecropview:1.1.8'
