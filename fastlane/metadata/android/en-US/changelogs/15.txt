@@ -1,0 +1,12 @@
+**v0.8.0:**
+🚀 Features and Enhancements
+
+- Enable PayPal payment option
+- Add order status information
+
+🐛 Bug Fixes
+
+- Fix app link intent issue
+- Fix favorite events
+- Fix verification status for free tickets
+- Some UI fixes
