@@ -87,7 +87,6 @@ import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.util.Currency
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
@@ -683,7 +682,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun loadTicketFragment() {
-        val currency = Currency.getInstance(currentEvent?.paymentCurrency ?: "USD").symbol
+        val currency = currentEvent?.paymentCurrency ?: "USD"
         currentEvent?.let {
             findNavController(rootView).navigate(EventDetailsFragmentDirections
                 .actionEventDetailsToTickets(it.id, currency))

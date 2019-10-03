@@ -1,7 +1,6 @@
 package org.fossasia.openevent.general.order
 
 import io.reactivex.Single
-import org.fossasia.openevent.general.attendees.Attendee
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -24,14 +23,11 @@ interface OrderApi {
         "\"placed\",\"pending\"]}]&include=event,attendees&fields[attendees]=id")
         fun ordersUnderUser(@Path("userId") userId: Long): Single<List<Order>>
 
-    @GET("/v1/users/{userId}/orders?include=event,attendees&fields[attendees]=id")
+    @GET("/v1/users/{userId}/orders?include=event,attendees")
     fun ordersUnderUserPaged(
         @Path("userId") userId: Long,
         @Query("filter") filter: String,
         @Query("page[number]") page: Int,
         @Query("page[size]") pageSize: Int = 5
     ): Single<List<Order>>
-
-    @GET("/v1/orders/{orderIdentifier}/attendees")
-    fun attendeesUnderOrder(@Path("orderIdentifier") orderIdentifier: String): Single<List<Attendee>>
 }

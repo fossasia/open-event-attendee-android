@@ -22,6 +22,10 @@
         android:background="?selectableItemBackground"
         android:src="@drawable/ic_filter" />
 </androidx.appcompat.widget.Toolbar>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <androidx.core.widget.NestedScrollView
     android:id="@+id/ordersNestedScrollView"
     android:layout_width="match_parent"
@@ -126,4 +130,5 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

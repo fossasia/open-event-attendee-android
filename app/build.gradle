@@ -1,5 +1,5 @@
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.24.2"
+    id "com.diffplug.gradle.spotless" version "3.24.3"
 }
 
 apply plugin: 'com.android.application'
@@ -11,6 +11,7 @@ apply plugin: "com.github.b3er.local.properties"
 
 def STRIPE_API_TOKEN = System.getenv('STRIPE_API_TOKEN') ?: "YOUR_API_KEY"
 def MAPBOX_KEY = System.getenv('MAPBOX_KEY') ?: "pk.eyJ1IjoiYW5nbWFzMSIsImEiOiJjanNqZDd0N2YxN2Q5NDNuNTBiaGt6eHZqIn0.BCrxjW6rP_OuOuGtbhVEQg"
+def PAYPAL_CLIENT_ID= System.getenv('PAYPAL_CLIENT_ID') ?: "YOUR_API_KEY"
 def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.file(SIGNING_KEY_FILE).exists()
 
 android {
@@ -22,8 +23,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 14
-        versionName "0.7.0"
+        versionCode 15
+        versionName "0.8.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -58,6 +59,7 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://api.eventyay.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
             resValue "string",  "FRONTEND_HOST", "eventyay.com"
             if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
                 signingConfig signingConfigs.release
@@ -66,6 +68,7 @@ android {
             buildConfigField "String", "DEFAULT_BASE_URL", '"https://open-event-api-dev.herokuapp.com/v1/"'
             buildConfigField "String", "MAPBOX_KEY", '"'+MAPBOX_KEY+'"'
             buildConfigField "String", "STRIPE_API_KEY", '"'+STRIPE_API_TOKEN+'"'
+            buildConfigField "String", "PAYPAL_CLIENT_ID", '"'+PAYPAL_CLIENT_ID+'"'
             resValue "string", "FRONTEND_HOST", "open-event-fe.netlify.com"
         }
     }
@@ -121,22 +124,22 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.2.0-alpha03"
+    def lifecycle_version = "2.2.0-alpha05"
     def koin_version = "2.0.1"
     def roomVersion = "2.1.0"
-    def ktx_version = "1.0.0"
-    def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-beta02"
+    def ktx_version = "1.1.0"
+    def ktx2_version = "2.1.0"
+    def nav_version = "2.1.0"
     def anko_version = "0.10.8"
     def paging_version = "2.1.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -146,7 +149,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation 'androidx.preference:preference:1.1.0-rc01'
+    implementation 'androidx.preference:preference:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -172,9 +175,9 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.6.2'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
@@ -182,14 +185,14 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:10.3.0'
+    implementation 'com.stripe:stripe-android:11.1.4'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -203,7 +206,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //Mapbox java sdk
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.9.0'
 
     // SimpleCropView
     implementation 'com.isseiaoki:simplecropview:1.1.8'
@@ -215,7 +218,7 @@ dependencies {
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
 
     //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 
     // Paging
     implementation "androidx.paging:paging-runtime:$paging_version"
@@ -231,11 +234,13 @@ dependencies {
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
 
+    //PayPal
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.threeten:threetenbp:1.4.0'
     testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

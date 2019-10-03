@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.order
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_orders_under_user.view.findMyTick
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.swipeRefresh
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
@@ -80,11 +82,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                     showNoTicketsScreen(currentItems.size == 0)
                     ordersPagedListAdapter.submitList(currentItems)
                 } else {
-                    if (isConnected) {
-                        ordersUnderUserVM.getOrdersAndEventsOfUser(false)
-                    } else {
-                        showNoInternetScreen(true)
-                    }
+                    ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = true)
                 }
             })
 
@@ -92,6 +90,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
                 rootView.ticketsNumber.text = resources.getQuantityString(R.plurals.numOfOrders, it, it)
+                showNoTicketsScreen(it == 0 && !rootView.shimmerSearch.isVisible)
             })
 
         ordersUnderUserVM.showShimmerResults
@@ -103,7 +102,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
                     showNoInternetScreen(false)
                 } else {
                     rootView.shimmerSearch.stopShimmer()
-                    showNoTicketsScreen(ordersPagedListAdapter.currentList?.isEmpty() ?: true)
+                    rootView.swipeRefresh.isRefreshing = false
                 }
                 rootView.shimmerSearch.isVisible = it
             })
@@ -119,6 +118,16 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             .observe(viewLifecycleOwner, Observer {
                 ordersPagedListAdapter.submitList(it)
             })
+
+        rootView.swipeRefresh.setColorSchemeColors(Color.BLUE)
+        rootView.swipeRefresh.setOnRefreshListener {
+            if (ordersUnderUserVM.isConnected()) {
+                ordersUnderUserVM.clearOrders()
+                ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = false)
+            } else {
+                rootView.swipeRefresh.isRefreshing = false
+            }
+        }
 
         return rootView
     }
@@ -182,7 +191,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ordersUnderUserVM.clearOrders()
         ordersPagedListAdapter.clear()
         if (ordersUnderUserVM.isConnected()) {
-            ordersUnderUserVM.getOrdersAndEventsOfUser(false)
+            ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = false)
         } else {
             showNoInternetScreen(true)
         }
@@ -190,6 +199,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        rootView.swipeRefresh.setOnRefreshListener(null)
         ordersPagedListAdapter.setListener(null)
     }
 

@@ -1,13 +1,14 @@
 package org.fossasia.openevent.general.paypal
 
-import com.github.jasminb.jsonapi.IntegerIdHandler
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Type
 
-@Type("paypal-payment")
-data class Paypal(
-    @Id(IntegerIdHandler::class)
-    val id: Int,
-    val cancelUrl: String? = null,
-    val returnUrl: String? = null
+@Type("order")
+@JsonNaming(PropertyNamingStrategy.KebabCaseStrategy::class)
+class Paypal(
+    @Id
+    val id: Int? = null,
+    val paymentId: String
 )

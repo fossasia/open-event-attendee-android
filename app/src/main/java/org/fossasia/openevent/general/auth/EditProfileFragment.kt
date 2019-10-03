@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
@@ -39,16 +38,15 @@ import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.replaceImag
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.removeImage
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastName
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhoto
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.progressBar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstNameLayout
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.lastNameLayout
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.MainActivity
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.RotateBitmap
 import org.fossasia.openevent.general.ComplexBackPressFragment
+import org.fossasia.openevent.general.utils.Utils.show
 import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.progressDialog
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.nullToEmpty
@@ -61,7 +59,6 @@ import java.io.IOException
 import java.io.FileNotFoundException
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.emptyToNull
-import org.fossasia.openevent.general.utils.setRequired
 import org.jetbrains.anko.design.snackbar
 
 class EditProfileFragment : Fragment(), ComplexBackPressFragment {
@@ -109,10 +106,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         val currentUser = editProfileViewModel.user.value
         if (currentUser == null) profileViewModel.getProfile() else loadUserUI(currentUser)
 
+        val progress = progressDialog(context)
         editProfileViewModel.progress
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                rootView.progressBar.isVisible = it
+                progress.show(it)
             })
 
         editProfileViewModel.getUpdatedTempFile()
@@ -156,9 +154,6 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             showEditPhotoDialog()
         }
 
-        rootView.firstNameLayout.setRequired()
-        rootView.lastNameLayout.setRequired()
-
         return rootView
     }
 
@@ -187,14 +182,6 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
     private fun isValidInput(): Boolean {
         var valid = true
-        if (rootView.firstName.text.isNullOrBlank()) {
-            rootView.firstName.error = getString(R.string.empty_field_error_message)
-            valid = false
-        }
-        if (rootView.lastName.text.isNullOrBlank()) {
-            rootView.lastName.error = getString(R.string.empty_field_error_message)
-            valid = false
-        }
         if (!rootView.instagram.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.instagram.text).matches()) {
             rootView.instagram.error = getString(R.string.invalid_url_message)
             valid = false
