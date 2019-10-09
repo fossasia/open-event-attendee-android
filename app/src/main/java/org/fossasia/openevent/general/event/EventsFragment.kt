@@ -143,8 +143,6 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         rootView.notification.isVisible = eventsViewModel.isLoggedIn()
         rootView.notificationToolbar.isVisible = eventsViewModel.isLoggedIn()
-        rootView.newNotificationDot.isVisible = eventsViewModel.isLoggedIn()
-        rootView.newNotificationDotToolbar.isVisible = eventsViewModel.isLoggedIn()
 
         eventsViewModel.loadLocation()
         if (rootView.locationTextView.text == getString(R.string.enter_location)) {
