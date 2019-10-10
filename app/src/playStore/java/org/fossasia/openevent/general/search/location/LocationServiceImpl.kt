@@ -8,15 +8,15 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import io.reactivex.Single
+import java.io.IOException
+import java.lang.Exception
+import java.util.Locale
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.location.LocationPermissionException
 import org.fossasia.openevent.general.location.NoLocationSourceException
 import org.fossasia.openevent.general.utils.nullToEmpty
 import timber.log.Timber
-import java.io.IOException
-import java.lang.Exception
-import java.util.Locale
 
 class LocationServiceImpl(
     private val context: Context,

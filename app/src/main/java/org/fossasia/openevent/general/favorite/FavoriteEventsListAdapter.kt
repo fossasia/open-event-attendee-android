@@ -3,11 +3,11 @@ package org.fossasia.openevent.general.favorite
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
+import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils.getEventDateTime
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 

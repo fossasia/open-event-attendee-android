@@ -13,10 +13,10 @@ import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_speaker.view.*
 import org.fossasia.openevent.general.CircleTransform
-import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.openUrl
 import org.fossasia.openevent.general.utils.Utils.requireDrawable
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
 import org.jetbrains.anko.design.snackbar

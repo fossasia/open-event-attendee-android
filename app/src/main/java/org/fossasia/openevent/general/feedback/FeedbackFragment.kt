@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_feedback.view.progressBar
 import kotlinx.android.synthetic.main.fragment_feedback.view.feedbackEmptyView
 import kotlinx.android.synthetic.main.fragment_feedback.view.feedbackRecyclerView
+import kotlinx.android.synthetic.main.fragment_feedback.view.progressBar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull

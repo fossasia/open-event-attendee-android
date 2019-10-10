@@ -11,36 +11,36 @@ import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
-import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
-import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.completedOrdersCheckBox
+import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
+import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.pendingOrdersCheckBox
 import kotlinx.android.synthetic.main.dialog_filter_order.view.placedOrdersCheckBox
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filter
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filterToolbar
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.findMyTickets
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.noTicketsScreen
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ordersRecycler
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.swipeRefresh
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.scrollView
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.pastEvent
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsNumber
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.toolbarLayout
 import kotlinx.android.synthetic.main.fragment_orders_under_user.view.ticketsTitle
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filterToolbar
-import kotlinx.android.synthetic.main.fragment_orders_under_user.view.filter
-import org.fossasia.openevent.general.R
+import kotlinx.android.synthetic.main.fragment_orders_under_user.view.toolbarLayout
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 

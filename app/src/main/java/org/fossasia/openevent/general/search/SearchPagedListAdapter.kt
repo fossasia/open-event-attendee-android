@@ -1,15 +1,14 @@
 package org.fossasia.openevent.general.search
 
-import org.fossasia.openevent.general.favorite.FavoriteEventViewHolder
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
-import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.EventsDiffCallback
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.favorite.FavoriteEventViewHolder
 
 class SearchPagedListAdapter : PagedListAdapter<Event, FavoriteEventViewHolder>(EventsDiffCallback()) {
 
