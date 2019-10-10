@@ -2,14 +2,14 @@ package org.fossasia.openevent.general.utils
 
 import android.content.Context
 import android.content.res.Resources
+import android.text.Editable
 import android.text.Html
+import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
-import android.text.style.ClickableSpan
 import android.text.TextWatcher
-import android.text.Editable
-import android.text.InputType
+import android.text.style.ClickableSpan
 import android.util.Patterns
 import android.view.View
 import com.google.android.material.textfield.TextInputEditText

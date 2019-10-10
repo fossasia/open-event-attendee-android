@@ -3,11 +3,11 @@ package org.fossasia.openevent.general.order
 import io.reactivex.Single
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.attendees.AttendeeDao
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventDao
 import org.fossasia.openevent.general.paypal.Paypal
 import org.fossasia.openevent.general.paypal.PaypalApi
 import org.fossasia.openevent.general.paypal.PaypalPaymentResponse
-import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventDao
 
 class OrderService(
     private val orderApi: OrderApi,

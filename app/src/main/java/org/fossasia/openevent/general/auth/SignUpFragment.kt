@@ -2,7 +2,9 @@ package org.fossasia.openevent.general.auth
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,30 +12,20 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
-import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutPassword
-import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutConfirmPassword
-import kotlinx.android.synthetic.main.fragment_signup.view.firstNameText
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
-import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
-import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
 import kotlinx.android.synthetic.main.fragment_signup.view.emailSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
+import kotlinx.android.synthetic.main.fragment_signup.view.firstNameText
+import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
+import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
 import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
+import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
+import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
+import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutConfirmPassword
+import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutPassword
 import kotlinx.android.synthetic.main.fragment_signup.view.toolbar
 import org.fossasia.openevent.general.R
-import org.fossasia.openevent.general.utils.Utils.setToolbar
-import org.fossasia.openevent.general.utils.Utils.show
-import org.fossasia.openevent.general.utils.Utils.progressDialog
-import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
-import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
-import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
-import androidx.navigation.fragment.navArgs
-import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.favorite.FAVORITE_FRAGMENT
 import org.fossasia.openevent.general.notification.NOTIFICATION_FRAGMENT
@@ -42,9 +34,17 @@ import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
 import org.fossasia.openevent.general.search.SEARCH_RESULTS_FRAGMENT
 import org.fossasia.openevent.general.speakercall.SPEAKERS_CALL_FRAGMENT
 import org.fossasia.openevent.general.ticket.TICKETS_FRAGMENT
+import org.fossasia.openevent.general.utils.StringUtils.getTermsAndPolicyText
+import org.fossasia.openevent.general.utils.Utils.hideSoftKeyboard
+import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.Utils.showNoInternetDialog
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.setSharedElementEnterTransition
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val MINIMUM_PASSWORD_LENGTH = 8
 

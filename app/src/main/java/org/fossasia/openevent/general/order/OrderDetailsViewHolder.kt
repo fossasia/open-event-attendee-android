@@ -7,14 +7,15 @@ import android.provider.CalendarContract
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.StringBuilder
 import kotlinx.android.synthetic.main.item_card_order_details.view.calendar
+import kotlinx.android.synthetic.main.item_card_order_details.view.checkedInLayout
+import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
 import kotlinx.android.synthetic.main.item_card_order_details.view.eventDetails
 import kotlinx.android.synthetic.main.item_card_order_details.view.map
-import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
-import kotlinx.android.synthetic.main.item_card_order_details.view.downloadButton
-import kotlinx.android.synthetic.main.item_card_order_details.view.checkedInLayout
-import kotlinx.android.synthetic.main.item_card_order_details.view.notCheckedInLayout
 import kotlinx.android.synthetic.main.item_card_order_details.view.notAvailableTextView
+import kotlinx.android.synthetic.main.item_card_order_details.view.notCheckedInLayout
+import kotlinx.android.synthetic.main.item_card_order_details.view.qrCodeView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.databinding.ItemCardOrderDetailsBinding
@@ -23,7 +24,6 @@ import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.loadMapUrl
 import org.fossasia.openevent.general.utils.stripHtml
 import org.jetbrains.anko.browse
-import java.lang.StringBuilder
 
 class OrderDetailsViewHolder(private val binding: ItemCardOrderDetailsBinding) : RecyclerView.ViewHolder(binding.root) {
     private val qrCode = QrCode()

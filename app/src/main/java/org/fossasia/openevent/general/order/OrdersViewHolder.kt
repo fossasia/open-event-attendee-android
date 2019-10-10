@@ -1,9 +1,9 @@
 package org.fossasia.openevent.general.order
 
 import androidx.recyclerview.widget.RecyclerView
+import org.fossasia.openevent.general.databinding.ItemCardOrderBinding
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.databinding.ItemCardOrderBinding
 
 class OrdersViewHolder(private val binding: ItemCardOrderBinding) : RecyclerView.ViewHolder(binding.root) {
 

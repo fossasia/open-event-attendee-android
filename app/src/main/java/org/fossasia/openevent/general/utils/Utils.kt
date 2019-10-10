@@ -23,8 +23,8 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.fossasia.openevent.general.R
 import java.util.regex.Pattern
+import org.fossasia.openevent.general.R
 
 object Utils {
 

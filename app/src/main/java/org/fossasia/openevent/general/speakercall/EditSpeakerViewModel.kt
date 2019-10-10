@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import java.io.File
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.forms.CustomForm
 import org.fossasia.openevent.general.auth.AuthHolder
@@ -17,7 +18,6 @@ import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
-import java.io.File
 
 class EditSpeakerViewModel(
     private val resource: Resource,

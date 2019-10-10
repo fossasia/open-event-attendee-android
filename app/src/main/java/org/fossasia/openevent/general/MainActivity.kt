@@ -7,12 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
-import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
-import org.fossasia.openevent.general.auth.SmartAuthViewModel
-import org.fossasia.openevent.general.auth.SmartAuthUtil
+import kotlinx.android.synthetic.main.activity_main.navigation
 import org.fossasia.openevent.general.auth.AuthFragment
+import org.fossasia.openevent.general.auth.RC_CREDENTIALS_READ
+import org.fossasia.openevent.general.auth.SmartAuthUtil
+import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.AppLinkUtils
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible

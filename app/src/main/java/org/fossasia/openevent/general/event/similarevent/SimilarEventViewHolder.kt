@@ -1,7 +1,5 @@
 package org.fossasia.openevent.general.event.similarevent
 
-import org.fossasia.openevent.general.event.Event
-import org.fossasia.openevent.general.event.EventUtils
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_card_events.view.eventImage
@@ -10,6 +8,8 @@ import kotlinx.android.synthetic.main.item_card_events.view.shareFab
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.databinding.ItemCardSimilarEventsBinding
+import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventUtils
 
 class SimilarEventViewHolder(
     private val binding: ItemCardSimilarEventsBinding

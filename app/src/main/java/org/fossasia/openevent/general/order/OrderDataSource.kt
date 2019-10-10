@@ -5,6 +5,8 @@ import androidx.paging.PageKeyedDataSource
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import java.util.Date
+import kotlin.collections.ArrayList
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.attendees.ORDER_STATUS_COMPLETED
 import org.fossasia.openevent.general.attendees.ORDER_STATUS_PENDING
@@ -16,8 +18,6 @@ import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
-import java.util.Date
-import kotlin.collections.ArrayList
 
 class OrderDataSource(
     private val orderService: OrderService,

@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTitle
 import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
