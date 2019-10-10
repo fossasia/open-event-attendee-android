@@ -240,7 +240,8 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel {
-        EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+        EventDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+    }
     viewModel { SessionViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
     viewModel { SearchResultsViewModel(get(), get(), get(), get(), get(), get()) }
@@ -254,7 +255,7 @@ val viewModelModule = module {
     viewModel { FavoriteEventsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { OrderCompletedViewModel(get(), get(), get(), get()) }
-    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get()) }
+    viewModel { OrdersUnderUserViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { GeoLocationViewModel(get()) }
@@ -279,12 +280,12 @@ val networkModule = module {
 
     single {
         PagedList
-            .Config
-            .Builder()
-            .setPageSize(5)
-            .setInitialLoadSizeHint(5)
-            .setEnablePlaceholders(false)
-            .build()
+                .Config
+                .Builder()
+                .setPageSize(5)
+                .setInitialLoadSizeHint(5)
+                .setEnablePlaceholders(false)
+                .build()
     }
 
     single {
@@ -292,11 +293,11 @@ val networkModule = module {
         val readTimeout = 15 // 15s
 
         val builder = OkHttpClient().newBuilder()
-            .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
-            .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
-            .addInterceptor(HostSelectionInterceptor(get()))
-            .addInterceptor(RequestAuthenticator(get()))
-            .addNetworkInterceptor(StethoInterceptor())
+                .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
+                .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
+                .addInterceptor(HostSelectionInterceptor(get()))
+                .addInterceptor(RequestAuthenticator(get()))
+                .addNetworkInterceptor(StethoInterceptor())
 
         if (BuildConfig.DEBUG) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -309,23 +310,23 @@ val networkModule = module {
         val baseUrl = BuildConfig.DEFAULT_BASE_URL
         val objectMapper: ObjectMapper = get()
         val onlineApiResourceConverter = ResourceConverter(
-            objectMapper, Event::class.java, User::class.java,
-            SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
-            EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
-            Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
-            CustomForm::class.java, EventLocation::class.java, EventType::class.java,
-            EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
-            Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
-            Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
-            DiscountCode::class.java, Settings::class.java, Proposal::class.java, Tax::class.java)
+                objectMapper, Event::class.java, User::class.java,
+                SignUp::class.java, Ticket::class.java, SocialLink::class.java, EventId::class.java,
+                EventTopic::class.java, Attendee::class.java, TicketId::class.java, Order::class.java,
+                Charge::class.java, Paypal::class.java, ConfirmOrder::class.java,
+                CustomForm::class.java, EventLocation::class.java, EventType::class.java,
+                EventSubTopic::class.java, Feedback::class.java, Speaker::class.java, FavoriteEvent::class.java,
+                Session::class.java, SessionType::class.java, MicroLocation::class.java, SpeakersCall::class.java,
+                Sponsor::class.java, EventFAQ::class.java, Notification::class.java, Track::class.java,
+                DiscountCode::class.java, Settings::class.java, Proposal::class.java, Tax::class.java)
 
         Retrofit.Builder()
-            .client(get())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
-            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-            .baseUrl(baseUrl)
-            .build()
+                .client(get())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+                .baseUrl(baseUrl)
+                .build()
     }
 }
 
@@ -333,9 +334,9 @@ val databaseModule = module {
 
     single {
         Room.databaseBuilder(androidApplication(),
-            OpenEventDatabase::class.java, "open_event_database")
-            .fallbackToDestructiveMigration()
-            .build()
+                OpenEventDatabase::class.java, "open_event_database")
+                .fallbackToDestructiveMigration()
+                .build()
     }
 
     factory {
