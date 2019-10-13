@@ -384,7 +384,7 @@ class EventDetailsFragment : Fragment() {
                     rootView.similarEventsContainer.isVisible = true
                 } else {
                     rootView.shimmerSimilarEvents.stopShimmer()
-                    if (!similarEventsAdapter.currentList?.isEmpty()!!) {
+                    if (!similarEventsAdapter.currentList.isNullOrEmpty()) {
                         hasSimilarEvents = true
                     }
                     rootView.similarEventsContainer.isVisible =  hasSimilarEvents
