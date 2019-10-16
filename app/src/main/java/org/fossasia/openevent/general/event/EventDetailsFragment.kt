@@ -387,7 +387,7 @@ class EventDetailsFragment : Fragment() {
                     if (!similarEventsAdapter.currentList.isNullOrEmpty()) {
                         hasSimilarEvents = true
                     }
-                    rootView.similarEventsContainer.isVisible =  hasSimilarEvents
+                    rootView.similarEventsContainer.isVisible = hasSimilarEvents
                 }
             })
 
