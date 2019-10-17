@@ -103,6 +103,7 @@ class EventDetailsFragment : Fragment() {
     private val sessionsAdapter = SessionRecyclerAdapter()
     private val socialLinkAdapter = SocialLinksRecyclerAdapter()
     private val similarEventsAdapter = SimilarEventsListAdapter()
+    private var hasSimilarEvents: Boolean = false
 
     private lateinit var rootView: View
     private lateinit var binding: FragmentEventBinding
@@ -383,7 +384,10 @@ class EventDetailsFragment : Fragment() {
                     rootView.similarEventsContainer.isVisible = true
                 } else {
                     rootView.shimmerSimilarEvents.stopShimmer()
-                    rootView.similarEventsContainer.isVisible = similarEventsAdapter.currentList?.isEmpty() ?: true
+                    if (!similarEventsAdapter.currentList.isNullOrEmpty()) {
+                        hasSimilarEvents = true
+                    }
+                    rootView.similarEventsContainer.isVisible = hasSimilarEvents
                 }
             })
 
