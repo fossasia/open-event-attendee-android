@@ -116,7 +116,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         eventsViewModel.pagedEvents
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 eventsListAdapter.submitList(list)
             })
 

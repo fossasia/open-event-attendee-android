@@ -258,7 +258,7 @@ class SearchLocationFragment : Fragment() {
 
         searchLocationViewModel.eventLocations
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 popularLocationAdapter.addAll(list.map { it.name })
                 rootView.popularLocationsLayout.isVisible = list.isNotEmpty()
             })

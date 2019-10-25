@@ -95,7 +95,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.shimmerSearch.startShimmer()
                     showNoTicketsScreen(false)
