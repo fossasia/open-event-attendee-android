@@ -193,7 +193,7 @@ class EventDetailsFragment : Fragment() {
     private fun setupEventOverview() {
         eventViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 currentEvent = it
                 loadEvent(it)
                 if (eventViewModel.similarEvents.value == null) {
@@ -483,7 +483,7 @@ class EventDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         eventViewModel.connection
             .nonNull()
-            .observe(this, Observer { isConnected ->
+            .observe(viewLifecycleOwner, Observer { isConnected ->
                 if (isConnected) {
                     val currentFeedback = eventViewModel.eventFeedback.value
                     if (currentFeedback == null) {

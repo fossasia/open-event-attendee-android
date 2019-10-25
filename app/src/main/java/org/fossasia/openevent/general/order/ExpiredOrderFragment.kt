@@ -51,7 +51,7 @@ class ExpiredOrderFragment : Fragment() {
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.shimmerSearch.isVisible = it
                 if (it) {
                     rootView.shimmerSearch.startShimmer()

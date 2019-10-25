@@ -45,7 +45,7 @@ class SearchTypeFragment : Fragment() {
 
         searchTypeViewModel.connection
             .nonNull()
-            .observe(this, Observer { isConnected ->
+            .observe(viewLifecycleOwner, Observer { isConnected ->
                 if (isConnected) {
                     searchTypeViewModel.loadEventTypes()
                     showNoInternetError(false)
@@ -67,7 +67,7 @@ class SearchTypeFragment : Fragment() {
 
         searchTypeViewModel.eventTypes
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 list.forEach {
                     eventTypesList.add(it.name)
                 }

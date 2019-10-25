@@ -53,12 +53,12 @@ class WelcomeFragment : Fragment() {
             redirectToAuth()
         }
 
-        geoLocationViewModel.location.observe(this, Observer {
+        geoLocationViewModel.location.observe(viewLifecycleOwner, Observer {
             preference.putString(SAVED_LOCATION, it)
             redirectToAuth()
         })
 
-        geoLocationViewModel.errorMessage.observe(this, Observer { message ->
+        geoLocationViewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
             rootView.locationProgressBar.isVisible = false
             Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
         })

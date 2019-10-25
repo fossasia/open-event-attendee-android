@@ -78,7 +78,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         searchResultsViewModel.loadEventTypes()
         searchResultsViewModel.eventTypes
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 eventTypesList = list
             })
     }
@@ -102,7 +102,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
 
         searchResultsViewModel.pagedEvents
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 searchPagedListAdapter.submitList(list)
                 Timber.d("Fetched events of size %s", searchPagedListAdapter.itemCount)
             })
@@ -172,7 +172,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
                 addChips(date, true)
                 searchResultsViewModel.eventTypes
                     .nonNull()
-                    .observe(this, Observer { list ->
+                    .observe(viewLifecycleOwner, Observer { list ->
                         list.forEach {
                             addChips(it.name, false)
                         }

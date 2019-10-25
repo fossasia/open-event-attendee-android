@@ -849,7 +849,7 @@ class AttendeeFragment : Fragment(), ComplexBackPressFragment {
 
         attendeeViewModel.ticketSoldOut
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 showTicketSoldOutDialog(it)
             })
 
