@@ -110,13 +110,13 @@ class TicketsFragment : Fragment() {
 
         ticketsViewModel.event
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 loadEventDetails(it)
             })
 
         ticketsViewModel.tickets
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 ticketsRecyclerAdapter.addAll(it)
                 ticketsRecyclerAdapter.notifyDataSetChanged()
             })

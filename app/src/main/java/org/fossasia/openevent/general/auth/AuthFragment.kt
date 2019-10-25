@@ -54,7 +54,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
             smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
             smartAuthViewModel.isCredentialStored
                 .nonNull()
-                .observe(this, Observer {
+                .observe(viewLifecycleOwner, Observer {
                     if (it) redirectToLogin()
                 })
         }
