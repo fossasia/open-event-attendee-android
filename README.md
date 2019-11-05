@@ -7,7 +7,7 @@
 
 An events app to discover events happening around the world using the Open Event Platform on Eventyay.com.
 
-- ##Application is available here:
+- Application is available here:
 
 <a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='docs/images/ic_play_store.png' height="80"/></a>
 <a href='https://f-droid.org/en/packages/com.eventyay.attendee/'><img alt='Get it on F-Droid' src='docs/images/ic_fdroid.png' height="80"/></a>
