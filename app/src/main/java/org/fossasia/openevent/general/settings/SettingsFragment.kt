@@ -11,22 +11,23 @@ import android.webkit.URLUtil
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceFragmentCompat
-import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlTextInputLayout
-import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlEditText
+import androidx.preference.PreferenceManager
+import java.util.prefs.PreferenceChangeEvent
+import java.util.prefs.PreferenceChangeListener
 import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlCheckBox
-import org.jetbrains.anko.design.snackbar
-import kotlinx.android.synthetic.main.dialog_change_password.view.oldPassword
-import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
+import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlEditText
+import kotlinx.android.synthetic.main.dialog_api_configuration.view.urlTextInputLayout
 import kotlinx.android.synthetic.main.dialog_change_password.view.confirmNewPassword
-import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.newPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.oldPassword
 import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutConfirmNewPassword
+import kotlinx.android.synthetic.main.dialog_change_password.view.textInputLayoutNewPassword
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.FDROID_BUILD_FLAVOR
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
@@ -36,12 +37,11 @@ import org.fossasia.openevent.general.auth.ProfileViewModel
 import org.fossasia.openevent.general.auth.SmartAuthUtil
 import org.fossasia.openevent.general.auth.SmartAuthViewModel
 import org.fossasia.openevent.general.utils.Utils
-import org.fossasia.openevent.general.utils.nullToEmpty
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.prefs.PreferenceChangeEvent
-import java.util.prefs.PreferenceChangeListener
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
+import org.fossasia.openevent.general.utils.nullToEmpty
+import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCAL_TIMEZONE = "localTimeZone"
 

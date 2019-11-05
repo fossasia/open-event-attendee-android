@@ -2,12 +2,12 @@ package org.fossasia.openevent.general.speakers
 
 import io.reactivex.Single
 import org.fossasia.openevent.general.attendees.forms.CustomForm
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.POST
-import retrofit2.http.Body
-import retrofit2.http.PATCH
 
 interface SpeakerApi {
 

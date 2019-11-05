@@ -8,11 +8,11 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import io.reactivex.Single
+import java.lang.IllegalArgumentException
+import java.util.Locale
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.nullToEmpty
-import java.lang.IllegalArgumentException
-import java.util.Locale
 
 class LocationServiceImpl(
     private val context: Context,

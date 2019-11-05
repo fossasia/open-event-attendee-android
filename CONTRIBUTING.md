@@ -1,5 +1,5 @@
 ## How to Contribute
-
+First please go through the [Open Source Developer Guide and Best Practices at FOSSASIA](https://blog.fossasia.org/open-source-developer-guide-and-best-practices-at-fossasia/)
 ### Raising an issue:
  This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well.
  This project adheres to the Contributor Covenant code of conduct.

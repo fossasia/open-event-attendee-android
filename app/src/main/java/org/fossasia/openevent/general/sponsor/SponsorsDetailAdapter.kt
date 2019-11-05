@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailLogo
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailDescription
-import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailType
+import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailLogo
 import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailName
+import kotlinx.android.synthetic.main.item_sponsor_detail.view.sponsorDetailType
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.utils.Utils

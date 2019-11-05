@@ -1,5 +1,5 @@
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.24.2"
+    id "com.diffplug.gradle.spotless" version "3.25.0"
 }
 
 apply plugin: 'com.android.application'
@@ -23,8 +23,8 @@ android {
         applicationId "com.eventyay.attendee"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 14
-        versionName "0.7.0"
+        versionCode 15
+        versionName "0.8.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -124,22 +124,22 @@ repositories {
 }
 
 dependencies {
-    def lifecycle_version = "2.2.0-alpha03"
+    def lifecycle_version = "2.2.0-rc01"
     def koin_version = "2.0.1"
-    def roomVersion = "2.1.0"
-    def ktx_version = "1.0.0"
-    def ktx2_version = "2.0.0"
-    def nav_version = "2.1.0-beta02"
+    def roomVersion = "2.2.1"
+    def ktx_version = "1.1.0"
+    def ktx2_version = "2.1.0"
+    def nav_version = "2.1.0"
     def anko_version = "0.10.8"
     def paging_version = "2.1.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
     implementation "androidx.browser:browser:1.0.0"
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -149,7 +149,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${roomVersion}"
     kapt "androidx.room:room-compiler:${roomVersion}"
     testImplementation "androidx.room:room-testing:${roomVersion}"
-    implementation 'androidx.preference:preference:1.1.0-rc01'
+    implementation 'androidx.preference:preference:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // KTX
@@ -175,9 +175,9 @@ dependencies {
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.6.2'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
@@ -185,14 +185,14 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.14'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:10.3.1'
+    implementation 'com.stripe:stripe-android:12.2.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -206,7 +206,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //Mapbox java sdk
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.9.0'
 
     // SimpleCropView
     implementation 'com.isseiaoki:simplecropview:1.1.8'
@@ -240,7 +240,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.threeten:threetenbp:1.4.0'
     testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

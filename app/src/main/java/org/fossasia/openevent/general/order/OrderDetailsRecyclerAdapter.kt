@@ -1,13 +1,13 @@
 package org.fossasia.openevent.general.order
 
 import android.graphics.Bitmap
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import kotlin.collections.ArrayList
 import org.fossasia.openevent.general.attendees.Attendee
 import org.fossasia.openevent.general.databinding.ItemCardOrderDetailsBinding
 import org.fossasia.openevent.general.event.Event
-import kotlin.collections.ArrayList
 
 class OrderDetailsRecyclerAdapter : RecyclerView.Adapter<OrderDetailsViewHolder>() {
 

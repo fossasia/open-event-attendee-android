@@ -14,16 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.dialog_filter_order.view.completedOrdersCheckBox
-import kotlinx.android.synthetic.main.dialog_filter_order.view.pendingOrdersCheckBox
-import kotlinx.android.synthetic.main.dialog_filter_order.view.placedOrdersCheckBox
 import kotlinx.android.synthetic.main.dialog_filter_order.view.dateRadioButton
 import kotlinx.android.synthetic.main.dialog_filter_order.view.orderStatusRadioButton
-import kotlinx.android.synthetic.main.fragment_expired_order.view.ordersRecycler
-import kotlinx.android.synthetic.main.fragment_expired_order.view.noTicketsScreen
-import kotlinx.android.synthetic.main.fragment_expired_order.view.shimmerSearch
+import kotlinx.android.synthetic.main.dialog_filter_order.view.pendingOrdersCheckBox
+import kotlinx.android.synthetic.main.dialog_filter_order.view.placedOrdersCheckBox
 import kotlinx.android.synthetic.main.fragment_expired_order.view.filterToolbar
-import kotlinx.android.synthetic.main.fragment_expired_order.view.toolbar
+import kotlinx.android.synthetic.main.fragment_expired_order.view.noTicketsScreen
+import kotlinx.android.synthetic.main.fragment_expired_order.view.ordersRecycler
+import kotlinx.android.synthetic.main.fragment_expired_order.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_expired_order.view.swipeRefresh
+import kotlinx.android.synthetic.main.fragment_expired_order.view.toolbar
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
@@ -51,7 +51,7 @@ class ExpiredOrderFragment : Fragment() {
 
         ordersUnderUserVM.showShimmerResults
             .nonNull()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 rootView.shimmerSearch.isVisible = it
                 if (it) {
                     rootView.shimmerSearch.startShimmer()

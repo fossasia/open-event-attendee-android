@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import java.lang.StringBuilder
 import org.fossasia.openevent.general.BuildConfig.MAPBOX_KEY
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
@@ -27,8 +27,8 @@ import org.fossasia.openevent.general.order.Order
 import org.fossasia.openevent.general.order.OrderService
 import org.fossasia.openevent.general.sessions.Session
 import org.fossasia.openevent.general.sessions.SessionService
-import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.social.SocialLink
+import org.fossasia.openevent.general.social.SocialLinksService
 import org.fossasia.openevent.general.speakers.Speaker
 import org.fossasia.openevent.general.speakers.SpeakerService
 import org.fossasia.openevent.general.sponsor.Sponsor
@@ -37,7 +37,6 @@ import org.fossasia.openevent.general.ticket.TicketPriceRange
 import org.fossasia.openevent.general.ticket.TicketService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
-import java.lang.StringBuilder
 
 class EventDetailsViewModel(
     private val eventService: EventService,

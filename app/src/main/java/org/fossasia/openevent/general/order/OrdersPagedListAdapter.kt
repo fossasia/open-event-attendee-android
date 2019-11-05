@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.databinding.ItemCardOrderBinding
+import org.fossasia.openevent.general.event.Event
 
 class OrdersPagedListAdapter : PagedListAdapter<Pair<Event, Order>, OrdersViewHolder>(OrdersDiffCallback()) {
 

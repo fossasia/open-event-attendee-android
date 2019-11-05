@@ -10,7 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.auth.AuthHolder
 import org.fossasia.openevent.general.common.SingleLiveEvent
@@ -20,6 +19,7 @@ import org.fossasia.openevent.general.event.EventId
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.event.paging.SimilarEventsDataSourceFactory
 import org.fossasia.openevent.general.favorite.FavoriteEvent
+import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
 
 class OrderCompletedViewModel(

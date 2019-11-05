@@ -28,6 +28,7 @@ data class Order(
     val identifier: String? = null,
     val orderNotes: String? = null,
     val completedAt: String? = null,
+    val state: String? = null,
     val city: String? = null,
     val address: String? = null,
     val createdAt: String? = null,

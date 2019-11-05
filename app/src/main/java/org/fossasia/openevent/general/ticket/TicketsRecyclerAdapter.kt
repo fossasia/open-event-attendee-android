@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.ticket
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.tax.Tax

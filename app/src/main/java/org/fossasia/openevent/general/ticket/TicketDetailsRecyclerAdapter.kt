@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.ticket
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.R
 
 class TicketDetailsRecyclerAdapter : RecyclerView.Adapter<TicketDetailsViewHolder>() {

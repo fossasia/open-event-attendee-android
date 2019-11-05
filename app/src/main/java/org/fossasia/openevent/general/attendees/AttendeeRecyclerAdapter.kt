@@ -1,10 +1,10 @@
 package org.fossasia.openevent.general.attendees
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.fossasia.openevent.general.databinding.ItemAttendeeBinding
+import androidx.recyclerview.widget.RecyclerView
 import org.fossasia.openevent.general.attendees.forms.CustomForm
+import org.fossasia.openevent.general.databinding.ItemAttendeeBinding
 import org.fossasia.openevent.general.ticket.Ticket
 
 class AttendeeRecyclerAdapter : RecyclerView.Adapter<AttendeeViewHolder>() {

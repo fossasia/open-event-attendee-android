@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.order
 
 import android.content.ActivityNotFoundException
-import androidx.appcompat.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,31 +21,30 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_rate_us.view.rateEventyayButton
-import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventsRecycler
-import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventLayout
-import kotlinx.android.synthetic.main.fragment_order_completed.view.shimmerSimilarEvents
-import kotlinx.android.synthetic.main.fragment_order_completed.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_completed.view.add
 import kotlinx.android.synthetic.main.fragment_order_completed.view.name
+import kotlinx.android.synthetic.main.fragment_order_completed.view.orderCoordinatorLayout
 import kotlinx.android.synthetic.main.fragment_order_completed.view.share
+import kotlinx.android.synthetic.main.fragment_order_completed.view.shimmerSimilarEvents
+import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventLayout
+import kotlinx.android.synthetic.main.fragment_order_completed.view.similarEventsRecycler
 import kotlinx.android.synthetic.main.fragment_order_completed.view.time
 import kotlinx.android.synthetic.main.fragment_order_completed.view.view
+import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
-import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.Event
+import org.fossasia.openevent.general.event.EventUtils
+import org.fossasia.openevent.general.event.RedirectToLogin
 import org.fossasia.openevent.general.event.similarevent.SimilarEventsListAdapter
+import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.stripHtml
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.jetbrains.anko.design.longSnackbar
-import android.net.Uri
-import org.fossasia.openevent.general.BuildConfig
-import org.fossasia.openevent.general.event.RedirectToLogin
-import org.fossasia.openevent.general.search.ORDER_COMPLETED_FRAGMENT
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val DISPLAY_RATING_DIALOG = "displayRatingDialog"
 

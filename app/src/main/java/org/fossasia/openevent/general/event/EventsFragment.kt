@@ -13,46 +13,46 @@ import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
 import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.dialog_reset_password.view.confirmNewPassword
 import kotlinx.android.synthetic.main.dialog_reset_password.view.newPassword
 import kotlinx.android.synthetic.main.dialog_reset_password.view.textInputLayoutConfirmNewPassword
 import kotlinx.android.synthetic.main.dialog_reset_password.view.textInputLayoutNewPassword
+import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
+import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
 import kotlinx.android.synthetic.main.fragment_events.view.eventsRecycler
 import kotlinx.android.synthetic.main.fragment_events.view.locationTextView
-import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
-import kotlinx.android.synthetic.main.fragment_events.view.eventsEmptyView
-import kotlinx.android.synthetic.main.fragment_events.view.emptyEventsText
-import kotlinx.android.synthetic.main.fragment_events.view.scrollView
-import kotlinx.android.synthetic.main.fragment_events.view.notification
-import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDot
+import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToolbar
+import kotlinx.android.synthetic.main.fragment_events.view.notification
+import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
+import kotlinx.android.synthetic.main.fragment_events.view.scrollView
+import kotlinx.android.synthetic.main.fragment_events.view.shimmerEvents
+import kotlinx.android.synthetic.main.fragment_events.view.swiperefresh
 import kotlinx.android.synthetic.main.fragment_events.view.toolbar
 import kotlinx.android.synthetic.main.fragment_events.view.toolbarLayout
-import kotlinx.android.synthetic.main.fragment_events.view.newNotificationDotToolbar
-import kotlinx.android.synthetic.main.fragment_events.view.notificationToolbar
-import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.BottomIconDoubleClick
+import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.StartupViewModel
-import org.fossasia.openevent.general.utils.RESET_PASSWORD_TOKEN
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
-import org.fossasia.openevent.general.utils.extensions.nonNull
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.fossasia.openevent.general.utils.Utils.setToolbar
+import org.fossasia.openevent.general.utils.RESET_PASSWORD_TOKEN
 import org.fossasia.openevent.general.utils.Utils.progressDialog
+import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.Utils.show
+import org.fossasia.openevent.general.utils.extensions.hideWithFading
+import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.setPostponeSharedElementTransition
 import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTransition
-import org.fossasia.openevent.general.utils.extensions.hideWithFading
 import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 const val EVENTS_FRAGMENT = "eventsFragment"
@@ -116,7 +116,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         eventsViewModel.pagedEvents
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 eventsListAdapter.submitList(list)
             })
 
@@ -143,8 +143,6 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         rootView.notification.isVisible = eventsViewModel.isLoggedIn()
         rootView.notificationToolbar.isVisible = eventsViewModel.isLoggedIn()
-        rootView.newNotificationDot.isVisible = eventsViewModel.isLoggedIn()
-        rootView.newNotificationDotToolbar.isVisible = eventsViewModel.isLoggedIn()
 
         eventsViewModel.loadLocation()
         if (rootView.locationTextView.text == getString(R.string.enter_location)) {

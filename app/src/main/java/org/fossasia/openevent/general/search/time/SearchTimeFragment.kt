@@ -8,18 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import java.util.Calendar
 import kotlinx.android.synthetic.main.fragment_search_time.view.anytimeTextView
+import kotlinx.android.synthetic.main.fragment_search_time.view.nextMonthTextView
+import kotlinx.android.synthetic.main.fragment_search_time.view.thisWeekendTextView
+import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.todayTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.tomorrowTextView
-import kotlinx.android.synthetic.main.fragment_search_time.view.thisWeekendTextView
-import kotlinx.android.synthetic.main.fragment_search_time.view.nextMonthTextView
 import kotlinx.android.synthetic.main.fragment_search_time.view.toolbar
-import kotlinx.android.synthetic.main.fragment_search_time.view.timeTextView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EventUtils.getSimpleFormattedDate
 import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
 import org.fossasia.openevent.general.search.SearchFilterFragmentArgs
-import java.util.Calendar
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

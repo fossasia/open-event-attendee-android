@@ -3,8 +3,8 @@ package org.fossasia.openevent.general.ticket
 import android.graphics.Color
 import android.graphics.Paint
 import android.text.Editable
-import android.text.TextWatcher
 import android.text.Html
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -12,30 +12,30 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_ticket.view.order
-import kotlinx.android.synthetic.main.item_ticket.view.orderRange
-import kotlinx.android.synthetic.main.item_ticket.view.price
-import kotlinx.android.synthetic.main.item_ticket.view.ticketName
+import java.util.Date
+import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.item_ticket.view.description
 import kotlinx.android.synthetic.main.item_ticket.view.discountPrice
 import kotlinx.android.synthetic.main.item_ticket.view.donationInput
+import kotlinx.android.synthetic.main.item_ticket.view.moreInfoSection
+import kotlinx.android.synthetic.main.item_ticket.view.order
 import kotlinx.android.synthetic.main.item_ticket.view.orderQtySection
+import kotlinx.android.synthetic.main.item_ticket.view.orderRange
+import kotlinx.android.synthetic.main.item_ticket.view.price
+import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
 import kotlinx.android.synthetic.main.item_ticket.view.priceSection
+import kotlinx.android.synthetic.main.item_ticket.view.saleInfo
+import kotlinx.android.synthetic.main.item_ticket.view.seeMoreInfoText
 import kotlinx.android.synthetic.main.item_ticket.view.taxInfo
+import kotlinx.android.synthetic.main.item_ticket.view.ticketDateText
+import kotlinx.android.synthetic.main.item_ticket.view.ticketName
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Resource
-import kotlinx.android.synthetic.main.item_ticket.view.priceInfo
-import kotlinx.android.synthetic.main.item_ticket.view.moreInfoSection
-import kotlinx.android.synthetic.main.item_ticket.view.seeMoreInfoText
-import kotlinx.android.synthetic.main.item_ticket.view.ticketDateText
-import kotlinx.android.synthetic.main.item_ticket.view.saleInfo
-import kotlinx.android.synthetic.main.item_ticket.view.description
 import org.fossasia.openevent.general.discount.DiscountCode
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.event.EventUtils.getFormattedDate
 import org.fossasia.openevent.general.event.tax.Tax
 import org.threeten.bp.DateTimeUtils
-import java.util.Date
-import kotlin.collections.ArrayList
 
 const val AMOUNT = "amount"
 const val TICKET_TYPE_FREE = "free"

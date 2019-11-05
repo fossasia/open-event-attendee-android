@@ -1,7 +1,7 @@
 package org.fossasia.openevent.general.utils
 
-import org.fossasia.openevent.general.event.EventUtils
 import java.util.Calendar
+import org.fossasia.openevent.general.event.EventUtils
 
 object DateTimeUtils {
     fun getNextDate(): String {

@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.item_session.view.sessiontime
 import kotlinx.android.synthetic.main.item_session.view.shortAbstract
 import kotlinx.android.synthetic.main.item_session.view.title
 import kotlinx.android.synthetic.main.item_session.view.trackDetail
-import kotlinx.android.synthetic.main.item_session.view.trackText
 import kotlinx.android.synthetic.main.item_session.view.trackIcon
+import kotlinx.android.synthetic.main.item_session.view.trackText
 import org.fossasia.openevent.general.common.SessionClickListener
 import org.fossasia.openevent.general.event.EventUtils
 import org.fossasia.openevent.general.utils.nullToEmpty

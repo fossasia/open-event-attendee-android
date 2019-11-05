@@ -2,14 +2,14 @@ package org.fossasia.openevent.general.favorite
 
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_card_favorite_event.view.eventImage
 import kotlinx.android.synthetic.main.item_card_favorite_event.view.favoriteFab
 import kotlinx.android.synthetic.main.item_card_favorite_event.view.shareFab
-import kotlinx.android.synthetic.main.item_card_favorite_event.view.eventImage
 import org.fossasia.openevent.general.common.EventClickListener
 import org.fossasia.openevent.general.common.FavoriteFabClickListener
+import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
 import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.event.EventUtils
-import org.fossasia.openevent.general.databinding.ItemCardFavoriteEventBinding
 
 class FavoriteEventViewHolder(
     private val binding: ItemCardFavoriteEventBinding

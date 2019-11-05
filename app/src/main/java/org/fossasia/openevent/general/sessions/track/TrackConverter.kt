@@ -1,8 +1,8 @@
 package org.fossasia.openevent.general.sessions.track
 
 import androidx.room.TypeConverter
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class TrackConverter {
 
