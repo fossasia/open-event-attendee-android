@@ -118,7 +118,7 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val price = if (tax?.rate != null && tax.isTaxIncludedInPrice) (ticket.price * 100) / (100 + tax.rate)
         else ticket.price
         val priceDetail = if (price > 0) "$eventCurrency${"%.2f".format(price)}"
-                                    else resource.getString(R.string.free)
+        else resource.getString(R.string.free)
         val priceInfo = "<b>${resource.getString(R.string.price)}:</b> $priceDetail"
         itemView.priceInfo.text = Html.fromHtml(priceInfo)
 
