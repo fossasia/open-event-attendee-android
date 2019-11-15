@@ -119,7 +119,7 @@ class TicketsViewModel(
                 qty.add(it.second)
             }
         }
-        val donation = ticketIdAndQty.map { it.third*it.second }.sum()
+        val donation = ticketIdAndQty.map { it.third * it.second }.sum()
         tickets.value?.filter { ticketIds.contains(it.id) }?.let { tickets ->
             var prices = 0F
             var index = 0
@@ -130,7 +130,7 @@ class TicketsViewModel(
                 if (code?.value != null) {
                     appliedDiscountCode?.tickets?.forEach { ticketId ->
                         if (ticket.id == ticketId.id.toInt()) {
-                            price -= if (code.type == AMOUNT) code.value else price*(code.value / 100)
+                            price -= if (code.type == AMOUNT) code.value else price * (code.value / 100)
                         }
                     }
                 }
