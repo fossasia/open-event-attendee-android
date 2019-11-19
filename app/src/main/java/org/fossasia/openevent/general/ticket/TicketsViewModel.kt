@@ -107,26 +107,22 @@ class TicketsViewModel(
 
     fun getAmount(ticketIdAndQty: List<Triple<Int, Int, Float>>): Float {
         val ticketIds = ArrayList<Int>()
-        val qty = ArrayList<Int>()
         val tax = taxInfo.value
         var taxRate = 0f
+        totalTaxAmount = 0f
         if (tax != null && !tax.isTaxIncludedInPrice) {
             taxRate = tax.rate ?: 0f
         }
         ticketIdAndQty.forEach {
-            if (it.second > 0) {
-                ticketIds.add(it.first)
-                qty.add(it.second)
-            }
+            ticketIds.add(it.first)
         }
         val donation = ticketIdAndQty.map { it.third * it.second }.sum()
         tickets.value?.filter { ticketIds.contains(it.id) }?.let { tickets ->
             var prices = 0F
-            var index = 0
             val code = appliedDiscountCode
             tickets.forEach { ticket ->
                 var price = ticket.price
-                totalTaxAmount += (ticket.price * taxRate / 100) * qty[index]
+                totalTaxAmount += (ticket.price * taxRate / 100) * ticketIdAndQty[tickets.indexOf(ticket)].second
                 if (code?.value != null) {
                     appliedDiscountCode?.tickets?.forEach { ticketId ->
                         if (ticket.id == ticketId.id.toInt()) {
@@ -134,8 +130,7 @@ class TicketsViewModel(
                         }
                     }
                 }
-                price.let { prices += price * qty[index] }
-                index++
+                price.let { prices += price * ticketIdAndQty[tickets.indexOf(ticket)].second }
             }
             prices += totalTaxAmount
             return prices + donation
@@ -156,8 +151,8 @@ class TicketsViewModel(
                 if (it is HttpException)
                     if (it.code() == HttpErrors.NOT_FOUND)
                         Timber.e(it, "No tax for this event")
-                else
-                    Timber.e(it, "Error fetching tax details")
+                    else
+                        Timber.e(it, "Error fetching tax details")
             })
     }
 
