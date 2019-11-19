@@ -78,7 +78,7 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         searchResultsViewModel.loadEventTypes()
         searchResultsViewModel.eventTypes
             .nonNull()
-            .observe(viewLifecycleOwner, Observer { list ->
+            .observe(this, Observer { list ->
                 eventTypesList = list
             })
     }
