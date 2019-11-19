@@ -241,7 +241,7 @@ dependencies {
     testImplementation 'com.github.iamareebjamal:stetho-noop:1.2.1'
 
     //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-4'
 
     // Paging
     implementation "androidx.paging:paging-runtime:$paging_version"
