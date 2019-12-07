@@ -47,10 +47,10 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareFab"
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
-            android:layout_marginEnd="@dimen/fab_margin_80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:fabCustomSize="@dimen/fab_height"
+            android:layout_marginEnd="@dimen/fab_margin_80dp"
             android:background="@android:color/white"
             android:scaleType="center"
             app:backgroundTint="@android:color/white"
@@ -63,8 +63,8 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/favoriteFab"
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:fabCustomSize="@dimen/fab_height"
             android:layout_marginEnd="@dimen/fab_margin_right"
             android:background="@android:color/white"
