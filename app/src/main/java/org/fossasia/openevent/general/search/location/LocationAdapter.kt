@@ -12,6 +12,7 @@ class LocationsAdapter : RecyclerView.Adapter<LocationViewHolder>() {
     fun addAll(locations: List<String>) {
         if (locationsList.isNotEmpty()) locationsList.clear()
         locationsList.addAll(locations)
+        locationsList.removeAt(0);
         notifyDataSetChanged()
     }
 
