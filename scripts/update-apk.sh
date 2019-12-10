@@ -60,10 +60,9 @@ for file in app*; do
 done
 
 if $IS_PUBLISH_BRANCH ;then
-    cd ..
     gem install fastlane
-    fastlane supply --aab ./apk/eventyay-attendee-master-app-playStore-release.aab --skip_upload_apk true --track alpha --json_key ./scripts/fastlane.json --package_name $PACKAGE_NAME $FASTLANE_DRY_RUN
-    if [ $? -ne 0 ]; then
+    fastlane supply --aab eventyay-attendee-master-app-playStore-release.aab --skip_upload_apk true --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME $FASTLANE_DRY_RUN
+    if [[ $? -ne 0 ]]; then
         exit 1
     fi
     if $PR_FOR_RELEASE ;then
