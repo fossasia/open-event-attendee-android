@@ -1,12 +1,12 @@
 package org.fossasia.openevent.general.event
 
+import java.time.ZoneId
+import java.util.TimeZone
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.ZonedDateTime
-import java.time.ZoneId
-import java.util.TimeZone
 
 class EventUtilsTest {
 

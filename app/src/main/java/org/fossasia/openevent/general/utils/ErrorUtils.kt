@@ -1,7 +1,5 @@
 package org.fossasia.openevent.general.utils
 
-import timber.log.Timber
-import org.json.JSONObject
 import org.fossasia.openevent.general.utils.HttpErrors.BAD_REQUEST
 import org.fossasia.openevent.general.utils.HttpErrors.CONFLICT
 import org.fossasia.openevent.general.utils.HttpErrors.FORBIDDEN
@@ -11,7 +9,9 @@ import org.fossasia.openevent.general.utils.HttpErrors.REQUEST_TIMEOUT
 import org.fossasia.openevent.general.utils.HttpErrors.UNAUTHORIZED
 import org.fossasia.openevent.general.utils.HttpErrors.UNPROCESSABLE_ENTITY
 import org.fossasia.openevent.general.utils.StringUtils.isEmpty
+import org.json.JSONObject
 import retrofit2.HttpException
+import timber.log.Timber
 
 const val ERRORS = "errors"
 const val SOURCE = "source"

@@ -1,13 +1,13 @@
 package org.fossasia.openevent.general.search
 
 import androidx.lifecycle.ViewModel
+import java.lang.StringBuilder
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.search.time.SAVED_TIME
 import org.fossasia.openevent.general.search.type.SAVED_TYPE
-import java.lang.StringBuilder
 
 class SearchViewModel(
     private val preference: Preference,

@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_sponsors.view.sponsorsDetailRecyclerView
 import kotlinx.android.synthetic.main.fragment_sponsors.view.sponsorDetailProgressBar
+import kotlinx.android.synthetic.main.fragment_sponsors.view.sponsorsDetailRecyclerView
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.utils.Utils
 import org.fossasia.openevent.general.utils.extensions.nonNull

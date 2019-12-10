@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.content_no_internet.view.noInternetCard
+import kotlinx.android.synthetic.main.content_no_internet.view.retry
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesRecyclerView
 import kotlinx.android.synthetic.main.fragment_search_type.view.eventTypesTextTitle
 import kotlinx.android.synthetic.main.fragment_search_type.view.shimmerSearchEventTypes
@@ -45,7 +45,7 @@ class SearchTypeFragment : Fragment() {
 
         searchTypeViewModel.connection
             .nonNull()
-            .observe(this, Observer { isConnected ->
+            .observe(viewLifecycleOwner, Observer { isConnected ->
                 if (isConnected) {
                     searchTypeViewModel.loadEventTypes()
                     showNoInternetError(false)
@@ -67,7 +67,7 @@ class SearchTypeFragment : Fragment() {
 
         searchTypeViewModel.eventTypes
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 list.forEach {
                     eventTypesList.add(it.name)
                 }

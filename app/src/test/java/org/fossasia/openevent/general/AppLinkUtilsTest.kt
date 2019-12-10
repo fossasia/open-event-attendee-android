@@ -1,12 +1,12 @@
 package org.fossasia.openevent.general
 
+import org.fossasia.openevent.general.utils.AppLinkData
+import org.fossasia.openevent.general.utils.AppLinkUtils
 import org.fossasia.openevent.general.utils.EVENT_IDENTIFIER
 import org.fossasia.openevent.general.utils.RESET_PASSWORD_TOKEN
-import org.fossasia.openevent.general.utils.AppLinkUtils
 import org.fossasia.openevent.general.utils.VERIFICATION_TOKEN
-import org.fossasia.openevent.general.utils.AppLinkData
-import org.junit.Test
 import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class AppLinkUtilsTest {
 

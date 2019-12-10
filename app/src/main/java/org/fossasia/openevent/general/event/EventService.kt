@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.event
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.Date
 import org.fossasia.openevent.general.event.faq.EventFAQ
 import org.fossasia.openevent.general.event.faq.EventFAQApi
 import org.fossasia.openevent.general.event.location.EventLocation
@@ -18,7 +19,6 @@ import org.fossasia.openevent.general.sessions.track.Track
 import org.fossasia.openevent.general.speakercall.SpeakersCall
 import org.fossasia.openevent.general.speakercall.SpeakersCallDao
 import org.jetbrains.anko.collections.forEachWithIndex
-import java.util.Date
 
 class EventService(
     private val eventApi: EventApi,

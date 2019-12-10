@@ -20,20 +20,20 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_search_location.view.scrollView
-import kotlinx.android.synthetic.main.fragment_search_location.view.toolbarTitle
-import kotlinx.android.synthetic.main.fragment_search_location.view.toolbarLayout
-import kotlinx.android.synthetic.main.fragment_search_location.view.placeSuggestionsCard
-import kotlinx.android.synthetic.main.fragment_search_location.view.recentSearchLayout
-import kotlinx.android.synthetic.main.fragment_search_location.view.recentSearchRv
-import kotlinx.android.synthetic.main.fragment_search_location.view.popularLocationsLayout
 import kotlinx.android.synthetic.main.fragment_search_location.view.currentLocation
-import kotlinx.android.synthetic.main.fragment_search_location.view.popularLocationsRv
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationProgressBar
 import kotlinx.android.synthetic.main.fragment_search_location.view.locationSearchView
+import kotlinx.android.synthetic.main.fragment_search_location.view.placeSuggestionsCard
+import kotlinx.android.synthetic.main.fragment_search_location.view.popularLocationsLayout
+import kotlinx.android.synthetic.main.fragment_search_location.view.popularLocationsRv
+import kotlinx.android.synthetic.main.fragment_search_location.view.recentSearchLayout
+import kotlinx.android.synthetic.main.fragment_search_location.view.recentSearchRv
 import kotlinx.android.synthetic.main.fragment_search_location.view.rvAutoPlaces
-import kotlinx.android.synthetic.main.fragment_search_location.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search_location.view.scrollView
 import kotlinx.android.synthetic.main.fragment_search_location.view.shimmerSearchEventTypes
+import kotlinx.android.synthetic.main.fragment_search_location.view.toolbar
+import kotlinx.android.synthetic.main.fragment_search_location.view.toolbarLayout
+import kotlinx.android.synthetic.main.fragment_search_location.view.toolbarTitle
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.search.SEARCH_FILTER_FRAGMENT
 import org.fossasia.openevent.general.search.SEARCH_FRAGMENT
@@ -258,7 +258,7 @@ class SearchLocationFragment : Fragment() {
 
         searchLocationViewModel.eventLocations
             .nonNull()
-            .observe(this, Observer { list ->
+            .observe(viewLifecycleOwner, Observer { list ->
                 popularLocationAdapter.addAll(list.map { it.name })
                 rootView.popularLocationsLayout.isVisible = list.isNotEmpty()
             })
