@@ -86,11 +86,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/placeSuggestionsCard"
-                android:layout_marginStart="@dimen/layout_margin_medium"
-                android:layout_marginLeft="@dimen/layout_margin_medium"
-                android:layout_marginTop="@dimen/layout_margin_medium"
-                android:layout_marginEnd="@dimen/layout_margin_medium"
-                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_margin="@dimen/layout_margin_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
