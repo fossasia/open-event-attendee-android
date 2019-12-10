@@ -1,0 +1,14 @@
+v0.9.1:
+
+- Fix app crash on startup/login
+
+🚀 Features
+
+- Reduce APK size by removing redundant Paypal binaries
+- Enable PayPal payment option
+
+🐛 Bug Fixes
+
+- Fix app crash in search
+- Some UI fixes
+- Other fixes and dependency updates
