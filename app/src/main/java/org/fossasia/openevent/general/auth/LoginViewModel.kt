@@ -91,12 +91,12 @@ class LoginViewModel(
                 mutableRequestTokenSuccess.value = verifyMessage(it.message)
             }, {
                 mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
-                mutableError.value = resource.getString(R.string.email_not_in_server_message)
+                mutableError.value = resource.getString(R.string.reset_password_mail_message)
             })
     }
 
     private fun verifyMessage(message: String): Boolean {
-        if (message == resource.getString(R.string.email_sent)) {
+        if (message.replace(" ", "") == resource.getString(R.string.reset_password_mail_message)?.replace(" ", "") ?: "") {
             return true
         }
         return false
