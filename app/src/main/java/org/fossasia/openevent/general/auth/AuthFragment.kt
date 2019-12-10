@@ -52,14 +52,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
         rootView = inflater.inflate(R.layout.fragment_auth, container, false)
         setSharedElementEnterTransition()
         setupToolbar()
-        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
-            smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
-            smartAuthViewModel.isCredentialStored
-                .nonNull()
-                .observe(viewLifecycleOwner, Observer {
-                    if (it) redirectToLogin()
-                })
-        }
+        checkCredentials()
 
         val progressDialog = progressDialog(context)
 
@@ -129,6 +122,17 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rootView.email.viewTreeObserver.addOnGlobalLayoutListener {
             startPostponedEnterTransition()
+        }
+    }
+
+    private fun checkCredentials() {
+        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+            smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
+            smartAuthViewModel.isCredentialStored
+                .nonNull()
+                .observe(viewLifecycleOwner, Observer {
+                    if (it) redirectToLogin()
+                })
         }
     }
 
