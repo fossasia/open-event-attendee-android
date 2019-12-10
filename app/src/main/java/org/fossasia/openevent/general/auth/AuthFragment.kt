@@ -48,10 +48,6 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
     private val safeArgs: AuthFragmentArgs by navArgs()
     private val smartAuthViewModel by sharedViewModel<SmartAuthViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_auth, container, false)
         setSharedElementEnterTransition()
