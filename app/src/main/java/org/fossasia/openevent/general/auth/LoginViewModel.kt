@@ -88,18 +88,11 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableRequestTokenSuccess.value = verifyMessage(it.message)
+                mutableRequestTokenSuccess.value = true
             }, {
-                mutableRequestTokenSuccess.value = verifyMessage(it.message.toString())
-                mutableError.value = resource.getString(R.string.email_not_in_server_message)
+                mutableRequestTokenSuccess.value = false
+                mutableError.value = resource.getString(R.string.reset_password_mail_message)
             })
-    }
-
-    private fun verifyMessage(message: String): Boolean {
-        if (message == resource.getString(R.string.email_sent)) {
-            return true
-        }
-        return false
     }
 
     fun fetchProfile() {
