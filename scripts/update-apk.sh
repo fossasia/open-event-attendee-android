@@ -60,18 +60,14 @@ for file in app*; do
 done
 
 if $IS_PUBLISH_BRANCH ;then
-    # Move to previous directory so that fastlane metadata gets uploaded
-    cd ..
     gem install fastlane
-    fastlane supply --aab ./apk/eventyay-attendee-master-app-playStore-release.aab --skip_upload_apk true --track alpha --json_key ./scripts/fastlane.json --package_name $PACKAGE_NAME $FASTLANE_DRY_RUN
+    fastlane supply --aab eventyay-attendee-master-app-playStore-release.aab --metadata_path ../fastlane/metadata/android --skip_upload_apk true --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME $FASTLANE_DRY_RUN
     if [[ $? -ne 0 ]]; then
         exit 1
     fi
     if $PR_FOR_RELEASE ;then
         exit 0
     fi
-    # Move back to apk directory so only apks get pushed to branch
-    cd apk
 fi
 
 # Create a new branch that will contains only latest apk
