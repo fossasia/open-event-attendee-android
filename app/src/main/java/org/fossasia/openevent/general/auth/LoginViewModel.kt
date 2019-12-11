@@ -32,14 +32,16 @@ class LoginViewModel(
     val error: SingleLiveEvent<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
-    private val mutableRequestTokenSuccess = MutableLiveData<Pair<Boolean, String>>()
-    val requestTokenSuccess: LiveData<Pair<Boolean, String>> = mutableRequestTokenSuccess
+    private val mutableRequestTokenSuccess = MutableLiveData<RequestToken>()
+    val requestTokenSuccess: LiveData<RequestToken> = mutableRequestTokenSuccess
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
     private val mutableValidPassword = MutableLiveData<Boolean>()
     val validPassword: LiveData<Boolean> = mutableValidPassword
 
     fun isLoggedIn() = authService.isLoggedIn()
+
+    data class RequestToken(val status: Boolean, val message: String)
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
@@ -89,9 +91,9 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableRequestTokenSuccess.postValue(Pair(true, it.message))
+                mutableRequestTokenSuccess.postValue(RequestToken(true, it.message))
             }, {
-                mutableRequestTokenSuccess.postValue(Pair(false, getErrorMessage(it)))
+                mutableRequestTokenSuccess.postValue(RequestToken(false, getErrorMessage(it)))
                 mutableError.value = getErrorMessage(it)
             })
     }

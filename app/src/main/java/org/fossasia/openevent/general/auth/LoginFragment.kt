@@ -144,8 +144,8 @@ class LoginFragment : Fragment() {
         loginViewModel.requestTokenSuccess
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                if (it.first) {
-                    rootView.mailSentTextView.text = it.second
+                if (it.status) {
+                    rootView.mailSentTextView.text = it.message
                     rootView.sentEmailLayout.isVisible = true
                     rootView.tick.isVisible = true
                     rootView.loginLayout.isVisible = false
