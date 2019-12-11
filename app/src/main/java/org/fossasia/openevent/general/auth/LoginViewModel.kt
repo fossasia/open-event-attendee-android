@@ -91,9 +91,9 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableRequestTokenSuccess.postValue(LinkResetResponse(true, it.message))
+                mutableRequestTokenSuccess.value = LinkResetResponse(true, it.message)
             }, {
-                mutableRequestTokenSuccess.postValue(LinkResetResponse(false, getErrorMessage(it)))
+                mutableRequestTokenSuccess.value = LinkResetResponse(false, getErrorMessage(it))
                 mutableError.value = getErrorMessage(it)
             })
     }
