@@ -12,6 +12,7 @@ import org.fossasia.openevent.general.data.Network
 import org.fossasia.openevent.general.data.Resource
 import org.fossasia.openevent.general.event.EventService
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
+import retrofit2.HttpException
 import timber.log.Timber
 
 class LoginViewModel(
@@ -91,8 +92,19 @@ class LoginViewModel(
                 mutableRequestTokenSuccess.value = true
             }, {
                 mutableRequestTokenSuccess.value = false
-                mutableError.value = resource.getString(R.string.reset_password_mail_message)
+                mutableError.value = getErrorMessage(it)
             })
+    }
+
+    private fun getErrorMessage(error: Throwable): String {
+        return if (error is HttpException) {
+            when (error.code()) {
+                429 -> resource.getString(R.string.reset_mail_limit_message).toString()
+                else -> error.message()
+            }
+        } else {
+            resource.getString(R.string.reset_password_mail_message).toString()
+        }
     }
 
     fun fetchProfile() {
