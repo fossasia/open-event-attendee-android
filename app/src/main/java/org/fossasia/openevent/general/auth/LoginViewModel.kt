@@ -3,7 +3,6 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.fasterxml.jackson.databind.AnnotationIntrospector.pair
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
