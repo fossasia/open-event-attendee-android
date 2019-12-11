@@ -32,8 +32,8 @@ class LoginViewModel(
     val error: SingleLiveEvent<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
-    private val mutableRequestTokenSuccess = MutableLiveData<RequestToken>()
-    val requestTokenSuccess: LiveData<RequestToken> = mutableRequestTokenSuccess
+    private val mutableRequestTokenSuccess = MutableLiveData<LinkResetResponse>()
+    val requestTokenSuccess: LiveData<LinkResetResponse> = mutableRequestTokenSuccess
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
     private val mutableValidPassword = MutableLiveData<Boolean>()
@@ -41,7 +41,7 @@ class LoginViewModel(
 
     fun isLoggedIn() = authService.isLoggedIn()
 
-    data class RequestToken(val status: Boolean, val message: String)
+    data class LinkResetResponse(val status: Boolean, val message: String?)
 
     fun login(email: String, password: String) {
         if (!isConnected()) return
@@ -91,21 +91,21 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableRequestTokenSuccess.postValue(RequestToken(true, it.message))
+                mutableRequestTokenSuccess.postValue(LinkResetResponse(true, it.message))
             }, {
-                mutableRequestTokenSuccess.postValue(RequestToken(false, getErrorMessage(it)))
+                mutableRequestTokenSuccess.postValue(LinkResetResponse(false, getErrorMessage(it)))
                 mutableError.value = getErrorMessage(it)
             })
     }
 
-    private fun getErrorMessage(error: Throwable): String {
+    private fun getErrorMessage(error: Throwable): String? {
         return if (error is HttpException) {
             when (error.code()) {
-                429 -> resource.getString(R.string.reset_mail_limit_message).toString()
+                429 -> resource.getString(R.string.reset_mail_limit_message)
                 else -> error.message()
             }
         } else {
-            resource.getString(R.string.something_went_wrong_message).toString()
+            resource.getString(R.string.something_went_wrong_message)
         }
     }
 
