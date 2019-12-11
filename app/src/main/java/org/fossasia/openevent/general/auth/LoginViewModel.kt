@@ -3,6 +3,7 @@ package org.fossasia.openevent.general.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.fasterxml.jackson.databind.AnnotationIntrospector.pair
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -32,8 +33,8 @@ class LoginViewModel(
     val error: SingleLiveEvent<String> = mutableError
     private val mutableShowNoInternetDialog = MutableLiveData<Boolean>()
     val showNoInternetDialog: LiveData<Boolean> = mutableShowNoInternetDialog
-    private val mutableRequestTokenSuccess = MutableLiveData<Boolean>()
-    val requestTokenSuccess: LiveData<Boolean> = mutableRequestTokenSuccess
+    private val mutableRequestTokenSuccess = MutableLiveData<Pair<Boolean, String>>()
+    val requestTokenSuccess: LiveData<Pair<Boolean, String>> = mutableRequestTokenSuccess
     private val mutableLoggedIn = SingleLiveEvent<Boolean>()
     var loggedIn: LiveData<Boolean> = mutableLoggedIn
     private val mutableValidPassword = MutableLiveData<Boolean>()
@@ -89,9 +90,9 @@ class LoginViewModel(
             }.doFinally {
                 mutableProgress.value = false
             }.subscribe({
-                mutableRequestTokenSuccess.value = true
+                mutableRequestTokenSuccess.postValue(Pair(true, it.message))
             }, {
-                mutableRequestTokenSuccess.value = false
+                mutableRequestTokenSuccess.postValue(Pair(false, getErrorMessage(it)))
                 mutableError.value = getErrorMessage(it)
             })
     }
@@ -103,7 +104,7 @@ class LoginViewModel(
                 else -> error.message()
             }
         } else {
-            resource.getString(R.string.reset_password_mail_message).toString()
+            resource.getString(R.string.something_went_wrong_message).toString()
         }
     }
 

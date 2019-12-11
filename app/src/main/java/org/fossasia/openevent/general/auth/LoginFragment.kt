@@ -15,15 +15,7 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
-import kotlinx.android.synthetic.main.fragment_login.view.email
-import kotlinx.android.synthetic.main.fragment_login.view.forgotPassword
-import kotlinx.android.synthetic.main.fragment_login.view.loginButton
-import kotlinx.android.synthetic.main.fragment_login.view.loginCoordinatorLayout
-import kotlinx.android.synthetic.main.fragment_login.view.loginLayout
-import kotlinx.android.synthetic.main.fragment_login.view.password
-import kotlinx.android.synthetic.main.fragment_login.view.sentEmailLayout
-import kotlinx.android.synthetic.main.fragment_login.view.tick
-import kotlinx.android.synthetic.main.fragment_login.view.toolbar
+import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
@@ -152,7 +144,8 @@ class LoginFragment : Fragment() {
         loginViewModel.requestTokenSuccess
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                if (it) {
+                if (it.first) {
+                    rootView.mailSentTextView.text = it.second
                     rootView.sentEmailLayout.isVisible = true
                     rootView.tick.isVisible = true
                     rootView.loginLayout.isVisible = false

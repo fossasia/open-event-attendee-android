@@ -147,6 +147,7 @@
                     android:text="@string/email_sent_alert"/>
 
                 <TextView
+                    android:id="@+id/mailSentTextView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.5"
