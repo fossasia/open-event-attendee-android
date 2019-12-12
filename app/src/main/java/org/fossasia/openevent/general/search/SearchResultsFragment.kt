@@ -76,11 +76,6 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         eventType = searchResultsViewModel.savedType ?: safeArgs.type
 
         searchResultsViewModel.loadEventTypes()
-        searchResultsViewModel.eventTypes
-            .nonNull()
-            .observe(this, Observer { list ->
-                eventTypesList = list
-            })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -88,6 +83,12 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         setPostponeSharedElementTransition()
         setupToolbar()
         setChips()
+
+        searchResultsViewModel.eventTypes
+            .nonNull()
+            .observe(viewLifecycleOwner, Observer { list ->
+                eventTypesList = list
+            })
 
         rootView.eventsRecycler.layoutManager = LinearLayoutManager(context)
 
