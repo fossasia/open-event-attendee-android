@@ -161,10 +161,10 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun setChips(date: String = eventDate, type: String = eventType) {
-        if (rootView.chipGroup.childCount > 0) {
+        if (rootView.chipGroup.childCount> 0) {
             rootView.chipGroup.removeAllViews()
         }
-        when {
+            when {
             date != getString(R.string.anytime) && type != getString(R.string.anything) -> {
                 addChips(date, true)
                 addChips(type, true)
@@ -282,12 +282,8 @@ class SearchResultsFragment : Fragment(), CompoundButton.OnCheckedChangeListener
         }
 
         rootView.searchText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/
-            }
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
             override fun afterTextChanged(s: Editable?) {
                 rootView.clearSearchText.visibility = if (s.toString().isNullOrBlank()) View.GONE else View.VISIBLE
             }
