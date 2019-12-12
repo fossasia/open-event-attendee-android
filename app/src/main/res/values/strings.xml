@@ -313,6 +313,8 @@
     <string name="login_automatically_fail_message">Unable to log in automatically</string>
     <string name="login_fail_message">Unable to Login. Please check your credentials</string>
     <string name="email_not_in_server_message">Email address not present in server. Please check your email</string>
+    <string name="reset_mail_limit_message">You\'ve exhausted your attempts to send reset link, please try again after some time</string>
+    <string name="something_went_wrong_message">Oops, something went wrong</string>
     <string name="email_sent">Email Sent</string>
     <string name="invalid_password_to_delete_account_message">Cannot delete your account as the password is incorrect</string>
 
