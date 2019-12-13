@@ -70,16 +70,6 @@ class LoginFragment : Fragment() {
         if (safeArgs.email.isNotEmpty()) {
             setSharedElementEnterTransition()
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
-            rootView.email.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable) {
-                    if (s.toString() != safeArgs.email)
-                        findNavController(rootView).navigate(LoginFragmentDirections
-                            .actionLoginToAuthPop(redirectedFrom = safeArgs.redirectedFrom, email = s.toString()))
-                }
-
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
-                override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) { /*Do Nothing*/ }
-            })
         } else if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
 
             smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
