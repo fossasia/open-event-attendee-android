@@ -70,6 +70,23 @@ class LoginFragment : Fragment() {
         if (safeArgs.email.isNotEmpty()) {
             setSharedElementEnterTransition()
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
+            rootView.email.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable) {
+                    if (s.toString() != safeArgs.email)
+                        try {
+                            findNavController(rootView).navigate(LoginFragmentDirections
+                                .actionLoginToAuthPop(redirectedFrom = safeArgs.redirectedFrom, email = s.toString()))
+                        } catch (ex: IllegalStateException) {
+                            //Ignored
+                        }
+                }
+
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { /*Do Nothing*/
+                }
+
+                override fun onTextChanged(email: CharSequence, start: Int, before: Int, count: Int) { /*Do Nothing*/
+                }
+            })
         } else if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
 
             smartAuthViewModel.requestCredentials(SmartAuthUtil.getCredentialsClient(requireActivity()))
@@ -127,7 +144,7 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(password: CharSequence, start: Int, before: Int, count: Int) {
-                    loginButton.isEnabled = password.isNotEmpty()
+                loginButton.isEnabled = password.isNotEmpty()
             }
         })
 
@@ -173,18 +190,18 @@ class LoginFragment : Fragment() {
 
     private fun popBackStack() {
         val destinationId =
-        when (safeArgs.redirectedFrom) {
-            PROFILE_FRAGMENT -> R.id.profileFragment
-            EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
-            ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
-            TICKETS_FRAGMENT -> R.id.ticketsFragment
-            NOTIFICATION_FRAGMENT -> R.id.notificationFragment
-            SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
-            FAVORITE_FRAGMENT -> R.id.favoriteFragment
-            SEARCH_RESULTS_FRAGMENT -> R.id.searchResultsFragment
-            ORDER_COMPLETED_FRAGMENT -> R.id.orderCompletedFragment
-            else -> R.id.eventsFragment
-        }
+            when (safeArgs.redirectedFrom) {
+                PROFILE_FRAGMENT -> R.id.profileFragment
+                EVENT_DETAIL_FRAGMENT -> R.id.eventDetailsFragment
+                ORDERS_FRAGMENT -> R.id.orderUnderUserFragment
+                TICKETS_FRAGMENT -> R.id.ticketsFragment
+                NOTIFICATION_FRAGMENT -> R.id.notificationFragment
+                SPEAKERS_CALL_FRAGMENT -> R.id.speakersCallFragment
+                FAVORITE_FRAGMENT -> R.id.favoriteFragment
+                SEARCH_RESULTS_FRAGMENT -> R.id.searchResultsFragment
+                ORDER_COMPLETED_FRAGMENT -> R.id.orderCompletedFragment
+                else -> R.id.eventsFragment
+            }
         if (destinationId == R.id.eventsFragment) {
             findNavController(rootView).navigate(LoginFragmentDirections.actionLoginToEventsPop())
         } else {
