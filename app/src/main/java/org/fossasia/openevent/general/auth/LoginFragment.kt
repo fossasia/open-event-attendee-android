@@ -72,9 +72,11 @@ class LoginFragment : Fragment() {
             rootView.email.text = SpannableStringBuilder(safeArgs.email)
             rootView.email.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
-                    if (s.toString() != safeArgs.email)
+                    if (s.toString() != safeArgs.email) {
                         findNavController(rootView).navigate(LoginFragmentDirections
                             .actionLoginToAuthPop(redirectedFrom = safeArgs.redirectedFrom, email = s.toString()))
+                        rootView.email.removeTextChangedListener(this)
+                    }
                 }
 
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { /*Do Nothing*/ }
