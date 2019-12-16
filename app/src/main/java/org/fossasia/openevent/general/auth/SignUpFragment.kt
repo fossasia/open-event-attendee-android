@@ -57,7 +57,7 @@ class SignUpFragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        rootView.mainView.setOnClickListener{
+        rootView.mainView.setOnClickListener {
             hideSoftKeyboard(context, rootView.mainView)
         }
 
