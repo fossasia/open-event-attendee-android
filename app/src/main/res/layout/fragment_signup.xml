@@ -18,6 +18,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_black"/>
 
     <LinearLayout
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_margin_medium"
