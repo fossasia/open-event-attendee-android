@@ -118,6 +118,8 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { list ->
                 eventsListAdapter.submitList(list)
+                if (!rootView.shimmerEvents.isVisible)
+                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
             })
 
         eventsViewModel.progress
@@ -130,7 +132,6 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 } else {
                     rootView.shimmerEvents.stopShimmer()
                     rootView.swiperefresh.isRefreshing = false
-                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
                 }
                 rootView.shimmerEvents.isVisible = it
             })
