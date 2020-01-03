@@ -34,7 +34,3 @@ allprojects {
         TRAVIS_BUILD = System.getenv("TRAVIS") == "true" && KEYSTORE_FILE.exists()
     }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
