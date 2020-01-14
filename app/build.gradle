@@ -194,7 +194,7 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2"
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
