@@ -643,7 +643,7 @@
                     android:layout_marginLeft="@dimen/layout_margin_large"
                     android:layout_marginRight="@dimen/layout_margin_large"
                     android:layout_marginBottom="@dimen/layout_margin_large"
-                    android:text="Sessions"
+                    android:text="@string/sessions"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/event_details_headers" />
 
