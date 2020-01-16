@@ -74,7 +74,7 @@
     <string name="add_to_calendar">Dodaj do kalendarza</string>
 
     <!--ticket details-->
-    <string name="tickets">bilety/string>
+    <string name="tickets">bilety</string>
     <string name="register">zarejestrować</string>
     <string name="ticket_name">nazwa biletu</string>
     <string name="price">Cena</string>
@@ -148,7 +148,7 @@
     <string name="logged_in_automatically">zalogowany automatycznie</string>
     <string name="log_in_first">najpierw się zaloguj</string>
     <string name="sign_in_canceled">logowanie zostało anulowane</string>
-    <string name="cannot_fetch_location">nie można pobrać lokalizacji/string>
+    <string name="cannot_fetch_location">nie można pobrać lokalizacji</string>
 
     <!--welcome fragment-->
     <string name="start_text_1">rozpocznij tekst 1</string>
@@ -156,7 +156,7 @@
     <string name="pick_a_city">wybierz miasto</string>
 
     <!--sign up fragment-->
-    <string name="invalid_email_message">niepoprawna wiadomość e-mail/string>
+    <string name="invalid_email_message">niepoprawna wiadomość e-mail</string>
     <string name="invalid_confirm_password_message">niepoprawny komunikat potwierdzający hasło</string>
     <string name="invalid_password_message">niepoprawne hasło</string>
     <string name="country">kraj</string>
