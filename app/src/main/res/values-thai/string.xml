@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="events">เหตุการณ์ที่เกิดขึ้น</string>
+    <string name="profile">ข้อมูลส่วนตัว</string>
+    <string name="likes">ชอบ</string>
+    <string name="location_hint">คำใบ้สถานที่ตั้ง</string>
+
+    <!--event details-->
+    <string name="report_event">รายงานเหตุการณ์</string>
+    <string name="about">เกี่ยวกับ</string>
+    <string name="see_more">ดูเพิ่มเติม</string>
+    <string name="see_less">ดูน้อยลง</string>
+    <string name="event_host_details">รายละเอียดโฮสต์เหตุการณ์</string>
+    <string name="organizer">การจัดงาน</string>
+    <string name="location">ที่ตั้ง</string>
+    <string name="whats_good">อะไรดี</string>
+    <string name="where">ที่ไหน</string>
+    <string name="no_internet_message">ไม่มีข้อความอินเทอร์เน็ต</string>
+    <string name="error_fetching_events">">เกิดข้อผิดพลาดในการดึงกิจกรรม</string>
+    <string name="tickets_sold_out">ขายตั๋วหมดแล้ว</string>
+    <string name="retry">ลองใหม่อีกครั้ง</string>
+    <string name="more_like_this">มากขึ้นเช่นนี้</string>
+    <string name="favorite_event">เหตุการณ์ที่ชื่นชอบ</string>
+    <string name="refund_Policy">นโยบายการคืนเงิน</string>
+    <string name="no_events_message">ไม่มีข้อความเหตุการณ์</string>
+
+    <!--Search event details-->
+    <string name="search">ค้นหา</string>
+    <string name="search_hint">คำใบ้การค้นหา</string>
+    <string name="go_out">ออกไป</string>
+    <string name="anywhere">ทุกแห่ง</string>
+    <string name="anytime">ทุกที่ทุกเวลา</string>
+    <string name="today">ในวันนี้</string>
+    <string name="tomorrow">วันพรุ่งนี้</string>
+    <string name="weekend">สุดสัปดาห์</string>
+    <string name="month">เดือน</string>
+    <string name="what_time">กี่โมง</string>
+    <string name="pick_date">เลือกวันที่</string>
+    <string name="no_search_results">>ไม่มีผลการค้นหา</string>
+    <string name="event_details">รายละเอียดกิจกรรม</string>
+    <string name="see_maps">ดูแผนที่</string>
+    <string name="in">ใน</string>
+
+    <!--profile details-->
+    <string name="logout">ออกจากระบบ</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="login">เข้าสู่ระบบ</string>
+    <string name="forgot_password">ลืมรหัสผ่าน</string>
+    <string name="email_sent_message">ข้อความอีเมลที่ส่ง</string>
+    <string name="email_sent_alert">ส่งอีเมลแจ้งเตือน</string>
+    <string name="sign_up">ลงชื่อ</string>
+    <string name="password">รหัสผ่าน</string>
+    <string name="manage_events">จัดการกิจกรรม</string>
+    <string name="edit_profile">แก้ไขโปรไฟล์</string>
+    <string name="ticket_issues">ปัญหาตั๋ว</string>
+    <string name="confirm_password">ยืนยันรหัสผ่าน</string>
+    <string name="first_name_optional">ชื่อตัวเลือก</string>
+    <string name="last_name_optional">นามสกุลไม่จำเป็น</string>
+    <string name="welcome_back">ยินดีต้อนรับกลับ</string>
+    <string name="update">ปรับปรุง</string>
+
+    <!--share details-->
+    <string name="starts_on">&#160;เริ่มใน</string>
+    <string name="ends_on">&#160;สิ้นสุดลง</string>
+    <string name="start_time">&#160;เวลาเริ่มต้น</string>
+    <string name="end_time">&#160;เวลาสิ้นสุด</string>
+    <string name="event_link">&#160;ลิงค์กิจกรรม</string>
+    <string name="event_description">&#160;คำอธิบายเหตุการณ์</string>
+    <string name="event_name">&#160;ชื่อเหตุการณ์</string>
+    <string name="event_location">&#160;สถานที่จัดงาน</string>
+    <string name="share">หุ้น</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">เพิ่มในปฏิทิน</string>
+
+    <!--ticket details-->
+    <string name="tickets">ตั๋ว</string>
+    <string name="register">การลงทะเบียน</string>
+    <string name="ticket_name">ชื่อตั๋ว</string>
+    <string name="price">ราคา</string>
+    <string name="qty">จำนวน</string>
+
+    <!--ticket details-->
+    <string name="your_info">ข้อมูลของคุณ</string>
+    <string name="first_name">ชื่อจริง</string>
+    <string name="last_name">นามสกุล</string>
+    <string name="email">อีเมล</string>
+    <string name="item">สิ่งของ</string>
+    <string name="subtotal">ไม่ทั้งหมด</string>
+    <string name="view">ดู</string>
+    <string name="no_tickets_message">ไม่มีข้อความตั๋ว</string>
+    <string name="whoops">ขออภัย</string>
+    <string name="ok">ตกลง</string>
+    <string name="view_ticket">ดูตั๋ว</string>
+    <string name="find_my_tickets">ค้นหาตั๋วของฉัน</string>
+
+    <!--payment details-->
+    <string name="card_number">หมายเลขบัตร</string>
+    <string name="expiration_date">วันหมดอายุ</string>
+    <string name="not_you">ไม่ใช่คุณ</string>
+    <string name="sign_out">ออกจากระบบ</string>
+    <string name="all_fees">ค่าธรรมเนียมทั้งหมด</string>
+
+    <!--order details-->
+    <string name="order_completed">คำสั่งซื้อเสร็จสมบูรณ์</string>
+    <string name="add">+ เพิ่ม</string>
+    <string name="invite">เชิญ</string>
+    <string name="name">ชื่อ</string>
+    <string name="event">เหตุการณ์</string>
+    <string name="date">วันที่</string>
+    <string name="order_identifier">ตัวระบุคำสั่งซื้อ</string>
+    <string name="event_summary">สรุปเหตุการณ์</string>
+    <string name="event_summary_preview">แสดงตัวอย่างสรุปเหตุการณ์</string>
+
+    <!--settings xml-->
+    <string name="version_settings">การตั้งค่าเวอร์ชัน</string>
+    <string name="key_version">เวอร์ชันหลัก</string>
+    <string name="key_about">สำคัญเกี่ยวกับ</string>
+    <string name="key_rating">คะแนนคีย์</string>
+    <string name="rating_settings">การตั้งค่าคะแนน</string>
+    <string name="key_profile">โปรไฟล์สำคัญ</string>
+    <string name="logged_in_account">เข้าสู่ระบบบัญชี</string>
+    <string name="timeZone_title">ชื่อโซนเวลา</string>
+    <string name="timeZone_summary">สรุปเขตเวลา</string>
+    <string name="privacy">ความเป็นส่วนตัว</string>
+    <string name="key_privacy">คีย์ข้อมูลส่วนบุคคล</string>
+    <string name="title_terms_of_service">เงื่อนไขการให้บริการชื่อ</string>
+    <string name="legal">ถูกกฎหมาย</string>
+    <string name="visit_website">เข้าไปดูในเว็บไซต์</string>
+    <string name="key_visit_website">เว็บไซต์เยี่ยมชมที่สำคัญ</string>
+
+    <!--settings profile dialog-->
+    <string name="message">ข่าวสาร</string>
+    <string name="cancel">ยกเลิก</string>
+
+    <!--liked events tab -->
+    <string name="find_something_to_do">หาอะไรทำ</string>
+    <string name="current_location">สถานที่ปัจจุบัน</string>
+
+    <!--attendee fragment-->
+    <string name="attendee_details">รายละเอียดผู้เข้าร่วม</string>
+    <string name="start_text">เริ่มข้อความ</string>
+    <string name="terms_text">ข้อความคำศัพท์</string>
+    <string name="middle_text">ข้อความกลาง</string>
+    <string name="privacy_text">ข้อความส่วนบุคคล</string>
+
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">เข้าสู่ระบบโดยอัตโนมัติ</string>
+    <string name="log_in_first">เข้าสู่ระบบก่อน</string>
+    <string name="sign_in_canceled">การลงชื่อเข้าใช้ถูกยกเลิก</string>
+    <string name="cannot_fetch_location">ไม่สามารถดึงตำแหน่ง</string>
+
+    <!--welcome fragment-->
+    <string name="start_text_1">ข้อความเริ่มต้น 1</string>
+    <string name="start_text_2">ข้อความเริ่มต้น 2</string>
+    <string name="pick_a_city">เลือกเมือง</string>
+
+    <!--sign up fragment-->
+    <string name="invalid_email_message">ข้อความอีเมลที่ไม่ถูกต้อง</string>
+    <string name="invalid_confirm_password_message">ข้อความยืนยันรหัสผ่านไม่ถูกต้อง</string>
+    <string name="invalid_password_message">ข้อความรหัสผ่านไม่ถูกต้อง</string>
+    <string name="country">ประเทศ</string>
+    <string name="accept_terms_and_conditions">ยอมรับข้อกำหนดและเงื่อนไข</string>
+
+    <!--Notification Fragment-->
+    <string name="no_notification_result">ไม่มีผลการแจ้งเตือน</string>
+
+</resources>
