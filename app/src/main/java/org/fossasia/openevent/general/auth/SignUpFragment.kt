@@ -13,18 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_signup.view.confirmPasswords
-import kotlinx.android.synthetic.main.fragment_signup.view.emailSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.firstNameText
-import kotlinx.android.synthetic.main.fragment_signup.view.lastNameText
-import kotlinx.android.synthetic.main.fragment_signup.view.passwordSignUp
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpButton
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpCheckbox
-import kotlinx.android.synthetic.main.fragment_signup.view.signUpText
-import kotlinx.android.synthetic.main.fragment_signup.view.signupNestedScrollView
-import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutConfirmPassword
-import kotlinx.android.synthetic.main.fragment_signup.view.textInputLayoutPassword
-import kotlinx.android.synthetic.main.fragment_signup.view.toolbar
+import kotlinx.android.synthetic.main.fragment_signup.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.event.EVENT_DETAIL_FRAGMENT
 import org.fossasia.openevent.general.favorite.FAVORITE_FRAGMENT
@@ -66,6 +55,10 @@ class SignUpFragment : Fragment() {
         setToolbar(activity, show = false)
         rootView.toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
+        }
+
+        rootView.mainView.setOnClickListener {
+            hideSoftKeyboard(context, rootView.mainView)
         }
 
         rootView.signUpText.text = getTermsAndPolicyText(requireContext(), resources)

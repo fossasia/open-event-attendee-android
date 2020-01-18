@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="events">تقریبات</string>
+    <string name="profile">پروفائل</string>
+    <string name="likes">پسند</string>
+    <string name="location_hint">مقام کا اشارہ</string>
+
+    <!--event details-->
+    <string name="report_event">رپورٹ تقریب</string>
+    <string name="about">بارے میں</string>
+    <string name="see_more">مزید جانیں</string>
+    <string name="see_less">کم دیکھیں</string>
+    <string name="event_host_details">تقریب کے میزبان کی تفصیلات</string>
+    <string name="organizer">منتظم</string>
+    <string name="location">مقام</string>
+    <string name="whats_good">کیا اچھا ہے</string>
+    <string name="where">کہاں؟</string>
+    <string name="no_internet_message">যہمیں سرور سے رابطہ قائم کرنے میں دشواری ہو رہی ہے۔ اپنا کنکشن چیک کریں یا بعد میں دوبارہ کوشش کریں</string>
+    <string name="error_fetching_events">ہمیں تقریب کی بازیافت میں دشواری ہو رہی ہے۔ بعد میں دوبارہ کوشش کریں۔</string>
+    <string name="tickets_sold_out">معذرت ، اس تقریب کے تمام ٹکٹ فروخت ہوچکے ہیں</string>
+    <string name="retry">دوبارہ کوشش کریں</string>
+    <string name="more_like_this">اس طرح کےاور</string>
+    <string name="favorite_event">پسندیدہ تقریب</string>
+    <string name="refund_Policy">رقم کی واپسی کی پالیسی</string>
+    <string name="no_events_message">معذرت ، کوئی تقریبات دستیاب نہیں ہیں</string>
+
+    <!--Search event details-->
+    <string name="search">تلاش کریں</string>
+    <string name="search_hint">جیسے کے. . .</string>
+    <string name="go_out">میں باہر جانا چاہتا ہوں</string>
+    <string name="anywhere">کہیں بھی</string>
+    <string name="anytime">کسی بھی وقت</string>
+    <string name="today">آج</string>
+    <string name="tomorrow">کل</string>
+    <string name="weekend">اس ہفتےکےآخر</string>
+    <string name="month">اگلے مہینے میں</string>
+    <string name="what_time">کیا وقت کام کرتا ہے؟</string>
+    <string name="pick_date">ایک تاریخ منتخب کریں</string>
+    <string name="no_search_results">ہممم ، ہمیں کوئی نتیجہ نہیں مل رہا ہے۔ ہماری غلطی - دوسری کوشش کریں</string>
+    <string name="event_details">تقریب کی تفصیلات</string>
+    <string name="see_maps">نقشہ دیکھیں</string>
+    <string name="in">میں</string>
+
+    <!--profile details-->
+    <string name="logout">لاگ آوٹ</string>
+    <string name="settings">সترتیبات</string>
+    <string name="login">لاگ ان کریں</string>
+    <string name="forgot_password">میں اپنا پاسورڈ بھول گیا</string>
+    <string name="email_sent_message">ہم نے ابھی آپ کو آپ کے پاس ورڈ کو دوبارہ ترتیب دینے کے لیےایک لنک کے ساتھ ایک ای میل بھیجا ہے</string>
+    <string name="email_sent_alert">اپنا ای میل چیک کریں!</string>
+    <string name="sign_up">سائن اپ</string>
+    <string name="password">پاس ورڈ</string>
+    <string name="manage_events">واقعات کا انتظام</string>
+    <string name="edit_profile">پروفائل میں ترمیم کریں</string>
+    <string name="ticket_issues">ٹکٹ کے مسائل</string>
+    <string name="confirm_password">پاس ورڈ کی تصدیق کریں</string>
+    <string name="first_name_optional">پہلا نام اختیاری</string>
+    <string name="last_name_optional">آخری نام اختیاری</string>
+    <string name="welcome_back">خوش آمدید</string>
+    <string name="update">اپ ڈیٹ</string>
+
+    <!--share details-->
+    <string name="starts_on">&#160;شروع ہوتا ہے</string>
+    <string name="ends_on">&#160;پر ختم ہوتا ہے</string>
+    <string name="start_time">&#160;وقت آغاز</string>
+    <string name="end_time">&#160;اختتامی وقت</string>
+    <string name="event_link">&#160;تقریب کا لنک</string>
+    <string name="event_description">&#160;تقریب کی تفریق</string>
+    <string name="event_name">&#160;تقریب کا نام</string>
+    <string name="event_location">&#160;تقریب کی جگہ</string>
+    <string name="share">بانٹیں</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">کیلنڈر میں شامل کریں</string>
+
+    <!--ticket details-->
+    <string name="tickets">ٹکٹ</string>
+    <string name="register">রرجسٹر کریں</string>
+    <string name="ticket_name">ٹکٹ کا نام</string>
+    <string name="price">قیمت</string>
+    <string name="qty">مقدار</string>
+
+    <!--ticket details-->
+    <string name="your_info">آپ کی معلومات</string>
+    <string name="first_name">پہلا نام</string>
+    <string name="last_name">آخری نام</string>
+    <string name="email">ای میل</string>
+    <string name="item">آئٹم</string>
+    <string name="subtotal">کل</string>
+    <string name="view">دیکھیں</string>
+    <string name="no_tickets_message">غلط مقدار براہ کرم 1 یا زیادہ کی مقدار داخل کریں</string>
+    <string name="whoops">افوہ</string>
+    <string name="ok">ٹھیک ہے</string>
+    <string name="view_ticket">ٹکٹ دیکھیں</string>
+    <string name="find_my_tickets">میرے ٹکٹ تلاش کرو</string>
+
+    <!--payment details-->
+    <string name="card_number">کارڈ نمبر</string>
+    <string name="expiration_date">میعاد ختم ہونے کی تاریخ</string>
+    <string name="not_you">آپ نہیں ہو؟</string>
+    <string name="sign_out">باہر جائیں</string>
+    <string name="all_fees">تمام فیسیں</string>
+
+    <!--order details-->
+    <string name="order_completed">آرڈر مکمل ہوا</string>
+    <string name="add">+ شامل کریں </string>
+    <string name="invite">مدعو کریں</string>
+    <string name="name">نام</string>
+    <string name="event">تقریب</string>
+    <string name="date">تاریخ</string>
+    <string name="order_identifier">آرڈر شناخت کنندہ</string>
+    <string name="event_summary">تقریب کا خلاصہ</string>
+    <string name="event_summary_preview">بہت اچھے</string>
+
+    <!--settings xml-->
+    <string name="version_settings">ورژن</string>
+    <string name="key_version">ورژن</string>
+    <string name="key_about">کے بارے میں</string>
+    <string name="key_rating">درجہ بندی </string>
+    <string name="rating_settings">ہمیں شرح دیں</string>
+    <string name="key_profile">پروفائل</string>
+    <string name="logged_in_account">کھاتہ</string>
+    <string name="timeZone_title">مقامی ٹائم زون کا استعمال کریں</string>
+    <string name="timeZone_summary">غیر فعال ہونے پر ایونٹ کا ٹائم زون استعمال ہوتا ہے</string>
+    <string name="privacy">رازداری</string>
+    <string name="key_privacy">رازداری</string>
+    <string name="title_terms_of_service">سروس کی شرائط</string>
+    <string name="legal">قانونی</string>
+    <string name="visit_website">ویب سائیٹ پر جائیں</string>
+    <string name="key_visit_website">ویب سائیٹ پر جائیں</string>
+
+    <!--settings profile dialog-->
+    <string name="message">کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟</string>
+    <string name="cancel">منسوخ کریں</string>
+
+    <!--liked events tab -->
+    <string name="find_something_to_do">কکرنے کے لئے کچھ تلاش کریں!</string>
+    <string name="current_location">میرا موجودہ مقام استعمال کریں</string>
+
+    <!--attendee fragment-->
+    <string name="attendee_details">شرکا کی تفصیلات</string>
+    <string name="start_text">میں قبول کرتا ہوں</string>
+    <string name="terms_text">سروس کی شرائط</string>
+    <string name="middle_text">اور پڑھ چکا ہیں</string>
+    <string name="privacy_text">رازداری کی پالیسی</string>
+
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">خودکار طور پر لاگ ان!</string>
+    <string name="log_in_first">آپ سب سے پہلے لاگ ان کرنے کی ضرورت ہے!</string>
+    <string name="sign_in_canceled">سائن ان منسوخ!</string>
+    <string name="cannot_fetch_location">مقام حاصل نہیں کیا جاسکتا!</string>
+
+    <!--welcome fragment-->
+    <string name="start_text_1">آپ کہاں باہر جاتے ہیں؟</string>
+    <string name="start_text_2">ہم آپ کو دکھائیں گے کہ آپ کے قریب کیا اچھا ہے</string>
+    <string name="pick_a_city">ایک شہر منتخب کریں</string>
+
+    <!--sign up fragment-->
+    <string name="invalid_email_message">آپ کا ای میل ایڈریس غلط ہے!</string>
+    <string name="invalid_confirm_password_message">آپ کا پاس ورڈ اور توثیقی پاس ورڈ مماثل نہیں ہیں!</string>
+    <string name="invalid_password_message">پاس ورڈ بہت چھوٹا ہے!</string>
+    <string name="country">ملک</string>
+    <string name="accept_terms_and_conditions">براہ کرم شرائط و ضوابط قبول کریں!</string>
+
+    <!--Notification Fragment-->
+    <string name="no_notification_result">آپ کے پاس کوئی اطلاع نہیں ہے ..</string>
+
+</resources>
