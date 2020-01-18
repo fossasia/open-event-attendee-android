@@ -1,0 +1,538 @@
+<resources>
+    <string name="app_name" translatable="false">Eventyay Attendee</string>
+    <string name="events">大事记</string>
+    <string name="profile">轮廓</string>
+    <string name="likes">喜欢</string>
+    <string name="location_hint">输入位置</string>
+    <string name="reset_password_message">成功重置密码，请登录以继续</string>
+
+    <!--event details-->
+    <string name="report_event">报告事件</string>
+    <string name="open_external_event_url">打开外部事件URL</string>
+    <string name="about">关于</string>
+    <string name="see_more">查看更多</string>
+    <string name="see_less">少看</string>
+    <string name="event_host_details">活动主持人详细信息</string>
+    <string name="organizer">组织者</string>
+    <string name="location">位置</string>
+    <string name="track_required">追踪*</string>
+    <string name="whats_good">有什么好处</string>
+    <string name="where">哪里？</string>
+    <string name="no_internet_message">我们无法连接到服务器。 检查您的连接或稍后再试。</string>
+    <string name="error_fetching_events">我们在获取事件时遇到了困难。 稍后再试。</string>
+    <string name="tickets_sold_out">对不起，该活动的所有门票已售罄！</string>
+    <string name="retry">重试</string>
+    <string name="more_like_this">更像这样</string>
+    <string name="favorite_event">最喜欢的活动</string>
+    <string name="refund_Policy">退款政策</string>
+    <string name="no_events_message">对不起，没有活动</string>
+    <string name="skip">跳跃</string>
+    <string name="enter_location">输入位置</string>
+    <string name="choose_preferred_location_message">请选择您的首选位置</string>
+    <string name="already_registered_message">您在其中赢得大奖</string>
+    <string name="see_your_ticket">看你的票</string>
+
+    <!--Search event details-->
+    <string name="search">搜索</string>
+    <string name="search_hint">搜索. . .</string>
+    <string name="go_out">我想出去</string>
+    <string name="anywhere">任何地方</string>
+    <string name="anytime">任何时候</string>
+    <string name="today">今天</string>
+    <string name="tomorrow">明天</string>
+    <string name="weekend">这周末</string>
+    <string name="month">在下个月</string>
+    <string name="what_time">什么时间有效?</string>
+    <string name="pick_date">选择一个日期...</string>
+    <string name="no_search_results">嗯，我们没有得到\n任何结果。我们不好-尝试\n进行其他搜索</string>
+    <string name="event_details">活动详情</string>
+    <string name="download_ticket">下载门票</string>
+    <string name="see_maps">查看地图</string>
+    <string name="in">在</string>
+
+    <!--profile details-->
+    <string name="logout">登出</string>
+    <string name="settings">设定值</string>
+    <string name="login">登录</string>
+    <string name="forgot_password">我忘记了我的密码</string>
+    <string name="email_sent_message">我们刚刚向您发送了一封电子邮件，其中包含重置密码\n您的密码的链接 </string>
+    <string name="email_sent_alert">查看你的邮件!</string>
+    <string name="sign_up">注册</string>
+    <string name="password">密码</string>
+    <string name="manage_events">管理活动</string>
+    <string name="edit_profile">编辑个人资料</string>
+    <string name="ticket_issues">票务问题</string>
+    <string name="ticket_issues_url" translatable="false">https://support.eventyay.com</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="first_name_optional">名字（可选的）</string>
+    <string name="last_name_optional">姓 (可选的)</string>
+    <string name="details_of_the_user">用户详细信息</string>
+    <string name="welcome_back">欢迎回来!</string>
+    <string name="update">更新资料</string>
+    <string name="profile_photo">头像照片</string>
+    <string name="verified">已验证</string>
+    <string name="not_verified">帐户未验证. 点击确认</string>
+    <string name="verification_error_message">验证电子邮件时出错</string>
+    <string name="verify_your_profile">请验证您的电子邮件以购买免费票</string>
+
+    <!--eventyay-->
+    <string name="eventyay_logo" translatable="false">eventyay</string>
+
+    <!--share details-->
+    <string name="starts_on">开始于 :&#160;</string>
+    <string name="ends_on">结束于 :&#160;</string>
+    <string name="start_time">开始时间 :&#160;</string>
+    <string name="end_time">时间结束 :&#160;</string>
+    <string name="event_link">活动链接 :&#160;</string>
+    <string name="event_description">活动说明 :&#160;</string>
+    <string name="event_name">活动名称 :&#160;</string>
+    <string name="event_location">活动地点 :&#160;</string>
+    <string name="share">分享</string>
+
+    <!--add to calendar-->
+    <string name="add_to_calendar">添加到日历</string>
+
+    <!--tickets fragment-->
+    <string name="tickets">入场券</string>
+    <string name="register">寄存器</string>
+    <string name="ticket_name">机票名称</string>
+    <string name="price">价钱</string>
+    <string name="qty">数量</string>
+    <string name="error_fetching_discount_code">提取折扣代码时出错</string>
+    <string name="apply_discount_code">申请折扣码</string>
+    <string name="apply">应用</string>
+    <string name="invalid_discount_code">无效的折扣代码</string>
+    <string name="discount_code_applied">优惠码已应用</string>
+
+    <!--ticket details-->
+    <string name="your_info">您的资料</string>
+    <string name="first_name">名字</string>
+    <string name="last_name">姓</string>
+    <string name="email">电子邮件</string>
+    <string name="item">项目</string>
+    <string name="subtotal">小计</string>
+    <string name="view">(视图)</string>
+    <string name="hide">(隐藏)</string>
+    <string name="no_tickets_message">无效数量. 请输入一个或多个数量</string>
+    <string name="no_internet_connection_message">没有网络连接!</string>
+    <string name="term_and_conditions">请接受条款和条件!</string>
+    <string name="invalid_email_address_message">无效的邮件地址!</string>
+    <string name="invalid_card_data_message">无效的卡数据</string>
+    <string name="invalid_card_number_message">无效卡号</string>
+    <string name="whoops">哎呀!</string>
+    <string name="ok">好</string>
+    <string name="view_ticket">视图</string>
+    <string name="no_ticket_message">没有看到你的票? 了解有关如何找到它们的更多信息.</string>
+    <string name="no_past_tickets">没有过往门票.</string>
+    <string name="past_tickets">过去的票</string>
+    <string name="past">过去 ></string>
+    <string name="find_my_tickets">查找我的票</string>
+    <string name="no_tickets_available">没有门票!</string>
+    <string name="ticket_details">机票详情</string>
+    <string name="ticket_timeout_message">您已超过时间限制，您的预订已被释放.\n\n此时间限制的目的是确保尽可能多的人可以注册. 我们对不便表示抱歉.</string>
+    <string name="ticket_timeout_info_message">%1$s 分钟后，我们保留的预订将被释放。</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="cancel_order_message">您确定要取消此订单吗?</string>
+
+    <!--payment details-->
+    <string name="card_number">卡号</string>
+    <string name="expiration_date">截止日期</string>
+    <string name="cvc" translatable="false">CVC</string>
+    <string name="postal_code">邮政编码</string>
+    <string name="payment_info">付款信息</string>
+    <string name="payment">付款</string>
+    <string name="not_you">不是你? </string>
+    <string name="sign_out">登出</string>
+    <string name="all_fees">所有费用已包含在价格中</string>
+    <string name="on_site">现场</string>
+    <string name="bank_transfer">电汇/银行转帐</string>
+    <string name="cheque">校验</string>
+    <string name="paypal_payment_not_available">该应用程序尚无法使用Paypal付款!</string>
+
+    <!--order details-->
+    <string name="order_completed">ORDER COMPLETED</string>
+    <string name="add">+ ADD</string>
+    <string name="invite">INVITE</string>
+    <string name="name">名称</string>
+    <string name="event">事件</string>
+    <string name="date">日期</string>
+    <string name="order_identifier">订单编号</string>
+    <string name="event_summary">活动总结</string>
+    <string name="organizer_preview" translatable="false">Mario</string>
+    <string name="event_summary_preview">非常好</string>
+    <string name="order_identifier_preview" translatable="false">3456789</string>
+    <string name="location_preview" translatable="false">Singapore</string>
+    <string name="date_preview" translatable="false">Thu,June 14</string>
+    <string name="event_preview" translatable="false">FOSSASIA summit</string>
+    <string name="name_preview" translatable="false">Nikit Bhandari</string>
+    <string name="email_preview" translatable="false">fossasia.asia@gmail.com</string>
+    <string name="checkin_status">入住状态</string>
+    <string name="checked_in">入住</string>
+    <string name="not_checked_in">未签入</string>
+    <string name="not_available">无法使用</string>
+    <string name="check_in_times">入住时间</string>
+    <string name="checked_out">检查过了</string>
+
+    <!--settings xml-->
+    <string name="version_settings">版</string>
+    <string name="key_version">版</string>
+    <string name="key_about">关于</string>
+    <string name="key_rating">评分</string>
+    <string name="key_account">帐户</string>
+    <string name="rating_settings">评价我们</string>
+    <string name="app_name_capital" translatable="false">Open Event Android</string>
+    <string name="key_acknowledgements" translatable="false">key_acknowledgements</string>
+    <string name="key_profile">轮廓</string>
+    <string name="logged_in_account">帐户</string>
+    <string name="key_timezone_switch" translatable="false">timeZoneSwitch</string>
+    <string name="timeZone_title">使用当地时区</string>
+    <string name="timeZone_summary">禁用时使用事件的时区.</string>
+    <string name="key_change_password">更改密码</string>
+    <string name="title_change_password">更改密码</string>
+    <string name="change">更改</string>
+    <string name="old_password">旧密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_new_password">确认新密码</string>
+    <string name="privacy">隐私</string>
+    <string name="key_privacy">隐私</string>
+    <string name="refund_policy">退款政策</string>
+    <string name="key_refund_policy" translatable="false">refund_policy</string>
+    <string name="title_terms_of_service">服务条款</string>
+    <string name="key_terms_of_service" translatable="false">terms_of_service</string>
+    <string name="legal">法律</string>
+    <string name="visit_website">访问网站</string>
+    <string name="key_visit_website">访问网站</string>
+    <string name="not_logged_in">没有帐户登录</string>
+    <string name="server_configuration">服务器配置</string>
+    <string name="key_server_configuration">服务器配置</string>
+    <string name="api_url">api网址</string>
+    <string name="key_api_url">api网址</string>
+    <string name="other_url">其他网址</string>
+    <string name="invalid_url">无效的网址</string>
+
+    <!--settings profile dialog-->
+    <string name="message">您确定要注销吗?</string>
+    <string name="cancel">取消</string>
+
+    <!--liked events tab -->
+    <string name="find_something_to_do">找点事做!!</string>
+    <string name="remember_like">切记将您喜欢的活动入围，以免错过!</string>
+    <string name="current_location">使用我目前的位置</string>
+
+    <!--attendee fragment-->
+    <string name="attendee_details">参加者详细资料</string>
+    <string name="start_text">我接受</string>
+    <string name="terms_text">服务条款</string>
+    <string name="middle_text">并已阅读</string>
+    <string name="privacy_text">隐私政策</string>
+    <string name="privacy_policy" translatable="false">https://eventyay.com/privacy-policy</string>
+    <string name="terms_of_service" translatable="false">https://eventyay.com/terms</string>
+    <string name="stripe" translatable="false">Stripe</string>
+    <string name="paypal" translatable="false">PayPal</string>
+    <string name="country">国家</string>
+    <string name="month_string">月</string>
+    <string name="january">一月</string>
+    <string name="february">二月</string>
+    <string name="march">游行</string>
+    <string name="april">四月</string>
+    <string name="may">可以</string>
+    <string name="june">六月</string>
+    <string name="july">七月</string>
+    <string name="august">八月</string>
+    <string name="september">九月</string>
+    <string name="october">十月</string>
+    <string name="november">十一月</string>
+    <string name="december">十二月</string>
+    <string name="create_attendee_success_message">与会者创建成功!</string>
+    <string name="create_attendee_fail_message">无法创建与会者!</string>
+    <string name="fill_all_fields_message">请把空白处全部填写</string>
+    <string name="fill_required_fields_message">请填写所有必填字段</string>
+    <string name="free">自由</string>
+    <string name="enter_donation">输入捐款</string>
+    <string name="order_success_message">订单创建成功!</string>
+    <string name="order_fail_message">无法创建订单!</string>
+    <string name="payment_not_complete_message">付款未完成!</string>
+    <string name="error_fetching_attendee_details_message">提取与会者详细信息时出错</string>
+    <string name="share_ticket">共享票</string>
+    <string name="fail_sharing_ticket">无法共享票</string>
+    <string name="state">州</string>
+    <string name="job_title">职称</string>
+    <string name="phone">电话</string>
+    <string name="tax_business_info">税务业务信息</string>
+    <string name="billing_address">帐单地址</string>
+    <string name="billing_information">账单信息</string>
+    <string name="shipping_address">送货地址s</string>
+    <string name="home_address">家庭地址</string>
+    <string name="work_address">工作地址</string>
+    <string name="work_phone">工作电话</string>
+    <string name="blog">博客</string>
+    <string name="gender">性别</string>
+    <string name="company">公司</string>
+    <string name="tax_id">税务编号或商家编号</string>
+    <string name="address">地址</string>
+    <string name="city">市</string>
+    <string name="checkbox_message">持票人与购票人是同一个人</string>
+    <string name="error_fetching_attendees">提取与会者时出错</string>
+    <string name="used_eventyay_before">之前使用过Eventyay?</string>
+    <string name="sign_in_order_text">快速订购</string>
+    <string name="sign_in_to_order_ticket">请登录以订购车票</string>
+    <string name="total_column">总:</string>
+    <string name="tax_column">税:</string>
+
+    <!--snackbar messages-->
+    <string name="logged_in_automatically">自动登录!</string>
+    <string name="log_in_first">您需要先登录!</string>
+    <string name="sign_in_canceled">登录已取消!</string>
+    <string name="sign_in">登入</string>
+    <string name="cannot_fetch_location">无法获取位置!</string>
+    <string name="removed_from_liked">从喜欢的活动中删除%1$s </string>
+    <string name="undo">撤消</string>
+
+    <!--welcome fragment-->
+    <string name="start_text_1">你要去哪里?</string>
+    <string name="start_text_2">We\'ll show you what\'s good near you</string>
+    <string name="pick_a_city">Pick a city</string>
+
+    <!--auth fragment-->
+    <string name="auth_title">Let\'s get started</string>
+    <string name="auth_subtitle">注册或登录以查看附近的情况</string>
+    <string name="get_started">开始使用</string>
+    <string name="skip_for_now">现在跳过</string>
+
+    <!--sign up fragment-->
+    <string name="invalid_email_message">您的电子邮件地址无效!</string>
+    <string name="invalid_confirm_password_message">您的密码和确认密码不匹配!</string>
+    <string name="invalid_password_message">密码太短!</string>
+    <string name="empty_email_message">电子邮件地址不能为空</string>
+    <string name="empty_password_message">密码不能为空</string>
+    <string name="empty_confirm_password_message">请确认您的密码</string>
+    <string name="accept_terms_and_conditions">请接受条款和条件!</string>
+    <string name="sign_up_fail_email_exist_message">无法注册：电子邮件已经存在!</string>
+    <string name="sign_up_fail_email_invalid_message">无法注册：无效的电子邮件地址!</string>
+    <string name="sign_up_fail_message">无法注册!</string>
+    <string name="login_automatically_fail_message">无法自动登录</string>
+    <string name="login_fail_message">无法登入. 请检查您的凭证</string>
+    <string name="email_not_in_server_message">服务器中不存在电子邮件地址. 请查看你的邮箱</string>
+    <string name="reset_mail_limit_message">您已尝试发送重置链接，请耐心等待，请稍后再试</string>
+    <string name="something_went_wrong_message">哎呀！出事了</string>
+    <string name="email_sent">邮件已发送</string>
+    <string name="invalid_password_to_delete_account_message">密码不正确，无法删除您的帐户</string>
+
+    <!--about event fragment-->
+    <string name="error_fetching_event_message">错误提取事件</string>
+    <string name="error_fetching_events_message">提取事件时出错</string>
+    <string name="error_fetching_speakers_for_session">在此会话下获取演讲者时出错</string>
+    <string name="error">错误</string>
+    <string name="fetch_favorite_events_error_message">提取喜欢的事件时出错</string>
+    <string name="list_orders_fail_message">无法列出用户下的订单</string>
+    <string name="list_events_fail_message">无法列出用户下的事件</string>
+    <string name="error_adding_favorite_message">添加到收藏夹时出错</string>
+    <string name="error_fetching_tickets_message">提取票时出错</string>
+
+    <!--edit profile fragment-->
+    <string name="select_image">选择图片</string>
+    <string name="changes_not_saved">您的更改尚未保存</string>
+    <string name="discard">丢弃</string>
+    <string name="save">保存</string>
+    <string name="permission_granted_message">授予访问权限%1$s !</string>
+    <string name="permission_denied_message">拒绝访问权限%1$s :(</string>
+    <string name="external_storage">外置储存</string>
+    <string name="camera">相机</string>
+    <string name="image_upload_success_message">图片上传成功!</string>
+    <string name="image_upload_error_message">上传图片时出错!</string>
+    <string name="provide_name_message">请提供名字和姓氏!</string>
+    <string name="user_update_error_message">更新用户时出错!</string>
+    <string name="user_update_success_message">用户更新成功!</string>
+    <string name="error_fetching_event_section_message">"提取事件%1$s时出错</string>
+    <string name="error_submitting_feedback">提交反馈失败</string>
+    <string name="error_fetching_feedback_message">获取此事件的反馈时出错</string>
+    <string name="no_feedback_message">没有此活动的反馈.</string>
+    <string name="see_all_feedback">查看所有反馈</string>
+    <string name="failure">失败</string>
+
+    <!--social link fragment-->
+    <string name="popular_locations">热门地点</string>
+    <string name="social_links">社交链接</string>
+    <string name="similar_events">类似事件</string>
+
+    <string name="anything">任何东西</string>
+    <string name="and_i_m_up_for">任何东西</string>
+    <string name="what_type">听起来不错?</string>
+    <string name="feedback">反馈</string>
+    <string name="write_feedback">发表反馈</string>
+    <string name="submit">提交</string>
+    <string name="submit_feedback">提交反馈</string>
+    <string name="feedback_submitted">反馈已成功提交</string>
+    <string name="be_the_first_to_write_a_review">成为第一个发表反馈的人</string>
+    <string name="frequently_asked_questions">经常问的问题</string>
+    <string name="no_faq_message">此活动没有常见问题.</string>
+
+    <string name="filter">筛选搜寻</string>
+    <string name="free_stuff">仅免费的东西</string>
+    <string name="speakers">讲者</string>
+    <string name="speakers_call">演讲者电话</string>
+    <string name="sponsors">赞助商</string>
+    <string name="sessions">届会</string>
+    <string name="session">届会</string>
+    <string name="description_preview">关于此赞助商的一些描述: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="sort_by_name">名称</string>
+    <string name="sort_by_date">开始于</string>
+    <string name="sort_by">排序方式</string>
+    <string name="category">类别</string>
+    <string name="sessions_and_speakers">会议和演讲者</string>
+    <string name="rate_eventyay">评价Eventyay</string>
+    <string name="no_thanks">不用了，谢谢</string>
+    <string name="maybe_later">也许以后</string>
+    <string name="rate_eventyay_dialog_message">如果您喜欢使用Eventyay，会介意花点时间对其进行评分吗？ 不会超过一分钟. 谢谢你的支持!</string>
+
+    <!--Notification fragment-->
+    <string name="msg_failed_to_load_notification">无法加载通知</string>
+    <string name="title_notifications">通知事项</string>
+    <string name="no_notification_result">您没有任何通知..</string>
+    <string name="unread">未读</string>
+    <string name="all">所有</string>
+
+    <!--Speaker Call Fragment-->
+    <string name="no_speakers_call_message">抱歉，此活动没有发言人邀请</string>
+    <string name="call_for_speakers">呼吁演讲者</string>
+    <string name="speakers_call_open_at">演讲嘉宾将于%1$s点开始</string>
+    <string name="speakers_call_open_until">Call for speakers will open until %1$s</string>
+    <string name="speakers_call_closed"> 通话邀请将持续到%1$s点 </string>
+    <string name="edit_session_name">编辑会议 - %1$s</string>
+    <string name="submit_proposal">提交提案</string>
+    <string name="code_of_conduct">行为守则</string>
+    <string name="empty_field_error_message">该字段不能为空</string>
+    <string name="proposal">提案</string>
+    <string name="speaker_details">我的演讲者详细信息</string>
+    <string name="session_proposal_detail">会议提案详细信息</string>
+    <string name="organization">组织</string>
+    <string name="position">位置</string>
+    <string name="short_bio">短生</string>
+    <string name="long_bio">龙生物</string>
+    <string name="website">网站</string>
+    <string name="twitter" translatable="false">Twitter</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="github" translatable="false">Github</string>
+    <string name="proposal_speaker">我的提案发言人</string>
+    <string name="no_speaker_info">您没有任何发言人信息</string>
+    <string name="add_speaker">添加发言人</string>
+    <string name="create_speaker">建立演讲者</string>
+    <string name="create_edit_speaker">创建/编辑提案</string>
+    <string name="create_proposal_message">为此活动创建建议或编辑演讲者个人资料</string>
+    <string name="create_proposal">创建提案</string>
+    <string name="create_speaker_profile_message">您尚未为此活动创建演讲者个人资料</string>
+    <string name="edit_speaker">编辑演讲者</string>
+    <string name="continue_string">继续</string>
+    <string name="loading_speaker_profile_message">载入您的演讲者资料</string>
+    <string name="no_speaker_profile_created_message">您尚未创建任何发言人资料</string>
+    <string name="create_speaker_fail_message">创建发言人资料失败</string>
+    <string name="update_speaker_fail_message">更新发言人资料失败</string>
+    <string name="loading_message">载入中...</string>
+    <string name="creating_order_message">创建订单...</string>
+    <string name="profile_settings">个人资料设置</string>
+    <string name="loading_tickets">个人资料设置...</string>
+    <string name="download_invoice">下载发票</string>
+    <string name="invalid_url_message">这不是有效的网址</string>
+    <string name="recent_locations">最近的位置</string>
+    <string name="edit_image">编辑影像</string>
+    <string name="remove_image">移除图片</string>
+    <string name="replace_image">替换图片</string>
+    <string name="take_image">拍摄影像</string>
+    <string name="error_cropping_image_message">哎呀。 裁剪图像时出现错误</string>
+    <string name="error_editting_image_message">哎呀，有错误。 当前图像无法编辑</string>
+    <string name="donation">捐款</string>
+    <string name="ended">已结束</string>
+    <string name="not_open">没开</string>
+    <string name="sales_end">销售端:</string>
+    <string name="filter_orders">筛选订单</string>
+    <string name="completed_orders">已完成的订单</string>
+    <string name="placed_orders">下订单</string>
+    <string name="pending_orders">待处理订单</string>
+    <string name="order_status">订单状态</string>
+    <string name="pay_now">现在付款</string>
+    <string name="cancel_order_button">是的，取消此订单</string>
+    <string name="continue_order_button">不，继续</string>
+    <string name="others">其他</string>
+    <string name="female">女</string>
+    <string name="male">男</string>
+    <string name="instagram">Instagram</string>
+    <string name="delete_account">删除帐户</string>
+    <string name="delete_account_fail_message">您的帐户当前无法删除，因为有活动事件和/或订单与之关联。 在删除帐户之前，您必须将活动的所有权转让给其他组织者或取消活动。 如果您的机票订单已存储在系统中，请也先取消订单。</string>
+    <string name="confirm_email_message">请输入您的电子邮件ID以确认您要删除该帐户</string>
+    <string name="enter_email_hint">输入您的电子邮件ID</string>
+    <string name="confirm">确认</string>
+    <string name="confirm_delete_checkbox_message">请勾选方框以表示同意，然后按 DELETE</string>
+    <string name="delete">删除</string>
+    <string name="enter_password_confirm_account">请输入密码以确认删除您的帐户</string>
+    <string name="error_deleting_account_message">哎呀。 有一个问题。 帐户未删除</string>
+    <string name="success_deleting_account_message">帐户已成功删除</string>
+    <string name="enter_account_password_message">输入您的帐户密码</string>
+    <string name="deleting_account">删除帐号...</string>
+    <string name="image_not_found">找不到图片</string>
+    <plurals name="ordersQuantity">
+        <item quantity="one">%1$s 票</item>
+        <item quantity="other">%1$s 车票</item>
+    </plurals>
+    <plurals name="numOfOrders">
+        <item quantity="zero">没有订单</item>
+        <item quantity="one">一单</item>
+        <item quantity="other">%1$s 订单</item>
+    </plurals>
+    <string name="short_list_event_message">筛选您喜欢的活动，这样您就不会错过</string>
+    <string name="out_bad_try_again">不好...让我们再试一次</string>
+    <string name="add_event_to_shortlist_message">我们已将该活动添加到您的候选清单中</string>
+    <string name="remove_event_from_shortlist_message">我们从您的候选清单中删除了该活动</string>
+    <string name="title">标题</string>
+    <string name="sub_title">副标题</string>
+    <string name="session_type">会话类型</string>
+    <string name="short_abstract">简短摘要</string>
+    <string name="long_abstract">长摘要</string>
+    <string name="error_fetching_tracks_message">获取此事件的曲目时出错</string>
+    <string name="error_fetching_session_types_message">提取此事件的会话类型时出错</string>
+    <string name="comments">注释</string>
+    <string name="fail_create_proposal_message">创建新会话失败</string>
+    <string name="fail_update_proposal_message">更新此会话失败</string>
+    <string name="loading">载入中...</string>
+    <string name="creating_session_message">创建新会话...</string>
+    <string name="updating_session_message">更新当前会话...</string>
+    <string name="fail_getting_current_proposal_message">无法获得会话</string>
+    <string name="update_session">更新会话</string>
+    <string name="create_session">建立工作阶段</string>
+    <string name="language">语言</string>
+    <string name="no_sessions_created_message">您尚未为此发言人创建任何会话</string>
+    <string name="proposal_creaed_updated_message">提案已成功创建/更新</string>
+    <string name="total_amount">总: %1$s</string>
+    <plurals name="order_quantity_item">
+        <item quantity="one"> — %1$s 项目</item>
+        <item quantity="other"> — %1$s 项目</item>
+    </plurals>
+    <string name="hello_user">你好 %1$s</string>
+    <string name="cant_be_empty">不能为空</string>
+    <plurals name="likes_number">
+        <item quantity="zero">没有喜欢</item>
+        <item quantity="one">%1$s 喜欢</item>
+        <item quantity="other">%1$s 喜欢</item>
+    </plurals>
+    <string name="removed_recent_search">删除了最近的搜索 %1$s</string>
+    <string name="type_name">类型: %1$s</string>
+    <string name="email_name">电子邮件: %1$s</string>
+    <string name="phone_number_name">电话号码: %1$s</string>
+    <string name="from_place">从: %1$s</string>
+    <string name="from_places">从: %1$s, %2$s</string>
+    <string name="by_organizer_name">通过 %1$s</string>
+    <string name="credit_debit_card">借记卡/信用卡</string>
+    <string name="select_payment_option_message">请为此订单选择付款方式</string>
+    <string name="heard_from">听到来自</string>
+    <string name="speaker_experience">口语经验</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="order_now">现在下单</string>
+    <string name="no_location">没有位置</string>
+    <string name="sponsor_type">类型: %1$s</string>
+    <string name="contact">联系</string>
+    <string name="incorrect_old_password_message">提供的旧密码不正确！</string>
+    <string name="change_password_fail_message">无法更改密码！</string>
+    <string name="change_password_success_message">密码修改成功！</string>
+    <string name="tickets_for">的门票 %1$s</string>
+    <string name="error_making_paypal_payment_message">支付宝付款失败</string>
+
+</resources>
