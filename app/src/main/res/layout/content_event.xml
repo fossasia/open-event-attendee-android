@@ -361,7 +361,7 @@
                     android:id="@+id/imageMap"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/home_logo_width"
-                    app:hideIfEmpty="@{event.locationName}"
+                    app:hideIfEmpty="@{event.latitude}"
                     android:layout_marginBottom="@dimen/divider_margin_bottom"
                     android:background="?selectableItemBackground"
                     android:scaleType="centerCrop"
