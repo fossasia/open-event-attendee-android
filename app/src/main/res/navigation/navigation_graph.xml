@@ -400,6 +400,14 @@
             app:popExitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
+        
+        <action
+            android:id="@+id/action_order_user_to_attendee"
+            app:destination="@id/attendeeFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
