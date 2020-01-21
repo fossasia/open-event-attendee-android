@@ -260,6 +260,9 @@ dependencies {
     //PayPal
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
+    //Rating
+    implementation 'com.mikhaellopez:ratebottomsheet:1.0.2'
+
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.threeten:threetenbp:1.4.1'
     testImplementation "org.koin:koin-test:$koin_version"

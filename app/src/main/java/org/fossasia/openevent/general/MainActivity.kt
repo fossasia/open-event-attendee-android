@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.mikhaellopez.ratebottomsheet.RateBottomSheet
+import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import kotlinx.android.synthetic.main.activity_main.mainFragmentCoordinatorLayout
 import kotlinx.android.synthetic.main.activity_main.navigation
 import org.fossasia.openevent.general.auth.AuthFragment
@@ -42,6 +44,16 @@ class MainActivity : AppCompatActivity() {
             handleNavigationVisibility(currentFragmentId)
         }
         AppLinkUtils.handleIntent(intent, navController)
+        // Rating
+        if (BuildConfig.FLAVOR == PLAY_STORE_BUILD_FLAVOR) {
+            RateBottomSheetManager(this)
+                .setInstallDays(3) // 3 by default
+                .setLaunchTimes(5) // 5 by default
+                .setRemindInterval(2) // 2 by default
+                .monitor()
+
+            RateBottomSheet.showRateBottomSheetIfMeetsConditions(this)
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
