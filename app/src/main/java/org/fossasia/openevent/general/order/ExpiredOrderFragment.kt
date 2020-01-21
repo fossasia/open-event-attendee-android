@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_expired_order.view.shimmerSearch
 import kotlinx.android.synthetic.main.fragment_expired_order.view.swipeRefresh
 import kotlinx.android.synthetic.main.fragment_expired_order.view.toolbar
 import org.fossasia.openevent.general.R
+import org.fossasia.openevent.general.event.Event
 import org.fossasia.openevent.general.utils.Utils.setToolbar
 import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.jetbrains.anko.design.longSnackbar
@@ -110,7 +111,7 @@ class ExpiredOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerViewClickListener = object : OrdersPagedListAdapter.OrderClickListener {
-            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long) {
+            override fun onClick(eventID: Long, orderIdentifier: String, orderId: Long, event: Event, order: Order) {
                 findNavController(rootView).navigate(ExpiredOrderFragmentDirections
                     .actionOrderExpiredToOrderDetails(eventID, orderIdentifier, orderId))
             }
