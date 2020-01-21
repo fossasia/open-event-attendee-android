@@ -457,7 +457,7 @@ class EventDetailsFragment : Fragment() {
         // load location to map
         val mapClickListener = View.OnClickListener { startMap(event) }
 
-        if (!event.locationName.isNullOrEmpty() && event.longitude != null && event.latitude != null) {
+        if (!event.locationName.isNullOrEmpty() && hasCoordinates(event)) {
             rootView.imageMap.setOnClickListener(mapClickListener)
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
@@ -477,6 +477,10 @@ class EventDetailsFragment : Fragment() {
         // Add event to Calendar
         val dateClickListener = View.OnClickListener { startCalendar(event) }
         rootView.eventTimingLinearLayout.setOnClickListener(dateClickListener)
+    }
+
+    private fun hasCoordinates(event: Event): Boolean {
+        return event.longitude != null && event.longitude != 0.00 && event.latitude != null && event.latitude != 0.00
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
