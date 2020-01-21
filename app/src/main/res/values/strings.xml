@@ -536,10 +536,6 @@
     <string name="error_making_paypal_payment_message">Fail on making Paypal payment</string>
     <string name="tick">tick</string>
     <string name="general_settings_and_support">General Settings and Support</string>
-<<<<<<< HEAD
-    <string name="sociallink">Social Link</string>
-=======
     <string name="socialLink">Social Link</string>
->>>>>>> 51274de059a3850db03a67b047cfc9eb20eaf1e3
 
 </resources>
