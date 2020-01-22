@@ -162,7 +162,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
     implementation "androidx.browser:browser:1.2.0"
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
@@ -215,7 +215,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Stripe
-    implementation 'com.stripe:stripe-android:13.0.0'
+    implementation 'com.stripe:stripe-android:13.1.0'
 
     // QR Code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
