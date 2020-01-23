@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
@@ -43,6 +43,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.profilePhotoFab
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.toolbar
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.twitter
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.updateButton
+import kotlinx.android.synthetic.main.fragment_event.*
 import org.fossasia.openevent.general.CircleTransform
 import org.fossasia.openevent.general.ComplexBackPressFragment
 import org.fossasia.openevent.general.MainActivity
@@ -133,11 +134,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
 
         rootView.updateButton.setOnClickListener {
             hideSoftKeyboard(context, rootView)
-            if (isValidInput()) {
-                updateUser()
-            } else {
-                rootView.snackbar(getString(R.string.fill_required_fields_message))
-            }
+            updateUser()
         }
 
         editProfileViewModel.message
@@ -153,8 +150,29 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         rootView.profilePhotoFab.setOnClickListener {
             showEditPhotoDialog()
         }
-
+        rootView.instagram.addTextChangedListener { checkForErrors(rootView.instagram) }
+        rootView.facebook.addTextChangedListener { checkForErrors(rootView.facebook) }
+        rootView.twitter.addTextChangedListener { checkForErrors(rootView.twitter) }
         return rootView
+    }
+
+    private fun checkForErrors(textView: TextInputEditText) {
+        val updateButton = rootView.updateButton
+        if (hasErrors(textView.text.toString())) {
+            updateButton.setBackgroundColor(resources.getColor(R.color.black))
+            textView.error = getString(R.string.invalid_url_message)
+        } else {
+            updateButton.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            textView.error = null
+        }
+    }
+
+    fun hasErrors(str: String): Boolean {
+        val newStr = updateStringRegEx(str)
+        if (str != newStr) {
+            return true
+        }
+        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
@@ -180,23 +198,6 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         }
     }
 
-    private fun isValidInput(): Boolean {
-        var valid = true
-        if (!rootView.instagram.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.instagram.text).matches()) {
-            rootView.instagram.error = getString(R.string.invalid_url_message)
-            valid = false
-        }
-        if (!rootView.facebook.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.facebook.text).matches()) {
-            rootView.facebook.error = getString(R.string.invalid_url_message)
-            valid = false
-        }
-        if (!rootView.twitter.text.isNullOrEmpty() && !Patterns.WEB_URL.matcher(rootView.twitter.text).matches()) {
-            rootView.twitter.error = getString(R.string.invalid_url_message)
-            valid = false
-        }
-        return valid
-    }
-
     private fun loadUserUI(user: User) {
         userFirstName = user.firstName.nullToEmpty()
         userLastName = user.lastName.nullToEmpty()
@@ -204,9 +205,9 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         if (editProfileViewModel.userAvatar == null)
             editProfileViewModel.userAvatar = user.avatarUrl.nullToEmpty()
         userPhone = user.contact.nullToEmpty()
-        userFacebook = user.facebookUrl.nullToEmpty()
-        userTwitter = user.twitterUrl.nullToEmpty()
-        userInstagram = user.instagramUrl.nullToEmpty()
+        userFacebook = loadStringRegEx(user.facebookUrl.nullToEmpty())
+        userTwitter = loadStringRegEx(user.twitterUrl.nullToEmpty())
+        userInstagram = loadStringRegEx(user.instagramUrl.nullToEmpty())
 
         if (safeArgs.croppedImage.isEmpty()) {
             if (!editProfileViewModel.userAvatar.isNullOrEmpty() && !editProfileViewModel.avatarUpdated) {
@@ -371,27 +372,44 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             dialog.setNegativeButton(getString(R.string.discard)) { _, _ ->
                 if (thisActivity is MainActivity) thisActivity.onSuperBackPressed()
             }
-            dialog.setPositiveButton(getString(R.string.save)) { _, _ ->
-                if (isValidInput()) {
-                    updateUser()
-                } else {
-                    rootView.snackbar(getString(R.string.fill_required_fields_message))
-                } }
+            dialog.setPositiveButton(getString(R.string.save)) { _, _ -> updateUser() }
             dialog.create().show()
         }
     }
 
     private fun updateUser() {
+        var fUrl: String? = null
+        if (!rootView.facebook.text.isNullOrEmpty()) {
+            fUrl = getString(R.string.facebook_head_url) + updateStringRegEx(rootView.facebook.text.toString())
+        }
+
+        var tUrl: String? = null
+        if (!rootView.twitter.text.isNullOrEmpty()) {
+            tUrl = getString(R.string.twitter_head_url) + updateStringRegEx(rootView.twitter.text.toString())
+        }
+        var iUrl: String? = null
+        if (!rootView.instagram.text.isNullOrEmpty()) {
+            iUrl = getString(R.string.instagram_head_url) + updateStringRegEx(rootView.instagram.text.toString())
+        }
         val newUser = User(
             id = editProfileViewModel.getId(),
             firstName = rootView.firstName.text.toString(),
             lastName = rootView.lastName.text.toString(),
             details = rootView.details.text.toString(),
-            facebookUrl = rootView.facebook.text.toString().emptyToNull(),
-            twitterUrl = rootView.twitter.text.toString().emptyToNull(),
+            facebookUrl = fUrl.emptyToNull(),
+            twitterUrl = tUrl.emptyToNull(),
+            instagramUrl = iUrl.emptyToNull(),
             contact = rootView.phone.text.toString().emptyToNull()
         )
         editProfileViewModel.updateProfile(newUser)
+    }
+
+    fun loadStringRegEx(str: String): String {
+        return str.replace(Regex("""(https)|(http)|[/|:]|(.com)|(www.)|(instagram)|(facebook)|(twitter)"""), "")
+    }
+
+    fun updateStringRegEx(str: String): String {
+        return str.replace(Regex("""[$\s@,]"""), "")
     }
 
     private fun noDataChanged() = !editProfileViewModel.avatarUpdated &&

@@ -121,6 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/padding_medium"
+        app:errorContentDescription="@string/invalid_url_message"
         android:hint="@string/facebook">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -135,13 +136,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_medium"
+            app:errorContentDescription="@string/invalid_url_message"
             android:hint="@string/twitter">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/twitter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textUri" />
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -149,6 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_large"
+            app:errorContentDescription="@string/invalid_url_message"
             android:hint="@string/instagram">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -158,7 +161,7 @@
                 android:inputType="textUri" />
         </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+        <Button
         android:id="@+id/updateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

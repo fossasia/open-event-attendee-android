@@ -349,6 +349,7 @@
     <string name="no_feedback_message">There are no feedback for this event.</string>
     <string name="see_all_feedback">See all feedback</string>
     <string name="failure">Failure</string>
+    <string name="error_text">All the Whitespcaes ,@ litrals will be removed automatically</string>
 
     <!--social link fragment-->
     <string name="popular_locations">Popular Locations</string>
@@ -410,8 +411,8 @@
     <string name="short_bio">Short Bio</string>
     <string name="long_bio">Long Bio</string>
     <string name="website">Website</string>
-    <string name="twitter" translatable="false">Twitter</string>
-    <string name="facebook" translatable="false">Facebook</string>
+    <string name="twitter" translatable="false">Twitter (username)</string>
+    <string name="facebook" translatable="false">Facebook (username)</string>
     <string name="github" translatable="false">Github</string>
     <string name="proposal_speaker">My Proposal Speaker</string>
     <string name="no_speaker_info">You haven\'t had any speaker information</string>
@@ -432,7 +433,7 @@
     <string name="profile_settings">Profile Settings</string>
     <string name="loading_tickets">Loading tickets...</string>
     <string name="download_invoice">Download Invoice</string>
-    <string name="invalid_url_message">This is not a valid URL</string>
+    <string name="invalid_url_message">Found unwanted literals! (@,space) will be removed automatically</string>
     <string name="recent_locations">Recent Locations</string>
     <string name="edit_image">Edit Image</string>
     <string name="remove_image">Remove Image</string>
@@ -455,7 +456,7 @@
     <string name="others">Others</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
-    <string name="instagram">Instagram</string>
+    <string name="instagram">Instagram (username)</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_fail_message">Your account currently cannot be deleted as active events and/or orders are associated with it. Before you can delete your account you must transfer the ownership of your event(s) to another organizer or cancel your event(s). If you have ticket orders stored in the system, please cancel your orders first too.</string>
     <string name="confirm_email_message">Please enter your Email ID to confirm that you want to delete the account</string>
@@ -535,4 +536,8 @@
     <string name="tickets_for">Ticket(s) for %1$s</string>
     <string name="error_making_paypal_payment_message">Fail on making Paypal payment</string>
 
+    <!-- Non-Translatable -->
+    <string name="facebook_head_url" translatable="false">https://www.facebook.com/</string>
+    <string name="twitter_head_url" translatable="false">https://www.twitter.com/</string>
+    <string name="instagram_head_url" translatable="false">https://www.instagram.com/</string>
 </resources>
