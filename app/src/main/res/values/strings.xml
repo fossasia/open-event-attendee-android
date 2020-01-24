@@ -535,6 +535,9 @@
     <string name="change_password_success_message">Password changed successfully!</string>
     <string name="tickets_for">Ticket(s) for %1$s</string>
     <string name="error_making_paypal_payment_message">Fail on making Paypal payment</string>
+    <string name="social_link">Social Link</string>
+    <string name="tick">tick</string>
+    <string name="general_settings_and_support">General Settings and Support</string>
 
     <!-- Non-Translatable -->
     <string name="facebook_head_url" translatable="false">https://www.facebook.com/</string>

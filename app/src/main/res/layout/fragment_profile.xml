@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title"
-                android:text="General Settings and Support"/>
+                android:text="@string/general_settings_and_support"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/event_details_divider"
@@ -201,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title"
-                android:text="Login"/>
+                android:text="@string/login"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/event_details_divider"
