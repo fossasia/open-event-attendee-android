@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/layout_margin_medium"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="SocialLink"
+        android:contentDescription="@string/social_link"
         android:tint="@android:color/white" />
 </FrameLayout>
