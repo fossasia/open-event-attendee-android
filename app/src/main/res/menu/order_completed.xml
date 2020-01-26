@@ -5,7 +5,7 @@
     <item
         android:id="@+id/tick"
         android:icon="@drawable/ic_baseline_tick"
-        android:title="tick"
+        android:title="@string/tick"
         app:showAsAction="always" />
 
 </menu>
