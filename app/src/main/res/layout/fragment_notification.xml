@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +7,7 @@
     android:id="@+id/swiperefresh"
     tools:context="org.fossasia.openevent.general.notification.NotificationFragment">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:id="@+id/notificationCoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -59,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:layout_centerInParent="true"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -78,7 +78,8 @@
             android:id="@+id/notificationRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/logo_icon_width"/>
+            android:layout_below="@id/filterChipGroup"
+            android:layout_marginTop="@dimen/padding_extra_small"/>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
