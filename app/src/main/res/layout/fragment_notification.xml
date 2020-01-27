@@ -7,8 +7,9 @@
     android:id="@+id/swiperefresh"
     tools:context="org.fossasia.openevent.general.notification.NotificationFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/notificationCoordinatorLayout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -55,10 +56,9 @@
         <LinearLayout
             android:id="@+id/noNotification"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_centerInParent="true"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -78,8 +78,7 @@
             android:id="@+id/notificationRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/filterChipGroup"
             android:layout_marginTop="@dimen/padding_extra_small"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
