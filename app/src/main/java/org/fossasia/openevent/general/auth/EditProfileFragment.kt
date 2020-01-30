@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.editImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.removeImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.replaceImage
 import kotlinx.android.synthetic.main.dialog_edit_profile_image.view.takeImage
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.countryCode
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.details
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.facebook
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.firstName
@@ -225,10 +226,11 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         setTextIfNull(rootView.firstName, userFirstName)
         setTextIfNull(rootView.lastName, userLastName)
         setTextIfNull(rootView.details, userDetails)
-        setTextIfNull(rootView.phone, userPhone)
+        setTextIfNull(rootView.phone, userPhone.subSequence(userPhone.indexOf(" ") + 1, userPhone.length).toString())
         setTextIfNull(rootView.facebook, userFacebook)
         setTextIfNull(rootView.twitter, userTwitter)
         setTextIfNull(rootView.instagram, userInstagram)
+        rootView.countryCode.setCountryForPhoneCode(userPhone.subSequence(1, userPhone.indexOf(" ")).toString().toInt())
     }
 
     private fun setTextIfNull(input: TextInputEditText, text: String) {
@@ -389,7 +391,8 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
             details = rootView.details.text.toString(),
             facebookUrl = rootView.facebook.text.toString().emptyToNull(),
             twitterUrl = rootView.twitter.text.toString().emptyToNull(),
-            contact = rootView.phone.text.toString().emptyToNull()
+            contact = rootView.countryCode.selectedCountryCodeWithPlus.toString().emptyToNull() + " " +
+                rootView.phone.text.toString().emptyToNull()
         )
         editProfileViewModel.updateProfile(newUser)
     }
@@ -401,7 +404,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         rootView.facebook.text.toString() == userFacebook &&
         rootView.twitter.text.toString() == userTwitter &&
         rootView.instagram.text.toString() == userInstagram &&
-        rootView.phone.text.toString() == userPhone
+        rootView.countryCode.selectedCountryCodeWithPlus.toString() + " " + rootView.phone.text.toString() == userPhone
 
     override fun onDestroyView() {
         val activity = activity as? AppCompatActivity
