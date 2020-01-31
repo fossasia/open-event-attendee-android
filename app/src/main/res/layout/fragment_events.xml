@@ -116,6 +116,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:visibility="gone"
                     tools:visibility="visible"
+                    android:layout_marginLeft="@dimen/divider_margin_bottom"
+                    android:layout_marginRight="@dimen/divider_margin_bottom"
                     layout="@layout/content_no_internet" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout
