@@ -197,7 +197,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2"
-    implementation 'com.github.jasminb:jsonapi-converter:0.10'
+    implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.7.1'
