@@ -59,12 +59,22 @@ class LoginFragment : Fragment() {
             activity?.onBackPressed()
         }
 
+        rootView.settings.setOnClickListener {
+            findNavController(rootView).navigate(LoginFragmentDirections.actionLoginToSetting())
+        }
+
         if (loginViewModel.isLoggedIn())
             popBackStack()
 
         rootView.loginButton.setOnClickListener {
             loginViewModel.login(email.text.toString(), password.text.toString())
             hideSoftKeyboard(context, rootView)
+        }
+
+        rootView.skipTextView.setOnClickListener {
+            findNavController(rootView).navigate(
+                LoginFragmentDirections.actionLoginToEventsPop()
+            )
         }
 
         if (safeArgs.email.isNotEmpty()) {
