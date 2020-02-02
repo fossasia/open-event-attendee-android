@@ -147,7 +147,7 @@ class AuthFragment : Fragment(), ComplexBackPressFragment {
     }
 
     private fun redirectToLogin(email: String = "") {
-        findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToLogIn(email, safeArgs.redirectedFrom),
+        findNavController(rootView).navigate(AuthFragmentDirections.actionAuthToLogIn(email, safeArgs.redirectedFrom, true),
             FragmentNavigatorExtras(rootView.email to "emailLoginTransition"))
     }
 

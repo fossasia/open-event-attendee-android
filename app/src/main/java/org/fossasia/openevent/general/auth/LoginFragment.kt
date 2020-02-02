@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.fragment_login.email
 import kotlinx.android.synthetic.main.fragment_login.loginButton
 import kotlinx.android.synthetic.main.fragment_login.password
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_login.view.email
+import kotlinx.android.synthetic.main.fragment_login.view.skipTextView
+import kotlinx.android.synthetic.main.fragment_login.view.toolbar
 import org.fossasia.openevent.general.BuildConfig
 import org.fossasia.openevent.general.PLAY_STORE_BUILD_FLAVOR
 import org.fossasia.openevent.general.R
@@ -71,6 +74,7 @@ class LoginFragment : Fragment() {
             hideSoftKeyboard(context, rootView)
         }
 
+        rootView.skipTextView.isVisible = safeArgs.showSkipButton
         rootView.skipTextView.setOnClickListener {
             findNavController(rootView).navigate(
                 LoginFragmentDirections.actionLoginToEventsPop()
