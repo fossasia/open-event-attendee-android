@@ -2,150 +2,150 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<data>
-    <variable
-        name="event"
-        type="org.fossasia.openevent.general.event.Event" />
-    <variable
-        name="position"
-        type="Integer" />
-    <variable
-        name="dateTime"
-        type="String" />
-    <variable
-        name="monthTime"
-        type="String" />
-</data>
+    <data>
+        <variable
+            name="event"
+            type="org.fossasia.openevent.general.event.Event" />
+        <variable
+            name="position"
+            type="Integer" />
+        <variable
+            name="dateTime"
+            type="String" />
+        <variable
+            name="monthTime"
+            type="String" />
+    </data>
 
-<androidx.cardview.widget.CardView
-    android:id="@+id/allEventsCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_margin_medium"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="@dimen/card_elevation"
-    android:foreground="?android:attr/selectableItemBackground">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/allEventsCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_medium"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-        <ImageView
-            android:id="@+id/eventImage"
-            android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="@dimen/layout_margin_none"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:eventImage="@{event.originalImageUrl}"
-            android:transitionName="@{`cardItemEventImage` + position}"
-            android:src="@drawable/header" />
+            <ImageView
+                android:id="@+id/eventImage"
+                android:layout_width="@dimen/layout_margin_none"
+                android:layout_height="@dimen/layout_margin_none"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:eventImage="@{event.originalImageUrl}"
+                android:transitionName="@{`cardItemEventImage` + position}"
+                android:src="@drawable/header" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shareFab"
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
-            android:layout_marginEnd="@dimen/fab_margin_80dp"
-            android:background="@android:color/white"
-            android:scaleType="center"
-            app:backgroundTint="@android:color/white"
-            app:tint="@color/colorAccent"
-            app:elevation="@dimen/fab_elevation"
-            app:layout_constraintBottom_toBottomOf="@+id/eventImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventImage"
-            app:srcCompat="@drawable/ic_share_grey" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/shareFab"
+                android:layout_width="@dimen/fab_width"
+                android:layout_height="@dimen/fab_height"
+                android:layout_marginEnd="@dimen/fab_margin_80dp"
+                android:background="@android:color/white"
+                android:scaleType="center"
+                app:backgroundTint="@android:color/white"
+                app:tint="@color/colorAccent"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_constraintBottom_toBottomOf="@+id/eventImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventImage"
+                app:srcCompat="@drawable/ic_share_grey" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/favoriteFab"
-            android:layout_width="@dimen/fab_width"
-            android:layout_height="@dimen/fab_height"
-            android:layout_marginEnd="@dimen/fab_margin_right"
-            android:background="@android:color/white"
-            android:scaleType="center"
-            app:isFavorite="@{event.favorite}"
-            app:backgroundTint="@android:color/white"
-            app:tint="@color/colorAccent"
-            app:elevation="@dimen/fab_elevation"
-            app:layout_constraintBottom_toBottomOf="@+id/eventImage"
-            app:layout_constraintEnd_toEndOf="@+id/eventImage"
-            app:layout_constraintTop_toBottomOf="@+id/eventImage"
-            app:srcCompat="@drawable/ic_baseline_favorite_border" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/favoriteFab"
+                android:layout_width="@dimen/fab_width"
+                android:layout_height="@dimen/fab_height"
+                android:layout_marginEnd="@dimen/fab_margin_right"
+                android:background="@android:color/white"
+                android:scaleType="center"
+                app:isFavorite="@{event.favorite}"
+                app:backgroundTint="@android:color/white"
+                app:tint="@color/colorAccent"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_constraintBottom_toBottomOf="@+id/eventImage"
+                app:layout_constraintEnd_toEndOf="@+id/eventImage"
+                app:layout_constraintTop_toBottomOf="@+id/eventImage"
+                app:srcCompat="@drawable/ic_baseline_favorite_border" />
 
-        <TextView
-            android:id="@+id/month"
-            android:layout_width="@dimen/text_size_very_large"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_margin_small"
-            android:layout_marginTop="@dimen/layout_margin_extra_small"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@{monthTime}"
-            app:layout_constraintStart_toStartOf="@+id/eventImage"
-            app:layout_constraintTop_toTopOf="@+id/eventName"
-            tools:text="Jan" />
+            <TextView
+                android:id="@+id/month"
+                android:layout_width="@dimen/text_size_very_large"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_margin_small"
+                android:layout_marginTop="@dimen/layout_margin_extra_small"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@{monthTime}"
+                app:layout_constraintStart_toStartOf="@+id/eventImage"
+                app:layout_constraintTop_toTopOf="@+id/eventName"
+                tools:text="Jan" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@{dateTime}"
-            app:layout_constraintEnd_toEndOf="@+id/month"
-            app:layout_constraintStart_toStartOf="@+id/month"
-            app:layout_constraintTop_toBottomOf="@+id/month"
-            tools:text="15" />
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@{dateTime}"
+                app:layout_constraintEnd_toEndOf="@+id/month"
+                app:layout_constraintStart_toStartOf="@+id/month"
+                app:layout_constraintTop_toBottomOf="@+id/month"
+                tools:text="15" />
 
-        <TextView
-            android:id="@+id/eventName"
-            android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_margin_medium"
-            android:layout_marginLeft="@dimen/layout_margin_medium"
-            android:layout_marginEnd="@dimen/layout_margin_medium"
-            android:layout_marginRight="@dimen/layout_margin_medium"
-            android:textColor="@color/black"
-            android:textSize="@dimen/heading_text_size"
-            android:text="@{event.name}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/month"
-            app:layout_constraintTop_toBottomOf="@+id/shareFab"
-            tools:text="Open Source Meetup" />
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="@dimen/layout_margin_none"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_margin_medium"
+                android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
+                android:textColor="@color/black"
+                android:textSize="@dimen/heading_text_size"
+                android:text="@{event.name}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/month"
+                app:layout_constraintTop_toBottomOf="@+id/shareFab"
+                tools:text="Open Source Meetup" />
 
-        <TextView
-            android:id="@+id/locationName"
-            android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_small"
-            android:layout_marginEnd="@dimen/layout_margin_medium"
-            android:textSize="@dimen/text_size_small"
-            android:text="@{event.locationName}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/eventName"
-            app:layout_constraintTop_toBottomOf="@+id/eventName"
-            tools:text="Jaipur, Rajasthan, India" />
+            <TextView
+                android:id="@+id/locationName"
+                android:layout_width="@dimen/layout_margin_none"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_small"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:textSize="@dimen/text_size_small"
+                android:text="@{event.locationName}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/eventName"
+                app:layout_constraintTop_toBottomOf="@+id/eventName"
+                tools:text="Jaipur, Rajasthan, India" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipTags"
-            android:layout_width="@dimen/layout_margin_none"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_small"
-            android:layout_marginEnd="@dimen/layout_margin_medium"
-            android:layout_marginBottom="@dimen/layout_margin_extra_large"
-            app:chipSpacingVertical="4dp"
-            app:chipSpacingHorizontal="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/eventName"
-            app:layout_constraintTop_toBottomOf="@+id/locationName">
-        </com.google.android.material.chip.ChipGroup>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipTags"
+                android:layout_width="@dimen/layout_margin_none"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_small"
+                android:layout_marginEnd="@dimen/layout_margin_medium"
+                android:layout_marginBottom="@dimen/layout_margin_extra_large"
+                app:chipSpacingVertical="4dp"
+                app:chipSpacingHorizontal="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/eventName"
+                app:layout_constraintTop_toBottomOf="@+id/locationName">
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

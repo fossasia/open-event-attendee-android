@@ -9,106 +9,106 @@
     android:elevation="@dimen/card_elevation"
     android:background="@drawable/border">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:weightSum="8"
-    android:layout_marginBottom="@dimen/layout_margin_medium">
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/ticketName"
-            android:paddingEnd="@dimen/padding_medium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Google I/O" />
-        <TextView
-            android:id="@+id/seeMoreInfoText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/colorAccent"
-            android:text="@string/see_more"
-            tools:text="@string/see_more"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/priceSection"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="$25" />
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/discountPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="$25" />
-
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/donationInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_medium"
-        android:ellipsize="end"
-        android:layout_weight="3"
-        android:inputType="number"
-        android:layout_marginEnd="@dimen/details_margin_small"
-        android:hint="@string/enter_donation"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/orderQtySection"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:background="@drawable/filled_border"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_marginBottom="@dimen/layout_margin_medium">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/ticketName"
+                android:paddingEnd="@dimen/padding_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Google I/O" />
+            <TextView
+                android:id="@+id/seeMoreInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:text="@string/see_more"
+                tools:text="@string/see_more"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/order"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/card_tickets_text_height"
+
+        <LinearLayout
+            android:id="@+id/priceSection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="$25" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/discountPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="$25" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/donationInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_medium"
+            android:ellipsize="end"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:layout_marginEnd="@dimen/details_margin_small"
+            android:hint="@string/enter_donation"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/orderQtySection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/filled_border"
             android:gravity="center"
-            android:spinnerMode="dialog"
-            android:textSize="@dimen/text_size_large" />
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/orderRange"
-            android:layout_width="@dimen/spinner_width"
-            android:layout_height="@dimen/spinner_height"
-            android:spinnerMode="dialog"
-            android:textSize="@dimen/text_size_small" />
+            <TextView
+                android:id="@+id/order"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_tickets_text_height"
+                android:gravity="center"
+                android:spinnerMode="dialog"
+                android:textSize="@dimen/text_size_large" />
 
+            <Spinner
+                android:id="@+id/orderRange"
+                android:layout_width="@dimen/spinner_width"
+                android:layout_height="@dimen/spinner_height"
+                android:spinnerMode="dialog"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/ticketDateText"
+            android:layout_weight="2"
+            android:layout_width="@dimen/layout_margin_none"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_large"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="@string/ended"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/ticketDateText"
-        android:layout_weight="2"
-        android:layout_width="@dimen/layout_margin_none"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_size_large"
-        android:visibility="gone"
-        tools:visibility="visible"
-        tools:text="@string/ended"/>
-</LinearLayout>
 
     <LinearLayout
         android:id="@+id/moreInfoSection"
@@ -148,10 +148,10 @@
             android:layout_height="match_parent"
             tools:text="Sales End: Jul 12, 2019" />
     </LinearLayout>
-<TextView
-    android:id="@+id/description"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:text="VIP Includes one hour early admission and free sample slices of pizza during VIP hour"
-    android:layout_marginBottom="@dimen/layout_margin_medium"/>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="VIP Includes one hour early admission and free sample slices of pizza during VIP hour"
+        android:layout_marginBottom="@dimen/layout_margin_medium"/>
 </LinearLayout>
