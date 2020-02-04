@@ -519,7 +519,7 @@
         <argument
             android:name="croppedImage"
             app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue="''"/>
     </fragment>
     <fragment
         android:id="@+id/cropImageFragment"
@@ -825,6 +825,13 @@
             app:destination="@id/eventsFragment"
             app:popUpTo="@id/eventsFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_login_to_setting"
+            app:destination="@id/settingsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
         <argument
             android:name="email"
             app:argType="string"
@@ -834,6 +841,10 @@
             android:name="redirectedFrom"
             app:argType="string"
             android:defaultValue="profile"/>
+        <argument
+            android:name="showSkipButton"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

@@ -32,6 +32,14 @@
                     android:tint="@color/black"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_check_black"/>
+                <ImageView
+                    android:id="@+id/settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:padding="@dimen/padding_large"
+                    android:tint="@color/black"
+                    android:src="@drawable/ic_settings"/>
             </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
@@ -107,9 +115,23 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginTop="@dimen/padding_medium"
-                    android:layout_marginBottom="@dimen/padding_large"
                     android:padding="@dimen/padding_medium"
                     android:text="@string/forgot_password" />
+
+                <TextView
+                    android:id="@+id/skipTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/layout_margin_medium"
+                    android:textStyle="bold"
+                    android:background="?selectableItemBackground"
+                    android:padding="@dimen/padding_large"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:text="@string/skip_for_now"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:textSize="@dimen/text_size_medium"/>
+
 
             </LinearLayout>
 

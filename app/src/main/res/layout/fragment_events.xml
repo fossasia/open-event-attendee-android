@@ -67,17 +67,23 @@
                     app:layout_constraintLeft_toRightOf="@+id/eventIcon" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/whatIsGoodText"
                     app:layout_constraintLeft_toRightOf="@id/eventIcon"
+                    app:layout_constraintTop_toBottomOf="@id/whatIsGoodText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/eventIcon"
                     android:layout_marginStart="@dimen/layout_margin_extra_large">
                     <TextView
                         android:id="@+id/locationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:maxLines="2"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="@dimen/text_size_larger"
+                        app:autoSizeMaxTextSize="@dimen/text_size_extra_large"
                         android:textSize="@dimen/text_size_extra_large"
                         android:background="?selectableItemBackground"
                         tools:text="India" />
@@ -110,6 +116,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:visibility="gone"
                     tools:visibility="visible"
+                    android:layout_marginLeft="@dimen/divider_margin_bottom"
+                    android:layout_marginRight="@dimen/divider_margin_bottom"
                     layout="@layout/content_no_internet" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout
