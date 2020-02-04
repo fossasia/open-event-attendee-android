@@ -15,7 +15,7 @@ class GeoLocationViewModel(private val locationService: LocationService) : ViewM
     private val compositeDisposable = CompositeDisposable()
 
     fun configure() {
-        compositeDisposable += locationService.getAdministrativeArea()
+        compositeDisposable += locationService.getCityName()
             .subscribe({
                 mutableLocation.value = it
             }, {
