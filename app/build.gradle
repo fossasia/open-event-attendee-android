@@ -200,7 +200,7 @@ dependencies {
     implementation 'com.github.jasminb:jsonapi-converter:0.10'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.8.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.8.1'
 
     // Cards Shimmer Animation
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
