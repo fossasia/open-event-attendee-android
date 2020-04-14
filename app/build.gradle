@@ -162,7 +162,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
     implementation "androidx.browser:browser:1.2.0"
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
