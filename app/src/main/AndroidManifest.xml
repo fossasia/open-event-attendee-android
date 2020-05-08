@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ticket.TicketsFragment"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/SplashTheme">
             <intent-filter>
