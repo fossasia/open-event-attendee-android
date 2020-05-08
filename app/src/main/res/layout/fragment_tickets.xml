@@ -137,12 +137,16 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:layout_gravity="left"
                     android:layout_marginStart="@dimen/layout_margin_medium"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/applyButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right"
                     android:text="@string/apply"
                     android:layout_marginStart="@dimen/layout_margin_medium"
                     android:layout_marginEnd="@dimen/layout_margin_medium"/>
