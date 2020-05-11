@@ -162,8 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_margin_none"
                     android:layout_weight="0.1"
-                    android:textAlignment="center"
-                    android:gravity="bottom"
+                    android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_large"
                     android:text="@string/email_sent_alert"/>
