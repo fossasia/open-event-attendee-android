@@ -17,6 +17,7 @@ import org.fossasia.openevent.general.utils.AppLinkUtils
 import org.fossasia.openevent.general.utils.Utils.navAnimGone
 import org.fossasia.openevent.general.utils.Utils.navAnimVisible
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.scope.BuildConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAY_STORE_BUILD_FLAVOR = "playStore"
