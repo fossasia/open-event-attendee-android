@@ -229,7 +229,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //Mapbox java sdk
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.4.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.5.0'
 
     // SimpleCropView
     implementation 'com.isseiaoki:simplecropview:1.1.8'
