@@ -17,7 +17,7 @@ git config --global user.email "noreply+travis@fossasia.org"
 
 echo "update apk script executed with isPR: $TRAVIS_PULL_REQUEST, $DEV_OR_MASTER_BUILD"
 
-if ($TRAVIS_PULL_REQUEST) && ! ($DEV_OR_MASTER_BUILD); then
+if ! ($DEV_OR_MASTER_BUILD); then
   echo "PR detected, commiiting the apk"
   git add --all
   git commit -m "add apk"
