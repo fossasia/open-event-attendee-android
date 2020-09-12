@@ -20,7 +20,7 @@ echo "update apk script executed with isPR: $TRAVIS_PULL_REQUEST, $DEV_OR_MASTER
 if ! ($DEV_OR_MASTER_BUILD); then
   echo "PR detected, commiiting the apk"
   ./gradlew assemblePlayStoreDebug
-  ./gradlew assembleFdroidStoreDebug
+  ./gradlew assembleFdroidDebug
   git add --all
   git commit -m "add apk"
   exit 0
