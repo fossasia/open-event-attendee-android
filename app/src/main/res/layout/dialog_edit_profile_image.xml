@@ -1,78 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/editImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large"
-        android:background="?selectableItemBackground"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/icon_edit_profile_height"
-            android:padding="@dimen/padding_large"
-            android:src="@drawable/ic_crop"/>
-        <TextView
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/editImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/edit_image"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/replaceImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large"
-        android:background="?selectableItemBackground"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/icon_edit_profile_height"
             android:padding="@dimen/padding_large"
-            android:src="@drawable/ic_image"/>
-        <TextView
+            android:background="?selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_edit_profile_height"
+                android:padding="@dimen/padding_large"
+                android:src="@drawable/ic_crop"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/edit_image"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/replaceImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/replace_image"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/takeImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large"
-        android:background="?selectableItemBackground"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/icon_edit_profile_height"
             android:padding="@dimen/padding_large"
-            android:src="@drawable/ic_camera"/>
-        <TextView
+            android:background="?selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_edit_profile_height"
+                android:padding="@dimen/padding_large"
+                android:src="@drawable/ic_image"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/replace_image"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/takeImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/take_image"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/removeImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large"
-        android:background="?selectableItemBackground"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/icon_edit_profile_height"
             android:padding="@dimen/padding_large"
-            android:src="@drawable/ic_trash"/>
-        <TextView
+            android:background="?selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_edit_profile_height"
+                android:padding="@dimen/padding_large"
+                android:src="@drawable/ic_camera"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/take_image"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/removeImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/remove_image"/>
+            android:padding="@dimen/padding_large"
+            android:background="?selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_edit_profile_height"
+                android:padding="@dimen/padding_large"
+                android:src="@drawable/ic_trash"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/remove_image"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

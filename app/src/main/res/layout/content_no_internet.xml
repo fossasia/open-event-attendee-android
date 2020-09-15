@@ -33,6 +33,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:text="@string/no_internet_message"
+            android:textAlignment="center"
             android:textSize="@dimen/text_size_medium"
             tools:text="No Internet" />
 
