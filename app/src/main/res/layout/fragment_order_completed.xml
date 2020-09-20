@@ -9,9 +9,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/orderCoordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/orderCoordinatorLayout">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,8 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/event_details_divider"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
-                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:layout_marginTop="@dimen/layout_margin_extra_large"
+                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:background="@color/grey" />
 
             <LinearLayout
@@ -93,8 +93,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
+                android:layout_marginRight="@dimen/layout_margin_medium"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_medium"
@@ -148,11 +148,11 @@
                     android:layout_width="@dimen/layout_margin_none"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin_large"
-                    android:paddingLeft="@dimen/layout_margin_medium"
                     android:layout_weight="0.95"
-                    android:textSize="@dimen/text_size_medium"
+                    android:paddingLeft="@dimen/layout_margin_medium"
                     android:text="@string/invite"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium" />
 
                 <ImageButton
                     android:id="@+id/share"
@@ -165,19 +165,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/event_details_divider"
-                android:layout_marginBottom="@dimen/event_details_divider_margin"
                 android:layout_marginLeft="@dimen/layout_margin_medium"
                 android:layout_marginRight="@dimen/layout_margin_medium"
+                android:layout_marginBottom="@dimen/event_details_divider_margin"
                 android:background="@color/grey" />
 
             <LinearLayout
                 android:id="@+id/similarEventLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_medium"
                 android:orientation="vertical"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_marginTop="@dimen/layout_margin_medium">
+                tools:visibility="visible">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -191,39 +192,40 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/similarEventsRecycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="vertical"
-                    tools:listitem="@layout/item_card_similar_events" />
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmerSimilarEvents"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    tools:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <include layout="@layout/placeholder_item_card_similar_events" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/similarEventsRecycler"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical"
+                            tools:listitem="@layout/item_card_similar_events" />
 
-                        <include layout="@layout/placeholder_item_card_similar_events" />
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmerSimilarEvents"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            tools:visibility="visible">
 
-                        <include layout="@layout/placeholder_item_card_similar_events" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
 
+                                <include layout="@layout/placeholder_item_card_similar_events" />
+
+                                <include layout="@layout/placeholder_item_card_similar_events" />
+
+                                <include layout="@layout/placeholder_item_card_similar_events" />
+
+                            </LinearLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
                     </LinearLayout>
-                </com.facebook.shimmer.ShimmerFrameLayout>
-                </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
         </LinearLayout>

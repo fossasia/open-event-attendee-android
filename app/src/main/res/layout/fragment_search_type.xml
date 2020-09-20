@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="org.fossasia.openevent.general.search.type.SearchTypeFragment"
-    style="@style/AppTheme.NoActionBar">
+    tools:context="org.fossasia.openevent.general.search.type.SearchTypeFragment">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_arrow_back_black"/>
+        app:navigationIcon="@drawable/ic_arrow_back_black" />
 
     <include layout="@layout/content_no_internet" />
 
@@ -25,6 +26,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_extra_large"
         android:textStyle="bold" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerSearchEventTypes"
         android:layout_width="wrap_content"
@@ -63,6 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null"
-        android:scrollbars="none"/>
+        android:scrollbars="none" />
 </LinearLayout>
 

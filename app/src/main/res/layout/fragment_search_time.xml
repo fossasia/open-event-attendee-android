@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical"
-    style="@style/AppTheme.NoActionBar"
     tools:context="org.fossasia.openevent.general.search.time.SearchTimeFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_arrow_back_black"/>
+        app:navigationIcon="@drawable/ic_arrow_back_black" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,8 +27,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,10 +40,10 @@
                 android:id="@+id/anytimeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/anytime"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/anytime"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -50,10 +51,10 @@
                 android:id="@+id/todayTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/today"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/today"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -61,10 +62,10 @@
                 android:id="@+id/tomorrowTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/tomorrow"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/tomorrow"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -72,10 +73,10 @@
                 android:id="@+id/thisWeekendTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/weekend"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/weekend"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -83,10 +84,10 @@
                 android:id="@+id/nextMonthTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/month"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/month"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
 
@@ -94,10 +95,10 @@
                 android:id="@+id/timeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/pick_date"
                 android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:padding="@dimen/layout_margin_large"
+                android:text="@string/pick_date"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_expanded_title" />
         </LinearLayout>
