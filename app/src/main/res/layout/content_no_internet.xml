@@ -47,6 +47,7 @@
             android:textColor="@color/colorPrimary"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             tools:text="RETRY" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

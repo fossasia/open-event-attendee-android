@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/write_feedback"
             android:inputType="textCapSentences" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

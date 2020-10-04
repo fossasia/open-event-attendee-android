@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/padding_large">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,6 +17,7 @@
             android:text="@string/filter_orders"
             android:textStyle="bold"
             android:textSize="@dimen/text_size_expanded_title" />
+
         <CheckBox
             android:id="@+id/completedOrdersCheckBox"
             android:layout_width="match_parent"
@@ -23,6 +25,7 @@
             android:text="@string/completed_orders"
             android:textColor="@color/light_grey"
             android:textSize="@dimen/text_size_large" />
+
         <CheckBox
             android:id="@+id/placedOrdersCheckBox"
             android:layout_width="match_parent"
@@ -30,6 +33,7 @@
             android:text="@string/placed_orders"
             android:textColor="@color/light_grey"
             android:textSize="@dimen/text_size_large" />
+
         <CheckBox
             android:id="@+id/pendingOrdersCheckBox"
             android:layout_width="match_parent"
@@ -37,6 +41,7 @@
             android:text="@string/pending_orders"
             android:textColor="@color/light_grey"
             android:textSize="@dimen/text_size_large" />
+
         <TextView
             android:id="@+id/sortLabel"
             android:layout_width="match_parent"
@@ -70,6 +75,9 @@
                 android:text="@string/order_status"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/text_size_large" />
+
         </RadioGroup>
+
     </LinearLayout>
+
 </ScrollView>

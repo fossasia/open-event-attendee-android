@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="event"
             type="org.fossasia.openevent.general.event.Event" />
@@ -152,6 +151,7 @@
                         tools:text="Wed June 5" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -182,6 +182,7 @@
                     android:layout_margin="@dimen/layout_margin_medium"
                     android:textColor="@color/dark_grey"
                     tools:text="Location" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -210,6 +211,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/layout_margin_medium"
                     android:textColor="@color/dark_grey"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -311,6 +313,7 @@
                     android:textColor="@color/dark_grey"
                     android:textStyle="bold"
                     android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -365,6 +368,7 @@
                     android:background="?selectableItemBackground"
                     android:scaleType="centerCrop"
                     android:src="@drawable/header" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -455,7 +459,9 @@
                             android:textColor="@color/dark_grey"
                             android:textStyle="bold"
                             android:visibility="gone" />
+
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -470,6 +476,7 @@
                     android:animateLayoutChanges="true"
                     android:visibility="gone"
                     tools:visibility="visible">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -485,7 +492,9 @@
                         android:layout_marginBottom="@dimen/layout_margin_medium"
                         android:layout_height="wrap_content"
                         android:scrollbars="vertical" />
+
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -565,8 +574,8 @@
                     android:layout_marginBottom="@dimen/layout_margin_large"
                     android:textColor="@color/colorAccent"
                     android:text="@string/write_feedback" />
-            </LinearLayout>
 
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/speakersContainer"
@@ -600,7 +609,6 @@
                     android:text="@string/speakers"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/event_details_headers" />
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/speakerRv"
@@ -645,7 +653,6 @@
                     android:text="@string/sessions"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/event_details_headers" />
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sessionsRv"
@@ -702,6 +709,7 @@
                     android:orientation="vertical"
                     tools:itemCount="3"
                     tools:listitem="@layout/item_sponsor" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -758,12 +766,17 @@
                             <include layout="@layout/placeholder_item_card_similar_events" />
                             <include layout="@layout/placeholder_item_card_similar_events" />
                             <include layout="@layout/placeholder_item_card_similar_events" />
+
                         </LinearLayout>
+
                     </com.facebook.shimmer.ShimmerFrameLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 </layout>

@@ -12,25 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="0dp">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_black">
+
             <TextView
                 android:id="@+id/toolbarTitle"
-                style = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:layout_width = "wrap_content"
-                android:gravity = "center_vertical"
-                android:layout_height = "match_parent" />
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical" />
         </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,35 +44,35 @@
                 android:id="@+id/locationSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_medium"
                 android:background="@null"
-                android:paddingStart="@dimen/padding_large"
-                android:paddingEnd="@dimen/padding_large"
-                android:paddingTop="@dimen/padding_medium"
-                android:paddingBottom="@dimen/padding_medium"
-                android:inputType="textCapWords"
-                android:imeOptions="actionSearch"
                 android:hint="@string/enter_location"
-                android:layout_marginBottom="@dimen/layout_margin_medium"/>
+                android:imeOptions="actionSearch"
+                android:inputType="textCapWords"
+                android:paddingStart="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingEnd="@dimen/padding_large"
+                android:paddingBottom="@dimen/padding_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginStart="@dimen/layout_margin_large"
                 android:layout_marginTop="@dimen/layout_margin_small"
                 android:layout_marginBottom="@dimen/layout_margin_small"
-                android:background="?selectableItemBackground">
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_location_pin"
-                    app:tint="@color/colorPrimary"/>
+                    app:tint="@color/colorPrimary" />
 
                 <TextView
+                    android:id="@+id/currentLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/currentLocation"
                     android:layout_marginStart="@dimen/layout_margin_medium"
                     android:text="@string/current_location"
                     android:textColor="@color/colorPrimary"
@@ -82,25 +86,26 @@
                 android:layout_height="@dimen/item_image_view_medium"
                 android:layout_marginBottom="@dimen/layout_margin_medium"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/placeSuggestionsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/layout_margin_medium"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:cardElevation="@dimen/card_elevation"
-                app:cardCornerRadius="@dimen/card_corner_radius"
                 tools:visibility="visible">
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAutoPlaces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
@@ -116,12 +121,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layout_margin_medium"
-                    android:text="@string/recent_locations"
                     android:paddingStart="@dimen/padding_large"
-                    android:paddingEnd="@dimen/padding_large"
                     android:paddingTop="@dimen/padding_large"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_expanded_title" />
+                    android:paddingEnd="@dimen/padding_large"
+                    android:text="@string/recent_locations"
+                    android:textSize="@dimen/text_size_expanded_title"
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recentSearchRv"
@@ -132,11 +137,11 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/event_details_divider"
-                    android:dividerHeight="0dp"
-                    android:divider="@null"
                     android:layout_marginStart="@dimen/layout_margin_large"
                     android:layout_marginEnd="@dimen/layout_margin_large"
-                    android:background="@color/grey" />
+                    android:background="@color/grey"
+                    android:divider="@null"
+                    android:dividerHeight="0dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,27 +149,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingBottom="@dimen/padding_large"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:paddingBottom="@dimen/padding_large">
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layout_margin_medium"
-                    android:text="@string/popular_locations"
                     android:paddingStart="@dimen/padding_large"
                     android:paddingEnd="@dimen/padding_large"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_expanded_title" />
+                    android:text="@string/popular_locations"
+                    android:textSize="@dimen/text_size_expanded_title"
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popularLocationsRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:dividerHeight="0dp"
+                    android:layout_marginBottom="@dimen/layout_margin_medium"
                     android:divider="@null"
-                    android:layout_marginBottom="@dimen/layout_margin_medium" />
+                    android:dividerHeight="0dp" />
             </LinearLayout>
 
 
@@ -178,14 +183,23 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     tools:visibility="gone">
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
+
                     <include layout="@layout/placeholder_item_event_location" />
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
