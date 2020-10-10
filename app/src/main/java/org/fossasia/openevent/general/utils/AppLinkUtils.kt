@@ -29,5 +29,6 @@ object AppLinkUtils {
         val bundle = Bundle()
         bundle.putString(data.argumentKey, data.argumentValue)
         navController.navigate(data.destinationId, bundle)
+
     }
 }

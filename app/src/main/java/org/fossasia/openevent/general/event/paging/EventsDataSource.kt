@@ -43,9 +43,11 @@ class EventsDataSource(
             eventService.getEventsByLocationPaged(query, requestedPage)
                 .withDefaultSchedulers()
                 .subscribe({ response ->
-                    if (response.isEmpty()) mutableProgress.value = false
                     initialCallback?.onResult(response, null, adjacentPage)
                     callback?.onResult(response, adjacentPage)
+                    if (response.isEmpty()) {
+                        mutableProgress.value = false
+                    }
                 }, { error ->
                     Timber.e(error, "Fail on fetching page of events")
                 }
