@@ -17,6 +17,7 @@ def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.f
 android {
     dataBinding {
         enabled = true
+
     }
     compileSdkVersion 28
     defaultConfig {
