@@ -57,11 +57,9 @@ class EventsViewModel(
         val location = mutableSavedLocation.value
         if (location == null || location == resource.getString(R.string.enter_location) ||
             location == resource.getString(R.string.no_location)) {
-           Timber.d("set progress to false")
             mutableProgress.value = false
             return
         }
-        Timber.d(location+"this is the location")
         sourceFactory = EventsDataSourceFactory(
             compositeDisposable,
             eventService,
@@ -84,7 +82,6 @@ class EventsViewModel(
                 if (currentPagedEvents == null) {
                     mutablePagedEvents.value = it
               } else {
-                    Timber.d(it.toString()+"in else viewmodel")
                     currentPagedEvents.addAll(it)
                     mutablePagedEvents.value = currentPagedEvents
                 }
