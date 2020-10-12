@@ -81,7 +81,7 @@ class EventsViewModel(
                 val currentPagedEvents = mutablePagedEvents.value
                 if (currentPagedEvents == null) {
                     mutablePagedEvents.value = it
-              } else {
+                } else {
                     currentPagedEvents.addAll(it)
                     mutablePagedEvents.value = currentPagedEvents
                 }
