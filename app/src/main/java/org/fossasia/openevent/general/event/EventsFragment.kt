@@ -201,14 +201,13 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.swiperefresh.setColorSchemeColors(Color.BLUE)
         rootView.swiperefresh.setOnRefreshListener {
             showNoInternetScreen(!eventsViewModel.isConnected())
-          eventsViewModel.clearEvents()
+            eventsViewModel.clearEvents()
             eventsViewModel.clearLastSearch()
-                if (eventsViewModel.isConnected()) {
-                    eventsViewModel.loadLocationEvents()
-                } else {
-                    showNoInternetScreen(true)
-                }
-
+            if (!eventsViewModel.isConnected()) {
+                rootView.swiperefresh.isRefreshing = false
+            } else {
+                eventsViewModel.loadLocationEvents()
+            }
         }
 
         startupViewModel.isRefresh
