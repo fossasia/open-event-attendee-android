@@ -46,7 +46,6 @@ class EventsDataSource(
                     if (response.isEmpty()) mutableProgress.value = false
                     initialCallback?.onResult(response, null, adjacentPage)
                     callback?.onResult(response, adjacentPage)
-
                 }, { error ->
                     Timber.e(error, "Fail on fetching page of events")
                 }
