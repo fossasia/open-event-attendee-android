@@ -537,5 +537,7 @@
     <string name="social_link">Social Link</string>
     <string name="tick">tick</string>
     <string name="general_settings_and_support">General Settings and Support</string>
+    <string name="dialog_message">This mobile app is still in its prototype stage with many features being experimental. We currently recommend using this app only for testing.</string>
+
 
 </resources>
