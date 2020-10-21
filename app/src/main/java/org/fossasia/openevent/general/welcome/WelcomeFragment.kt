@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -13,10 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_welcome.view.currentLocation
-import kotlinx.android.synthetic.main.fragment_welcome.view.locationProgressBar
-import kotlinx.android.synthetic.main.fragment_welcome.view.pickCityButton
-import kotlinx.android.synthetic.main.fragment_welcome.view.skip
+import kotlinx.android.synthetic.main.fragment_welcome.view.*
 import org.fossasia.openevent.general.R
 import org.fossasia.openevent.general.data.Preference
 import org.fossasia.openevent.general.search.location.GeoLocationViewModel
@@ -26,8 +24,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val LOCATION_PERMISSION_REQUEST = 1000
 const val WELCOME_FRAGMENT = "welcomeFragment"
+const val EXPERIMENTAL_WARNING_PREFERENCE_KEY = "experimental_warning_shown"
 
 class WelcomeFragment : Fragment() {
+
     private lateinit var rootView: View
     private val geoLocationViewModel by viewModel<GeoLocationViewModel>()
     val preference = Preference()
@@ -41,7 +41,15 @@ class WelcomeFragment : Fragment() {
             Navigation.findNavController(rootView)
                 .navigate(WelcomeFragmentDirections.actionWelcomeToSearch(WELCOME_FRAGMENT))
         }
-
+        if (!preference.getBoolean(EXPERIMENTAL_WARNING_PREFERENCE_KEY, false)) {
+            AlertDialog.Builder(requireActivity())
+                .setTitle("Message")
+                .setMessage(R.string.dialog_message)
+                .setPositiveButton(R.string.ok) { dialog, it ->
+                    preference.putBoolean(EXPERIMENTAL_WARNING_PREFERENCE_KEY, true)
+                    dialog.dismiss()
+                }.show()
+        }
         rootView.currentLocation.setOnClickListener {
             if (isLocationEnabled(requireContext())) {
                 rootView.locationProgressBar.isVisible = true
@@ -91,8 +99,8 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun redirectToAuth() {
-        Navigation.findNavController(rootView).navigate(WelcomeFragmentDirections.actionWelcomeToAuth(
-                redirectedFrom = WELCOME_FRAGMENT, showSkipButton = true)
-        )
+        Navigation.findNavController(rootView)
+            .navigate(WelcomeFragmentDirections
+                .actionWelcomeToAuth(redirectedFrom = WELCOME_FRAGMENT, showSkipButton = true))
     }
 }
