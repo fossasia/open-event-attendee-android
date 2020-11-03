@@ -41,7 +41,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
+:
 const val ORDERS_FRAGMENT = "ordersFragment"
 
 class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
