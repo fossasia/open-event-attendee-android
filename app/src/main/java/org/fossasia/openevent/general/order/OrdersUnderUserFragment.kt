@@ -41,6 +41,7 @@ import org.fossasia.openevent.general.utils.extensions.nonNull
 import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 const val ORDERS_FRAGMENT = "ordersFragment"
 
@@ -76,15 +77,16 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ordersUnderUserVM.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
+                    showNoInternetScreen(!isConnected)
+                if(isConnected){
                 val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
                 if (currentItems != null) {
-                    showNoInternetScreen(false)
                     showNoTicketsScreen(currentItems.size == 0)
                     ordersPagedListAdapter.submitList(currentItems)
                 } else {
                     ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = true)
                 }
-            })
+            }})
 
         ordersUnderUserVM.numOfTickets
             .nonNull()
