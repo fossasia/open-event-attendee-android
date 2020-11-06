@@ -76,13 +76,17 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
         ordersUnderUserVM.connection
             .nonNull()
             .observe(viewLifecycleOwner, Observer { isConnected ->
-                val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
-                if (currentItems != null) {
-                    showNoInternetScreen(false)
-                    showNoTicketsScreen(currentItems.size == 0)
-                    ordersPagedListAdapter.submitList(currentItems)
+                if (!isConnected) {
+                    showNoInternetScreen(true)
                 } else {
-                    ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = true)
+                    val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
+                    if (currentItems != null) {
+                        showNoInternetScreen(false)
+                        showNoTicketsScreen(currentItems.size == 0)
+                        ordersPagedListAdapter.submitList(currentItems)
+                    } else {
+                        ordersUnderUserVM.getOrdersAndEventsOfUser(showExpired = false, fromDb = true)
+                    }
                 }
             })
 
