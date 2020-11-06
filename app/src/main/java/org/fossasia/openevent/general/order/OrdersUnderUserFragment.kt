@@ -78,8 +78,7 @@ class OrdersUnderUserFragment : Fragment(), BottomIconDoubleClick {
             .observe(viewLifecycleOwner, Observer { isConnected ->
                 if (!isConnected) {
                     showNoInternetScreen(true)
-                }
-                else {
+                } else {
                 val currentItems = ordersUnderUserVM.eventAndOrderPaged.value
                 if (currentItems != null) {
                     showNoInternetScreen(false)
