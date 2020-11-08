@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ import org.fossasia.openevent.general.utils.extensions.setStartPostponedEnterTra
 import org.fossasia.openevent.general.utils.extensions.showWithFading
 import org.jetbrains.anko.design.longSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 const val BEEN_TO_WELCOME_SCREEN = "beenToWelcomeScreen"
 const val EVENTS_FRAGMENT = "eventsFragment"
@@ -81,6 +83,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         val progressDialog = progressDialog(context, getString(R.string.loading_message))
 
         val token = arguments?.getString(RESET_PASSWORD_TOKEN)
+
         if (token != null)
             showResetPasswordAlertDialog(token)
 
@@ -116,10 +119,8 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
 
         eventsViewModel.pagedEvents
             .nonNull()
-            .observe(viewLifecycleOwner, Observer { list ->
-                eventsListAdapter.submitList(list)
-                if (!rootView.shimmerEvents.isVisible)
-                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
+            .observe( viewLifecycleOwner, Observer {
+                eventsListAdapter.submitList(it)
             })
 
         eventsViewModel.progress
@@ -130,6 +131,12 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                     showEmptyMessage(false)
                     showNoInternetScreen(false)
                 } else {
+                    if(eventsListAdapter.currentList?.isEmpty() != false ){
+                        showEmptyMessage(true)
+                    }
+                    else{
+                        showEmptyMessage(false)
+                    }
                     rootView.shimmerEvents.stopShimmer()
                     rootView.swiperefresh.isRefreshing = false
                 }
@@ -146,6 +153,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         rootView.notificationToolbar.isVisible = eventsViewModel.isLoggedIn()
 
         eventsViewModel.loadLocation()
+
         if (rootView.locationTextView.text == getString(R.string.enter_location)) {
             rootView.emptyEventsText.text = getString(R.string.choose_preferred_location_message)
         } else {

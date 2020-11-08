@@ -3,6 +3,7 @@ package org.fossasia.openevent.general
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -31,10 +32,10 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val hostFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
+
         setupBottomNavigationMenu(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->

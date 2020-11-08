@@ -17,6 +17,10 @@ cache:
       - "${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/"
       - "$HOME/.gradle/caches/"
       - "$HOME/.gradle/wrapper/"
+
+licenses:
+  - '.+'
+
 before_script:
   - bash scripts/prep-key.sh
 script:
@@ -25,7 +29,9 @@ script:
 after_success:
     - bash scripts/update-apk.sh
 
+
 branches:
   only:
     - master
     - development
+

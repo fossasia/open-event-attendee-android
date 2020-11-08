@@ -1,5 +1,6 @@
 package org.fossasia.openevent.general.event
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ import org.fossasia.openevent.general.favorite.FavoriteEvent
 import org.fossasia.openevent.general.search.location.SAVED_LOCATION
 import org.fossasia.openevent.general.utils.extensions.withDefaultSchedulers
 import timber.log.Timber
+import java.lang.NullPointerException
 
 const val NEW_NOTIFICATIONS = "newNotifications"
 
@@ -34,7 +36,6 @@ class EventsViewModel(
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-
     val connection: LiveData<Boolean> = mutableConnectionLiveData
     private val mutableProgress = MediatorLiveData<Boolean>()
     val progress: MediatorLiveData<Boolean> = mutableProgress
@@ -59,7 +60,6 @@ class EventsViewModel(
             mutableProgress.value = false
             return
         }
-
         sourceFactory = EventsDataSourceFactory(
             compositeDisposable,
             eventService,
@@ -89,6 +89,7 @@ class EventsViewModel(
                 Timber.e(it, "Error fetching events")
                 mutableMessage.value = resource.getString(R.string.error_fetching_events_message)
             })
+
     }
     fun isConnected(): Boolean = mutableConnectionLiveData.value ?: false
 

@@ -145,7 +145,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:visibility="gone"
-                    tools:visibility="visible">
+                    tools:visibility="invisible">
                     <RelativeLayout
                         android:layout_width="@dimen/item_image_view_large"
                         android:layout_height="@dimen/item_image_view_large"
