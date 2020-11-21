@@ -11,4 +11,8 @@ interface LocationService {
      * Gives the administrative area of the current location the user is in.
      * */
     fun getAdministrativeArea(): Single<String>
+    /**
+     * Gives the city name of the current location the user is in.
+     * */
+    fun getCityName(): Single<String>
 }
