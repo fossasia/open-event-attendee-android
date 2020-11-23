@@ -75,6 +75,13 @@
                     android:textSize="@dimen/text_size_large" />
 
             </LinearLayout>
+            <CheckBox
+                android:id="@+id/chkvirtualevt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/virtual_location"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
 
             <ProgressBar
                 android:id="@+id/locationProgressBar"
