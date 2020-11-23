@@ -37,6 +37,7 @@
     <string name="search_hint">Search for. . .</string>
     <string name="go_out">I want to go out</string>
     <string name="anywhere">Anywhere</string>
+    <string name="virtual">Virtual</string>
     <string name="anytime">Anytime</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
@@ -369,6 +370,9 @@
 
     <string name="filter">Filter Search</string>
     <string name="free_stuff">Free stuff only</string>
+    <string name="both">Both</string>
+    <string name="virtual_location">Also Search For Virtual Event</string>
+
     <string name="speakers">Speakers</string>
     <string name="speakers_call">Speakers Call</string>
     <string name="sponsors">Sponsors</string>
