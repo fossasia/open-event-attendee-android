@@ -33,7 +33,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/layout_margin_large"
             android:textAlignment="center"
-            android:text="@string/error_fetching_events"
+            android:text="chutiyaaaa"
             android:textSize="@dimen/text_size_medium"
             />
 
