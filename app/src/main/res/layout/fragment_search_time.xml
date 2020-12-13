@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     style="@style/AppTheme.NoActionBar"
     tools:context="org.fossasia.openevent.general.search.time.SearchTimeFragment">
@@ -35,71 +35,133 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/padding_large">
 
-            <CheckedTextView
-                android:id="@+id/anytimeTextView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/anytime"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp">
+                <CheckedTextView
+                    android:id="@+id/anytimeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/anytime"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
 
-            <CheckedTextView
-                android:id="@+id/todayTextView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/today"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp"
+                android:layout_marginTop="10dp">
+                <CheckedTextView
+                    android:id="@+id/todayTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/today"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
 
-            <CheckedTextView
-                android:id="@+id/tomorrowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/tomorrow"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
 
-            <CheckedTextView
-                android:id="@+id/thisWeekendTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/weekend"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
 
-            <CheckedTextView
-                android:id="@+id/nextMonthTextView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/month"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp"
+                android:layout_marginTop="10dp">
+                <CheckedTextView
+                    android:id="@+id/tomorrowTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/tomorrow"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
 
-            <CheckedTextView
-                android:id="@+id/timeTextView"
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/layout_margin_large"
-                android:gravity="center_vertical"
-                android:text="@string/pick_date"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_expanded_title" />
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp"
+                android:layout_marginTop="10dp">
+                <CheckedTextView
+                    android:id="@+id/thisWeekendTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/weekend"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp"
+                android:layout_marginTop="10dp">
+                <CheckedTextView
+                    android:id="@+id/nextMonthTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/month"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:cardElevation="10dp"
+                android:layout_marginTop="10dp">
+                <CheckedTextView
+                    android:id="@+id/timeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_margin_large"
+                    android:gravity="center_vertical"
+                    android:text="@string/pick_date"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_expanded_title" />
+            </androidx.cardview.widget.CardView>
+
+
+
+
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
