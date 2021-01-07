@@ -63,7 +63,7 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/padding_extra_large"
             android:paddingStart="@dimen/padding_extra_large"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
             app:layout_constraintLeft_toLeftOf="parent">
 
             <TextView
