@@ -147,6 +147,7 @@ class EventDetailsFragment : Fragment() {
         eventViewModel.popMessage
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
+                Timber.d(it + "hereeeee")
                 rootView.snackbar(it)
                 showEventErrorScreen(it == getString(R.string.error_fetching_event_message))
             })
@@ -400,7 +401,7 @@ class EventDetailsFragment : Fragment() {
             .nonNull()
             .observe(viewLifecycleOwner, Observer { similarEvents ->
                 similarEventsAdapter.submitList(similarEvents)
-        })
+            })
     }
 
     private fun loadEvent(event: Event) {
@@ -462,10 +463,10 @@ class EventDetailsFragment : Fragment() {
             rootView.eventLocationLinearLayout.setOnClickListener(mapClickListener)
 
             Picasso.get()
-                    .load(eventViewModel.loadMap(event))
-                    .placeholder(R.drawable.ic_map_black)
-                    .error(R.drawable.ic_map_black)
-                    .into(rootView.imageMap)
+                .load(eventViewModel.loadMap(event))
+                .placeholder(R.drawable.ic_map_black)
+                .error(R.drawable.ic_map_black)
+                .into(rootView.imageMap)
         } else {
             rootView.imageMap.isVisible = false
         }
@@ -529,7 +530,9 @@ class EventDetailsFragment : Fragment() {
 
                     val currentSocialLinks = eventViewModel.socialLinks.value
                     if (currentSocialLinks == null) {
-                        currentEvent?.let { eventViewModel.fetchSocialLink(it.id) }
+                        currentEvent?.let {
+                            eventViewModel.fetchSocialLink(it.id)
+                        }
                     } else {
                         socialLinkAdapter.addAll(currentSocialLinks)
                         rootView.socialLinkContainer.isVisible = currentSocialLinks.isNotEmpty()
@@ -602,7 +605,10 @@ class EventDetailsFragment : Fragment() {
                         currentEvent = it
                     } else {
                         EventUtils.showLoginToLikeDialog(requireContext(), layoutInflater, object : RedirectToLogin {
-                            override fun goBackToLogin() { redirectToLogin() } }, it.originalImageUrl, it.name)
+                            override fun goBackToLogin() {
+                                redirectToLogin()
+                            }
+                        }, it.originalImageUrl, it.name)
                     }
                 }
                 true
@@ -620,8 +626,8 @@ class EventDetailsFragment : Fragment() {
             }
             R.id.code_of_conduct -> {
                 currentEvent?.let { event ->
-                        findNavController(rootView)
-                            .navigate(EventDetailsFragmentDirections.actionEventDetailsToConductCode(event.id))
+                    findNavController(rootView)
+                        .navigate(EventDetailsFragmentDirections.actionEventDetailsToConductCode(event.id))
                 }
                 return true
             }
@@ -758,21 +764,23 @@ class EventDetailsFragment : Fragment() {
             .show()
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         layout.feedback.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(p0: Editable?) {
 
-                    if (layout.feedback.text.toString().isNotEmpty()) {
-                        layout.feedbackTextInputLayout.error = null
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-                        layout.feedbackTextInputLayout.isErrorEnabled = false
-                    } else {
-                        layout.feedbackTextInputLayout.error = getString(R.string.cant_be_empty)
-                    }
+                if (layout.feedback.text.toString().isNotEmpty()) {
+                    layout.feedbackTextInputLayout.error = null
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                    layout.feedbackTextInputLayout.isErrorEnabled = false
+                } else {
+                    layout.feedbackTextInputLayout.error = getString(R.string.cant_be_empty)
                 }
+            }
 
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
 
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
-            })
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
+        })
     }
 
     private fun moveToSponsorSection() {

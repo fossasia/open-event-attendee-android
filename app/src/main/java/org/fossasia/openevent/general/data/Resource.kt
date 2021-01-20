@@ -12,7 +12,7 @@ class Resource {
 
     fun getString(@StringRes resId: Int) = context?.getString(resId)
 
-    fun getString(@StringRes resId: Int, vararg args: Any?) = context?.getString(resId, args)
+    fun getString(@StringRes resId: Int, vararg args: Any?) = context?.getString(resId, args[0])
 
     fun getColor(@ColorRes resId: Int) = context?.resources?.getColor(resId)
 }

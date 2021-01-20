@@ -122,6 +122,7 @@ class EventDetailsViewModel(
                 mutablePopMessage.value = resource.getString(R.string.error_submitting_feedback)
             })
     }
+
     fun fetchEventSpeakers(id: Long) {
         if (id == -1L) return
 
