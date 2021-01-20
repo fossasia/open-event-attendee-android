@@ -122,8 +122,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                     showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
             })
 
-        eventsViewModel.progress
-            .nonNull()
+        eventsViewModel.progress.nonNull()
             .observe(viewLifecycleOwner, Observer {
                 if (it) {
                     rootView.shimmerEvents.startShimmer()
@@ -132,6 +131,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 } else {
                     rootView.shimmerEvents.stopShimmer()
                     rootView.swiperefresh.isRefreshing = false
+                    showEmptyMessage(eventsListAdapter.currentList?.isEmpty() ?: true)
                 }
                 rootView.shimmerEvents.isVisible = it
             })
@@ -237,7 +237,7 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
         val eventClickListener: EventClickListener = object : EventClickListener {
             override fun onClick(eventID: Long, imageView: ImageView) {
                 findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToEventsDetail(eventID),
-                        FragmentNavigatorExtras(imageView to "eventDetailImage"))
+                    FragmentNavigatorExtras(imageView to "eventDetailImage"))
             }
         }
 
@@ -297,11 +297,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
     }
 
     private fun openSearch(hashTag: String) {
-            findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
-                query = "",
-                location = Preference().getString(SAVED_LOCATION).toString(),
-                date = getString(R.string.anytime),
-                type = hashTag))
+        findNavController(rootView).navigate(EventsFragmentDirections.actionEventsToSearchResults(
+            query = "",
+            location = Preference().getString(SAVED_LOCATION).toString(),
+            date = getString(R.string.anytime),
+            type = hashTag))
     }
 
     private fun showNoInternetScreen(show: Boolean) {
@@ -363,9 +363,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
         })
 
         layout.confirmNewPassword.addTextChangedListener(object : TextWatcher {
@@ -392,9 +394,11 @@ class EventsFragment : Fragment(), BottomIconDoubleClick {
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/ }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { /*Implement here*/
+            }
         })
     }
 
