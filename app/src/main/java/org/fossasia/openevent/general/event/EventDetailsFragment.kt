@@ -147,7 +147,6 @@ class EventDetailsFragment : Fragment() {
         eventViewModel.popMessage
             .nonNull()
             .observe(viewLifecycleOwner, Observer {
-                Timber.d(it + "hereeeee")
                 rootView.snackbar(it)
                 showEventErrorScreen(it == getString(R.string.error_fetching_event_message))
             })
