@@ -69,7 +69,7 @@ class ProfileViewModel(
                     mutableUpdatedPassword.value = newPassword
                 }
             }, {
-                if (it.message.toString() == "HTTP 400 BAD REQUEST")
+                if (it.message.toString() == resource.getString(R.string.bad_request))
                     mutableMessage.value = resource.getString(R.string.incorrect_old_password_message)
                 else mutableMessage.value = resource.getString(R.string.change_password_fail_message)
             })

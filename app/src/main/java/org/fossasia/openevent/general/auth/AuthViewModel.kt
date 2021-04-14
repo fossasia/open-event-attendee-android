@@ -39,7 +39,7 @@ class AuthViewModel(
                 mutableProgress.value = false
             }.subscribe({
                 mutableStatus.value = !it.result
-                Timber.d("Success!")
+                Timber.d(resource.getString(R.string.success))
             }, {
                 mutableError.value = resource.getString(R.string.error)
                 Timber.d(it, "Failed")
