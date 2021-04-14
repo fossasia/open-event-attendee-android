@@ -80,7 +80,7 @@ class WelcomeFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     geoLocationViewModel.configure()
                 } else {
-                    Snackbar.make(rootView, "Cannot fetch location!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, getString(R.string.cannot_fetch_location), Snackbar.LENGTH_SHORT).show()
                     rootView.locationProgressBar.isVisible = false
                 }
             }

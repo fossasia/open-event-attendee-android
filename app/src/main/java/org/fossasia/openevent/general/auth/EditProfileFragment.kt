@@ -303,7 +303,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         // create temp file
         try {
 
-            val tempAvatar = File(context?.cacheDir, "tempAvatar")
+            val tempAvatar = File(context?.cacheDir, getString(R.string.avatar))
             if (tempAvatar.exists()) {
                 tempAvatar.delete()
             }

@@ -141,7 +141,7 @@ class AttendeeViewModel(
                 mutableSignedIn.value = false
                 mutableUser.value = null
             }) {
-                Timber.e(it, "Failure Logging out!")
+                Timber.e(it, resource.getString(R.string.failue_log_out))
             }
     }
 
@@ -176,7 +176,7 @@ class AttendeeViewModel(
                         mutableRedirectToProfile.value = true
                     }
                 }
-                Timber.e(it, "Fail on creating pending order")
+                Timber.e(it, resource.getString(R.string.failed_pending_order))
             })
     }
 
@@ -200,7 +200,7 @@ class AttendeeViewModel(
                             mutableTicketSoldOut.value = true
                     } else {
                         mutableMessage.value = resource.getString(R.string.create_attendee_fail_message)
-                        Timber.d(it, "Failed")
+                        Timber.d(it,resource.getString(R.string.attendee_failed))
                         mutableTicketSoldOut.value = false
                     }
             })

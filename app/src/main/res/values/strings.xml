@@ -43,7 +43,7 @@
     <string name="weekend">This weekend</string>
     <string name="month">In the next month</string>
     <string name="what_time">What time works?</string>
-    <string name="pick_date">Pick a date...</string>
+    <string name="pick_date">Pick a date…</string>
     <string name="no_search_results">Hmmm, we\'\re not getting\nany results. Our bad - try\nanother search</string>
     <string name="event_details">Event details</string>
     <string name="download_ticket">Download Ticket</string>
@@ -538,6 +538,13 @@
     <string name="tick">tick</string>
     <string name="general_settings_and_support">General Settings and Support</string>
     <string name="dialog_message">This mobile app is still in its prototype stage with many features being experimental. We currently recommend using this app only for testing.</string>
+    <string name="attendee_failed">Failed</string>
+    <string name="failed_pending_order">Fail on creating pending order</string>
+    <string name="failue_log_out">Failure Logging out!</string>
+    <string name="success">Success!</string>
+    <string name="avatar">tempAvatar</string>
+    <string name="bad_request">HTTP 400 BAD REQUEST</string>
+    <string name="cannot_fetch_location">Cannot fetch location!</string>
 
 
 </resources>
