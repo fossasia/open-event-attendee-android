@@ -61,4 +61,47 @@ class LocationServiceImpl(
             }
         }
     }
+
+    @SuppressLint("MissingPermission")
+    override fun getCityName(): Single<String> {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+            ?: return Single.error(IllegalStateException())
+        val geoCoder = Geocoder(context, Locale.getDefault())
+
+        return Single.create { emitter ->
+            try {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f,
+                    object : LocationListener {
+                        override fun onLocationChanged(location: Location?) {
+                            if (location == null) {
+                                emitter.onError(java.lang.IllegalStateException())
+                                return
+                            }
+                            val addresses = geoCoder.getFromLocation(location.latitude, location.longitude, 1)
+                            try {
+                                val adminArea = if (addresses.isNotEmpty()) addresses[0].locality
+                                else resource.getString(R.string.no_location).nullToEmpty()
+                                emitter.onSuccess(adminArea)
+                            } catch (e: IllegalArgumentException) {
+                                emitter.onError(e)
+                            }
+                        }
+
+                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                            // To change body of created functions use File | Settings | File Templates.
+                        }
+
+                        override fun onProviderEnabled(provider: String?) {
+                            // To change body of created functions use File | Settings | File Templates.
+                        }
+
+                        override fun onProviderDisabled(provider: String?) {
+                            // To change body of created functions use File | Settings | File Templates.
+                        }
+                    })
+            } catch (e: SecurityException) {
+                emitter.onError(e)
+            }
+        }
+    }
 }
