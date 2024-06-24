@@ -15,7 +15,7 @@ object ImageUtils {
     }
 
     fun decodeBitmap(encodedBitmap: String): Bitmap {
-        val decodedString = Base64.decode(encodedBitmap, Base64.DEFAULT)
+        val decodedString = Base64.decode(encodedBitmap, Base64.DEFAULT or Base64.NO_WRAP)
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
     }
 }

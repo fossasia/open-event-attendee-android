@@ -208,7 +208,7 @@ class EditProfileFragment : Fragment(), ComplexBackPressFragment {
         userTwitter = user.twitterUrl.nullToEmpty()
         userInstagram = user.instagramUrl.nullToEmpty()
 
-        if (safeArgs.croppedImage.isEmpty()) {
+        if (safeArgs.croppedImage.equals("''")) {
             if (!editProfileViewModel.userAvatar.isNullOrEmpty() && !editProfileViewModel.avatarUpdated) {
                 val drawable = requireDrawable(requireContext(), R.drawable.ic_account_circle_grey)
                 Picasso.get()
