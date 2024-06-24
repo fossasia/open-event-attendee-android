@@ -89,7 +89,9 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_expanded_title" />
 
+
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tvSelectLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,6 +102,47 @@
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_small"
                 android:text="@string/anywhere"
+                android:textSize="@dimen/text_size_large" />
+
+            <CheckBox
+                android:id="@+id/ckSelectLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/anywhere"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
+            <CheckBox
+                android:id="@+id/ckSelectvirtual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/virtual"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_size_large" />
+
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_small"
+                android:text="or"
+                android:textSize="@dimen/text_size_large"
+                tools:ignore="RtlCompat" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvSelectvirtual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/ic_virtual"
+                android:drawablePadding="@dimen/padding_medium"
+                android:drawableTint="@color/light_grey"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_small"
+                android:text="@string/virtual"
                 android:textSize="@dimen/text_size_large" />
 
             <View
